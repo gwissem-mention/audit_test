@@ -114,6 +114,36 @@ input[type="date"]{min-width: 145px}
     margin: 0;
 }
 
+#converter-prepare-infradoc .media .media-actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+
+    flex-shrink: 0;
+}
+
+#converter-prepare-infradoc .media .media-actions .media-action {
+    margin-left: 5px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#converter-prepare-infradoc .media .media-actions .media-action input[type=checkbox] {
+    margin: 0 0 0 6px;
+}
+
+#converter-prepare-infradoc .media .media-actions .media-action label {
+    margin: 0;
+    display: block;
+}
+
 #converter-upload-form-wrapper form {
     display: -webkit-box;
     display: -ms-flexbox;

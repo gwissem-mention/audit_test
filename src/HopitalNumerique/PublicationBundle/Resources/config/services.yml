@@ -149,6 +149,14 @@ services:
         tags:
             - { name: converter.node_parser, priority: 99 }
 
+    hopitalnumerique_publication.node.image_remover:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\ImageRemover
+        public: false
+        calls:
+            - [setMediaUploader, ['@hopitalnumerique_publication.media_uploader']]
+        tags:
+            - { name: converter.node_parser, priority: 110 }
+
     hopitalnumerique_publication.node.tag_remover:
         class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\TagRemover
         public: false

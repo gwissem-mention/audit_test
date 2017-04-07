@@ -3,3 +3,5 @@ form:
         node:
             excluded: Exclure ce chapitre
             squashIn: Inclure dans l'infradoc précédent
+        media:
+            excluded: Exclure cette image

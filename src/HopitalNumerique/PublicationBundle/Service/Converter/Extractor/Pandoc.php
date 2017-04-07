@@ -96,6 +96,8 @@ class Pandoc implements ConverterInterface
                 $wrapperElement->saveHTML()
             );
         });
+        $this->extractImages($currentNode);
+
 
         $root = $currentNode->getHighestParent();
 

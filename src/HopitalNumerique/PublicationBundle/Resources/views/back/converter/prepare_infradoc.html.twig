@@ -20,12 +20,16 @@
             <h3>Images trouvées dans votre document</h3>
             <table class="table">
                 {% for media in form.medias %}
-                    <tr>
+                    <tr class="media">
                         <td>
                             <img src="{{ asset(media.vars.public_path) }}" alt="" width="100" />
                         </td>
-                        <td>
+                        <td class="media-actions">
                             {{ form_widget(media.name, {"attr": {"placeholder": media.vars.placeholder, "class": "form-control"}}) }}
+                            <div class="media-action">
+                                {{ form_label(media.excluded) }}
+                                {{ form_widget(media.excluded) }}
+                            </div>
                         </td>
                     </tr>
                 {% endfor %}

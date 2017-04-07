@@ -45,6 +45,14 @@ class Media
      */
     private $name;
 
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $excluded = false;
+
     /**
      * @var Node
      *
@@ -124,5 +132,25 @@ class Media
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExcluded()
+    {
+        return $this->excluded;
+    }
+
+    /**
+     * @param bool $excluded
+     *
+     * @return Media
+     */
+    public function setExcluded($excluded)
+    {
+        $this->excluded = $excluded;
+
+        return $this;
     }
 }

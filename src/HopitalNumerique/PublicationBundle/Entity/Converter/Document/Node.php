@@ -264,4 +264,16 @@ class Node implements NodeInterface
 
         return new ArrayCollection($medias);
     }
+
+    /**
+     * @param bool $deep
+     *
+     * @return \Doctrine\Common\Collections\Collection|Media[]
+     */
+    public function getExcludedMedias($deep = false)
+    {
+        return $this->getMedias($deep)->filter(function (Media $media) {
+            return $media->isExcluded();
+        });
+    }
 }
