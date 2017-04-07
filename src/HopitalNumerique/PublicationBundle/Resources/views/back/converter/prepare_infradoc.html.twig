@@ -9,9 +9,10 @@
     <div class="panel">
         <h3>Chapitres trouvés dans votre document</h3>
 
-
+        {% set level = 1 %}
         {% for child in form.childrens %}
-            {{ tools.renderNode(child) }}
+            {{ tools.renderNode(child, level) }}
+            {% set level = level + 1 %}
         {% endfor %}
     </div>
 
@@ -54,12 +55,12 @@
     {{ form_end(form, {render_rest: false}) }}
 </div>
 
-{% macro renderNode(node) %}
+{% macro renderNode(node, level) %}
     {% import _self as tools %}
     <div class="node-wrapper">
         <div class="node">
             <div class="node-title" title="{{ node.vars.value.title }}">
-                {{ node.vars.value.title }}
+                {{ level }}. {{ node.vars.value.title }}
             </div>
             <div class="node-actions">
                 <div class="node-action exclude">
@@ -77,8 +78,10 @@
         </div>
 
         <div class="childrens">
+            {% set level = 1 %}
             {% for children in node.childrens %}
-                {{ tools.renderNode(children) }}
+                {{ tools.renderNode(children, level) }}
+                {% set level = level + 1 %}
             {% endfor %}
         </div>
     </div>
