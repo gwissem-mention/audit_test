@@ -11,13 +11,17 @@ use HopitalNumerique\PublicationBundle\Entity\Converter\Document\Node;
  */
 class EmptyTagCleaner implements ParserInterface
 {
-    private $regexp = '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/';
+    protected $excludedTag = ['td', 'th'];
+
+    private $regexp = '/<(\w+)%s\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/';
 
     public function parse(Node $node)
     {
         $node->setContent(
             preg_replace(
-                $this->regexp,
+                sprintf($this->regexp, implode(null, array_map(function($e) {
+                    return sprintf('(?!.*%s)', $e);
+                }, $this->excludedTag))),
                 '',
                 $node->getContent()
             )
