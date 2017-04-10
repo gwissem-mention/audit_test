@@ -13,9 +13,6 @@ use Symfony\Component\DomCrawler\Crawler;
 class CustomAttributes implements ParserInterface
 {
     private $tags = [
-        'p' => [
-            'style' => 'text-align: justify;',
-        ],
         'table' => [
             'class' => 'table table-striped table-bordered table-hover',
         ],
