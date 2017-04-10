@@ -135,6 +135,12 @@ services:
     hopitalnumerique_publication.node.parser:
         class: HopitalNumerique\PublicationBundle\Service\Converter\Node\NodeParser
 
+    hopitalnumerique_publication.node.footnote_adujuster:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\Footnotes
+        public: false
+        tags:
+            - { name: converter.node_parser, priority: 10 }
+
     hopitalnumerique_publication.node.empty_tag_cleaner:
         class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\EmptyTagCleaner
         public: false

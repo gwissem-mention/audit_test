@@ -43,6 +43,16 @@ abstract class NodeDecorator implements NodeInterface
         return $this->node->setContent($content);
     }
 
+    public function getFootnotes()
+    {
+        return $this->node->getFootnotes();
+    }
+
+    public function addFootnote($id, $note)
+    {
+        return $this->node->addFootnote($id, $note);
+    }
+
     public function getHighestParent()
     {
         return $this->node->getHighestParent();

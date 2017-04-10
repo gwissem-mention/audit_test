@@ -50,6 +50,10 @@ class SquashableNode extends NodeDecorator
             ])
         );
 
+        foreach ($node->getFootnotes() as $id => $note) {
+            $node->getSquashIn()->addFootnote($id, $note);
+        }
+
         foreach ($node->getMedias() as $media) {
             $node->getSquashIn()->addMedia($media);
         }

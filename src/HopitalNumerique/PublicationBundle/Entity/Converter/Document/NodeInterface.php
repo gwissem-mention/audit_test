@@ -37,6 +37,19 @@ interface NodeInterface
     public function setContent($content);
 
     /**
+     * @return array
+     */
+    public function getFootnotes();
+
+    /**
+     * @param $id
+     * @param $note
+     *
+     * @return NodeInterface
+     */
+    public function addFootnote($id, $note);
+
+    /**
      * @return NodeInterface
      */
     public function getHighestParent();

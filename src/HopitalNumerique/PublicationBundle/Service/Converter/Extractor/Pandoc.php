@@ -223,24 +223,7 @@ class Pandoc implements ConverterInterface
             $noteCrawler = $crawler->filter('a[href="#' . $id . '"]');
 
             if ($noteCrawler->count() > 0) {
-                $sectionNoteCrawler = $crawler->filter('section.footnotes ol');
-
-                $note = preg_replace('/(<a href="#fnref\d+">↩<\/a>)/', null, $note);
-
-                if (0 === $sectionNoteCrawler->count()) {
-                    $node->setContent(
-                        $node->getContent()
-                        . "<section class='note_bas_de_page'><ol><li id='$id'>$note</li></ol></section>"
-                    );
-                } else {
-                    $node->setContent(
-                        str_replace(
-                            "</ol></section>",
-                            "<li id='$id'>$note</li></ol></section>",
-                            $node->getContent()
-                        )
-                    );
-                }
+                $node->addFootnote($id, preg_replace('/(<a href="#fnref\d+">↩<\/a>)/', null, $note));
 
                 unset($footnotes[$id]);
             }

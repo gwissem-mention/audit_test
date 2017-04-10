@@ -39,6 +39,13 @@ class Node implements NodeInterface
     protected $content;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    protected $footnotes = [];
+
+    /**
      * @var bool
      *
      * @ORM\Column(type="boolean")
@@ -133,6 +140,27 @@ class Node implements NodeInterface
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFootnotes()
+    {
+        return $this->footnotes;
+    }
+
+    /**
+     * @param $id
+     * @param $note
+     *
+     * @return Node
+     */
+    public function addFootnote($id, $note)
+    {
+        $this->footnotes[$id] = $note;
+
+        return $this;
     }
 
     public function getHighestParent()
