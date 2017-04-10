@@ -9,40 +9,7 @@
 
             <div class="panel-body">
                 <h3>{{ report.objectLabel }}</h3>
-                {% if report.links|length > 0 or report.images|length > 0 or report.footnotes|length > 0 or report.tableCount > 0 %}
-                    {% if report.links|length > 0 %}
-                        <span>Liens :</span>
-                        <ul>
-                            {% for link in report.links %}
-                                <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if report.images|length > 0 %}
-                        <span>Images :</span>
-                        <ul>
-                            {% for image in report.images %}
-                                <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if report.footnotes|length > 0 %}
-                        <span>Notes de bas de page :</span>
-                        <ul>
-                            {% for footnote in report.footnotes %}
-                                <li>{{ footnote }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if report.tableCount > 0 %}
-                        <span>Nombre de tableaux :</span> {{ report.tableCount }}
-                    {% endif %}
-                {% else %}
-                    RAS
-                {% endif %}
+                {% include '@HopitalNumeriqueObjet/Objet/partial/reportLine.html.twig' with {'report': report} %}
 
                 {% if report.children|length > 0 %}
                     <div class="separator-mark"></div>
@@ -51,40 +18,7 @@
                 {% for child in report.children %}
                     <div class="child-block">
                         <h4>{{ child.contentLabel }}</h4>
-                        {% if child.links|length > 0 or child.images|length > 0 or child.footnotes|length > 0 or child.tableCount > 0 %}
-                            {% if child.links|length > 0 %}
-                                <span>Liens :</span>
-                                <ul>
-                                    {% for link in child.links %}
-                                        <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.images|length > 0 %}
-                                <span>Images :</span>
-                                <ul>
-                                    {% for image in child.images %}
-                                        <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.footnotes|length > 0 %}
-                                <span>Notes de bas de page :</span>
-                                <ul>
-                                    {% for footnote in child.footnotes %}
-                                        <li>{{ footnote }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.tableCount > 0 %}
-                                <span>Nombre de tableaux :</span> {{ child.tableCount }}
-                            {% endif %}
-                        {% else %}
-                            RAS
-                        {% endif %}
+                        {% include '@HopitalNumeriqueObjet/Objet/partial/reportLine.html.twig' with {'report': child} %}
                     </div>
                 {% endfor %}
             </div>

@@ -105,7 +105,7 @@ class Report
         $crawler = new Crawler();
         $crawler->addHtmlContent($string);
 
-        $links = $crawler->filter('a')->each(function (Crawler $node) {
+        $links = $crawler->filter('a:not([href^="#fn"])')->each(function (Crawler $node) {
             return ['href' => $node->attr('href'), 'text' => $node->text()];
         });
 
@@ -151,7 +151,7 @@ class Report
         $crawler = new Crawler();
         $crawler->addHtmlContent($string);
 
-        $footnotes = $crawler->filter('span[class="note_bas_de_page"]')->each(function (Crawler $node) {
+        $footnotes = $crawler->filter('.note_bas_de_page li')->each(function (Crawler $node) {
             return $node->text();
         });
 
