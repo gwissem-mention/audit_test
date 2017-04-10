@@ -6,3 +6,4 @@ form:
         media:
             excluded: Exclure cette image
             found_in: Trouvé dans "%node%"
+            name: Descriptif de l'image

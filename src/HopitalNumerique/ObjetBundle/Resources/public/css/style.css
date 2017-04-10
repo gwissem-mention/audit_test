@@ -120,8 +120,13 @@ input[type="date"]{min-width: 145px}
     display: -webkit-flex;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     flex-shrink: 0;
+}
+
+#converter-prepare-infradoc .media .media-actions label {
+    margin: 0 10px;
 }
 
 #converter-prepare-infradoc .media .media-actions .media-action {
