@@ -4,6 +4,7 @@ namespace HopitalNumerique\PublicationBundle\Entity\Converter\Document;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Media
@@ -42,6 +43,7 @@ class Media
      * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=true)
+     * @Assert\Length(max = 50)
      */
     private $name;
 

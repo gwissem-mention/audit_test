@@ -31,7 +31,7 @@
                             {% endif %}
                         </td>
                         <td class="media-actions">
-                            {{ form_widget(media.name, {"attr": {"placeholder": media.vars.placeholder, "class": "form-control"}}) }}
+                            {{ form_widget(media.name, {"attr": {"placeholder": media.vars.placeholder, "class": "form-control", "maxlength": 50}}) }}
                             <div class="media-action">
                                 {{ form_label(media.excluded) }}
                                 {{ form_widget(media.excluded) }}
