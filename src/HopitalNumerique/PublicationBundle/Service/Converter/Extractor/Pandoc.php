@@ -228,13 +228,13 @@ class Pandoc implements ConverterInterface
                 if (0 === $sectionNoteCrawler->count()) {
                     $node->setContent(
                         $node->getContent()
-                        . "<section class='note_bas_de_page'><ol><li>$note</li></ol></section>"
+                        . "<section class='note_bas_de_page'><ol><li id='$id'>$note</li></ol></section>"
                     );
                 } else {
                     $node->setContent(
                         str_replace(
                             "</ol></section>",
-                            "<li>$note</li></ol></section>",
+                            "<li id='$id'>$note</li></ol></section>",
                             $node->getContent()
                         )
                     );

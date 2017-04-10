@@ -13,6 +13,9 @@ use Symfony\Component\DomCrawler\Crawler;
 class CustomAttributes implements ParserInterface
 {
     private $tags = [
+        'img' => [
+            'style' => 'display: block; margin-left: auto; margin-right: auto;',
+        ],
         'table' => [
             'class' => 'table table-striped table-bordered table-hover',
         ],
