@@ -3,7 +3,7 @@
         <span>Liens :</span>
         <ul>
             {% for link in report.links %}
-                <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
+                <li><strong>{{ link['text'] }}</strong> - <em><a href="{{ link['href'] }}">{{ link['href'] }}</a></em></li>
             {% endfor %}
         </ul>
     {% endif %}
