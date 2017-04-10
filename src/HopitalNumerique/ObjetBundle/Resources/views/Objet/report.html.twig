@@ -17,7 +17,7 @@
 
                 {% for child in report.children %}
                     <div class="child-block">
-                        <h4>{{ child.contentLabel }}</h4>
+                        <h4>{{ child.contentOrder}} - {{ child.contentLabel }}</h4>
                         {% include '@HopitalNumeriqueObjet/Objet/partial/reportLine.html.twig' with {'report': child} %}
                     </div>
                 {% endfor %}

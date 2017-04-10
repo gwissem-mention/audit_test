@@ -85,6 +85,7 @@ class Report
         $contentReport->objectLabel = $content->getObjet()->getTitre();
         $contentReport->contentId = $content->getId();
         $contentReport->contentLabel = $content->getTitre();
+        $contentReport->contentOrder = $this->getChapterNumber($content);
         $contentReport->domains = $content->getDomaines();
 
         $contentReport->links = $this->findLinks($content->getContenu());
@@ -93,6 +94,35 @@ class Report
         $contentReport->tableCount = count($this->findTables($content->getContenu()));
 
         return $contentReport;
+    }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return string
+     */
+    private function getChapterNumber(Contenu $content)
+    {
+        $chapters = $this->getParentsChapterNumbers($content);
+        asort($chapters);
+
+        return implode('.', $chapters);
+    }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return array
+     */
+    private function getParentsChapterNumbers(Contenu $content)
+    {
+        $chapters = [$content->getOrder()];
+
+        if (!is_null($content->getParent())) {
+            $chapters = array_merge($this->getParentsChapterNumbers($content->getParent()), $chapters);
+        }
+
+        return $chapters;
     }
 
     /**
