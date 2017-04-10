@@ -225,6 +225,8 @@ class Pandoc implements ConverterInterface
             if ($noteCrawler->count() > 0) {
                 $sectionNoteCrawler = $crawler->filter('section.footnotes ol');
 
+                $note = preg_replace('/(<a href="#fnref\d+">↩<\/a>)/', null, $note);
+
                 if (0 === $sectionNoteCrawler->count()) {
                     $node->setContent(
                         $node->getContent()
