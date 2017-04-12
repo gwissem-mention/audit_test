@@ -12,11 +12,13 @@ $(document).ready(function() {
 
     if (window['wordConverter'] !== undefined) {
         wordConverter.onPrepareFormLoaded(function() {
+            $('.summary').hide();
             $('.manualAction').hide();
         });
 
         wordConverter.onAbortion(function() {
             $('.manualAction').show();
+            $('.summary').show();
         });
     }
 
