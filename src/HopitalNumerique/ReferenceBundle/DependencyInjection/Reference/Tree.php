@@ -69,13 +69,13 @@ class Tree
 
         foreach ($orderedReferences as $referenceParemeters) {
             $referenceId = $referenceParemeters['reference']['id'];
-            if (!in_array($referenceId, $forbiddenReferenceIds)) { // Éviter qu'un parent soit lui-même un des ses enfants (boucles infinies)
+            // Éviter qu'un parent soit lui-même un des ses enfants (boucles infinies)
+            if (!in_array($referenceId, $forbiddenReferenceIds)) {
                 $domaineLibelles = [];
                 foreach ($referenceParemeters['reference']['domaines'] as $domaine) {
                     $domaineLibelles[] = $domaine['nom'];
                 }
 
-                $forbiddenReferenceIds[] = $referenceId;
                 $jsTreeOptionsDataPart[] = [
                     'id' => $referenceId,
                     'text' => $referenceParemeters['reference']['libelle'] . (count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- ' . implode(' ; ', $domaineLibelles) . '</small></em>' : ''),
@@ -90,14 +90,19 @@ class Tree
     /**
      * Retourne les références classées.
      *
-     * @param bool|null                                                  $parentable  Parentable
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines    Domaines des références
-     * @param bool|null                                                  $inRecherche InRecherche ?
+     * @param Reference|null $referenceRoot
+     * @param bool|null      $parentable  Parentable
+     * @param Domaine[]|null $domaines    Domaines des références
+     * @param bool|null      $inRecherche InRecherche ?
      *
-     * @return \Doctrine\Common\Collections\Collection Références
+     * @return Reference[]
      */
-    public function getOrderedReferences(Reference $referenceRoot = null, $parentable = true, $domaines = null, $inRecherche = null)
-    {
+    public function getOrderedReferences(
+        Reference $referenceRoot = null,
+        $parentable = true,
+        $domaines = null,
+        $inRecherche = null
+    ) {
         if (null === $domaines) {
             $referencesConditions = [
                 'lock' => false,
@@ -107,7 +112,16 @@ class Tree
             }
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, true);
+            $references = $this->referenceManager->findByDomaines(
+                $domaines,
+                true,
+                false,
+                $parentable,
+                null,
+                $inRecherche,
+                null,
+                true
+            );
         }
 
         // 3 - 30
@@ -118,8 +132,8 @@ class Tree
      * Retourne un arbre de références.
      * Le & pour $references permet d'éviter les doublons qui cassent le fonctionnement à cause d'ID identiques.
      *
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference\Reference> $references      Références à trier
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference        $referenceParent Référence parente
+     * @param Reference[] $references      Références à trier
+     * @param Reference   $referenceParent Référence parente
      *
      * @return array Arbre
      */
@@ -129,8 +143,12 @@ class Tree
 
         foreach ($references as $i => $reference) {
             if ($reference instanceof Reference) {
-                if ((null === $referenceParent && 0 === count($reference->getParents())) || (null !== $referenceParent && $reference->hasParent($referenceParent))) {
-                    //unset($references[$i]); // À décommenter uniquement si on passe une référence (pour éviter les doublons)
+                if ((null === $referenceParent && 0 === count($reference->getParents()))
+                    || (null !== $referenceParent
+                        && $reference->hasParent(
+                            $referenceParent
+                        ))
+                ) {
                     $referencesSubTreeNode = [
                         'reference' => $reference,
                         'enfants' => $this->getOrderedReferencesTreePart($references, $reference),
@@ -138,9 +156,13 @@ class Tree
                     $referencesSubTree[] = $referencesSubTreeNode;
                 }
             } else {
+                $hasParent = false;
+
                 if ($referenceParent != null) {
-                    $hasParent = false;
-                    $referenceParentId = $referenceParent instanceof Reference ? $referenceParent->getId() : $referenceParent['id'];
+                    $referenceParentId = $referenceParent instanceof Reference ? $referenceParent->getId()
+                        : $referenceParent['id']
+                    ;
+
                     foreach ($reference['parents'] as $parent) {
                         if ($parent['id'] == $referenceParentId) {
                             $hasParent = true;
@@ -148,11 +170,15 @@ class Tree
                         }
                     }
                 }
-                if ((null === $referenceParent && 0 === count($reference['parents'])) || (null !== $referenceParent && $hasParent)) {
+                if ((null === $referenceParent && 0 === count($reference['parents']))
+                    || (null !== $referenceParent
+                        && $hasParent)
+                ) {
                     $referencesSubTreeNode = [
                         'reference' => $reference,
                         'enfants' => $this->getOrderedReferencesTreePart($references, $reference),
                     ];
+
                     $referencesSubTree[] = $referencesSubTreeNode;
                 }
             }
@@ -161,6 +187,12 @@ class Tree
         return $referencesSubTree;
     }
 
+    /**
+     * @param array $referencesTree
+     * @param array $checkedReferenceIds
+     *
+     * @return array
+     */
     public function addCheckedReferenceIdsInTree(array $referencesTree, array $checkedReferenceIds)
     {
         $referencesTree = $this->addCheckedReferenceIdsInSubtree($referencesTree, $checkedReferenceIds);
@@ -168,6 +200,12 @@ class Tree
         return $referencesTree;
     }
 
+    /**
+     * @param array $referencesSubtree
+     * @param array $checkedReferenceIds
+     *
+     * @return array
+     */
     public function addCheckedReferenceIdsInSubtree(array $referencesSubtree, array &$checkedReferenceIds)
     {
         $referencesSubtreeWithCheckedReferenceIds = [];
@@ -179,7 +217,10 @@ class Tree
                 $checkedReferenceIds = array_diff($checkedReferenceIds, [$referenceSubtree['reference']->getId()]);
             }
 
-            $referenceSubtree['enfants'] = $this->addCheckedReferenceIdsInSubtree($referenceSubtree['enfants'], $checkedReferenceIds);
+            $referenceSubtree['enfants'] = $this->addCheckedReferenceIdsInSubtree(
+                $referenceSubtree['enfants'],
+                $checkedReferenceIds
+            );
 
             $referencesSubtreeWithCheckedReferenceIds[] = $referenceSubtree;
         }
@@ -187,6 +228,11 @@ class Tree
         return $referencesSubtreeWithCheckedReferenceIds;
     }
 
+    /**
+     * @param array $referencesTree
+     *
+     * @return array
+     */
     public function getAllReferenceIdsByTree(array $referencesTree)
     {
         $referenceIds = [];
