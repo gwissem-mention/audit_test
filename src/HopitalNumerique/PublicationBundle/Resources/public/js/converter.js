@@ -51,8 +51,9 @@ var WordConverter;
             $.post(instance.abortBtn.attr('href'), null, function () {
                 instance.viewport.html('');
                 instance.abortBtn.hide();
+                instance.button.show();
                 instance.callbacks.abortion.fire();
-                isntance.setIdleState();
+                instance.setIdleState();
             }, 'json');
         },
 
@@ -192,6 +193,7 @@ var WordConverter;
             });
 
             instance.abortBtn.show();
+            instance.button.hide();
             instance.callbacks.prepareFormLoaded.fire();
         },
 
