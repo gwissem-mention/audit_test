@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
  */
 class Footnotes implements ParserInterface
 {
+    public static $offset = 1;
 
     public function parse(Node $node)
     {
@@ -21,16 +22,14 @@ class Footnotes implements ParserInterface
             return $node;
         }
 
-        $n = 1;
         foreach ($node->getFootnotes() as $id => $note) {
             $crawler = new Crawler("<meta charset=\"UTF-8\">{$node->getContent()}");
 
             $footnotes = $crawler->filter('a[href="#'.$id.'"] sup');
 
-            $footnotes->each(function (Crawler $crawler) use ($n) {
-                $crawler->getNode(0)->nodeValue = $n;
+            $footnotes->each(function (Crawler $crawler) {
+                $crawler->getNode(0)->nodeValue = self::$offset;
             });
-            $n++;
 
             if ($crawler->filter('body')->count() > 0) {
                 $node->setContent($crawler->filter('body')->html());
@@ -41,7 +40,7 @@ class Footnotes implements ParserInterface
             if (0 === $sectionNoteCrawler->count()) {
                 $node->setContent(
                     $node->getContent()
-                    . "<section class='note_bas_de_page'><ol><li id='$id'>$note</li></ol></section>"
+                    . "<section class='note_bas_de_page'><ol start='" . self::$offset . "'><li id='$id'>$note</li></ol></section>"
                 );
             } else {
                 $node->setContent(
@@ -52,6 +51,8 @@ class Footnotes implements ParserInterface
                     )
                 );
             }
+
+            self::$offset++;
         }
 
         return $node;
