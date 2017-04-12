@@ -20,15 +20,21 @@
         <div class="panel">
             <h3>Images trouvées dans votre document</h3>
             <table class="table">
+                {% set nodeName = null %}
                 {% for media in form.medias %}
+
+                    {% if media.vars.nodeName and (nodeName is null or nodeName != media.vars.nodeName) %}
+                        {% set nodeName = media.vars.nodeName %}
+                        <tr>
+                            <th colspan="2">
+                                <h4>{{ 'form.document.media.found_in'|trans({"%node%": media.vars.nodeName}) }}</h4>
+                            </th>
+                        </tr>
+                    {% endif %}
+
                     <tr class="media">
                         <td>
                             <img src="{{ asset(media.vars.public_path) }}" alt="" width="100" />
-                        </td>
-                        <td>
-                            {% if media.vars.nodeName %}
-                                {{ 'form.document.media.found_in'|trans({"%node%": media.vars.nodeName}) }}
-                            {% endif %}
                         </td>
                         <td class="media-actions">
                             {{ form_label(media.name) }}
