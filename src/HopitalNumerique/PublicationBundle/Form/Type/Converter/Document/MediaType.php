@@ -3,6 +3,7 @@
 namespace HopitalNumerique\PublicationBundle\Form\Type\Converter\Document;
 
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\Media;
+use HopitalNumerique\PublicationBundle\Model\Converter\Document\WalkableNode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,9 +26,22 @@ class MediaType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['public_path'] = $form->getData()->getPath();
-        $view->vars['placeholder'] = pathinfo($form->getData()->getPath())['filename'];
-        $view->vars['nodeName'] = $form->getData()->getNode() ? $form->getData()->getNode()->getTitle() : null;
+        /** @var Media $media */
+        $media = $form->getData();
+
+        $view->vars['public_path'] = $media->getPath();
+        $view->vars['placeholder'] = pathinfo($media->getPath())['filename'];
+        $view->vars['nodeName'] = $media->getNode() ? $media->getNode()->getTitle() : null;
+
+        $level = null;
+        if ($media->getNode()) {
+            $node = new WalkableNode($media->getNode());
+            $level = $node->getLevel(true);
+
+            if (null !== $view->vars['nodeName']) {
+                $view->vars['nodeName'] = sprintf('%s. %s', implode('.', $level), $view->vars['nodeName']);
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

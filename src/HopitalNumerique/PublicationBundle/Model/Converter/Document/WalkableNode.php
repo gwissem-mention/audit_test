@@ -35,4 +35,28 @@ class WalkableNode extends NodeDecorator
     {
         return $this->getParent() ? $this->getParent()->getChildrens() : null;
     }
+
+    /**
+     * Get node level in tree
+     *
+     * @param bool $deep
+     * @return array
+     */
+    public function getLevel($deep = false)
+    {
+        $level = [];
+
+        if ($deep && null !== $this->getParent()) {
+            $level = array_merge($level, (new WalkableNode($this->getParent()))->getLevel(true));
+        }
+
+        $siblings = $this->getSiblings();
+        if (null !== $siblings) {
+            $level[] = $siblings->indexOf($this->node) + 1;
+
+            return $level;
+        }
+
+        return [];
+    }
 }
