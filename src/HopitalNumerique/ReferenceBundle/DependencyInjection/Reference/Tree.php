@@ -40,8 +40,6 @@ class Tree
 
         $jsTreeOptionsData = $this->getTreeOptionsDataPart($references, $forbiddenReferenceIds);
 
-        // dump($jsTreeOptionsData[8]['children'][66]['children'][7]);die;
-
         $jsTreeOptions = [
             'core' => [
                 'data' => $jsTreeOptionsData,
