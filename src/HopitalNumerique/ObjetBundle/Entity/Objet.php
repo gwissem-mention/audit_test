@@ -410,7 +410,7 @@ class Objet implements RoutedItemInterface
         $this->ambassadeurs = [];
         $this->modules = [];
         $this->maitriseUsers = [];
-        $this->domaines = [];
+        $this->domaines = new ArrayCollection();
     }
 
     /**
@@ -1531,11 +1531,7 @@ class Objet implements RoutedItemInterface
      */
     public function removeDomaine(Domaine $domaine)
     {
-        $domainIndex = array_search($domaine, $this->domaines);
-
-        if ($domainIndex) {
-            unset($this->domaines[$domainIndex]);
-        }
+        $this->domaines->removeElement($domaine);
 
         return $this;
     }

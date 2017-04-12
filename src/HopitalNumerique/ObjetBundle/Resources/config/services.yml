@@ -55,6 +55,7 @@ services:
             - "@hopitalnumerique_user.manager.user"
             - "@hopitalnumerique_reference.manager.reference"
             - "@hopitalnumerique_objet.manager.form.objetmanagerform"
+            - "@hopitalnumerique_domaine.manager.domaine"
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_objet }
 
