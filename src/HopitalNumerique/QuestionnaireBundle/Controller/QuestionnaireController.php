@@ -421,6 +421,7 @@ class QuestionnaireController extends Controller
             'routeRedirection' => $this->_routeRedirection,
             'readOnly' => $readOnly,
             'idSession' => $idSession,
+            'paramId' => $idSession,
         ];
 
         if (isset($options['showAllQuestions']) && !is_null($options['showAllQuestions'])) {
