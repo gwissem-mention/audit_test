@@ -18,10 +18,10 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block headerTitle %}Candidature ambassadeur{% endblock %}
+{% block headerTitle %}Candidature pour intégrer le réseau de professionnels{% endblock %}
 
 {% block headerDesc %}
-    <p>Si vous souhaitez devenir ambassadeur de l'ANAP, remplissez le formulaire ci-après. Un mail de confirmation vous sera envoyé. Après étude de votre candidature, une réponse vous sera communiquée dans les plus brefs délais.</p>
+    {{'Module_candidature_ambassadeur'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
 {% endblock %}
 
 {% block content %}
