@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Formulaire de création d'une demande d'intervention dans l'administration.
- *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
- */
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 
 use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
@@ -77,16 +72,13 @@ class AdminType extends InterventionDemandeType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->interventionDemande = $options['interventionDemande'];
-
         $reponseCourante = $builder->getData();
 
         $builder
             ->add('interventionInitiateur', EntityType::class, [
                 'choices' => $this->formInterventionInitiateurManager->getInterventionInitiateursChoices(),
                 'class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur',
-                'data' => $this->interventionDemande->getInterventionInitiateur(),
-                'property' => 'type',
+                'choice_label' => 'type',
                 'label' => 'Initiateur de la demande',
                 'required' => false,
                 'read_only' => true,
@@ -95,7 +87,7 @@ class AdminType extends InterventionDemandeType
             ->add('interventionEtat', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getInterventionEtatsChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                'property' => 'libelle',
+                'choice_label' => 'libelle',
                 'label' => 'État actuel',
                 'required' => true,
                 'read_only' => true,
@@ -108,7 +100,7 @@ class AdminType extends InterventionDemandeType
                 'choices' => $this->formUserManager->getRegionsChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'empty_value' => '-',
-                'property' => 'libelle',
+                'choice_label' => 'libelle',
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'],
@@ -127,7 +119,7 @@ class AdminType extends InterventionDemandeType
                 'choices' => $this->formUserManager->getAmbassadeursChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'empty_value' => '-',
-                'property' => 'appellation',
+                'choice_label' => 'appellation',
                 'label' => 'Ambassadeur',
                 'required' => true,
                 'read_only' => false,
@@ -137,14 +129,14 @@ class AdminType extends InterventionDemandeType
                 'choices' => $this->formUserManager->getReferentsChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'label' => 'Demandeur',
-                'property' => 'nomPrenom',
+                'choice_label' => 'nomPrenom',
                 'required' => true,
             ])
             ->add('objets', EntityType::class, [
                 'choices' => $this->objetManager->getProductionsActive(),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
-                'property' => 'titre',
+                'choice_label' => 'titre',
                 'multiple' => true,
                 'required' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets'],
@@ -155,13 +147,5 @@ class AdminType extends InterventionDemandeType
                 'read_only' => false,
             ])
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'hopitalnumerique_interventionbundle_interventiondemande_admin';
     }
 }

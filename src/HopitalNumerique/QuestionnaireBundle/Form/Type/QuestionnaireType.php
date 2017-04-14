@@ -351,12 +351,12 @@ class QuestionnaireType extends AbstractType
                                     'etat',
                                     Expr\Join::WITH,
                                     'ref.etat = :actif'
-                                )->setParameter('actif', Reference::STATUT_ACTIF_ID)->setParameter(
-                                    'etat',
-                                    $question->getReferenceParamTri()
-                                )->orderBy('ref.order', 'ASC');
+                                )
+                                ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                ->setParameter('etat', $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
                             },
-                            'data'          => is_null($reponseCourante) ? null
+                            'data' => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
                         ]
                     );

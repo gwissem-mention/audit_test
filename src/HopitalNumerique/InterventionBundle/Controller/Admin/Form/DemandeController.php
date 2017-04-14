@@ -1,12 +1,10 @@
 <?php
 
-/**
- * Contrôleur des formulaires de demandes d'intervention dans l'administration.
- *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
- */
 namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 
+use HopitalNumerique\InterventionBundle\Form\InterventionDemande\AdminType;
+use HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition\AdminType as EditAdminType;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +30,13 @@ class DemandeController extends Controller
     public function nouveauAction()
     {
         $this->interventionDemande = new InterventionDemande();
+
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $this->interventionDemande->setEmail($user->getEmail());
+            $this->interventionDemande->setTelephone($user->getTelephoneDirect());
+        }
+
         $this->interventionDemande->setInterventionInitiateur(
             $this->container->get('hopitalnumerique_intervention.manager.intervention_initiateur')
                 ->getInterventionInitiateurAnap()
@@ -43,9 +48,8 @@ class DemandeController extends Controller
         );
 
         $interventionDemandeFormulaire = $this->createForm(
-            'hopitalnumerique_interventionbundle_interventiondemande_admin',
-            $this->interventionDemande,
-            ['interventionDemande' => $this->interventionDemande]
+            AdminType::class,
+            $this->interventionDemande
         );
 
         if ($this->gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)) {
@@ -53,8 +57,8 @@ class DemandeController extends Controller
 
             return $this->redirect(
                 $do == 'save-close'
-                    ? $this->generateUrl('hopital_numerique_intervention_admin_liste')
-                    : $this->generateUrl(
+                ? $this->generateUrl('hopital_numerique_intervention_admin_liste')
+                : $this->generateUrl(
                     'hopital_numerique_intervention_admin_demande_edit',
                     ['id' => $this->interventionDemande->getId()]
                 )
@@ -144,9 +148,8 @@ class DemandeController extends Controller
     {
         $this->interventionDemande = $id;
         $interventionDemandeFormulaire = $this->createForm(
-            'hopitalnumerique_interventionbundle_interventiondemande_edition_admin',
-            $this->interventionDemande,
-            ['interventionDemande' => $this->interventionDemande]
+            EditAdminType::class,
+            $this->interventionDemande
         );
 
         if ($this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)) {
@@ -236,7 +239,9 @@ class DemandeController extends Controller
     public function supprimeAction(InterventionDemande $id)
     {
         $interventionDemande = $id;
-        $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemande);
+        $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete(
+            $interventionDemande
+        );
         $this->container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
         $reponseJson = json_encode([
