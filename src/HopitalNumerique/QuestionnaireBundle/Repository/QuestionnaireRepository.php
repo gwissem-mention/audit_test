@@ -3,7 +3,9 @@
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Doctrine\ORM\Query\Expr;
@@ -19,10 +21,10 @@ class QuestionnaireRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
+     * @param      $domainesIds
+     * @param null $condition
      *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return QueryBuilder
      */
     public function getDatasForGrid($domainesIds, $condition = null)
     {
@@ -45,13 +47,17 @@ class QuestionnaireRepository extends EntityRepository
             ])
             ->orderBy('questionnaire.nom')
             ->groupBy('questionnaire.id', 'domaine.id');
-            // ->addGroupBy('domaine.id');
 
         return $qb;
     }
 
     /**
      * Récupère les questions/réponses d'un questionnaire.
+     *
+     * @param                 $idQuestionnaire
+     * @param                 $idUser
+     * @param Occurrence|null $occurrence
+     * @param null            $paramId
      *
      * @return array
      */
@@ -66,7 +72,7 @@ class QuestionnaireRepository extends EntityRepository
         ;
 
         $qb
-            ->leftJoin('question.reponses', 'reponse', 'WITH', 'reponse.user = :idUser' . (null !== $paramId ? ' AND reponse.paramId = :paramId' : '') . (null !== $occurrence ? ' AND reponse.occurrence = :occurrence' : ''))
+            ->leftJoin('question.reponses', 'reponse', 'WITH', 'reponse.user = :idUser' . (null != $paramId ? ' AND reponse.paramId = :paramId' : '') . (null !== $occurrence ? ' AND reponse.occurrence = :occurrence' : ''))
             ->setParameter('idUser', $idUser)
         ;
 
@@ -86,9 +92,9 @@ class QuestionnaireRepository extends EntityRepository
     /**
      * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
-     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     * @return Questionnaire[]
      */
     public function findByUser(User $user)
     {
@@ -97,8 +103,8 @@ class QuestionnaireRepository extends EntityRepository
         $query
             ->select('questionnaire', 'occurrence')
             ->innerJoin('questionnaire.questions', 'question')
-            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
-            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->innerJoin('question.reponses', 'reponse', Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', Expr\Join::WITH, 'occurrence.user = :user')
             ->setParameter('user', $user)
             ->groupBy('questionnaire.id', 'occurrence.id')
             ->addOrderBy('questionnaire.id', 'ASC')
@@ -111,9 +117,9 @@ class QuestionnaireRepository extends EntityRepository
     /**
      * Retourne les questionnaires d'un domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
      *
-     * @return \Doctrine\Common\Collections\Collection Questionnaires
+     * @return Questionnaire[]
      */
     public function findByDomaine(Domaine $domaine)
     {
@@ -126,13 +132,15 @@ class QuestionnaireRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    /*
-     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine
+     * avec les dates de création et de dernières modifications.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
-     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     * @param User    $user
+     * @param Domaine $domaine
+     * @param null    $isLock
+     *
+     * @return Questionnaire[]
      */
     public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
     {
@@ -143,10 +151,10 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('MIN(reponse.dateCreation) AS dateCreation')
             ->addSelect('MAX(reponse.dateUpdate) AS dernierUpdate')
             ->leftJoin('questionnaire.questions', 'question')
-            ->leftJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
-            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->leftJoin('question.reponses', 'reponse', Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', Expr\Join::WITH, 'occurrence.user = :user')
             ->setParameter('user', $user)
-            ->innerJoin('questionnaire.domaines', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, 'domaine = :domaine')
+            ->innerJoin('questionnaire.domaines', 'domaine', Expr\Join::WITH, 'domaine = :domaine')
             ->setParameter('domaine', $domaine)
             ->having($query->expr()->orX('COUNT(reponse) > :zero', $query->expr()->isNotNull('occurrence.id')))
             ->setParameter('zero', 0)

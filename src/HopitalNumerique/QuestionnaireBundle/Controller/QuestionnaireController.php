@@ -424,6 +424,7 @@ class QuestionnaireController extends Controller
             'paramId' => $idSession,
         ];
 
+
         if (isset($options['showAllQuestions']) && !is_null($options['showAllQuestions'])) {
             $label_attr['showAllQuestions'] = $options['showAllQuestions'];
         }

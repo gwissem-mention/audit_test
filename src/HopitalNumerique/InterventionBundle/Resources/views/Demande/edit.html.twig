@@ -11,7 +11,6 @@
 
     {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
         <script type="text/javascript">
-            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initRegions([{{ interventionDemande.etablissementsRattachesRegionsIds|join(',') }}]);
             {% for etablissement in interventionDemande.etablissements %}
                 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
             {% endfor %}
