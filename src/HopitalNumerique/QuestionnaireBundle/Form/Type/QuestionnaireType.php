@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -31,6 +31,9 @@ use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * Class QuestionnaireType
+ */
 class QuestionnaireType extends AbstractType
 {
     /**
@@ -38,13 +41,13 @@ class QuestionnaireType extends AbstractType
      */
     private $occurrenceForm;
 
-    private $_readOnly = false;
-    private $_managerReponse;
+    private $readOnly = false;
+    private $managerReponse;
 
     /**
      * @var QuestionnaireManager QuestionnaireManager
      */
-    private $_managerQuestionnaire;
+    private $managerQuestionnaire;
 
     /**
      * @var OccurrenceManager OccurrenceManager
@@ -72,11 +75,11 @@ class QuestionnaireType extends AbstractType
         OccurrenceManager $occurrenceManager,
         UserManager $userManager
     ) {
-        $this->occurrenceForm        = $occurrenceForm;
-        $this->_managerReponse       = $managerReponse;
-        $this->_managerQuestionnaire = $managerQuestionnaire;
-        $this->occurrenceManager     = $occurrenceManager;
-        $this->userManager           = $userManager;
+        $this->occurrenceForm       = $occurrenceForm;
+        $this->managerReponse       = $managerReponse;
+        $this->managerQuestionnaire = $managerQuestionnaire;
+        $this->occurrenceManager    = $occurrenceManager;
+        $this->userManager          = $userManager;
     }
 
     /**
@@ -98,7 +101,7 @@ class QuestionnaireType extends AbstractType
         $occurrence = (isset($options['label_attr']['occurrence']) ? $options['label_attr']['occurrence'] : null);
 
         /** @var Questionnaire $questionnaire */
-        $questionnaire = $this->_managerQuestionnaire->findOneBy(['id' => $idQuestionnaire]);
+        $questionnaire = $this->managerQuestionnaire->findOneBy(['id' => $idQuestionnaire]);
 
         /** @var User $user */
         $user = $this->userManager->findOneById($idUser);
@@ -114,8 +117,8 @@ class QuestionnaireType extends AbstractType
                              && !is_null($options['label_attr']['routeRedirection'])
         ) ? $options['label_attr']['routeRedirection'] : [];
 
-        $this->_readOnly = (isset($options['label_attr']['readOnly'])
-                            && !is_null($options['label_attr']['readOnly'])
+        $this->readOnly = (isset($options['label_attr']['readOnly'])
+                           && !is_null($options['label_attr']['readOnly'])
         ) ? $options['label_attr']['readOnly'] : false;
 
         //Si le showAllQuestions n'est pas reinseigné, par défaut on les affiches toutes
@@ -147,18 +150,25 @@ class QuestionnaireType extends AbstractType
         );
 
         if ($questionnaire->isOccurrenceMultiple() && null === $occurrence) {
-            $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
+            if (is_null($options['label_attr']['paramId'])) {
+                $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser(
+                    $questionnaire,
+                    $user
+                );
 
-            if (null === $occurrence) {
-                $occurrence = $this->occurrenceManager->createEmpty();
-                $occurrence->setQuestionnaire($questionnaire);
-                $occurrence->setUser($user);
-                $this->occurrenceManager->save($occurrence);
+                if (null === $occurrence) {
+                    $occurrence = $this->occurrenceManager->createEmpty();
+                    $occurrence->setQuestionnaire($questionnaire);
+                    $occurrence->setUser($user);
+                    $this->occurrenceManager->save($occurrence);
+                }
+            } else {
+                $occurrence = null;
             }
         }
 
         //Récupération du questionnaire
-        $questions = $this->_managerQuestionnaire->getQuestionsReponses(
+        $questions = $this->managerQuestionnaire->getQuestionsReponses(
             $idQuestionnaire,
             $idUser,
             $occurrence,
@@ -169,13 +179,19 @@ class QuestionnaireType extends AbstractType
         $this->constructBuilder($builder, $questions, $questionnaire, $occurrence, $options);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire',
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'nodevo_questionnaire_questionnaire';
@@ -197,7 +213,9 @@ class QuestionnaireType extends AbstractType
         Occurrence $occurrence = null,
         $options
     ) {
-        $this->addOccurrenceType($builder, $questionnaire, $occurrence);
+        if (is_null($options['label_attr']['paramId'])) {
+            $this->addOccurrenceType($builder, $questionnaire, $occurrence);
+        }
 
         //Réponse de la question courante
         $reponseCourante = null;
@@ -235,8 +253,8 @@ class QuestionnaireType extends AbstractType
                             'required'   => $question->getObligatoire(),
                             'label'      => $question->getLibelle(),
                             'mapped'     => false,
-                            'read_only'  => $this->_readOnly,
-                            'disabled'   => $this->_readOnly,
+                            'read_only'  => $this->readOnly,
+                            'disabled'   => $this->readOnly,
                             'attr'       => is_null($question->getVerifJS()) ? $attr
                                 : ['class' => $question->getVerifJS()],
                             'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
@@ -257,8 +275,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -284,8 +302,8 @@ class QuestionnaireType extends AbstractType
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
@@ -323,8 +341,8 @@ class QuestionnaireType extends AbstractType
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
                             'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
@@ -362,8 +380,8 @@ class QuestionnaireType extends AbstractType
                             'empty_value'   => $question->getObligatoire() ? false : 'Ne se prononce pas',
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'expanded'      => true,
                             'multiple'      => false,
                             'attr'          => $attr,
@@ -400,8 +418,8 @@ class QuestionnaireType extends AbstractType
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
                             'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'expanded'      => true,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
@@ -440,8 +458,8 @@ class QuestionnaireType extends AbstractType
                                         'class' => 'inputUpload ' . $question->getVerifJS(),
                                     ],
                                 'mapped'     => false,
-                                'read_only'  => $this->_readOnly,
-                                'disabled'   => $this->_readOnly,
+                                'read_only'  => $this->readOnly,
+                                'disabled'   => $this->readOnly,
                                 'data'       => is_null($reponseCourante)
                                     ? null
                                     : [
@@ -483,8 +501,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => $attr,
                             'data'      => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
                         ]
@@ -500,7 +518,7 @@ class QuestionnaireType extends AbstractType
                     }
 
                     $objetIdsSelectionnees = [];
-                    $reponse               = $this->_managerReponse->findOneBy(
+                    $reponse               = $this->managerReponse->findOneBy(
                         [
                             'question' => $question,
                             'user'     => $interventionDemande->getReferent(),
@@ -526,8 +544,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -554,8 +572,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -586,8 +604,8 @@ class QuestionnaireType extends AbstractType
                             'label'       => $question->getLibelle(),
                             'trim'        => true,
                             'mapped'      => false,
-                            'read_only'   => $this->_readOnly,
-                            'disabled'    => $this->_readOnly,
+                            'read_only'   => $this->readOnly,
+                            'disabled'    => $this->readOnly,
                             'attr'        => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -615,8 +633,8 @@ class QuestionnaireType extends AbstractType
                             'required'     => $question->getObligatoire(),
                             'label'        => $question->getLibelle(),
                             'mapped'       => false,
-                            'read_only'    => $this->_readOnly,
-                            'disabled'     => $this->_readOnly,
+                            'read_only'    => $this->readOnly,
+                            'disabled'     => $this->readOnly,
                             'empty_value'  => ' - ',
                             'attr'         => array_merge($attr, $etabAttr),
                             'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
@@ -632,7 +650,8 @@ class QuestionnaireType extends AbstractType
                                 ]
                             );
                         } else {
-                            $fieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                            $fieldOptions['choices'] =
+                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
                                 ? []
                                 : [$reponseCourante->getEtablissement()]
                             ;
@@ -682,11 +701,15 @@ class QuestionnaireType extends AbstractType
                             'label'        => $question->getLibelle(),
                             'mapped'       => false,
                             'multiple'     => true,
-                            'read_only'    => $this->_readOnly,
-                            'disabled'     => $this->_readOnly,
+                            'read_only'    => $this->readOnly,
+                            'disabled'     => $this->readOnly,
                             'empty_value'  => ' - ',
                             'attr'         => array_merge($attr, $etabAttr),
-                            'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissementMulitple(),
+                            'data'         =>
+                                is_null($reponseCourante)
+                                ? null
+                                : $reponseCourante->getEtablissementMulitple()
+                            ,
                         ];
 
                         if ($full) {
@@ -699,7 +722,8 @@ class QuestionnaireType extends AbstractType
                                 ]
                             );
                         } else {
-                            $fieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                            $fieldOptions['choices'] =
+                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
                                 ? []
                                 : $reponseCourante->getEtablissementMulitple()
                             ;
@@ -758,8 +782,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
