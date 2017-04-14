@@ -9,7 +9,6 @@ namespace HopitalNumerique\InterventionBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-use HopitalNumerique\InterventionBundle\Manager\InterventionDemande;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -25,7 +24,6 @@ use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
-use Symfony\Component\Validator\Validator\LegacyValidator;
 
 /**
  * Formulaire d'une demande d'intervention.
@@ -54,7 +52,7 @@ abstract class InterventionDemandeType extends AbstractType
      */
     protected $utilisateurConnecte;
     /**
-     * @var InterventionDemande La demande d'intervention ouverte
+     * @var InterventionDemandeManager La demande d'intervention ouverte
      */
     protected $interventionDemande;
 
@@ -238,7 +236,8 @@ abstract class InterventionDemandeType extends AbstractType
             FormInterface $form,
             $full = false
         ) use (
-            $reponseCourante, $etablissementFieldOptions
+            $reponseCourante,
+            $etablissementFieldOptions
         ) {
 
             if ($full) {
