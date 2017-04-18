@@ -63,7 +63,7 @@ class QuestionnaireType extends AbstractType
     /**
      * @var RouterInterface
      */
-    private $routerInterface;
+    private $router;
 
     /**
      * QuestionnaireType constructor.
@@ -73,7 +73,7 @@ class QuestionnaireType extends AbstractType
      * @param QuestionnaireManager $managerQuestionnaire
      * @param OccurrenceManager    $occurrenceManager
      * @param UserManager          $userManager
-     * @param RouterInterface      $routerInterface
+     * @param RouterInterface      $router
      */
     public function __construct(
         OccurrenceType $occurrenceForm,
@@ -81,14 +81,14 @@ class QuestionnaireType extends AbstractType
         $managerQuestionnaire,
         OccurrenceManager $occurrenceManager,
         UserManager $userManager,
-        RouterInterface $routerInterface
+        RouterInterface $router
     ) {
         $this->occurrenceForm       = $occurrenceForm;
         $this->managerReponse       = $managerReponse;
         $this->managerQuestionnaire = $managerQuestionnaire;
         $this->occurrenceManager    = $occurrenceManager;
         $this->userManager          = $userManager;
-        $this->routerInterface      = $routerInterface;
+        $this->router               = $router;
     }
 
     /**
@@ -459,7 +459,7 @@ class QuestionnaireType extends AbstractType
 
                     $questionLabel = $question->getLibelle();
                     if ($question->getAlias() === 'dpi') {
-                        $downloadLink = $this->routerInterface->generate(
+                        $downloadLink = $this->router->generate(
                             'hopitalnumerique_questionnaire_question_download_template',
                             ['question' => $question->getId()]
                         );

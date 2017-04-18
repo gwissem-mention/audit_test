@@ -55,6 +55,7 @@
                 {% if form[item].vars.attr['data-template-enabled']is defined and form[item].vars.attr['data-template-enabled'] == 'true' %}
                     {% form_theme form[item] '@HopitalNumeriqueQuestionnaire/Questionnaire/Theme/theme.raw_label.html.twig' %}
                 {% endif %}
+                {{form_row(form[item])}}
             {% endfor %}
         {{ form_end(form) }}
     {% endif %}

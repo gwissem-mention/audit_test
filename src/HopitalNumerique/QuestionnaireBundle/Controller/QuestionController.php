@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question as HopiQuestion;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller des Questionnaire.
@@ -184,18 +185,19 @@ class QuestionController extends Controller
     /**
      * @param Question $question
      *
-     * @return null|Response
+     * @return Response
      */
     public function downloadTemplateFileAction(Question $question)
     {
-        $response = new Response();
 
         if ($question->getAlias() == 'dpi') {
             $path = $this->get('kernel')->getRootDir(). '/../files/expert/';
             $filename = 'experts_dpi.docx';
         } else {
-            return $response;
+            throw new NotFoundHttpException('Le modèle demandé n\'existe pas.');
         }
+
+        $response = new Response();
 
         $file = file_get_contents($path.$filename);
 
