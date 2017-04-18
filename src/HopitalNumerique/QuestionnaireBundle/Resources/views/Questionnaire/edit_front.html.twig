@@ -52,12 +52,11 @@
                 {{ form_widget(form.occurrence) }}
             {% endif %}
             {% for item in form.vars.order %}
-                {% if form[item].vars.attr['data-template-enabled']is defined and form[item].vars.attr['data-template-enabled'] == 'true' %}
+                {% if form[item].vars.attr['data-template-link'] is defined %}
                     {% form_theme form[item] '@HopitalNumeriqueQuestionnaire/Questionnaire/Theme/theme.raw_label.html.twig' %}
                 {% endif %}
                 {{form_row(form[item])}}
             {% endfor %}
         {{ form_end(form) }}
     {% endif %}
-
 </div>

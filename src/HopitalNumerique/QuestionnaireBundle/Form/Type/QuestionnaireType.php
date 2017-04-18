@@ -455,16 +455,11 @@ class QuestionnaireType extends AbstractType
                         $attr['class'] = 'inputUpload ' . $question->getVerifJS();
                     }
 
-
-
-                    $questionLabel = $question->getLibelle();
                     if ($question->getAlias() === 'dpi') {
-                        $downloadLink = $this->router->generate(
+                        $attr['data-template-link'] = $this->router->generate(
                             'hopitalnumerique_questionnaire_question_download_template',
                             ['question' => $question->getId()]
                         );
-                        $questionLabel = $question->getLibelle() . ' <a href="' . $downloadLink . '">Télécharger le modèle</a>';
-                        $attr['data-template-enabled'] = 'true';
                     }
 
                     $fieldName = $question->getTypeQuestion()->getLibelle()
@@ -478,7 +473,7 @@ class QuestionnaireType extends AbstractType
                             FileType::class,
                             [
                                 'required'   => $question->getObligatoire(),
-                                'label'      => $questionLabel,
+                                'label'      => $question->getLibelle(),
                                 'attr'       => $attr,
                                 'mapped'     => false,
                                 'read_only'  => $this->readOnly,
