@@ -143,7 +143,10 @@ abstract class InterventionDemandeType extends AbstractType
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'required' => true,
-                'attr' => ['class' => $this->_constraints['telephone']['class']],
+                'attr' => [
+                    'class' => $this->_constraints['telephone']['class'],
+                    'data-mask' => $this->_constraints['telephone']['mask'],
+                ],
                 'data' => is_null($options['interventionDemande']->getTelephone())
                     ? $this->utilisateurConnecte->getTelephoneDirect()
                     : $options['interventionDemande']->getTelephone(),
