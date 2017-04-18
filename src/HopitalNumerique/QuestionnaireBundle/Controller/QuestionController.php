@@ -188,16 +188,16 @@ class QuestionController extends Controller
      */
     public function downloadTemplateFileAction(Question $question)
     {
+        $response = new Response();
+
         if ($question->getAlias() == 'dpi') {
             $path = $this->get('kernel')->getRootDir(). '/../files/expert/';
             $filename = 'experts_dpi.docx';
         } else {
-            return null;
+            return $response;
         }
 
         $file = file_get_contents($path.$filename);
-
-        $response = new Response();
 
         $response->headers->set(
             'Content-Type',

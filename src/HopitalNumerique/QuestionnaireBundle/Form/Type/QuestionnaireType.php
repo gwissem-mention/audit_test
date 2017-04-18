@@ -29,7 +29,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
@@ -61,9 +61,9 @@ class QuestionnaireType extends AbstractType
     private $userManager;
 
     /**
-     * @var Router
+     * @var RouterInterface
      */
-    private $router;
+    private $routerInterface;
 
     /**
      * QuestionnaireType constructor.
@@ -73,7 +73,7 @@ class QuestionnaireType extends AbstractType
      * @param QuestionnaireManager $managerQuestionnaire
      * @param OccurrenceManager    $occurrenceManager
      * @param UserManager          $userManager
-     * @param Router               $router
+     * @param RouterInterface      $routerInterface
      */
     public function __construct(
         OccurrenceType $occurrenceForm,
@@ -81,14 +81,14 @@ class QuestionnaireType extends AbstractType
         $managerQuestionnaire,
         OccurrenceManager $occurrenceManager,
         UserManager $userManager,
-        Router $router
+        RouterInterface $routerInterface
     ) {
         $this->occurrenceForm       = $occurrenceForm;
         $this->managerReponse       = $managerReponse;
         $this->managerQuestionnaire = $managerQuestionnaire;
         $this->occurrenceManager    = $occurrenceManager;
         $this->userManager          = $userManager;
-        $this->router               = $router;
+        $this->routerInterface      = $routerInterface;
     }
 
     /**
@@ -459,7 +459,7 @@ class QuestionnaireType extends AbstractType
 
                     $questionLabel = $question->getLibelle();
                     if ($question->getAlias() === 'dpi') {
-                        $downloadLink = $this->router->generate(
+                        $downloadLink = $this->routerInterface->generate(
                             'hopitalnumerique_questionnaire_question_download_template',
                             ['question' => $question->getId()]
                         );
