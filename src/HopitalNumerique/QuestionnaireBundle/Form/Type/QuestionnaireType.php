@@ -223,6 +223,7 @@ class QuestionnaireType extends AbstractType
         //Création des questions
         /** @var Question $question */
         foreach ($questions as $question) {
+            /*dump($question);*/
             $reponses = $question->getReponses();
             $reponseCourante = null;
 
@@ -438,7 +439,19 @@ class QuestionnaireType extends AbstractType
                     );
                     break;
                 case 'file':
-                    $attr = $question->getObligatoire() ? ['class' => 'inputUpload validate[required]'] : [];
+                    $attr = [];
+
+                    if (is_null($question->getVerifJS()) && $question->getObligatoire()) {
+                        $attr['class'] = 'inputUpload validate[required]';
+                    } else {
+                        $attr['class'] = 'inputUpload ' . $question->getVerifJS();
+                    }
+
+                    $questionLabel = $question->getLibelle();
+                    if ($question->getAlias() === 'dpi') {
+                        $questionLabel = $question->getLibelle() . ' <a href="test.php">Télécharger le modèle</a>';
+                        $attr['data-template-enabled'] = 'true';
+                    }
 
                     $fieldName = $question->getTypeQuestion()->getLibelle()
                                  . '_' . $question->getId()
@@ -451,12 +464,8 @@ class QuestionnaireType extends AbstractType
                             FileType::class,
                             [
                                 'required'   => $question->getObligatoire(),
-                                'label'      => $question->getLibelle(),
-                                'attr'       => is_null($question->getVerifJS())
-                                    ? $attr
-                                    : [
-                                        'class' => 'inputUpload ' . $question->getVerifJS(),
-                                    ],
+                                'label'      => $questionLabel,
+                                'attr'       => $attr,
                                 'mapped'     => false,
                                 'read_only'  => $this->readOnly,
                                 'disabled'   => $this->readOnly,
