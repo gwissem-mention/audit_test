@@ -4,6 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
 use HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion;
+use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -189,22 +190,22 @@ class QuestionController extends Controller
      */
     public function downloadTemplateFileAction(Question $question)
     {
+        $filename = sprintf('template_%s.docx', $question->getAlias());
+        $path = $this->get('kernel')->getRootDir(). '/../files/expert/'.$filename;
 
-        if ($question->getAlias() == 'dpi') {
-            $path = $this->get('kernel')->getRootDir(). '/../files/expert/';
-            $filename = 'experts_dpi.docx';
-        } else {
+        if (!TemplateQuestionAliasEnum::hasTemplate($question->getAlias()) || !file_exists($path)) {
             throw new NotFoundHttpException('Le modèle demandé n\'existe pas.');
         }
 
         $response = new Response();
 
-        $file = file_get_contents($path.$filename);
+        $file = file_get_contents($path);
 
         $response->headers->set(
             'Content-Type',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         );
+
         $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename);
 
         $response->setContent($file);

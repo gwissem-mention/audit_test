@@ -4,7 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
-use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAlias;
+use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
@@ -456,7 +456,7 @@ class QuestionnaireType extends AbstractType
                         $attr['class'] = 'inputUpload ' . $question->getVerifJS();
                     }
 
-                    if (TemplateQuestionAlias::hasTemplate($question->getAlias())) {
+                    if (TemplateQuestionAliasEnum::hasTemplate($question->getAlias())) {
                         $attr['data-template-link'] = $this->router->generate(
                             'hopitalnumerique_questionnaire_question_download_template',
                             ['question' => $question->getId()]

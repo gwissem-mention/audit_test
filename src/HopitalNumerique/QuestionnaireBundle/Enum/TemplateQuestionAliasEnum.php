@@ -7,9 +7,19 @@ namespace HopitalNumerique\QuestionnaireBundle\Enum;
  *
  * Lists the aliases of the questions that have a download link in their label
  */
-class TemplateQuestionAlias
+class TemplateQuestionAliasEnum
 {
-    private static $questionAliasesWithTemplate = ['dpi'];
+    const DPI = 'dpi';
+
+    /**
+     * @return array
+     */
+    public static function getQuestionsAliasesWithTemplate()
+    {
+        return [
+            self::DPI,
+        ];
+    }
 
     /**
      * @param $alias
@@ -18,12 +28,6 @@ class TemplateQuestionAlias
      */
     public static function hasTemplate($alias)
     {
-        foreach (TemplateQuestionAlias::$questionAliasesWithTemplate as $questionAlias) {
-            if ($alias == $questionAlias) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($alias, self::getQuestionsAliasesWithTemplate());
     }
 }
