@@ -294,6 +294,10 @@ class PublicationController extends Controller
         /** @var Contenu $contenu */
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $idc]);
 
+        if (is_null($contenu) || $contenu->getObjet() !== $objet) {
+            throw $this->createNotFoundException("Contenu introuvable pour cette publication.");
+        }
+
         $productionsLiees = $this->get('hopitalnumerique_publication.service.relation_finder')->findRelations($contenu);
 
         $prefix = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
