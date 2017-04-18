@@ -53,7 +53,7 @@
             {% endif %}
             {% for item in form.vars.order %}
                 {% if form[item].vars.attr['data-template-link'] is defined %}
-                    {% form_theme form[item] '@HopitalNumeriqueQuestionnaire/Questionnaire/Theme/theme.raw_label.html.twig' %}
+                    {% form_theme form[item] '@HopitalNumeriqueQuestionnaire/Questionnaire/Theme/theme.download_template_label.html.twig' %}
                 {% endif %}
                 {{form_row(form[item])}}
             {% endfor %}
