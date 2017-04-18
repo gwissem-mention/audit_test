@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Contrôleur des utilisateurs.
@@ -22,7 +23,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         if (!$this->container
             ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()
         ) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_user_list'));
+
+            return $this->redirectToRoute('account_login');
         }
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
 
