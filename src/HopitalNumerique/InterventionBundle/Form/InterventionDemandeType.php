@@ -1,15 +1,10 @@
 <?php
 
-/**
- * Formulaire d'une demande d'intervention.
- *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
- */
 namespace HopitalNumerique\InterventionBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-use HopitalNumerique\InterventionBundle\Manager\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -25,7 +20,6 @@ use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
-use Symfony\Component\Validator\Validator\LegacyValidator;
 
 /**
  * Formulaire d'une demande d'intervention.
@@ -36,14 +30,17 @@ abstract class InterventionDemandeType extends AbstractType
      * @var array Pour la validation du formulaire
      */
     protected $_constraints = [];
+
     /**
      * @var FormInterventionDemandeManager Manager Form\InterventionDemande
      */
     protected $formInterventionDemandeManager;
+
     /**
      * @var FormUserManager Manager Form\User
      */
     protected $formUserManager;
+
     /**
      * @var FormEtablissementManager Manager Form\Etablissement
      */
@@ -53,10 +50,6 @@ abstract class InterventionDemandeType extends AbstractType
      * @var User Utilisateur connecté
      */
     protected $utilisateurConnecte;
-    /**
-     * @var InterventionDemande La demande d'intervention ouverte
-     */
-    protected $interventionDemande;
 
     /**
      * InterventionDemandeType constructor.
@@ -90,8 +83,6 @@ abstract class InterventionDemandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->interventionDemande = $options['interventionDemande'];
-
         $reponseCourante = $builder->getData();
         $etablissementFieldOptions = [
             'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
@@ -136,9 +127,6 @@ abstract class InterventionDemandeType extends AbstractType
                 'label' => 'Adresse mail',
                 'required' => true,
                 'attr' => ['class' => $this->_constraints['email']['class']],
-                'data' => is_null($options['interventionDemande']->getEmail())
-                    ? $this->utilisateurConnecte->getEmail()
-                    : $options['interventionDemande']->getEmail(),
             ])
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
@@ -147,9 +135,6 @@ abstract class InterventionDemandeType extends AbstractType
                     'class' => $this->_constraints['telephone']['class'],
                     'data-mask' => $this->_constraints['telephone']['mask'],
                 ],
-                'data' => is_null($options['interventionDemande']->getTelephone())
-                    ? $this->utilisateurConnecte->getTelephoneDirect()
-                    : $options['interventionDemande']->getTelephone(),
             ])
             ->add('etablissements', EntityType::class, $etablissementFieldOptions)
             ->add('referent', EntityType::class, [
@@ -241,7 +226,8 @@ abstract class InterventionDemandeType extends AbstractType
             FormInterface $form,
             $full = false
         ) use (
-            $reponseCourante, $etablissementFieldOptions
+            $reponseCourante,
+            $etablissementFieldOptions
         ) {
 
             if ($full) {
@@ -254,7 +240,8 @@ abstract class InterventionDemandeType extends AbstractType
                     ]
                 );
             } else {
-                $etablissementFieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissements())
+                $etablissementFieldOptions['choices'] =
+                    is_null($reponseCourante) || is_null($reponseCourante->getEtablissements())
                     ? []
                     : $reponseCourante->getEtablissements()
                 ;
@@ -284,16 +271,7 @@ abstract class InterventionDemandeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande',
-            'interventionDemande' => null,
+            'data_class' => InterventionDemande::class,
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'hopitalnumerique_interventionbundle_interventiondemande';
     }
 }

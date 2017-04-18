@@ -15,7 +15,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initBoutonSoumission_Click();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireCreation_Submit();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireEdition_Submit();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAmbassadeur_Change();
@@ -69,19 +68,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initF
     });
 };
 
-/**
- * Initialisation de l'événement d'un changement de région.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change = function()
-{
-    var regionSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_region');
-
-    $(regionSelect).change(function() {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
-    });
-};
 /**
  * Initialisation de l'événement d'un changement parmi les autres établissements de santé.
  * 
