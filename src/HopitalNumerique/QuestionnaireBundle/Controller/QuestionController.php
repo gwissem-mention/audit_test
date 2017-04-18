@@ -180,4 +180,33 @@ class QuestionController extends Controller
 
         return new Response('{"success":true}', 200);
     }
+
+    /**
+     * @param Question $question
+     *
+     * @return null|Response
+     */
+    public function downloadTemplateFileAction(Question $question)
+    {
+        if ($question->getAlias() == 'dpi') {
+            $path = $this->get('kernel')->getRootDir(). '/../files/expert/';
+            $filename = 'experts_dpi.docx';
+        } else {
+            return null;
+        }
+
+        $file = file_get_contents($path.$filename);
+
+        $response = new Response();
+
+        $response->headers->set(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename);
+
+        $response->setContent($file);
+
+        return $response;
+    }
 }

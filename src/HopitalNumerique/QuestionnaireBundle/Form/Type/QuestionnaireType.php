@@ -29,6 +29,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
@@ -60,6 +61,11 @@ class QuestionnaireType extends AbstractType
     private $userManager;
 
     /**
+     * @var Router
+     */
+    private $router;
+
+    /**
      * QuestionnaireType constructor.
      *
      * @param OccurrenceType       $occurrenceForm
@@ -67,19 +73,22 @@ class QuestionnaireType extends AbstractType
      * @param QuestionnaireManager $managerQuestionnaire
      * @param OccurrenceManager    $occurrenceManager
      * @param UserManager          $userManager
+     * @param Router               $router
      */
     public function __construct(
         OccurrenceType $occurrenceForm,
         $managerReponse,
         $managerQuestionnaire,
         OccurrenceManager $occurrenceManager,
-        UserManager $userManager
+        UserManager $userManager,
+        Router $router
     ) {
         $this->occurrenceForm       = $occurrenceForm;
         $this->managerReponse       = $managerReponse;
         $this->managerQuestionnaire = $managerQuestionnaire;
         $this->occurrenceManager    = $occurrenceManager;
         $this->userManager          = $userManager;
+        $this->router               = $router;
     }
 
     /**
@@ -223,7 +232,6 @@ class QuestionnaireType extends AbstractType
         //Création des questions
         /** @var Question $question */
         foreach ($questions as $question) {
-            /*dump($question);*/
             $reponses = $question->getReponses();
             $reponseCourante = null;
 
@@ -447,9 +455,15 @@ class QuestionnaireType extends AbstractType
                         $attr['class'] = 'inputUpload ' . $question->getVerifJS();
                     }
 
+
+
                     $questionLabel = $question->getLibelle();
                     if ($question->getAlias() === 'dpi') {
-                        $questionLabel = $question->getLibelle() . ' <a href="test.php">Télécharger le modèle</a>';
+                        $downloadLink = $this->router->generate(
+                            'hopitalnumerique_questionnaire_question_download_template',
+                            ['question' => $question->getId()]
+                        );
+                        $questionLabel = $question->getLibelle() . ' <a href="' . $downloadLink . '">Télécharger le modèle</a>';
                         $attr['data-template-enabled'] = 'true';
                     }
 
