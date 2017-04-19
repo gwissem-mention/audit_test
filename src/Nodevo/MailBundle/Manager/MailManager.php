@@ -620,7 +620,7 @@ class MailManager extends BaseManager
 
     /**
      * @param $body
-     * 
+     *
      * @return string
      */
     private function truncatePostBody($body)
@@ -628,10 +628,7 @@ class MailManager extends BaseManager
         $body = trim(strip_tags(html_entity_decode($this->bbcodeEngine->process($body))));
 
         if (strlen($body) > 50) {
-            $body = substr($body, 0, 50);
-            if (strrpos($body, ' ') > 0) {
-                $body = substr($body, 0, strrpos($body, ' ')) . '...';
-            }
+            $body = substr($body, 0, strrpos(substr($body, 0, 50), ' ') ?: strrpos(substr($body, 0, 50), "\n") ?: 50);
         }
 
         return $body;
