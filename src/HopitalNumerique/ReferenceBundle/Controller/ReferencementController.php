@@ -27,7 +27,7 @@ class ReferencementController extends Controller
         $entityService = $this->get('hopitalnumerique_core.dependency_injection.entity');
 
         $entity = $entityService->getEntityByTypeAndId($entityType, $entityId);
-        $entityTitle = $entityService->getTitleByEntity($entity);
+        $entityTitle = $entityService->getTitleByEntity($entity, null, false);
 
         if (!$this->isGranted('reference', $entity)) {
             throw $this->createAccessDeniedException();
