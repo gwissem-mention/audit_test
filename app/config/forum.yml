@@ -12,6 +12,7 @@ services:
                 - "@security.context"
                 - "@nodevo_mail.manager.mail"
                 - "@mailer"
+                - "@hopitalnumerique_forum.repository.post"
             tags:
                 - { name: kernel.event_subscriber }
 

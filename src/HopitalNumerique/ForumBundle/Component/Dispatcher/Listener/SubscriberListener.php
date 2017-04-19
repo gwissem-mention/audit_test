@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Component\Dispatcher\Listener;
 
 use CCDNForum\ForumBundle\Component\Dispatcher\Listener\SubscriberListener as CCDNSubscriberListener;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
+use HopitalNumerique\ForumBundle\Repository\PostRepository;
 use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\MailBundle\Manager\MailManager;
 
@@ -19,16 +20,20 @@ class SubscriberListener extends CCDNSubscriberListener
      */
     protected $mailer;
 
+    /** @var PostRepository $postRepository */
+    protected $postRepository;
+
     /**
      * @param \CCDNForum\ForumBundle\Model\FrontModel\SubscriptionModel $subscriptionModel
      * @param \Symfony\Component\Security\Core\SecurityContext          $securityContext
      */
-    public function __construct($subscriptionModel, SecurityContext $securityContext, MailManager $mailManager, \Swift_Mailer $mailer)
+    public function __construct($subscriptionModel, SecurityContext $securityContext, MailManager $mailManager, \Swift_Mailer $mailer, PostRepository $postRepository)
     {
         $this->subscriptionModel = $subscriptionModel;
         $this->securityContext = $securityContext;
         $this->mailManager = $mailManager;
         $this->mailer = $mailer;
+        $this->postRepository = $postRepository;
     }
 
     public function onTopicCreateComplete(UserTopicEvent $event)
@@ -45,12 +50,15 @@ class SubscriberListener extends CCDNSubscriberListener
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
                 $user = $this->securityContext->getToken()->getUser();
+                $topic = $event->getTopic();
 
                 if ($event->authorWantsToSubscribe()) {
                     $this->subscriptionModel->subscribe($event->getTopic(), $user);
                 }
 
                 $subscriptions = $this->subscriptionModel->findAllSubscriptionsToSend($event->getTopic());
+
+                $post = current($this->postRepository->findBy(['topic' => $topic->getId()], ['id' => 'DESC'], 1));
 
                 //Envoie des mails pour les followers
                 foreach ($subscriptions as $subscription) {
@@ -67,6 +75,7 @@ class SubscriberListener extends CCDNSubscriberListener
                             'fildiscusssion' => $topic->getTitle(),
                             'lienversmessage' => 'lien',
                             'pseudouser' => !is_null($user->getPseudonymeForum()) ? $user->getPseudonymeForum() : $user->getNomPrenom(),
+                            'shortMessage' => $post->getBody(),
                         ];
                         $mail = $this->mailManager->sendNouveauMessageForumMail($subscription->getOwnedBy(), $options, $topic->getId());
                         $this->mailer->send($mail);
