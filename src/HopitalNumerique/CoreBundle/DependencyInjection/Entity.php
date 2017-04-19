@@ -457,10 +457,11 @@ class Entity
      *
      * @param object   $entity                 Entité
      * @param int|null $truncateCaractersCount Nombre de caractères à afficher
+     * @param bool     $parentTitle            If true, displays the parent title of the entity
      *
      * @return string Libellé
      */
-    public function getTitleByEntity($entity, $truncateCaractersCount = null)
+    public function getTitleByEntity($entity, $truncateCaractersCount = null, $parentTitle = true)
     {
         $title = null;
 
@@ -470,7 +471,11 @@ class Entity
                 $title = $entity->getTitre();
                 break;
             case self::ENTITY_TYPE_CONTENU:
-                $title = $entity->getObjet()->getTitre();
+                if ($parentTitle) {
+                    $title = $entity->getObjet()->getTitre();
+                } else {
+                    $title = $entity->getTitre();
+                }
                 break;
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 $title = $entity->getTitle();
