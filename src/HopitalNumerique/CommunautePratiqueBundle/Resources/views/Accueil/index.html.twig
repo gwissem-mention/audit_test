@@ -180,7 +180,7 @@
                                                 <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic['topic'].board.category.forum.name, topicId:topic['topic'].firstPost.topic.id }) }}"><strong>{{ topic['topic'].firstPost.topic.title }}</strong></a>
                                                 <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': topic['categoryId'], 'forumName': topic['forumName']}) -}}" class="salon-access"><em class="fa fa-angle-double-right"></em> Accéder à : {{ topic['categoryName'] }}</a>
                                             </h3>
-                                            {{ topic['topic'].firstPost.body|replace({'\"[': '' , ']\"': ''})|truncate(250) }}
+                                            {{ BBCode_Parse(topic['topic'].firstPost.body|truncate(250))|replace({'<pre>': '' , '</pre>': ''})|raw }}
                                             <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic['topic'].board.category.forum.name, topicId:topic['topic'].firstPost.topic.id }) }}">En savoir plus</a>
                                         </div>
                                     </div>
