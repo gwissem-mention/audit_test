@@ -47,6 +47,10 @@ services:
     hopitalnumerique_forum.manager.post:
         class: %hopitalnumerique_forum.manager.post.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_forum.manager.topic", "@hopitalnumerique_forum.manager.board"]
+    hopitalnumerique_forum.repository.post:
+            class: HopitalNumerique\ForumBundle\Repository\PostRepository
+            factory: ['@doctrine.orm.default_entity_manager', getRepository]
+            arguments: ['HopitalNumeriqueForumBundle:Post']
     #--Subscription
     hopitalnumerique_forum.manager.subscription:
         class: %hopitalnumerique_forum.manager.subscription.class%

@@ -65,6 +65,7 @@ class PostEventListener implements EventSubscriberInterface
                 'fildiscusssion' => $post->getTopic()->getTitle(),
                 'lienversmessage' => 'lien',
                 'pseudouser' => !is_null($user->getPseudonymeForum()) ? $user->getPseudonymeForum() : $user->getNomPrenom(),
+                'shortMessage' => $post->getBody(),
             ];
 
             $mail = $this->_mailManager->sendNouveauMessageForumAttenteModerationMail($options, $post->getTopic()->getId());
