@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 
 /**
  * Question.
@@ -355,5 +356,13 @@ class Question
     public function getCommentaire()
     {
         return $this->commentaire;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTemplate()
+    {
+        return in_array($this->alias, TemplateQuestionAliasEnum::getQuestionsAliasesWithTemplate());
     }
 }

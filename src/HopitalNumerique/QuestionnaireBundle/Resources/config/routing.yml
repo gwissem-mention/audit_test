@@ -109,6 +109,10 @@ hopitalnumerique_questionnaire_question_reorder:
     requirements:
         id: \d+
         _method: GET|POST
+#---Template file download
+hopitalnumerique_questionnaire_question_download_template:
+    path: /compte-hn/questionnaire/template/{question}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:downloadTemplateFile" }
 
 #Réponse
 hopitalnumerique_reponse_download:
