@@ -4,13 +4,14 @@ namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
 use HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion;
-use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question as HopiQuestion;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -197,18 +198,11 @@ class QuestionController extends Controller
             throw new NotFoundHttpException('Le modèle demandé n\'existe pas.');
         }
 
-        $response = new Response();
-
-        $file = file_get_contents($path);
-
-        $response->headers->set(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        $response = new BinaryFileResponse($path);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename
         );
-
-        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename);
-
-        $response->setContent($file);
 
         return $response;
     }
