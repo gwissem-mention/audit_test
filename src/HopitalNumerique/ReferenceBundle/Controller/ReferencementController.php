@@ -24,7 +24,10 @@ class ReferencementController extends Controller
      */
     public function popinAction($entityType, $entityId, $redirect = true)
     {
-        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $entityService = $this->get('hopitalnumerique_core.dependency_injection.entity');
+
+        $entity = $entityService->getEntityByTypeAndId($entityType, $entityId);
+        $entityTitle = $entityService->getTitleByEntity($entity);
 
         if (!$this->isGranted('reference', $entity)) {
             throw $this->createAccessDeniedException();
@@ -35,24 +38,34 @@ class ReferencementController extends Controller
         }
 
         $domaines = [];
-        foreach ($this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesByEntity($entity) as $domaine) {
+
+        foreach ($entityService->getDomainesByEntity($entity) as $domaine) {
             if ($this->getUser()->hasDomaine($domaine)) {
                 $domaines[] = $domaine;
             }
         }
 
-        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferencesTreeWithEntitiesHasReferences(
-            $domaines,
-            $entityType,
-            $entityId
-        );
+        $referencesTree = $this->get('hopitalnumerique_reference.dependency_injection.referencement')
+           ->getReferencesTreeWithEntitiesHasReferences(
+               $domaines,
+               $entityType,
+               $entityId
+           )
+        ;
 
-        return $this->render('HopitalNumeriqueReferenceBundle:Referencement:popin.html.twig', [
-            'entityType' => $entityType,
-            'entityId' => $entityId,
-            'referencesTree' => $referencesTree,
-            'redirectionUrl' => $redirect === true ? $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getMangementUrlByEntity($entity) : null,
-        ]);
+        return $this->render(
+            'HopitalNumeriqueReferenceBundle:Referencement:popin.html.twig',
+            [
+                'entityType'     => $entityType,
+                'entityId'       => $entityId,
+                'entityTitle'    => $entityTitle,
+                'referencesTree' => $referencesTree,
+                'redirectionUrl' => $redirect === true
+                    ? $entityService
+                       ->getMangementUrlByEntity($entity)
+                    : null,
+            ]
+        );
     }
 
     /**
@@ -71,37 +84,54 @@ class ReferencementController extends Controller
          */
         $entitiesHaveReferencesParameters = $request->request->get('entitiesHaveReferencesParameters');
 
-        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $entity = $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId(
+            $entityType,
+            $entityId
+        );
 
         if (!$this->isGranted('reference', $entity)) {
             throw $this->createAccessDeniedException();
         }
 
         $referencesDomainesToDelete = $this->getDomainesToDeleteForNoteSaving($entity);
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $referencesDomainesToDelete);
-        $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->delete($references);
+        $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
+            ->findByEntityTypeAndEntityIdAndDomaines(
+                $entityType,
+                $entityId,
+                $referencesDomainesToDelete
+            )
+        ;
+
+        $this->get('hopitalnumerique_reference.manager.entity_has_reference')->delete($references);
 
         if (null !== $entitiesHaveReferencesParameters) {
             foreach ($entitiesHaveReferencesParameters as $entityHasReferenceParameters) {
-                $reference = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($entityHasReferenceParameters['referenceId']);
-                $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findOneBy([
+                $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(
+                    $entityHasReferenceParameters['referenceId']
+                );
+                $entityHasReference = $this->get('hopitalnumerique_reference.manager.entity_has_reference')->findOneBy([
                     'entityType' => $entityType,
                     'entityId' => $entityId,
                     'reference' => $reference,
                 ]);
                 if (null === $entityHasReference) {
-                    $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->createEmpty();
+                    $entityHasReference = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
+                        ->createEmpty()
+                    ;
                     $entityHasReference->setEntityType($entityType);
                     $entityHasReference->setEntityId($entityId);
                     $entityHasReference->setReference($reference);
                 }
 
                 $entityHasReference->setPrimary('1' == $entityHasReferenceParameters['primary']);
-                $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->save($entityHasReference);
+                $this->get('hopitalnumerique_reference.manager.entity_has_reference')->save($entityHasReference);
             }
         }
 
-        $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForEntityTypeAndEntityId($entityType, $entityId);
+        $this->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForEntityTypeAndEntityId(
+            $entityType,
+            $entityId
+        );
 
         $this->addFlash('success', 'Références enregistrées.');
 
@@ -111,9 +141,10 @@ class ReferencementController extends Controller
     }
 
     /**
-     * Lors de l'enregistrement des références d'une entité, on ré-initialise les références existantes en supprimant celles du domaine de l'utilisateur connecté et celles n'appartenant plus à l'entité.
+     * Lors de l'enregistrement des références d'une entité, on ré-initialise les références existantes en
+     * supprimant celles du domaine de l'utilisateur connecté et celles n'appartenant plus à l'entité.
      *
-     * @param object Entité
+     * @param object $entity
      *
      * @return array
      */
@@ -121,9 +152,9 @@ class ReferencementController extends Controller
     {
         $domaines = [];
         $userDomaines = $this->getUser()->getDomaines();
-        $entityDomaines = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesByEntity($entity);
+        $entityDomaines = $this->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesByEntity($entity);
 
-        foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
+        foreach ($this->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
             $userHasDomaine = false;
             foreach ($userDomaines as $userDomaine) {
                 if ($userDomaine->equals($domaine)) {
@@ -163,8 +194,10 @@ class ReferencementController extends Controller
     {
         if ($token === 'PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT') {
             set_time_limit(0);
-            foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
-                $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForDomaine($domaine);
+            foreach ($this->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
+                $this->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForDomaine(
+                    $domaine
+                );
             }
 
             return new Response('Cron termin&eacute; !');
@@ -184,7 +217,7 @@ class ReferencementController extends Controller
     {
         if ($token === 'gfd5g6df81df6gdf1g6fd1scd8s6f') {
             set_time_limit(0);
-            $this->container->get('hopitalnumerique_reference.doctrine.referencement.deleter')->removeInexistants();
+            $this->get('hopitalnumerique_reference.doctrine.referencement.deleter')->removeInexistants();
 
             return new Response('Cron termin&eacute; !');
         }
@@ -202,7 +235,7 @@ class ReferencementController extends Controller
     public function migreAction($token)
     {
         if ('kawabunga' == $token) {
-            $this->container->get('hopitalnumerique_reference.doctrine.referencement.migration')->migreAll();
+            $this->get('hopitalnumerique_reference.doctrine.referencement.migration')->migreAll();
 
             return new Response('OK');
         }

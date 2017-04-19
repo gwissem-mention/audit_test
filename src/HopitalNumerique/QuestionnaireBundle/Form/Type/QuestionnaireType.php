@@ -4,6 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
+use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
@@ -29,6 +30,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
@@ -60,6 +62,11 @@ class QuestionnaireType extends AbstractType
     private $userManager;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * QuestionnaireType constructor.
      *
      * @param OccurrenceType       $occurrenceForm
@@ -67,19 +74,22 @@ class QuestionnaireType extends AbstractType
      * @param QuestionnaireManager $managerQuestionnaire
      * @param OccurrenceManager    $occurrenceManager
      * @param UserManager          $userManager
+     * @param RouterInterface      $router
      */
     public function __construct(
         OccurrenceType $occurrenceForm,
         $managerReponse,
         $managerQuestionnaire,
         OccurrenceManager $occurrenceManager,
-        UserManager $userManager
+        UserManager $userManager,
+        RouterInterface $router
     ) {
         $this->occurrenceForm       = $occurrenceForm;
         $this->managerReponse       = $managerReponse;
         $this->managerQuestionnaire = $managerQuestionnaire;
         $this->occurrenceManager    = $occurrenceManager;
         $this->userManager          = $userManager;
+        $this->router               = $router;
     }
 
     /**
@@ -438,7 +448,20 @@ class QuestionnaireType extends AbstractType
                     );
                     break;
                 case 'file':
-                    $attr = $question->getObligatoire() ? ['class' => 'inputUpload validate[required]'] : [];
+                    $attr = [];
+
+                    if (is_null($question->getVerifJS()) && $question->getObligatoire()) {
+                        $attr['class'] = 'inputUpload validate[required]';
+                    } else {
+                        $attr['class'] = 'inputUpload ' . $question->getVerifJS();
+                    }
+
+                    if ($question->hasTemplate()) {
+                        $attr['data-template-link'] = $this->router->generate(
+                            'hopitalnumerique_questionnaire_question_download_template',
+                            ['question' => $question->getId()]
+                        );
+                    }
 
                     $fieldName = $question->getTypeQuestion()->getLibelle()
                                  . '_' . $question->getId()
@@ -452,11 +475,7 @@ class QuestionnaireType extends AbstractType
                             [
                                 'required'   => $question->getObligatoire(),
                                 'label'      => $question->getLibelle(),
-                                'attr'       => is_null($question->getVerifJS())
-                                    ? $attr
-                                    : [
-                                        'class' => 'inputUpload ' . $question->getVerifJS(),
-                                    ],
+                                'attr'       => $attr,
                                 'mapped'     => false,
                                 'read_only'  => $this->readOnly,
                                 'disabled'   => $this->readOnly,

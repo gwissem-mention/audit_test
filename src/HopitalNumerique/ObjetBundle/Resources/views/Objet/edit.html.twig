@@ -51,9 +51,6 @@
     {% endif %}
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    {% if objet.id %}
-        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_delete', { 'id': objet.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
-    {% endif %}
 {% endblock %}
 
 {% block body %}

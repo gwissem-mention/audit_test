@@ -34,7 +34,7 @@ services:
     #--Type
     hopitalnumerique_questionnaire.form.type.questionnaire:
         class: "%hopitalnumerique_questionnaire.form.type.questionnaire%"
-        arguments: ["@hopitalnumerique_questionnaire.form.type.occurrence", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_questionnaire.manager.occurrence", "@hopitalnumerique_user.manager.user"]
+        arguments: ["@hopitalnumerique_questionnaire.form.type.occurrence", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_questionnaire.manager.occurrence", "@hopitalnumerique_user.manager.user", "@router"]
         tags:
             - { name: form.type, alias: nodevo_questionnaire_questionnaire }
     #-Gestion des questionnaires

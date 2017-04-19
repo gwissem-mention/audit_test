@@ -70,14 +70,29 @@
 {% endblock %}
 
 {%- macro button_group(button_group) -%}
+    {% spaceless %}
     {%- for button_order, tag in button_group -%}
         {%- set icon = BBCode_GetButtonIcon(tag) -%}
         {%- set label = BBCode_GetButtonLabel(tag) -%}
         {%- set token_name = BBCode_GetTokenName(tag) -%}
         {%- set token_count = BBCode_GetTokenCount(tag) -%}
         {%- set param_question = BBCode_GetButtonParameterQuestion(tag) -%}
+        {% set btn_translation_key = 'ccdn_component_bb_code.editor.button.'~BBCode_GetLexemeName(tag)|lower %}
+        {% set btn_translation = btn_translation_key|trans({}, ForumBundle.translation) %}
 
-        <button class="btn btn-default btn-sm" data-tag="{{- token_name -}}" data-tag-count="{{- token_count -}}"{%- if param_question %} data-param-question="{{- param_question|trans({}, ForumBundle.translation ) -}}"{% endif %}>
+        <button
+            class="btn btn-default btn-sm"
+            {% if btn_translation_key != btn_translation %}
+                data-html="true"
+                data-toggle="tooltip"
+                data-tag="{{- token_name -}}"
+                title="{{ btn_translation|e }}"
+            {% endif %}
+            data-tag-count="{{- token_count -}}"
+            {%- if param_question %}
+                data-param-question="{{- param_question|trans({}, ForumBundle.translation ) -}}"
+            {% endif %}
+        >
             {%- if icon -%}
                 <i class="{{- icon -}}"></i>
             {%- else -%}
@@ -85,6 +100,7 @@
             {%- endif -%}
         </button>
     {%- endfor -%}
+{% endspaceless %}
 {%- endmacro -%}
 
 {%- macro button_row(groups) -%}
@@ -129,6 +145,10 @@
         </div>
 
         <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+
+        <script>
+            $('[data-toggle="tooltip"]').tooltip();
+        </script>
 
     </div>
 {% endblock bb_editor_widget %}
