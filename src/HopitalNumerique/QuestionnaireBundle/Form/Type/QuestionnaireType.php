@@ -456,7 +456,7 @@ class QuestionnaireType extends AbstractType
                         $attr['class'] = 'inputUpload ' . $question->getVerifJS();
                     }
 
-                    if (TemplateQuestionAliasEnum::hasTemplate($question->getAlias())) {
+                    if ($question->hasTemplate()) {
                         $attr['data-template-link'] = $this->router->generate(
                             'hopitalnumerique_questionnaire_question_download_template',
                             ['question' => $question->getId()]

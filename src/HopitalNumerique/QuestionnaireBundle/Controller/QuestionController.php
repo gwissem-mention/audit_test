@@ -193,7 +193,7 @@ class QuestionController extends Controller
         $filename = sprintf('template_%s.docx', $question->getAlias());
         $path = $this->get('kernel')->getRootDir(). '/../files/expert/'.$filename;
 
-        if (!TemplateQuestionAliasEnum::hasTemplate($question->getAlias()) || !file_exists($path)) {
+        if (!$question->hasTemplate() || !file_exists($path)) {
             throw new NotFoundHttpException('Le modèle demandé n\'existe pas.');
         }
 

@@ -20,14 +20,4 @@ class TemplateQuestionAliasEnum
             self::DPI,
         ];
     }
-
-    /**
-     * @param $alias
-     *
-     * @return bool
-     */
-    public static function hasTemplate($alias)
-    {
-        return in_array($alias, self::getQuestionsAliasesWithTemplate());
-    }
 }
