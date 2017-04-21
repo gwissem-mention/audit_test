@@ -85,6 +85,7 @@ class Report
         $contentReport->objectLabel = $content->getObjet()->getTitre();
         $contentReport->contentId = $content->getId();
         $contentReport->contentLabel = $content->getTitre();
+        $contentReport->contentOrder = $this->getChapterNumber($content);
         $contentReport->domains = $content->getDomaines();
 
         $contentReport->links = $this->findLinks($content->getContenu());
@@ -93,6 +94,35 @@ class Report
         $contentReport->tableCount = count($this->findTables($content->getContenu()));
 
         return $contentReport;
+    }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return string
+     */
+    private function getChapterNumber(Contenu $content)
+    {
+        $chapters = $this->getParentsChapterNumbers($content);
+        asort($chapters);
+
+        return implode('.', $chapters);
+    }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return array
+     */
+    private function getParentsChapterNumbers(Contenu $content)
+    {
+        $chapters = [$content->getOrder()];
+
+        if (!is_null($content->getParent())) {
+            $chapters = array_merge($this->getParentsChapterNumbers($content->getParent()), $chapters);
+        }
+
+        return $chapters;
     }
 
     /**
@@ -105,7 +135,7 @@ class Report
         $crawler = new Crawler();
         $crawler->addHtmlContent($string);
 
-        $links = $crawler->filter('a')->each(function (Crawler $node) {
+        $links = $crawler->filter('a:not([href^="#fn"])')->each(function (Crawler $node) {
             return ['href' => $node->attr('href'), 'text' => $node->text()];
         });
 
@@ -151,8 +181,8 @@ class Report
         $crawler = new Crawler();
         $crawler->addHtmlContent($string);
 
-        $footnotes = $crawler->filter('span[class="note_bas_de_page"]')->each(function (Crawler $node) {
-            return $node->text();
+        $footnotes = $crawler->filter('.note_bas_de_page li')->each(function (Crawler $node) {
+            return $node->html();
         });
 
         return $footnotes;

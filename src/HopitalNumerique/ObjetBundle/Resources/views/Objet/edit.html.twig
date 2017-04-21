@@ -42,7 +42,7 @@
         {% else %}
             <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0 , 'filtre':"publication" }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% endif %}
-        <a class="btn btn-default fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank" title="Afficher le rapport"><i class="fa fa-search"></i></a>
+        <a class="btn btn-default btn-report fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank"><i class="fa fa-search"></i></a>
         <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% elseif objet.isArticle %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_filtre', { 'filtre': 'Article' }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
@@ -351,9 +351,9 @@
 
                         {% if objet.id %}
                             <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
-                                <div class="btn btn-primary addContenu" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
-                                <a class="btn btn-success reloadContenu" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
-                                <a class="btn btn-warning uploadSommaire fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
+                                <div class="btn btn-primary addContenu manualAction" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
+                                <a class="btn btn-success reloadContenu manualAction" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
+                                <a class="btn btn-warning uploadSommaire manualAction fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
 
                                 {% spaceless %}
                                     <a
@@ -365,10 +365,15 @@
                                     </a>
                                 {% endspaceless %}
 
+                                {% include '@HopitalNumeriquePublication/back/converter/upload_button.html.twig' %}
+
                                 <fieldset class="summary">
+
                                     <legend>Sommaire</legend>
 
-                                    <p class="designForBlank" style="{% if contenus|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.</p>
+                                    <p class="designForBlank" style="{{ contenus|length >= 1 ? ' display:none' }}">
+                                        Importez un document ou cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.
+                                    </p>
                                     <div class="dd" id="sommaire">
                                         <ol class="dd-list">
                                             {% import _self as mySelf %}
@@ -379,12 +384,12 @@
                                     </div>
                                 </fieldset>
 
-                                <div class="well well-lg" id="edition-infradox">
-                                    <span class="selectionInfradoc">Vous devez sélectionner un élément avant de pouvoir l'éditer.</span>
+                                <div id="edition-infradox">
                                     <div class="results">
                                     </div>
-                                    <input type="hidden" class="infradoc" value="0" />
                                 </div>
+
+                                <input type="hidden" class="infradoc" value="0" />
 
                             </div>
 

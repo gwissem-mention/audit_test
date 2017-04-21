@@ -1,0 +1,24 @@
+hopital_numerique_publication_converter_upload:
+    path: /infradoc/{infradoc}/converter/upload
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:uploadDocument" }
+    requirements:
+        infradoc: \d+
+
+hopital_numerique_publication_converter_prepare:
+    path: /infradoc/{infradoc}/converter/prepare
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:prepareInfradoc" }
+    requirements:
+        infradoc: \d+
+
+hopital_numerique_publication_converter_generate:
+    path: /converter/document/{document}/generate
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:generate" }
+    requirements:
+        document: \d+
+
+hopital_numerique_publication_converter_abort:
+    path: /converter/document/{publicationId}/abort
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:abort" }
+    methods: [POST]
+    requirements:
+        publicationId: \d+

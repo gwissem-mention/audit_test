@@ -1,0 +1,14 @@
+services:
+    hopitalnumerique_publication.convert_document_handler:
+        class: HopitalNumerique\PublicationBundle\Domain\Command\ConvertDocumentHandler
+        arguments :
+            - '@hopitalnumerique_publication.pandoc'
+            - '@hopitalnumerique_publication.repository.document'
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@hopitalnumerique_publication.media_uploader'
+
+    hopitalnumerique_publication.abort_document_handler:
+        class: HopitalNumerique\PublicationBundle\Domain\Command\AbortDocumentHandler
+        arguments:
+            - '@hopitalnumerique_publication.repository.document'
+            - '@hopitalnumerique_publication.media_uploader'
