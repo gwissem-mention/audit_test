@@ -353,10 +353,14 @@ class Contenu
      * Set objet.
      *
      * @param Objet $objet
+     *
+     * @return Contenu
      */
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
+
+        return $this;
     }
 
     /**

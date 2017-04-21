@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
     $('.deleteAllInfradocs').on('click', function(e) {
         var $this = $(this);
         e.preventDefault();
@@ -10,6 +9,22 @@ $(document).ready(function() {
             }
         })
     });
+
+    if (window['wordConverter'] !== undefined) {
+        wordConverter.onPrepareFormLoaded(function() {
+            $('.summary').hide();
+            $('.manualAction').hide();
+        });
+
+        wordConverter.onAbortion(function() {
+            $('.manualAction').show();
+            $('.summary').show();
+        });
+    }
+
+    if( $('#sommaire ol li').length > 0){
+        $('#converter-upload-wrapper').hide();
+    }
 
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
@@ -52,6 +67,11 @@ $(document).ready(function() {
                         $('.uploadSommaire').hide();
                         $('.deleteAllInfradocs').removeClass('hidden');
                         $('.designForBlank').hide();
+                        $('#converter-upload-wrapper').hide();
+
+                        if (window['wordConverter'] !== undefined) {
+                            window['wordConverter'].unloadUploadForm();
+                        }
                     }
                 }
                 else
@@ -167,7 +187,7 @@ function selectChapitre( id, url )
         url     : url,
         type    : 'POST',
         success : function( data ){
-            $('#edition-infradox .results').html( data );
+            $('#edition-infradox .results').addClass('well well-lg').html( data );
             $('#edition-infradox .infradoc').val( id );
             loader.finished();
             $('.select2').select2();
@@ -282,7 +302,7 @@ function deleteContenu( id, url )
                             })
                         }
 
-                        $('#edition-infradox .results').html('');
+                        $('#edition-infradox .results').html('').removeClass('well well-lg');
                         $('#edition-infradox .selectionInfradoc').show();
 
                         //supprime l'élément dans le HTML
@@ -293,6 +313,7 @@ function deleteContenu( id, url )
                             $('.uploadSommaire').show();
                             $('.deleteAllInfradocs').addClass('hidden');
                             $('.designForBlank').show();
+                            $('#converter-upload-wrapper').show();
                         }
                     }
                 }

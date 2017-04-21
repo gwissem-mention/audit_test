@@ -1,5 +1,5 @@
 {% block body %}
-    <div class="col-sm-12">
+    <div id="report-popin" class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
                 <h4>
@@ -8,82 +8,17 @@
             </div>
 
             <div class="panel-body">
-                {% if report.links|length > 0 or report.images|length > 0 or report.footnotes|length > 0 or report.tableCount > 0 %}
-                    {% if report.links|length > 0 %}
-                        <span>Liens :</span>
-                        <ul>
-                            {% for link in report.links %}
-                                <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                <h3>{{ report.objectLabel }}</h3>
+                {% include '@HopitalNumeriqueObjet/Objet/partial/reportLine.html.twig' with {'report': report} %}
 
-                    {% if report.images|length > 0 %}
-                        <span>Images :</span>
-                        <ul>
-                            {% for image in report.images %}
-                                <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if report.footnotes|length > 0 %}
-                        <span>Notes de bas de page :</span>
-                        <ul>
-                            {% for footnote in report.footnotes %}
-                                <li>{{ footnote }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if report.tableCount > 0 %}
-                        <span>Nombre de tableaux :</span> {{ report.tableCount }}
-                    {% endif %}
-
-                    {% if report.children|length > 0 %}
-                        <div style="border-bottom: 1px solid #4d4d4d; margin-top: 30px;"></div>
-                    {% endif %}
-                {% else %}
-                    Aucune donnée.
+                {% if report.children|length > 0 %}
+                    <div class="separator-mark"></div>
                 {% endif %}
 
                 {% for child in report.children %}
-                    <div style="margin: 20px 0 20px 40px;">
-                        <h4 style="color: #34495e; font-weight: bold;">{{ child.contentLabel }}</h4>
-                        {% if child.links|length > 0 or child.images|length > 0 or child.footnotes|length > 0 or child.tableCount > 0 %}
-                            {% if child.links|length > 0 %}
-                                <span>Liens :</span>
-                                <ul>
-                                    {% for link in child.links %}
-                                        <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.images|length > 0 %}
-                                <span>Images :</span>
-                                <ul>
-                                    {% for image in child.images %}
-                                        <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.footnotes|length > 0 %}
-                                <span>Notes de bas de page :</span>
-                                <ul>
-                                    {% for footnote in child.footnotes %}
-                                        <li>{{ footnote }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if child.tableCount > 0 %}
-                                <span>Nombre de tableaux :</span> {{ child.tableCount }}
-                            {% endif %}
-                        {% else %}
-                            Aucune donnée.
-                        {% endif %}
+                    <div class="child-block">
+                        <h4>{{ child.contentOrder}} - {{ child.contentLabel }}</h4>
+                        {% include '@HopitalNumeriqueObjet/Objet/partial/reportLine.html.twig' with {'report': child} %}
                     </div>
                 {% endfor %}
             </div>
