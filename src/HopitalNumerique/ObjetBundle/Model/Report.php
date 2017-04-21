@@ -182,7 +182,7 @@ class Report
         $crawler->addHtmlContent($string);
 
         $footnotes = $crawler->filter('.note_bas_de_page li')->each(function (Crawler $node) {
-            return $node->text();
+            return $node->html();
         });
 
         return $footnotes;

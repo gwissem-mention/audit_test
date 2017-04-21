@@ -21,7 +21,7 @@
         <span>Notes de bas de page :</span>
         <ul>
             {% for footnote in report.footnotes %}
-                <li>{{ footnote }}</li>
+                <li>{{ footnote|raw }}</li>
             {% endfor %}
         </ul>
     {% endif %}
