@@ -20,6 +20,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * Class PublicationController
+ */
 class PublicationController extends Controller
 {
     /**
@@ -104,6 +107,7 @@ class PublicationController extends Controller
 
         $referencesInDomaine = [];
         $objetDomaines = $objet->getDomaines();
+
         foreach ($objetDomaines as $domaine) {
             $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
                 ->findByEntityTypeAndEntityIdAndDomaines(
@@ -133,9 +137,12 @@ class PublicationController extends Controller
 
         $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
         shuffle($userRelated);
-        $topicRelated = (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID == $this->container->get(
+        $topicRelated = (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID == $this->get(
             'hopitalnumerique_domaine.dependency_injection.current_domaine'
-        )->get()->getId() ? $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC) : []);
+        )->get()->getId()
+            ? $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC)
+            : []
+        );
         shuffle($topicRelated);
 
         //render
@@ -215,7 +222,7 @@ class PublicationController extends Controller
             'header-font-size' => '10',
             'footer-spacing' => '10',
             'page-width' => '1024px',
-            'footer-html' => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>',
+            'footer-html' => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits du centre de ressources de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>',
         ];
 
         return new Response(
@@ -347,7 +354,7 @@ class PublicationController extends Controller
             );
         }
 
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+        $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
             $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
             $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),
             [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
@@ -505,6 +512,10 @@ class PublicationController extends Controller
 
     /**
      * Affiche la synthèse de l'objet dans une grande popin.
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function syntheseAction($id)
     {
