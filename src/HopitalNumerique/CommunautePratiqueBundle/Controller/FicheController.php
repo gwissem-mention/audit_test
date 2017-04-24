@@ -4,9 +4,11 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur concernant les fiches.
@@ -15,6 +17,10 @@ class FicheController extends Controller
 {
     /**
      * Visualisation d'une fiche.
+     *
+     * @param Fiche $fiche
+     *
+     * @return RedirectResponse|Response
      */
     public function viewAction(Fiche $fiche)
     {
@@ -34,6 +40,11 @@ class FicheController extends Controller
 
     /**
      * Ajout d'une fiche.
+     *
+     * @param Groupe  $groupe
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function addAction(Groupe $groupe, Request $request)
     {
@@ -51,6 +62,11 @@ class FicheController extends Controller
 
     /**
      * Édition d'une fiche.
+     *
+     * @param Fiche   $fiche
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction(Fiche $fiche, Request $request)
     {
@@ -84,50 +100,66 @@ class FicheController extends Controller
 
     /**
      * Suppression d'une fiche.
+     *
+     * @param Fiche $fiche
+     *
+     * @return RedirectResponse
      */
     public function deleteAction(Fiche $fiche)
     {
         $groupe = $fiche->getGroupe();
 
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canDeleteFiche($fiche)) {
-            $this->container->get('session')->getFlashBag()->add('danger', 'Vous n\'avez pas les droits pour supprimer cette fiche.');
+        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canDeleteFiche($fiche)
+        ) {
+            $this->addFlash('danger', 'Vous n\'avez pas les droits pour supprimer cette fiche.');
         }
 
-        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->delete($fiche);
-        $this->container->get('session')->getFlashBag()->add('success', 'Fiche supprimée.');
+        $this->get('hopitalnumerique_communautepratique.manager.fiche')->delete($fiche);
+        $this->addFlash('success', 'Fiche supprimée.');
 
-        return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $groupe->getId()]));
+        return $this->redirect(
+            $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $groupe->getId()])
+        );
     }
 
     /**
      * Résout la fiche.
+     *
+     * @param Fiche $fiche
+     *
+     * @return JsonResponse
      */
     public function closeAction(Fiche $fiche)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canCloseFiche($fiche)) {
+        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canCloseFiche($fiche)
+        ) {
             return new JsonResponse(['success' => false]);
         }
 
         $fiche->setResolu(true);
-        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
+        $this->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
 
         return new JsonResponse(['success' => true]);
     }
 
     /**
      * Rouvre la fiche.
+     *
+     * @param Fiche $fiche
+     *
+     * @return JsonResponse
      */
     public function openAction(Fiche $fiche)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')
             ->canOpenFiche($fiche)) {
             return new JsonResponse(['success' => false]);
         }
 
         $fiche->setResolu(false);
-        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
+        $this->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
 
         return new JsonResponse(['success' => true]);
     }
