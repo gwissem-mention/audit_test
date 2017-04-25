@@ -14,30 +14,59 @@ use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use HopitalNumerique\StatBundle\Entity\ErrorUrl;
 use HopitalNumerique\StatBundle\Manager\ErrorUrlManager;
 use HopitalNumerique\StatBundle\Repository\ErrorUrlRepository;
+use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Class UrlChecker
+ */
 class UrlChecker
 {
-    /** @var ContenuManager $contentManager */
+    /**
+     * @var ContenuManager $contentManager
+     */
     private $contentManager;
 
-    /** @var ObjetManager $objectManager */
+    /**
+     * @var ObjetManager $objectManager
+     */
     private $objectManager;
 
-    /** @var DomaineManager $domainManager */
+    /**
+     * @var DomaineManager $domainManager
+     */
     private $domainManager;
 
-    /** @var ErrorUrlRepository $errorUrlRepository */
+    /**
+     * @var ErrorUrlRepository $errorUrlRepository
+     */
     private $errorUrlRepository;
 
-    /** @var ErrorUrlManager $errorUrlManager */
+    /**
+     * @var ErrorUrlManager $errorUrlManager
+     */
     private $errorUrlManager;
 
-    /** @var AutodiagRepository $autodiagRepository */
+    /**
+     * @var AutodiagRepository $autodiagRepository
+     */
     private $autodiagRepository;
 
-    /** @var QuestionnaireManager $questionnaireManager */
+    /**
+     * @var QuestionnaireManager $questionnaireManager
+     */
     private $questionnaireManager;
 
+    /**
+     * UrlChecker constructor.
+     *
+     * @param ObjetManager         $objetManager
+     * @param ContenuManager       $contenuManager
+     * @param ErrorUrlRepository   $errorUrlRepository
+     * @param DomaineManager       $domaineManager
+     * @param ErrorUrlManager      $errorUrlManager
+     * @param AutodiagRepository   $autodiagRepository
+     * @param QuestionnaireManager $questionnaireManager
+     */
     public function __construct(
         ObjetManager $objetManager,
         ContenuManager $contenuManager,
@@ -183,16 +212,12 @@ class UrlChecker
     private function getUrlByObject(Objet $object, $urls)
     {
         if (null !== $object->getPath()) {
-            foreach ($object->getDomaines() as $domain) {
-                $url = $domain->getUrl() . '/' . $object->getWebPath(1);
+                $url = '/' . $object->getWebPath(1);
                 $urls['FICHIER'][$object->getId()]['objet'][] = $url;
-            }
         }
         if (null !== $object->getPath2()) {
-            foreach ($object->getDomaines() as $domain) {
-                $url = $domain->getUrl() . '/' . $object->getWebPath(2);
+                $url = '/' . $object->getWebPath(2);
                 $urls['FICHIER'][$object->getId()]['objet'][] = $url;
-            }
         }
 
         $urls = $this->findLink($object->getSynthese(), $object->getId(), $urls);
@@ -216,22 +241,27 @@ class UrlChecker
      */
     private function findLink($text, $objectId, $urls, $isContent = false, $contentId = 0)
     {
-        $reg_exUrl = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
-        preg_match_all($reg_exUrl, $text, $matchesURLTemp);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($text);
 
-        if (count($matchesURLTemp[0]) > 0) {
-            $matchesURL = $matchesURLTemp[0];
-            foreach ($matchesURL as $matcheURL) {
-                if (!array_key_exists($objectId, $urls['URL'])) {
-                    $urls['URL'][$objectId] = [
-                        'objet' => [],
-                        $contentId => [],
-                    ];
-                }
-                if ($isContent) {
-                    $urls['URL'][$objectId][$contentId][] = trim($matcheURL, '"');
-                } else {
-                    $urls['URL'][$objectId]['objet'][] = trim($matcheURL, '"');
+        $links = $crawler->filter('a:not([href^="#fn"])')->each(function (Crawler $node) {
+            return $node->attr('href');
+        });
+
+        if (count($links) > 0) {
+            foreach ($links as $link) {
+                if (!is_null($link) && strpos($link, 'mailto') !== 0) {
+                    if (!array_key_exists($objectId, $urls['URL'])) {
+                        $urls['URL'][$objectId] = [
+                            'objet' => [],
+                            $contentId => [],
+                        ];
+                    }
+                    if ($isContent) {
+                        $urls['URL'][$objectId][$contentId][] = trim($link);
+                    } else {
+                        $urls['URL'][$objectId]['objet'][] = trim($link);
+                    }
                 }
             }
         }
