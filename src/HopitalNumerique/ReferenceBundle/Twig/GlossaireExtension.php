@@ -6,20 +6,23 @@ use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader as GlossaireReader;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Class GlossaireExtension
+ */
 class GlossaireExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\Routing\RouterInterface Router
+     * @var RouterInterface Router
      */
     private $router;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader GlossaireReader
+     * @var GlossaireReader GlossaireReader
      */
     private $glossaireReader;
 
     /**
-     * @var \HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine CurrentDomaine
+     * @var CurrentDomaine CurrentDomaine
      */
     private $currentDomaine;
 
@@ -27,9 +30,16 @@ class GlossaireExtension extends \Twig_Extension
 
     /**
      * Constructeur.
+     *
+     * @param RouterInterface $router
+     * @param GlossaireReader $glossaireReader
+     * @param CurrentDomaine  $currentDomaine
      */
-    public function __construct(RouterInterface $router, GlossaireReader $glossaireReader, CurrentDomaine $currentDomaine)
-    {
+    public function __construct(
+        RouterInterface $router,
+        GlossaireReader $glossaireReader,
+        CurrentDomaine $currentDomaine
+    ) {
         $this->router = $router;
         $this->glossaireReader = $glossaireReader;
         $this->currentDomaine = $currentDomaine;
@@ -49,7 +59,8 @@ class GlossaireExtension extends \Twig_Extension
     /**
      * Vérifie que l'user à bien l'accès à la route.
      *
-     * @param array $options Tableau d'options
+     * @param $text
+     * @param $entity
      *
      * @return bool
      */
@@ -98,6 +109,12 @@ class GlossaireExtension extends \Twig_Extension
         return $text;
     }
 
+    /**
+     * @param $text
+     * @param $entity
+     *
+     * @return array
+     */
     public function listGlossaire($text, $entity)
     {
         $glossaireReferences = $this->glossaireReader->getGlossaireReferencesByEntityAndDomaine(
@@ -110,7 +127,7 @@ class GlossaireExtension extends \Twig_Extension
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
-                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}' . $glossaireReference->getSigleHtmlForGlossaire() . '[\;\<\>\,\"\(\)\'\.\& ]{1,1}/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'’\& ]{1,1}' . $glossaireReference->getSigleHtmlForGlossaire() . '[\;\<\>\,\"\(\)\'’\.\& ]{1,1}/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
@@ -128,6 +145,7 @@ class GlossaireExtension extends \Twig_Extension
                 }
             }
         }
+
         ksort($list);
 
         return $list;
