@@ -81,7 +81,9 @@
     <script type="text/javascript">
 
         var restitution = new AutodiagRestitution($('#restitution'));
-        restitution.addHandler('jauge', 'Jauge');
+        restitution.addHandler('jauge', 'Jauge', {
+            delay: false
+        });
         restitution.initItems();
 
         $(function() {

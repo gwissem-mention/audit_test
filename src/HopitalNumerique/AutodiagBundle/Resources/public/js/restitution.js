@@ -22,15 +22,18 @@ AutodiagRestitution.prototype = {
         $('[data-item-type]', this.element).each(function() {
             var type = $(this).data('item-type');
 
-            if (instance.handlers[type] !== undefined && window[instance.handlers[type]] !== undefined) {
-                new window[instance.handlers[type]]($(this));
+            if (instance.handlers[type] !== undefined && window[instance.handlers[type].class] !== undefined) {
+                new window[instance.handlers[type].class]($(this), instance.handlers[type].arguments);
             }
         });
     },
 
-    addHandler: function (type, handlerClass)
+    addHandler: function (type, handlerClass, arguments)
     {
-        this.handlers[type] = handlerClass;
+        this.handlers[type] = {
+            class: handlerClass,
+            arguments : arguments
+        };
     }
 
 };
