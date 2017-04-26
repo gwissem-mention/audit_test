@@ -244,16 +244,23 @@ class UrlChecker
         $crawler = new Crawler();
         $crawler->addHtmlContent($text);
 
-        $links = $crawler->filter('a:not([href^="#fn"])')->each(function (Crawler $node) {
-            return $node->attr('href');
-        });
+        $links = $crawler
+            ->filter('a')
+            ->filter('*:not([href^="#"])')
+            ->filter('*:not([href^="mailto"])')
+            ->each(
+                function (Crawler $node) {
+                    return $node->attr('href');
+                }
+            )
+        ;
 
         if (count($links) > 0) {
             foreach ($links as $link) {
-                if (!is_null($link) && strpos($link, 'mailto') !== 0) {
+                if (!is_null($link)) {
                     if (!array_key_exists($objectId, $urls['URL'])) {
                         $urls['URL'][$objectId] = [
-                            'objet' => [],
+                            'objet'    => [],
                             $contentId => [],
                         ];
                     }
