@@ -57,7 +57,7 @@ class PublicationController extends Controller
 
         $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
         /** @var Domaine $domaine */
-        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
         if (!in_array($domaine->getId(), $objet->getDomainesId())) {
@@ -97,11 +97,11 @@ class PublicationController extends Controller
             ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($objet->getId())
             : [];
 
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+        $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
             ->findByEntityTypeAndEntityIdAndDomaines(
-                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
-                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
-                [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+                $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
             )
         ;
 
@@ -109,10 +109,10 @@ class PublicationController extends Controller
         $objetDomaines = $objet->getDomaines();
 
         foreach ($objetDomaines as $domaine) {
-            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+            $domaineReference = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
                 ->findByEntityTypeAndEntityIdAndDomaines(
-                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
-                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
                     [$domaine]
                 )
             ;
@@ -183,7 +183,7 @@ class PublicationController extends Controller
     public function pdfAction($entityType, $entityId)
     {
         if (Entity::ENTITY_TYPE_OBJET == $entityType) {
-            $objet = $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId);
+            $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_objet',
                 [
@@ -194,7 +194,7 @@ class PublicationController extends Controller
             );
             $fileName = 'ANAP-' . $objet->getAlias() . '.pdf';
         } elseif (Entity::ENTITY_TYPE_CONTENU == $entityType) {
-            $contenu = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
+            $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_contenu_without_alias',
                 [
@@ -226,7 +226,7 @@ class PublicationController extends Controller
         ];
 
         return new Response(
-            $this->container->get('knp_snappy.pdf')->getOutput($pdfUrl, $pdfOptions),
+            $this->get('knp_snappy.pdf')->getOutput($pdfUrl, $pdfOptions),
             200,
             [
                 'Content-Type' => 'application/pdf',
@@ -264,7 +264,7 @@ class PublicationController extends Controller
             $showCog = true;
         }
 
-        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
         /** @var Objet $objet */
@@ -355,20 +355,20 @@ class PublicationController extends Controller
         }
 
         $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
-            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
-            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),
-            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
-        )
-        ;
+            $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
+            $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),
+            [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
+
         $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $contenu->getContenu());
 
         $referencesInDomaine = [];
         $objetDomaines = $objet->getDomaines();
         foreach ($objetDomaines as $domaine) {
-            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+            $domaineReference = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
                 ->findByEntityTypeAndEntityIdAndDomaines(
-                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
-                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
                     [$domaine]
                 )
             ;
@@ -398,7 +398,7 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
-            'note' => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByContenuAndUser(
+            'note' => $this->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByContenuAndUser(
                 $contenu,
                 $this->getUser()
             ),
@@ -473,12 +473,12 @@ class PublicationController extends Controller
 
         $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
             ->findByEntityTypeAndEntityIdAndDomaines(
-                $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                $this->get('hopitalnumerique_core.dependency_injection.entity')
                     ->getEntityType($objet),
-                $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                $this->get('hopitalnumerique_core.dependency_injection.entity')
                     ->getEntityId($objet),
                 [
-                    $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get(),
+                    $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get(),
                 ]
             );
 
