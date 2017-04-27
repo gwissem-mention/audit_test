@@ -9,8 +9,9 @@ $(document).ready(function() {
         }
     });
 
+    $('#nodevo_user_user_typeActivite').select2({width: '100%'});
+
     loader = $('#form_edit_user').nodevoLoader();
-    var idEntreprise = 0;
     var idDepartement = 0;
 
     // ------- Gestion de la photo de profil --------
@@ -28,9 +29,6 @@ $(document).ready(function() {
     //Récupération de l'id du département si il on est en édition
     if(null !== $('#nodevo_user_user_departement').val())
         idDepartement = $('#nodevo_user_user_departement').val();
-    //Récupération de l'id de l'entreprise si il on est en édition
-    if(null !== $('#nodevo_user_user_etablissementRattachementSante').val())
-        idEntreprise = $('#nodevo_user_user_etablissementRattachementSante').val();
 
     // --- Département
 
@@ -45,30 +43,6 @@ $(document).ready(function() {
     $('#nodevo_user_user_region').on('change', function()
     {
         chargementDepartement();
-        chargementEtablissementRattachement();
-    });
-
-    // --- Type de structure
-
-    //Ajout de la fonction de chargement des entreprises sur le on change des types de structure
-    $('#nodevo_user_user_statutEtablissementSante').on('change', function()
-    {
-    	chargementEtablissementRattachement();
-    });
-
-    // --- Etablissement rattachement
-
-    //Chargement des entreprises du formulaire en fonction du département selectionné
-    chargementEtablissementRattachement();
-
-    //Si le département était renseigné on le recharge une fois que la liste des département est correct
-    if( 0 != idEntreprise )
-        $('#nodevo_user_user_etablissementRattachementSante').val(idEntreprise);
-
-    //Ajout de la fonction de chargement des entreprises sur le on change des départements
-    $('#nodevo_user_user_departement').on('change', function()
-    {
-    	chargementEtablissementRattachement();
     });
 
     //Chargement des masks du formulaire
@@ -83,6 +57,30 @@ $(document).ready(function() {
 
     //bind de Validation Engine
     $('form.toValidate').validationEngine();
+
+    $(function() {
+        var $select = $('.ajax-select2-list');
+        $select.select2({
+            ajax: {
+                url: $select.data('url'),
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function (data, params) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 3,
+            width: '100%'
+        });
+    });
 });
 
 /**
@@ -101,28 +99,6 @@ function chargementDepartement(){
             var value = $('#nodevo_user_user_departement').val();
             $('#nodevo_user_user_departement').html( data );
             $('#nodevo_user_user_departement option[value="' + value + '"]').prop('selected', true);
-            loader.finished();
-        }
-    });
-}
-
-/**
- * Permet de charger les entreprises en fonction du département selectionné en ajax
- */
-function chargementEtablissementRattachement(){
-    loader.start();
-
-    $.ajax({
-        url  : $('#etablissement-url').val(),
-        data : {
-            idDepartement : $('#nodevo_user_user_departement').val(),
-            idTypeEtablissement: $('#nodevo_user_user_statutEtablissementSante').val(),
-        },
-        type    : 'POST',
-        success : function( data ){
-            var value = $('#nodevo_user_user_etablissementRattachementSante').val();
-            $('#nodevo_user_user_etablissementRattachementSante').html( data );
-            $('#nodevo_user_user_etablissementRattachementSante option[value="' + value + '"]').prop('selected', true);
             loader.finished();
         }
     });

@@ -59,27 +59,6 @@
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
 
-                    {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Région</label>
-                            <div class="username col-md-7">{{ user.region.libelle }}</div>
-                        </div>
-                        <div class="clearfix"></div>
-                        {% if user.departement.libelle is defined %}
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Département</label>
-                                <div class="username col-md-7">{{ user.departement.libelle }}</div>
-                            </div>
-                            <div class="clearfix"></div>
-                        {% endif %}
-                    {% else %}
-                        {{ form_row(form.region) }}
-                        {%- if form.rattachementRegions is defined -%}
-                            {{ form_row(form.rattachementRegions) }}
-                        {%- endif -%}
-                        {{ form_row(form.departement) }}
-                    {% endif %}
-
                     {{ form_row(form.profilEtablissementSante) }}
 
                     <div class="form-group">
@@ -116,12 +95,36 @@
 	                {% endif %}
                     <div id="etablissement_sante">
 	                    <h4 class="violet">Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h4>
-	                    {{ form_row(form.statutEtablissementSante) }}
-	                    {{ form_row(form.etablissementRattachementSante) }}
-	                    {{ form_row(form.autreStructureRattachementSante) }}
                         {{ form_row(form.typeActivite) }}
                         {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-	                    {{ form_row(form.fonctionDansEtablissementSante) }}
+                        {{ form_row(form.fonctionDansEtablissementSante) }}
+                        <hr>
+                        <h5>Si votre structure est identifiée</h5>
+	                    {{ form_row(form.etablissementRattachementSante) }}
+                        <hr>
+                        <h5>Si votre structure n'est pas dans la liste</h5>
+	                    {{ form_row(form.statutEtablissementSante) }}
+	                    {{ form_row(form.autreStructureRattachementSante) }}
+                        {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Région</label>
+                                <div class="username col-md-7">{{ user.region.libelle }}</div>
+                            </div>
+                            <div class="clearfix"></div>
+                            {% if user.departement.libelle is defined %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Département</label>
+                                    <div class="username col-md-7">{{ user.departement.libelle }}</div>
+                                </div>
+                                <div class="clearfix"></div>
+                            {% endif %}
+                        {% else %}
+                            {{ form_row(form.region) }}
+                            {%- if form.rattachementRegions is defined -%}
+                                {{ form_row(form.rattachementRegions) }}
+                            {%- endif -%}
+                            {{ form_row(form.departement) }}
+                        {% endif %}
                     </div>
 
                     <div id="autre_etablissement_sante">

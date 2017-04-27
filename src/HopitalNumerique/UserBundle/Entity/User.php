@@ -904,10 +904,12 @@ class User extends BaseUser
      */
     public function setRegion($region)
     {
-        if ($region instanceof Reference) {
-            $this->region = $region;
-        } else {
-            $this->region = null;
+        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+            if ($region instanceof Reference) {
+                $this->region = $region;
+            } else {
+                $this->region = null;
+            }
         }
     }
 
@@ -1098,10 +1100,12 @@ class User extends BaseUser
      */
     public function setDepartement($departement)
     {
-        if ($departement instanceof Reference) {
-            $this->departement = $departement;
-        } else {
-            $this->departement = null;
+        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+            if ($departement instanceof Reference) {
+                $this->departement = $departement;
+            } else {
+                $this->departement = null;
+            }
         }
     }
 
@@ -1340,7 +1344,7 @@ class User extends BaseUser
      */
     public function setStatutEtablissementSante($statutEtablissementSante)
     {
-        if ($statutEtablissementSante instanceof Reference) {
+        if ($statutEtablissementSante instanceof Reference && !$this->etablissementRattachementSante instanceof Etablissement) {
             $this->statutEtablissementSante = $statutEtablissementSante;
         } else {
             $this->statutEtablissementSante = null;
@@ -1388,6 +1392,11 @@ class User extends BaseUser
     {
         if ($etablissementRattachementSante instanceof Etablissement) {
             $this->etablissementRattachementSante = $etablissementRattachementSante;
+
+            $this->region = $etablissementRattachementSante->getRegion();
+            $this->departement = $etablissementRattachementSante->getDepartement();
+            $this->statutEtablissementSante = $etablissementRattachementSante->getTypeOrganisme();
+            $this->autreStructureRattachementSante = null;
         } else {
             $this->etablissementRattachementSante = null;
         }
@@ -1427,7 +1436,9 @@ class User extends BaseUser
      */
     public function setAutreStructureRattachementSante($autreStructureRattachementSante)
     {
-        $this->autreStructureRattachementSante = $autreStructureRattachementSante;
+        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+            $this->autreStructureRattachementSante = $autreStructureRattachementSante;
+        }
     }
 
     /**
