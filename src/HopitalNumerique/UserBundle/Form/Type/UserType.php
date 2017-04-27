@@ -8,7 +8,7 @@ namespace HopitalNumerique\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
-use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -68,6 +68,7 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $currentResponse = $builder->getData();
         $datas = $options['data'];
         $roles = $datas->getRoles();
         $connectedUser = $this->_userManager->getUserConnected();
@@ -299,50 +300,60 @@ class UserType extends AbstractType
             'attr' => ['class' => 'etablissement_sante'],
         ]);
 
-        $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
-            $form->add('etablissementRattachementSante', 'choice', [
-                'multiple' => false,
-                'required' => false,
-                'label' => 'Structure de rattachement',
-                'empty_value' => ' - ',
-                'attr' => ['class' => 'etablissement_sante'],
-                'choices' => $data,
-                'choices_as_values' => true,
-                'choice_value' => 'id',
-                'choice_label' => 'nom',
-            ]);
+        $etablissementFieldOptions = [
+            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+            'choice_label' => 'appellation',
+            'required'     => false,
+            'label'        => 'Structure de rattachement',
+            'multiple'     => false,
+            'empty_value'  => '-',
+            'attr'         => ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'],
+            'data'         => is_null($currentResponse) ? null : $currentResponse->getEtablissementRattachementSante(),
+        ];
+
+        $etablissementRattachementSanteModifier = function (
+            FormInterface $form,
+            $etabId = null
+        ) use (
+            $currentResponse,
+            $etablissementFieldOptions
+        ) {
+
+            if (!is_null($etabId)) {
+                $etablissementFieldOptions = array_merge(
+                    $etablissementFieldOptions,
+                    [
+                        'query_builder' => function (EntityRepository $er) use ($etabId) {
+                            return $er->createQueryBuilder('eta')
+                                  ->orderBy('eta.nom', 'ASC')
+                            ;
+                        },
+                    ]
+                );
+            } else {
+                $etablissementFieldOptions['choices'] =
+                    is_null($currentResponse) || is_null($currentResponse->getEtablissementRattachementSante())
+                        ? []
+                        : [$currentResponse->getEtablissementRattachementSante()]
+                ;
+            }
+
+            $form->add('etablissementRattachementSante', EntityType::class, $etablissementFieldOptions);
         };
 
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                /** @var User $data */
-                $data = $event->getData();
-                $form = $event->getForm();
-
-                $list = $this->etablissementManager->findBy([
-                    'departement' => $data->getDepartement(),
-                    'typeOrganisme' => $data->getStatutEtablissementSante(),
-                ]);
-                $etablissementRattachementSanteModifier($form, $list);
+                $etablissementRattachementSanteModifier($event->getForm());
             }
         );
 
-        $builder->get('statutEtablissementSante')->addEventListener(
-            FormEvents::POST_SUBMIT,
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                $form = $event->getForm()->getParent();
-                $status = $event->getForm()->getData();
-
-                $list = $this->etablissementManager->findBy([
-                    'departement' => $event->getForm()->getParent()->get('departement')->getData(),
-                    'typeOrganisme' => $status,
-                ]);
-
-                $etablissementRattachementSanteModifier($form, $list);
+                $etablissementRattachementSanteModifier($event->getForm(), $event->getForm()->getData());
             }
-        )
-        ;
+        );
 
         $builder->add('autreStructureRattachementSante', 'text', [
             'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
@@ -370,7 +381,7 @@ class UserType extends AbstractType
                 'choices' => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
                 'property' => 'libelle',
                 'required' => false,
-                'expanded' => true,
+                'expanded' => false,
                 'multiple' => true,
                 'label' => 'Type activité (pour les établissements sanitaires)',
                 'empty_value' => ' - ',
