@@ -21,3 +21,5 @@ h3 label { font-weight: 300; }
 /* formulaire */
 input.checkbox {width:16px; height:16px; margin-top: 8px!important;}
 input.radio    {width:16px; height:16px;} .radio input {width: 16px; height: 16px;}
+
+.select2-dropdown { z-index: 10000 !important; }
