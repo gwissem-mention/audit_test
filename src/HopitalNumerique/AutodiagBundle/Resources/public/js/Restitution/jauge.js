@@ -9,7 +9,8 @@ var Jauge;
         this.element = element;
 
         this.options = $.extend({
-            bottom: -5
+            bottom: -5,
+            delay: true
         }, options);
 
         this.stacks = [];
@@ -61,9 +62,9 @@ var Jauge;
                                 bottom: bottom,
                                 zIndex: instance.stacks[el.data('value')]
                             });
-                        }, i * 50);
+                        }, instance.options.delay * i * 50);
                     });
-                }, (jaugeCount * 500) + j * 50);
+                }, instance.options.delay * ((jaugeCount * 70) + j * 50));
             });
         },
 
