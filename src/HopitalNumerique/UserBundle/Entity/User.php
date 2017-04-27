@@ -904,7 +904,7 @@ class User extends BaseUser
      */
     public function setRegion($region)
     {
-        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+        if (null === $this->etablissementRattachementSante) {
             if ($region instanceof Reference) {
                 $this->region = $region;
             } else {
@@ -984,7 +984,7 @@ class User extends BaseUser
     {
         $domaineString = '';
 
-        if (is_null($this->domaines)) {
+        if (null === $this->domaines) {
             return $domaineString;
         }
 
@@ -1004,7 +1004,7 @@ class User extends BaseUser
     {
         $domainesId = [];
 
-        if (is_null($this->domaines)) {
+        if (null === $this->domaines) {
             return $domainesId;
         }
 
@@ -1100,7 +1100,7 @@ class User extends BaseUser
      */
     public function setDepartement($departement)
     {
-        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+        if (null === $this->etablissementRattachementSante) {
             if ($departement instanceof Reference) {
                 $this->departement = $departement;
             } else {
@@ -1344,7 +1344,7 @@ class User extends BaseUser
      */
     public function setStatutEtablissementSante($statutEtablissementSante)
     {
-        if ($statutEtablissementSante instanceof Reference && !$this->etablissementRattachementSante instanceof Etablissement) {
+        if ($statutEtablissementSante instanceof Reference && null === $this->etablissementRattachementSante) {
             $this->statutEtablissementSante = $statutEtablissementSante;
         } else {
             $this->statutEtablissementSante = null;
@@ -1386,19 +1386,17 @@ class User extends BaseUser
     /**
      * Set etablissementRattachementSante.
      *
-     * @param string $etablissementRattachementSante
+     * @param Etablissement|null $etablissementRattachementSante
      */
-    public function setEtablissementRattachementSante($etablissementRattachementSante)
+    public function setEtablissementRattachementSante(Etablissement $etablissementRattachementSante = null)
     {
-        if ($etablissementRattachementSante instanceof Etablissement) {
-            $this->etablissementRattachementSante = $etablissementRattachementSante;
+        $this->etablissementRattachementSante = $etablissementRattachementSante;
 
+        if (null !== $etablissementRattachementSante) {
             $this->region = $etablissementRattachementSante->getRegion();
             $this->departement = $etablissementRattachementSante->getDepartement();
             $this->statutEtablissementSante = $etablissementRattachementSante->getTypeOrganisme();
             $this->autreStructureRattachementSante = null;
-        } else {
-            $this->etablissementRattachementSante = null;
         }
     }
 
@@ -1436,7 +1434,7 @@ class User extends BaseUser
      */
     public function setAutreStructureRattachementSante($autreStructureRattachementSante)
     {
-        if (!$this->etablissementRattachementSante instanceof Etablissement) {
+        if (null === $this->etablissementRattachementSante) {
             $this->autreStructureRattachementSante = $autreStructureRattachementSante;
         }
     }
@@ -1913,7 +1911,7 @@ class User extends BaseUser
     {
         $ambassadeurString = '';
 
-        if (is_null($this->connaissancesAmbassadeurs)) {
+        if (null === $this->connaissancesAmbassadeurs) {
             return $ambassadeurString;
         }
 
@@ -2162,7 +2160,7 @@ class User extends BaseUser
      */
     public function setPath($path)
     {
-        if (is_null($path) && file_exists($this->getAbsolutePath())) {
+        if (null === $path && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
         }
 
