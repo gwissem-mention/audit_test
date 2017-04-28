@@ -66,26 +66,25 @@
 
             <div id="etablissement_sante">
                 <div class="panel panel-default">
-                    <div class="panel-heading closed">Vous êtes dans une structure de santé (établissement ou service
+                    <div class="panel-heading open">Vous êtes dans une structure de santé (établissement ou service
                         sanitaire ou médico-social)
                     </div>
-                    <div class="panel-body" style="display:none;">
-                        {{ form_row(form.typeActivite) }}
-                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-                        {{ form_row(form.fonctionDansEtablissementSante) }}
-
-                        <hr>
-
-                        <strong class="panel-title">Votre structure est identifiée</strong>
+                    <div class="panel-body">
+                        <strong class="panel-title">Votre structure</strong>
                         {{ form_row(form.etablissementRattachementSante) }}
-
                         <hr>
-
                         <strong class="panel-title">Votre structure n'est pas dans la liste précédente</strong>
                         {{ form_row(form.statutEtablissementSante) }}
                         {{ form_row(form.autreStructureRattachementSante) }}
                         {{ form_row(form.region) }}
                         {{ form_row(form.departement) }}
+                        <hr>
+                        <strong class="panel-title">Les activités de votre structure</strong>
+                        {{ form_row(form.typeActivite) }}
+                        <hr>
+                        <strong class="panel-title">Votre fonction</strong>
+                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
+                        {{ form_row(form.fonctionDansEtablissementSante) }}
                     </div>
                 </div>
             </div>

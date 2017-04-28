@@ -95,14 +95,10 @@
 	                {% endif %}
                     <div id="etablissement_sante">
 	                    <h4 class="violet">Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h4>
-                        {{ form_row(form.typeActivite) }}
-                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-                        {{ form_row(form.fonctionDansEtablissementSante) }}
-                        <hr>
-                        <h5>Si votre structure est identifiée</h5>
+                        <h5>Votre structure</h5>
 	                    {{ form_row(form.etablissementRattachementSante) }}
                         <hr>
-                        <h5>Si votre structure n'est pas dans la liste</h5>
+                        <h5>Votre structure n'est pas dans la liste précédente</h5>
 	                    {{ form_row(form.statutEtablissementSante) }}
 	                    {{ form_row(form.autreStructureRattachementSante) }}
                         {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
@@ -125,6 +121,13 @@
                             {%- endif -%}
                             {{ form_row(form.departement) }}
                         {% endif %}
+                        <hr>
+                        <h5>Les activités de votre structure</h5>
+                        {{ form_row(form.typeActivite) }}
+                        <hr>
+                        <h5>Votre fonction</h5>
+                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
+                        {{ form_row(form.fonctionDansEtablissementSante) }}
                     </div>
 
                     <div id="autre_etablissement_sante">
