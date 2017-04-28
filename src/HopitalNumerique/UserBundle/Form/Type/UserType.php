@@ -383,7 +383,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'expanded' => false,
                 'multiple' => true,
-                'label' => 'Type activité (pour les établissements sanitaires)',
+                'label' => 'Type d\'activité',
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'etablissement_sante'],
             ])
