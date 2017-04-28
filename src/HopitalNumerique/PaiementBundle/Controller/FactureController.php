@@ -107,6 +107,7 @@ class FactureController extends Controller
 
         return $this->render('HopitalNumeriquePaiementBundle:Facture:total.html.twig', [
             'total' => $total,
+            'displayPaymentInformation' => in_array('ROLE_AMBASSADEUR_7', $user->getRoles()),
         ]);
     }
 
