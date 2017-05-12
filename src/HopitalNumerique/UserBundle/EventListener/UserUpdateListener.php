@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\EventListener;
 use HopitalNumerique\ReferenceBundle\Doctrine\ReferencementDeleter;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
+use HopitalNumerique\UserBundle\UserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Nodevo\MailBundle\Manager\MailManager;
 
@@ -30,8 +31,8 @@ class UserUpdateListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'user_nodevo.update' => 'update',
-            'user_nodevo.before_update' => 'beforeUserUpdate',
+            UserEvents::USER_UPDATED => 'update',
+            UserEvents::USER_PRE_UPDATE => 'beforeUserUpdate',
         ];
     }
 

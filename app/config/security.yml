@@ -41,6 +41,8 @@ security:
                 path:   account_logout
                 target: hopital_numerique_homepage
                 success_handler: logout_handler
+                handlers:
+                    - hopitalnumerique_user.subscriber.token
             remember_me:
                 key: %secret%
             context: application
@@ -62,6 +64,8 @@ security:
                 path:   /admin/logout
                 target: hopital_numerique_admin_homepage
                 success_handler: logout_handler
+                handlers:
+                    - hopitalnumerique_user.subscriber.token
             remember_me:
                 key: %secret%
             anonymous: false
@@ -85,6 +89,8 @@ security:
                 path:   account_logout
                 target: hopital_numerique_homepage
                 success_handler: logout_handler
+                handlers:
+                    - hopitalnumerique_user.subscriber.token
             remember_me:
                 key: %secret%
             anonymous: true
