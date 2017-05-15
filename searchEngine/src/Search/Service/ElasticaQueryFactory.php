@@ -3,7 +3,11 @@
 namespace Search\Service;
 
 use Elastica\Query\AbstractQuery;
+use Elastica\Query\BoolQuery;
+use Elastica\Query\Term;
 use Search\Model\Query;
+use Search\Model\User;
+use Search\Service\TypeFactory\TypeFactoryInterface;
 
 /**
  * Elastica Query factory.
@@ -12,18 +16,24 @@ use Search\Model\Query;
 class ElasticaQueryFactory
 {
     /**
+     * @var TypeFactoryInterface[]
+     */
+    protected $typeFactories = [];
+
+    /**
      * Get Elastic Query based on source Query
      *
      * @param Query $source
+     * @param User $user
      *
      * @return \Elastica\Query
      */
-    public function getQuery(Query $source)
+    public function getQuery(Query $source, User $user)
     {
         $rootQuery = new \Elastica\Query();
         $query = (new \Elastica\Query\BoolQuery())
             ->addMust(
-                $this->createTermQuery($source->getTerm())
+                $this->createTermQuery($source, $user)
             )
         ;
 
@@ -62,32 +72,26 @@ class ElasticaQueryFactory
         return $rootQuery;
     }
 
+    public function addTypeFactory(TypeFactoryInterface $typeFactory)
+    {
+        $this->typeFactories[] = $typeFactory;
+    }
+
     /**
      * Build term search query
      *
-     * @param $term
+     * @param Query $source
+     * @param User $user
      *
-     * @return \Elastica\Query\BoolQuery
+     * @return BoolQuery
      */
-    private function createTermQuery($term)
+    private function createTermQuery(Query $source, User $user)
     {
         $query = new \Elastica\Query\BoolQuery();
 
-        $query
-            ->addShould(
-                (new \Elastica\Query\MultiMatch())
-                    ->setFields(['title', 'content', 'forumName'])
-                    ->setType(\Elastica\Query\MultiMatch::TYPE_PHRASE)
-                    ->setQuery($term)
-            )
-            ->addShould(
-                (new \Elastica\Query\MultiMatch())
-                    ->setFields(['firstname', 'lastname'])
-                    ->setType(\Elastica\Query\MultiMatch::TYPE_CROSS_FIELDS)
-                    ->setTieBreaker(1.0)
-                    ->setQuery($term)
-            )
-        ;
+        foreach ($this->typeFactories as $typeFactory) {
+            $query->addShould($typeFactory->getQuery($source, $user));
+        }
 
         return $query;
     }

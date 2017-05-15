@@ -3,6 +3,7 @@ import { BrowserModule }  from '@angular/platform-browser';
 import { SearchModule }  from './search/search.module';
 import { SearchComponent }  from './search/search.component';
 import {Config} from "./app.config";
+import {AuthService} from "./shared/auth.service";
 
 @NgModule({
     imports: [
@@ -11,6 +12,7 @@ import {Config} from "./app.config";
     ],
     providers: [
         Config,
+        AuthService,
         {
             provide: APP_INITIALIZER,
             useFactory: (config: Config) => () => config.load(),

@@ -22,12 +22,12 @@ $container->loadFromExtension('fos_elastica', [
                                 'type' => 'custom',
                                 'char_filter' => ['html_strip'],
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer', 'my_ngram'],
+                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer'],
                             ],
                             'title_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer', 'my_ngram', 'synonym_domaine'],
+                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer', 'synonym_domaine'],
                             ],
                             'name_analyzer' => [
                                 'type' => 'custom',
@@ -92,6 +92,10 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                             ],
                         ],
+                        'restricted_roles' => [
+                            'property_path' => 'roles',
+                            'index' => 'not_analyzed',
+                        ]
                     ],
                     'persistence' => [
                         'driver' => 'orm',

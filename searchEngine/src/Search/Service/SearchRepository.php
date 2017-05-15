@@ -4,6 +4,7 @@ namespace Search\Service;
 
 use Elastica\Client;
 use Search\Model\Query;
+use Search\Model\User;
 
 /**
  * Search repository
@@ -37,10 +38,11 @@ class SearchRepository
      * Search all
      *
      * @param Query $query
+     * @param User $user
      *
      * @return array
      */
-    public function search(Query $query)
+    public function search(Query $query, User $user)
     {
         $query
             ->addFilter(
@@ -48,17 +50,18 @@ class SearchRepository
             )
         ;
 
-        return $this->doRequest($query);
+        return $this->doRequest($query, $user);
     }
 
     /**
      * Search for all "Point dur"
      *
      * @param Query $query
+     * @param User $user
      *
      * @return array
      */
-    public function searchHot(Query $query)
+    public function searchHot(Query $query, User $user)
     {
         $query
             ->addFilter(
@@ -66,18 +69,19 @@ class SearchRepository
             )
         ;
 
-        return $this->doRequest($query, 'object');
+        return $this->doRequest($query, $user, 'object');
     }
 
     /**
      * @param Query $query
+     * @param User $user
      * @param null $type
      *
      * @return array
      */
-    protected function doRequest(Query $query, $type = null)
+    protected function doRequest(Query $query, User $user, $type = null)
     {
-        $elasticaQuery = $this->factory->getQuery($query);
+        $elasticaQuery = $this->factory->getQuery($query, $user);
 
         $search = new \Elastica\Search($this->client);
         $search

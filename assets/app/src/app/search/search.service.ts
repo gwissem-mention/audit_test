@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http, RequestOptions, URLSearchParams} from '@angular/http';
+import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -7,7 +7,8 @@ import 'rxjs/add/operator/switchMap';
 
 import Query from "../Model/Search/Query";
 import ResultSet from "../Model/Search/ResultSet";
-import {Subject} from "rxjs/Subject";
+import { AuthService } from "../shared/auth.service";
+import { Subject } from "rxjs/Subject";
 
 
 @Injectable()
@@ -18,7 +19,7 @@ export class SearchService {
     private queryObservable = new Subject<Query>();
     private queryHotObservable = new Subject<Query>();
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private auth: AuthService) {
         this.queryObservable
             .switchMap((query: Query) => this.doRequest(query))
             .subscribe((res) => this.resultSet.update(res))
@@ -70,6 +71,8 @@ export class SearchService {
             params.set(`filters[${filterKey}][field]`, filter.field);
             params.set(`filters[${filterKey}][value]`, filter.value);
         }
+
+        params.set('token', this.auth.getToken());
 
         let requestOptions = new RequestOptions();
         requestOptions.params = params;

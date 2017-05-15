@@ -4,6 +4,7 @@ namespace Search\Controller;
 
 use Search\Service\RequestToQueryTransformer;
 use Search\Service\SearchRepository;
+use Search\Service\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,11 @@ class SearchController
     /**
      * @var SearchRepository
      */
-    protected $repository;
+    protected $searchRepository;
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
 
     /**
      * @var RequestToQueryTransformer
@@ -25,11 +30,13 @@ class SearchController
     /**
      * SearchController constructor.
      * @param SearchRepository $repository
+     * @param UserRepository $userRepository
      * @param RequestToQueryTransformer $transformer
      */
-    public function __construct(SearchRepository $repository, RequestToQueryTransformer $transformer)
+    public function __construct(SearchRepository $repository, UserRepository $userRepository, RequestToQueryTransformer $transformer)
     {
-        $this->repository = $repository;
+        $this->searchRepository = $repository;
+        $this->userRepository = $userRepository;
         $this->transformer = $transformer;
     }
 
@@ -41,8 +48,9 @@ class SearchController
      */
     public function indexAction(Request $request)
     {
-        $data = $this->repository->search(
-            $this->transformer->transform($request)
+        $data = $this->searchRepository->search(
+            $this->transformer->transform($request),
+            $this->userRepository->getUserByToken($request->query->get('token'))
         );
 
         return new JsonResponse($data);
@@ -56,8 +64,9 @@ class SearchController
      */
     public function hotAction(Request $request)
     {
-        $data = $this->repository->searchHot(
-            $this->transformer->transform($request)
+        $data = $this->searchRepository->searchHot(
+            $this->transformer->transform($request),
+            $this->userRepository->getUserByToken($request->query->get('token'))
         );
 
         return new JsonResponse($data);

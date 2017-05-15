@@ -11,12 +11,33 @@ $app->register(new Rpodwika\Silex\YamlConfigServiceProvider("../../app/config/pa
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 /* Services declaration */
+$app['db'] = function () use ($app) {
+    $host = $app['config']['parameters']['database_host'];
+    $database = $app['config']['parameters']['database_name'];
+    $user = $app['config']['parameters']['database_user'];
+    $password = $app['config']['parameters']['database_password'];
+    return new \PDO("mysql:host=$host;dbname=$database", $user, $password);
+};
+
+$app['user.repository'] = function () use ($app) {
+    return new \Search\Service\UserRepository($app['db']);
+};
+
 $app['query.transformer'] = function () {
     return new \Search\Service\RequestToQueryTransformer();
 };
 
-$app['query.factory'] = function () {
-    return new \Search\Service\ElasticaQueryFactory();
+$app['query.factory'] = function () use ($app) {
+    $factory = new \Search\Service\ElasticaQueryFactory();
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\ObjectTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\ContentTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\AutodiagTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\PersonTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\PostTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\TopicTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\GroupTypeFactory());
+
+    return $factory;
 };
 
 $app['elastic.client'] = function () use ($app) {
@@ -31,7 +52,7 @@ $app['search.repository'] = function () use ($app) {
 };
 
 $app['search.controller'] = function () use ($app) {
-    return new \Search\Controller\SearchController($app['search.repository'], $app['query.transformer']);
+    return new \Search\Controller\SearchController($app['search.repository'], $app['user.repository'], $app['query.transformer']);
 };
 /************************/
 
