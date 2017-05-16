@@ -282,7 +282,23 @@ function calculMoyenne()
         success  : function(data) {
 
             //Mise à jour du nombre de note
-            $("#info-note-moyenne").text("( " + data.nbNote + " avis )");
+            $("#info-note-moyenne").text("(" + data.nbNote + " notes)");
+            $("#info-note-moyenne").css('cursor', 'pointer');
+            if (data.reviewByMark.length > 0) {
+
+                var html = '<ul style="list-style-type: none; margin: 0; padding: 0;">';
+                for (var i = 0; i < data.reviewByMark.length; i++) {
+                    plural = '';
+                    if (data.reviewByMark[i].reviewCount > 1) {
+                        plural = 's';
+                    }
+                    var li = '<li>' + data.reviewByMark[i].reviewCount + ' note' + plural + ' à ' + data.reviewByMark[i].note + '/5</li>';
+                    html = html + li;
+                }
+                html = html + '</ul>';
+            }
+
+            $("#info-note-moyenne").prop('title', html).tooltip({'html': true});
 
             $('#note-moyenne-etoile')
                 .rateit('value', data.noteMoyenne)

@@ -49,6 +49,8 @@ class NoteController extends Controller
     {
         $nombreNotes = 0;
         $noteMoyenne = 0;
+        $reviewCountByMark = [];
+
         //récupération de l'objet du commentaire passé en param de la requete
         $isContenu = $request->request->get('isContenu') === '1';
 
@@ -64,6 +66,8 @@ class NoteController extends Controller
             $noteMoyenne = $this->get('hopitalnumerique_objet.manager.note')->getMoyenneNoteByObjet($objet->getId(), $isContenu);
 
             $nombreNotes = $this->get('hopitalnumerique_objet.manager.note')->countNbNoteByObjet($objet->getId(), $isContenu);
+
+            $reviewCountByMark = $this->get('hopitalnumerique_objet.manager.note')->countReviewByMark($objet->getId(), $isContenu);
         }
 
         return new JsonResponse([
@@ -71,6 +75,7 @@ class NoteController extends Controller
             'nbNote' => $nombreNotes,
             'noteMoyenne' => $noteMoyenne,
             'userCanVote' => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->userCanVote($objet, $this->getUser()),
+            'reviewByMark' => $reviewCountByMark,
         ]);
     }
 
