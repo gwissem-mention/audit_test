@@ -3,7 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * NoteRepository.
@@ -65,6 +65,37 @@ class NoteRepository extends EntityRepository
                 ->andWhere($qb->expr()->isNull('contenu.id'))
             ;
         }
+
+        return $qb;
+    }
+
+    /**
+     * @param $objectId
+     * @param $isContenu
+     *
+     * @return QueryBuilder
+     */
+    public function countReviewByMark($objectId, $isContenu)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('note.note', 'count(note.note) as reviewCount')
+           ->from('HopitalNumeriqueObjetBundle:Note', 'note')
+        ;
+        if ($isContenu) {
+            $qb->leftJoin('note.contenu', 'contenu')
+               ->where('contenu.id = :contenuId')
+               ->setParameter('contenuId', $objectId)
+            ;
+        } else {
+            $qb->leftJoin('note.objet', 'objet')
+               ->where('objet.id = :objetId')
+               ->setParameter('objetId', $objectId)
+               ->leftJoin('note.contenu', 'contenu')
+               ->andWhere($qb->expr()->isNull('contenu.id'))
+            ;
+        }
+
+        $qb->addGroupBy('note.note');
 
         return $qb;
     }
