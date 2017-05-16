@@ -2,7 +2,11 @@
 
 namespace HopitalNumerique\ModuleBundle\Repository;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * SessionRepository.
@@ -15,7 +19,7 @@ class SessionRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
+     * @return QueryBuilder
      *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
@@ -37,7 +41,10 @@ class SessionRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
+     * @param $domainesIds
+     * @param $condition
+     *
+     * @return QueryBuilder
      *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
@@ -66,6 +73,8 @@ class SessionRepository extends EntityRepository
      * Retourne la liste des sessions du formateur.
      *
      * @param User $user L'utilisateur concerné
+     * @param bool $withDate
+     * @param bool $limit
      *
      * @return QueryBuilder
      */
@@ -82,10 +91,10 @@ class SessionRepository extends EntityRepository
         if ($withDate !== false) {
             if ($withDate == 'beforeToday') {
                 $qb->andWhere('ses.dateSession < :today')
-                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+                   ->setParameter('today', new \DateTime(), Type::DATETIME);
             } else {
                 $qb->andWhere('ses.dateSession > :today')
-                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+                   ->setParameter('today', new \DateTime(), Type::DATETIME);
             }
         }
 
@@ -99,7 +108,7 @@ class SessionRepository extends EntityRepository
     /**
      * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user.
      *
-     * @param idDomaine $idDomaine Domaine concerné
+     * @param $idDomaine $idDomaine Domaine concerné
      *
      * @return QueryBuilder
      */
@@ -152,6 +161,8 @@ class SessionRepository extends EntityRepository
     /**
      * Retourne les sessions des 15 prochains jours.
      *
+     * @param $domainesUser
+     *
      * @return QueryBuilder
      */
     public function getNextSessions($domainesUser)
@@ -171,7 +182,7 @@ class SessionRepository extends EntityRepository
                             'etatInscription' => 407,
                             'idDomaines' => $domainesUser,
                         ])
-                        ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setParameter('today', $today, Type::DATETIME)
                         ->setMaxResults(5)
                         ->groupBy('ses.id')
                         ->orderBy('ses.dateSession', 'ASC');
@@ -183,7 +194,7 @@ class SessionRepository extends EntityRepository
      * @param int       $nombreParticipantsActuelMax Nombre maximum de particpants actuellement enregistrés
      * @param \DateTime $dateLimite                  Date limite
      *
-     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     * @return QueryBuilder QueryBuilder
      */
     public function getSessionsRisquees($nombreParticipantsActuelMax, \DateTime $dateLimite)
     {
@@ -192,12 +203,15 @@ class SessionRepository extends EntityRepository
         $queryBuilder
             ->leftJoin('session.inscriptions', 'inscription')
             ->where($queryBuilder->expr()->between('session.dateSession', ':aujourdhui', ':dateLimite'))
+            ->andWhere('session.archiver = false')
+            ->andWhere('session.etat = :activeStatus')
             ->groupBy('session.id')
             ->having($queryBuilder->expr()->lte('COUNT(inscription.id)', ':nombreParticipantsActuelMax'))
             ->setParameters([
                 'aujourdhui' => new \DateTime(),
                 'dateLimite' => $dateLimite,
                 'nombreParticipantsActuelMax' => $nombreParticipantsActuelMax,
+                'activeStatus' => Reference::STATUT_SESSION_ACTIVE_ID,
             ])
         ;
 
