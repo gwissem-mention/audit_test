@@ -77,10 +77,9 @@ class NoteRepository extends EntityRepository
      */
     public function countReviewByMark($objectId, $isContenu)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('note.note', 'count(note.note) as reviewCount')
-           ->from('HopitalNumeriqueObjetBundle:Note', 'note')
-        ;
+        $qb = $this->createQueryBuilder('note');
+        $qb->select('note.note', 'count(note.note) as reviewCount');
+
         if ($isContenu) {
             $qb->leftJoin('note.contenu', 'contenu')
                ->where('contenu.id = :contenuId')
