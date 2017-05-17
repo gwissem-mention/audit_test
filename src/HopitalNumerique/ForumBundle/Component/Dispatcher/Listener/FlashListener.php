@@ -171,7 +171,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getBoard()) {
             if (!$event->getBoard()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Thème "' . $event->getBoard()->getName() . '" supprimée.');
+                $this->session->getFlashBag()->add('success', 'Thème "' . $event->getBoard()->getName() . '" supprimé.');
             }
         }
     }
