@@ -366,31 +366,14 @@ class EntityHasReferenceRepository extends EntityRepository
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
                 'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount',
-                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum',
-                'reference.id AS referenceId'
+                'SUM(entityHasReference.primary) AS primarySum'
             )
-            ->leftJoin('entityHasReference.reference', 'reference')
         ;
 
-        if (null !== $groupedReferences) {
-            // ET pour chaque référence de niveau 1, OU pour les sous-références
-            for ($i = 0; $i < count($groupedReferences); ++$i) {
-                $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
-                $qb
-                    ->innerJoin(
-                        EntityHasReference::class,
-                        'entityHasReference' . $i,
-                        Expr\Join::WITH,
-                        $qb->expr()->andX(
-                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference' . $i . '.entityType'),
-                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference' . $i . '.entityId'),
-                            $qb->expr()->in('entityHasReference' . $i . '.reference', ':references' . $i)
-                        )
-                    )
-                    ->setParameter(':references' . $i, $groupedReferences[$i])
-                ;
-            }
+        for ($i = 0; $i < count($groupedReferences); ++$i) {
+            $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
         }
+
         if (null !== $entityTypeIds) {
             $qb
                 ->andWhere($qb->expr()->in('entityHasReference.entityType', ':entityTypes'))
