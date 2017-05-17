@@ -27,7 +27,22 @@ $(document).ready(function() {
                 },
                 cache: true
             },
-            minimumInputLength: 3
+            minimumInputLength: 3,
+            language: {
+                inputTooShort: function (args) {
+                    var remainingChars = args.minimum - args.input.length;
+
+                    var message = 'Saisir ' + remainingChars + ' caractère';
+
+                    if (remainingChars !== 1) {
+                        message += 's';
+                    }
+
+                    message += ' du nom de votre structure, de la ville ou de son FINESS';
+
+                    return message;
+                }
+            }
         });
     });
 })();
