@@ -608,7 +608,7 @@ class PublicationController extends Controller
 
             $form->setData($data);
 
-            $response = $this->render('@CCDNForumForum/User/Topic/create.html.twig', [
+            $response = $this->render('CCDNForumForumBundle:User:Topic/create.html.twig', [
                 'crumbs' => $this->get('ccdn_forum_forum.component.crumb_builder')->addUserTopicCreate($forum, $board),
                 'forum' => $forum,
                 'forumName' => $forum->getName(),
