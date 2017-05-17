@@ -77,6 +77,8 @@ class Reference
     const GUYANE_REGION_ID = 1008;
     const OCEAN_INDIEN_REGION_ID = 1010;
 
+    const STATUT_SESSION_ACTIVE_ID = 403;
+
     /**
      * @var int
      *

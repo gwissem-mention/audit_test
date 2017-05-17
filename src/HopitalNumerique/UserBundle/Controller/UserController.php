@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Controller;
 
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
+use HopitalNumerique\UserBundle\UserEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -888,7 +889,7 @@ class UserController extends Controller
 
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            $this->get('event_dispatcher')->dispatch('user_nodevo.before_update', new UserEvent(clone $user));
+            $this->get('event_dispatcher')->dispatch(UserEvents::USER_PRE_UPDATE, new UserEvent(clone $user));
 
             // On bind les données du form
             $form->handleRequest($request);
@@ -997,7 +998,7 @@ class UserController extends Controller
                         } elseif ($role->getRole() == 'ROLE_EXPERT_6') {
                             $user->setAlreadyBeExpert(true);
                         }
-                        $this->get('event_dispatcher')->dispatch('user_nodevo.update', new UserEvent($user));
+                        $this->get('event_dispatcher')->dispatch(UserEvents::USER_UPDATED, new UserEvent($user));
                     }
                 } else {
                     //--FO-- Inscription
