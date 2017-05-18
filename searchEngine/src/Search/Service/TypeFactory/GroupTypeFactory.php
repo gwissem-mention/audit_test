@@ -20,6 +20,7 @@ class GroupTypeFactory implements TypeFactoryInterface
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                     ->setQuery($source->getTerm())
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                    ->setPrefixLength(2)
             )
             ->addMust(
                 (new Type(self::TYPE))

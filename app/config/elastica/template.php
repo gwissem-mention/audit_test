@@ -22,12 +22,12 @@ $container->loadFromExtension('fos_elastica', [
                                 'type' => 'custom',
                                 'char_filter' => ['html_strip'],
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer'],
+                                'filter' => ['lowercase', 'asciifolding', 'stop_filter', 'my_stemmer'],
                             ],
                             'title_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'stop_filter', 'my_stemmer', 'synonym_domaine'],
+                                'filter' => ['lowercase', 'asciifolding', 'stop_filter', 'my_stemmer', 'synonym_domaine'],
                             ],
                             'name_analyzer' => [
                                 'type' => 'custom',

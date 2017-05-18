@@ -20,6 +20,7 @@ class PostTypeFactory implements TypeFactoryInterface
                 (new Match())
                     ->setFieldQuery('content', $source->getTerm())
                     ->setFieldFuzziness('content', 'AUTO')
+                    ->setFieldPrefixLength('content', 2)
             )
             ->addMust(new Type(self::TYPE))
         ;

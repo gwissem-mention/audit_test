@@ -19,6 +19,7 @@ class AutodiagTypeFactory implements TypeFactoryInterface
                 (new Match())
                     ->setFieldQuery('title', $source->getTerm())
                     ->setFieldFuzziness('title', 'AUTO')
+                    ->setFieldPrefixLength('title', 2)
             )
             ->addMust(new Type(self::TYPE))
         ;

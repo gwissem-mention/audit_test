@@ -20,6 +20,7 @@ class TopicTypeFactory implements TypeFactoryInterface
                     ->setFields(['title', 'forumName'])
                     ->setQuery($source->getTerm())
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                    ->setPrefixLength(2)
             )
             ->addMust(
                 (new Type(self::TYPE))
