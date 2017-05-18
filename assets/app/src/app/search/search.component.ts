@@ -10,6 +10,8 @@ import {Subject} from "rxjs/Subject";
 import ResultSet from "../Model/Search/ResultSet";
 import {Config} from "../app.config";
 
+let queryString = require("query-string");
+
 const SEARCH_DELAY = 150;
 
 @Component({
@@ -59,5 +61,9 @@ export class SearchComponent implements OnInit {
             .debounceTime(SEARCH_DELAY)
             .subscribe((query: Query) => {this.searchService.search(query)})
         ;
+
+        let urlQuery = queryString.parse(location.search);
+        this.query.setTerm(urlQuery.q);
+        this.refreshQuery(this.query);
     }
 }
