@@ -6,7 +6,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 /**
  * Group type indexable.
- * This class is responsible of saying if a Group can be indexable or not
+ * This class is responsible of saying if a Group is indexable
  */
 class GroupIndexable
 {

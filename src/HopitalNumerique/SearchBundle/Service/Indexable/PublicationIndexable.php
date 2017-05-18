@@ -8,7 +8,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
  * Publication type indexable.
- * This class is responsible of saying if a Publication can be indexable or not
+ * This class is responsible of saying if a Publication is indexable
  */
 class PublicationIndexable
 {

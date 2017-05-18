@@ -181,7 +181,7 @@ $container->loadFromExtension('fos_elastica', [
                                 'id' => null,
                                 'title' => null,
                                 'forumName' => [
-                                    'property_path' => 'board.category.forumName',
+                                    'property_path' => 'board.category.forum.name',
                                 ],
                             ],
                         ],
@@ -194,6 +194,10 @@ $container->loadFromExtension('fos_elastica', [
                         'driver' => 'orm',
                         'model' => Post::class,
                     ],
+                    'indexable_callback' => [
+                        "@hopital_numerique_search.indexable.forum.$serviceIdentifier",
+                        'isPostIndexable',
+                    ],
                 ],
                 'forum_topic' => [
                     'mappings' => [
@@ -201,7 +205,7 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'title_analyzer',
                         ],
                         'forumName' => [
-                            'property_path' => 'board.category.forumName',
+                            'property_path' => 'board.category.forum.name',
                         ],
                         'authorised_roles' => [
                             'property_path' => 'board.category.forum.readAuthorisedRoles',
@@ -211,6 +215,10 @@ $container->loadFromExtension('fos_elastica', [
                     'persistence' => [
                         'driver' => 'orm',
                         'model' => Topic::class,
+                    ],
+                    'indexable_callback' => [
+                        "@hopital_numerique_search.indexable.forum.$serviceIdentifier",
+                        'isTopicIndexable',
                     ],
                 ],
                 'cdp_groups' => [

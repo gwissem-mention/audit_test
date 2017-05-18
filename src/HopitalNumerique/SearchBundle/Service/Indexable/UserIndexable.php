@@ -8,7 +8,7 @@ use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * User type indexable.
- * This class is responsible of saying if a User can be indexable or not
+ * This class is responsible of saying if a User is indexable
  */
 class UserIndexable
 {
