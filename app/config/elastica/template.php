@@ -149,6 +149,10 @@ $container->loadFromExtension('fos_elastica', [
                                         ],
                                     ],
                                 ],
+                                'restricted_roles' => [
+                                    'property_path' => 'roles',
+                                    'index' => 'not_analyzed',
+                                ],
                             ],
                         ],
                     ],
@@ -181,6 +185,10 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                             ],
                         ],
+                        'authorised_roles' => [
+                            'property_path' => 'topic.board.category.forum.readAuthorisedRoles',
+                            'index' => 'not_analyzed',
+                        ],
                     ],
                     'persistence' => [
                         'driver' => 'orm',
@@ -194,6 +202,10 @@ $container->loadFromExtension('fos_elastica', [
                         ],
                         'forumName' => [
                             'property_path' => 'board.category.forumName',
+                        ],
+                        'authorised_roles' => [
+                            'property_path' => 'board.category.forum.readAuthorisedRoles',
+                            'index' => 'not_analyzed',
                         ],
                     ],
                     'persistence' => [

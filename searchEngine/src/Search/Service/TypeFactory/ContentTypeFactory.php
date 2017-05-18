@@ -3,6 +3,7 @@
 namespace Search\Service\TypeFactory;
 
 use Elastica\Query\BoolQuery;
+use Elastica\Query\Term;
 use Elastica\Query\Type;
 use Search\Model\Query;
 use Search\Model\User;
@@ -20,11 +21,26 @@ class ContentTypeFactory implements TypeFactoryInterface
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                     ->setQuery($source->getTerm())
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                    ->setPrefixLength(2)
             )
             ->addMust(
                 (new Type(self::TYPE))
             )
         ;
+
+        if (null !== $user) {
+            foreach ($user->getRoles() as $role) {
+                $query
+                    ->addMustNot(
+                        (new \Elastica\Query\Nested())
+                            ->setPath('parent')
+                            ->setQuery(
+                                (new  Term())->setTerm('parent.restricted_roles', $role)
+                            )
+                    )
+                ;
+            }
+        }
 
         return $query;
     }

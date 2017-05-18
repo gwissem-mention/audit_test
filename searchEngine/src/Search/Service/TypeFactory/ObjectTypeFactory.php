@@ -20,6 +20,7 @@ class ObjectTypeFactory implements TypeFactoryInterface
                     ->setFields(['title^2', 'content'])
                     ->setQuery($source->getTerm())
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                    ->setPrefixLength(2)
             )
             ->addMust(
                 (new Type(self::TYPE))
