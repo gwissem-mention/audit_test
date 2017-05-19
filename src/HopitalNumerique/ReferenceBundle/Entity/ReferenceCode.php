@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class ReferenceCode
+ *
  * @ORM\Table(name="hn_reference_code")
  * @ORM\Entity()
  * @UniqueEntity(fields={"label","reference"}, message="Ce code est déjà assigné à la référence.")
@@ -27,7 +28,7 @@ class ReferenceCode
      * @var string
      *
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Le libellé ne peut pas être vide.")
+     * @Assert\NotNull(message="Le libellé ne peut pas être vide.")
      */
     private $label;
 

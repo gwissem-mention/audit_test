@@ -109,6 +109,7 @@ class Reference
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference", cascade={"persist"}, orphanRemoval=true)
+     * @Assert\Valid()
      */
     protected $codes;
 
@@ -317,6 +318,22 @@ class Reference
         $this->libelle = $libelle;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
     /**
@@ -1201,15 +1218,5 @@ class Reference
             self::GUYANE_REGION_ID,
             self::OCEAN_INDIEN_REGION_ID,
         ];
-    }
-
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 }

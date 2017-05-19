@@ -59,7 +59,7 @@
 
         <h2>Paramètres de liste</h2>
 
-        <label>Code(s)</label>
+        {{ form_label(form.codes) }}
         <ul class="row list-unstyled" id="reference_codes_form" data-prototype="{{ form_widget(form.codes.vars.prototype.label)|e }}">
             {% for code in form.codes %}
                 <li class="col-lg-3 col-md-4">
@@ -68,6 +68,8 @@
                 </li>
             {% endfor %}
         </ul>
+        {{ form_widget(form.codes) }}
+
         {{ form_widget(form.synonymes) }}
 
         {{ form_row(form.order) }}

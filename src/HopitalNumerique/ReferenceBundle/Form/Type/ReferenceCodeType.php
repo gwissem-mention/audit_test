@@ -4,9 +4,13 @@ namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use HopitalNumerique\ReferenceBundle\Entity\ReferenceCode;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class ReferenceCodeType
+ */
 class ReferenceCodeType extends AbstractType
 {
     /**
@@ -16,7 +20,12 @@ class ReferenceCodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label')
+            ->add('label', TextType::class, [
+                'attr' => [
+                    'maxlength' => 255,
+                    'class' => 'validate[required]',
+                ],
+            ])
         ;
     }
 
