@@ -2,12 +2,20 @@
 
 namespace HopitalNumerique\ModuleBundle\Form;
 
+use HopitalNumerique\ModuleBundle\Entity\Module;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Gaetan MELCHILSEN
@@ -17,8 +25,9 @@ class ModuleType extends AbstractType
 {
     private $_constraints = [];
     private $_userManager;
+
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     * @var ReferenceManager
      */
     private $referenceManager;
 
@@ -35,7 +44,7 @@ class ModuleType extends AbstractType
         $connectedUser = $this->_userManager->getUserConnected();
 
         $builder
-            ->add('titre', 'text', [
+            ->add('titre', TextType::class, [
                     'max_length' => $this->_constraints['titre']['maxlength'],
                     'required' => true,
                     'label' => 'Titre du module',
@@ -60,13 +69,13 @@ class ModuleType extends AbstractType
                     'property' => 'libelle',
                     'multiple' => true,
                     'required' => false,
-                    //'group_by'      => 'parentName',
                     'label' => 'Connaissances SI',
                     'empty_value' => ' - ',
                     'attr' => ['class' => 'connaissances'],
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
                             ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
                             ->orderBy('ref.order', 'ASC')
                         ;
@@ -77,18 +86,19 @@ class ModuleType extends AbstractType
                     'property' => 'libelle',
                     'multiple' => true,
                     'required' => false,
-                    // 'group_by'      => 'parentName',
                     'label' => 'Connaissances métiers',
                     'empty_value' => ' - ',
                     'attr' => ['class' => 'connaissancesMetier'],
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
                             ->setParameter('etat', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
-                            ->orderBy('ref.order', 'ASC');
+                            ->orderBy('ref.order', 'ASC')
+                        ;
                     },
             ])
-            ->add('domaines', 'entity', [
+            ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property' => 'nom',
                 'required' => false,
@@ -99,7 +109,7 @@ class ModuleType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 },
             ])
-            ->add('duree', 'entity', [
+            ->add('duree', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices' => $this->referenceManager->findByCode('DUREE_FORMATION'),
                     'property' => 'libelle',
@@ -108,7 +118,7 @@ class ModuleType extends AbstractType
                     'empty_value' => ' - ',
                     'attr' => [],
             ])
-            ->add('horairesType', 'text', [
+            ->add('horairesType', TextType::class, [
                     'max_length' => $this->_constraints['horairesType']['maxlength'],
                     'required' => false,
                     'label' => 'Horaires type',
@@ -116,28 +126,28 @@ class ModuleType extends AbstractType
                             'class' => $this->_constraints['horairesType']['class'],
                     ],
             ])
-            ->add('lieu', 'textarea', [
+            ->add('lieu', TextareaType::class, [
                     'required' => false,
                     'label' => 'Lieu',
                     'attr' => [
                             'rows' => 3,
                     ],
             ])
-            ->add('description', 'textarea', [
+            ->add('description', TextareaType::class, [
                     'required' => false,
                     'label' => 'Description',
                     'attr' => [
                             'rows' => 3,
                     ],
             ])
-            ->add('nombrePlaceDisponible', 'integer', [
+            ->add('nombrePlaceDisponible', IntegerType::class, [
                     'required' => false,
                     'label' => 'Nombre de places disponibles',
                     'attr' => [
                             'class' => $this->_constraints['nombrePlaceDisponible']['class'],
                     ],
             ])
-            ->add('prerequis', 'textarea', [
+            ->add('prerequis', TextareaType::class, [
                     'required' => false,
                     'label' => 'Prérequis',
                     'attr' => [
@@ -160,7 +170,7 @@ class ModuleType extends AbstractType
                             ->orderBy('user.nom', 'ASC');
                     },
             ])
-            ->add('textMailRappel', 'textarea', [
+            ->add('textMailRappel', TextareaType::class, [
                     'required' => false,
                     'label' => 'Texte du mail de rappel',
                     'attr' => [
@@ -168,37 +178,37 @@ class ModuleType extends AbstractType
                     ],
             ])
 
-            ->add('mailAccuseInscription', 'checkbox', [
+            ->add('mailAccuseInscription', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Envoyer le mail d\'accusé de réception d\'inscription ?',
             ])
 
-            ->add('mailConfirmationInscription', 'checkbox', [
+            ->add('mailConfirmationInscription', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Envoyer le mail de confirmation d\'inscription ?',
             ])
 
-            ->add('mailRefusInscription', 'checkbox', [
+            ->add('mailRefusInscription', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Envoyer le mail de refus ?',
             ])
 
-            ->add('mailRappelEvalution', 'checkbox', [
+            ->add('mailRappelEvalution', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Envoyer le mail de rappel d\'évalution ?',
             ])
 
-            ->add('mailAlerteEvaluation', 'checkbox', [
+            ->add('mailAlerteEvaluation', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Envoyer le mail d\'alerte pour l\'évaluation ?',
             ])
 
-            ->add('file', 'file', [
+            ->add('file', FileType::class, [
                     'required' => false,
                     'label' => 'Pièce-jointe',
             ])
-            ->add('path', 'hidden')
-            ->add('statut', 'entity', [
+            ->add('path', HiddenType::class)
+            ->add('statut', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices' => $this->referenceManager->findByCode('ETAT'),
                     'property' => 'libelle',
@@ -209,10 +219,10 @@ class ModuleType extends AbstractType
             ]);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ModuleBundle\Entity\Module',
+            'data_class' => Module::class,
         ]);
     }
 

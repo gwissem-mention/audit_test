@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
+use HopitalNumerique\ReferenceBundle\Entity\ReferenceCode;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -121,6 +122,7 @@ class ReferenceManager extends BaseManager
 
         $results = [];
 
+        /** @var Reference $reference */
         foreach ($references as $reference) {
             $object = [];
             $object['idReference'] = $object['id'] = $reference->getId();
@@ -132,7 +134,15 @@ class ReferenceManager extends BaseManager
             $object['inRecherche'] = $reference->isInRecherche();
             $object['inGlossaire'] = $reference->isInGlossaire();
             $object['etat'] = $reference->getEtat()->getLibelle();
-            $object['code'] = $reference->getCode();
+            $object['code'] = implode(
+                ', ',
+                array_map(
+                    function (ReferenceCode $referenceCode) {
+                        return $referenceCode->getLabel();
+                    },
+                    $reference->getCodes()->toArray()
+                )
+            );
             $object['idParent'] = $reference->getParentIds();
 
             foreach ($reference->getDomaines() as $domaine) {

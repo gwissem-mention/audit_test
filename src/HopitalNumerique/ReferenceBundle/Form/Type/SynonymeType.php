@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme;
 use HopitalNumerique\ReferenceBundle\Manager\SynonymeManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -15,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SynonymeType extends AbstractType
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\SynonymeManager SynonymeManager
+     * @var SynonymeManager SynonymeManager
      */
     private $synonymeManager;
 
@@ -33,7 +35,7 @@ class SynonymeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle', 'text', [
+            ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
                 'required' => true,
                 'read_only' => (null !== $builder->getData()),
@@ -51,7 +53,7 @@ class SynonymeType extends AbstractType
     /**
      * Si un synonyme identique existe déjà à la création, il est utilisé (pour éviter les doublons).
      *
-     * @param \Symfony\Component\Form\FormEvent $event Event
+     * @param FormEvent $event Event
      */
     private function processExistingSynonyme(FormEvent &$event)
     {
@@ -72,7 +74,7 @@ class SynonymeType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\Synonyme',
+                'data_class' => Synonyme::class,
             ])
         ;
     }

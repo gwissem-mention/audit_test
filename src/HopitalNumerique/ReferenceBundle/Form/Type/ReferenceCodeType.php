@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\ReferenceBundle\Entity\ReferenceCode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReferenceLockedType extends AbstractType
+/**
+ * Class ReferenceCodeType
+ */
+class ReferenceCodeType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,27 +20,22 @@ class ReferenceLockedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle', TextType::class, [
-                'required' => true,
-                'label' => 'Libellé du concept',
+            ->add('label', TextType::class, [
                 'attr' => [
                     'maxlength' => 255,
                     'class' => 'validate[required]',
-                    'data-prompt-position' => 'bottomLeft',
                 ],
             ])
         ;
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Reference::class,
+            'data_class' => ReferenceCode::class,
         ]);
-    }
-
-    public function getName()
-    {
-        return 'hopitalnumerique_reference_reference_locked';
     }
 }

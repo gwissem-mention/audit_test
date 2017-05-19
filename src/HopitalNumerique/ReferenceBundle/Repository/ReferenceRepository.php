@@ -22,13 +22,25 @@ class ReferenceRepository extends EntityRepository
     /**
      * Récupère tous les items de l'arborescence référence dans le bon ordre.
      *
+     * @param bool  $unlockedOnly
+     * @param bool  $fromDictionnaire
+     * @param bool  $fromRecherche
+     * @param array $domaineIds
+     * @param int   $actif
+     *
      * @return array
      */
-    public function getArbo($unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = [], $actif = Reference::STATUT_ACTIF_ID)
-    {
+    public function getArbo(
+        $unlockedOnly = false,
+        $fromDictionnaire = false,
+        $fromRecherche = false,
+        $domaineIds = [],
+        $actif = Reference::STATUT_ACTIF_ID
+    ) {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
+        $qb->select('ref.id, ref.libelle, codes.label as code, par.id as parent, ref.order')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.codes', 'codes')
             ->leftJoin('ref.parents', 'par')
         ;
 
@@ -58,13 +70,16 @@ class ReferenceRepository extends EntityRepository
             $qb->andWhere('ref.inRecherche = 1');
         }
 
-        $qb->orderBy('parent, ref.code, ref.order');
+        $qb->orderBy('parent, codes.label, ref.order');
 
         return $qb->getQuery()->getResult();
     }
 
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
+     *
+     * @param      $domainesIds
+     * @param null $condition
      *
      * @return QueryBuilder
      */
@@ -106,7 +121,7 @@ class ReferenceRepository extends EntityRepository
                 'ref.id',
                 'ref.libelle',
                 'ref.sigle',
-                'ref.code',
+                'GROUP_CONCAT(DISTINCT refCodes.label SEPARATOR \', \') AS codes',
                 'ref.order',
                 'ref.reference',
                 'ref.referenceLibelle',
@@ -119,13 +134,14 @@ class ReferenceRepository extends EntityRepository
                 'GROUP_CONCAT(DISTINCT champLexicalNoms.libelle SEPARATOR \',\') AS champLexicalNomsLibelle'
             )
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.codes', 'refCodes')
             ->leftJoin('ref.etat', 'refEtat')
             ->leftJoin('ref.parents', 'conceptParent')
             ->leftJoin('ref.domaines', 'domaine')
             ->leftJoin('ref.synonymes', 'synonymes')
             ->leftJoin('ref.champLexicalNoms', 'champLexicalNoms')
             ->where('ref.id IN (:ids)')
-            ->orderBy('ref.code, ref.order')
+            ->orderBy('refCodes.label, ref.order')
             ->groupBy('ref.id')
             ->setParameter('ids', $ids)
         ;
@@ -195,18 +211,18 @@ class ReferenceRepository extends EntityRepository
      */
     public function getAllRefCode(array $domainesQuestionnaireId)
     {
-        //TODO : check si la fonction est utilisée autre part que pour les questions + passées les domaines du questionnaire pour filtrer
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.domaines', 'domaine')
+            ->leftJoin('ref.codes', 'codes')
             ->where($qb->expr()->orX(
                 $qb->expr()->in('domaine.id', ':domainesId'),
                 $qb->expr()->isNull('domaine.id')
             ))
             ->setParameter('domainesId', $domainesQuestionnaireId)
-            ->groupBy('ref.code')
-            ->orderBy('ref.code')
+            ->groupBy('codes.label')
+            ->orderBy('codes.label')
         ;
 
         return $qb;
@@ -251,7 +267,8 @@ class ReferenceRepository extends EntityRepository
         $qb
             ->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->andWhere('ref.code = :code')
+            ->leftJoin('ref.codes', 'codes')
+            ->andWhere('codes.label = :code')
             ->setParameter('code', $code)
             ->orderBy('ref.order', 'ASC')
         ;
@@ -276,18 +293,27 @@ class ReferenceRepository extends EntityRepository
     /**
      * Retourne les références selon des domaines.
      *
-     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
-     * @param bool|null                                              $actif       Actif
-     * @param bool|null                                              $lock        Lock
-     * @param bool|null                                              $parentable  Parentable
-     * @param bool                                                   $reference   Reference
-     * @param bool                                                   $inRecherche InRecherche ?
-     * @param bool                                                   $inGlossaire InGlossaire ?
+     * @param      $domaines
+     * @param      $actif
+     * @param      $lock
+     * @param      $parentable
+     * @param      $reference
+     * @param      $inRecherche
+     * @param      $inGlossaire
+     * @param bool $resultsInArray
      *
-     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     * @return Reference[]
      */
-    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire, $resultsInArray = false)
-    {
+    public function findByDomaines(
+        $domaines,
+        $actif,
+        $lock,
+        $parentable,
+        $reference,
+        $inRecherche,
+        $inGlossaire,
+        $resultsInArray = false
+    ) {
         if (0 === count($domaines)) {
             return [];
         }
@@ -357,7 +383,10 @@ class ReferenceRepository extends EntityRepository
                     return $domaine['id'];
                 }, $reference['domainesDisplay']);
 
-                $reference['domainesDisplayId'] = array_intersect($reference['domainesId'], $reference['domainesDisplayId']);
+                $reference['domainesDisplayId'] = array_intersect(
+                    $reference['domainesId'],
+                    $reference['domainesDisplayId']
+                );
             });
 
             return $result;
@@ -368,6 +397,8 @@ class ReferenceRepository extends EntityRepository
 
     /**
      * Récupère les domaines en fonction de la référence.
+     *
+     * @param $idReference
      *
      * @return array
      */

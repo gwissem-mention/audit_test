@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom;
 use HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -15,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ChampLexicalNomType extends AbstractType
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager ChampLexicalNomManager
+     * @var ChampLexicalNomManager ChampLexicalNomManager
      */
     private $champLexicalNomManager;
 
@@ -33,7 +35,7 @@ class ChampLexicalNomType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle', 'text', [
+            ->add('libelle', TextType::class, [
                 'label' => 'Nom',
                 'required' => true,
                 'read_only' => (null !== $builder->getData()),
@@ -51,7 +53,7 @@ class ChampLexicalNomType extends AbstractType
     /**
      * Si un terme du champ lexical identique existe déjà à la création, il est utilisé (pour éviter les doublons).
      *
-     * @param \Symfony\Component\Form\FormEvent $event Event
+     * @param FormEvent $event Event
      */
     private function processExistingChampLexicalNom(FormEvent &$event)
     {
@@ -72,7 +74,7 @@ class ChampLexicalNomType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\ChampLexicalNom',
+                'data_class' => ChampLexicalNom::class,
             ])
         ;
     }

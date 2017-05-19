@@ -3,8 +3,10 @@
 namespace HopitalNumerique\ContactBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Nodevo\ContactBundle\Entity\Contact;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Nodevo\ContactBundle\Form\Type\ContactType as NodevoContactType;
 
 /**
@@ -36,7 +38,7 @@ class ContactType extends NodevoContactType
 
         $builder
 
-        ->add('civilite', 'entity', [
+        ->add('civilite', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'required' => true,
@@ -46,7 +48,8 @@ class ContactType extends NodevoContactType
                 'data' => ('anon.' != $user && !is_null($user->getCivilite())) ? $user->getCivilite() : '',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :etat')
                         ->setParameter('etat', 'CIVILITE')
                         ->orderBy('ref.order', 'ASC');
                 },
@@ -56,12 +59,12 @@ class ContactType extends NodevoContactType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ContactBundle\Entity\Contact',
+            'data_class' => Contact::class,
         ]);
     }
 

@@ -15,9 +15,10 @@ class Score
     /**
      * Score constructor.
      *
-     * @param $code
-     * @param $label
-     * @param $score
+     * @param      $score
+     * @param null $label
+     * @param null $code
+     * @param null $color
      */
     public function __construct($score, $label = null, $code = null, $color = null)
     {

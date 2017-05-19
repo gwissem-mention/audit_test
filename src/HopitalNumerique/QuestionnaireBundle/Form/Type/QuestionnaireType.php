@@ -195,7 +195,7 @@ class QuestionnaireType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire',
+            'data_class' => Questionnaire::class,
         ]);
     }
 
@@ -317,16 +317,14 @@ class QuestionnaireType extends AbstractType
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')->where('ref.code = :etat')->setParameter(
-                                    'etat',
-                                    $question->getReferenceParamTri()
-                                )->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')->setParameter(
-                                    'actif',
-                                    Reference::STATUT_ACTIF_ID
-                                )->orderBy(
-                                    'ref.order',
-                                    'ASC'
-                                );
+                                return $er->createQueryBuilder('ref')
+                                    ->leftJoin('ref.codes', 'codes')
+                                    ->where('codes.label = :etat')
+                                    ->setParameter('etat', $question->getReferenceParamTri())
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                    ->orderBy('ref.order', 'ASC')
+                                ;
                             },
                             'data'          => is_null($reponseCourante) ? null : $reponseCourante->getReference(),
                         ]
@@ -356,15 +354,14 @@ class QuestionnaireType extends AbstractType
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')->where('ref.code = :etat')->innerJoin(
-                                    'ref.etat',
-                                    'etat',
-                                    Expr\Join::WITH,
-                                    'ref.etat = :actif'
-                                )
-                                ->setParameter('actif', Reference::STATUT_ACTIF_ID)
-                                ->setParameter('etat', $question->getReferenceParamTri())
-                                ->orderBy('ref.order', 'ASC');
+                                return $er->createQueryBuilder('ref')
+                                   ->leftJoin('ref.codes', 'codes')
+                                   ->where('codes.label = :etat')
+                                   ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                   ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                   ->setParameter('etat', $question->getReferenceParamTri())
+                                   ->orderBy('ref.order', 'ASC')
+                                ;
                             },
                             'data' => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
@@ -396,15 +393,14 @@ class QuestionnaireType extends AbstractType
                             'multiple'      => false,
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')->where('ref.code = :etat')->innerJoin(
-                                    'ref.etat',
-                                    'etat',
-                                    Expr\Join::WITH,
-                                    'ref.etat = :actif'
-                                )->setParameter('actif', Reference::STATUT_ACTIF_ID)->setParameter(
-                                    'etat',
-                                    $question->getReferenceParamTri()
-                                )->orderBy('ref.order', 'ASC');
+                                return $er->createQueryBuilder('ref')
+                                    ->leftJoin('ref.codes', 'codes')
+                                    ->where('codes.label = :etat')
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                    ->setParameter('etat', $question->getReferenceParamTri())
+                                    ->orderBy('ref.order', 'ASC')
+                                ;
                             },
                             'data'          => is_null($reponseCourante) ? null : $reponseCourante->getReference(),
                         ]
@@ -434,13 +430,16 @@ class QuestionnaireType extends AbstractType
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')
-                                    ->where('ref.code = :etat')
-                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
-                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
-                                    ->setParameter('etat', $question->getReferenceParamTri())
-                                    ->orderBy('ref.order', 'ASC')
-                                ;
+                                return $er->createQueryBuilder('ref')->leftJoin('ref.codes', 'codes')
+                                    ->where('codes.label = :etat')
+                                    ->innerJoin('ref.etat',
+                                    'etat',
+                                    Expr\Join::WITH,
+                                    'ref.etat = :actif')
+                                ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                    ->setParameter('etat',
+                                    $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
                             },
                             'data'          => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
