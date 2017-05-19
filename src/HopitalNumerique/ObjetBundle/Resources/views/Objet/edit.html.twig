@@ -42,7 +42,7 @@
         {% else %}
             <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0 , 'filtre':"publication" }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% endif %}
-        <a class="btn btn-default fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank" title="Afficher le rapport"><i class="fa fa-search"></i></a>
+        <a class="btn btn-default btn-report fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank"><i class="fa fa-search"></i></a>
         <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% elseif objet.isArticle %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_filtre', { 'filtre': 'Article' }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
@@ -51,9 +51,6 @@
     {% endif %}
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    {% if objet.id %}
-        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_delete', { 'id': objet.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
-    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -89,8 +86,8 @@
 
                                 <div class="form-group">
                                     {{ form_label(form.domaines) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.domaines) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(form.domaines, {'attr': {'class': 'select2'}}) }}
                                         {{ form_errors(form.domaines) }}
                                     </div>
                                 </div>
@@ -354,14 +351,29 @@
 
                         {% if objet.id %}
                             <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
-                                <div class="btn btn-primary addContenu" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
-                                <a class="btn btn-success reloadContenu" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
-                                <a class="btn btn-warning uploadSommaire fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
+                                <div class="btn btn-primary addContenu manualAction" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
+                                <a class="btn btn-success reloadContenu manualAction" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
+                                <a class="btn btn-warning uploadSommaire manualAction fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
 
-                                <fieldset>
+                                {% spaceless %}
+                                    <a
+                                        class="btn btn-danger deleteAllInfradocs{{ contenus|length == 0 ? ' hidden' }}"
+                                        title="Supprimer tous les infras-document"
+                                        href="{{path('hopitalnumerique_objet_contenu_delete_all', {'object': objet.id})}}"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                {% endspaceless %}
+
+                                {% include '@HopitalNumeriquePublication/back/converter/upload_button.html.twig' %}
+
+                                <fieldset class="summary">
+
                                     <legend>Sommaire</legend>
 
-                                    <p class="designForBlank" style="{% if contenus|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.</p>
+                                    <p class="designForBlank" style="{{ contenus|length >= 1 ? ' display:none' }}">
+                                        Importez un document ou cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.
+                                    </p>
                                     <div class="dd" id="sommaire">
                                         <ol class="dd-list">
                                             {% import _self as mySelf %}
@@ -372,12 +384,12 @@
                                     </div>
                                 </fieldset>
 
-                                <div class="well well-lg" id="edition-infradox">
-                                    <span class="selectionInfradoc">Vous devez sélectionner un élément avant de pouvoir l'éditer.</span>
+                                <div id="edition-infradox">
                                     <div class="results">
                                     </div>
-                                    <input type="hidden" class="infradoc" value="0" />
                                 </div>
+
+                                <input type="hidden" class="infradoc" value="0" />
 
                             </div>
 
@@ -398,6 +410,13 @@
                                         </ol>
                                     </div>
                                 </fieldset>
+
+                                {% if relatedObjects|length > 0 %}
+                                    <legend style="margin-top: 20px;">Cette production est également liée depuis</legend>
+                                    {% for relatedObject in relatedObjects %}
+                                        <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>

@@ -38,6 +38,9 @@ class AddInscriptionType extends AbstractType
                     'query_builder' => function (EntityRepository $er) use ($roleNames) {
                         return $er->getUsersByRole($roleNames);
                     },
+                    'attr' => [
+                        'class' => 'validate[required]'
+                    ],
             ])
             ->add('etatInscription', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -53,6 +56,9 @@ class AddInscriptionType extends AbstractType
                             ->orderBy('ref.order', 'ASC')
                         ;
                     },
+                    'attr' => [
+                        'class' => 'validate[required]'
+                    ],
             ])
             ->add('etatParticipation', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -68,6 +74,9 @@ class AddInscriptionType extends AbstractType
                             ->orderBy('ref.order', 'ASC')
                         ;
                     },
+                    'attr' => [
+                        'class' => 'validate[required]'
+                    ],
             ])
             ;
     }

@@ -12,6 +12,7 @@ services:
                 - "@security.context"
                 - "@nodevo_mail.manager.mail"
                 - "@mailer"
+                - "@ccdn_forum_forum.repository.post"
             tags:
                 - { name: kernel.event_subscriber }
 
@@ -294,3 +295,7 @@ ccdn_forum_forum:
         title_length:         67
 
 ccdn_component_bb_code:
+    component:
+        engine:
+            table_container:
+                class:                CCDNComponent\BBCodeBundle\Engine\TableContainer

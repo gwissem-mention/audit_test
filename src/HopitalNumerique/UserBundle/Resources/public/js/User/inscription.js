@@ -28,6 +28,8 @@ jQuery(document).ready(function() {
         $(this).toggleClass('open closed');
         $(this).parent().find('.panel-body').slideToggle();
     });
+
+    $('#nodevo_user_user_typeActivite').select2();
 });
 
 function viderStructureEtablissementSante(elementCourant)
@@ -72,7 +74,7 @@ function viderAutreStructure(elementCourant)
 		
 		childsAutreStructure.each(function(){
 			$(this).val('');
-		})	
+		});
 		
 		textRetour = 'etablissement';
 	}

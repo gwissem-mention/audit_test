@@ -55,6 +55,7 @@ services:
             - "@hopitalnumerique_user.manager.user"
             - "@hopitalnumerique_reference.manager.reference"
             - "@hopitalnumerique_objet.manager.form.objetmanagerform"
+            - "@hopitalnumerique_domaine.manager.domaine"
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_objet }
 
@@ -116,6 +117,11 @@ services:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
         arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']
 
+    hopitalnumerique_objet.repository.objet:
+        class: HopitalNumerique\ObjetBundle\Repository\ObjetRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\Objet'
 
     hopitalnumerique_objet.repository.commentaire:
         class: HopitalNumerique\ObjetBundle\Repository\CommentaireRepository

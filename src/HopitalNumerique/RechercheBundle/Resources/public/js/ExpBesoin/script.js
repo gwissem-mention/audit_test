@@ -47,7 +47,7 @@ function initFancyBox()
             'autoSize'  : false,
             'width'     : '80%',
             'height'    : '600px',
-            'scrolling' : 'no',
+            'scrolling' : 'yes',
             'modal'     : true
         });
 }
@@ -161,7 +161,7 @@ function deleteQuestion( id, url )
                             })
                         }
 
-                        location.reload();
+                        selectQuestion(data.questionId, '/admin/aide-expression-besoin/' + data.questionId + '/reponse');
                     }
                 }
             });
@@ -279,7 +279,7 @@ function editLibelleReponse( id, url )
                 success  : function( data ){
                     if( data != '' )
                     {
-                        location.reload();
+                        selectQuestion(data.questionId, '/admin/aide-expression-besoin/' + data.questionId + '/reponse')
                         //Forcer le click sur la question éditée
                     }
                     else
@@ -351,7 +351,7 @@ function saveReponse(idReponse, url)
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
-            apprise('La réponse est modifiée avec succès.');
+            selectQuestion(data.questionId, '/admin/aide-expression-besoin/' + data.questionId + '/reponse')
         }
     });
 }

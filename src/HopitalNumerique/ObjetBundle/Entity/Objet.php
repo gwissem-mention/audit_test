@@ -298,7 +298,7 @@ class Objet implements RoutedItemInterface
     protected $listeNotes;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" }, orphanRemoval=true)
      */
     protected $contenus;
 
@@ -410,7 +410,7 @@ class Objet implements RoutedItemInterface
         $this->ambassadeurs = [];
         $this->modules = [];
         $this->maitriseUsers = [];
-        $this->domaines = [];
+        $this->domaines = new ArrayCollection();
     }
 
     /**
@@ -652,6 +652,10 @@ class Objet implements RoutedItemInterface
      */
     public function setInfraDoc($isInfraDoc)
     {
+        if (!$isInfraDoc) {
+            $this->getContenus()->clear();
+        }
+
         $this->isInfraDoc = $isInfraDoc;
 
         return $this;
@@ -1527,11 +1531,7 @@ class Objet implements RoutedItemInterface
      */
     public function removeDomaine(Domaine $domaine)
     {
-        $domainIndex = array_search($domaine, $this->domaines);
-
-        if ($domainIndex) {
-            unset($this->domaines[$domainIndex]);
-        }
+        $this->domaines->removeElement($domaine);
 
         return $this;
     }
@@ -1549,7 +1549,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return ArrayCollection|array
+     * @return ArrayCollection|Domaine[]
      */
     public function getDomaines()
     {

@@ -11,6 +11,7 @@ use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -49,7 +50,7 @@ class AutodiagEntryController extends Controller
     /**
      * @param AutodiagEntry $entry
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function editAction(AutodiagEntry $entry, $noLayout = false)
     {
@@ -219,7 +220,9 @@ class AutodiagEntryController extends Controller
     /**
      * Demand for restitution page.
      *
+     * @param Request       $request
      * @param AutodiagEntry $entry
+     * @param               $target
      *
      * @return Response
      */

@@ -225,7 +225,7 @@
                                     <li><strong>{{blocSessions['totalInscriptionsAnneeEnCours']}}</strong> inscriptions en {{ anneeEnCours }}</li>
                                     <li><strong>{{blocSessions['totalParticipantsAnneePrecedente']}}</strong> personnes inscrites en {{ anneeEnCours - 1 }}</li>
                                     <li><strong>{{blocSessions['totalParticipantsAnneeEnCours']}}</strong> personnes inscrites en {{ anneeEnCours }}</li>
-                                    <li><a{% if blocSessions['totalSessionsRisquees'] > 0 %} href="{{ path('hopitalnumerique_module_session_popinsessionsrisquees') }}"{% endif %} class="fancybox fancybox.ajax"><strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois</a></li>
+                                    <li>{% if blocSessions['totalSessionsRisquees'] > 0 %}<a href="{{ path('hopitalnumerique_module_session_popinsessionsrisquees') }}" class="fancybox fancybox.ajax">{% endif %}<strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois{% if blocSessions['totalSessionsRisquees'] > 0 %}</a>{% endif %}</li>
                                 </ol>
                             </div>
                         </div>
@@ -269,6 +269,26 @@
                                     <li><b>{{ blocPaiements['waitingPayment']|number_format(0, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
                                     <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
                                     <li><b>{{ blocPaiements['waitingBillCreation']|number_format(0, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li data-row="{{userConf['cdp']['row']}}" data-col="{{userConf['cdp']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
+                        <div class="panel panel-midnightblue">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-credit-card"></i>CDP</h3>
+                                <div class="options">
+                                    <i class="fa fa-arrows"></i>
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <ol>
+                                    <li><b>{{ blockCDP['members']|number_format(0, ',', ' ') }}</b> membres dans la communauté</li>
+                                    <li><b>{{ blockCDP['GTMembers']|number_format(0, ',', ' ') }}</b> membres dans les GT</li>
+                                    <li><b>{{ blockCDP['pendingRecords']|number_format(0, ',', ' ') }}</b> fiches de problématiques en cours</li>
+                                    <li><b>{{ blockCDP['comments']|number_format(0, ',', ' ') }}</b> commentaires ces 30 derniers jours</li>
                                 </ol>
                             </div>
                         </div>

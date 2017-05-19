@@ -6,7 +6,10 @@ $(document).ready(function() {
         'width'     : '50%',
         'autoSize'  : false,
         'height'    : '210px',
-        'href'      : $('#objets-liste-url').val()
+        'href'      : $('#objets-liste-url').val(),
+        'afterShow' : function () {
+            $('#publication').select2({width: 'resolve'});
+        }
     });
 
     $('.selectArticle').fancybox({
@@ -16,7 +19,10 @@ $(document).ready(function() {
         'width'     : '50%',
         'autoSize'  : false,
         'height'    : '210px',
-        'href'      : $('#articles-liste-url').val()
+        'href'      : $('#articles-liste-url').val(),
+        'afterShow' : function () {
+            $('#publication').select2({width: 'resolve'});
+        }
     });
 });
 

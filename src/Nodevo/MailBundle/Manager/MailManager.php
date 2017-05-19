@@ -2,6 +2,7 @@
 
 namespace Nodevo\MailBundle\Manager;
 
+use CCDNComponent\BBCodeBundle\Component\BBCodeEngine;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -87,6 +88,8 @@ class MailManager extends BaseManager
      * @var \HopitalNumerique\UserBundle\Entity\User|null Utilisateur connecté
      */
     private $user;
+    /** @var BBCodeEngine $bbcodeEngine */
+    protected $bbcodeEngine;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
@@ -94,7 +97,7 @@ class MailManager extends BaseManager
      * @param EntityManager $em      Entity      Manager de Doctrine
      * @param array         $options Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = [])
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = [], BBCodeEngine $BBCodeEngine)
     {
         parent::__construct($em);
 
@@ -116,6 +119,7 @@ class MailManager extends BaseManager
         $this->referenceManager = $referenceManager;
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
+        $this->bbcodeEngine = $BBCodeEngine;
 
         $this->setOptions();
 
@@ -566,7 +570,9 @@ class MailManager extends BaseManager
         $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
                 'forumName' => $options['forum'],
                 'topicId' => $topicId,
-            ])) . '" target="_blank" >Nouveau message</a>';
+            ])) . '" target="_blank" >%s</a>';
+
+        $options['lienversmessage'] = sprintf($options['lienversmessage'], $this->truncatePostBody($options['shortMessage']));
 
         $mail = $this->findOneById(36);
 
@@ -589,7 +595,9 @@ class MailManager extends BaseManager
         $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
                 'forumName' => $options['forum'],
                 'topicId' => $topicId,
-            ])) . '" target="_blank" >Nouveau message</a>';
+            ])) . '" target="_blank" >%s</a>';
+
+        $options['lienversmessage'] = sprintf($options['lienversmessage'], $this->truncatePostBody($options['shortMessage']));
 
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
         $destinataire = $domaine->getAdresseMailContact();
@@ -608,6 +616,22 @@ class MailManager extends BaseManager
         $mailToSend = $this->sendMail($subject, $from, [$destinataire], $content, $this->getMailDomaine());
 
         return $mailToSend;
+    }
+
+    /**
+     * @param $body
+     *
+     * @return string
+     */
+    private function truncatePostBody($body)
+    {
+        $body = trim(strip_tags(html_entity_decode($this->bbcodeEngine->process($body))));
+
+        if (strlen($body) > 50) {
+            $body = substr($body, 0, strrpos(substr($body, 0, 50), ' ') ?: strrpos(substr($body, 0, 50), "\n") ?: 50);
+        }
+
+        return $body;
     }
 
     /**

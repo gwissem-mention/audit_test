@@ -6,10 +6,13 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Question;
 use HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question as HopiQuestion;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller des Questionnaire.
@@ -179,5 +182,28 @@ class QuestionController extends Controller
         $this->get('hopitalnumerique_questionnaire.manager.question')->delete($question);
 
         return new Response('{"success":true}', 200);
+    }
+
+    /**
+     * @param Question $question
+     *
+     * @return Response
+     */
+    public function downloadTemplateFileAction(Question $question)
+    {
+        $filename = sprintf('template_%s.docx', $question->getAlias());
+        $path = $this->get('kernel')->getRootDir(). '/../files/expert/'.$filename;
+
+        if (!$question->hasTemplate() || !file_exists($path)) {
+            throw new NotFoundHttpException('Le modèle demandé n\'existe pas.');
+        }
+
+        $response = new BinaryFileResponse($path);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename
+        );
+
+        return $response;
     }
 }

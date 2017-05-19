@@ -20,8 +20,10 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         //On récupère l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+        $user = $this->getUser();
+        $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
+            $request->getSession()->get('domaineId')
+        );
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
         $userConf = $this->buildDashboardRows(json_decode($user->getDashboardBack(), true));
@@ -40,7 +42,6 @@ class DefaultController extends Controller
             'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
             'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
         ];
-        $blocPaiements = ['apayer' => 0, 'attente' => 0, 'janvier' => 0];
 
         //Bloc Interventions
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
@@ -85,7 +86,8 @@ class DefaultController extends Controller
                     }
 
                     if ($inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411
-                        && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6
+                        && $inscription->getUser()->hasRoleAmbassadeur()
+                        && $inscription->getSession()->getModule()->getId() == 6
                     ) {
                         ++$blocUser['ambassadeursMAPF'];
                     }
@@ -114,6 +116,8 @@ class DefaultController extends Controller
             }
         }
 
+        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($currentDomaine);
+
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
             'anneeEnCours' => $anneeEnCours,
             'userConf' => $userConf,
@@ -123,6 +127,7 @@ class DefaultController extends Controller
             'blocInterventions' => $blocInterventions,
             'blocSessions' => $blocSessions,
             'blocPaiements' => $blocPaiements,
+            'blockCDP' => $blocCDP,
         ]);
     }
 
@@ -440,6 +445,7 @@ class DefaultController extends Controller
         $datas['inscriptions'] = ['row' => 4, 'col' => 1];
         $datas['sessions'] = ['row' => 4, 'col' => 2];
         $datas['paiements'] = ['row' => 4, 'col' => 3];
+        $datas['cdp'] = ['row' => 5, 'col' => 3];
 
         //Forum blocs
         $forums = $this->get('ccdn_forum_forum.model.forum')->findAllForums();

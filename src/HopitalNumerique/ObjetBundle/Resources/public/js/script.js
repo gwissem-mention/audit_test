@@ -1,4 +1,31 @@
 $(document).ready(function() {
+
+    $('.deleteAllInfradocs').on('click', function(e) {
+        var $this = $(this);
+        e.preventDefault();
+        return apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+            if (r) {
+                window.location.href = $this.attr('href');
+            }
+        })
+    });
+
+    if (window['wordConverter'] !== undefined) {
+        wordConverter.onPrepareFormLoaded(function() {
+            $('.summary').hide();
+            $('.manualAction').hide();
+        });
+
+        wordConverter.onAbortion(function() {
+            $('.manualAction').show();
+            $('.summary').show();
+        });
+    }
+
+    if( $('#sommaire ol li').length > 0){
+        $('#converter-upload-wrapper').hide();
+    }
+
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
         $(this).hide();
@@ -38,7 +65,13 @@ $(document).ready(function() {
                     //affiche le lien d'upload CSV + la phrase en cas de données vide
                     if( $('#sommaire ol li').length > 0){
                         $('.uploadSommaire').hide();
+                        $('.deleteAllInfradocs').removeClass('hidden');
                         $('.designForBlank').hide();
+                        $('#converter-upload-wrapper').hide();
+
+                        if (window['wordConverter'] !== undefined) {
+                            window['wordConverter'].unloadUploadForm();
+                        }
                     }
                 }
                 else
@@ -154,7 +187,7 @@ function selectChapitre( id, url )
         url     : url,
         type    : 'POST',
         success : function( data ){
-            $('#edition-infradox .results').html( data );
+            $('#edition-infradox .results').addClass('well well-lg').html( data );
             $('#edition-infradox .infradoc').val( id );
             loader.finished();
             $('.select2').select2();
@@ -164,7 +197,7 @@ function selectChapitre( id, url )
 }
 
 function fillRelatedProductionsList(url) {
-    var loader = $('#s2id_hopitalnumerique_objet_contenu_objets').nodevoLoader().start();
+    var loader = $('.related-productions').nodevoLoader().start();
     var relatedProdList = $('#hopitalnumerique_objet_contenu_objets');
     var preselectedValues = $.parseJSON(relatedProdList.attr('data-preselected-values'));
 
@@ -269,7 +302,7 @@ function deleteContenu( id, url )
                             })
                         }
 
-                        $('#edition-infradox .results').html('');
+                        $('#edition-infradox .results').html('').removeClass('well well-lg');
                         $('#edition-infradox .selectionInfradoc').show();
 
                         //supprime l'élément dans le HTML
@@ -278,7 +311,9 @@ function deleteContenu( id, url )
                         //affiche le lien d'upload CSV + la phrase en cas de données vide
                         if( $('#sommaire ol li').length == 0){
                             $('.uploadSommaire').show();
+                            $('.deleteAllInfradocs').addClass('hidden');
                             $('.designForBlank').show();
+                            $('#converter-upload-wrapper').show();
                         }
                     }
                 }

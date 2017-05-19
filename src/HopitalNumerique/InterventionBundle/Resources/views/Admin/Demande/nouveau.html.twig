@@ -24,7 +24,23 @@
                     {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
 
                     {{ form_javascript(interventionDemandeFormulaireNouveau) }}
-                    {{ form_widget(interventionDemandeFormulaireNouveau) }}
+
+                    {{ form_row(interventionDemandeFormulaireNouveau.interventionInitiateur) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.ambassadeur) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.interventionType) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.region) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.email) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.telephone) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.etablissements) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.objets) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.connaissances) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.connaissancesSI) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.objetsAutres) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.description) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.difficulteDescription) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.champLibre) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.rdvInformations) }}
+                    {{ form_row(interventionDemandeFormulaireNouveau.cmsiCommentaire) }}
 
                 {{ form_end(interventionDemandeFormulaireNouveau) }}
             </div>

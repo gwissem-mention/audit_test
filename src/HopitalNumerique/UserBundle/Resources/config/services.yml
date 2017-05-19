@@ -170,6 +170,15 @@ services:
         arguments: ["@nodevo_mail.manager.mail", "@mailer", '@hopitalnumerique_reference.doctrine.referencement_deleter']
         tags:
             - { name: 'kernel.event_subscriber' }
+
+    hopitalnumerique_user.subscriber.token:
+            class: HopitalNumerique\UserBundle\EventListener\TokenSubscriber
+            arguments:
+                - '@session'
+                - '@hopitalnumerique_user.token.token_storage'
+            tags:
+                - { name: 'kernel.event_subscriber' }
+
     #--Handler
     hopitalnumerique_user.handler.login:
         class:  %hopitalnumerique_user.handler.login.class%
@@ -194,3 +203,22 @@ services:
             - "@hopitalnumerique_objet.repository.commentaire"
             - "@hopitalnumerique_objet.repository.note"
             - "@ccdn_forum_forum.repository.post"
+
+    hopitalnumerique_user.repository.user:
+            class: HopitalNumerique\UserBundle\Repository\UserRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\UserBundle\Entity\User'
+
+    hopitalnumerique_user.repository.token:
+            class: HopitalNumerique\UserBundle\Repository\TokenRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\UserBundle\Entity\Token'
+
+    hopitalnumerique_user.token.token_storage:
+            class: HopitalNumerique\UserBundle\Service\TokenStorage
+            arguments:
+                - '@hopitalnumerique_user.repository.token'
+                - '@doctrine.orm.entity_manager'
+                - '@event_dispatcher'

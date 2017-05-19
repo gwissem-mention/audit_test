@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -766,5 +767,40 @@ class UserRepository extends EntityRepository
         ;
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return integer
+     */
+    public function countCDPUsers(Domaine $domain)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(DISTINCT u.id)')
+            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domain->getId())
+            ->andWhere('u.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return integer
+     */
+    public function countUsersInCDP(Domaine $domain)
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('COUNT(DISTINCT i.user)')
+            ->from(Inscription::class, 'i')
+            ->join('i.user', 'u')
+            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domain->getId())
+
+            ->getQuery()->getSingleScalarResult()
+        ;
     }
 }

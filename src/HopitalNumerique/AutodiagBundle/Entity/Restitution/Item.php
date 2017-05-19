@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Item
 {
+    const RESPONSE_TYPE = 'reponses';
+
     /**
      * @var int
      *

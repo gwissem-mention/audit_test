@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +14,14 @@ class LinkController extends Controller
 {
     /**
      * Fancybox d'ajout d'objet à l'utilisateur.
+     *
+     * @param Objet $objet
+     *
+     * @return Response
      */
     public function addLinkAction(Objet $objet)
     {
-        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
+        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo(null, $objet);
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', [
             'arbo' => $arbo,
@@ -35,7 +40,7 @@ class LinkController extends Controller
 
         //bind Objet
         $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
-        $currentObjets = new \Doctrine\Common\Collections\ArrayCollection($pointDur->getObjets());
+        $currentObjets = new ArrayCollection($pointDur->getObjets());
 
         //bind objects
         foreach ($objets as $one) {
@@ -48,7 +53,12 @@ class LinkController extends Controller
 
         $this->get('session')->getFlashBag()->add('success', 'Les productions ont été liées au point dur.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id]) . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "'
+            . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id])
+            . '"}',
+            200
+        );
     }
 
     /**
@@ -72,7 +82,13 @@ class LinkController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $pointDur->getId()]) . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl(
+                'hopitalnumerique_objet_objet_edit',
+                ['id' => $pointDur->getId()]
+            ) . '"}',
+            200
+        );
     }
 
     /**
@@ -87,7 +103,7 @@ class LinkController extends Controller
         //get datas serialzed
         $datas = $this->get('request')->request->get('datas');
 
-        $doctrineArray = new \Doctrine\Common\Collections\ArrayCollection();
+        $doctrineArray = new ArrayCollection();
         foreach ($datas as $one) {
             $doctrineArray->add($one['id']);
         }

@@ -904,11 +904,21 @@ class User extends BaseUser
      */
     public function setRegion($region)
     {
-        if ($region instanceof Reference) {
-            $this->region = $region;
-        } else {
-            $this->region = null;
+        if (null === $this->etablissementRattachementSante) {
+            if ($region instanceof Reference) {
+                $this->region = $region;
+            } else {
+                $this->region = null;
+            }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegionDom()
+    {
+        return in_array($this->getRegion()->getId(), Reference::DOMRegionsIds());
     }
 
     /**
@@ -974,7 +984,7 @@ class User extends BaseUser
     {
         $domaineString = '';
 
-        if (is_null($this->domaines)) {
+        if (null === $this->domaines) {
             return $domaineString;
         }
 
@@ -994,7 +1004,7 @@ class User extends BaseUser
     {
         $domainesId = [];
 
-        if (is_null($this->domaines)) {
+        if (null === $this->domaines) {
             return $domainesId;
         }
 
@@ -1090,10 +1100,12 @@ class User extends BaseUser
      */
     public function setDepartement($departement)
     {
-        if ($departement instanceof Reference) {
-            $this->departement = $departement;
-        } else {
-            $this->departement = null;
+        if (null === $this->etablissementRattachementSante) {
+            if ($departement instanceof Reference) {
+                $this->departement = $departement;
+            } else {
+                $this->departement = null;
+            }
         }
     }
 
@@ -1332,7 +1344,7 @@ class User extends BaseUser
      */
     public function setStatutEtablissementSante($statutEtablissementSante)
     {
-        if ($statutEtablissementSante instanceof Reference) {
+        if ($statutEtablissementSante instanceof Reference && null === $this->etablissementRattachementSante) {
             $this->statutEtablissementSante = $statutEtablissementSante;
         } else {
             $this->statutEtablissementSante = null;
@@ -1374,14 +1386,17 @@ class User extends BaseUser
     /**
      * Set etablissementRattachementSante.
      *
-     * @param string $etablissementRattachementSante
+     * @param Etablissement|null $etablissementRattachementSante
      */
-    public function setEtablissementRattachementSante($etablissementRattachementSante)
+    public function setEtablissementRattachementSante(Etablissement $etablissementRattachementSante = null)
     {
-        if ($etablissementRattachementSante instanceof Etablissement) {
-            $this->etablissementRattachementSante = $etablissementRattachementSante;
-        } else {
-            $this->etablissementRattachementSante = null;
+        $this->etablissementRattachementSante = $etablissementRattachementSante;
+
+        if (null !== $etablissementRattachementSante) {
+            $this->region = $etablissementRattachementSante->getRegion();
+            $this->departement = $etablissementRattachementSante->getDepartement();
+            $this->statutEtablissementSante = $etablissementRattachementSante->getTypeOrganisme();
+            $this->autreStructureRattachementSante = null;
         }
     }
 
@@ -1419,7 +1434,9 @@ class User extends BaseUser
      */
     public function setAutreStructureRattachementSante($autreStructureRattachementSante)
     {
-        $this->autreStructureRattachementSante = $autreStructureRattachementSante;
+        if (null === $this->etablissementRattachementSante) {
+            $this->autreStructureRattachementSante = $autreStructureRattachementSante;
+        }
     }
 
     /**
@@ -1894,7 +1911,7 @@ class User extends BaseUser
     {
         $ambassadeurString = '';
 
-        if (is_null($this->connaissancesAmbassadeurs)) {
+        if (null === $this->connaissancesAmbassadeurs) {
             return $ambassadeurString;
         }
 
@@ -2143,7 +2160,7 @@ class User extends BaseUser
      */
     public function setPath($path)
     {
-        if (is_null($path) && file_exists($this->getAbsolutePath())) {
+        if (null === $path && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
         }
 

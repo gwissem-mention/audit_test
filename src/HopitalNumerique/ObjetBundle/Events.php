@@ -2,8 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle;
 
-use HopitalNumerique\ObjetBundle\Entity\Objet;
-
 /**
  * Contains all events thrown in the HopitalNumerique\ObjetBundle.
  */

@@ -78,8 +78,7 @@ class ObjetController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy([
             'id' => $id,
-        ])
-        ;
+        ]);
 
         $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
@@ -190,11 +189,14 @@ class ObjetController extends Controller
             $objet->getObjets()
         );
 
+        $relatedObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjectRelationships($objet);
+
         $options = [
             'contenus' => $contenus,
             'infra' => $infra,
             'toRef' => $toRef,
             'productions' => $productions,
+            'relatedObjects' => $relatedObjects,
             'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
                                                          ->getEntityDomainesCommunsWithUser($objet, $user),
         ];
@@ -488,6 +490,7 @@ class ObjetController extends Controller
                     'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                     'note' => isset($options['note']) ? $options['note'] : 0,
                     'productions' => isset($options['productions']) ? $options['productions'] : [],
+                    'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
                 ]);
@@ -514,6 +517,7 @@ class ObjetController extends Controller
                         'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                         'note' => isset($options['note']) ? $options['note'] : 0,
                         'productions' => isset($options['productions']) ? $options['productions'] : [],
+                        'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
                     ]);
@@ -626,6 +630,7 @@ class ObjetController extends Controller
                 'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                 'note' => isset($options['note']) ? $options['note'] : 0,
                 'productions' => isset($options['productions']) ? $options['productions'] : [],
+                'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],
             ]

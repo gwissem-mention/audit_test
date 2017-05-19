@@ -295,15 +295,18 @@
  #}
 {% macro display_article(article) %}
     <div class="communaute-de-pratiques-actualite">
-        <h3>{{ article.topic.title }} <span class="date">{{ article.createdDate|date('d/m/Y') }}</span> </h3>
-        <div class="body">{{ article.body|parsePublication|unescape }}</div>
+        <h3 id="article-{{ article.topic.id }}">{{ article.topic.title }} <span class="date">{{ article.createdDate|date('d/m/Y') }}</span> </h3>
+        <div class="body">{{ BBCode_Parse(article.body|parsePublication|unescape)|replace({'<pre>': '', '</pre>': ''})|raw }}</div>
     </div>
 {% endmacro %}
 
 {% macro display_article_truncate(article,size) %}
     <div class="communaute-de-pratiques-actualite">
         <h3>{{ article.topic.title }} <span class="date">{{ article.createdDate|date('d/m/Y') }}</span> </h3>
-        <div class="body">{{ article.body|truncate(size)|parsePublication|unescape }}</div>
+        <div class="body">
+            {{ BBCode_Parse(article.body|truncate(size)|unescape)|replace({'<pre>': '', '</pre>': ''})|raw }}
+            <a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}#article-{{ article.topic.id }}">Lire la suite</a>
+        </div>
     </div>
 {% endmacro %}
 {##

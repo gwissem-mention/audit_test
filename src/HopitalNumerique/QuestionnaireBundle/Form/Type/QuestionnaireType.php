@@ -4,6 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
+use HopitalNumerique\QuestionnaireBundle\Enum\TemplateQuestionAliasEnum;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
@@ -16,6 +17,11 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -24,9 +30,12 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * Class QuestionnaireType
+ */
 class QuestionnaireType extends AbstractType
 {
     /**
@@ -34,13 +43,13 @@ class QuestionnaireType extends AbstractType
      */
     private $occurrenceForm;
 
-    private $_readOnly = false;
-    private $_managerReponse;
+    private $readOnly = false;
+    private $managerReponse;
 
     /**
      * @var QuestionnaireManager QuestionnaireManager
      */
-    private $_managerQuestionnaire;
+    private $managerQuestionnaire;
 
     /**
      * @var OccurrenceManager OccurrenceManager
@@ -53,6 +62,11 @@ class QuestionnaireType extends AbstractType
     private $userManager;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * QuestionnaireType constructor.
      *
      * @param OccurrenceType       $occurrenceForm
@@ -60,19 +74,22 @@ class QuestionnaireType extends AbstractType
      * @param QuestionnaireManager $managerQuestionnaire
      * @param OccurrenceManager    $occurrenceManager
      * @param UserManager          $userManager
+     * @param RouterInterface      $router
      */
     public function __construct(
         OccurrenceType $occurrenceForm,
         $managerReponse,
         $managerQuestionnaire,
         OccurrenceManager $occurrenceManager,
-        UserManager $userManager
+        UserManager $userManager,
+        RouterInterface $router
     ) {
-        $this->occurrenceForm        = $occurrenceForm;
-        $this->_managerReponse       = $managerReponse;
-        $this->_managerQuestionnaire = $managerQuestionnaire;
-        $this->occurrenceManager     = $occurrenceManager;
-        $this->userManager           = $userManager;
+        $this->occurrenceForm       = $occurrenceForm;
+        $this->managerReponse       = $managerReponse;
+        $this->managerQuestionnaire = $managerQuestionnaire;
+        $this->occurrenceManager    = $occurrenceManager;
+        $this->userManager          = $userManager;
+        $this->router               = $router;
     }
 
     /**
@@ -94,7 +111,7 @@ class QuestionnaireType extends AbstractType
         $occurrence = (isset($options['label_attr']['occurrence']) ? $options['label_attr']['occurrence'] : null);
 
         /** @var Questionnaire $questionnaire */
-        $questionnaire = $this->_managerQuestionnaire->findOneBy(['id' => $idQuestionnaire]);
+        $questionnaire = $this->managerQuestionnaire->findOneBy(['id' => $idQuestionnaire]);
 
         /** @var User $user */
         $user = $this->userManager->findOneById($idUser);
@@ -110,8 +127,8 @@ class QuestionnaireType extends AbstractType
                              && !is_null($options['label_attr']['routeRedirection'])
         ) ? $options['label_attr']['routeRedirection'] : [];
 
-        $this->_readOnly = (isset($options['label_attr']['readOnly'])
-                            && !is_null($options['label_attr']['readOnly'])
+        $this->readOnly = (isset($options['label_attr']['readOnly'])
+                           && !is_null($options['label_attr']['readOnly'])
         ) ? $options['label_attr']['readOnly'] : false;
 
         //Si le showAllQuestions n'est pas reinseigné, par défaut on les affiches toutes
@@ -143,18 +160,25 @@ class QuestionnaireType extends AbstractType
         );
 
         if ($questionnaire->isOccurrenceMultiple() && null === $occurrence) {
-            $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
+            if (is_null($options['label_attr']['paramId'])) {
+                $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser(
+                    $questionnaire,
+                    $user
+                );
 
-            if (null === $occurrence) {
-                $occurrence = $this->occurrenceManager->createEmpty();
-                $occurrence->setQuestionnaire($questionnaire);
-                $occurrence->setUser($user);
-                $this->occurrenceManager->save($occurrence);
+                if (null === $occurrence) {
+                    $occurrence = $this->occurrenceManager->createEmpty();
+                    $occurrence->setQuestionnaire($questionnaire);
+                    $occurrence->setUser($user);
+                    $this->occurrenceManager->save($occurrence);
+                }
+            } else {
+                $occurrence = null;
             }
         }
 
         //Récupération du questionnaire
-        $questions = $this->_managerQuestionnaire->getQuestionsReponses(
+        $questions = $this->managerQuestionnaire->getQuestionsReponses(
             $idQuestionnaire,
             $idUser,
             $occurrence,
@@ -165,6 +189,9 @@ class QuestionnaireType extends AbstractType
         $this->constructBuilder($builder, $questions, $questionnaire, $occurrence, $options);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -172,6 +199,9 @@ class QuestionnaireType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'nodevo_questionnaire_questionnaire';
@@ -193,7 +223,9 @@ class QuestionnaireType extends AbstractType
         Occurrence $occurrence = null,
         $options
     ) {
-        $this->addOccurrenceType($builder, $questionnaire, $occurrence);
+        if (is_null($options['label_attr']['paramId'])) {
+            $this->addOccurrenceType($builder, $questionnaire, $occurrence);
+        }
 
         //Réponse de la question courante
         $reponseCourante = null;
@@ -213,16 +245,8 @@ class QuestionnaireType extends AbstractType
             // il sera surchargé si le champ controle JS est rempli pour la question courante
             $attr = $question->getObligatoire() ? ['class' => 'validate[required]'] : [];
 
-            if (!$options['label_attr']['showAllQuestions']) {
-                //Récupère les classes de la question
-                $classes = explode(' ', $question->getVerifJS());
-                //Vérifie si on doit afficher la question
-                $hide = in_array('hideQuestion', $classes);
-
-                //Si la question est à cacher alors on ne la créée pas
-                if ($hide) {
-                    break;
-                }
+            if (!$options['label_attr']['showAllQuestions'] && $this->isQuestionHidden($question)) {
+                continue;
             }
 
             switch ($question->getTypeQuestion()->getLibelle()) {
@@ -239,8 +263,8 @@ class QuestionnaireType extends AbstractType
                             'required'   => $question->getObligatoire(),
                             'label'      => $question->getLibelle(),
                             'mapped'     => false,
-                            'read_only'  => $this->_readOnly,
-                            'disabled'   => $this->_readOnly,
+                            'read_only'  => $this->readOnly,
+                            'disabled'   => $this->readOnly,
                             'attr'       => is_null($question->getVerifJS()) ? $attr
                                 : ['class' => $question->getVerifJS()],
                             'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
@@ -261,8 +285,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -284,12 +308,12 @@ class QuestionnaireType extends AbstractType
                         $question->getTypeQuestion()->getLibelle(),
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
@@ -320,26 +344,26 @@ class QuestionnaireType extends AbstractType
                         'genemu_jqueryselect2_entity',
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
                             'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
                                 return $er->createQueryBuilder('ref')
-                                    ->leftJoin('ref.codes', 'codes')
-                                    ->where('codes.label = :etat')
-                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
-                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
-                                    ->setParameter('etat', $question->getReferenceParamTri())
-                                    ->orderBy('ref.order', 'ASC')
+                                   ->leftJoin('ref.codes', 'codes')
+                                   ->where('codes.label = :etat')
+                                   ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                   ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                   ->setParameter('etat', $question->getReferenceParamTri())
+                                   ->orderBy('ref.order', 'ASC')
                                 ;
                             },
-                            'data'          => is_null($reponseCourante) ? null
+                            'data' => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
                         ]
                     );
@@ -358,13 +382,13 @@ class QuestionnaireType extends AbstractType
                         EntityType::class,
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'empty_value'   => $question->getObligatoire() ? false : 'Ne se prononce pas',
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'expanded'      => true,
                             'multiple'      => false,
                             'attr'          => $attr,
@@ -395,25 +419,27 @@ class QuestionnaireType extends AbstractType
                         EntityType::class,
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
                             'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
+                            'read_only'     => $this->readOnly,
+                            'disabled'      => $this->readOnly,
                             'expanded'      => true,
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')
-                                    ->leftJoin('ref.codes', 'codes')
+                                return $er->createQueryBuilder('ref')->leftJoin('ref.codes', 'codes')
                                     ->where('codes.label = :etat')
-                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
-                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
-                                    ->setParameter('etat', $question->getReferenceParamTri())
-                                    ->orderBy('ref.order', 'ASC')
-                                ;
+                                    ->innerJoin('ref.etat',
+                                    'etat',
+                                    Expr\Join::WITH,
+                                    'ref.etat = :actif')
+                                ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                    ->setParameter('etat',
+                                    $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
                             },
                             'data'          => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
@@ -421,7 +447,20 @@ class QuestionnaireType extends AbstractType
                     );
                     break;
                 case 'file':
-                    $attr = $question->getObligatoire() ? ['class' => 'inputUpload validate[required]'] : [];
+                    $attr = [];
+
+                    if (is_null($question->getVerifJS()) && $question->getObligatoire()) {
+                        $attr['class'] = 'inputUpload validate[required]';
+                    } else {
+                        $attr['class'] = 'inputUpload ' . $question->getVerifJS();
+                    }
+
+                    if ($question->hasTemplate()) {
+                        $attr['data-template-link'] = $this->router->generate(
+                            'hopitalnumerique_questionnaire_question_download_template',
+                            ['question' => $question->getId()]
+                        );
+                    }
 
                     $fieldName = $question->getTypeQuestion()->getLibelle()
                                  . '_' . $question->getId()
@@ -435,14 +474,10 @@ class QuestionnaireType extends AbstractType
                             [
                                 'required'   => $question->getObligatoire(),
                                 'label'      => $question->getLibelle(),
-                                'attr'       => is_null($question->getVerifJS())
-                                    ? $attr
-                                    : [
-                                        'class' => 'inputUpload ' . $question->getVerifJS(),
-                                    ],
+                                'attr'       => $attr,
                                 'mapped'     => false,
-                                'read_only'  => $this->_readOnly,
-                                'disabled'   => $this->_readOnly,
+                                'read_only'  => $this->readOnly,
+                                'disabled'   => $this->readOnly,
                                 'data'       => is_null($reponseCourante)
                                     ? null
                                     : [
@@ -484,8 +519,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => $attr,
                             'data'      => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
                         ]
@@ -501,14 +536,7 @@ class QuestionnaireType extends AbstractType
                     }
 
                     $objetIdsSelectionnees = [];
-                    $reponses              = $this->_managerReponse->reponsesByQuestionnaireByUser(
-                        $questionnaire->getId(),
-                        $interventionDemande->getReferent()->getId(),
-                        true,
-                        null,
-                        $interventionDemande->getId()
-                    );
-                    $reponse               = $this->_managerReponse->findOneBy(
+                    $reponse               = $this->managerReponse->findOneBy(
                         [
                             'question' => $question,
                             'user'     => $interventionDemande->getReferent(),
@@ -534,8 +562,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -562,8 +590,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -594,8 +622,8 @@ class QuestionnaireType extends AbstractType
                             'label'       => $question->getLibelle(),
                             'trim'        => true,
                             'mapped'      => false,
-                            'read_only'   => $this->_readOnly,
-                            'disabled'    => $this->_readOnly,
+                            'read_only'   => $this->readOnly,
+                            'disabled'    => $this->readOnly,
                             'attr'        => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -608,59 +636,140 @@ class QuestionnaireType extends AbstractType
                     );
                     break;
                 case 'etablissement':
-                    $builder->add(
-                        $question->getTypeQuestion()->getLibelle()
-                        . '_'
-                        . $question->getId()
-                        . '_'
-                        . $question->getAlias(),
-                        'genemu_jqueryselect2_entity',
-                        [
-                            'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'property'      => 'appellation',
-                            'required'      => $question->getObligatoire(),
-                            'label'         => $question->getLibelle(),
-                            'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
-                            'empty_value'   => ' - ',
-                            'attr'          => $attr,
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
-                            },
-                            'data'          => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
-                        ]
+                    $etablissementFormModifier = function (
+                        FormInterface $form,
+                        $full = false
+                    ) use (
+                        $question,
+                        $attr,
+                        $reponseCourante
+                    ) {
+                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $fieldOptions = [
+                            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'choice_label' => 'appellation',
+                            'required'     => $question->getObligatoire(),
+                            'label'        => $question->getLibelle(),
+                            'mapped'       => false,
+                            'read_only'    => $this->readOnly,
+                            'disabled'     => $this->readOnly,
+                            'empty_value'  => ' - ',
+                            'attr'         => array_merge($attr, $etabAttr),
+                            'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
+                        ];
+
+                        if ($full) {
+                            $fieldOptions = array_merge(
+                                $fieldOptions,
+                                [
+                                    'query_builder' => function (EntityRepository $er) {
+                                        return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
+                                    },
+                                ]
+                            );
+                        } else {
+                            $fieldOptions['choices'] =
+                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                                ? []
+                                : [$reponseCourante->getEtablissement()]
+                            ;
+                        }
+                        $form->add(
+                            $question->getTypeQuestion()->getLibelle()
+                            . '_'
+                            . $question->getId()
+                            . '_'
+                            . $question->getAlias(),
+                            EntityType::class,
+                            $fieldOptions
+                        );
+                    };
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SET_DATA,
+                        function (FormEvent $event) use ($etablissementFormModifier) {
+                            $etablissementFormModifier($event->getForm());
+                        }
                     );
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SUBMIT,
+                        function (FormEvent $event) use ($etablissementFormModifier) {
+                            $etablissementFormModifier($event->getForm(), true);
+                        }
+                    );
+
                     break;
                 // Les entity ne sont prévues que pour des entités de Référence
                 // (TODO : mettre en base la class et le property ?)
                 case 'etablissementmultiple':
-                    $attr['class'] = 'select2-multiple-entity';
+                    $etablissementMultipleFormModifier = function (
+                        FormInterface $form,
+                        $full = false
+                    ) use (
+                        $question,
+                        $attr,
+                        $reponseCourante
+                    ) {
+                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $fieldOptions = [
+                            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'choice_label' => 'appellation',
+                            'required'     => $question->getObligatoire(),
+                            'label'        => $question->getLibelle(),
+                            'mapped'       => false,
+                            'multiple'     => true,
+                            'read_only'    => $this->readOnly,
+                            'disabled'     => $this->readOnly,
+                            'empty_value'  => ' - ',
+                            'attr'         => array_merge($attr, $etabAttr),
+                            'data'         =>
+                                is_null($reponseCourante)
+                                ? null
+                                : $reponseCourante->getEtablissementMulitple()
+                            ,
+                        ];
 
-                    $builder->add(
-                        $question->getTypeQuestion()->getLibelle()
-                        . '_'
-                        . $question->getId()
-                        . '_'
-                        . $question->getAlias(),
-                        'genemu_jqueryselect2_entity',
-                        [
-                            'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'property'      => 'appellation',
-                            'required'      => $question->getObligatoire(),
-                            'label'         => $question->getLibelle(),
-                            'mapped'        => false,
-                            'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
-                            'empty_value'   => ' - ',
-                            'attr'          => $attr,
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
-                            },
-                            'data'          => is_null($reponseCourante) ? null
-                                : $reponseCourante->getEtablissementMulitple(),
-                        ]
+                        if ($full) {
+                            $fieldOptions = array_merge(
+                                $fieldOptions,
+                                [
+                                    'query_builder' => function (EntityRepository $er) {
+                                        return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
+                                    },
+                                ]
+                            );
+                        } else {
+                            $fieldOptions['choices'] =
+                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                                ? []
+                                : $reponseCourante->getEtablissementMulitple()
+                            ;
+                        }
+
+                        $form->add(
+                            $question->getTypeQuestion()->getLibelle()
+                            . '_'
+                            . $question->getId()
+                            . '_'
+                            . $question->getAlias(),
+                            EntityType::class,
+                            $fieldOptions
+                        );
+                    };
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SET_DATA,
+                        function (FormEvent $event) use ($etablissementMultipleFormModifier) {
+                            $etablissementMultipleFormModifier($event->getForm());
+                        }
+                    );
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SUBMIT,
+                        function (FormEvent $event) use ($etablissementMultipleFormModifier) {
+                            $etablissementMultipleFormModifier($event->getForm(), true);
+                        }
                     );
                     break;
                 case 'commentaire':
@@ -691,8 +800,8 @@ class QuestionnaireType extends AbstractType
                             'required'  => $question->getObligatoire(),
                             'label'     => $question->getLibelle(),
                             'mapped'    => false,
-                            'read_only' => $this->_readOnly,
-                            'disabled'  => $this->_readOnly,
+                            'read_only' => $this->readOnly,
+                            'disabled'  => $this->readOnly,
                             'attr'      => is_null($question->getVerifJS())
                                 ? $attr
                                 : [
@@ -704,6 +813,52 @@ class QuestionnaireType extends AbstractType
                     break;
             }
         }
+    }
+
+    /**
+     * @param Question $question
+     *
+     * @return bool
+     */
+    private function isQuestionHidden(Question $question)
+    {
+        //Récupère les classes de la question
+        $classes = explode(' ', $question->getVerifJS());
+        //Vérifie si on doit afficher la question
+        $hide = in_array('hideQuestion', $classes);
+
+        //Si la question est à cacher alors on ne la créée pas
+        if ($hide) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::buildView($view, $form, $options);
+
+        $questions = $form->getData()->getQuestions();
+        $order = [];
+
+        /** @var Question $question */
+        foreach ($questions as $question) {
+            if ($this->isQuestionHidden($question)) {
+                continue;
+            }
+
+            $order[$question->getOrdre()] =
+                $question->getTypeQuestion()->getLibelle() . '_' . $question->getId() . '_' . $question->getAlias()
+            ;
+        }
+
+        $view->vars['order'] = $order;
     }
 
     /**

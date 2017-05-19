@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
  * Manager de l'entité Note.
@@ -24,11 +23,33 @@ class NoteManager extends BaseManager
         return $this->getRepository()->getMoyenneNoteByObjet($idObjet, $isContenu)->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param $idObjet
+     * @param $isContenu
+     *
+     * @return mixed
+     */
     public function countNbNoteByObjet($idObjet, $isContenu)
     {
         return $this->getRepository()->countNbNoteByObjet($idObjet, $isContenu)->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param $objectId
+     * @param $isContenu
+     *
+     * @return array
+     */
+    public function countReviewByMark($objectId, $isContenu)
+    {
+        return $this->getRepository()->countReviewByMark($objectId, $isContenu)->getQuery()->getResult();
+    }
+
+    /**
+     * @param $idDomaine
+     *
+     * @return mixed
+     */
     public function findNoteByDomaine($idDomaine)
     {
         return $this->getRepository()->findNoteByDomaine($idDomaine)->getQuery()->getResult();

@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ObjetBundle\Form;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -12,12 +14,17 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class ObjetType
+ */
 class ObjetType extends AbstractType
 {
     private $_constraints = [];
@@ -33,19 +40,40 @@ class ObjetType extends AbstractType
      */
     private $objetManagerForm;
 
+    /**
+     * @var DomaineManager $domainManager
+     */
+    private $domainManager;
+
+    /**
+     * ObjetType constructor.
+     *
+     * @param                  $manager
+     * @param                  $validator
+     * @param UserManager      $userManager
+     * @param ReferenceManager $referenceManager
+     * @param ObjetManagerForm $objetManagerForm
+     * @param DomaineManager   $domainManager
+     */
     public function __construct(
         $manager,
         $validator,
         UserManager $userManager,
         ReferenceManager $referenceManager,
-        ObjetManagerForm $objetManagerForm
+        ObjetManagerForm $objetManagerForm,
+        DomaineManager $domainManager
     ) {
         $this->_constraints = $manager->getConstraints($validator);
         $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
         $this->objetManagerForm = $objetManagerForm;
+        $this->domainManager = $domainManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $datas = $options['data'];
@@ -243,22 +271,54 @@ class ObjetType extends AbstractType
                 ],
             ])
             ->add('domaines', EntityType::class, [
-                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'property' => 'nom',
-                'required' => true,
+                'class' => Domaine::class,
                 'multiple' => true,
-                'label' => 'Domaine(s) associé(s)',
-                'empty_value' => ' - ',
-                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
-                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                'choice_attr' => function (Domaine $domain) use ($connectedUser) {
+                    if (!$connectedUser->getDomaines()->contains($domain)) {
+                        return ['disabled' => 'disabled'];
+                    }
+
+                    return [];
                 },
             ])
             ->add('modified', HiddenType::class, [
                 'mapped' => false,
             ])
-            ->add('article', HiddenType::class);
+            ->add('article', HiddenType::class)
+        ;
+
+        $builder->get('domaines')->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $formEvent) use ($connectedUser) {
+                $objectDomains = $formEvent->getForm()->getData();
+                $selectedData  = is_null($formEvent->getData()) ? [] : $formEvent->getData();
+
+                $allowedDomains = $connectedUser->getDomaines()->toArray();
+
+                $finalDomainList = [];
+
+                // Get all object's domains the user doesn't have access to
+                foreach ($objectDomains as $objectDomain) {
+                    if (!in_array($objectDomain, $allowedDomains)) {
+                        $finalDomainList[] = $objectDomain->getId();
+                    }
+                }
+
+                // Adds user-selected domains
+                foreach ($selectedData as $domainId) {
+                    if (!is_null($domainId) && !in_array($domainId, $finalDomainList)) {
+                        $finalDomainList[] = $domainId;
+                    }
+                }
+
+                $formEvent->setData($finalDomainList);
+            }
+        );
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -266,6 +326,9 @@ class ObjetType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'hopitalnumerique_objet_objet';

@@ -1,12 +1,11 @@
 <?php
-/**
- * Formulaire de création d'une demande d'intervention dans l'administration.
- *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
- */
 
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -16,6 +15,7 @@ use HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManag
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use Symfony\Component\Validator\Validator\LegacyValidator;
 
 /**
  * Formulaire de création d'une demande d'intervention spécifique dans l'administration.
@@ -23,30 +23,46 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 class AdminType extends InterventionDemandeType
 {
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager Manager de Objet
+     * @var ObjetManager Manager de Objet
      */
     private $objetManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager Manager Form\InterventionInitiateurManager
+     * @var FormInterventionInitiateurManager Manager Form\InterventionInitiateurManager
      */
     private $formInterventionInitiateurManager;
 
     /**
      * Constructeur du formulaire de création de demande d'intervention spécifique dans l'administration.
      *
-     * @param \Symfony\Component\Security\Core\SecurityContext                                $securityContext                   SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator\LegacyValidator                          $validator                         LegacyValidator
-     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager         $interventionDemandeManager        Manager InterventionDemande
-     * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager                              $objetManager                      Manager Objet
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager    $formInterventionDemandeManager    Manager Form\InterventionDemande
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager $formInterventionInitiateurManager Manager Form\InterventionInitiateur
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\UserManager                   $formUserManager                   Manager Form\User
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager          $formEtablissementManager          Manager Form\Etablissement
+     * @param SecurityContext                   $securityContext                   SecurityContext de l'application
+     * @param LegacyValidator                   $validator                         LegacyValidator
+     * @param InterventionDemandeManager        $interventionDemandeManager        Manager InterventionDemande
+     * @param ObjetManager                      $objetManager                      Manager Objet
+     * @param FormInterventionDemandeManager    $formInterventionDemandeManager    Manager Form\InterventionDemande
+     * @param FormInterventionInitiateurManager $formInterventionInitiateurManager Manager Form\InterventionInitiateur
+     * @param FormUserManager                   $formUserManager                   Manager Form\User
+     * @param EtablissementManager              $formEtablissementManager          Manager Form\Etablissement
      */
-    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, ObjetManager $objetManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
-    {
-        parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
-        $this->objetManager = $objetManager;
+    public function __construct(
+        SecurityContext $securityContext,
+        $validator,
+        InterventionDemandeManager $interventionDemandeManager,
+        ObjetManager $objetManager,
+        FormInterventionDemandeManager $formInterventionDemandeManager,
+        FormInterventionInitiateurManager $formInterventionInitiateurManager,
+        FormUserManager $formUserManager,
+        FormEtablissementManager $formEtablissementManager
+    ) {
+        parent::__construct(
+            $securityContext,
+            $validator,
+            $interventionDemandeManager,
+            $formInterventionDemandeManager,
+            $formUserManager,
+            $formEtablissementManager
+        );
+
+        $this->objetManager                      = $objetManager;
         $this->formInterventionInitiateurManager = $formInterventionInitiateurManager;
     }
 
@@ -56,23 +72,22 @@ class AdminType extends InterventionDemandeType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->interventionDemande = $options['interventionDemande'];
+        $reponseCourante = $builder->getData();
 
         $builder
-            ->add('interventionInitiateur', 'entity', [
+            ->add('interventionInitiateur', EntityType::class, [
                 'choices' => $this->formInterventionInitiateurManager->getInterventionInitiateursChoices(),
                 'class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur',
-                'data' => $this->interventionDemande->getInterventionInitiateur(),
-                'property' => 'type',
+                'choice_label' => 'type',
                 'label' => 'Initiateur de la demande',
                 'required' => false,
                 'read_only' => true,
                 'disabled' => true,
             ])
-            ->add('interventionEtat', 'entity', [
+            ->add('interventionEtat', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getInterventionEtatsChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                'property' => 'libelle',
+                'choice_label' => 'libelle',
                 'label' => 'État actuel',
                 'required' => true,
                 'read_only' => true,
@@ -80,64 +95,57 @@ class AdminType extends InterventionDemandeType
             ]);
         parent::buildForm($builder, $options);
         $builder
-            ->add('region', 'entity', [
+            ->add('region', EntityType::class, [
                 'label' => 'Région des établissements',
                 'choices' => $this->formUserManager->getRegionsChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'empty_value' => '-',
-                'property' => 'libelle',
+                'choice_label' => 'libelle',
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'],
             ])
-            ->add('etablissements', 'entity', [
-                'choices' => $this->formEtablissementManager->getEtablissementsChoices(),
-                'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
-                'property' => 'nom',
-                'multiple' => true,
-                'label' => 'Rattacher d\'autres établissements à ma demande, parmi ',
-                'required' => false,
-                'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'],
+            ->add('etablissements', EntityType::class, [
+                'class'        => Etablissement::class,
+                'choice_label' => 'appellation',
+                'required'     => false,
+                'label'        => 'Rattacher d\'autres établissements à ma demande, parmi',
+                'multiple'     => true,
+                'empty_value'  => '-',
+                'attr'         => ['class' => 'ajax-select2-list hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
+                'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissements(),
             ])
-            ->add('ambassadeur', 'entity', [
+            ->add('ambassadeur', EntityType::class, [
                 'choices' => $this->formUserManager->getAmbassadeursChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'empty_value' => '-',
-                'property' => 'appellation',
+                'choice_label' => 'appellation',
                 'label' => 'Ambassadeur',
                 'required' => true,
                 'read_only' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_ambassadeur'],
             ])
-            ->add('referent', 'entity', [
+            ->add('referent', EntityType::class, [
                 'choices' => $this->formUserManager->getReferentsChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'label' => 'Demandeur',
-                'property' => 'nomPrenom',
+                'choice_label' => 'nomPrenom',
                 'required' => true,
             ])
-            ->add('objets', 'entity', [
+            ->add('objets', EntityType::class, [
                 'choices' => $this->objetManager->getProductionsActive(),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
-                'property' => 'titre',
+                'choice_label' => 'titre',
                 'multiple' => true,
                 'required' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets'],
             ])
-            ->add('cmsiCommentaire', 'textarea', [
+            ->add('cmsiCommentaire', TextareaType::class, [
                 'label' => 'Commentaire CMSI',
                 'required' => false,
                 'read_only' => false,
             ])
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'hopitalnumerique_interventionbundle_interventiondemande_admin';
     }
 }

@@ -8,6 +8,7 @@ Hn_RechercheBundle_Referencement.AJAX_LOADER = null;
  */
 Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
 Hn_RechercheBundle_Referencement.mainSearchQuery = null;
+Hn_RechercheBundle_Referencement.showCog = false;
 
 /**
  * Affiche les résultats.
@@ -48,6 +49,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         function (data, status, jqXHR) {
             if (Hn_RechercheBundle_Referencement.mainSearchQuery !== jqXHR) {
                 return true;
+            }
+
+            if (data['showCog']) {
+                Hn_RechercheBundle_Referencement.showCog = true;
             }
 
             var totalCount = 0;
@@ -133,7 +138,11 @@ Hn_RechercheBundle_Referencement.getEntityBlocHtml = function(entityProperties)
 {
     var html = '';
     html += '<div class="category">' + entityProperties['categoryLabels'] + '</div>';
-    html += '<h3 class="title"><a href="' + entityProperties['url'] + '">';
+    if (Hn_RechercheBundle_Referencement.showCog == true) {
+        html += '<h3 class="title"><a href="'+ Routing.generate('hopitalnumerique_reference_referencement_popin', { entityType: entityProperties['entityType'], entityId: entityProperties['entityId'] }) +'" class="open-popin-referencement fancybox.ajax pull-left" style="margin-right: 5px;" title="Référencer cette publication"><i class="fa fa-cog"></i></a><a href="' + entityProperties['url'] + '">';
+    } else {
+        html += '<h3 class="title"><a href="' + entityProperties['url'] + '">';
+    }
     html += '<em class="pertinence-niveau-' + entityProperties['pertinenceNiveau'] + '"></em>';
     html += entityProperties['title'];
     if (undefined != entityProperties['subtitle']) {

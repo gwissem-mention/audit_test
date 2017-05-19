@@ -44,15 +44,6 @@ class TopicCreateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('board', 'entity',
-                [
-                    'property' => 'name',
-                    'class' => 'CCDNForumForumBundle:Board',
-                    'choices' => $options['boards'],
-                    'label' => 'board.label',
-                    'translation_domain' => 'CCDNForumForumBundle',
-                ]
-            )
             ->add('title', null,
                 [
                     'label' => 'topic.title-label',

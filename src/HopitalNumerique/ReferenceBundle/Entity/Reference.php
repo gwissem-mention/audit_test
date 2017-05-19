@@ -71,6 +71,12 @@ class Reference
      */
     const ETAT_SUGGESTION_VALIDE_ID = 2006;
 
+    const GUADELOUPE_REGION_ID = 1007;
+    const GUYANE_REGION_ID = 1008;
+    const OCEAN_INDIEN_REGION_ID = 1010;
+
+    const STATUT_SESSION_ACTIVE_ID = 403;
+
     /**
      * @var int
      *
@@ -1186,5 +1192,24 @@ class Reference
         return $this->domainesDisplay->map(function (Domaine $domaine) {
             return $domaine->getId();
         });
+    }
+
+    public static function DOMRegionsIds()
+    {
+        return [
+            self::GUADELOUPE_REGION_ID,
+            self::GUYANE_REGION_ID,
+            self::OCEAN_INDIEN_REGION_ID,
+        ];
+    }
+
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 }
