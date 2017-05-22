@@ -288,7 +288,6 @@ class Reference
         $this->parents = new ArrayCollection();
         $this->enfants = new ArrayCollection();
         $this->domainesDisplay = new ArrayCollection();
-        $this->codes = new ArrayCollection();
     }
 
     /**
