@@ -11,3 +11,9 @@ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx|[g]melch
 sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs;
 sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs;
 make cldroit
+
+
+Moteur de recherche
+===================
+
+[Documentation moteur de rechecher](doc/search/index.md)
