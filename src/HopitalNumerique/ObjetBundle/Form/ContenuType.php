@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContenuType extends AbstractType
 {
@@ -109,12 +109,14 @@ class ContenuType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'query_builder' => function (EntityRepository $er) use ($contenu) {
-                    $qb = $er->createQueryBuilder('ref');
+                    $qb = $er->createQueryBuilder('ref')
+                        ->leftJoin('ref.codes', 'codes')
+                    ;
                     if ($contenu->getObjet()->isArticle()) {
-                        $qb->andWhere('ref.id != 188', 'ref.id != 570', 'ref.code = :article')
+                        $qb->andWhere('ref.id != 188', 'ref.id != 570', 'codes.label = :article')
                            ->setParameter('article', 'CATEGORIE_ARTICLE');
                     } elseif (!$contenu->getObjet()->isArticle()) {
-                        $qb->andWhere('ref.id != 175', 'ref.code = :objet')
+                        $qb->andWhere('ref.id != 175', 'codes.label = :objet')
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
                     $qb->orderBy('ref.order', 'ASC');
@@ -128,14 +130,11 @@ class ContenuType extends AbstractType
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu',
+                'data_class' => Contenu::class,
             ])
             ->setRequired(['domaine', 'user'])->setAllowedTypes([
                 'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',

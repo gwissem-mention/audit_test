@@ -29,6 +29,7 @@ class ObjetType extends AbstractType
 {
     private $_constraints = [];
     private $_userManager;
+
     /**
      * @var ReferenceManager
      */
@@ -144,15 +145,17 @@ class ObjetType extends AbstractType
                 'label' => 'Catégorie',
                 'attr' => ['placeholder' => 'Selectionnez le ou les catégories de cette publication'],
                 'query_builder' => function (EntityRepository $er) use ($datas) {
-                    $qb = $er->createQueryBuilder('ref');
+                    $qb = $er->createQueryBuilder('ref')
+                        ->leftJoin('ref.codes', 'codes')
+                    ;
 
                     //cas objet existe + is ARTICLE
                     if ($datas->isArticle()) {
-                        $qb->andWhere('ref.id != 188', 'ref.id != 570', 'ref.code = :article')
+                        $qb->andWhere('ref.id != 188', 'ref.id != 570', 'codes.label = :article')
                            ->setParameter('article', 'CATEGORIE_ARTICLE');
                     //cas objet existe + is OBJET
                     } elseif (!$datas->isArticle()) {
-                        $qb->andWhere('ref.id != 175', 'ref.code = :objet')
+                        $qb->andWhere('ref.id != 175', 'codes.label = :objet')
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
 
@@ -319,7 +322,7 @@ class ObjetType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Objet',
+            'data_class' => Objet::class,
         ]);
     }
 

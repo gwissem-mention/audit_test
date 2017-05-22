@@ -58,7 +58,20 @@
         <br>{{ form_row(form.etat) }}
 
         <h2>Paramètres de liste</h2>
-        {{ form_row(form.code) }}
+
+        {{ form_label(form.codes) }}
+        <ul class="row list-unstyled" id="reference_codes_form" data-prototype="{{ form_widget(form.codes.vars.prototype.label)|e }}">
+            {% for code in form.codes %}
+                <li class="col-lg-3 col-md-4">
+                    <div class="hide">{{ form_widget(code) }}</div>
+                    <input type="text" class="form-control" value="{{ code.vars.data.label }}" disabled>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form_widget(form.codes) }}
+
+        {{ form_widget(form.synonymes) }}
+
         {{ form_row(form.order) }}
 
         <h2>Paramètres de la référence</h2>

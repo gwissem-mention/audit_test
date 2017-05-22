@@ -194,14 +194,15 @@ class ObjetRepository extends EntityRepository
             ->where('obj.etat = :idEtat')
             ->andWhere($qb->expr()->isNull('role.id'))
             ->leftJoin('obj.types', 'refType')
+            ->leftJoin('refType.codes', 'codes')
             ->leftJoin('refType.parents', 'typeParent')
             ->andWhere(
                 $qb->expr()->orx(
                     $qb->expr()->andX(
                         $qb->expr()->isNotNull('typeParent.id'),
-                        $qb->expr()->eq('refType.code', ':code_artcle')
+                        $qb->expr()->eq('codes.label', ':code_artcle')
                     ),
-                    $qb->expr()->eq('refType.code', ':code_objet')
+                    $qb->expr()->eq('codes.label', ':code_objet')
                 )
             )
             ->setParameters([
@@ -241,6 +242,8 @@ class ObjetRepository extends EntityRepository
      * Retourne la liste des objets selon le/les types.
      *
      * @param array $types Les types à filtrer
+     * @param int   $limit
+     * @param       $order
      *
      * @param int   $limit
      * @param       $order

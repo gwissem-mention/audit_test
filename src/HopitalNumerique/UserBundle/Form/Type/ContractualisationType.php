@@ -2,10 +2,15 @@
 
 namespace HopitalNumerique\UserBundle\Form\Type;
 
+use HopitalNumerique\UserBundle\Entity\Contractualisation;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContractualisationType extends AbstractType
 {
@@ -25,19 +30,19 @@ class ContractualisationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', 'file', [
+            ->add('file', FileType::class, [
                 'required' => true,
                 'label' => 'Fichier objet',
                 'attr' => ['class' => $this->_constraints['file']['class']],
             ])
-            ->add('path', 'hidden')
+            ->add('path', HiddenType::class)
             ->add('nomDocument', 'text', [
                 'max_length' => $this->_constraints['nomDocument']['maxlength'],
                 'required' => true,
                 'label' => 'Nom du document',
                 'attr' => ['class' => $this->_constraints['nomDocument']['class']],
             ])
-            ->add('typeDocument', 'entity', [
+            ->add('typeDocument', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
                     'required' => true,
@@ -46,9 +51,11 @@ class ContractualisationType extends AbstractType
                     'attr' => ['class' => $this->_constraints['typeDocument']['class']],
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'DOCUMENT_CONTRACTUALISATION_TYPE')
-                        ->orderBy('ref.order', 'ASC');
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
+                            ->setParameter('etat', 'DOCUMENT_CONTRACTUALISATION_TYPE')
+                            ->orderBy('ref.order', 'ASC')
+                        ;
                     },
             ])
             ->add('dateRenouvellement', 'genemu_jquerydate', [
@@ -56,17 +63,17 @@ class ContractualisationType extends AbstractType
                 'label' => 'Date de renouvellement',
                 'widget' => 'single_text',
             ])
-            ->add('archiver', 'checkbox', [
+            ->add('archiver', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Archiver le document ?',
                 'attr' => ['class' => 'checkbox'],//array('class' => $this->_constraints['archiver']['class'] )
             ]);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\UserBundle\Entity\Contractualisation',
+            'data_class' => Contractualisation::class,
         ]);
     }
 

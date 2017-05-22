@@ -5,6 +5,7 @@ namespace HopitalNumerique\InterventionBundle\Form;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,7 +17,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
@@ -168,7 +168,8 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :code')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :code')
                         ->leftJoin('ref.etat', 'etat', Expr\Join::WITH, 'etat.id = 3')
                         ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :idParent')
                         ->setParameters([
@@ -187,7 +188,8 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :code')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :code')
                         ->leftJoin('ref.etat', 'etat')
                             ->andWhere('etat.id = 3')
                         ->setParameter('code', 'CONNAISSANCES_AMBASSADEUR_SI')

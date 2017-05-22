@@ -4,13 +4,21 @@ namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Nodevo\ToolsBundle\Tools\Systeme;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Doctrine\ORM\EntityRepository;
@@ -21,7 +29,7 @@ class ReferenceType extends AbstractType
     private $constraints = [];
     private $userManager;
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     * @var ReferenceManager
      */
     private $referenceManager;
 
@@ -42,7 +50,7 @@ class ReferenceType extends AbstractType
 
         if ($connectedUser->hasRoleAdmin()) {
             $builder
-                ->add('domaines', 'entity', [
+                ->add('domaines', EntityType::class, [
                     'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                     'property' => 'nom',
                     'required' => false,
@@ -60,7 +68,7 @@ class ReferenceType extends AbstractType
 
             if ($connectedUser->hasRoleAdmin()) {
                 $builder
-                    ->add('allDomaines', 'checkbox', [
+                    ->add('allDomaines', CheckboxType::class, [
                         'label' => 'Tous les domaines',
                         'required' => false,
                     ])
@@ -77,15 +85,15 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Concept du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartConcept(FormBuilderInterface $builder, array $options)
     {
         $referenceId = $options['data']->getId();
 
         $builder
-            ->add('libelle', 'text', [
+            ->add('libelle', TextType::class, [
                 'required' => true,
                 'label' => 'Libellé du concept',
                 'attr' => [
@@ -94,31 +102,31 @@ class ReferenceType extends AbstractType
                     'data-prompt-position' => 'bottomLeft',
                 ],
             ])
-            ->add('image', 'hidden', [
+            ->add('image', HiddenType::class, [
                 'required' => false,
             ])
-            ->add('imageFile', 'file', [
+            ->add('imageFile', FileType::class, [
                 'label' => 'Image',
                 'required' => false,
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $this->verifyImage($event->getForm(), $event->getData());
             })
-            ->add('synonymes', 'collection', [
+            ->add('synonymes', CollectionType::class, [
                 'label' => 'Synonymes',
                 'type' => SynonymeType::class,
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
-            ->add('champLexicalNoms', 'collection', [
+            ->add('champLexicalNoms', CollectionType::class, [
                 'label' => 'Champ lexical',
                 'type' => ChampLexicalNomType::class,
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
             ])
-            ->add('parents', 'entity', [
+            ->add('parents', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'multiple' => true,
                 'required' => false,
@@ -127,7 +135,8 @@ class ReferenceType extends AbstractType
                     $qb = $er->createQueryBuilder('ref')
                         ->andWhere('ref.lock = 0')
                         ->leftJoin('ref.parents', 'parent')
-                        ->orderBy('parent.id, ref.code, ref.order', 'ASC');
+                        ->leftJoin('ref.codes', 'codes')
+                        ->orderBy('parent.id, codes.label, ref.order', 'ASC');
 
                     if ($referenceId) {
                         $qb->andWhere("ref.id != $referenceId");
@@ -136,7 +145,7 @@ class ReferenceType extends AbstractType
                     return $qb;
                 },
             ])
-            ->add('etat', 'entity', [
+            ->add('etat', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices' => $this->referenceManager->findByCode('ETAT'),
                 'property' => 'libelle',
@@ -150,8 +159,8 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Liste du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartListe(FormBuilderInterface $builder, array $options)
     {
@@ -163,12 +172,13 @@ class ReferenceType extends AbstractType
         }
 
         $builder
-            ->add('code', 'text', [
-                'required' => false,
-                'label' => 'Code',
-                'attr' => $attrCode,
+            ->add('codes', CollectionType::class, [
+                'entry_type' => ReferenceCodeType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
-            ->add('order', 'number', [
+            ->add('order', NumberType::class, [
                 'required' => true,
                 'label' => 'Ordre d\'affichage',
                 'attr' => ['class' => 'validate[required, custom[numberVirgule]]'],
@@ -179,30 +189,30 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Référence du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartReference(FormBuilderInterface $builder, array $options)
     {
         $connectedUser = $this->userManager->getUserConnected();
 
         $builder
-            ->add('reference', 'checkbox', [
+            ->add('reference', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Est une référence ?',
             ])
-            ->add('inRecherche', 'checkbox', [
+            ->add('inRecherche', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Présente dans la recherche ?',
             ])
-            ->add('referenceLibelle', 'text', [
+            ->add('referenceLibelle', TextType::class, [
                 'required' => false,
                 'label' => 'Libellé de la référence (si différent du libellé du concept)',
                 'attr' => [
                     'maxlength' => 255,
                 ],
             ])
-            ->add('domainesDisplay', 'entity', [
+            ->add('domainesDisplay', EntityType::class, [
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property' => 'nom',
                 'required' => false,
@@ -221,45 +231,45 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Glossaire du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartGlossaire(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('inGlossaire', 'checkbox', [
+            ->add('inGlossaire', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Présent dans le glossaire ?',
             ])
-            ->add('sigle', 'text', [
+            ->add('sigle', TextType::class, [
                 'required' => false,
                 'label' => 'Sigle',
                 'attr' => [
                     'maxlength' => 255,
                 ],
             ])
-            ->add('glossaireLibelle', 'text', [
+            ->add('glossaireLibelle', TextType::class, [
                 'required' => false,
                 'label' => 'Libellé dans le glossaire (si différent du libellé du concept)',
                 'attr' => [
                     'maxlength' => 255,
                 ],
             ])
-            ->add('descriptionCourte', 'textarea', [
+            ->add('descriptionCourte', TextareaType::class, [
                 'required' => false,
                 'label' => 'Description courte <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>',
                 'attr' => [
                     'data-prompt-position' => 'bottomLeft',
                 ],
             ])
-            ->add('descriptionLongue', 'textarea', [
+            ->add('descriptionLongue', TextareaType::class, [
                 'required' => false,
                 'label' => 'Description longue',
                 'attr' => [
                     'class' => 'tinyMce',
                 ],
             ])
-            ->add('casseSensible', 'checkbox', [
+            ->add('casseSensible', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Sensible à la casse ?',
             ])
@@ -269,20 +279,26 @@ class ReferenceType extends AbstractType
     /**
      * Vérifie la validité de l'image.
      *
-     * @param \Symfony\Component\Form\FormInterface              $form      Formulaire
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Référence
+     * @param FormInterface $form      Formulaire
+     * @param Reference     $reference Référence
      */
     private function verifyImage(FormInterface $form, Reference $reference)
     {
         if (null !== $reference->getImageFile() && !$reference->imageFileIsValid()) {
-            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à ' . intval(Systeme::getFileUploadMaxSize() / 1024 / 1024) . ' Mo.'));
+            $form->get('imageFile')->addError(
+                new FormError(
+                    'Veuillez choisir une image inférieure à '
+                    . intval(Systeme::getFileUploadMaxSize() / 1024 / 1024)
+                    . ' Mo.'
+                )
+            );
         }
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+            'data_class' => Reference::class,
         ]);
     }
 

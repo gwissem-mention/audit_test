@@ -2,17 +2,20 @@
 
 namespace HopitalNumerique\ExpertBundle\Form;
 
+use HopitalNumerique\ExpertBundle\Entity\EvenementExpert;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EvenementExpertType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', 'entity', [
+            ->add('nom', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'required' => true,
@@ -20,13 +23,15 @@ class EvenementExpertType extends AbstractType
                 'empty_value' => ' - ',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'TYPE_EVENEMENT')
-                              ->orderBy('ref.libelle', 'ASC');
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :etat')
+                        ->setParameter('etat', 'TYPE_EVENEMENT')
+                        ->orderBy('ref.libelle', 'ASC')
+                    ;
                 },
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('nbVacation', 'integer', [
+            ->add('nbVacation', IntegerType::class, [
                 'required' => true,
                 'label' => 'Nombre de vacations',
                 'attr' => [
@@ -42,10 +47,10 @@ class EvenementExpertType extends AbstractType
             ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\EvenementExpert',
+            'data_class' => EvenementExpert::class,
         ]);
     }
 

@@ -9,7 +9,6 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
@@ -17,7 +16,6 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  *
  * @ORM\Table(name="hn_reference")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository")
- * @UniqueEntity(fields={"libelle","code"}, message="Ce libellé pour ce code existe déjà.")
  */
 class Reference
 {
@@ -106,6 +104,14 @@ class Reference
      * @ORM\Column(name="ref_code", type="string", length=255, nullable=true, options = {"comment" = "Code de la référence"})
      */
     protected $code;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference", cascade={"persist"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    protected $codes;
 
     /**
      * @Assert\NotBlank(message="Merci de choisir un état")
@@ -288,6 +294,7 @@ class Reference
         $this->parents = new ArrayCollection();
         $this->enfants = new ArrayCollection();
         $this->domainesDisplay = new ArrayCollection();
+        $this->codes = new ArrayCollection();
     }
 
     /**
@@ -315,6 +322,22 @@ class Reference
     }
 
     /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
      * Get libelle.
      *
      * @return string
@@ -325,27 +348,49 @@ class Reference
     }
 
     /**
-     * Set code.
-     *
-     * @param string $code
+     * @return ArrayCollection
+     */
+    public function getCodes()
+    {
+        return $this->codes;
+    }
+
+    /**
+     * @param ArrayCollection $codes
      *
      * @return Reference
      */
-    public function setCode($code)
+    public function setCodes($codes)
     {
-        $this->code = $code;
+        $this->codes = $codes;
 
         return $this;
     }
 
     /**
-     * Get code.
+     * @param ReferenceCode $code
      *
-     * @return string
+     * @return $this
      */
-    public function getCode()
+    public function addCode(ReferenceCode $code)
     {
-        return $this->code;
+        $this->codes->add($code);
+
+        $code->setReference($this);
+
+        return $this;
+    }
+
+    /**
+     * @param ReferenceCode $code
+     *
+     * @return $this
+     */
+    public function removeCode(ReferenceCode $code)
+    {
+        $this->codes->removeElement($code);
+
+        return $this;
     }
 
     /**
@@ -1059,7 +1104,13 @@ class Reference
 
     public function __toString()
     {
-        return $this->code . ' - ' . $this->libelle;
+        if ($this->codes->count() > 0) {
+            return implode(' ,', array_map(function (ReferenceCode $referenceCode) {
+                    return $referenceCode->getLabel();
+            }, $this->codes->toArray())) . ' - ' . $this->libelle;
+        }
+
+        return $this->libelle;
     }
 
     /**
