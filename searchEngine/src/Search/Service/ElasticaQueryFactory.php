@@ -58,7 +58,7 @@ class ElasticaQueryFactory
         );
 
         $titleHighlight = new \stdClass();
-        $titleHighlight->force_source = true;
+        $titleHighlight->type = 'fvh';
         $rootQuery->setHighlight([
             'fields' => [
                 'title' => $titleHighlight,

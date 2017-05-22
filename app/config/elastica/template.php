@@ -66,8 +66,10 @@ $container->loadFromExtension('fos_elastica', [
                 'object' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'synthese' => null,
                         'domaines' => [
@@ -77,9 +79,10 @@ $container->loadFromExtension('fos_elastica', [
                             ],
                         ],
                         'content' => [
-                            'type' => 'string',
+                            'type' => 'text',
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'resume',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'alias' => [
                             'type' => 'keyword',
@@ -112,13 +115,16 @@ $container->loadFromExtension('fos_elastica', [
                 'content' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'content' => [
-                            'type' => 'string',
+                            'type' => 'text',
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'contenu',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'alias' => [
                             'type' => 'keyword',
@@ -137,7 +143,9 @@ $container->loadFromExtension('fos_elastica', [
                             'property_path' => 'objet',
                             'properties' => [
                                 'title' => [
+                                    'type' => 'text',
                                     'property_path' => 'titre',
+                                    'term_vector' => 'with_positions_offsets',
                                 ],
                                 'id' => null,
                                 'alias' => null,
@@ -171,9 +179,10 @@ $container->loadFromExtension('fos_elastica', [
                 'forum_post' => [
                     'mappings' => [
                         'content' => [
-                            'type' => 'string',
+                            'type' => 'text',
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'body',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'topic' => [
                             'type' => 'nested',
@@ -202,7 +211,9 @@ $container->loadFromExtension('fos_elastica', [
                 'forum_topic' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
                             'analyzer' => 'title_analyzer',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'forumName' => [
                             'property_path' => 'board.category.forum.name',
@@ -224,8 +235,10 @@ $container->loadFromExtension('fos_elastica', [
                 'cdp_groups' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                         'descriptionCourte' => null,
                         'descriptionHtml' => null,
@@ -271,7 +284,9 @@ $container->loadFromExtension('fos_elastica', [
                 'autodiag' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
                             'analyzer' => 'title_analyzer',
+                            'term_vector' => 'with_positions_offsets',
                         ],
                     ],
                     'persistence' => [

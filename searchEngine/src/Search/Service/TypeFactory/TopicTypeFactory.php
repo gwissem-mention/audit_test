@@ -21,6 +21,7 @@ class TopicTypeFactory implements TypeFactoryInterface
                     ->setQuery($source->getTerm())
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
                     ->setPrefixLength(2)
+                    ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
             )
             ->addMust(
                 (new Type(self::TYPE))

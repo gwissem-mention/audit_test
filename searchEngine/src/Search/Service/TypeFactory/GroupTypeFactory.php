@@ -19,6 +19,7 @@ class GroupTypeFactory implements TypeFactoryInterface
                     ->setFields(['title', 'descriptionCourte'])
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                     ->setQuery($source->getTerm())
+                    ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
                     ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
                     ->setPrefixLength(2)
             )

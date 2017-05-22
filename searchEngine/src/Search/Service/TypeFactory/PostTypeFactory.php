@@ -21,6 +21,7 @@ class PostTypeFactory implements TypeFactoryInterface
                     ->setFieldQuery('content', $source->getTerm())
                     ->setFieldFuzziness('content', 'AUTO')
                     ->setFieldPrefixLength('content', 2)
+                    ->setFieldOperator('content', \Elastica\Query\Common::OPERATOR_AND)
             )
             ->addMust(new Type(self::TYPE))
         ;

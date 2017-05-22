@@ -20,6 +20,7 @@ class AutodiagTypeFactory implements TypeFactoryInterface
                     ->setFieldQuery('title', $source->getTerm())
                     ->setFieldFuzziness('title', 'AUTO')
                     ->setFieldPrefixLength('title', 2)
+                    ->setFieldOperator('title', \Elastica\Query\Common::OPERATOR_AND)
             )
             ->addMust(new Type(self::TYPE))
         ;

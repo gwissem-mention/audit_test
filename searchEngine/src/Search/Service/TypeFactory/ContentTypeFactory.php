@@ -20,8 +20,10 @@ class ContentTypeFactory implements TypeFactoryInterface
                     ->setFields(['title', 'content'])
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                     ->setQuery($source->getTerm())
-                    ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                    ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                    ->setFuzziness(1)
                     ->setPrefixLength(2)
+                    ->setMaxExpansions(5)
             )
             ->addMust(
                 (new Type(self::TYPE))
