@@ -23,43 +23,69 @@ const SEARCH_DELAY = 150;
     providers: [ SearchService ]
 })
 export class SearchComponent implements OnInit {
+    /**
+     * Primary query object
+     */
     query: Query;
+
+    /**
+     * Hot query object
+     */
+    hotQuery: Query;
+
     resultSet: ResultSet;
     hotResultSet: ResultSet;
+
     noResutls: boolean = false;
 
+    private hotSearchStream = new Subject<Query>();
     private searchStream = new Subject<Query>();
 
+    /**
+     * Build primary and "hot" queries and resultSets
+     *
+     * @param searchService
+     * @param config
+     */
     constructor(
         private searchService: SearchService,
         config: Config
     ) {
         this.query = new Query(config.get('index'));
+        this.hotQuery = new Query(config.get('index'));
+
         this.resultSet = this.searchService.getResultSet();
         this.hotResultSet = this.searchService.getHotResultSet();
     }
 
+    /**
+     * Update hot query
+     *
+     * @param query
+     */
+    refreshHotQuery(query: Query) {
+        this.hotSearchStream.next(query);
+    }
+
+    /**
+     * Update primary query.
+     * Update hot query with primary query terms
+     *
+     * @param query
+     */
     refreshQuery(query: Query) {
         this.searchStream.next(query);
-    }
 
-    getQuery() {
-        return this.query;
-    }
-
-    getResultSet() {
-        return this.resultSet;
-    }
-
-    getHotResultSet() {
-        return this.hotResultSet;
-    }
-
-    getHotMode() {
-        return 'lite';
+        this.hotQuery.setTerm(query.term);
+        this.refreshHotQuery(this.hotQuery);
     }
 
     ngOnInit(): void {
+        this.hotSearchStream
+            .debounceTime(SEARCH_DELAY)
+            .subscribe((query: Query) => {this.searchService.searchHot(query)})
+        ;
+
         this.searchStream
             .debounceTime(SEARCH_DELAY)
             .subscribe((query: Query) => {this.searchService.search(query)})

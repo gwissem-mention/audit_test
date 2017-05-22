@@ -21,6 +21,7 @@ class PersonTypeFactory implements TypeFactoryInterface
                     ->setType(\Elastica\Query\MultiMatch::TYPE_CROSS_FIELDS)
                     ->setTieBreaker(1.0)
                     ->setQuery($source->getTerm())
+                    ->setParam('boost', 0.6)
             )
             ->addMust(
                 (new Type(self::TYPE))

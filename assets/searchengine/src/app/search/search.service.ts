@@ -38,9 +38,12 @@ export class SearchService {
         return this.hotResultSet;
     }
 
+    searchHot(query: Query): void {
+        this.queryHotObservable.next(query);
+    }
+
     search(query: Query): void {
         this.queryObservable.next(query);
-        this.queryHotObservable.next(query);
     }
 
     private doRequest(query: Query): Observable<ResultSet> {
