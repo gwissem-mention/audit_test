@@ -6,9 +6,11 @@ import {SearchService} from "./search.service";
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
+
 import {Subject} from "rxjs/Subject";
 import ResultSet from "../Model/Search/ResultSet";
 import {Config} from "../app.config";
+import {Observable} from "rxjs/Observable";
 
 let queryString = require("query-string");
 
@@ -24,6 +26,7 @@ export class SearchComponent implements OnInit {
     query: Query;
     resultSet: ResultSet;
     hotResultSet: ResultSet;
+    noResutls: boolean = false;
 
     private searchStream = new Subject<Query>();
 
@@ -63,7 +66,39 @@ export class SearchComponent implements OnInit {
         ;
 
         let urlQuery = queryString.parse(location.search);
-        this.query.setTerm(urlQuery.q);
-        this.refreshQuery(this.query);
+        if (undefined !== urlQuery.q) {
+            this.query.setTerm(urlQuery.q);
+            this.refreshQuery(this.query);
+        }
+
+        /**
+         * Empty result observable
+         */
+        let hasResultsObservable = Observable.create((observer: any) => {
+            let searching = false;
+            let count = 0;
+            let iteration = 0;
+
+            let init = (query: Query) => {
+                searching = !query.isEmpty();
+                count = 0;
+                iteration = 0;
+            };
+
+            let complete = (resultsCount: number) => {
+                iteration++;
+                count += resultsCount;
+
+                if (iteration === 2) {
+                    observer.next(!searching || count > 0);
+                }
+            };
+
+            this.searchStream.subscribe(query => init(query));
+            this.resultSet.results.subscribe(results => complete(results.length));
+            this.hotResultSet.results.subscribe(results => complete(results.length));
+        });
+
+        hasResultsObservable.subscribe((hasResults: boolean) => this.noResutls = !hasResults);
     }
 }

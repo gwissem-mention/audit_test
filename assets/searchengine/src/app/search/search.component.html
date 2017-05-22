@@ -4,7 +4,11 @@
     <div class="resultset-wrapper">
         <div class="results-wrapper">
             <search-results [mode]="getHotMode()" [resultSet]="getHotResultSet()" [query]="getQuery()"  (queryChanged)="refreshQuery($event)"></search-results>
-            <search-results [resultSet]="getResultSet()" [query]="getQuery()"  (queryChanged)="refreshQuery($event)"></search-results>
+            <search-results [resultSet]="getResultSet()" [query]="getQuery()" (queryChanged)="refreshQuery($event)"></search-results>
+
+            <div *ngIf="noResutls" class="no-results-wrapper">
+                Aucun résultat trouvé
+            </div>
         </div>
         <!--<div class="aggregations-wrapper">-->
             <!--<search-aggregation [resultSet]="getResultSet()" [query]="getQuery()" (queryChanged)="refreshQuery($event)"></search-aggregation>-->

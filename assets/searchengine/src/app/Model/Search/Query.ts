@@ -65,4 +65,10 @@ export default class Query {
             this.filters.splice(index, 1);
         }
     }
+
+    isEmpty(): boolean {
+        return this.term == ''
+            && this.filters.length === 0
+            ;
+    }
 }
