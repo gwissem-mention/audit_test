@@ -1,8 +1,20 @@
 <?php
 
 $domaines = [
-    'mon-hopital-numerique',
-    'macrodiagnostic',
+    'numerique',
+    'macrodiag',
+    'transports-sanitaires',
+    'psychiatrie-sante-mentale',
+    'formations-plan-triennal',
+    'rse',
+    'bloc-operatoire',
+    'pf-test',
+    'medicaments',
+    'gestion-des-lits',
+    'immobilier',
+    'imagerie',
+    'urgences',
+    'si-ght',
 ];
 
 foreach ($domaines as $slug) {

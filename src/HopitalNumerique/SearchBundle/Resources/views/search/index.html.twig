@@ -23,8 +23,8 @@
         <script src="{{ searchEngineAppSourcePath }}/vendor.js"></script>
         <script src="{{ searchEngineAppSourcePath }}/app.js"></script>
     {% else %}
-        <script src="{{ asset('searchengine/polyfills.js') }}"></script>
-        <script src="{{ asset('searchengine/vendor.js') }}"></script>
-        <script src="{{ asset('searchengine/app.js') }}"></script>
+        <script src="{{ asset('searchengine/dist/polyfills.js') }}"></script>
+        <script src="{{ asset('searchengine/dist/vendor.js') }}"></script>
+        <script src="{{ asset('searchengine/dist/app.js') }}"></script>
     {% endif %}
 {% endblock %}

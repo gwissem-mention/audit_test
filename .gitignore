@@ -4,7 +4,7 @@
 /web/media/cache/
 /web/assetic/
 /web/js/
-/web/dist
+/web/searchengine/dist
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml

@@ -64,5 +64,6 @@ maj-prod:
 	php -d memory_limit=-1 app/console a:d --env=prod;
 
 build-search:
+	composer install -d ./searchEngine --optimize-autoloader --no-dev;
 	npm install --prefix ./assets/searchengine;
 	npm run build --prefix ./assets/searchengine;
