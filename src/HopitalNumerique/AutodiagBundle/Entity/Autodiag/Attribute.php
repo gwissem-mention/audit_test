@@ -125,6 +125,8 @@ class Attribute
      */
     private $options;
 
+    const TEXT_TYPE = 'texte';
+
     /**
      * @var Autodiag
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="attributes")
