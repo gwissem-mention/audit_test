@@ -254,7 +254,7 @@ class Attribute
     }
 
     /**
-     * Get type.
+     * Get unit.
      *
      * @return string
      */
