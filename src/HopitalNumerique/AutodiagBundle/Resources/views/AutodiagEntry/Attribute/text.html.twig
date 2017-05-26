@@ -1,5 +1,14 @@
 {% extends '@HopitalNumeriqueAutodiag/AutodiagEntry/Attribute/base.html.twig' %}
 
 {% block form_content %}
-    <input type="text" id="value_value" name="value[value]" required="required" class="form-control" value="{{ value }}">
+    <div class="row">
+        <div class="col-md-{{ null == attribute.unit ? '12' : '6' }}">
+            <input type="text" id="value_value" name="value[value]" required="required" class="form-control" value="{{ value }}">
+        </div>
+        {% if null != attribute.unit %}
+            <div class="col-md-6">
+                {{ attribute.unit }}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

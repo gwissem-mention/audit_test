@@ -12,7 +12,7 @@
             <tr>
                 <td>{{ attribute.label }}</td>
                 <td>
-                    {{ attribute.response.text }}
+                    {{ attribute.response.text }} {{ attribute.response.unit }}
                     {% if attribute.response.comment is not null and attribute.response.comment|length > 0 %}
                         - <i class="small">{{ attribute.response.comment }}</i>
                     {% endif %}

@@ -59,6 +59,15 @@ class Attribute
     private $label;
 
     /**
+     * Attribute unit.
+     *
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
+     */
+    private $unit;
+
+    /**
      * Attribute type.
      *
      * @var int
@@ -242,6 +251,30 @@ class Attribute
         } else {
             return sprintf('%s. %s', $this->number, $this->label);
         }
+    }
+
+    /**
+     * Get type.
+     *
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * Set unit.
+     *
+     * @param string $unit
+     *
+     * @return Attribute
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+
+        return $this;
     }
 
     /**
