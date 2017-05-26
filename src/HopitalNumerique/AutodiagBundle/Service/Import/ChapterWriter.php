@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
@@ -195,7 +196,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         $updatedActions = [];
 
         foreach ($actions as $action) {
-            if (count($action) !== 5) {
+            if (count($action) < 5) {
                 $this->progress->addMessage('', implode(' - ', $action), 'chapter_actionplan_invalid');
                 continue;
             }
@@ -214,8 +215,21 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             $object->setVisible((bool) $action[1]);
             $object->setDescription(isset($action[2]) ? $action[2] : null);
-            $object->setLinkDescription(isset($action[3]) ? $action[3] : null);
-            $object->setLink(isset($action[4]) ? $action[4] : null);
+
+            $i = 3;
+            $links = new ArrayCollection();
+
+            foreach ($object->getLinks() as $link) {
+                $this->manager->remove($link);
+            }
+
+            while (isset($action[$i]) && isset($action[$i + 1])) {
+                $links->add(new Autodiag\ActionPlan\Link($object, $action[$i + 1], $action[$i]));
+
+                $i = $i + 2;
+            }
+
+            $object->setLinks($links);
 
             $updatedActions[$object->getId()] = true;
 

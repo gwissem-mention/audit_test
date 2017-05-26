@@ -6,16 +6,14 @@ class ItemActionPlan
 {
     private $value;
     private $description;
-    private $link;
-    private $linkDescription;
+    private $links;
     private $visible;
 
-    public function __construct($value, $description, $link, $linkDescription, $visible)
+    public function __construct($value, $description, $links, $visible)
     {
         $this->value = $value;
         $this->description = $description;
-        $this->link = $link;
-        $this->linkDescription = $linkDescription;
+        $this->links = $links;
         $this->visible = $visible;
     }
 
@@ -38,17 +36,9 @@ class ItemActionPlan
     /**
      * @return mixed
      */
-    public function getLink()
+    public function getLinks()
     {
-        return $this->link;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLinkDescription()
-    {
-        return $this->linkDescription;
+        return $this->links;
     }
 
     public function isVisible()

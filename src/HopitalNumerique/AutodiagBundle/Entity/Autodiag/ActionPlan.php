@@ -2,8 +2,11 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan\Link;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,6 +39,10 @@ class ActionPlan
      */
     private $description;
 
+    // ----------------------------------------------------------------------------------------------------------------
+    // @TODO: Supprimer après la migration ----------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------
+
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
@@ -48,6 +55,72 @@ class ActionPlan
      * @Assert\Length(max="255")
      */
     private $linkDescription;
+
+    /**
+     * @deprecated
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @param string $link
+     *
+     * @return ActionPlan
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @return mixed
+     */
+    public function getLinkDescription()
+    {
+        return $this->linkDescription;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @param mixed $linkDescription
+     *
+     * @return ActionPlan
+     */
+    public function setLinkDescription($linkDescription)
+    {
+        $this->linkDescription = $linkDescription;
+
+        return $this;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan\Link",
+     *     mappedBy="actionPlan",
+     *     cascade={"persist", "remove", "detach"},
+     *     orphanRemoval=true,
+     *     fetch="EAGER"
+     * )
+     * @Assert\Valid()
+     */
+    private $links;
 
     /**
      * @var bool
@@ -142,35 +215,35 @@ class ActionPlan
     }
 
     /**
-     * @return string
+     * @return ArrayCollection
      */
-    public function getLink()
+    public function getLinks()
     {
-        return $this->link;
+        return $this->links;
     }
 
     /**
-     * @param string $link
+     * @param Link $link
+     *
+     * @return ActionPlan
      */
-    public function setLink($link)
+    public function addLink(Link $link)
     {
-        $this->link = $link;
+        $this->links[] = $link;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @param $links
+     *
+     * @return ActionPlan
      */
-    public function getLinkDescription()
+    public function setLinks($links)
     {
-        return $this->linkDescription;
-    }
+        $this->links = $links;
 
-    /**
-     * @param string $linkDescription
-     */
-    public function setLinkDescription($linkDescription)
-    {
-        $this->linkDescription = $linkDescription;
+        return $this;
     }
 
     /**
