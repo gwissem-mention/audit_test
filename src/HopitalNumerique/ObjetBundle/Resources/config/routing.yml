@@ -1,58 +1,58 @@
 #partie Objet
 hopitalnumerique_objet_objet:
-    pattern:  /objet
+    path:  /objet
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
 hopitalnumerique_objet_objet_filtre:
-    pattern:  /objet-avec-filtre/{filtre}
+    path:  /objet-avec-filtre/{filtre}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", filtre: null }
 
 hopitalnumerique_objet_objet_add:
-    pattern:  /objet/add/{type}
+    path:  /objet/add/{type}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add", type:1 }
 
 hopitalnumerique_objet_objet_isFileExist:
-    pattern:  /objet/isFileExist
+    path:  /objet/isFileExist
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:isFileExist" }
 
 hopitalnumerique_objet_objet_getObjets:
-    pattern:  /objet/getObjets
+    path:  /objet/getObjets
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
 
 hopitalnumerique_objet_objet_getObjets_by_domaine:
-    pattern:  /objet/getObjetsByDomaine
+    path:  /objet/getObjetsByDomaine
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjetsByDomaine" }
 
 hopitalnumerique_objet_objet_getPublications:
-    pattern:  /objet/getPublications/{articles}
+    path:  /objet/getPublications/{articles}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications", articles:1 }
 
 hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
-    pattern:  /objet/getPublicationDetailsForMenu
+    path:  /objet/getPublicationDetailsForMenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublicationDetailsForMenu" }
 
 hopitalnumerique_objet_objet_cancel:
-    pattern:  /objet/cancel/{id}/{message}
+    path:  /objet/cancel/{id}/{message}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancel", message:null }
 
 hopitalnumerique_objet_objet_cancel_with_filtre:
-    pattern:  /objet/cancelwithfiltre/{id}/{message}/{filtre}
+    path:  /objet/cancelwithfiltre/{id}/{message}/{filtre}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancelWithFiltre",message:null}
 
 hopitalnumerique_objet_objet_show:
-    pattern:  /objet/show/{id}
+    path:  /objet/show/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:show", id:1 }
     requirements:
         id: \d+
 
 hopitalnumerique_objet_objet_edit:
-    pattern:  /objet/edit/{id}/{infra}/{toRef}
+    path:  /objet/edit/{id}/{infra}/{toRef}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:edit", id:1, infra:0, toRef:0  }
     requirements:
         id: \d+
 
 hopitalnumerique_objet_objet_delete:
-    pattern:  /objet/delete/{id}.{_format}
+    path:  /objet/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:delete", _format: json }
     requirements: 
         id: \d+
@@ -65,69 +65,92 @@ hopitalnumerique_objet_objet_reportPopin:
 
 #Partie Link
 hopitalnumerique_objet_objet_addLink:
-    pattern:  /objet/addLink/{id}
+    path:  /objet/addLink/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:addLink" }
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_board_addLink:
+    path:  /objet/board/addLink/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:addLink" }
+    requirements:
+        id: \d+
+
 hopitalnumerique_objet_objet_saveLink:
-    pattern:  /objet/saveLink
+    path:  /objet/saveLink
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:saveLink" }
 
+hopitalnumerique_objet_board_saveLink:
+    path:  /objet/board/saveLink
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:saveLink" }
+
 hopitalnumerique_objet_objet_deleteLink:
-    pattern:  /objet/deleteLink/{pointDur}/{id}/{obj}
+    path:  /objet/deleteLink/{pointDur}/{id}/{obj}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:deleteLink" }
     requirements: 
         id: \d+
         pointDur: \d+
 
+hopitalnumerique_objet_board_deleteLink:
+    path:  /objet/board/deleteLink/{pointDur}/{id}/{obj}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:deleteLink" }
+    requirements:
+        id: \d+
+        pointDur: \d+
+
 hopitalnumerique_objet_objet_reorder:
-    pattern:  /objet/reorder/{id}
+    path:  /objet/reorder/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:reorder" }
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_board_reorder:
+    path:  /objet/board/reorder/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:reorder" }
+    requirements:
+        id: \d+
+
 #partie Contenu
 hopitalnumerique_objet_contenu_add:
-    pattern:  /objet/contenu/add/{id}
+    path:  /objet/contenu/add/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:add", id:1 }
     requirements:
         id: \d+
 
 hopitalnumerique_objet_contenu_form:
-    pattern:  /objet/contenu/form/{id}
+    path:  /objet/contenu/form/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:form", id:1}
     requirements:
         id: \d+
 
 hopitalnumerique_objet_contenu_edit:
-    pattern:  /objet/contenu/edit/{id}
+    path:  /objet/contenu/edit/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:edit", id:1}
     requirements:
         id: \d+
 
 hopitalnumerique_objet_contenu_delete:
-    pattern:  /objet/contenu/delete/{id}.{_format}
+    path:  /objet/contenu/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:delete", _format: json }
     requirements: 
         id: \d+
 
 hopitalnumerique_objet_contenu_delete_all:
-    pattern:  /objet/contenu/delete-all/{object}
+    path:  /objet/contenu/delete-all/{object}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:deleteAllForObject" }
 
 hopitalnumerique_objet_contenu_uploadparse:
-    pattern:  /objet/contenu/upload/parse/{id}
+    path:  /objet/contenu/upload/parse/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:uploadParse", id:1 }
     requirements: 
         id: \d+
 
 hopitalnumerique_objet_contenu_upload:
-    pattern:  /objet/contenu/upload
+    path:  /objet/contenu/upload
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:upload" }
 
 hopitalnumerique_objet_contenu_reorder:
-    pattern:  /objet/contenu/reorder
+    path:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
 
 hopitalnumerique_objet_infradoc_related_production:
@@ -136,27 +159,27 @@ hopitalnumerique_objet_infradoc_related_production:
 
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:
-    pattern:  /objet/commentaire
+    path:  /objet/commentaire
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:index" }
     requirements: 
         _method: GET|POST
 
 hopitalnumerique_objet_admin_commentaire_edit:
-    pattern:  /objet/commentaire/edit/{id}
+    path:  /objet/commentaire/edit/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:edit" }
     requirements:
         id: \d+
         _method: GET|POST
 
 hopitalnumerique_objet_admin_commentaire_toggle_publication:
-    pattern:  /objet/commentaire/toggle-publication/{id}.{_format}
+    path:  /objet/commentaire/toggle-publication/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:togglePublication", _format: json }
     requirements: 
         id: \d+
         _method: POST|GET
 
 hopitalnumerique_objet_admin_commentaire_delete:
-    pattern:  /objet/commentaire/delete/{id}.{_format}
+    path:  /objet/commentaire/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:delete", _format: json }
     requirements: 
         id: \d+
@@ -164,7 +187,7 @@ hopitalnumerique_objet_admin_commentaire_delete:
 
 #Temporaire
 hopitalnumerique_objet_administration_fichierModifiable:
-    pattern:  /objet/administration/{id}
+    path:  /objet/administration/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:FichierModifiable:index" }
     requirements: 
         _method: GET|POST

@@ -63,7 +63,7 @@
                         <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Publication</a></li>
                         {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
-                            <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
+                            <li><a href="#productions" data-toggle="tab">Ressources associées</a></li>
                         {% endif %}
                         {%- if objet.id is not null and not objet.isArticle and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) -%}
                             <li><a href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}">Administration</a></li>
@@ -394,29 +394,59 @@
                             </div>
 
                             <div class="tab-pane" id="productions">
-                                <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
 
-                                {# Liste des prod maitrisées #}
-                                <fieldset>
-                                    <legend>Productions liées</legend>
+                                        {# Liste des prod maitrisées #}
+                                        <fieldset>
+                                            <legend>Productions liées</legend>
 
-                                    <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier une production.</p>
-                                    <div class="dd" id="productions-nestable">
-                                        <ol class="dd-list">
-                                            {% import _self as mySelf %}
-                                            {% for production in productions %}
-                                                {{ mySelf.buildProductionListe(production, objet.id) }}
-                                            {% endfor %}
-                                        </ol>
+                                            <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier une production.</p>
+                                            <div class="dd" id="productions-nestable">
+                                                <ol class="dd-list">
+                                                    {% import _self as mySelf %}
+                                                    {% for production in productions %}
+                                                        {{ mySelf.buildProductionListe(production, objet.id) }}
+                                                    {% endfor %}
+                                                </ol>
+                                            </div>
+                                        </fieldset>
                                     </div>
-                                </fieldset>
+                                </div>
 
                                 {% if relatedObjects|length > 0 %}
-                                    <legend style="margin-top: 20px;">Cette production est également liée depuis</legend>
-                                    {% for relatedObject in relatedObjects %}
-                                        <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
-                                    {% endfor %}
+                                    <div class="row resource-row">
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <legend>Cette production est également liée depuis</legend>
+                                                {% for relatedObject in relatedObjects %}
+                                                    <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
+                                                {% endfor %}
+                                            </fieldset>
+                                        </div>
+                                    </div>
                                 {% endif %}
+
+                                <div class="row resource-row">
+                                    <div class="col-md-12">
+                                        <a href="{{path('hopitalnumerique_objet_board_addLink', {'id':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un board lié"><i class="fa fa-plus"></i></a>
+
+                                        <fieldset>
+                                            <legend>Board liés</legend>
+
+                                            <p class="designForBlank" style="{% if boards|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un board.</p>
+                                            <div class="dd" id="boards-nestable">
+                                                <ol class="dd-list">
+                                                    {% import _self as mySelf %}
+                                                    {% for board in boards %}
+                                                        {{ mySelf.buildProductionListe(board, objet.id) }}
+                                                    {% endfor %}
+                                                </ol>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
@@ -477,5 +507,14 @@
     </li>
 {% endmacro %}
 
-
-
+{% macro buildBoardList(board, objectId) %}
+    <li class="dd-item dd3-item" id="prod-{{board.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            {{board.name}}
+        </div>
+        <div class="dd3-actions">
+            <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_board_deleteLink', { 'object':objectId, 'board': board.id }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        </div>
+    </li>
+{% endmacro %}

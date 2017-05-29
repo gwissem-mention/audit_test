@@ -116,7 +116,7 @@ $(document).ready(function() {
 
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
-    $('.dd3-content a, .uploadSommaire, .addProd').fancybox({
+    $('.dd3-content a, .uploadSommaire, .addLink').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -391,6 +391,22 @@ function addObjet( id )
         data : {
             idObjet : id,
             objets  : $('#objets-linked').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            window.location = data.url;
+        }
+    });
+}
+
+function addBoard(id)
+{
+    $.ajax({
+        url  : $('#save-board-url').val(),
+        data : {
+            idObjet : id,
+            objets  : $('#boards-linked').val()
         },
         type     : 'POST',
         dataType : 'json',

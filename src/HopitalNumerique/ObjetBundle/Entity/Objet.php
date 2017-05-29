@@ -386,6 +386,12 @@ class Objet implements RoutedItemInterface
     private $associatedProductions;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\RelatedBoard", mappedBy="object")
+     */
+    protected $relatedBoards;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -411,6 +417,7 @@ class Objet implements RoutedItemInterface
         $this->modules = [];
         $this->maitriseUsers = [];
         $this->domaines = new ArrayCollection();
+        $this->relatedBoards = new ArrayCollection();
     }
 
     /**
