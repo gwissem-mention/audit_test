@@ -3,7 +3,6 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\AttributeColumnsDefinition;
@@ -104,6 +103,7 @@ class SurveyExport extends AbstractExport
             AttributeColumnsDefinition::DESCRIPTION => $attribute->getDescription(),
             AttributeColumnsDefinition::NUMBER => $attribute->getNumber(),
             AttributeColumnsDefinition::LABEL => $attribute->getLabel(),
+            AttributeColumnsDefinition::UNIT => $attribute->getUnit(),
             AttributeColumnsDefinition::TYPE => $attribute->getType(),
             AttributeColumnsDefinition::COLORED => $attribute->isColored() ? ($attribute->isColorationInversed() ? '-1' : '1') : '0',
             AttributeColumnsDefinition::TOOLTIP => $attribute->getTooltip(),
@@ -157,6 +157,7 @@ class SurveyExport extends AbstractExport
             $data[AttributeColumnsDefinition::DESCRIPTION],
             $data[AttributeColumnsDefinition::NUMBER],
             $data[AttributeColumnsDefinition::LABEL],
+            $data[AttributeColumnsDefinition::UNIT],
             $data[AttributeColumnsDefinition::TYPE],
             $options,
             $data[AttributeColumnsDefinition::COLORED],
