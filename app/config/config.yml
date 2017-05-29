@@ -236,6 +236,7 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_user_desinscritgroupe
         - hopitalnumerique_communautepratique_user_activegroupe
         - hopitalnumerique_communautepratique_user_listbygroupe
+        - hopitalnumerique_communautepratique_groupe_view
         - hopitalnumerique_objet_objet_getObjets
         - hopital_numerique_recherche_parcours_save
         - hopitalnumerique_recherche_referencement_jsonentities

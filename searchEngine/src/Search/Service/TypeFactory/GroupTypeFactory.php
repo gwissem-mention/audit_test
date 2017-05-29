@@ -16,7 +16,7 @@ class GroupTypeFactory implements TypeFactoryInterface
         $query = (new BoolQuery())
             ->addMust(
                 (new \Elastica\Query\MultiMatch())
-                    ->setFields(['title', 'descriptionCourte'])
+                    ->setFields(['title', 'content'])
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                     ->setQuery($source->getTerm())
                     ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)

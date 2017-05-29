@@ -4,6 +4,7 @@ import Publication from "./Result/Publication";
 import ForumPost from "./Result/ForumPost";
 import ForumTopic from "./Result/ForumTopic";
 import Person from "./Result/Person";
+import Group from "./Result/Group";
 
 export default class ResultFactory {
 
@@ -46,6 +47,8 @@ export default class ResultFactory {
                 return new ForumTopic(resultData._id, resultData._score, title, resultData._source.forumName);
             case "person":
                 return new Person(resultData._id, resultData._score, resultData._source.firstname, resultData._source.lastname, resultData._source.username);
+            case "cdp_groups":
+                return new Group(resultData._id, resultData._score, title, content);
             default:
                 console.log(resultData);
         }

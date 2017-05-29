@@ -75,7 +75,7 @@ export default class ResultSet {
     private getAggregationLabel(key: string): string {
         switch (key) {
             case 'cdp_groups':
-                return 'Groupe de communauté de pratique';
+                return 'Groupe de la communauté de pratique';
             case 'autodiag':
                 return 'Autodiagnostic';
             case 'object':

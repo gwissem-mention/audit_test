@@ -240,8 +240,12 @@ $container->loadFromExtension('fos_elastica', [
                             'property_path' => 'titre',
                             'term_vector' => 'with_positions_offsets',
                         ],
-                        'descriptionCourte' => null,
-                        'descriptionHtml' => null,
+                        'content' => [
+                            'type' => 'text',
+                            'analyzer' => 'content_analyzer',
+                            'property_path' => 'descriptionCourte',
+                            'term_vector' => 'with_positions_offsets',
+                        ],
                     ],
                     'persistence' => [
                         'driver' => 'orm',
