@@ -34,10 +34,15 @@ class MigrateActionPlanCommand extends ContainerAwareCommand
 
         /** @var Autodiag\ActionPlan $actionPlan */
         foreach ($actionPlans as $actionPlan) {
-            $url = $actionPlan->getLink();
+            if ('null' === $actionPlan->getLink()) {
+                $url = "";
+            } else {
+                $url = $actionPlan->getLink();
+            }
+
             $description = $actionPlan->getLinkDescription();
 
-            if (null != $url) {
+            if (null !== $url) {
                 $link = new Autodiag\ActionPlan\Link($actionPlan, $url, $description);
                 $actionPlan->addLink($link);
             }
