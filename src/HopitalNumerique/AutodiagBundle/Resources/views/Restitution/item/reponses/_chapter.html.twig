@@ -7,12 +7,12 @@
     </span>
 
 
-    <table class="table table-bordered">
+    <table class="table table-bordered restitution-table">
         {% for attribute in resultItem.attributes %}
             <tr>
                 <td>{{ attribute.label }}</td>
                 <td>
-                    {{ attribute.response.text }} {{ attribute.response.unit }}
+                    {{ attribute.response.text }} {{ attribute.response.text is null ? '' : attribute.response.unit }}
                     {% if attribute.response.comment is not null and attribute.response.comment|length > 0 %}
                         - <i class="small">{{ attribute.response.comment }}</i>
                     {% endif %}
