@@ -124,8 +124,8 @@ ad:
             reference_invalid: Format de référence incorrect
             container_identifier_notfound: Code de l'entité non trouvé
             source_invalid: L'axe de restitution est incorrect, les valeurs "chapitres" ou "catégories" sont autorisées
-            chapter_actionplan_invalid: Le plan d'action doit contenir 5 sections
-            attribute_actionplan_invalid: Le plan d'action doit contenir 6 sections
+            chapter_actionplan_invalid: Le plan d'action doit contenir au moins 5 sections
+            attribute_actionplan_invalid: Le plan d'action doit contenir au moins 6 sections
             algorithm: L'algorithme est incorrect
         violations:
             actionplan: Plan d'action

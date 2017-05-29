@@ -75,10 +75,21 @@ class SurveyExport extends AbstractExport
         $chapterData[] = $chapter->getAdditionalDescription();
 
         $actionPlans = array_map(function (Autodiag\ActionPlan $actionPlan) use ($chapter) {
-            if ($chapter === $actionPlan->getContainer()) {
-                return $actionPlan->getValue() . '::' . $actionPlan->isVisible() . '::' . $actionPlan->getDescription()
-                       . '::' . $actionPlan->getLinkDescription() . '::' . $actionPlan->getLink()
+            if ($chapter === $actionPlan->getContainer() && count($actionPlan->getLinks()) > 0) {
+                $actionPlanString =
+                    $actionPlan->getValue()
+                    . '::'
+                    . $actionPlan->isVisible()
+                    . '::'
+                    . $actionPlan->getDescription()
                 ;
+
+                /** @var Autodiag\ActionPlan\Link $link */
+                foreach ($actionPlan->getLinks() as $link) {
+                    $actionPlanString .= '::' . $link->getDescription() . '::' . $link->getUrl();
+                }
+
+                return $actionPlanString;
             }
 
             return null;
@@ -137,11 +148,23 @@ class SurveyExport extends AbstractExport
             while ($i < count($actionPlans)) {
                 /** @var Autodiag\ActionPlan $actionPlan */
                 $actionPlan = $actionPlans[$i];
-                if ($actionPlans[$i]->getValue() === $option->getValue()) {
-                    return $option->getValue() . '::' . $option->getLabel() . '::' . $actionPlan->isVisible() . '::'
-                           . $actionPlan->getDescription() . '::' . $actionPlan->getLinkDescription()
-                           . '::' . $actionPlan->getLink()
+                if ($actionPlan->getValue() === $option->getValue() && count($actionPlan->getLinks()) > 0) {
+                    $actionPlanString =
+                        $option->getValue()
+                        . '::'
+                        . $option->getLabel()
+                        . '::'
+                        . $actionPlan->isVisible()
+                        . '::'
+                        . $actionPlan->getDescription()
                     ;
+
+                    /** @var Autodiag\ActionPlan\Link $link */
+                    foreach ($actionPlan->getLinks() as $link) {
+                        $actionPlanString .= '::' . $link->getDescription() . '::' . $link->getUrl();
+                    }
+
+                    return $actionPlanString;
                 }
 
                 ++$i;

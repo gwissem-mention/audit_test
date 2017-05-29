@@ -447,8 +447,7 @@ class RestitutionCalculator
         $actionPlan = new ItemActionPlan(
             $closest->getValue(),
             $closest->getDescription(),
-            $closest->getLink(),
-            $closest->getLinkDescription(),
+            $closest->getLinks(),
             $closest->isVisible()
         );
 
