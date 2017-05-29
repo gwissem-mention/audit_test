@@ -152,6 +152,21 @@ class ActionPlan
      */
     private $container;
 
+    /**
+     * ActionPlan constructor.
+     */
+    private function __construct()
+    {
+        $this->links = new ArrayCollection();
+    }
+
+    /**
+     * @param Autodiag  $autodiag
+     * @param Container $container
+     * @param           $value
+     *
+     * @return ActionPlan
+     */
     public static function createForContainer(Autodiag $autodiag, Container $container, $value)
     {
         $actionPlan = new self();
@@ -162,6 +177,13 @@ class ActionPlan
         return $actionPlan;
     }
 
+    /**
+     * @param Autodiag  $autodiag
+     * @param Attribute $attribute
+     * @param           $value
+     *
+     * @return ActionPlan
+     */
     public static function createForAttribute(Autodiag $autodiag, Attribute $attribute, $value)
     {
         $actionPlan = new self();
