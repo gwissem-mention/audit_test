@@ -57,13 +57,23 @@ class ElasticaQueryFactory
                 )
         );
 
-        $titleHighlight = new \stdClass();
-        $titleHighlight->type = 'fvh';
         $rootQuery->setHighlight([
             'fields' => [
-                'title' => $titleHighlight,
-                'title.exact' => $titleHighlight,
-                'content' => clone($titleHighlight),
+                'title' => [
+                    'type' => 'fvh',
+                    'number_of_fragments' => 0,
+                    'no_match_size' => 350,
+                    'matched_fields' => ['title', 'title.exact'],
+                ],
+                'content' => [
+                    'type' => 'fvh',
+                    'number_of_fragments' => 1,
+                    'fragment_size' => 350,
+                    'no_match_size' => 350,
+                    // Available in elasticsearch 5.4
+                    //'boundary_scanner' => ['chars'],
+                    //'boundary_scanner_locale' => 'fr',
+                ],
             ]
         ]);
 
