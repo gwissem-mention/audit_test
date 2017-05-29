@@ -15,13 +15,22 @@ class PostTypeFactory implements TypeFactoryInterface
 
     public function getQuery(Query $source, User $user)
     {
+        $bool = new BoolQuery();
+        $bool->addShould(
+            (new Match('content.exact', $source->getTerm()))
+        );
+
+        $bool->addShould(
+            (new Match())
+                ->setFieldQuery('content', $source->getTerm())
+                ->setFieldFuzziness('content', 'AUTO')
+                ->setFieldPrefixLength('content', 2)
+                ->setFieldOperator('content', \Elastica\Query\Common::OPERATOR_AND)
+        );
+
         $query = (new BoolQuery())
             ->addMust(
-                (new Match())
-                    ->setFieldQuery('content', $source->getTerm())
-                    ->setFieldFuzziness('content', 'AUTO')
-                    ->setFieldPrefixLength('content', 2)
-                    ->setFieldOperator('content', \Elastica\Query\Common::OPERATOR_AND)
+                $bool
             )
             ->addMust(new Type(self::TYPE))
         ;

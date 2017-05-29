@@ -14,15 +14,28 @@ class ObjectTypeFactory implements TypeFactoryInterface
 
     public function getQuery(Query $source, User $user)
     {
+        $bool = new BoolQuery();
+        $bool->addShould(
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title.exact^1.5', 'content.exact'])
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+        );
+
+        $bool->addShould(
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title^1.5', 'content'])
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                ->setFuzziness(1)
+                ->setPrefixLength(2)
+                ->setMaxExpansions(5)
+        );
+
+
         $query = (new BoolQuery())
             ->addMust(
-                (new \Elastica\Query\MultiMatch())
-                    ->setFields(['title^2', 'content'])
-                    ->setQuery($source->getTerm())
-                    ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                    ->setFuzziness(1)
-                    ->setPrefixLength(2)
-                    ->setMaxExpansions(5)
+                $bool
             )
             ->addMust(
                 (new Type(self::TYPE))

@@ -16,8 +16,10 @@ export default class ResultFactory {
 
         if (undefined !== resultData.highlight) {
             highlight = resultData.highlight;
-            if (undefined !== highlight.title) {
-                title = highlight.title.join(' ');
+            if (undefined !== highlight['title.exact']) {
+                title = highlight['title.exact'].join(' ');
+            } else if (undefined !== highlight['title']) {
+                title = highlight['title'].join(' ');
             }
 
             if (undefined !== highlight.content) {

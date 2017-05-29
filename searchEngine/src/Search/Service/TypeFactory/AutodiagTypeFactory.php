@@ -14,13 +14,24 @@ class AutodiagTypeFactory implements TypeFactoryInterface
 
     public function getQuery(Query $source, User $user)
     {
+        $bool = new BoolQuery();
+        $bool->addShould(
+            (new Match())
+                ->setFieldQuery('title.exact', $source->getTerm())
+                ->setFieldOperator('title.exact', \Elastica\Query\Common::OPERATOR_AND)
+        );
+
+        $bool->addShould(
+            (new Match())
+                ->setFieldQuery('title', $source->getTerm())
+                ->setFieldFuzziness('title', 'AUTO')
+                ->setFieldPrefixLength('title', 2)
+                ->setFieldOperator('title', \Elastica\Query\Common::OPERATOR_AND)
+        );
+
         $query = (new BoolQuery())
             ->addMust(
-                (new Match())
-                    ->setFieldQuery('title', $source->getTerm())
-                    ->setFieldFuzziness('title', 'AUTO')
-                    ->setFieldPrefixLength('title', 2)
-                    ->setFieldOperator('title', \Elastica\Query\Common::OPERATOR_AND)
+                $bool
             )
             ->addMust(new Type(self::TYPE))
         ;

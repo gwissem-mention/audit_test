@@ -62,6 +62,7 @@ class ElasticaQueryFactory
         $rootQuery->setHighlight([
             'fields' => [
                 'title' => $titleHighlight,
+                'title.exact' => $titleHighlight,
                 'content' => clone($titleHighlight),
             ]
         ]);

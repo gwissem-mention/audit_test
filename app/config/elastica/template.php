@@ -22,17 +22,53 @@ $container->loadFromExtension('fos_elastica', [
                                 'type' => 'custom',
                                 'char_filter' => ['html_strip'],
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'asciifolding', 'stop_filter', 'my_stemmer'],
+                                'filter' => [
+                                    'lowercase',
+                                    'stop_filter',
+                                    'elision',
+                                    'asciifolding',
+                                    'word_delimiter',
+                                    'my_stemmer',
+                                ],
+                            ],
+                            'content_exact_analyzer' => [
+                                'type' => 'custom',
+                                'char_filter' => ['html_strip'],
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'stop_filter',
+                                    'elision',
+                                    'asciifolding',
+                                ],
                             ],
                             'title_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'asciifolding', 'stop_filter', 'my_stemmer', 'synonym_domaine'],
+                                'filter' => [
+                                    'lowercase',
+                                    'stop_filter',
+                                    'elision',
+                                    'asciifolding',
+                                    'word_delimiter',
+                                    'my_stemmer',
+                                    'synonym_domaine',
+                                ],
+                            ],
+                            'title_exact_analyzer' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'stop_filter',
+                                    'elision',
+                                    'asciifolding',
+                                ],
                             ],
                             'name_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'asciifolding', 'name_ngram'],
+                                'filter' => ['lowercase', 'asciifolding'],
                             ],
                         ],
                         'filter' => [
@@ -42,7 +78,11 @@ $container->loadFromExtension('fos_elastica', [
                             ],
                             'my_stemmer' => [
                                 'type' => 'snowball',
-                                'name' => 'French',
+                                'name' => 'french',
+                            ],
+                            'minimal_stemmer' => [
+                                'type' => 'stemmer',
+                                'name' => 'minimal_french',
                             ],
                             'my_ngram' => [
                                 'type' => 'nGram',
@@ -57,6 +97,13 @@ $container->loadFromExtension('fos_elastica', [
                             'synonym_domaine' => [
                                 'type' => 'synonym',
                                 'synonyms' => ['automobile , voiture => urbain , citadine'],
+                            ],
+                            'elision' => [
+                                'type' => 'elision',
+                                'articles' => ['l', 'm', 't', 'qu', 'n', 's', 'j', 'd'],
+                            ],
+                            'word_delimiter' => [
+                                'type' => 'word_delimiter',
                             ]
                         ],
                     ],
@@ -70,6 +117,13 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'synthese' => null,
                         'domaines' => [
@@ -83,6 +137,13 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'resume',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'alias' => [
                             'type' => 'keyword',
@@ -119,12 +180,26 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'content' => [
                             'type' => 'text',
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'contenu',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'alias' => [
                             'type' => 'keyword',
@@ -183,6 +258,13 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'body',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'topic' => [
                             'type' => 'nested',
@@ -214,9 +296,23 @@ $container->loadFromExtension('fos_elastica', [
                             'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'forumName' => [
                             'property_path' => 'board.category.forum.name',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'authorised_roles' => [
                             'property_path' => 'board.category.forum.readAuthorisedRoles',
@@ -239,12 +335,26 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'title_analyzer',
                             'property_path' => 'titre',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                         'content' => [
                             'type' => 'text',
                             'analyzer' => 'content_analyzer',
                             'property_path' => 'descriptionCourte',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                     ],
                     'persistence' => [
@@ -291,6 +401,13 @@ $container->loadFromExtension('fos_elastica', [
                             'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
                         ],
                     ],
                     'persistence' => [

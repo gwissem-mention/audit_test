@@ -14,14 +14,26 @@ class TopicTypeFactory implements TypeFactoryInterface
 
     public function getQuery(Query $source, User $user)
     {
+        $bool = new BoolQuery();
+        $bool->addShould(
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title.exact', 'forumName.exact'])
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+        );
+
+        $bool->addShould(
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title', 'forumName'])
+                ->setQuery($source->getTerm())
+                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                ->setPrefixLength(2)
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+        );
+
         $query = (new BoolQuery())
             ->addMust(
-                (new \Elastica\Query\MultiMatch())
-                    ->setFields(['title', 'forumName'])
-                    ->setQuery($source->getTerm())
-                    ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
-                    ->setPrefixLength(2)
-                    ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                $bool
             )
             ->addMust(
                 (new Type(self::TYPE))
