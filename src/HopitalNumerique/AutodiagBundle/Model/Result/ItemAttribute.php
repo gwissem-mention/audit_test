@@ -22,9 +22,9 @@ class ItemAttribute
         $this->colored = $colored;
     }
 
-    public function setResponse($responseValue, $responseText, $comment = null, $score = null)
+    public function setResponse($responseValue, $responseText, $responseUnit = null, $comment = null, $score = null)
     {
-        $response = new ItemResponse($responseValue, $responseText, $comment, $score);
+        $response = new ItemResponse($responseValue, $responseText, $responseUnit, $comment, $score);
         $this->response = $response;
     }
 

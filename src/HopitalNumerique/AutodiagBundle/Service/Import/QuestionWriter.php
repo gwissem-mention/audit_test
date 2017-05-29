@@ -46,6 +46,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected $mapping = [
         AttributeColumnsDefinition::DESCRIPTION => 'description',
         AttributeColumnsDefinition::LABEL => 'label',
+        AttributeColumnsDefinition::UNIT => 'unit',
         AttributeColumnsDefinition::TYPE => 'type',
         AttributeColumnsDefinition::TOOLTIP => 'tooltip',
         AttributeColumnsDefinition::NUMBER => 'number',

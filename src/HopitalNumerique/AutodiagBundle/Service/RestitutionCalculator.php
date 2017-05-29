@@ -292,6 +292,7 @@ class RestitutionCalculator
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
             $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText,
+            Autodiag\Attribute::TEXT_TYPE === $attribute['type'] ? $attribute['unit'] : null,
             $attribute['value_comment']
         );
 

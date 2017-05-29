@@ -59,6 +59,15 @@ class Attribute
     private $label;
 
     /**
+     * Attribute unit.
+     *
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
+     */
+    private $unit;
+
+    /**
      * Attribute type.
      *
      * @var int
@@ -115,6 +124,8 @@ class Attribute
      * @Assert\Valid()
      */
     private $options;
+
+    const TEXT_TYPE = 'texte';
 
     /**
      * @var Autodiag
@@ -242,6 +253,30 @@ class Attribute
         } else {
             return sprintf('%s. %s', $this->number, $this->label);
         }
+    }
+
+    /**
+     * Get unit.
+     *
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * Set unit.
+     *
+     * @param string $unit
+     *
+     * @return Attribute
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+
+        return $this;
     }
 
     /**

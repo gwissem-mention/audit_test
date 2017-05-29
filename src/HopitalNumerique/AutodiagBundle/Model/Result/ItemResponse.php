@@ -6,6 +6,7 @@ class ItemResponse
 {
     protected $value;
     protected $text;
+    protected $unit;
     protected $comment;
     protected $score;
 
@@ -17,15 +18,17 @@ class ItemResponse
     /**
      * ItemResponse constructor.
      *
-     * @param $text
      * @param $value
+     * @param $text
+     * @param $unit
      * @param $comment
      * @param $score
      */
-    public function __construct($value, $text, $comment = null, $score = null)
+    public function __construct($value, $text, $unit = null, $comment = null, $score = null)
     {
         $this->value = $value;
         $this->text = $text;
+        $this->unit = $unit;
         $this->comment = $comment;
         $this->score = $score;
     }
@@ -54,6 +57,14 @@ class ItemResponse
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
     }
 
     public function getComment()
