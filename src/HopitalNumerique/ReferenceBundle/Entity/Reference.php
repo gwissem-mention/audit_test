@@ -100,12 +100,6 @@ class Reference
     protected $libelle;
 
     /**
-     * @var string
-     * @ORM\Column(name="ref_code", type="string", length=255, nullable=true, options = {"comment" = "Code de la référence"})
-     */
-    protected $code;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference", cascade={"persist"}, orphanRemoval=true)
@@ -319,22 +313,6 @@ class Reference
         $this->libelle = $libelle;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 
     /**
