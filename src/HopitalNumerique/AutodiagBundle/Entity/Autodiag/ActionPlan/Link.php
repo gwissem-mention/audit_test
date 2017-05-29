@@ -81,7 +81,7 @@ class Link
      *
      * @return Link
      */
-    public function setActionPlan($actionPlan)
+    public function setActionPlan(ActionPlan $actionPlan)
     {
         $this->actionPlan = $actionPlan;
 
