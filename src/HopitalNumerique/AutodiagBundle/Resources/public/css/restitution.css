@@ -38,6 +38,10 @@
     margin-top: -70px;
 }
 
+#restitution .restitution-table td {
+    min-width: 70px;
+}
+
 #restitution .item-row {
     display: -webkit-box;
     display: -ms-flexbox;

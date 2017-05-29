@@ -129,6 +129,10 @@ class ResultItemBuilder
             }
         }
 
+        if (Autodiag\Attribute::TEXT_TYPE === $attribute['type']) {
+            $responseText = $attribute['value_value'];
+        }
+
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
             $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText,

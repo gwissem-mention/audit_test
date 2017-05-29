@@ -289,6 +289,10 @@ class RestitutionCalculator
             }
         }
 
+        if (Autodiag\Attribute::TEXT_TYPE === $attribute['type']) {
+            $responseText = $attribute['value_value'];
+        }
+
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
             $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText,
@@ -447,8 +451,7 @@ class RestitutionCalculator
         $actionPlan = new ItemActionPlan(
             $closest->getValue(),
             $closest->getDescription(),
-            $closest->getLink(),
-            $closest->getLinkDescription(),
+            $closest->getLinks(),
             $closest->isVisible()
         );
 

@@ -26,7 +26,13 @@
         {% if container.actionPlan is not null and container.actionPlan.visible %}
             <td>{{ container.actionPlan.description }}</td>
             <td>
-                <a target="_blank" href="{{ container.actionPlan.link }}">{{ container.actionPlan.linkDescription }}</a>
+                <ul>
+                    {% for link in container.actionPlan.links %}
+                        <li>
+                            <a target="_blank" href="{{ link.url }}">{{ link.description }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </td>
         {% else %}
             <td class="empty-cell"></td>
@@ -40,7 +46,13 @@
             <td>{{ attribute.response.text }}</td>
             <td>{{ attribute.actionPlan.description }}</td>
             <td>
-                <a target="_blank" href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>
+                <ul>
+                    {% for link in attribute.actionPlan.links %}
+                        <li>
+                            <a target="_blank" href="{{ link.url }}">{{ link.description }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </td>
         </tr>
     {% endfor %}
