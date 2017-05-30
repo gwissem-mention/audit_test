@@ -71,7 +71,7 @@ class ElasticaQueryFactory
                     'fragment_size' => 350,
                     'no_match_size' => 350,
                     // Available in elasticsearch 5.4
-                    //'boundary_scanner' => ['chars'],
+                    //'boundary_scanner' => ['sentence'],
                     //'boundary_scanner_locale' => 'fr',
                 ],
             ]

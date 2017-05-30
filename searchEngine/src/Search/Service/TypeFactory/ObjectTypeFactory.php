@@ -20,6 +20,9 @@ class ObjectTypeFactory implements TypeFactoryInterface
                 ->setFields(['title.exact^1.5', 'content.exact'])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                ->setFuzziness(1)
+                ->setPrefixLength(2)
+                ->setMaxExpansions(5)
         );
 
         $bool->addShould(
@@ -27,7 +30,7 @@ class ObjectTypeFactory implements TypeFactoryInterface
                 ->setFields(['title^1.5', 'content'])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                ->setFuzziness(1)
+                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
                 ->setPrefixLength(2)
                 ->setMaxExpansions(5)
         );

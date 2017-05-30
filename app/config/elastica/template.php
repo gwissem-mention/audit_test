@@ -70,6 +70,11 @@ $container->loadFromExtension('fos_elastica', [
                                 'tokenizer' => 'standard',
                                 'filter' => ['lowercase', 'asciifolding'],
                             ],
+                            'phone_analyzer' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'keyword',
+                                'filter' => ['phone_delimiter']
+                            ]
                         ],
                         'filter' => [
                             'stop_filter' => [
@@ -104,7 +109,12 @@ $container->loadFromExtension('fos_elastica', [
                             ],
                             'word_delimiter' => [
                                 'type' => 'word_delimiter',
-                            ]
+                            ],
+                            'phone_delimiter' => [
+                                'type' => 'pattern_replace',
+                                'pattern' => '\ ',
+                                'replacement' => ''
+                            ],
                         ],
                     ],
                 ],
@@ -304,8 +314,22 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
+                        'content' => [
+                            'type' => 'text',
+                            'property_path' => 'firstPostBody',
+                            'analyzer' => 'content_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
+                        ],
                         'forumName' => [
                             'property_path' => 'board.category.forum.name',
+                            "analyzer" => "title_analyzer",
                             'fields' => [
                                 'exact' => [
                                     "type" => "text",
@@ -356,6 +380,19 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
+                        'description' => [
+                            'type' => 'text',
+                            'analyzer' => 'content_analyzer',
+                            'property_path' => 'descriptionHtml',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
+                        ],
                     ],
                     'persistence' => [
                         'driver' => 'orm',
@@ -382,6 +419,24 @@ $container->loadFromExtension('fos_elastica', [
                             'property_path' => 'nom',
                             'analyzer' => 'name_analyzer',
                         ],
+                        'biography' => [
+                            'property_path' => 'biographie',
+                            'analyzer' => 'content_analyzer',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                ]
+                            ]
+                        ],
+                        'phone' => [
+                            'property_path' => 'telephoneDirect',
+                            'analyzer' => 'phone_analyzer',
+                        ],
+                        'cellphone' => [
+                            'property_path' => 'telephonePortable',
+                            'analyzer' => 'phone_analyzer',
+                        ],
                     ],
                     'persistence' => [
                         'driver' => 'orm',
@@ -398,6 +453,18 @@ $container->loadFromExtension('fos_elastica', [
                 'autodiag' => [
                     'mappings' => [
                         'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'title_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ]
+                            ]
+                        ],
+                        'chapter_label' => [
                             'type' => 'text',
                             'analyzer' => 'title_analyzer',
                             'term_vector' => 'with_positions_offsets',

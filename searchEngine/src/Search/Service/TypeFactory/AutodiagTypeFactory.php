@@ -16,17 +16,25 @@ class AutodiagTypeFactory implements TypeFactoryInterface
     {
         $bool = new BoolQuery();
         $bool->addShould(
-            (new Match())
-                ->setFieldQuery('title.exact', $source->getTerm())
-                ->setFieldOperator('title.exact', \Elastica\Query\Common::OPERATOR_AND)
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title.exact^1.5', 'chapter_label.exact'])
+                ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                ->setFuzziness(1)
+                ->setPrefixLength(2)
+                ->setMaxExpansions(5)
         );
 
         $bool->addShould(
-            (new Match())
-                ->setFieldQuery('title', $source->getTerm())
-                ->setFieldFuzziness('title', 'AUTO')
-                ->setFieldPrefixLength('title', 2)
-                ->setFieldOperator('title', \Elastica\Query\Common::OPERATOR_AND)
+            (new \Elastica\Query\MultiMatch())
+                ->setFields(['title^1.5', 'chapter_label'])
+                ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
+                ->setPrefixLength(2)
+                ->setMaxExpansions(5)
         );
 
         $query = (new BoolQuery())

@@ -17,7 +17,10 @@ class PostTypeFactory implements TypeFactoryInterface
     {
         $bool = new BoolQuery();
         $bool->addShould(
-            (new Match('content.exact', $source->getTerm()))
+            (new Match())
+                ->setFieldQuery('content.exact', $source->getTerm())
+                ->setFieldFuzziness('content.exact', 1)
+                ->setFieldPrefixLength('content.exact', 2)
         );
 
         $bool->addShould(

@@ -28,7 +28,7 @@ class ContentTypeFactory implements TypeFactoryInterface
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                ->setFuzziness(1)
+                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
                 ->setPrefixLength(2)
                 ->setMaxExpansions(5)
         );

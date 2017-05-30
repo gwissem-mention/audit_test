@@ -13,11 +13,11 @@ abstract class Result {
     abstract getLink(): string;
 
     getScore() {
-        return Math.round(this.maxScore * (1 - (1 / Math.log(this.ponderateScore() + Math.E))));
+        return Math.round(this.maxScore * (1 - (1 / Math.log((this.ponderateScore()+1) + Math.E))));
     }
 
     private ponderateScore() {
-        return Math.exp(this.score) * 0.5;
+        return Math.exp(this.score / 2);
     }
 }
 

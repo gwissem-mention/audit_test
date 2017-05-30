@@ -20,6 +20,8 @@ class TopicTypeFactory implements TypeFactoryInterface
                 ->setFields(['title.exact', 'forumName.exact'])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+                ->setFuzziness(1)
+                ->setPrefixLength(2)
         );
 
         $bool->addShould(

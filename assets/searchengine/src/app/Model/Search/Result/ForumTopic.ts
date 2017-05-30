@@ -4,7 +4,7 @@ declare let Routing: any;
 
 export default class ForumTopic extends Result {
 
-    constructor(id: number, score: number, protected title: string, protected forumName: string) {
+    constructor(id: number, score: number, protected title: string, protected content: string, protected forumName: string) {
         super(id, score);
     }
 
@@ -17,7 +17,7 @@ export default class ForumTopic extends Result {
     }
 
     getContent() :string {
-        return null;
+        return this.content;
     }
 
     getLink(): string {
