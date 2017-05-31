@@ -135,7 +135,17 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
-                        'synthese' => null,
+                        'synthesis' => [
+                            'type' => 'text',
+                            'analyzer' => 'content_analyzer',
+                            'property_path' => 'synthese',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                ]
+                            ]
+                        ],
                         'domaines' => [
                             'type' => 'nested',
                             'properties' => [
