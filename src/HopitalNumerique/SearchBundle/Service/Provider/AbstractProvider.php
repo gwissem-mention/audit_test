@@ -64,8 +64,10 @@ abstract class AbstractProvider implements ProviderInterface
     protected function getData()
     {
         $page = 0;
+        $queryBuilder = $this->createQueryBuidler();
+
         do {
-            $queryBuilder = $this->createQueryBuidler()
+            $queryBuilder
                 ->setFirstResult($page * self::BATCH_SIZE)
                 ->setMaxResults(self::BATCH_SIZE)
             ;

@@ -4,6 +4,8 @@ parameters:
 services:
     hopital_numerique_search.indexer_subscriber:
         class: HopitalNumerique\SearchBundle\EventListener\IndexerSubscriber
+        arguments:
+            - '@hopitalnumerique_publication.twig.publication_extension'
         tags:
             - { name: kernel.event_subscriber }
 
