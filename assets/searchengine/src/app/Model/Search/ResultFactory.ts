@@ -29,7 +29,16 @@ export default class ResultFactory {
 
         switch (resultData._type) {
             case 'autodiag':
-                return new Autodiag(resultData._id, resultData._score, title, resultData._source.chapter_label, resultData._source.autodiag_id);
+                let chapterLabel = resultData._source.chapter_label;
+                if (undefined !== resultData.highlight) {
+                    chapterLabel = resultData.highlight['chapter_label.exact']
+                        ? resultData.highlight['chapter_label.exact']
+                        : resultData.highlight['chapter_label']
+                            ? resultData.highlight['chapter_label']
+                            : chapterLabel;
+                }
+
+                return new Autodiag(resultData._id, resultData._score, title, chapterLabel, resultData._source.autodiag_id);
             case "object":
                 result = new Publication(resultData._id, resultData._score, title, resultData._source.alias, content);
                 result.types = resultData._source.types.map((x: any) => x.libelle);

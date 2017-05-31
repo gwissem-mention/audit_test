@@ -65,6 +65,12 @@ class ElasticaQueryFactory
                     'no_match_size' => 350,
                     'matched_fields' => ['title', 'title.exact'],
                 ],
+                'chapter_label' => [
+                    'type' => 'fvh',
+                    'number_of_fragments' => 0,
+                    'no_match_size' => 350,
+                    'matched_fields' => ['chapter_label', 'chapter_label.exact'],
+                ],
                 'content' => [
                     'type' => 'fvh',
                     'number_of_fragments' => 1,
