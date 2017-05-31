@@ -49,7 +49,7 @@ export class SearchComponent implements OnInit {
      */
     constructor(
         private searchService: SearchService,
-        config: Config
+        public config: Config
     ) {
         this.query = new Query(config.get('index'));
         this.hotQuery = new Query(config.get('index'));

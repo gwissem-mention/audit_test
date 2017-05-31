@@ -53,7 +53,7 @@ twig:
             translation: HopitalNumeriqueForumBundle
         CookieLink: %cookieLink%
         ActivateRsxSociaux: %activateRsxSociaux%
-        searchEngineAppSourcePath: %searchEngine_app_source_path%
+        searchEngineAppSourcePath: %search_engine_app_source_path%
     form:
         resources:
             - 'HopitalNumeriqueForumBundle:Formulaire/Theme:theme.vertical.html.twig'

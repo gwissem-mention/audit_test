@@ -16,15 +16,18 @@ class ConfigFactory
      */
     protected $domainStorage;
 
+    protected $aggregationParameter;
+
     /**
      * ConfigFactory constructor.
      * @param IndexManager $indexManager
      * @param CurrentDomaine $domainStorage
      */
-    public function __construct(IndexManager $indexManager, CurrentDomaine $domainStorage)
+    public function __construct(IndexManager $indexManager, CurrentDomaine $domainStorage, $aggregationParameter)
     {
         $this->indexManager = $indexManager;
         $this->domainStorage = $domainStorage;
+        $this->aggregationParameter = $aggregationParameter;
     }
 
     /**
@@ -36,6 +39,7 @@ class ConfigFactory
     {
         return [
             'index' => $this->indexManager->getIndexNameByDomaine($this->domainStorage->get()),
+            'aggregation' => $this->aggregationParameter,
         ];
     }
 }

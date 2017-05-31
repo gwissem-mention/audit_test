@@ -19,7 +19,7 @@ Installer les dépendances via composer et configurer l'application :
 
 - `elastica_host`: Url du serveur Elasticsearch
 - `elastica_port`: Port du serveur Elasticsearch
-- `searchEngine_app_source_path`: L'url de `webpack-web-server`, utiliser en environement de développement uniquement 
+- `search_engine_app_source_path`: L'url de `webpack-web-server`, utiliser en environement de développement uniquement 
 
 ### Silex
 

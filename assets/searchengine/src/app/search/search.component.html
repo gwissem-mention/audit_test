@@ -10,7 +10,7 @@
                 Aucun résultat trouvé
             </div>
         </div>
-        <div class="aggregations-wrapper">
+        <div class="aggregations-wrapper" *ngIf="config.get('aggregation')">
             <search-aggregation [resultSet]="resultSet" [query]="query" (queryChanged)="refreshQuery($event)"></search-aggregation>
         </div>
     </div>
