@@ -387,7 +387,8 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\RelatedBoard", mappedBy="object")
+     *
+     * @ORM\OneToMany(targetEntity="RelatedBoard", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $relatedBoards;
 
@@ -1844,6 +1845,50 @@ class Objet implements RoutedItemInterface
     public function incrementDownloadFile2()
     {
         ++$this->downloadCountFile2;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRelatedBoards()
+    {
+        return $this->relatedBoards;
+    }
+
+    /**
+     * @param ArrayCollection $relatedBoards
+     *
+     * @return Objet
+     */
+    public function setRelatedBoards($relatedBoards)
+    {
+        $this->relatedBoards = $relatedBoards;
+
+        return $this;
+    }
+
+    /**
+     * @param RelatedBoard $relatedBoard
+     *
+     * @return Objet
+     */
+    public function addRelatedBoard(RelatedBoard $relatedBoard)
+    {
+        $this->relatedBoards->add($relatedBoard);
+
+        return $this;
+    }
+
+    /**
+     * @param RelatedBoard $relatedBoard
+     *
+     * @return Objet
+     */
+    public function removeRelatedBoard(RelatedBoard $relatedBoard)
+    {
+        $this->relatedBoards->removeElement($relatedBoard);
 
         return $this;
     }

@@ -435,12 +435,12 @@
                                         <fieldset>
                                             <legend>Board liés</legend>
 
-                                            <p class="designForBlank" style="{% if boards|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un board.</p>
+                                            <p class="designForBlank" style="{% if relatedBoards|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un board.</p>
                                             <div class="dd" id="boards-nestable">
                                                 <ol class="dd-list">
                                                     {% import _self as mySelf %}
-                                                    {% for board in boards %}
-                                                        {{ mySelf.buildProductionListe(board, objet.id) }}
+                                                    {% for relatedBoard in relatedBoards %}
+                                                        {{ mySelf.buildBoardList(relatedBoard) }}
                                                     {% endfor %}
                                                 </ol>
                                             </div>
@@ -457,6 +457,7 @@
                 <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
                 <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
                 <input type="hidden" id="reorder-prods-url" value="{{path('hopitalnumerique_objet_objet_reorder', {'id':objet.id})}}" />
+                <input type="hidden" id="reorder-boards-url" value="{{path('hopitalnumerique_objet_board_reorder', {'object':objet.id})}}" />
                 <input type="hidden" id="objet-id" value="{{objet.id}}" />
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
             {% endif %}
@@ -507,14 +508,14 @@
     </li>
 {% endmacro %}
 
-{% macro buildBoardList(board, objectId) %}
-    <li class="dd-item dd3-item" id="prod-{{board.id}}" >
+{% macro buildBoardList(relatedBoard) %}
+    <li class="dd-item dd3-item" data-id="{{ relatedBoard.board.id }}" id="board-{{ relatedBoard.board.id }}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            {{board.name}}
+            {{relatedBoard.board.name}}
         </div>
         <div class="dd3-actions">
-            <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_board_deleteLink', { 'object':objectId, 'board': board.id }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_board_deleteLink', { 'object':relatedBoard.object.id, 'board': relatedBoard.board.id }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
         </div>
     </li>
 {% endmacro %}

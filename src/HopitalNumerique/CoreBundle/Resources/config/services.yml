@@ -25,6 +25,7 @@ services:
         - '%ref_recherche_parcours_id%'
         - '%ref_com_pratique_id%'
         - '%ref_expression_besoin_reponse_id%'
+        - '%ref_forum_board_id%'
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView

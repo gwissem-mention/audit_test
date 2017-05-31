@@ -8,6 +8,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as Communaut
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -20,6 +21,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use Nodevo\TexteDynamiqueBundle\Manager\CodeManager;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -67,6 +69,11 @@ class Entity
      */
     const ENTITY_TYPE_SUGGESTION = 8;
 
+    /**
+     * @var int Forum board type
+     */
+    const ENTITY_TYPE_FORUM_BOARD = 9;
+
     private $refForumTopicId;
 
     private $refAmbassadeurId;
@@ -77,58 +84,60 @@ class Entity
 
     private $refExpressionBesoinReponseId;
 
+    private $refForumBoardId;
+
     /**
-     * @var \Symfony\Component\Routing\RouterInterface Router
+     * @var RouterInterface Router
      */
     private $router;
 
     /**
-     * @var \HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine CurrentDomaine
+     * @var CurrentDomaine CurrentDomaine
      */
     private $currentDomaine;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     * @var UserManager UserManager
      */
     private $userManager;
 
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager ObjetManager
+     * @var ObjetManager ObjetManager
      */
     private $objetManager;
 
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ContenuManager ContenuManager
+     * @var ContenuManager ContenuManager
      */
     private $contenuManager;
 
     /**
-     * @var \HopitalNumerique\ForumBundle\Manager\TopicManager TopicManager
+     * @var TopicManager TopicManager
      */
     private $forumTopicManager;
 
     /**
-     * @var \HopitalNumerique\DomaineBundle\Manager\DomaineManager DomaineManager
+     * @var DomaineManager DomaineManager
      */
     private $domaineManager;
 
     /**
-     * @var \HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager RechercheParcoursManager
+     * @var RechercheParcoursManager RechercheParcoursManager
      */
     private $rechercheParcoursManager;
 
     /**
-     * @var \HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager GroupeManager
+     * @var CommunautePratiqueGroupeManager GroupeManager
      */
     private $communautePratiqueGroupeManager;
 
     /**
-     * @var \HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager ExpBesoinReponsesManager
+     * @var ExpBesoinReponsesManager ExpBesoinReponsesManager
      */
     private $expressionBesoinReponseManager;
 
     /**
-     * @var \Nodevo\TexteDynamiqueBundle\Manager\CodeManager CodeManager
+     * @var CodeManager CodeManager
      */
     private $texteDynamiqueCodeManager;
 
@@ -144,6 +153,26 @@ class Entity
 
     /**
      * Constructeur.
+     *
+     * @param RouterInterface                 $router
+     * @param CurrentDomaine                  $currentDomaine
+     * @param UserManager                     $userManager
+     * @param ObjetManager                    $objetManager
+     * @param ContenuManager                  $contenuManager
+     * @param TopicManager                    $forumTopicManager
+     * @param DomaineManager                  $domaineManager
+     * @param RechercheParcoursManager        $rechercheParcoursManager
+     * @param CommunautePratiqueGroupeManager $communautePratiqueGroupeManager
+     * @param ExpBesoinReponsesManager        $expressionBesoinReponseManager
+     * @param CodeManager                     $texteDynamiqueCodeManager
+     * @param ReferenceManager                $referenceManager
+     * @param SuggestionRepository            $suggestionRepository
+     * @param                                 $refForumTopicId
+     * @param                                 $refAmbassadeurId
+     * @param                                 $refRechercheParcoursId
+     * @param                                 $refComPratiqueId
+     * @param                                 $refExpressionBesoinReponseId
+     * @param                                 $refForumBoardId
      */
     public function __construct(
         RouterInterface $router,
@@ -163,7 +192,8 @@ class Entity
         $refAmbassadeurId,
         $refRechercheParcoursId,
         $refComPratiqueId,
-        $refExpressionBesoinReponseId
+        $refExpressionBesoinReponseId,
+        $refForumBoardId
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -183,6 +213,7 @@ class Entity
         $this->refRechercheParcoursId = $refRechercheParcoursId;
         $this->refComPratiqueId = $refComPratiqueId;
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
+        $this->refForumBoardId = $refForumBoardId;
     }
 
     /**
@@ -220,6 +251,11 @@ class Entity
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
             case 'HopitalNumerique\PublicationBundle\Entity\Suggestion':
                 return self::ENTITY_TYPE_SUGGESTION;
+        }
+
+        switch (true) {
+            case $entity instanceof Board:
+                return self::ENTITY_TYPE_FORUM_BOARD;
         }
 
         return null;
@@ -491,6 +527,10 @@ class Entity
                 break;
             case self::ENTITY_TYPE_SUGGESTION:
                 $title = $entity->getTitle();
+                break;
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                $title = $entity->getName();
+                break;
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -532,7 +572,7 @@ class Entity
                 if (0 === count($entity->getTypes())) {
                     return $this->getCategoryIdsByEntity($entity->getObjet());
                 }
-                // no break
+            // no break
             case self::ENTITY_TYPE_OBJET:
                 return $entity->getTypeIds();
                 break;
@@ -558,7 +598,7 @@ class Entity
                 if (0 === count($entity->getTypes())) {
                     return $this->getCategoryByEntity($entity->getObjet());
                 }
-                // no break
+            // no break
             case self::ENTITY_TYPE_OBJET:
                 $categories = $entity->getTypeLabels();
                 break;
@@ -572,6 +612,8 @@ class Entity
                 return $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle();
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->referenceManager->findOneById($this->refExpressionBesoinReponseId)->getLibelle();
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return $this->referenceManager->findOneById($this->refForumBoardId)->getLibelle();
         }
 
         return implode(' &diams; ', $categories);
@@ -613,6 +655,10 @@ class Entity
                 break;
             case self::ENTITY_TYPE_SUGGESTION:
                 $description = $entity->getSummary();
+                break;
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                $description = $entity->getDescription();
+                break;
         }
 
         if (null !== $description) {
@@ -664,7 +710,9 @@ class Entity
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
             case self::ENTITY_TYPE_SUGGESTION:
-                return$this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
+                return $this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return $this->router->generate('ccdn_forum_user_board_show', ['boardId' => $entityId]);
         }
 
         return null;

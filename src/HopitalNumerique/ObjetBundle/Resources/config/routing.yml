@@ -92,11 +92,11 @@ hopitalnumerique_objet_objet_deleteLink:
         pointDur: \d+
 
 hopitalnumerique_objet_board_deleteLink:
-    path:  /objet/board/deleteLink/{pointDur}/{id}/{obj}
+    path:  /objet/board/deleteLink/{object}/{board}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:deleteLink" }
     requirements:
-        id: \d+
-        pointDur: \d+
+        object: \d+
+        board: \d+
 
 hopitalnumerique_objet_objet_reorder:
     path:  /objet/reorder/{id}
@@ -105,10 +105,10 @@ hopitalnumerique_objet_objet_reorder:
         id: \d+
 
 hopitalnumerique_objet_board_reorder:
-    path:  /objet/board/reorder/{id}
+    path:  /objet/board/reorder/{object}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:reorder" }
     requirements:
-        id: \d+
+        object: \d+
 
 #partie Contenu
 hopitalnumerique_objet_contenu_add:

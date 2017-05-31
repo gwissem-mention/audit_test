@@ -5,7 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\ForumBundle\Entity\Board;
 
-/***
+/**
  * Class RelatedBoard
  *
  * @ORM\Entity
@@ -17,7 +17,8 @@ class RelatedBoard
      * @var Objet
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="relatedBoards")
+     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="relatedBoards", cascade={"persist"})
+     * @ORM\JoinColumn(referencedColumnName="obj_id")
      */
     protected $object;
 
@@ -25,7 +26,7 @@ class RelatedBoard
      * @var Board
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ForumBundle\Entity\Board")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ForumBundle\Entity\Board", cascade={"persist"})
      */
     protected $board;
 
@@ -34,20 +35,20 @@ class RelatedBoard
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $order;
+    protected $position;
 
     /**
      * RelatedBoard constructor.
      *
      * @param Objet $object
      * @param Board $board
-     * @param       $order
+     * @param       $position
      */
-    public function __construct(Objet $object, Board $board, $order)
+    public function __construct(Objet $object, Board $board, $position = null)
     {
         $this->object = $object;
         $this->board = $board;
-        $this->order = $order;
+        $this->position = $position;
     }
 
     /**
@@ -93,19 +94,19 @@ class RelatedBoard
     /**
      * @return int
      */
-    public function getOrder()
+    public function getPosition()
     {
-        return $this->order;
+        return $this->position;
     }
 
     /**
-     * @param int $order
+     * @param int $position
      *
      * @return RelatedBoard
      */
-    public function setOrder($order)
+    public function setPosition($position)
     {
-        $this->order = $order;
+        $this->position = $position;
 
         return $this;
     }
