@@ -4,9 +4,8 @@ namespace HopitalNumerique\PublicationBundle\Service\Converter\Extractor;
 
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\Node;
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
-use HopitalNumerique\PublicationBundle\Service\Converter\MediaUploader;
+use HopitalNumerique\PublicationBundle\Exception\Converter\IncorrectFormatException;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
@@ -120,7 +119,7 @@ class Pandoc implements ConverterInterface
         $processArguments = [
             $document->getRealPath(),
             '--from',
-            'docx',
+            $this->getPandocFormat($document),
             '--to',
             'html5',
             '--standalone',
@@ -247,5 +246,36 @@ class Pandoc implements ConverterInterface
             $file = new File($crawler->attr('src'));
             $node->addFile($file);
         });
+    }
+
+    /**
+     * @param File $file
+     *
+     * @return mixed
+     * @throws IncorrectFormatException
+     */
+    private function getPandocFormat(File $file)
+    {
+        $fileMimeType = $file->getMimeType();
+
+        $formats = [
+            'docx' => [
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/wps-office.docx',
+            ],
+            'odt' => [
+                'application/vnd.oasis.opendocument.text',
+            ],
+        ];
+
+        foreach ($formats as $format => $mimeTypes) {
+            foreach ($mimeTypes as $mimeType) {
+                if ($mimeType === $fileMimeType) {
+                    return $format;
+                }
+            }
+        }
+
+        throw new IncorrectFormatException($fileMimeType);
     }
 }

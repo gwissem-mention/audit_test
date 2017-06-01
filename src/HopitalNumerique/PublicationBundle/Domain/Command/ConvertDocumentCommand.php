@@ -52,14 +52,13 @@ class ConvertDocumentCommand
     {
         $mimeTypes = [
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/msword",
             "application/vnd.oasis.opendocument.text",
-            "application/wps-office.docx"
+            "application/wps-office.docx",
         ];
 
         $extensions = [
-            'doc',
-            'docx'
+            'docx',
+            'odt',
         ];
 
         if (in_array($this->file->getMimeType(), $mimeTypes)) {
