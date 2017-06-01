@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\PublicationBundle\Exception\Converter;
 
+/**
+ * Class IncorrectFormatException
+ */
 class IncorrectFormatException extends \Exception
 {
     protected $mimeType;
