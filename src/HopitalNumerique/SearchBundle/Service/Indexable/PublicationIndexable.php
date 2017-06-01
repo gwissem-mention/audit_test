@@ -35,6 +35,10 @@ class PublicationIndexable
      */
     public function isObjectIndexable(Objet $object)
     {
+        if ($object->isArticle()) {
+            return false;
+        }
+
         return !$object->getDomaines()
             ->map(function (Domaine $domaine) {
                 return $domaine->getSlug();
@@ -54,6 +58,10 @@ class PublicationIndexable
      */
     public function isContentIndexable(Contenu $content)
     {
+        if ($content->getObjet()->isArticle()) {
+            return false;
+        }
+
         return !$content->getDomaines()
             ->map(function (Domaine $domaine) {
                 return $domaine->getSlug();

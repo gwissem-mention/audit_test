@@ -17,6 +17,7 @@ class ObjectProvider extends AbstractProvider
             ->setParameters([
                 'domaineSlug' => $this->domaineSlug,
             ])
+            ->andWhere('object.isArticle = false')
         ;
 
         return $queryBuilder;

@@ -16,8 +16,9 @@ class ContentProvider extends AbstractProvider
     {
         $queryBuilder = $this->repository->createQueryBuilder('content');
         $queryBuilder
-            ->join('content.objet', 'objet')
-            ->join('objet.domaines', 'domaine', Join::WITH, 'domaine.slug = :domaineSlug')
+            ->join('content.objet', 'object')
+            ->join('object.domaines', 'domaine', Join::WITH, 'domaine.slug = :domaineSlug')
+            ->andWhere('object.isArticle = false')
             ->setParameters([
                 'domaineSlug' => $this->domaineSlug,
             ])
