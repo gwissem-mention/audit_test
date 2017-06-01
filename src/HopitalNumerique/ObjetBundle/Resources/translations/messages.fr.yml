@@ -1,0 +1,6 @@
+related_board:
+    link:
+        add:
+            success: Les boards ont été liés à la publication.
+        remove:
+            success: Suppression effectuée avec succès.

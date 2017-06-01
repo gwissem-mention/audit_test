@@ -1876,7 +1876,9 @@ class Objet implements RoutedItemInterface
      */
     public function addRelatedBoard(RelatedBoard $relatedBoard)
     {
-        $this->relatedBoards->add($relatedBoard);
+        if (!$this->relatedBoards->contains($relatedBoard)) {
+            $this->relatedBoards->add($relatedBoard);
+        }
 
         return $this;
     }

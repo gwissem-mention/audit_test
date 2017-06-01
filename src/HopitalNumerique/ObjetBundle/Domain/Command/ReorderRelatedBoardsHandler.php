@@ -11,9 +11,15 @@ use HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository;
  */
 class ReorderRelatedBoardsHandler
 {
-    private $entityManager;
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
-    private $relatedBoardRepository;
+    /**
+     * @var RelatedBoardRepository
+     */
+    protected $relatedBoardRepository;
 
     /**
      * ReorderRelatedBoardsHandler constructor.

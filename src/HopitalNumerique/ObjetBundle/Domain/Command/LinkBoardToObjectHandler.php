@@ -13,11 +13,20 @@ use CCDNForum\ForumBundle\Model\Component\Repository\BoardRepository;
  */
 class LinkBoardToObjectHandler
 {
-    private $objectRepository;
+    /**
+     * @var ObjetRepository
+     */
+    protected $objectRepository;
 
-    private $objectManager;
+    /**
+     * @var ObjetManager
+     */
+    protected $objectManager;
 
-    private $boardRepository;
+    /**
+     * @var BoardRepository
+     */
+    protected $boardRepository;
 
     /**
      * LinkBoardToObjectHandler constructor.

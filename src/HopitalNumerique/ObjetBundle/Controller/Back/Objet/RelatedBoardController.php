@@ -43,10 +43,9 @@ class RelatedBoardController extends Controller
 
         $this->get('hopitalnumerique_objet.link_board_to_object_handler')->handle($linkBoardToObjectCommand);
 
-        $this->get('session')->getFlashBag()->add('success', 'Les boards ont été liés à la publication.');
+        $this->addFlash('success', $this->get('translator')->trans('related_board.link.add.success'));
 
         return new JsonResponse([
-            'success' => true,
             'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $currentObjectId]),
         ]);
     }
@@ -63,11 +62,10 @@ class RelatedBoardController extends Controller
 
         $this->get('hopitalnumerique_objet.unlink_board_to_object_handler')->handle($unlinkBoardToObjectCommand);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        $this->addFlash('info', $this->get('translator')->trans('related_board.link.remove.success'));
 
         return new JsonResponse([
-            'success' => true,
-            'url'     => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()]),
+            'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()]),
         ]);
     }
 
@@ -84,6 +82,6 @@ class RelatedBoardController extends Controller
 
         $this->get('hopitalnumerique_objet.reorder_related_board_handler')->handle($reorderRelatedBoardsCommand);
 
-        return new JsonResponse(['success' => true]);
+        return new JsonResponse();
     }
 }

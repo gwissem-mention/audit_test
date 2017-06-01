@@ -10,7 +10,10 @@ use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
  */
 class UnlinkBoardToObjectHandler
 {
-    private $entityManager;
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
     /**
      * UnlinkBoardToObjectHandler constructor.
