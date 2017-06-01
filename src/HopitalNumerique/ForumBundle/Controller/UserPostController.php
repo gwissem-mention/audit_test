@@ -3,7 +3,9 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserPostController as UserPostControllerBase;
+use HopitalNumerique\ForumBundle\Domain\Command\SendEmailToSubscriberCommand;
 use HopitalNumerique\ForumBundle\Entity\Post;
+use HopitalNumerique\ForumBundle\Entity\Subscription;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,9 +35,20 @@ class UserPostController extends UserPostControllerBase
 
         $this->container->get('hopitalnumerique_forum.manager.post')->save($post);
 
-        $this->container->get('session')->getFlashBag()->add('success', 'Le post de ' . $post->getCreatedBy()->getAppellation() . ' a été activé.');
+        $sendEmailToSubscriberCommand = new SendEmailToSubscriberCommand($this->getUser(), $post);
 
-        return $this->redirectResponse($this->path('ccdn_forum_user_topic_show', ['topicId' => $post->getTopic()->getId()]));
+        $this->container->get('hopitalnumerique_forum.send_email_to_subscriber_handler')->handle(
+            $sendEmailToSubscriberCommand
+        );
+
+        $this->container->get('session')->getFlashBag()->add(
+            'success',
+            'Le post de ' . $post->getCreatedBy()->getAppellation() . ' a été activé.'
+        );
+
+        return $this->redirectResponse(
+            $this->path('ccdn_forum_user_topic_show', ['topicId' => $post->getTopic()->getId()])
+        );
     }
 
     /**

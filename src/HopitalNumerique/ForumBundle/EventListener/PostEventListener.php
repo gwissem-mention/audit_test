@@ -48,7 +48,7 @@ class PostEventListener implements EventSubscriberInterface
 
         // Check if there is a url in the text
         preg_match_all($reg_exUrl, $post->getBody(), $matchesURLTemp);
-        if (count($matchesURLTemp[0]) > 0 || strstr($post->getBody(), '[URL')) {
+        if (count($matchesURLTemp[0]) > 0 || strstr($post->getBody(), '[URL') || strstr($post->getBody(), '[LINK')) {
             //Desactive le post
             $post->setEnAttente(true);
 

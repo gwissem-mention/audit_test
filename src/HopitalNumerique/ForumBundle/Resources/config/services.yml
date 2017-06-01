@@ -51,6 +51,13 @@ services:
             class: HopitalNumerique\ForumBundle\Repository\PostRepository
             factory: ['@doctrine.orm.default_entity_manager', getRepository]
             arguments: ['HopitalNumeriqueForumBundle:Post']
+    hopitalnumerique_forum.send_email_to_subscriber_handler:
+        class: HopitalNumerique\ForumBundle\Domain\Command\SendEmailToSubscriberHandler
+        arguments:
+            - "@ccdn_forum_forum.model.subscription"
+            - "@nodevo_mail.manager.mail"
+            - "@mailer"
+
     #--Subscription
     hopitalnumerique_forum.manager.subscription:
         class: %hopitalnumerique_forum.manager.subscription.class%
