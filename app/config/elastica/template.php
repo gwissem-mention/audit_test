@@ -297,7 +297,8 @@ $container->loadFromExtension('fos_elastica', [
                             ],
                         ],
                         'authorised_roles' => [
-                            'property_path' => 'topic.board.category.forum.readAuthorisedRoles',
+                            'type' => 'keyword',
+                            'property_path' => false,
                             'index' => 'not_analyzed',
                         ],
                     ],
@@ -349,7 +350,8 @@ $container->loadFromExtension('fos_elastica', [
                             ]
                         ],
                         'authorised_roles' => [
-                            'property_path' => 'board.category.forum.readAuthorisedRoles',
+                            'type' => 'keyword',
+                            'property_path' => false,
                             'index' => 'not_analyzed',
                         ],
                     ],

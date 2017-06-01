@@ -3,6 +3,8 @@
 namespace HopitalNumerique\SearchBundle\EventListener;
 
 use FOS\ElasticaBundle\Event\TransformEvent;
+use HopitalNumerique\ForumBundle\Entity\Post;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
@@ -47,13 +49,39 @@ class IndexerSubscriber implements EventSubscriberInterface
      */
     public function postTransform(TransformEvent $event)
     {
+        $document = $event->getDocument();
+
         if ($event->getObject() instanceof Objet || $event->getObject() instanceof Contenu) {
-            $document = $event->getDocument();
             if ($document->has('content')) {
                 $document->set('content', strip_tags(
                     $this->publicationExtension->parsePublication($document->get('content'))
                 ));
             }
+        }
+
+        if ($event->getObject() instanceof Topic) {
+            /** @var Topic $topic */
+            $topic = $event->getObject();
+            $roles = array_intersect(
+                $topic->getBoard()->getReadAuthorisedRoles(),
+                $topic->getBoard()->getCategory()->getReadAuthorisedRoles(),
+                $topic->getBoard()->getCategory()->getForum()->getReadAuthorisedRoles()
+            );
+
+            $document->set('authorised_roles', $roles);
+        }
+
+        if ($event->getObject() instanceof Post) {
+            /** @var Post $post */
+            $post = $event->getObject();
+            $topic = $post->getTopic();
+            $roles = array_intersect(
+                $topic->getBoard()->getReadAuthorisedRoles(),
+                $topic->getBoard()->getCategory()->getReadAuthorisedRoles(),
+                $topic->getBoard()->getCategory()->getForum()->getReadAuthorisedRoles()
+            );
+
+            $document->set('authorised_roles', $roles);
         }
     }
 }
