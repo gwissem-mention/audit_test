@@ -47,6 +47,10 @@ class CustomAttributes implements ParserInterface
             });
         }
 
-        return $crawler->filter('body')->html();
+        if ($crawler->filter('body')->count() > 0) {
+            return $crawler->filter('body')->html();
+        }
+
+        return $content;
     }
 }

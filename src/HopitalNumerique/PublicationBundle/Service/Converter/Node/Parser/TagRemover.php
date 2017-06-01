@@ -13,7 +13,7 @@ class TagRemover implements ParserInterface
 {
     private $regexp = '#</?([\w]+)[^>]*>#is';
 
-    private $tags = ['em', 'hr', 'blockquote', 'span'];
+    private $tags = ['em', 'hr', 'blockquote', 'span', 'embed'];
 
     public function parse(Node $node)
     {
