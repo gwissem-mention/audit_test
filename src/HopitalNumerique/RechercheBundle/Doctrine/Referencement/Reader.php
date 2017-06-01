@@ -4,6 +4,7 @@ namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
@@ -420,7 +421,13 @@ class Reader
         foreach ($relatedBoards as $relatedBoard) {
             $board = $relatedBoard->getBoard();
 
-            if ($board->isAuthorisedToRead($this->securityContext)) {
+            $category = $board->getCategory();
+            $forum = $category->getForum();
+
+            if ($board->isAuthorisedToRead($this->securityContext)
+                && $category->isAuthorisedToRead($this->securityContext)
+                && $forum->isAuthorisedToRead($this->securityContext)
+            ) {
                 $boards[] = [
                     'title' => $this->entity->getTitleByEntity($board),
                     'subtitle' => $this->entity->getSubtitleByEntity($board),
