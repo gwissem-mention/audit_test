@@ -52,6 +52,7 @@ class AutodiagProvider extends AbstractProvider
                     $attribute['id'],
                     [
                         'title' => $attribute['label'],
+                        'chapter_id' => $attribute['chapter_id'],
                         'chapter_label' => $attribute['chapter_label'],
                         'autodiag_id' => $attribute['autodiag_id'],
                     ]
@@ -72,6 +73,7 @@ class AutodiagProvider extends AbstractProvider
             ->select(
                 'attribute.id',
                 'attribute.label',
+                'container.id as chapter_id',
                 'container.label as chapter_label',
                 'autodiag.id as autodiag_id'
             )

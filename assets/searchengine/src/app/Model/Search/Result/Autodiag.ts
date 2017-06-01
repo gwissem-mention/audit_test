@@ -4,7 +4,7 @@ declare let Routing: any;
 
 export default class Autodiag extends Result {
 
-    constructor(id: number, score: number, public title: string, public chapter: string, protected autodiagId: number)
+    constructor(id: number, score: number, public title: string, public chapterId: number, public chapter: string, protected autodiagId: number)
     {
         super(id, score);
     }
@@ -25,6 +25,9 @@ export default class Autodiag extends Result {
     }
 
     getLink(): string {
-        return Routing.generate('hopitalnumerique_autodiag_entry_add', {'autodiag': this.autodiagId});
+        return Routing.generate('hopitalnumerique_autodiag_entry_add', {'autodiag': this.autodiagId})
+            + '#'
+            + this.chapterId
+        ;
     }
 }
