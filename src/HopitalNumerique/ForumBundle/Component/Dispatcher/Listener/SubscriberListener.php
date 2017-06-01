@@ -5,6 +5,7 @@ namespace HopitalNumerique\ForumBundle\Component\Dispatcher\Listener;
 use CCDNForum\ForumBundle\Component\Dispatcher\Listener\SubscriberListener as CCDNSubscriberListener;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 use CCDNForum\ForumBundle\Model\Component\Repository\PostRepository;
+use HopitalNumerique\ForumBundle\Entity\Post;
 use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\MailBundle\Manager\MailManager;
 
@@ -58,6 +59,7 @@ class SubscriberListener extends CCDNSubscriberListener
 
                 $subscriptions = $this->subscriptionModel->findAllSubscriptionsToSend($event->getTopic());
 
+                /** @var Post $post */
                 $post = $this->postRepository->getLastPostForTopicById($topic->getId());
 
                 //Envoie des mails pour les followers
@@ -77,8 +79,11 @@ class SubscriberListener extends CCDNSubscriberListener
                             'pseudouser' => !is_null($user->getPseudonymeForum()) ? $user->getPseudonymeForum() : $user->getNomPrenom(),
                             'shortMessage' => $post->getBody(),
                         ];
-                        $mail = $this->mailManager->sendNouveauMessageForumMail($subscription->getOwnedBy(), $options, $topic->getId());
-                        $this->mailer->send($mail);
+
+                        if (false === $post->getEnAttente()) {
+                            $mail = $this->mailManager->sendNouveauMessageForumMail($subscription->getOwnedBy(), $options, $topic->getId());
+                            $this->mailer->send($mail);
+                        }
                     }
                 }
 
