@@ -410,7 +410,7 @@ class Reader
     /**
      * @param $relatedBoards
      *
-     * @return array
+     * @return RelatedBoard[]
      */
     public function formateRelatedBoards($relatedBoards)
     {
@@ -420,7 +420,7 @@ class Reader
         foreach ($relatedBoards as $relatedBoard) {
             $board = $relatedBoard->getBoard();
 
-            if($board->isAuthorisedToRead($this->securityContext)) {
+            if ($board->isAuthorisedToRead($this->securityContext)) {
                 $boards[] = [
                     'title' => $this->entity->getTitleByEntity($board),
                     'subtitle' => $this->entity->getSubtitleByEntity($board),

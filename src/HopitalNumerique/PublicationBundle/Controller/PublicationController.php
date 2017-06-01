@@ -146,7 +146,7 @@ class PublicationController extends Controller
         );
         shuffle($topicRelated);
 
-        $relatedBoards = $this->getDoctrine()->getRepository(RelatedBoard::class)->findBy(
+        $relatedBoards = $this->get('hopitalnumerique_objet.repository.related_board')->findBy(
             ['object' => $objet->getId()],
             ['position' => 'ASC']
         );

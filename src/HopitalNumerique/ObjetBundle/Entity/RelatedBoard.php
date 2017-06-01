@@ -8,7 +8,7 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 /**
  * Class RelatedBoard
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository")
  * @ORM\Table(name="hn_related_board")
  */
 class RelatedBoard
