@@ -6,7 +6,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
-use CCDNForum\ForumBundle\Model\Component\Repository\BoardRepository;
+use HopitalNumerique\ForumBundle\Repository\BoardRepository;
 
 /**
  * Class LinkBoardToObjectHandler
@@ -63,11 +63,10 @@ class LinkBoardToObjectHandler
             $boardsId[] = $relatedBoard->getBoard()->getId();
         }
 
-        foreach ($command->boardsId as $selectedBoardId) {
-            if (!in_array($selectedBoardId, $boardsId)) {
-                $board = $this->boardRepository->findOneBoardById($selectedBoardId);
-                $currentObject->addRelatedBoard(new RelatedBoard($currentObject, $board));
-            }
+        $boards = $this->boardRepository->findBy(['id' => $command->boardsId]);
+
+        foreach ($boards as $board) {
+            $currentObject->linkBoard($board);
         }
 
         $this->objectManager->save($currentObject);

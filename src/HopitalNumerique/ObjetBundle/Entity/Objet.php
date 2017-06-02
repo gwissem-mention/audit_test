@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -386,7 +387,7 @@ class Objet implements RoutedItemInterface
     private $associatedProductions;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|RelatedBoard[]
      *
      * @ORM\OneToMany(targetEntity="RelatedBoard", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -1858,27 +1859,20 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param ArrayCollection $relatedBoards
+     * @param Board $board
+     * @param null  $position
      *
      * @return Objet
      */
-    public function setRelatedBoards($relatedBoards)
+    public function linkBoard(Board $board, $position = null)
     {
-        $this->relatedBoards = $relatedBoards;
-
-        return $this;
-    }
-
-    /**
-     * @param RelatedBoard $relatedBoard
-     *
-     * @return Objet
-     */
-    public function addRelatedBoard(RelatedBoard $relatedBoard)
-    {
-        if (!$this->relatedBoards->contains($relatedBoard)) {
-            $this->relatedBoards->add($relatedBoard);
+        foreach ($this->relatedBoards as $relatedBoard) {
+            if ($relatedBoard->getBoard()->getId() === $board->getId()) {
+                return $this;
+            }
         }
+
+        $this->relatedBoards->add(new RelatedBoard($this, $board, $position));
 
         return $this;
     }

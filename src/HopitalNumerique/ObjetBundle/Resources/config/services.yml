@@ -141,7 +141,7 @@ services:
         arguments:
             - "@hopitalnumerique_objet.repository.objet"
             - "@hopitalnumerique_objet.manager.objet"
-            - "@ccdn_forum_forum.repository.board"
+            - "@hopitalnumerique_forum.repository.board"
 
     hopitalnumerique_objet.unlink_board_to_object_handler:
         class: HopitalNumerique\ObjetBundle\Domain\Command\UnlinkBoardToObjectHandler

@@ -4,18 +4,23 @@ namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Entity\Board;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\PublicationBundle\Repository\SuggestionRepository;
+use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
@@ -231,31 +236,28 @@ class Entity
             throw new \Exception('L\'entité n\'est pas un objet (type "' . gettype($entity) . '" trouvé).');
         }
 
-        switch (get_class($entity)) {
-            case 'HopitalNumerique\ObjetBundle\Entity\Objet':
+        switch (true) {
+            case $entity instanceof Objet:
                 return self::ENTITY_TYPE_OBJET;
-            case 'HopitalNumerique\ObjetBundle\Entity\Contenu':
+            case $entity instanceof Board:
+                return self::ENTITY_TYPE_FORUM_BOARD;
+            case $entity instanceof Contenu:
                 return self::ENTITY_TYPE_CONTENU;
-            case 'HopitalNumerique\ForumBundle\Entity\Topic':
+            case $entity instanceof Topic:
                 return self::ENTITY_TYPE_FORUM_TOPIC;
-            case 'HopitalNumerique\UserBundle\Entity\User':
+            case $entity instanceof User:
                 if ($entity->hasRoleAmbassadeur()) {
                     return self::ENTITY_TYPE_AMBASSADEUR;
                 }
                 break;
-            case 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours':
+            case $entity instanceof RechercheParcours:
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
-            case 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe':
+            case $entity instanceof Groupe:
                 return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
-            case 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses':
+            case $entity instanceof ExpBesoinReponses:
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
-            case 'HopitalNumerique\PublicationBundle\Entity\Suggestion':
+            case $entity instanceof Suggestion:
                 return self::ENTITY_TYPE_SUGGESTION;
-        }
-
-        switch (true) {
-            case $entity instanceof Board:
-                return self::ENTITY_TYPE_FORUM_BOARD;
         }
 
         return null;
