@@ -60,6 +60,7 @@ parameters:
     ref_recherche_parcours_id: 1997
     ref_com_pratique_id: 1998
     ref_expression_besoin_reponse_id: 1999
+    ref_forum_board_id: 2280
 
     ref_board_create_topic: 29
     ref_forum_create_topic: 1

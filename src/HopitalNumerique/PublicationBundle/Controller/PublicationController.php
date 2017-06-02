@@ -10,6 +10,7 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -145,6 +146,11 @@ class PublicationController extends Controller
         );
         shuffle($topicRelated);
 
+        $relatedBoards = $this->get('hopitalnumerique_objet.repository.related_board')->findBy(
+            ['object' => $objet->getId()],
+            ['position' => 'ASC']
+        );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -162,6 +168,7 @@ class PublicationController extends Controller
             'productionsLiees' => $productionsLiees,
             'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
                 ->getFormattedParcoursGuidesLies($objet),
+            'relatedBoards' => $reader->formateRelatedBoards($relatedBoards),
             'topicRelated' => array_slice($topicRelated, 0, 3),
             'userRelated' => array_slice($userRelated, 0, 3),
             'is_pdf' => $isPdf,

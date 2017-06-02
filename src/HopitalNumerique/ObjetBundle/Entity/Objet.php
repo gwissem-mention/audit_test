@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -386,6 +387,13 @@ class Objet implements RoutedItemInterface
     private $associatedProductions;
 
     /**
+     * @var ArrayCollection|RelatedBoard[]
+     *
+     * @ORM\OneToMany(targetEntity="RelatedBoard", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $relatedBoards;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -411,6 +419,7 @@ class Objet implements RoutedItemInterface
         $this->modules = [];
         $this->maitriseUsers = [];
         $this->domaines = new ArrayCollection();
+        $this->relatedBoards = new ArrayCollection();
     }
 
     /**
@@ -1837,6 +1846,45 @@ class Objet implements RoutedItemInterface
     public function incrementDownloadFile2()
     {
         ++$this->downloadCountFile2;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRelatedBoards()
+    {
+        return $this->relatedBoards;
+    }
+
+    /**
+     * @param Board $board
+     * @param null  $position
+     *
+     * @return Objet
+     */
+    public function linkBoard(Board $board, $position = null)
+    {
+        foreach ($this->relatedBoards as $relatedBoard) {
+            if ($relatedBoard->getBoard()->getId() === $board->getId()) {
+                return $this;
+            }
+        }
+
+        $this->relatedBoards->add(new RelatedBoard($this, $board, $position));
+
+        return $this;
+    }
+
+    /**
+     * @param RelatedBoard $relatedBoard
+     *
+     * @return Objet
+     */
+    public function removeRelatedBoard(RelatedBoard $relatedBoard)
+    {
+        $this->relatedBoards->removeElement($relatedBoard);
 
         return $this;
     }

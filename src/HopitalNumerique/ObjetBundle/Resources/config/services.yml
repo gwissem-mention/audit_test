@@ -26,6 +26,13 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueObjetBundle:Objet'
+
+    hopitalnumerique_objet.repository.related_board:
+        class: HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueObjetBundle:RelatedBoard'
+
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
@@ -117,12 +124,6 @@ services:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
         arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']
 
-    hopitalnumerique_objet.repository.objet:
-        class: HopitalNumerique\ObjetBundle\Repository\ObjetRepository
-        factory: ["@doctrine.orm.entity_manager", "getRepository"]
-        arguments:
-            - 'HopitalNumerique\ObjetBundle\Entity\Objet'
-
     hopitalnumerique_objet.repository.commentaire:
         class: HopitalNumerique\ObjetBundle\Repository\CommentaireRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -134,3 +135,21 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Note'
+
+    hopitalnumerique_objet.link_board_to_object_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\LinkBoardToObjectHandler
+        arguments:
+            - "@hopitalnumerique_objet.repository.objet"
+            - "@hopitalnumerique_objet.manager.objet"
+            - "@hopitalnumerique_forum.repository.board"
+
+    hopitalnumerique_objet.unlink_board_to_object_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\UnlinkBoardToObjectHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.reorder_related_board_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\ReorderRelatedBoardsHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.repository.related_board"

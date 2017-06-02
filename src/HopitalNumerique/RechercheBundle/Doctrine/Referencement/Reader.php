@@ -4,6 +4,8 @@ namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\ForumBundle\Entity\Forum;
+use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
@@ -12,6 +14,7 @@ use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Lecteur de la recherche par référencement.
@@ -68,6 +71,8 @@ class Reader
      */
     private $contenuManager;
 
+    private $securityContext;
+
     /**
      * @var bool
      */
@@ -78,7 +83,7 @@ class Reader
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, Entity $entity, Referencement $referencement, Modulation $modulation, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
+    public function __construct(RouterInterface $router, Entity $entity, Referencement $referencement, Modulation $modulation, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager, SecurityContext $securityContext)
     {
         $this->router = $router;
         $this->entity = $entity;
@@ -90,6 +95,7 @@ class Reader
         $this->entityHasNoteManager = $entityHasNoteManager;
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -400,5 +406,38 @@ class Reader
         }
 
         return $related;
+    }
+
+    /**
+     * @param $relatedBoards
+     *
+     * @return RelatedBoard[]
+     */
+    public function formateRelatedBoards($relatedBoards)
+    {
+        $boards = [];
+
+        /** @var RelatedBoard $relatedBoard */
+        foreach ($relatedBoards as $relatedBoard) {
+            $board = $relatedBoard->getBoard();
+
+            $category = $board->getCategory();
+            $forum = $category->getForum();
+
+            if ($board->isAuthorisedToRead($this->securityContext)
+                && $category->isAuthorisedToRead($this->securityContext)
+                && $forum->isAuthorisedToRead($this->securityContext)
+            ) {
+                $boards[] = [
+                    'title' => $this->entity->getTitleByEntity($board),
+                    'subtitle' => $this->entity->getSubtitleByEntity($board),
+                    'category' => $this->entity->getCategoryByEntity($board),
+                    'description' => $this->entity->getDescriptionByEntity($board),
+                    'url' => $this->entity->getFrontUrlByEntity($board),
+                ];
+            }
+        }
+
+        return $boards;
     }
 }

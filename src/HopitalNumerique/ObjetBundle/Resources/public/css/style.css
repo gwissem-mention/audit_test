@@ -10,7 +10,7 @@ ul.list-unstyled{margin-bottom:0;}
 
     /* Tab Infra-documentaire */
     #infra .addContenu,
-    #productions .addProd,
+    #productions .addLink,
     #infra .reloadContenu,
     #infra .uploadSommaire,
     #infra .deleteAllInfradocs {
@@ -23,6 +23,7 @@ ul.list-unstyled{margin-bottom:0;}
 
     /* Tabl productions */
     #productions{margin-top:20px;}
+    #productions .resource-row { margin-top: 30px; }
 
 /* fancybox References */
 #panel-references{padding:0;}
