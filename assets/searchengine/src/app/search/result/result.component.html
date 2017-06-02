@@ -21,13 +21,13 @@
                     <span class="title__score">
                         <score [score]="result.getScore()"></score>
                     </span>
-                    <a href="{{ result.parent.getLink() }}" *ngIf="result.parent.getLink()" class="title__text" [innerHTML]="result.parent.getTitle()"></a>
+                    <a [href]="sanitizeUrl(result.parent.getLink())" *ngIf="result.parent.getLink()" class="title__text" [innerHTML]="result.parent.getTitle()"></a>
                     <span *ngIf="!result.parent.getLink()" class="title__text" [innerHTML]="result.parent.getTitle()"></span>
                 </div>
 
                 <div class="subtitle">
                     <i class="fa fa-share fa-flip-vertical"></i>
-                    <a href="{{ result.getLink() }}" class="title__text" *ngIf="result.getLink()" [innerHTML]="result.getTitle()"></a>
+                    <a [href]="sanitizeUrl(result.getLink())" class="title__text" *ngIf="result.getLink()" [innerHTML]="result.getTitle()"></a>
                     <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
                 </div>
             </ng-container>
@@ -37,7 +37,7 @@
                     <span class="title__score">
                         <score [score]="result.getScore()"></score>
                     </span>
-                    <a href="{{ result.getLink() }}" *ngIf="result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></a>
+                    <a [href]="sanitizeUrl(result.getLink())" *ngIf="result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></a>
                     <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
                 </div>
             </ng-template>

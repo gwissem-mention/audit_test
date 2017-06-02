@@ -57,7 +57,7 @@ export default class ResultFactory {
             case "forum_topic":
                 return new ForumTopic(resultData._id, resultData._score, title, content, resultData._source.forumName);
             case "person":
-                return new Person(resultData._id, resultData._score, resultData._source.firstname, resultData._source.lastname, resultData._source.username);
+                return new Person(resultData._id, resultData._score, resultData._source.firstname, resultData._source.lastname, resultData._source.username, resultData._source.email);
             case "cdp_groups":
                 return new Group(resultData._id, resultData._score, title, content);
             default:

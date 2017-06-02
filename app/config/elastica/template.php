@@ -449,6 +449,9 @@ $container->loadFromExtension('fos_elastica', [
                             'property_path' => 'telephonePortable',
                             'analyzer' => 'phone_analyzer',
                         ],
+                        'email' => [
+                            'index' => 'not_analyzed',
+                        ]
                     ],
                     'persistence' => [
                         'driver' => 'orm',

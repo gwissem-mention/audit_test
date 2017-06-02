@@ -2,6 +2,7 @@ import {Component, Input, Output, OnInit, EventEmitter, ViewEncapsulation} from 
 import ResultSet from "../../Model/Search/ResultSet";
 import Query from "../../Model/Search/Query";
 import Result from "../../Model/Search/Result";
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
     selector: 'search-results',
@@ -27,7 +28,7 @@ export class ResultComponent implements OnInit {
     @Output()
     queryChanged: EventEmitter<Query> = new EventEmitter<Query>();
 
-    constructor() {
+    constructor(private sanitizer:DomSanitizer) {
 
     }
 
@@ -39,6 +40,10 @@ export class ResultComponent implements OnInit {
     showLess() {
         this.query.less();
         this.queryChanged.emit(this.query);
+    }
+
+    sanitizeUrl(url: string): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustUrl(url);
     }
 
     ngOnInit() {
