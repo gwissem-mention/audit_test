@@ -17,7 +17,11 @@ class ObjectTypeFactory implements TypeFactoryInterface
         $bool = new BoolQuery();
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title.exact^1.5', 'content.exact', 'synthesis.exact'])
+                ->setFields([
+                    sprintf('title.exact^%f', ConfigFactory::TITLE_BOOST),
+                    'content.exact',
+                    'synthesis.exact',
+                ])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
                 ->setFuzziness(1)
@@ -27,7 +31,11 @@ class ObjectTypeFactory implements TypeFactoryInterface
 
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title^1.5', 'content', 'synthesis'])
+                ->setFields([
+                    sprintf('title^%f', ConfigFactory::TITLE_BOOST),
+                    'content',
+                    'synthesis',
+                ])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
                 ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)

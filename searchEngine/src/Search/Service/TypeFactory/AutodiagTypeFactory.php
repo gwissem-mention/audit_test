@@ -17,7 +17,10 @@ class AutodiagTypeFactory implements TypeFactoryInterface
         $bool = new BoolQuery();
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title.exact^1.5', 'chapter_label.exact'])
+                ->setFields([
+                    'title.exact',
+                    sprintf('chapter_label.exact^%f', ConfigFactory::TITLE_BOOST),
+                ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
@@ -28,7 +31,10 @@ class AutodiagTypeFactory implements TypeFactoryInterface
 
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title^1.5', 'chapter_label'])
+                ->setFields([
+                    'title',
+                    sprintf('chapter_label^%f', ConfigFactory::TITLE_BOOST),
+                ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)

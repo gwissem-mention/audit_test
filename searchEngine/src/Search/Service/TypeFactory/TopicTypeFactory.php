@@ -17,7 +17,10 @@ class TopicTypeFactory implements TypeFactoryInterface
         $bool = new BoolQuery();
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title.exact', 'forumName.exact'])
+                ->setFields([
+                    sprintf('title.exact^%f', ConfigFactory::TITLE_BOOST),
+                    'forumName.exact',
+                ])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
                 ->setFuzziness(1)
@@ -26,7 +29,10 @@ class TopicTypeFactory implements TypeFactoryInterface
 
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title', 'forumName'])
+                ->setFields([
+                    sprintf('title^%f', ConfigFactory::TITLE_BOOST),
+                    'forumName',
+                ])
                 ->setQuery($source->getTerm())
                 ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
                 ->setPrefixLength(2)

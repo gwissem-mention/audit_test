@@ -17,14 +17,20 @@ class ContentTypeFactory implements TypeFactoryInterface
         $bool = new BoolQuery();
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title.exact^1.5', 'content.exact'])
+                ->setFields([
+                    sprintf('title.exact^%f', ConfigFactory::TITLE_BOOST),
+                    'content.exact'
+                ])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
         );
 
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title^1.5', 'content'])
+                ->setFields([
+                    sprintf('title^%f', ConfigFactory::TITLE_BOOST),
+                    'content'
+                ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)

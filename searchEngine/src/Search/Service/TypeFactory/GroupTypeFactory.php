@@ -16,7 +16,11 @@ class GroupTypeFactory implements TypeFactoryInterface
         $bool = new BoolQuery();
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title.exact^1.5', 'content.exact', 'description.exact'])
+                ->setFields([
+                    sprintf('title.exact^%f', ConfigFactory::TITLE_BOOST),
+                    'content.exact',
+                    'description.exact',
+                ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
@@ -26,7 +30,11 @@ class GroupTypeFactory implements TypeFactoryInterface
 
         $bool->addShould(
             (new \Elastica\Query\MultiMatch())
-                ->setFields(['title^1.5', 'content', 'description'])
+                ->setFields([
+                    sprintf('title^%f', ConfigFactory::TITLE_BOOST),
+                    'content',
+                    'description',
+                ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
