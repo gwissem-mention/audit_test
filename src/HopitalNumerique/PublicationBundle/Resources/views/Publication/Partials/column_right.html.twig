@@ -1,7 +1,7 @@
 {% if
     (contenu is defined and contenu is not sameas(false)) or
     (productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0) or
-    (objet.domaines|length > 1)
+    (objet.domaines|length > 1) or relatedBoards|length > 0
 %}
 
     <div id="column-right">
@@ -11,7 +11,7 @@
             </div>
         {% endif %}
         {% if objet.associatedProductions == true %}
-            {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 %}
+            {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 or relatedBoards|length > 0 %}
                 <div class="column-right-container">
                     {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
                 </div>

@@ -402,6 +402,11 @@ class PublicationController extends Controller
         $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
         shuffle($topicRelated);
 
+        $relatedBoards = $this->get('hopitalnumerique_objet.repository.related_board')->findBy(
+            ['object' => $objet->getId()],
+            ['position' => 'ASC']
+        );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -428,6 +433,7 @@ class PublicationController extends Controller
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
+            'relatedBoards' => $reader->formateRelatedBoards($relatedBoards),
         ]);
     }
 
