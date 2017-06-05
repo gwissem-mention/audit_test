@@ -17,6 +17,10 @@
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with parcoursGuide %}
             {%- endfor -%}
 
+            {%- for relatedBoard in relatedBoards -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with relatedBoard %}
+            {%- endfor -%}
+
             {%- for topic in topicRelated -%}
                 {% set hideTopicDescription = true %}
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with topic %}

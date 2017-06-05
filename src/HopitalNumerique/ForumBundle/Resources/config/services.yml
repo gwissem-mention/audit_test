@@ -39,6 +39,10 @@ services:
     hopitalnumerique_forum.manager.board:
         class: %hopitalnumerique_forum.manager.board.class%
         arguments: ["@doctrine.orm.entity_manager", "@ccdn_forum_forum.model.topic", "@ccdn_forum_forum.model.post"]
+    hopitalnumerique_forum.repository.board:
+        class: HopitalNumerique\ForumBundle\Repository\BoardRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueForumBundle:Board']
     #--Topic
     hopitalnumerique_forum.manager.topic:
         class: %hopitalnumerique_forum.manager.topic.class%

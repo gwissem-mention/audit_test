@@ -2,10 +2,10 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ObjetBundle\Model\Report;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -196,6 +196,11 @@ class ObjetController extends Controller
             'infra' => $infra,
             'toRef' => $toRef,
             'productions' => $productions,
+            'relatedBoards' => $this
+                ->get('doctrine.orm.default_entity_manager')
+                ->getRepository(RelatedBoard::class)
+                ->findBy(['object' => $objet->getId()], ['position' => 'ASC'])
+            ,
             'relatedObjects' => $relatedObjects,
             'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
                                                          ->getEntityDomainesCommunsWithUser($objet, $user),
@@ -491,6 +496,7 @@ class ObjetController extends Controller
                     'note' => isset($options['note']) ? $options['note'] : 0,
                     'productions' => isset($options['productions']) ? $options['productions'] : [],
                     'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
+                    'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
                 ]);
@@ -517,6 +523,7 @@ class ObjetController extends Controller
                         'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                         'note' => isset($options['note']) ? $options['note'] : 0,
                         'productions' => isset($options['productions']) ? $options['productions'] : [],
+                        'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                         'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
@@ -630,6 +637,7 @@ class ObjetController extends Controller
                 'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                 'note' => isset($options['note']) ? $options['note'] : 0,
                 'productions' => isset($options['productions']) ? $options['productions'] : [],
+                'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                 'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],
