@@ -10,6 +10,7 @@ final class AttributeColumnsDefinition
     const DESCRIPTION = 'texte_avant';
     const NUMBER = 'numero_question';
     const LABEL = 'libelle_question';
+    const ADDITIONAL_DESCRIPTION = 'texte_apres';
     const UNIT = 'unite_reponse';
     const TYPE = 'format_reponse';
     const OPTIONS = 'items_reponse';
@@ -32,6 +33,7 @@ final class AttributeColumnsDefinition
             self::DESCRIPTION,
             self::NUMBER,
             self::LABEL,
+            self::ADDITIONAL_DESCRIPTION,
             self::UNIT,
             self::TYPE,
             self::OPTIONS,
