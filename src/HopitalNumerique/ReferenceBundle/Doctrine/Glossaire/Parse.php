@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
@@ -10,6 +11,7 @@ use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Enregistre le glossaire pour chaque publication.
@@ -145,6 +147,70 @@ class Parse
     }
 
     /**
+     * Parse et sauvegarde le glossaire des autodiags.
+     *
+     * @param Autodiag[] $autodiags
+     */
+    private function parseAndSaveAutodiags($autodiags)
+    {
+        $this->init();
+
+        $fields = [
+            'autodiag' => [
+                'instructions',
+            ],
+            'chapter' => [
+                'title',
+                'extendedLabel',
+                'additionalDescription',
+                'description',
+            ],
+            'questions' => [
+                'label',
+                'additionalDescription',
+                'description',
+            ]
+        ];
+
+        foreach ($autodiags as $autodiag) {
+            foreach ($this->entity->getDomainesByEntity($autodiag) as $domaine) {
+                $foundSigles = [];
+                /** @var Autodiag\Container\Chapter $chapter */
+                foreach ($autodiag->getChapters() as $chapter) {
+
+                    foreach ($fields['autodiag'] as $field) {
+                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $autodiag, $field));
+                    }
+
+                    foreach ($fields['chapter'] as $field) {
+                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $chapter, $field));
+                    }
+
+                    foreach ($chapter->getAttributes() as $attribute) {
+                        foreach ($fields['questions'] as $field) {
+                            $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $attribute, $field));
+                        }
+                    }
+                }
+
+                array_unique($foundSigles);
+
+                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_AUTODIAG, $autodiag->getId(), $domaine, $foundSigles);
+            }
+        }
+    }
+
+    private function getFoundedSigles(Domaine $domain, $object, $field)
+    {
+        $propertyAccessor = new PropertyAccessor();
+
+        return $this->getFoundSiglesByText(
+            self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domain->getId()],
+            strip_tags($propertyAccessor->getValue($object, $field))
+        );
+    }
+
+    /**
      * Parse et enregistre le glossaire de l'entité.
      *
      * @param objet $entity Entité
@@ -157,6 +223,9 @@ class Parse
                 break;
             case Entity::ENTITY_TYPE_CONTENU:
                 $this->parseAndSaveContenus([$entity]);
+                break;
+            case Entity::ENTITY_TYPE_AUTODIAG:
+                $this->parseAndSaveAutodiags([$entity]);
                 break;
             default:
                 throw new \Exception('Entité non parsable pour le glossaire.');

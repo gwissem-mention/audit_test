@@ -30,6 +30,8 @@ class AutodiagEntryController extends Controller
      */
     public function addAction(Autodiag $autodiag, $noLayout = false)
     {
+        $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($autodiag);
+
         $entry = $this->get('autodiag.entry.session')->get($autodiag)->first();
         if (false !== $entry && $entry->getId()) {
             return $this->redirectToRoute(
@@ -55,6 +57,8 @@ class AutodiagEntryController extends Controller
     public function editAction(AutodiagEntry $entry, $noLayout = false)
     {
         $autodiag = $entry->getSynthesis()->getAutodiag();
+
+        $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($autodiag);
 
         if (!$this->isGranted('edit', $entry)) {
             return $this->redirectToRoute(
