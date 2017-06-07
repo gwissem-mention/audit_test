@@ -1,5 +1,9 @@
 /* STYLES GLOBAUX */
 
+.glosstool {
+    color: black;
+}
+
 /* <-- Alignement responsive */
 .text-xs-left { text-align: left; }
 .text-xs-right { text-align: right; }
