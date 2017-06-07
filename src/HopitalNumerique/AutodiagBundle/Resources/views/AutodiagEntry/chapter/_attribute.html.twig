@@ -18,6 +18,12 @@
                 {{ attribute.extendedLabel }}
             </div>
 
+            {% if attribute.additionalDescription is not empty %}
+                <div class="col-md-12 attribute-additional-description">
+                    {{ attribute.additionalDescription }}
+                </div>
+            {% endif %}
+
             <div class="col-md-12">
                 {{ forms[attribute.id]|raw }}
             </div>

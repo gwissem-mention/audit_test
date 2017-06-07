@@ -49,6 +49,15 @@ class Attribute
     private $description;
 
     /**
+     * Additional description.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="additional_description", type="text", nullable=true)
+     */
+    private $additionalDescription;
+
+    /**
      * Attribute label.
      *
      * @var string
@@ -218,6 +227,28 @@ class Attribute
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalDescription()
+    {
+        return $this->additionalDescription;
+    }
+
+    /**
+     * Set additional description.
+     *
+     * @param string $additionalDescription
+     *
+     * @return Attribute
+     */
+    public function setAdditionalDescription($additionalDescription)
+    {
+        $this->additionalDescription = $additionalDescription;
 
         return $this;
     }

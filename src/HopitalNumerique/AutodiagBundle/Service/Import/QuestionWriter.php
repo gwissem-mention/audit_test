@@ -109,6 +109,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $attribute->setOrder($item[AttributeColumnsDefinition::ORDER]);
 
+            $attribute->setAdditionalDescription($item[AttributeColumnsDefinition::ADDITIONAL_DESCRIPTION]);
+
             $this->handleOptions($attribute, $item[AttributeColumnsDefinition::OPTIONS]);
             $chapterValid = $this->handleChapter($attribute, $item[AttributeColumnsDefinition::CHAPTER], $item[AttributeColumnsDefinition::CHAPTER_WEIGHT]);
             $this->handleCategories($attribute, $item[AttributeColumnsDefinition::CATEGORY_WEIGHT]);
