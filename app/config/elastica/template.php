@@ -221,6 +221,10 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
+                        'content_code' => [
+                            'type' => 'keyword',
+                            'property_path' => 'prefix',
+                        ],
                         'alias' => [
                             'type' => 'keyword',
                         ],

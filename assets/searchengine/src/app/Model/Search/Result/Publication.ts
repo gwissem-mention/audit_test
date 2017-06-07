@@ -7,6 +7,7 @@ export default class Publication extends Result {
     title: string;
     alias: string;
     content: string;
+    code: string;
     types: string[] = [];
 
     children: Publication[] = [];
@@ -23,6 +24,11 @@ export default class Publication extends Result {
         this.title = title;
         this.alias = alias;
         this.content = content;
+    }
+
+    setCode(code: string)
+    {
+        this.code = code;
     }
 
     addType(type: string)
@@ -44,7 +50,10 @@ export default class Publication extends Result {
     }
 
     getTitle(): string {
-        return this.title;
+        return this.code
+            ? this.code + ' ' + this.title
+            : this.title
+        ;
     }
 
     getContent() :string {

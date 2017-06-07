@@ -50,6 +50,7 @@ export default class ResultFactory {
                 result.types = resultData._source.types.map((x: any) => x.libelle);
                 let parent = new Publication(parentData.id, 0, parentData.title, parentData.alias);
                 result.setParent(parent);
+                result.setCode(resultData._source.content_code);
 
                 return result;
             case "forum_post":
