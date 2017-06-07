@@ -369,6 +369,10 @@
     margin-left: -50px;
 }
 
+.inplace-edit-text {
+    white-space: nowrap;
+}
+
 @media (max-width: 992px) {
     .checkboxCustom .control-label {
         margin-left: 5px;

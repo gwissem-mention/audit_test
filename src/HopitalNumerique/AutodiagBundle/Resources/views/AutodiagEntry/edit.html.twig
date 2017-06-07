@@ -79,7 +79,7 @@
             </div>
             <div class="synthesis-name">
                 <h2>
-                    {{ entry.synthesis.name }}
+                    <span class="inplace-edit-text" data-id="{{ entry.synthesis.id }}">{{ entry.synthesis.name }}</span>
                     {% if autodiag.publicUpdatedDate > entry.updatedAt %}
                         - {{ 'ad.autodiagentry.outofdate'|trans }}
                     {% endif %}
@@ -120,6 +120,8 @@
         </div>
     </div>
 
+    <div class="change-synthesis-name-url" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name')}}"></div>
+
     <script type="text/javascript">
         var entry = {{ entry.id ? entry.id : 'null' }};
         var attributeSaveErrorMessage = "{{ 'ad.front.entry.attribute_save_error'|trans|raw }}"
@@ -135,6 +137,9 @@
             $('button.show-results').show();
         }
 
+        $('.inplace-edit-text').each(function() {
+            new InplaceEditor($(this), $('.change-synthesis-name-url').data("url"));
+        });
     </script>
 
 {% endblock %}

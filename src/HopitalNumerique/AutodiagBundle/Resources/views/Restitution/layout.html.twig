@@ -21,7 +21,7 @@
 
             <div class="identity">
                 <div class="title">{{ synthesis.autodiag.title }}</div>
-                <div class="name">{{ synthesis.name }}</div>
+                <div class="name"><span class="inplace-edit-text" data-id="{{ synthesis.id }}">{{ synthesis.name }}</span></div>
             </div>
 
             {% if pdf is not defined %}
@@ -84,6 +84,8 @@
         </div>
     </div>
 
+    <div class="change-synthesis-name-url" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name')}}"></div>
+
     <script type="text/javascript">
 
         var restitution = new AutodiagRestitution($('#restitution'));
@@ -98,8 +100,11 @@
                 }
             });
         });
+
+        $('.inplace-edit-text').each(function() {
+            new InplaceEditor($(this), $('.change-synthesis-name-url').data("url"));
+        });
     </script>
 
 {% endblock %}
-
 

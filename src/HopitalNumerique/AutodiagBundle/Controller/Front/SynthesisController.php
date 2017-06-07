@@ -4,10 +4,12 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SynthesisController extends Controller
 {
@@ -64,5 +66,36 @@ class SynthesisController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeNameAction(Request $request)
+    {
+        $synthesisId = $request->request->get('id');
+
+        /** @var Synthesis $synthesis */
+        $synthesis = $this->get('autodiag.repository.synthesis')->findOneById($synthesisId);
+
+        if (!$this->isGranted('edit', $synthesis)) {
+             throw new AccessDeniedException();
+        }
+
+        $form = $this->createForm(SynthesisType::class, $synthesis, [
+            'csrf_protection' => false,
+        ]);
+
+        $form->submit([
+            'name' => $request->request->get('text'),
+        ]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get('doctrine.orm.entity_manager')->flush($synthesis);
+        }
+
+        return new JsonResponse();
     }
 }
