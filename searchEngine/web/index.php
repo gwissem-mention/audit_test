@@ -28,14 +28,15 @@ $app['query.transformer'] = function () {
 };
 
 $app['query.factory'] = function () use ($app) {
+    $config = new \Search\Service\QueryConfigurator;
     $factory = new \Search\Service\ElasticaQueryFactory();
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\ObjectTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\ContentTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\AutodiagTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\PersonTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\PostTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\TopicTypeFactory());
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\GroupTypeFactory());
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\ObjectTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\ContentTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\AutodiagTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\PersonTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\PostTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\TopicTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\GroupTypeFactory($config));
 
     return $factory;
 };

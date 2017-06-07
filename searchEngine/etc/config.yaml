@@ -1,0 +1,23 @@
+global:
+    boost:
+        title: 1.5
+    query:
+        exact:
+            enabled: true
+            boost: 10
+            fuzziness:
+                enabled: false
+        similar:
+            enabled: true
+            fuzziness:
+                enabled: true
+                value: AUTO
+                prefix: 2
+                expansion: 5
+        suggestion:
+            enabled: true
+            fuzziness:
+                enabled: true
+                value: AUTO
+                prefix: 2
+                expansion: 5

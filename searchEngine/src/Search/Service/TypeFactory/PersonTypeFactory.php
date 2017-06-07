@@ -9,7 +9,7 @@ use Elastica\Query\Type;
 use Search\Model\Query;
 use Search\Model\User;
 
-class PersonTypeFactory implements TypeFactoryInterface
+class PersonTypeFactory extends ConfigurableFactory
 {
     const TYPE = "person";
 

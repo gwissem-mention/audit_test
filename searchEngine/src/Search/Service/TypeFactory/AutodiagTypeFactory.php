@@ -8,40 +8,62 @@ use Elastica\Query\Type;
 use Search\Model\Query;
 use Search\Model\User;
 
-class AutodiagTypeFactory implements TypeFactoryInterface
+class AutodiagTypeFactory extends ConfigurableFactory
 {
     const TYPE = "autodiag";
 
     public function getQuery(Query $source, User $user)
     {
         $bool = new BoolQuery();
-        $bool->addShould(
-            (new \Elastica\Query\MultiMatch())
+
+        if ($this->config->get('query.exact.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
                     'title.exact',
-                    sprintf('chapter_label.exact^%f', ConfigFactory::TITLE_BOOST),
+                    sprintf('chapter_label.exact^%f', $this->config->get('boost.title', self::TYPE)),
                 ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                ->setFuzziness(1)
-                ->setPrefixLength(2)
-                ->setMaxExpansions(5)
-        );
+                ->setParam('boost', $this->config->get('query.exact.boost', self::TYPE))
+            ;
 
-        $bool->addShould(
-            (new \Elastica\Query\MultiMatch())
+            $this->addFuzzinessToMultimatch($subQuery, 'exact', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
+
+        if ($this->config->get('query.similar.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
+                ->setFields([
+                    'title.exact',
+                    sprintf('chapter_label.exact^%f', $this->config->get('boost.title', self::TYPE)),
+                ])
+                ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+            ;
+
+            $this->addFuzzinessToMultimatch($subQuery, 'similar', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
+
+        if ($this->config->get('query.suggestion.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
                     'title',
-                    sprintf('chapter_label^%f', ConfigFactory::TITLE_BOOST),
+                    sprintf('chapter_label^%f', $this->config->get('boost.title')),
                 ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
-                ->setPrefixLength(2)
-                ->setMaxExpansions(5)
-        );
+            ;
+
+            $this->addFuzzinessToMultimatch($subQuery, 'suggestion', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
 
         $query = (new BoolQuery())
             ->addMust(

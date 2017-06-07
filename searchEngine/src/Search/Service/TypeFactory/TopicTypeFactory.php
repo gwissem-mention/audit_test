@@ -8,36 +8,62 @@ use Elastica\Query\Type;
 use Search\Model\Query;
 use Search\Model\User;
 
-class TopicTypeFactory implements TypeFactoryInterface
+class TopicTypeFactory extends ConfigurableFactory
 {
     const TYPE = "forum_topic";
 
     public function getQuery(Query $source, User $user)
     {
         $bool = new BoolQuery();
-        $bool->addShould(
-            (new \Elastica\Query\MultiMatch())
+
+        if ($this->config->get('query.exact.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
-                    sprintf('title.exact^%f', ConfigFactory::TITLE_BOOST),
+                    sprintf('title.exact^%f', $this->config->get('boost.title')),
                     'forumName.exact',
                 ])
                 ->setQuery($source->getTerm())
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-                ->setFuzziness(1)
-                ->setPrefixLength(2)
-        );
+                ->setParam('boost', $this->config->get('query.exact.boost', self::TYPE))
+            ;
 
-        $bool->addShould(
-            (new \Elastica\Query\MultiMatch())
+            $this->addFuzzinessToMultimatch($subQuery, 'exact', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
+
+
+        if ($this->config->get('query.similar.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
-                    sprintf('title^%f', ConfigFactory::TITLE_BOOST),
+                    sprintf('title.exact^%f', $this->config->get('boost.title')),
+                    'forumName.exact',
+                ])
+                ->setQuery($source->getTerm())
+                ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
+            ;
+
+            $this->addFuzzinessToMultimatch($subQuery, 'similar', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
+
+
+        if ($this->config->get('query.suggestion.enabled', self::TYPE)) {
+            $subQuery = (new \Elastica\Query\MultiMatch())
+                ->setFields([
+                    sprintf('title^%f', $this->config->get('boost.title')),
                     'forumName',
                 ])
                 ->setQuery($source->getTerm())
-                ->setFuzziness(\Elastica\Query\MultiMatch::FUZZINESS_AUTO)
-                ->setPrefixLength(2)
                 ->setOperator(\Elastica\Query\MultiMatch::OPERATOR_AND)
-        );
+            ;
+
+            $this->addFuzzinessToMultimatch($subQuery, 'suggestion', self::TYPE);
+
+            $bool->addShould($subQuery);
+        }
+
 
         $query = (new BoolQuery())
             ->addMust(
