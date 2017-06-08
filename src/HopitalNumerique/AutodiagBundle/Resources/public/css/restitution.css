@@ -2,6 +2,10 @@
 
 }
 
+#restitution .acronym {
+    color: #333;
+}
+
 #restitution .restitution-header {
     margin: 20px 0;
 }
