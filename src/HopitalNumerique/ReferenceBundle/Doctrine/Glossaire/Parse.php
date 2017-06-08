@@ -200,6 +200,13 @@ class Parse
         }
     }
 
+    /**
+     * @param Domaine $domain
+     * @param $object
+     * @param string $field
+     *
+     * @return array
+     */
     private function getFoundedSigles(Domaine $domain, $object, $field)
     {
         $propertyAccessor = new PropertyAccessor();
