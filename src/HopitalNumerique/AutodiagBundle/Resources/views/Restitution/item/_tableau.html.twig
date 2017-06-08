@@ -32,6 +32,11 @@
                             <td>
                                 {% if data.references[code] is defined %}
                                     {{ data.references[code].value }}
+
+                                    {% if data.references[code].autodiagEntryName %}
+                                        <br />
+                                        <small>({{ data.references[code].autodiagEntryName }})</small>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         {% endfor %}
@@ -50,6 +55,10 @@
                                 <td>
                                     {% if children.references[code] is defined %}
                                         {{ children.references[code].value }}
+                                        {% if children.references[code].autodiagEntryName %}
+                                            <br />
+                                            <small>({{ children.references[code].autodiagEntryName }})</small>
+                                        {% endif %}
                                     {% endif %}
                                 </td>
                             {% endfor %}

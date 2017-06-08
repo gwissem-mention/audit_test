@@ -27,6 +27,8 @@ class ScoreRepository extends EntityRepository
         $qb
             ->addSelect('container.id')
             ->join('score.container', 'container')
+            ->leftJoin('score.minAutodiagEntry', 'minAutodiagEntry')->addSelect('minAutodiagEntry.id as minAutodiagEntryId')
+            ->leftJoin('score.maxAutodiagEntry', 'maxAutodiagEntry')->addSelect('maxAutodiagEntry.id as maxAutodiagEntryId')
         ;
 
         $result = $qb->getQuery()->getArrayResult();
@@ -36,6 +38,8 @@ class ScoreRepository extends EntityRepository
                 'score' => $score['score'],
                 'min' => $score['min_score'],
                 'max' => $score['max_score'],
+                'minAutodiagEntryId' => $score['minAutodiagEntryId'],
+                'maxAutodiagEntryId' => $score['maxAutodiagEntryId'],
             ];
         }
 

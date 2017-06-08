@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    $(".glosstool").tooltip({
+        placement : 'top'
+    });
+});
+
 var AutodiagNavigation = function(element, options) {
     this.element = element;
     this.step = element.data('step');

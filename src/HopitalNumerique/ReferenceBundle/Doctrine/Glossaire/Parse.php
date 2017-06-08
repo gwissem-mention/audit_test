@@ -185,11 +185,11 @@ class Parse
                     foreach ($fields['chapter'] as $field) {
                         $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $chapter, $field));
                     }
+                }
 
-                    foreach ($chapter->getAttributes() as $attribute) {
-                        foreach ($fields['questions'] as $field) {
-                            $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $attribute, $field));
-                        }
+                foreach ($autodiag->getAttributes() as $attribute) {
+                    foreach ($fields['questions'] as $field) {
+                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $attribute, $field));
                     }
                 }
 

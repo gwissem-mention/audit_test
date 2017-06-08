@@ -53,6 +53,20 @@ class Score
     private $max;
 
     /**
+     * @var AutodiagEntry
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry")
+     */
+    protected $minAutodiagEntry;
+
+    /**
+     * @var AutodiagEntry
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry")
+     */
+    protected $maxAutodiagEntry;
+
+    /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=true)
@@ -125,6 +139,46 @@ class Score
     public function setMax($max)
     {
         $this->max = $max;
+
+        return $this;
+    }
+
+    /**
+     * @return AutodiagEntry
+     */
+    public function getMinAutodiagEntry()
+    {
+        return $this->minAutodiagEntry;
+    }
+
+    /**
+     * @param AutodiagEntry $minAutodiagEntry
+     *
+     * @return Score
+     */
+    public function setMinAutodiagEntry(AutodiagEntry $minAutodiagEntry = null)
+    {
+        $this->minAutodiagEntry = $minAutodiagEntry;
+
+        return $this;
+    }
+
+    /**
+     * @return AutodiagEntry
+     */
+    public function getMaxAutodiagEntry()
+    {
+        return $this->maxAutodiagEntry;
+    }
+
+    /**
+     * @param AutodiagEntry $maxAutodiagEntry
+     *
+     * @return Score
+     */
+    public function setMaxAutodiagEntry(AutodiagEntry $maxAutodiagEntry = null)
+    {
+        $this->maxAutodiagEntry = $maxAutodiagEntry;
 
         return $this;
     }
