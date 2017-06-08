@@ -29,4 +29,18 @@ class ContainerRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @return Chapter[]|null
+     */
+    public function getChapters()
+    {
+        $qb = $this->createQueryBuilder('container');
+        $qb
+            ->where(
+                $qb->expr()->isInstanceOf('container', Chapter::class)
+            );
+
+        return $qb->getQuery()->getResult();
+    }
 }

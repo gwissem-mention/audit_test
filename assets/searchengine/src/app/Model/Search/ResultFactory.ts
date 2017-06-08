@@ -38,7 +38,7 @@ export default class ResultFactory {
                             : chapterLabel;
                 }
 
-                return new Autodiag(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.autodiag_id);
+                return new Autodiag(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.chapter_code, resultData._source.autodiag_id);
             case "object":
                 result = new Publication(resultData._id, resultData._score, title, resultData._source.alias, content);
                 result.types = resultData._source.types.map((x: any) => x.libelle);

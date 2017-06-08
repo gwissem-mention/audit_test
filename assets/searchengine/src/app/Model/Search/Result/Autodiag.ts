@@ -4,7 +4,7 @@ declare let Routing: any;
 
 export default class Autodiag extends Result {
 
-    constructor(id: number, score: number, public title: string, public chapterId: number, public chapter: string, protected autodiagId: number)
+    constructor(id: number, score: number, public title: string, public chapterId: number, public chapter: string, public chapterCode: string, protected autodiagId: number)
     {
         super(id, score);
     }
@@ -16,7 +16,7 @@ export default class Autodiag extends Result {
 
     getTitle() :string
     {
-        return this.chapter;
+        return this.chapterCode + '. ' + this.chapter;
     }
 
     getContent() :string

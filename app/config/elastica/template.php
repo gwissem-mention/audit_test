@@ -495,6 +495,10 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
+                        'chapter_code' => [
+                            'type' => 'keyword',
+                            'property_path' => false,
+                        ]
                     ],
                     'persistence' => [
                         'model' => Chapter::class,
