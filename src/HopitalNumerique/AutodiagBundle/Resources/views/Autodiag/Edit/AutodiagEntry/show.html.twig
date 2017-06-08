@@ -53,7 +53,7 @@
         <ul>
             {% for item in items %}
                 <li>
-                    {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": item}) }}
+                    {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": item, "autodiag": model}) }}
                 </li>
             {% endfor %}
         </ul>

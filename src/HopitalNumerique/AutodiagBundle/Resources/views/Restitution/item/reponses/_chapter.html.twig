@@ -1,8 +1,12 @@
 {% import _self as tools %}
 
+{% if synthesis is defined %}
+    {% set autodiag = synthesis.autodiag %}
+{% endif %}
+
 <li>
     <span class="chapter-title">
-        {{ resultItem.label|glossaire_add(synthesis.autodiag)|raw }}
+        {{ resultItem.label|glossaire_add(autodiag)|raw }}
         <i>Nombre de réponses : {{ resultItem.numberOfAnswers }} / {{ resultItem.numberOfQuestions }}</i>
     </span>
 
@@ -10,7 +14,7 @@
     <table class="table table-bordered restitution-table">
         {% for attribute in resultItem.attributes %}
             <tr>
-                <td>{{ attribute.label|glossaire_add(synthesis.autodiag)|raw }}</td>
+                <td>{{ attribute.label|glossaire_add(autodiag)|raw }}</td>
                 <td>
                     {{ attribute.response.text }} {{ attribute.response.text is null ? '' : attribute.response.unit }}
                     {% if attribute.response.comment is not null and attribute.response.comment|length > 0 %}
