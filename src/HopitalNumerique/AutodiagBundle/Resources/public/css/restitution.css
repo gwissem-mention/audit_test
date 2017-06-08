@@ -311,7 +311,14 @@
 
 #restitution .tableau table {
     margin-bottom: 0;
+    vertical-align: middle;
 }
+
+#restitution .tableau table td,
+#restitution .tableau table th {
+    vertical-align: middle;
+}
+
 #restitution .tableau td, #restitution .tableau th {
     text-align: center;
 }
