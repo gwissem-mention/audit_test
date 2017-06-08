@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block grid_column_id_name_cell %}
-    <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': {{ row.getField('id') }}})}}">{{ value }}</span>
+    <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': row.getField('id') })}}">{{ value }}</span>
 {% endblock %}
 
 {% block edit_content %}

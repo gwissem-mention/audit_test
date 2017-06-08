@@ -4,6 +4,14 @@
 
 #restitution .acronym {
     color: #333;
+    text-decoration: none;
+}
+
+#restitution a acronym {
+    color: #333;
+    cursor: help;
+    border-bottom: 1px dotted #333;
+    text-decoration: none;
 }
 
 #restitution .restitution-header {
