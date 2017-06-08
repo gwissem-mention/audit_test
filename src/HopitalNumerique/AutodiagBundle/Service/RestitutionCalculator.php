@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Service;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
@@ -148,8 +149,8 @@ class RestitutionCalculator
         // max de la synthèse
         if ($synthesis->getEntries()->count() > 1) {
             $references = [
-                SynthesisReference::create($synthesis, 'min')->setValue('min')->setLabel('Minimum'),
-                SynthesisReference::create($synthesis, 'max')->setValue('max')->setLabel('Maximum'),
+                SynthesisReference::create($synthesis, 'min')->setAutodiagEntryIdPath('minAutodiagEntryId')->setValue('min')->setLabel('Minimum'),
+                SynthesisReference::create($synthesis, 'max')->setAutodiagEntryIdPath('maxAutodiagEntryId')->setValue('max')->setLabel('Maximum'),
             ];
         }
 
@@ -227,7 +228,7 @@ class RestitutionCalculator
 
             if (count($references) > 0) {
                 foreach ($references as $reference) {
-                    $referenceScore = $this->getReferenceScore($reference, $container);
+                    $referenceScore = $this->getReferenceScore($reference, $container, $synthesis);
                     if ($referenceScore instanceof Score) {
                         $resultItem->addReference($referenceScore);
                     }
@@ -322,7 +323,7 @@ class RestitutionCalculator
         $itemAttribute->response->setScore($score);
     }
 
-    protected function getReferenceScore(Autodiag\Reference $reference, Container $container)
+    protected function getReferenceScore(Autodiag\Reference $reference, Container $container, Synthesis $synthesis)
     {
         $cacheKey = implode('-', [
             $reference->getValue(),
@@ -333,11 +334,25 @@ class RestitutionCalculator
             $score = null;
 
             if ($reference instanceof SynthesisReference) {
+
+                $autodiagEntryName = null;
+                if (!is_null($reference->getAutodiagEntryIdPath())) {
+                    $entryId = $this->getContainerSynthesisScore($reference->getSynthesis(), $container->getId(), $reference->getAutodiagEntryIdPath());
+                    $autodiagEntry = $synthesis->getEntries()->filter(function (AutodiagEntry $autodiagEntry) use ($entryId) {
+                        return $autodiagEntry->getId() == $entryId;
+                    })->first();
+
+                    if ($autodiagEntry) {
+                        $autodiagEntryName = $autodiagEntry->getName();
+                    }
+                }
+
                 $score = new Score(
                     $this->getContainerSynthesisScore($reference->getSynthesis(), $container->getId(), $reference->getNumber()),
                     $reference->getLabel(),
                     $reference->getNumber(),
-                    $reference->getColor()
+                    $reference->getColor(),
+                    $autodiagEntryName
                 );
             } else {
                 $referenceScores = $this->getContainerScores($container);

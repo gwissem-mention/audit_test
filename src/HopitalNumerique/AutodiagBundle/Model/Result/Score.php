@@ -13,19 +13,26 @@ class Score
     protected $color = null;
 
     /**
+     * @var string $autodiagEntryName
+     */
+    protected $autodiagEntryName;
+
+    /**
      * Score constructor.
      *
      * @param      $score
      * @param null $label
      * @param null $code
      * @param null $color
+     * @param string|null $autodiagEntryName
      */
-    public function __construct($score, $label = null, $code = null, $color = null)
+    public function __construct($score, $label = null, $code = null, $color = null, $autodiagEntryName = null)
     {
         $this->code = $code;
         $this->label = $label;
         $this->value = null !== $score ? round($score, 0) : null;
         $this->color = $color;
+        $this->autodiagEntryName = $autodiagEntryName;
     }
 
     /**
@@ -63,5 +70,13 @@ class Score
     public function setColor($color)
     {
         $this->color = $color;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAutodiagEntryName()
+    {
+        return $this->autodiagEntryName;
     }
 }
