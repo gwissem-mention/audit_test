@@ -81,6 +81,13 @@ services:
     #--Post
     hopitalnumerique_forum.listener.post:
         class: %hopitalnumerique_forum.listener.post.class%
-        arguments: ["@ccdn_forum_forum.model.post", "@nodevo_mail.manager.mail", "@hopitalnumerique_user.manager.user", "@mailer"]
+        arguments:
+            - "@ccdn_forum_forum.model.post"
+            - "@nodevo_mail.manager.mail"
+            - "@hopitalnumerique_user.manager.user"
+            - "@mailer"
+            - "@security.token_storage"
+            - "@ccdn_forum_forum.model.subscription"
+            - "@ccdn_forum_forum.repository.post"
         tags:
             - { name: 'kernel.event_subscriber' }
