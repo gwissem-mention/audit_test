@@ -48,7 +48,7 @@ class RestitutionExtension extends \Twig_Extension
             ],
             'tooltip' => [
                 'shared' => true,
-                'pointFormat' => '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>',
+                'pointFormat' => '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b> {point.autodiagEntryName}<br/>',
             ],
             'credits' => [
                 'enabled' => false,
@@ -75,7 +75,9 @@ class RestitutionExtension extends \Twig_Extension
             $data['xAxis']['categories'][] = $item->getLabel();
 
             $data['series']['score']['name'] = $item->getScore()->getLabel();
-            $data['series']['score']['data'][] = $item->getScore()->getValue();
+            $data['series']['score']['data'][] = [
+                'y' => $item->getScore()->getValue(),
+            ];
             $data['series']['score']['color'] = $item->getScore()->getColor();
 
             foreach ($item->getReferences() as $reference) {
@@ -88,7 +90,10 @@ class RestitutionExtension extends \Twig_Extension
                     ];
                 }
 
-                $data['series'][$code]['data'][] = $reference->getValue();
+                $data['series'][$code]['data'][] = [
+                    'y' => $reference->getValue(),
+                    'autodiagEntryName' => !is_null($reference->getAutodiagEntryName()) ? sprintf(' (%s)', $reference->getAutodiagEntryName()) : null,
+                ];
             }
 
             if ($item->getScore() instanceof ComparedScore) {
