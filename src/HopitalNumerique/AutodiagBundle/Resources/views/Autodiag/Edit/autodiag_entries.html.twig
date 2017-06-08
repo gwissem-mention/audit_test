@@ -14,16 +14,15 @@
 {% endblock %}
 
 {% block grid_column_id_name_cell %}
-    <span class="inplace-edit-text" data-id="{{ row.getField('id') }}">{{ value }}</span>
+    <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': {{ row.getField('id') }}})}}">{{ value }}</span>
 {% endblock %}
 
 {% block edit_content %}
     {{ grid(grid, _self) }}
-    <div class="change-synthesis-name-url" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name')}}"></div>
 
     <script>
         $('.inplace-edit-text').each(function() {
-            new InplaceEditor($(this), $('.change-synthesis-name-url').data("url"));
+            new InplaceEditor($(this), $(this).data("url"));
         });
     </script>
 {% endblock %}

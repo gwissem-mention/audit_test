@@ -34,7 +34,7 @@ hopitalnumerique_autodiag_synthesis_polling:
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:scorePolling }
 
 hopitalnumerique_autodiag_synthesis_change_name:
-    path: /autodiagnostic/synthese/change-name
+    path: /autodiagnostic/synthese/{synthesis}/change-name
     methods: ["POST"]
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:changeName }
 

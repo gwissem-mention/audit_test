@@ -69,17 +69,13 @@ class SynthesisController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
+     * @param Synthesis $synthesis
      *
      * @return JsonResponse
      */
-    public function changeNameAction(Request $request)
+    public function changeNameAction(Request $request, Synthesis $synthesis)
     {
-        $synthesisId = $request->request->get('id');
-
-        /** @var Synthesis $synthesis */
-        $synthesis = $this->get('autodiag.repository.synthesis')->findOneById($synthesisId);
-
         if (!$this->isGranted('edit', $synthesis)) {
              throw new AccessDeniedException();
         }

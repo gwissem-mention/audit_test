@@ -3,13 +3,12 @@
  */
 var InplaceEditor = (function() {
 
-    InplaceEditor = function(field, url) {
+    InplaceEditor = function(field, url, options) {
         this.field = field;
         this.url = url;
-        this.objectId = this.field.data('id');
         this.text = null;
 
-        this.options = {
+        this.options = $.extend({
             text: {
                 cssClass: "inplace-edit-text"
             },
@@ -22,7 +21,7 @@ var InplaceEditor = (function() {
             input: {
                 cssClass: "inplace-input"
             }
-        };
+        }, options, true);
 
         this.init();
     };
@@ -79,7 +78,6 @@ var InplaceEditor = (function() {
             $.ajax({
                 url: self.url,
                 data: {
-                    id: self.objectId,
                     text: self.text
                 },
                 type: 'POST'
