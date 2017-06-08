@@ -8,6 +8,8 @@ export default class ResultSet {
 
     maxScore: number;
 
+    exactMatches: number;
+
     results = new Subject<Result[]>();
 
     aggregations = new Subject<Aggregation[]>();
@@ -41,6 +43,7 @@ export default class ResultSet {
 
     private extractAggregations(body: any): Array<Aggregation> {
         let aggregations: Aggregation[] = [];
+
         for (let aggData of body.types.buckets) {
             let hasSubAggregation:boolean = false;
             for (let property of Object.getOwnPropertyNames(aggData)) {
@@ -68,6 +71,10 @@ export default class ResultSet {
 
             return 0;
         });
+
+        if (undefined !== body.exact_results) {
+            this.exactMatches = body.exact_results.buckets[0].doc_count;
+        }
 
         return aggregations;
     }

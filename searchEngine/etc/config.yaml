@@ -1,10 +1,13 @@
 global:
     boost:
         title: 1.5
+    exact_result_score: 100
+    highlights:
+        enabled: true
     query:
         exact:
             enabled: true
-            boost: 10
+            boost: 100
             fuzziness:
                 enabled: false
         similar:

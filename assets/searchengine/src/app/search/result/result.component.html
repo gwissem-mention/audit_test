@@ -3,10 +3,16 @@
     <h2>
         <span class="title">{{resultSet.label}}</span>
         <span [ngPlural]="resultSet.total">
-                <ng-template ngPluralCase="=0">(Aucun résultat)</ng-template>
-                <ng-template ngPluralCase="=1">({{resultSet.total}} résultat)</ng-template>
-                <ng-template ngPluralCase="other">({{resultSet.total}} résultats)</ng-template>
-            </span>
+            <ng-template ngPluralCase="=0">(Aucun résultat)</ng-template>
+            <ng-template ngPluralCase="=1">({{resultSet.total}} résultat)</ng-template>
+            <ng-template ngPluralCase="other">({{resultSet.total}} résultats)</ng-template>
+        </span>
+
+        <span class="exact-results" [ngPlural]="resultSet.exactMatches">
+            <ng-template ngPluralCase="=0"></ng-template>
+            <ng-template ngPluralCase="=1">Nous avons trouvé un résultat correspondant exactement aux mots recherchés</ng-template>
+            <ng-template ngPluralCase="other">Nous avons trouvé {{resultSet.exactMatches}} résultats correspondant exactement aux mots recherchés</ng-template>
+        </span>
     </h2>
 
     <div class="results-wrapper">

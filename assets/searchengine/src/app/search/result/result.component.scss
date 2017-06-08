@@ -13,7 +13,18 @@ $main-font-color: #000;
         .title {
             border-bottom: 4px solid $main-color;
         }
+
+        .exact-results {
+            font-style: italic;
+            padding-bottom: 6px;
+            font-size: 13px;
+            color: #424242;
+            text-transform: none;
+            font-weight: normal;
+        }
     }
+
+
 
     .results-wrapper {
 

@@ -21,6 +21,20 @@ class ElasticaQueryFactory
     protected $typeFactories = [];
 
     /**
+     * @var QueryConfigurator
+     */
+    protected $config;
+
+    /**
+     * ElasticaQueryFactory constructor.
+     * @param QueryConfigurator $config
+     */
+    public function __construct(QueryConfigurator $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Get Elastic Query based on source Query
      *
      * @param Query $source
@@ -57,31 +71,39 @@ class ElasticaQueryFactory
                 )
         );
 
-        $rootQuery->setHighlight([
-            'fields' => [
-                'title' => [
-                    'type' => 'fvh',
-                    'number_of_fragments' => 0,
-                    'no_match_size' => 350,
-                    'matched_fields' => ['title', 'title.exact'],
-                ],
-                'chapter_label' => [
-                    'type' => 'fvh',
-                    'number_of_fragments' => 0,
-                    'no_match_size' => 350,
-                    'matched_fields' => ['chapter_label', 'chapter_label.exact'],
-                ],
-                'content' => [
-                    'type' => 'fvh',
-                    'number_of_fragments' => 1,
-                    'fragment_size' => 350,
-                    'no_match_size' => 350,
-                    // Available in elasticsearch 5.4
-                    //'boundary_scanner' => ['sentence'],
-                    //'boundary_scanner_locale' => 'fr',
-                ],
-            ]
-        ]);
+        $rootQuery->addAggregation(
+            (new \Elastica\Aggregation\Range('exact_results'))
+                ->setScript('_score')
+                ->addRange($this->config->get('exact_result_score'))
+        );
+
+        if ($this->config->get('highlights.enabled')) {
+            $rootQuery->setHighlight([
+                'fields' => [
+                    'title' => [
+                        'type' => 'fvh',
+                        'number_of_fragments' => 0,
+                        'no_match_size' => 350,
+                        'matched_fields' => ['title', 'title.exact'],
+                    ],
+                    'chapter_label' => [
+                        'type' => 'fvh',
+                        'number_of_fragments' => 0,
+                        'no_match_size' => 350,
+                        'matched_fields' => ['chapter_label', 'chapter_label.exact'],
+                    ],
+                    'content' => [
+                        'type' => 'fvh',
+                        'number_of_fragments' => 1,
+                        'fragment_size' => 350,
+                        'no_match_size' => 350,
+                        // Available in elasticsearch 5.4
+                        //'boundary_scanner' => ['sentence'],
+                        //'boundary_scanner_locale' => 'fr',
+                    ],
+                ]
+            ]);
+        }
 
         $rootQuery->setSize($source->getSize());
         $rootQuery->setFrom($source->getFrom());

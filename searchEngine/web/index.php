@@ -29,7 +29,7 @@ $app['query.transformer'] = function () {
 
 $app['query.factory'] = function () use ($app) {
     $config = new \Search\Service\QueryConfigurator;
-    $factory = new \Search\Service\ElasticaQueryFactory();
+    $factory = new \Search\Service\ElasticaQueryFactory($config);
     $factory->addTypeFactory(new \Search\Service\TypeFactory\ObjectTypeFactory($config));
     $factory->addTypeFactory(new \Search\Service\TypeFactory\ContentTypeFactory($config));
     $factory->addTypeFactory(new \Search\Service\TypeFactory\AutodiagTypeFactory($config));
