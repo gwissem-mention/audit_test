@@ -294,6 +294,15 @@
 .chapter .chapter-desc .acronym,
 .chapter .chapter-additionnal .acronym {
     color: #333;
+    text-decoration: none;
+}
+
+.chapter .chapter-desc a acronym,
+.chapter .chapter-additionnal a acronym {
+    color: #333;
+    cursor: help;
+    border-bottom: 1px dotted #333;
+    text-decoration: none;
 }
 
 /**
@@ -371,11 +380,28 @@
 
 .attribute .attribute-additional-description .acronym {
     color: #777;
+    text-decoration: none;
+}
+
+.attribute .attribute-additional-description a acronym {
+    color: #777;
+    cursor: help;
+    border-bottom: 1px dotted #777;
+    text-decoration: none;
 }
 
 .attribute .attribute-description .acronym,
 .attribute .attribute-label .acronym {
     color: #333;
+    text-decoration: none;
+}
+
+.attribute .attribute-description a acronym,
+.attribute .attribute-label a acronym {
+    color: #333;
+    cursor: help;
+    border-bottom: 1px dotted #333;
+    text-decoration: none;
 }
 
 .checkboxCustom .control-label {

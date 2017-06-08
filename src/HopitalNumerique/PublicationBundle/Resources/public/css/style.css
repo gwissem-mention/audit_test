@@ -166,8 +166,14 @@
 /* Bloc Articles */
     #articles{margin-top: 20px; position: relative}
 
-    #articles p .acronym,
-    #articles ul li .acronym {color: #333;}
+    #articles p acronym,
+    #articles ul li acronym{color: #333;cursor: help;border-bottom: 1px dotted #333;text-decoration:none;}
+
+    #articles p a.acronym,
+    #articles ul li a.acronym{text-decoration:none;}
+
+
+
     /* Colonne right */
         #articles h1{font-size: 24px; font-weight: bold; margin:2px 0 0 0; width: 90%;}
         #articles h2{font-size: 18px; color: #d60030; font-weight: bold;}
