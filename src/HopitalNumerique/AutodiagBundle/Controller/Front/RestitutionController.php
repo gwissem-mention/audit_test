@@ -30,6 +30,8 @@ class RestitutionController extends Controller
             ->getFullyLoadedSynthesis($synthesis)
         ;
 
+        $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($synthesis->getAutodiag());
+
         $autodiag = $synthesis->getAutodiag();
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag, $synthesis);
 

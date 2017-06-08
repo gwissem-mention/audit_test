@@ -171,7 +171,7 @@ ccdn_forum_forum:
             flash:
                 class:                HopitalNumerique\ForumBundle\Component\Dispatcher\Listener\FlashListener
             subscriber:
-                class:                HopitalNumerique\ForumBundle\Component\Dispatcher\Listener\SubscriberListener
+                class:                CCDNForum\ForumBundle\Component\Dispatcher\Listener\SubscriberListener
         helper:
             role:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper

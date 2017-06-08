@@ -1,16 +1,16 @@
 <div class="chapter" data-chapter="{{ chapter.id }}">
     <div class="chapter-title">
-        {{ chapter.title }}
+        {{ chapter.title|glossaire_add(autodiag)|raw }}
     </div>
 
     <div class="chapter-desc">
         <p>
-            {{ chapter.description | raw }}
+            {{ chapter.description|glossaire_add(autodiag)|raw }}
         </p>
     </div>
 
     <div class="chapter-label">
-        <span>{{ chapter.extendedLabel }}</span>
+        <span>{{ chapter.extendedLabel|glossaire_add(autodiag)|raw }}</span>
         <div class="not-concerned pull-right" title="{{ 'ad.front.chapter.not_concerned_title'|trans }}">
             <i class="fa fa-ban"></i>
             {{ "ad.front.chapter.not_concerned"|trans }}
@@ -19,7 +19,7 @@
 
     <div class="chapter-additionnal">
         <p>
-            {{ chapter.additionalDescription | raw }}
+            {{ chapter.additionalDescription|glossaire_add(autodiag)|raw }}
         </p>
     </div>
 

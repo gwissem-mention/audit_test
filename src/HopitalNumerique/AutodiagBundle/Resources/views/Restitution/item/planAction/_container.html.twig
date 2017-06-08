@@ -21,10 +21,10 @@
 
 {% if visible %}
     <tr class="root autodiag-container {% if isChild is defined %}children{% endif %}">
-        <td class="container-label">{{ container.label }}</td>
+        <td class="container-label">{{ container.label|glossaire_add(synthesis.autodiag)|raw }}</td>
         <td class="empty-cell"></td>
         {% if container.actionPlan is not null and container.actionPlan.visible %}
-            <td>{{ container.actionPlan.description }}</td>
+            <td>{{ container.actionPlan.description|glossaire_add(synthesis.autodiag)|raw }}</td>
             <td>
                 <ul>
                     {% for link in container.actionPlan.links %}

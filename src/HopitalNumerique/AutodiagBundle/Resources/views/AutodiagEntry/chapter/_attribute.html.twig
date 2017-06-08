@@ -6,7 +6,7 @@
             {% if attribute.description is not null %}
                 <div class="col-md-12 attribute-description">
                     <p>
-                        {{ attribute.description|raw }}
+                        {{ attribute.description|glossaire_add(autodiag)|raw }}
                     </p>
                 </div>
             {% endif %}
@@ -15,12 +15,12 @@
                 {% if attribute.tooltip is not empty %}
                     <i class="attribute-tooltip fa fa-question-circle" data-toggle="tooltip" title="{{ attribute.tooltip }}"></i>
                 {% endif %}
-                {{ attribute.extendedLabel }}
+                {{ attribute.extendedLabel|glossaire_add(autodiag)|raw }}
             </div>
 
             {% if attribute.additionalDescription is not empty %}
                 <div class="col-md-12 attribute-additional-description">
-                    {{ attribute.additionalDescription }}
+                    {{ attribute.additionalDescription|glossaire_add(autodiag)|raw }}
                 </div>
             {% endif %}
 
