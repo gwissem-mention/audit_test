@@ -111,7 +111,7 @@
                                         {% endif %}
                                     </td>
                                     {% if synthesis.entries|length > 1 %}
-                                        <td>{{ 'ad.account.synthesis.name'|trans }} : {{ synthesis.name }}</td>
+                                        <td>{{ 'ad.account.synthesis.name'|trans }} : <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span></td>
                                     {% else %}
                                         <td>
                                             <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span>
