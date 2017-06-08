@@ -76,6 +76,7 @@ class BoundaryCalculator
 
         $autodiag = $synthesis->getAutodiag();
         $entriesValues = [];
+        $autodiagEntries = [];
 
         // Get values for algorithm by entry
         foreach ($synthesis->getEntries() as $entry) {
@@ -83,15 +84,17 @@ class BoundaryCalculator
                 $synthesis,
                 $entry
             );
+            $autodiagEntries[$entry->getId()] = $entry;
         }
 
         // find min and max for each autodiag containers
         foreach ($autodiag->getContainers() as $container) {
             $scores = [];
-            foreach ($entriesValues as $entryValues) {
-                $scores[] = $this->algorithm->getScore($container, $entryValues);
+            foreach ($entriesValues as $entryId => $entryValues) {
+                $scores[$entryId] = $this->algorithm->getScore($container, $entryValues);
             }
 
+            $minAutodiagEntry = $maxAutodiagEntry = current($autodiagEntries);
             if (empty($scores)) {
                 $min = $max = null;
             } elseif (count($scores) === 1) {
@@ -99,6 +102,9 @@ class BoundaryCalculator
             } else {
                 $min = call_user_func_array('min', $scores);
                 $max = call_user_func_array('max', $scores);
+
+                $minAutodiagEntry = $autodiagEntries[array_search($min, $scores)];
+                $maxAutodiagEntry = $autodiagEntries[array_search($max, $scores)];
             }
 
             if (null !== $min || null !== $max) {
@@ -112,8 +118,12 @@ class BoundaryCalculator
                     $this->entityManager->persist($score);
                 }
 
-                $score->setMin($min);
-                $score->setMax($max);
+                $score
+                    ->setMin($min)
+                    ->setMax($max)
+                    ->setMinAutodiagEntry($minAutodiagEntry)
+                    ->setMaxAutodiagEntry($maxAutodiagEntry)
+                ;
             }
         }
 
