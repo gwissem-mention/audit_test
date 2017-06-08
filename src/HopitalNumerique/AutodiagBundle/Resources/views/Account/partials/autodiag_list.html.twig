@@ -35,7 +35,9 @@
                             <tr><td colspan="4" class="autodiag-title">{{ autodiag.name }}{% if autodiag.updated %} <i class="attribute-tooltip maj" data-toggle="tooltip" title="{{ 'ad.account.autodiag.updated'|trans }}"></i>{% endif %}</td></tr>
                             {% for synthesis in autodiag.syntheses %}
                                 <tr>
-                                    <td>{{ synthesis.name }}</td>
+                                    <td>
+                                        <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span>
+                                    </td>
                                     <td>{{ synthesis.updated_at|date('d/m/Y') }}</td>
                                     <td>
                                         {{ synthesis.completion ~ "%" }}
@@ -111,7 +113,9 @@
                                     {% if synthesis.entries|length > 1 %}
                                         <td>{{ 'ad.account.synthesis.name'|trans }} : {{ synthesis.name }}</td>
                                     {% else %}
-                                        <td>{{ synthesis.name }}</td>
+                                        <td>
+                                            <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span>
+                                        </td>
                                     {% endif %}
                                     <td>{{ synthesis.validated_at|date('d/m/Y') }}</td>
                                     <td>
@@ -178,6 +182,10 @@
                 var pollingUrl = "{{ path('hopitalnumerique_autodiag_synthesis_polling') }}";
                 var polling = new ScorePolling({
                     url: pollingUrl
+                });
+
+                $('.inplace-edit-text').each(function() {
+                    new InplaceEditor($(this), $(this).data("url"));
                 });
             });
         </script>

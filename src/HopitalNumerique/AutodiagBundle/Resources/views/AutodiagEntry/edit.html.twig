@@ -79,7 +79,7 @@
             </div>
             <div class="synthesis-name">
                 <h2>
-                    {{ entry.synthesis.name }}
+                    <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': entry.synthesis.id})}}">{{ entry.synthesis.name }}</span>
                     {% if autodiag.publicUpdatedDate > entry.updatedAt %}
                         - {{ 'ad.autodiagentry.outofdate'|trans }}
                     {% endif %}
@@ -135,6 +135,9 @@
             $('button.show-results').show();
         }
 
+        $('.inplace-edit-text').each(function() {
+            new InplaceEditor($(this), $(this).data("url"));
+        });
     </script>
 
 {% endblock %}

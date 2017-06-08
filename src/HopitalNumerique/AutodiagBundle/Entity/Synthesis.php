@@ -190,6 +190,10 @@ class Synthesis
      */
     public function setName($name)
     {
+        if ($this->entries->count() === 1) {
+            $this->entries->first()->setName($name);
+        }
+
         $this->name = $name;
 
         return $this;

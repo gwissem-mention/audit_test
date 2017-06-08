@@ -13,7 +13,9 @@
         <div class="validation-header">
             <div class="identity">
                 <div class="title">{{ synthesis.autodiag.title }}</div>
-                <div class="name">{{ synthesis.name }}</div>
+                <div class="name">
+                    <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span>
+                </div>
             </div>
         </div>
 
@@ -43,6 +45,10 @@
         </div>
     </div>
 
+    <script>
+        $('.inplace-edit-text').each(function() {
+            new InplaceEditor($(this), $(this).data("url"));
+        });
+    </script>
+
 {% endblock %}
-
-

@@ -15,6 +15,7 @@ class SynthesisVoter extends Voter
     const VALIDATE = 'validate';
     const SHARE = 'share';
     const DELETE = 'delete';
+    const EDIT = 'edit';
 
     /**
      * @var AutodiagEntrySession
@@ -28,7 +29,7 @@ class SynthesisVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::READ, self::SHARE, self::VALIDATE, self::DELETE])) {
+        if (!in_array($attribute, [self::READ, self::SHARE, self::VALIDATE, self::DELETE, self::EDIT])) {
             return false;
         }
 
@@ -56,15 +57,14 @@ class SynthesisVoter extends Voter
         switch ($attribute) {
             case self::SHARE:
                 return $this->canShare($synthesis, $user);
-                break;
+            case self::EDIT:
+                return $this->canEdit($synthesis, $user);
             case self::VALIDATE:
                 return $this->canValidate($synthesis, $user);
-                break;
             case self::READ:
                 return $this->canRead($synthesis, $user);
             case self::DELETE:
                 return $this->canRemove($synthesis, $user);
-                break;
         }
 
         return false;
@@ -149,6 +149,33 @@ class SynthesisVoter extends Voter
                     return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Peut accéder en écriture si l'utilisateur possède la synthèse
+     * ou si l'utilisateur a l'entry de la synthèse en session
+     * ou si l'utilisateur est admin.
+     *
+     * @param Synthesis $synthesis
+     * @param $user
+     *
+     * @return bool
+     */
+    public function canEdit(Synthesis $synthesis, $user)
+    {
+        if ($user instanceof User) {
+            /** @var $user User */
+            if ($user->hasRoleAdmin() || $user->hasRoleAdminHn() || $user->hasRoleAdminDomaine() || $user->hasRoleAdminAutodiag()) {
+                return true;
+            }
+        }
+
+        if ($synthesis->getUser() === $user
+            || $this->autodiagEntrySession->has($synthesis->getEntries()->first())) {
+            return true;
         }
 
         return false;
