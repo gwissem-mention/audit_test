@@ -4,6 +4,7 @@ namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
@@ -78,6 +79,11 @@ class Entity
      * @var int Forum board type
      */
     const ENTITY_TYPE_FORUM_BOARD = 9;
+
+    /**
+     * @var int Autodiag
+     */
+    const ENTITY_TYPE_AUTODIAG = 10;
 
     private $refForumTopicId;
 
@@ -258,6 +264,8 @@ class Entity
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
             case $entity instanceof Suggestion:
                 return self::ENTITY_TYPE_SUGGESTION;
+            case $entity instanceof Autodiag:
+                return self::ENTITY_TYPE_AUTODIAG;
         }
 
         return null;

@@ -291,6 +291,11 @@
     margin-top: 20px;
 }
 
+.chapter .chapter-desc .acronym,
+.chapter .chapter-additionnal .acronym {
+    color: #333;
+}
+
 /**
 * Attribute
 */
@@ -362,6 +367,15 @@
     font-size: 12px;
     color: #777;
     margin-bottom: 5px;
+}
+
+.attribute .attribute-additional-description .acronym {
+    color: #777;
+}
+
+.attribute .attribute-description .acronym,
+.attribute .attribute-label .acronym {
+    color: #333;
 }
 
 .checkboxCustom .control-label {

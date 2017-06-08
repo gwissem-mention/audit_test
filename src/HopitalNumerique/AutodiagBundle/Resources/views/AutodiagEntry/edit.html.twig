@@ -35,7 +35,7 @@
                     <div class="title">{{ "ad.front.instruction_title"|trans }}</div>
                     <div class="mysep background-rose"></div>
                     <div class="instruction-content">
-                        {{ autodiag.instructions|raw }}
+                        {{ autodiag.instructions|glossaire_add(autodiag)|raw }}
                     </div>
                 </div>
             {% endif %}
