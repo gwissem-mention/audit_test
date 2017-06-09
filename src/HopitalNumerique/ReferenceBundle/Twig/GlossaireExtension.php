@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Twig;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader as GlossaireReader;
 use Symfony\Component\Routing\RouterInterface;
@@ -26,7 +27,17 @@ class GlossaireExtension extends \Twig_Extension
      */
     private $currentDomaine;
 
+    /**
+     * @var Entity $entity
+     */
+    protected $entity;
+
     private $badPortionsConverted = [];
+
+    /**
+     * @var array
+     */
+    private $occurrenceFounded = [];
 
     /**
      * Constructeur.
@@ -34,15 +45,18 @@ class GlossaireExtension extends \Twig_Extension
      * @param RouterInterface $router
      * @param GlossaireReader $glossaireReader
      * @param CurrentDomaine  $currentDomaine
+     * @param Entity $entity
      */
     public function __construct(
         RouterInterface $router,
         GlossaireReader $glossaireReader,
-        CurrentDomaine $currentDomaine
+        CurrentDomaine $currentDomaine,
+        Entity $entity
     ) {
         $this->router = $router;
         $this->glossaireReader = $glossaireReader;
         $this->currentDomaine = $currentDomaine;
+        $this->entity = $entity;
     }
 
     /**
@@ -70,7 +84,10 @@ class GlossaireExtension extends \Twig_Extension
             $entity,
             $this->currentDomaine->get()
         );
-        $testString = [];
+
+        $entityType = $this->entity->getEntityType($entity);
+        $entityId = $this->entity->getEntityId($entity);
+
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
@@ -78,7 +95,11 @@ class GlossaireExtension extends \Twig_Extension
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
-                    if (!in_array($glossaireReference->getLibelle(), $testString)) {
+                    if (
+                        !isset($this->occurrenceFounded[$entityType]) ||
+                        !isset($this->occurrenceFounded[$entityType][$entityId]) ||
+                        !in_array($glossaireReference->getLibelle(), $this->occurrenceFounded[$entityType][$entityId])
+                    ) {
                         $html =
                             '<a class="acronym fancybox fancybox.ajax" href="' . $this->router->generate(
                                 'hopitalnumerique_reference_glossaire_popin',
@@ -91,7 +112,8 @@ class GlossaireExtension extends \Twig_Extension
 
                         $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
                         $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
-                        $testString[] = $glossaireReference->getLibelle();
+
+                        $this->occurrenceFounded[$entityType][$entityId][] = $glossaireReference->getLibelle();
                     }
                 }
             }
