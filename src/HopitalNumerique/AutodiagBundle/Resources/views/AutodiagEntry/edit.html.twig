@@ -139,7 +139,7 @@
         }
 
         $('.inplace-edit-text').each(function() {
-            new InplaceEditor($(this), $(this).data("url"));
+            new InplaceEditor($(this), $(this).data("url"), {title: '{{ 'Rename'|trans }}'});
         });
     </script>
 
