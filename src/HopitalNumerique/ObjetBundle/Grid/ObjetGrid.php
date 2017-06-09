@@ -37,8 +37,6 @@ class ObjetGrid extends Grid implements GridInterface
     {
         $filtres = [];
 
-        $this->setPersistence(true);
-
         switch ($filtre) {
             case 'point-dur':
                 $filtres['types'] = 'Point dur';
@@ -60,6 +58,8 @@ class ObjetGrid extends Grid implements GridInterface
         if (!empty($filtres)) {
             $this->setDefaultFilters($filtres);
         }
+
+        $this->setPersistence(true);
     }
 
     /**
