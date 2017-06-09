@@ -177,7 +177,7 @@ class ScoreCalculator
         $this->entityManager->flush($synthesis);
 
         $synthesisId = $synthesis->getId();
-        $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId &");
+        $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId --boundaries &");
         $process->start();
     }
 }
