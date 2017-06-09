@@ -74,10 +74,10 @@ class GlossaireExtension extends \Twig_Extension
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
-                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'’\& ]{1,1}' . $glossaireReference->getSigleHtmlForGlossaire() . '[\;\<\>\,\"\(\)\'’\.\& ]{1,1}/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+                $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)' . $glossaireReference->getSigleHtmlForGlossaire() . '([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
-                foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
+                foreach ($wordSearchPatternMatches[0] as $key => $wordSearchPatternMatch) {
                     if (!in_array($glossaireReference->getLibelle(), $testString)) {
                         $html =
                             '<a class="acronym fancybox fancybox.ajax" href="' . $this->router->generate(
@@ -89,7 +89,7 @@ class GlossaireExtension extends \Twig_Extension
                             ) : '') .
                             '">' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>';
 
-                        $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
+                        $html = $wordSearchPatternMatches[1][$key] . $html . $wordSearchPatternMatches[2][$key];
                         $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
                         $testString[] = $glossaireReference->getLibelle();
                     }
