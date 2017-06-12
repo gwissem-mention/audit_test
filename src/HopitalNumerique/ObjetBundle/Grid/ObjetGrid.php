@@ -33,6 +33,17 @@ class ObjetGrid extends Grid implements GridInterface
         $this->showIDColumn(false);
     }
 
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->_grid->setId($id);
+    }
+
+    /**
+     * @param string $filtre
+     */
     public function setDefaultFiltreFromController($filtre)
     {
         $filtres = [];
