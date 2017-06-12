@@ -74,7 +74,7 @@ class GlossaireExtension extends \Twig_Extension
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
-                $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)' . $glossaireReference->getSigleHtmlForGlossaire() . '([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+                $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)(' . $glossaireReference->getSigleHtmlForGlossaire() . ')([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
                 foreach ($wordSearchPatternMatches[0] as $key => $wordSearchPatternMatch) {
@@ -87,9 +87,9 @@ class GlossaireExtension extends \Twig_Extension
                             (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml(
                                 $glossaireReference->getDescriptionCourte()
                             ) : '') .
-                            '">' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>';
+                            '">' . $this->convertToAsciiHtml($wordSearchPatternMatches[2][$key]) . '</acronym></a>';
 
-                        $html = $wordSearchPatternMatches[1][$key] . $html . $wordSearchPatternMatches[2][$key];
+                        $html = $wordSearchPatternMatches[1][$key] . $html . $wordSearchPatternMatches[3][$key];
                         $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
                         $testString[] = $glossaireReference->getLibelle();
                     }
