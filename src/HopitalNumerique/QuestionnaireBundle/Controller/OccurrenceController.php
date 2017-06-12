@@ -3,16 +3,21 @@
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Contrôleur des occurrences.
  */
-class OccurrenceController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class OccurrenceController extends Controller
 {
     /**
      * Crée une occurrence et redirige vers le questionnaire.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param Questionnaire $questionnaire Questionnaire
+     *
+     * @return RedirectResponse
+     * @throws \Exception
      */
     public function addAction(Questionnaire $questionnaire)
     {
@@ -30,7 +35,6 @@ class OccurrenceController extends \Symfony\Bundle\FrameworkBundle\Controller\Co
 
         return $this->redirect($this->generateUrl(
             'hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence',
-
             [
                 'questionnaire' => $questionnaire->getId(),
                 'occurrence' => $nouvelOccurrence->getId(),

@@ -4,7 +4,6 @@ namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use HopitalNumerique\QuestionnaireBundle\Entity\Question;
 use HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +101,7 @@ class QuestionController extends Controller
                 'question' => $question,
                 'typeQuestions' => $typeQuestions,
                 'references' => $references,
-            ]);
+        ]);
     }
 
     /**
