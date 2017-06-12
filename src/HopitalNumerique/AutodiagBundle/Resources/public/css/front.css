@@ -385,7 +385,7 @@
 }
 
 .attribute .attribute-additional-description {
-    font-weight: bold;
+    /*font-weight: bold;*/
     font-style: italic;
     font-size: 12px;
     color: #777;
