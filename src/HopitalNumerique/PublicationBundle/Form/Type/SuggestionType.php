@@ -4,6 +4,7 @@ namespace HopitalNumerique\PublicationBundle\Form\Type;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -67,7 +68,8 @@ class SuggestionType extends AbstractType
                 'class' => Reference::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('reference')
-                        ->where("reference.code = 'ETAT_SUGGESTION'");
+                        ->join('reference.codes', 'referenceCode', Expr\Join::WITH, "referenceCode.label = 'ETAT_SUGGESTION'")
+                    ;
                 },
                 'label' => 'État',
                 'choice_label' => 'libelle',

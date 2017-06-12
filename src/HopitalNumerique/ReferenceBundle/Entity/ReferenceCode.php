@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Class ReferenceCode
  *
  * @ORM\Table(name="hn_reference_code")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\ReferenceCodeRepository")
  * @UniqueEntity(fields={"label","reference"}, message="Ce code est déjà assigné à la référence.")
  */
 class ReferenceCode
@@ -86,5 +86,13 @@ class ReferenceCode
         $this->reference = $reference;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->label;
     }
 }

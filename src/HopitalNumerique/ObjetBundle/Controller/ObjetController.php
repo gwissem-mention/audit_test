@@ -55,6 +55,7 @@ class ObjetController extends Controller
     public function indexFiltreAction($filtre = null)
     {
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
+        $grid->setId($filtre);
 
         if (!is_null($filtre)) {
             $grid->setDefaultFiltreFromController($filtre);
