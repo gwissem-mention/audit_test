@@ -41,7 +41,7 @@
     #productionsPointDur .wrapper-results .results .fa-refresh{ color:#3da20b; }
 
 /* Bloc publication*/
-    #publication a acronym{color: #333;cursor: help;border-bottom: 1px dotted #333;}
+    #publication a acronym{color: #333;cursor: help;border-bottom: 1px dotted #333;text-decoration: none;}
     #publication a.acronym{text-decoration:none}
     #publication img{ margin: 5px 10px 0 5px; }
     #publication ol {overflow: hidden;}

@@ -26,7 +26,14 @@ services:
 
     hopitalnumerique_reference.doctrine.glossaire.parse:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Parse'
-        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.manager.entity_has_glossaire', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_domaine.manager.domaine', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+        arguments:
+            - '@hopitalnumerique_core.dependency_injection.entity'
+            - '@hopitalnumerique_reference.manager.entity_has_glossaire'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_domaine.manager.domaine'
+            - '@hopitalnumerique_objet.manager.objet'
+            - '@hopitalnumerique_objet.manager.contenu'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
 
     hopitalnumerique_reference.doctrine.glossaire.reader:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader'
