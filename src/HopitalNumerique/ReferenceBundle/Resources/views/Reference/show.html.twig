@@ -3,7 +3,7 @@
 {% block title %}{{parent()}} - Référentiel{% endblock %}
 
 {% block h1Title %}
-    Fiche du référentiel {{reference.code}}
+    Fiche du référentiel <em>{{reference.libelle}}</em>
 {% endblock %}
 
 {% block toolbarButton %}
@@ -81,7 +81,7 @@
             </div>
             <div class="panel-body">
                 <p>
-                    <strong>Code</strong> : {{ reference.code }}
+                    <strong>Code(s)</strong> : {{ reference.codes|join(', ') }}
                 </p>
                 <p>
                     <strong>Ordre</strong> : {{ reference.order }}

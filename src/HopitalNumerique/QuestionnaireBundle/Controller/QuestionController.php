@@ -94,10 +94,9 @@ class QuestionController extends Controller
             [],
             ['nom' => 'ASC']
         );
-        /** @var Reference[] $references */
-        $references = $this->get('hopitalnumerique_reference.manager.reference')->getAllRefCode(
-            $question->getQuestionnaire()
-        );
+
+        $references = $this->get('hopitalnumerique_reference.repository.reference_code')->getDistinctCodes();
+
 
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:edit.html.twig', [
                 'question' => $question,
