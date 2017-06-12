@@ -223,7 +223,7 @@ class QuestionnaireType extends AbstractType
         Occurrence $occurrence = null,
         $options
     ) {
-        if (is_null($options['label_attr']['paramId'])) {
+        if (null === $options['label_attr']['paramId']) {
             $this->addOccurrenceType($builder, $questionnaire, $occurrence);
         }
 
