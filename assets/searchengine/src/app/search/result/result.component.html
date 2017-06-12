@@ -9,9 +9,9 @@
         </span>
 
         <span class="exact-results" [ngPlural]="resultSet.exactMatches">
-            <ng-template ngPluralCase="=0"></ng-template>
-            <ng-template ngPluralCase="=1">Nous avons trouvé un résultat correspondant exactement aux mots recherchés</ng-template>
-            <ng-template ngPluralCase="other">Nous avons trouvé {{resultSet.exactMatches}} résultats correspondant exactement aux mots recherchés</ng-template>
+            <ng-template ngPluralCase="=0">Aucun résultat ne correspond exactement aux mots recherchés</ng-template>
+            <ng-template ngPluralCase="=1">Le premier résultat correspondent exactement aux mots recherchés</ng-template>
+            <ng-template ngPluralCase="other">Les {{resultSet.exactMatches}} premiers résultats correspondent exactement aux mots recherchés</ng-template>
         </span>
     </h2>
 

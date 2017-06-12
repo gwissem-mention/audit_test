@@ -21,6 +21,7 @@ class PostTypeFactory extends ConfigurableFactory
             $subQuery = (new Match())
                 ->setFieldQuery('content.exact', $source->getTerm())
                 ->setFieldBoost('content.exact', $this->config->get('query.exact.boost', self::TYPE))
+                ->setFieldOperator('content.exact', \Elastica\Query\Common::OPERATOR_AND)
             ;
 
             $this->addFuzzinessToMatch($subQuery, 'content.exact', 'exact', self::TYPE);
@@ -31,6 +32,7 @@ class PostTypeFactory extends ConfigurableFactory
         if ($this->config->get('query.similar.enabled', self::TYPE)) {
             $subQuery = (new Match())
                 ->setFieldQuery('content.exact', $source->getTerm())
+                ->setFieldOperator('content.exact', \Elastica\Query\Common::OPERATOR_AND)
             ;
 
             $this->addFuzzinessToMatch($subQuery, 'content.exact', 'similar', self::TYPE);
