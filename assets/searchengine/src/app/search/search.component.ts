@@ -91,12 +91,6 @@ export class SearchComponent implements OnInit {
             .subscribe((query: Query) => {this.searchService.search(query)})
         ;
 
-        let urlQuery = queryString.parse(location.search);
-        if (undefined !== urlQuery.q) {
-            this.query.setTerm(urlQuery.q);
-            this.refreshQuery(this.query);
-        }
-
         /**
          * Empty result observable
          */
@@ -126,5 +120,11 @@ export class SearchComponent implements OnInit {
         });
 
         hasResultsObservable.subscribe((hasResults: boolean) => this.noResutls = !hasResults);
+
+        let urlQuery = queryString.parse(location.search);
+        if (undefined !== urlQuery.q) {
+            this.query.setTerm(urlQuery.q);
+            this.refreshQuery(this.query);
+        }
     }
 }

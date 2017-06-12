@@ -17,7 +17,7 @@ abstract class Result {
     }
 
     private ponderateScore() {
-        return Math.exp(this.score / 2);
+        return Math.exp(this.score / 2.6);
     }
 }
 
