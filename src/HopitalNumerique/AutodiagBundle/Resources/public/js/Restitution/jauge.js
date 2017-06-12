@@ -37,8 +37,15 @@ var Jauge;
                     $('[data-value]', el).each(function(i) {
                         var el = $(this);
 
+                        var title = (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%';
+
+                        if (el.data('autodiag-entry-name')) {
+                            title += " ("+el.data('autodiag-entry-name')+")";
+                        }
+
+
                         el.tooltip({
-                            title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%',
+                            title: title,
                             container: 'body'
                         });
 
