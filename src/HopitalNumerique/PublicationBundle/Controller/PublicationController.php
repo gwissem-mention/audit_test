@@ -10,13 +10,13 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -276,6 +276,10 @@ class PublicationController extends Controller
 
         /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
+
+        if (null === $objet) {
+            throw new NotFoundHttpException();
+        }
 
         if (!in_array($domaine->getId(), $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
