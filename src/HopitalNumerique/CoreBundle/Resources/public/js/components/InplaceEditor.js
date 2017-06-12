@@ -9,6 +9,7 @@ var InplaceEditor = (function() {
         this.text = null;
 
         this.options = $.extend({
+            title: 'okook',
             text: {
                 cssClass: "inplace-edit-text"
             },
@@ -16,7 +17,8 @@ var InplaceEditor = (function() {
                 cssClass: "inplace-edit-btn",
                 logo: {
                     cssClass: "fa fa-edit"
-                }
+                },
+                title: "Edit"
             },
             input: {
                 cssClass: "inplace-input"
@@ -34,6 +36,7 @@ var InplaceEditor = (function() {
         createEditBtn: function () {
             var edit = $('<a/>')
                 .addClass(this.options.editButton.cssClass)
+                .attr('title', this.options.title)
                 .css('padding-left', '5px')
                 .css('cursor', 'pointer')
                 .append(

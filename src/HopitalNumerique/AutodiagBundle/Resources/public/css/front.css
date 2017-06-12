@@ -291,17 +291,31 @@
     margin-top: 20px;
 }
 
+.autodiag-popin .acronym,
 .chapter .chapter-desc .acronym,
 .chapter .chapter-additionnal .acronym {
     color: #333;
     text-decoration: none;
 }
 
+.autodiag-popin a acronym,
 .chapter .chapter-desc a acronym,
 .chapter .chapter-additionnal a acronym {
     color: #333;
     cursor: help;
     border-bottom: 1px dotted #333;
+    text-decoration: none;
+}
+
+.chapter .chapter-label .acronym {
+    color: #d60030;
+    text-decoration: none;
+}
+
+.chapter .chapter-label a acronym {
+    color: #d60030;
+    cursor: help;
+    border-bottom: 1px dotted #d60030;
     text-decoration: none;
 }
 

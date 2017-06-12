@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
@@ -49,6 +50,11 @@ class Parse
     private $contenuManager;
 
     /**
+     * @var CurrentDomaine $currentDomain
+     */
+    private $currentDomain;
+
+    /**
      * @var array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Glossaire
      */
     private static $GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = null;
@@ -56,7 +62,15 @@ class Parse
     /**
      * Constructeur.
      */
-    public function __construct(Entity $entity, EntityHasGlossaireManager $entityHasGlossaireManager, ReferenceManager $referenceManager, DomaineManager $domaineManager, ObjetManager $objetManager, ContenuManager $contenuManager)
+    public function __construct(
+        Entity $entity,
+        EntityHasGlossaireManager $entityHasGlossaireManager,
+        ReferenceManager $referenceManager,
+        DomaineManager $domaineManager,
+        ObjetManager $objetManager,
+        ContenuManager $contenuManager,
+        CurrentDomaine $currentDomain
+    )
     {
         $this->entity = $entity;
         $this->entityHasGlossaireManager = $entityHasGlossaireManager;
@@ -64,6 +78,7 @@ class Parse
         $this->domaineManager = $domaineManager;
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
+        $this->currentDomain = $currentDomain;
     }
 
     /**
@@ -120,12 +135,11 @@ class Parse
     private function parseAndSaveObjets($objets)
     {
         $this->init();
+        $domaine = $this->currentDomain->get();
 
         foreach ($objets as $objet) {
-            foreach ($this->entity->getDomainesByEntity($objet) as $domaine) {
-                $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese()));
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_OBJET, $objet->getId(), $domaine, $foundSigles);
-            }
+            $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese()));
+            $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_OBJET, $objet->getId(), $domaine, $foundSigles);
         }
     }
 
@@ -137,12 +151,11 @@ class Parse
     private function parseAndSaveContenus($contenus)
     {
         $this->init();
+        $domaine = $this->currentDomain->get();
 
         foreach ($contenus as $contenu) {
-            foreach ($this->entity->getDomainesByEntity($contenu) as $domaine) {
-                $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($contenu->getContenu()));
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_CONTENU, $contenu->getId(), $domaine, $foundSigles);
-            }
+            $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($contenu->getContenu()));
+            $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_CONTENU, $contenu->getId(), $domaine, $foundSigles);
         }
     }
 
@@ -172,31 +185,31 @@ class Parse
             ]
         ];
 
+        $domaine = $this->currentDomain->get();
+
         foreach ($autodiags as $autodiag) {
-            foreach ($this->entity->getDomainesByEntity($autodiag) as $domaine) {
-                $foundSigles = [];
-                /** @var Autodiag\Container\Chapter $chapter */
-                foreach ($autodiag->getChapters() as $chapter) {
+            $foundSigles = [];
+            /** @var Autodiag\Container\Chapter $chapter */
+            foreach ($autodiag->getChapters() as $chapter) {
 
-                    foreach ($fields['autodiag'] as $field) {
-                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $autodiag, $field));
-                    }
-
-                    foreach ($fields['chapter'] as $field) {
-                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $chapter, $field));
-                    }
+                foreach ($fields['autodiag'] as $field) {
+                    $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $autodiag, $field));
                 }
 
-                foreach ($autodiag->getAttributes() as $attribute) {
-                    foreach ($fields['questions'] as $field) {
-                        $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $attribute, $field));
-                    }
+                foreach ($fields['chapter'] as $field) {
+                    $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $chapter, $field));
                 }
-
-                array_unique($foundSigles);
-
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_AUTODIAG, $autodiag->getId(), $domaine, $foundSigles);
             }
+
+            foreach ($autodiag->getAttributes() as $attribute) {
+                foreach ($fields['questions'] as $field) {
+                    $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $attribute, $field));
+                }
+            }
+
+            array_unique($foundSigles);
+
+            $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_AUTODIAG, $autodiag->getId(), $domaine, $foundSigles);
         }
     }
 
