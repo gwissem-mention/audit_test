@@ -17,7 +17,7 @@
                 </div>
             {% endif %}
         {% endif %}
-        {% if contenu.contenu is defined and contenu.contenu|parsePublication|glossaire_list(contenu) is not empty or objet.resume is defined and objet.resume|parsePublication|glossaire_list(objet) is not empty %}
+        {% if contenu.contenu is defined and contenu.contenu|parsePublication|glossaire_list(contenu) is not empty or contenu.contenu is not defined and objet.resume is defined and objet.resume|parsePublication|glossaire_list(objet) is not empty %}
             <div class="column-right-container" style="margin-top: 10px;">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/glossary.html.twig' %}
             </div>

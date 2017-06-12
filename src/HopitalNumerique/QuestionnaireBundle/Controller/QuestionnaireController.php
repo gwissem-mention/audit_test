@@ -421,7 +421,7 @@ class QuestionnaireController extends Controller
             'routeRedirection' => $this->_routeRedirection,
             'readOnly' => $readOnly,
             'idSession' => $idSession,
-            'paramId' => $idSession,
+            'paramId' => $idSession === 0 ? null : $idSession,
         ];
 
 
