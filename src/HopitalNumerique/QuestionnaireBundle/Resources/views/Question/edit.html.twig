@@ -52,7 +52,9 @@
                 <select name="typeQuestionSelect_reference" id="typeQuestion_reference" class="form-control typeQuestion col-md-12">
                     <option value=""> - </option>
                     {% for reference in references %}
-                        <option value="{{reference.code}}" >{{reference.code}}</option>
+                        {% for code in reference %}
+                            <option value="{{code}}" >{{code}}</option>
+                        {% endfor %}
                     {% endfor %}
                 </select>
             </div>
