@@ -35,7 +35,8 @@ class ForumIndexable
      */
     public function isPostIndexable(Post $post)
     {
-        return null !== $post->getTopic()
+        return false === $post->getEnAttente()
+            && null !== $post->getTopic()
             && null !== $post->getTopic()->getBoard()
             && null !== $post->getTopic()->getBoard()->getCategory()
             && null !== $post->getTopic()->getBoard()->getCategory()->getForum()
