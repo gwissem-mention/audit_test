@@ -11,6 +11,8 @@ services:
 
     hopital_numerique_search.config_factory:
         class: HopitalNumerique\SearchBundle\Service\ConfigFactory
-        autowire: true
         arguments:
-            3: '%search_engine_aggregations%'
+            - '@fos_elastica.index_manager'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.repository.reference'
+            - '%search_engine_aggregations%'
