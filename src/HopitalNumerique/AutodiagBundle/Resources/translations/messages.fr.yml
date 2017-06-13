@@ -213,7 +213,7 @@ ad:
             not_concerned: Non concerné
             not_concerned_title: Je ne suis pas concerné par ce chapitre
         restitution_demand:
-            title: Voir le résultat de mon autodiagnositc
+            title: Voir le résultat de mon autodiagnostic
             description: |
                 {0}Autodiagnostic terminé
                 |{1}Il vous reste à répondre encore à une question.
