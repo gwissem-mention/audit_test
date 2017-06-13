@@ -12,6 +12,10 @@ abstract class Result {
 
     abstract getLink(): string;
 
+    getRawScore(): number {
+        return this.score;
+    }
+
     getScore() {
         return Math.round(this.maxScore * (1 - (1 / Math.log((this.ponderateScore()-1) + Math.E))));
     }

@@ -3,7 +3,7 @@ import Filter from "./Filter";
 export default class Query {
     term: string = '';
 
-    size: number = 10;
+    offset: number = 0;
     from: number = 0;
 
     index: string;
@@ -19,29 +19,41 @@ export default class Query {
 
     setTerm(term: string) {
         this.term = term.trim();
+        this.offset = 0;
     }
 
     /**
      * Show more results
      */
     more() {
-        this.size += this.getItemPerPage();
+        this.currentPage++;
     }
 
     /**
      * Show less results
      */
     less() {
-        this.size -= this.getItemPerPage();
+        this.currentPage--;
+    }
+
+    getSize(): number {
+        return this.offset + this.currentPage * this.itemsPerPage;
     }
 
     getItemPerPage(): number {
         return this.itemsPerPage;
     }
 
-    setItemsPerPage(items: number) {
-        this.itemsPerPage = items;
-        // @TODO
+    setItemsPerPage(size: number) {
+        this.itemsPerPage = size;
+    }
+
+    getCurrentPage(): number {
+        return this.currentPage;
+    }
+
+    setCurrentPage(page: number) {
+        this.currentPage = page;
     }
 
     getFilters(): Filter[] {

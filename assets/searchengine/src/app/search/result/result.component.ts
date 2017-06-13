@@ -24,6 +24,7 @@ export class ResultComponent implements OnInit {
     canShow = false;
     canShowMore = false;
     canShowLess = false;
+    allHidden = false;
     results: Array<Result>;
 
     @Output()
@@ -49,10 +50,26 @@ export class ResultComponent implements OnInit {
 
     ngOnInit() {
         this.resultSet.results.subscribe((results) => {
-            this.canShowMore = results.length < this.resultSet.total;
-            this.canShowLess = results.length > 10;
-            this.canShow = results.length > 0;
-            this.results = results;
+            let minScore = this.resultSet.getMinScoreToShow();
+
+            if (null !== minScore && this.query.getCurrentPage() === 1) {
+                this.results = [];
+                for (let result of results) {
+                    if (result.getRawScore() > minScore) {
+                        this.results.push(result);
+                        this.query.offset--;
+                    }
+                }
+            } else {
+                this.results = results;
+            }
+
+            let resultLength = this.results.length;
+
+            this.allHidden = resultLength === 0 && this.resultSet.total > 0;
+            this.canShowMore = resultLength < this.resultSet.total;
+            this.canShowLess = this.query.getCurrentPage() > 1;
+            this.canShow = this.resultSet.total > 0;
         });
     }
 }

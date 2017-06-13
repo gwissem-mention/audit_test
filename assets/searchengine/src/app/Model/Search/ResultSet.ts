@@ -10,6 +10,8 @@ export default class ResultSet {
 
     exactMatches: number;
 
+    minScoreToShow: number = null;
+
     results = new Subject<Result[]>();
 
     aggregations = new Subject<Aggregation[]>();
@@ -19,6 +21,14 @@ export default class ResultSet {
 
     setTotal(total: number) {
         this.total = total;
+    }
+
+    setMinScoreToShow(score: number) {
+        this.minScoreToShow = score;
+    }
+
+    getMinScoreToShow(): number {
+        return this.minScoreToShow;
     }
 
     update(rawResult: any) {

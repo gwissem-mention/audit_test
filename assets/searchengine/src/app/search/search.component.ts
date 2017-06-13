@@ -53,6 +53,7 @@ export class SearchComponent implements OnInit {
     ) {
         this.query = new Query(config.get('index'));
         this.hotQuery = new Query(config.get('index'));
+        this.hotQuery.setItemsPerPage(5);
 
         this.resultSet = this.searchService.getResultSet();
         this.hotResultSet = this.searchService.getHotResultSet();

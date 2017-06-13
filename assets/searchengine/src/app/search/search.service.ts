@@ -11,6 +11,7 @@ import { AuthService } from "../shared/auth.service";
 import { Subject } from "rxjs/Subject";
 import {Text} from "./text.service";
 
+const MIN_HOT_SCORE = 18;
 
 @Injectable()
 export class SearchService {
@@ -29,6 +30,9 @@ export class SearchService {
             .switchMap((query: Query) => this.doRequest(query))
             .subscribe((res) => this.resultSet.update(res))
         ;
+
+        this.hotResultSet.setMinScoreToShow(MIN_HOT_SCORE);
+
         this.queryHotObservable
             .switchMap((query: Query) => this.doHotRequest(query))
             .subscribe((res) => this.hotResultSet.update(res))
@@ -70,7 +74,7 @@ export class SearchService {
 
         params.set('index', query.index);
         params.set('term', query.term);
-        params.set('size', query.size.toString());
+        params.set('size', query.getSize().toString());
         params.set('from', query.from.toString());
 
         for (let filterKey in query.getFilters()) {

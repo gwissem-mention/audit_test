@@ -54,6 +54,9 @@
 
         </div>
 
+        <div *ngIf="allHidden">
+            Cliquez sur le bouton "Voir plus" pour afficher les résultats complémentaires.
+        </div>
 
         <div class="text-right">
             <div *ngIf="canShowLess" (click)="showLess()" class="btn btn-danger btn-xs">
