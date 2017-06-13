@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import Query from "../../Model/Search/Query";
 import Filter from "../../Model/Search/Filter";
+import {Text} from "../text.service";
 
 @Component({
     selector: 'query',
@@ -18,6 +19,8 @@ export class QueryComponent implements OnInit {
 
     @Output()
     queryChanged: EventEmitter<Query> = new EventEmitter<Query>();
+
+    constructor(protected text: Text) {}
 
     updateTerm(term: string): void {
         if (this.sanitizeTerm(term) !== this.query.term ) {

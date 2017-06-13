@@ -3,6 +3,7 @@ import ResultSet from "../../../Model/Search/ResultSet";
 import Query from "../../../Model/Search/Query";
 import Aggregation from "../../../Model/Search/Aggregation";
 import Filter from "../../../Model/Search/Filter";
+import {Text} from "../../text.service";
 
 @Component({
     selector: 'search-aggregation',
@@ -18,6 +19,8 @@ export class AggregationComponent {
 
     @Output()
     queryChanged: EventEmitter<Query> = new EventEmitter<Query>();
+
+    constructor(protected text: Text) {}
 
     addFilter(aggregation: Aggregation): void {
         this.query.addFilter(Filter.createFromAggregation(aggregation));

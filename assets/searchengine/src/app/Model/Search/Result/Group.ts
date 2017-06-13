@@ -11,7 +11,7 @@ export default class Group extends Result {
 
     getType() :string
     {
-        return 'Groupe de la communauté de pratique';
+        return 'cdp_groups';
     }
 
     getTitle() :string

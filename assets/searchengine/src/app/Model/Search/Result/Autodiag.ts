@@ -11,7 +11,7 @@ export default class Autodiag extends Result {
 
     getType() :string
     {
-        return "Autodiagnostic";
+        return "autodiag";
     }
 
     getTitle() :string

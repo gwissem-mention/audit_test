@@ -9,17 +9,22 @@ import Query from "../Model/Search/Query";
 import ResultSet from "../Model/Search/ResultSet";
 import { AuthService } from "../shared/auth.service";
 import { Subject } from "rxjs/Subject";
+import {Text} from "./text.service";
 
 
 @Injectable()
 export class SearchService {
 
-    resultSet: ResultSet = new ResultSet('Productions');
-    hotResultSet: ResultSet = new ResultSet('Point dur');
+    resultSet: ResultSet;
+    hotResultSet: ResultSet;
     private queryObservable = new Subject<Query>();
     private queryHotObservable = new Subject<Query>();
 
-    constructor(private http: Http, private auth: AuthService) {
+    constructor(protected text: Text, private http: Http, private auth: AuthService) {
+
+        this.resultSet = new ResultSet(text.get('productions', 'productions'));
+        this.hotResultSet = new ResultSet(text.get('hot', 'Point dur'));
+
         this.queryObservable
             .switchMap((query: Query) => this.doRequest(query))
             .subscribe((res) => this.resultSet.update(res))

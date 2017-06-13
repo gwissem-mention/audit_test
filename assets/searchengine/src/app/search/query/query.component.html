@@ -3,7 +3,7 @@
         <div class="search-tags-wrapper">
             <div class="search-tags">
                 <span class="tag badge" *ngFor="let filter of query.getFilters()" (click)="removeFilter(filter)">
-                    {{filter.label}}
+                    {{ this.text.get('type.' + filter.label, filter.label) }}
                     <i class="fa fa-times"></i>
                 </span>
             </div>

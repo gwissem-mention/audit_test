@@ -6,11 +6,15 @@ import {BrowserModule} from "@angular/platform-browser";
 import {ResultComponent} from "./result/result.component";
 import {ScoreComponent} from "./result/score/score.component";
 import {AggregationComponent} from "./result/aggregation/aggregation.component";
+import {Text} from "./text.service";
 
 @NgModule({
     imports: [
         HttpModule,
         BrowserModule,
+    ],
+    providers: [
+        Text,
     ],
     declarations: [
         SearchComponent,

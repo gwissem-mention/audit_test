@@ -11,7 +11,7 @@ export default class ForumPost extends Result {
 
     getType() :string
     {
-        return "Forum post";
+        return "forum_post";
     }
 
     getTitle() :string

@@ -3,6 +3,7 @@ import ResultSet from "../../Model/Search/ResultSet";
 import Query from "../../Model/Search/Query";
 import Result from "../../Model/Search/Result";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {Text} from "../text.service";
 
 @Component({
     selector: 'search-results',
@@ -28,7 +29,7 @@ export class ResultComponent implements OnInit {
     @Output()
     queryChanged: EventEmitter<Query> = new EventEmitter<Query>();
 
-    constructor(private sanitizer:DomSanitizer) {
+    constructor(private sanitizer:DomSanitizer, protected text: Text) {
 
     }
 

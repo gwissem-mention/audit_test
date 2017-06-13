@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class Config {
-    public index: string = "cdr_domaine_mon_hopital_numerique";
-
     protected config: Object = {};
 
     public load() {
@@ -15,7 +13,7 @@ export class Config {
         });
     }
 
-    public get(key: string): string {
+    public get(key: string): any {
         if (this.config.hasOwnProperty(key)) {
             return this.config[key];
         }

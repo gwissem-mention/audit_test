@@ -79,30 +79,9 @@ export default class ResultSet {
         return aggregations;
     }
 
-    private getAggregationLabel(key: string): string {
-        switch (key) {
-            case 'cdp_groups':
-                return 'Groupe de la communauté de pratique';
-            case 'autodiag':
-                return 'Autodiagnostic';
-            case 'object':
-                return 'Objet';
-            case 'content':
-                return 'Contenu';
-            case 'forum_topic':
-                return 'Sujet du forum';
-            case 'forum_post':
-                return 'Message du forum';
-            case 'person':
-                return 'Personne';
-            default:
-                return key;
-        }
-    }
-
     private parseAggregation(aggData: any, field: string = 'types'): Aggregation {
         let aggregation = new Aggregation;
-        aggregation.label = this.getAggregationLabel(aggData.key);
+        aggregation.label = aggData.key;
         aggregation.value = aggData.key;
         aggregation.count = aggData.doc_count;
         aggregation.field = field;

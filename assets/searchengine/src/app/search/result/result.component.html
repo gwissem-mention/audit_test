@@ -19,7 +19,9 @@
 
         <div *ngFor="let result of results" class="result">
 
-            <div *ngIf="mode != 'lite'" class="type">{{ result.getType() }}</div>
+            <div *ngIf="mode != 'lite'" class="type">
+                {{ this.text.get('type.' + result.getType(), result.getType()) }}
+            </div>
 
 
             <ng-container *ngIf="result.parent; else noParent">

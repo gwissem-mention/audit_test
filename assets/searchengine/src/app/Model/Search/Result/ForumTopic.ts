@@ -9,7 +9,7 @@ export default class ForumTopic extends Result {
     }
 
     getType() :string {
-        return "Forum topic";
+        return "forum_topic";
     }
 
     getTitle() :string {

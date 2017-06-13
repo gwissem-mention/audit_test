@@ -9,7 +9,7 @@ export default class Person extends Result {
 
     getType() :string
     {
-        return "Personne";
+        return "person";
     }
 
     getTitle() :string
