@@ -19,7 +19,7 @@ class ContentTypeFactory extends ConfigurableFactory
         if ($this->config->get('query.exact.enabled', self::TYPE)) {
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
-                    sprintf('title_tree.exact^%f', $this->config->get('title.boost')),
+                    sprintf('title_tree.exact^%f', $this->config->get('boost.title')),
                     'content.exact'
                 ])
                 ->setQuery($source->getTerm())
