@@ -196,6 +196,23 @@ class Contenu
     }
 
     /**
+     * Get title tree concatenated.
+     * Used for search indexation
+     *
+     * @return string
+     */
+    public function getTitleTree()
+    {
+        $title = $this->getTitre();
+
+        if ($this->getParent()) {
+            $title = $this->getParent()->getTitre() . ' ' . $title;
+        }
+
+        return $this->getObjet()->getTitre() . ' ' . $title;
+    }
+
+    /**
      * Set alias.
      *
      * @param string $alias

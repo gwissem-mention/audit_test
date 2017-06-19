@@ -19,7 +19,7 @@ class ContentTypeFactory extends ConfigurableFactory
         if ($this->config->get('query.exact.enabled', self::TYPE)) {
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
-                    sprintf('title.exact^%f', $this->config->get('title.boost')),
+                    sprintf('title_tree.exact^%f', $this->config->get('title.boost')),
                     'content.exact'
                 ])
                 ->setQuery($source->getTerm())
@@ -35,7 +35,7 @@ class ContentTypeFactory extends ConfigurableFactory
         if ($this->config->get('query.similar.enabled', self::TYPE)) {
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
-                    sprintf('title.exact^%f', $this->config->get('boost.title', self::TYPE)),
+                    sprintf('title_tree.exact^%f', $this->config->get('boost.title', self::TYPE)),
                     'content.exact'
                 ])
                 ->setQuery($source->getTerm())
@@ -51,7 +51,7 @@ class ContentTypeFactory extends ConfigurableFactory
             $subQuery =
                 (new \Elastica\Query\MultiMatch())
                     ->setFields([
-                        sprintf('title^%f', $this->config->get('boost.title', self::TYPE)),
+                        sprintf('title_tree^%f', $this->config->get('boost.title', self::TYPE)),
                         'content'
                     ])
                     ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)

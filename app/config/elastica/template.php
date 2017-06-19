@@ -208,6 +208,17 @@ $container->loadFromExtension('fos_elastica', [
                                 ]
                             ]
                         ],
+                        'title_tree' => [
+                            'type' => 'text',
+                            'analyzer' => 'title_analyzer',
+                            'property_path' => 'titleTree',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                ]
+                            ]
+                        ],
                         'content' => [
                             'type' => 'text',
                             'analyzer' => 'content_analyzer',
