@@ -62,7 +62,12 @@ class PublicationIndexable
             return false;
         }
 
-        return !$content->getDomaines()
+        $domains = $content->getDomaines();
+        if ($domains->isEmpty()) {
+            $domains = $content->getObjet()->getDomaines();
+        }
+
+        return !$domains
             ->map(function (Domaine $domaine) {
                 return $domaine->getSlug();
             })
