@@ -19,7 +19,7 @@ $domaines = [
 
 foreach ($domaines as $slug) {
     $serviceIdentifier = str_replace('-', '', $slug);
-    $index = sprintf("cdr_domaine_%s", str_replace('-', '_', $slug));
+    $index = sprintf("%s_%s", $container->getParameter('elastica_index_prefix'), str_replace('-', '_', $slug));
 
     require "template.php";
 }

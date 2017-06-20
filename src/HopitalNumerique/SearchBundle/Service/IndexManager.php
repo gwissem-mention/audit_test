@@ -11,6 +11,24 @@ use FOS\ElasticaBundle\Elastica\Index;
 class IndexManager extends \FOS\ElasticaBundle\Index\IndexManager
 {
     /**
+     * @var string
+     */
+    protected $indexPrefix;
+
+    /**
+     * IndexManager constructor.
+     * @param array $indexes
+     * @param Index $defaultIndex
+     * @param $indexPrefix
+     */
+    public function __construct(array $indexes, Index $defaultIndex, $indexPrefix)
+    {
+        parent::__construct($indexes, $defaultIndex);
+
+        $this->indexPrefix = $indexPrefix;
+    }
+
+    /**
      * Get an index by domain slug
      *
      * @param $slug
@@ -40,6 +58,6 @@ class IndexManager extends \FOS\ElasticaBundle\Index\IndexManager
      */
     public function getIndexNameByDomaineSlug($slug)
     {
-        return sprintf('cdr_domaine_%s', str_replace('-', '_', $slug));
+        return sprintf('%s_%s', $this->indexPrefix, str_replace('-', '_', $slug));
     }
 }

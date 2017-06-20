@@ -16,3 +16,10 @@ services:
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@hopitalnumerique_reference.repository.reference'
             - '%search_engine_aggregations%'
+
+    fos_elastica.index_manager:
+        class: HopitalNumerique\SearchBundle\Service\IndexManager
+        arguments:
+            -
+            - '@fos_elastica.index'
+            - '%elastica_index_prefix%'
