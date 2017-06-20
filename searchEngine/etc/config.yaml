@@ -4,6 +4,7 @@ global:
     exact_result_score: 100
     highlights:
         enabled: true
+        tag: em
     query:
         exact:
             enabled: true

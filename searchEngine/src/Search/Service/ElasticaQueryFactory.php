@@ -78,7 +78,10 @@ class ElasticaQueryFactory
         );
 
         if ($this->config->get('highlights.enabled')) {
+            $tag = $this->config->get('highlights.tag');
             $rootQuery->setHighlight([
+                'pre_tags' => ["<$tag>"],
+                'post_tags' => ["</$tag>"],
                 'fields' => [
                     'title' => [
                         'type' => 'fvh',
