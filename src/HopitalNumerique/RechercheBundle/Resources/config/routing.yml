@@ -11,25 +11,25 @@ hopital_numerique_recherche_homepage_requete_generator:
 hopital_numerique_requete_delete:
     pattern:  /requetes/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete, id:1, _format:json }
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_requete_edit:
     pattern:  /requetes/edit/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:edit, id:1}
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_requete_toggle:
     pattern:  /requetes/toggle/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:toggle, id:1}
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_requete_consultation_delete:
     pattern:  /requetes/consultation/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Consultation:delete, id:1, _format:json }
-    requirements: 
+    requirements:
         id: \d+
 
 #Expression du besoin
@@ -37,13 +37,13 @@ hopital_numerique_requete_consultation_delete:
 hopitalnumerique_recherche_admin_aide-expression-besoin_gestion:
     pattern:  /admin/aide-expression-besoin/gestion
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:index" }
-    requirements: 
+    requirements:
         _method: GET|POST
 
 hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_add:
     pattern:  /admin/aide-expression-besoin/gestion/add
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:add" }
-    requirements: 
+    requirements:
         _method: GET|POST
 
 hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_show:
@@ -63,7 +63,7 @@ hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_edit:
 hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_delete:
     pattern:  /admin/aide-expression-besoin/gestion/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:delete", _format: json }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 
@@ -76,31 +76,31 @@ hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_get_recherche_ai
 hopital_numerique_expbesoin_index:
     pattern:  /admin/aide-expression-besoin/{id}                #l'id correspond à l'id du gestionnaire
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:index }
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_expbesoin_edit:
     pattern:  /admin/aide-expression-besoin/edit/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:edit }
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_expbesoin_addquestion:
     pattern:  /admin/aide-expression-besoin/{id}/add-question   #l'id correspond à l'id du gestionnaire
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_expbesoin_description:
     pattern:  /admin/aide-expression-besoin/{id}/description    #l'id correspond à l'id de l'exp du besoin de la description
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:description }
-    requirements: 
+    requirements:
         id: \d+
 
 hopital_numerique_expbesoin_descriptionSave:
     pattern:  /admin/aide-expression-besoin/{id}/description/save #l'id correspond à l'id de l'exp du besoin de la description
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:descriptionSave }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 
@@ -111,7 +111,7 @@ hopital_numerique_expbesoin_editquestion:
 hopital_numerique_expbesoin_deletequestion:
     pattern:  /admin/aide-expression-besoin/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:delete", _format: json }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 
@@ -123,44 +123,44 @@ hopital_numerique_expbesoin_reorderquestion:
 hopitalnumerique_expbesoin_question:
     pattern:  /admin/aide-expression-besoin/{id}/reponse
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:index" }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_add:
     pattern:  /admin/aide-expression-besoin/chapitre/{id}/question/add
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add" }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_delete:
     pattern:  /admin/aide-expression-besoin/question/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:delete", _format: json }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 
 hopitalnumerique_expbesoin_reponse_edit:
     pattern:  /admin/aide-expression-besoin/question/edit/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:edit",  _format: json }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_edit_ajax:
     pattern:  /admin/aide-expression-besoin/question/ajax-edit/{id}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:ajaxEdit" }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_edit_libelle:
     pattern:  /admin/aide-expression-besoin/question/edit-libelle/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:editLibelle",  _format: json }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_reorder:
     pattern:  /admin/aide-expression-besoin/{id}/reponse/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }
-    requirements: 
+    requirements:
         id : \d+
 
 hopitalnumerique_expbesoin_reponse_reference:
@@ -189,3 +189,9 @@ hopital_numerique_expbesoin_stat_add:
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:StatClic:add", _format: json }
     requirements:
         _method: POST
+
+
+tmp:
+    path: 'poc'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Search:index' }
+    methods: 'GET'

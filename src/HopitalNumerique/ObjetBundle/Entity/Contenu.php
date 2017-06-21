@@ -53,7 +53,7 @@ class Contenu
     protected $alias;
 
     /**
-     * @var int
+     * @var integer
      *
      * @ORM\Column(name="con_order", type="integer", nullable=true, options = {"comment" = "Ordre du contenu"})
      */
@@ -164,7 +164,7 @@ class Contenu
     /**
      * Get id.
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -193,6 +193,23 @@ class Contenu
     public function getTitre()
     {
         return $this->titre;
+    }
+
+    /**
+     * Get title tree concatenated.
+     * Used for search indexation
+     *
+     * @return string
+     */
+    public function getTitleTree()
+    {
+        $title = $this->getTitre();
+
+        if ($this->getParent()) {
+            $title = $this->getParent()->getTitre() . ' ' . $title;
+        }
+
+        return $this->getObjet()->getTitre() . ' ' . $title;
     }
 
     /**

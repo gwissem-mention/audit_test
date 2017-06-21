@@ -47,8 +47,6 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content, $glossaires = false)
     {
-        $domaineUrl = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->getUrl();
-
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
 

@@ -59,6 +59,7 @@ assetic:
                 - 'bundles/hopitalnumeriquecore/css/layout.css'
                 - 'bundles/hopitalnumeriquecore/css/Glyphter.css'
                 - 'bundles/hopitalnumeriqueaccount/css/connexion-bloc.css'
+                - 'bundles/hopitalnumeriquesearch/css/search.css'
         front_js:
             inputs:
                 - 'bundles/fosjsrouting/js/router.js'

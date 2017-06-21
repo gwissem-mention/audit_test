@@ -4,6 +4,7 @@
 /web/media/cache/
 /web/assetic/
 /web/js/
+/web/searchengine/dist
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
@@ -16,6 +17,8 @@
 /bin/
 .php_cs.cache
 
+node_modules
+.npm
 
 #Net Beans
 .buildpath

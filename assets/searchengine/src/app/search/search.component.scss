@@ -1,0 +1,15 @@
+.resultset-wrapper {
+    display: flex;
+
+    .results-wrapper {
+        flex: 1 1 auto;
+    }
+
+    .no-results-wrapper {
+        text-align: center;
+    }
+
+    .aggregations-wrapper {
+        flex: 0 0 20%;
+    }
+}

@@ -170,4 +170,9 @@ class Board extends BaseBoard
 
         return $this;
     }
+
+    public function getReadAuthorisedRoles()
+    {
+        return array_values(parent::getReadAuthorisedRoles()) ?: [];
+    }
 }

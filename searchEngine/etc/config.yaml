@@ -1,0 +1,27 @@
+global:
+    boost:
+        title: 1.5
+    exact_result_score: 100
+    highlights:
+        enabled: true
+        tag: em
+    query:
+        exact:
+            enabled: true
+            boost: 100
+            fuzziness:
+                enabled: false
+        similar:
+            enabled: true
+            fuzziness:
+                enabled: true
+                value: AUTO
+                prefix: 2
+                expansion: 5
+        suggestion:
+            enabled: true
+            fuzziness:
+                enabled: true
+                value: AUTO
+                prefix: 2
+                expansion: 5

@@ -186,7 +186,21 @@ Summary.prototype = {
     {
         var chapter = window.location.hash.substr(1).length > 0
             ? this.getChapterByHash(window.location.hash.substr(1))
-            : $('li.summary-item', this.element).first().data('chapter');
+            : null
+        ;
+
+        if (null === chapter) {
+            var chapterSession = null;
+
+            if (typeof Storage !== "undefined") {
+                chapterSession = sessionStorage.getItem(AutodiagEntry.CHAPTER_KEY);
+                sessionStorage.removeItem(AutodiagEntry.CHAPTER_KEY);
+            }
+
+            chapter = null !== chapterSession
+                ? chapterSession
+                : $('li.summary-item', this.element).first().data('chapter')
+        }
 
         this.selectChapter(chapter, false);
     },

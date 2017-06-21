@@ -78,6 +78,8 @@ class AppKernel extends Kernel
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
+            new FOS\ElasticaBundle\FOSElasticaBundle(),
+            new HopitalNumerique\SearchBundle\HopitalNumeriqueSearchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

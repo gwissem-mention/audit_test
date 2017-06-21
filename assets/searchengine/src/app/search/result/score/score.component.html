@@ -1,0 +1,6 @@
+<div class="score">
+    <ng-container *ngFor="let bar of bars">
+        <div [style.height.%]="bar.percent" class="bar active" *ngIf="bar.enabled === true"></div>
+        <div [style.height.%]="bar.percent" class="bar" *ngIf="bar.enabled === false"></div>
+    </ng-container>
+</div>

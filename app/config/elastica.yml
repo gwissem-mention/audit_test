@@ -1,0 +1,6 @@
+imports:
+    - { resource: elastica/domains.php }
+
+fos_elastica:
+    clients:
+        default: { host: %elastica_host%, port: %elastica_port% }
