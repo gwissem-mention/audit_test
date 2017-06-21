@@ -8,7 +8,7 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
-/config/parameters.json
+/assets/searchengine/config/parameters.json
 /app/logs/*
 /app/check.php
 /app/SymfonyRequirements.php

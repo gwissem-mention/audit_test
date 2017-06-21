@@ -192,7 +192,9 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->innerJoin('ref.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :idDomaine')
+            ->leftJoin('ref.domaines', 'domaine')
+            ->andWhere('domaine.id = :idDomaine')
+            ->orWhere('ref.allDomaines = 1')
             ->innerJoin('ref.parents', 'par', Expr\Join::WITH, 'par.id = :idParent')
             ->setParameters([
                 'idDomaine' => $idDomaine,

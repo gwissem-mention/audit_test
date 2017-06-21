@@ -1,6 +1,6 @@
 global:
     boost:
-        title: 1.5
+        title: 2
     exact_result_score: 100
     highlights:
         enabled: true
