@@ -15,6 +15,8 @@ $domaines = [
     'imagerie',
     'urgences',
     'si-ght',
+    'ressources',
+    'consultation-secretariat',
 ];
 
 foreach ($domaines as $slug) {

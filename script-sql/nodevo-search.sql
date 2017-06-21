@@ -13,3 +13,6 @@ UPDATE `hn_domaine` SET `dom_slug` = 'immobilier' WHERE `dom_id` = '12';
 UPDATE `hn_domaine` SET `dom_slug` = 'imagerie' WHERE `dom_id` = '13';
 UPDATE `hn_domaine` SET `dom_slug` = 'urgences' WHERE `dom_id` = '14';
 UPDATE `hn_domaine` SET `dom_slug` = 'si-ght' WHERE `dom_id` = '15';
+UPDATE `hn_domaine` SET `dom_slug` = 'ressources' WHERE `dom_id` = '17';
+UPDATE `hn_domaine` SET `dom_slug` = 'consultation-secretariat' WHERE `dom_id` = '18';
+
