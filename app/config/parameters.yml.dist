@@ -68,3 +68,11 @@ parameters:
     pandoc_path: '/usr/local/opt/pandoc/bin/pandoc'
     pandoc_working_dir: '%kernel.root_dir%/../files/pandoc'
     pandoc_data_dir: ~
+
+    elastica_host: localhost
+    elastica_port: 9200
+    elastica_index_prefix: cdr_domain
+
+    search_engine_app_source_path: http://127.0.0.1:3000
+    search_engine_aggregations: true
+

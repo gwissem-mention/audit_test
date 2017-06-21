@@ -42,4 +42,9 @@ class Forum extends BaseForum
 
         return false;
     }
+
+    public function getReadAuthorisedRoles()
+    {
+        return array_values(parent::getReadAuthorisedRoles());
+    }
 }

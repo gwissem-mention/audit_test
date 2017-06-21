@@ -17,4 +17,12 @@ class Topic extends BaseTopic
     {
         return $this->title;
     }
+
+    public function getFirstPostBody()
+    {
+        return $this->getFirstPost()
+            ? $this->getFirstPost()->getBody()
+            : null
+        ;
+    }
 }

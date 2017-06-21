@@ -9,7 +9,7 @@ var InplaceEditor = (function() {
         this.text = null;
 
         this.options = $.extend({
-            title: 'okook',
+            title: 'Edit',
             text: {
                 cssClass: "inplace-edit-text"
             },
@@ -17,8 +17,7 @@ var InplaceEditor = (function() {
                 cssClass: "inplace-edit-btn",
                 logo: {
                     cssClass: "fa fa-edit"
-                },
-                title: "Edit"
+                }
             },
             input: {
                 cssClass: "inplace-input"

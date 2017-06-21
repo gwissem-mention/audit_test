@@ -65,7 +65,8 @@
         "egeloen/google-map-bundle"                    : "2.2.*",
         "symfony/var-dumper"                           : "3.0.*",
         "egeloen/ckeditor-bundle"                      : "^4.0",
-        "box/spout": "^2.6"
+        "box/spout": "^2.6",
+        "friendsofsymfony/elastica-bundle": "^4.0"
     },
     "scripts": {
         "post-install-cmd": [
@@ -95,5 +96,6 @@
         "branch-alias": {
             "dev-master": "2.4-dev"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

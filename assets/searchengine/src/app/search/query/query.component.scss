@@ -1,0 +1,40 @@
+$main-color: #d60030;
+
+.search-bar {
+    background: $main-color;
+    padding: 2px;
+    margin: 14px 0;
+
+    input {
+        display: block;
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 0 8px;
+        height: 32px;
+        outline: none;
+        font-size: 20px;
+    }
+}
+
+.search-tags-wrapper {
+    display: flex;
+    background: #fff;
+    padding: 4px;
+
+    .search-tags {
+        display: flex;
+        flex-wrap: wrap;
+
+        .tag {
+            align-self: center;
+            cursor: pointer;
+            margin-right: 4px;
+            font-weight: normal;
+        }
+    }
+
+    .search-input {
+        flex: 1 1 auto;
+    }
+}

@@ -1,0 +1,18 @@
+<main>
+    <query [query]="query" (queryChanged)="refreshQuery($event)"></query>
+
+    <div class="resultset-wrapper">
+        <div class="results-wrapper">
+            <search-results [mode]="'lite'" [resultSet]="hotResultSet" [query]="hotQuery"  (queryChanged)="refreshHotQuery($event)"></search-results>
+            <search-results [resultSet]="resultSet" [query]="query" (queryChanged)="refreshQuery($event)"></search-results>
+
+            <div *ngIf="noResutls" class="no-results-wrapper">
+                Aucun résultat trouvé
+            </div>
+        </div>
+        <div class="aggregations-wrapper" *ngIf="config.get('aggregation')">
+            <search-aggregation [resultSet]="resultSet" [query]="query" (queryChanged)="refreshQuery($event)"></search-aggregation>
+        </div>
+    </div>
+</main>
+

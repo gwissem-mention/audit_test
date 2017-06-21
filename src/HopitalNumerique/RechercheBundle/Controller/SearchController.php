@@ -6,6 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SearchController extends Controller
 {
+    public function indexAction()
+    {
+
+
+        die('poc');
+
+
+    }
+
     /**
      * Génération manuelle d'une requete de recherche en fonction
      * d'un tableau d'id de reference passé en param, d'une recherche textuelle et de type(s).

@@ -1,0 +1,27 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block body -%}
+
+    <br/>
+
+    <search-engine>
+        <div class="search-engine-loader">
+            <i class="fa fa-spinner fa-spin"></i>
+        </div>
+    </search-engine>
+
+    <script>
+        sessionStorage.setItem('searchengine', '{{ config|raw }}');
+        sessionStorage.setItem('authentication_token', '{{ token|raw }}');
+    </script>
+
+    {% if app.debug %}
+        <script src="{{ searchEngineAppSourcePath }}/polyfills.js"></script>
+        <script src="{{ searchEngineAppSourcePath }}/vendor.js"></script>
+        <script src="{{ searchEngineAppSourcePath }}/app.js"></script>
+    {% else %}
+        <script src="{{ asset('searchengine/dist/polyfills.js') }}"></script>
+        <script src="{{ asset('searchengine/dist/vendor.js') }}"></script>
+        <script src="{{ asset('searchengine/dist/app.js') }}"></script>
+    {% endif %}
+{% endblock %}

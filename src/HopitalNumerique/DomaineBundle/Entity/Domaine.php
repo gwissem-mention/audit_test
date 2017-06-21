@@ -44,6 +44,13 @@ class Domaine
     /**
      * @var string
      *
+     * @ORM\Column(name="dom_slug", type="string", length=255)
+     */
+    protected $slug;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="dom_description", type="text", nullable=true)
      */
     private $description;
@@ -485,6 +492,26 @@ class Domaine
     public function getNom()
     {
         return $this->nom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return Domaine
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 
     /**

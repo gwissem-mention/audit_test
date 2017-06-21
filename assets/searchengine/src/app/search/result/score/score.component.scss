@@ -1,0 +1,16 @@
+.score {
+  height: 10px;
+  display: flex;
+  align-items: flex-end;
+
+  .bar {
+    background: #bbbbbb;
+    margin-right: 1px;
+    width: 4px;
+
+
+    &.active {
+      background: #d71590;
+    }
+  }
+}

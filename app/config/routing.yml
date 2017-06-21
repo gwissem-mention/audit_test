@@ -1,3 +1,7 @@
+hopital_numerique_search:
+    resource: "@HopitalNumeriqueSearchBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_autodiag:
     resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing.yml"
     prefix:   /

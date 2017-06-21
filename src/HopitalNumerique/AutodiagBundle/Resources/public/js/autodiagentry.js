@@ -12,6 +12,8 @@ var AutodiagEntry = function(element, entry, options) {
     this.init();
 };
 
+AutodiagEntry.CHAPTER_KEY = 'autodiag.chapter.hash';
+
 AutodiagEntry.prototype = {
     init: function()
     {
@@ -32,6 +34,14 @@ AutodiagEntry.prototype = {
     initEntry: function()
     {
         if (this.entry === null && $('#synthesisCreate').length > 0) {
+
+            var chapterHash = window.location.hash;
+            if (chapterHash.length > 0) {
+                if (typeof Storage !== "undefined") {
+                    sessionStorage.setItem(AutodiagEntry.CHAPTER_KEY, chapterHash.substr(1));
+                }
+            }
+
             $(function () {
                 $.fancybox({
                     content: $('#synthesisCreate'),

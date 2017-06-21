@@ -1,0 +1,78 @@
+version: "3"
+
+services:
+    apache:
+        build: docker/apache
+        ports:
+            - "8080:80"
+            - "8000:8000"
+        volumes:
+            - .:/var/www/html:rw
+        networks:
+            - default
+        depends_on:
+          - db
+
+    db:
+        image: mysql
+        ports:
+          - "3307:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=web_hopitalnumerique
+            - MYSQL_USER=nodevo
+            - MYSQL_PASSWORD=nodevo
+        volumes:
+            - db:/var/lib/mysql:rw
+            - .:/host
+            - ./docker/db:/etc/mysql/conf.d
+        networks:
+            - default
+        dns_search:
+            - db
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+        container_name: elasticsearch
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - esdata:/usr/share/elasticsearch/data
+            - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        ports:
+            - 9200:9200
+        networks:
+            - default
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:5.2.2
+        ports:
+            - "5701:5601"
+        networks:
+            - default
+
+    build:
+        build: docker/angular
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/src:rw
+        networks:
+            - default
+volumes:
+    db:
+        driver: local
+    esdata:
+        driver: local
+
+networks:
+    default:

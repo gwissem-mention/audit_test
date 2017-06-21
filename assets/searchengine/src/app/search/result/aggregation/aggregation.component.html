@@ -1,0 +1,9 @@
+<div class="aggregations">
+    <div *ngFor="let agg of resultSet.aggregations |async" class="clearfix">
+        {{ this.text.get('type.' + agg.label, agg.label) }} ({{ agg.count }})
+
+        <button class="btn btn-success btn-xs pull-right" (click)="addFilter(agg)" [disabled]="!isAggregationDisplayable(agg)">
+            <i class="fa fa-plus"></i>
+        </button>
+    </div>
+</div>
