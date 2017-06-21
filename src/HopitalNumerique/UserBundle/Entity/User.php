@@ -2286,6 +2286,11 @@ class User extends BaseUser
         return $this->inscritCommunautePratique;
     }
 
+    public function getInscritCommunautePratiqueString()
+    {
+        return $this->inscritCommunautePratique ? 'Oui' : 'Non';
+    }
+
     /**
      * Set inscritCommunautePratique.
      *
