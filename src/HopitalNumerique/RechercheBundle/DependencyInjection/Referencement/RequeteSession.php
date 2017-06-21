@@ -9,6 +9,8 @@ use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Manager\RequeteManager;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\StatBundle\Entity\StatRecherche;
+use HopitalNumerique\StatBundle\Manager\StatRechercheManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -81,7 +83,21 @@ class RequeteSession
     private $domaine;
 
     /**
+     * @var StatRechercheManager
+     */
+    protected $statRechercheManager;
+
+    /**
      * Constructeur.
+     *
+     * @param SessionInterface        $session
+     * @param ConnectedUser           $connectedUser
+     * @param CurrentDomaine          $currentDomaine
+     * @param ReferenceTree           $referenceTree
+     * @param ReferencementModulation $referencementModulation
+     * @param ReferenceManager        $referenceManager
+     * @param RequeteManager          $requeteManager
+     * @param StatRechercheManager    $statRechercheManager
      */
     public function __construct(
         SessionInterface $session,
@@ -90,7 +106,8 @@ class RequeteSession
         ReferenceTree $referenceTree,
         ReferencementModulation $referencementModulation,
         ReferenceManager $referenceManager,
-        RequeteManager $requeteManager
+        RequeteManager $requeteManager,
+        StatRechercheManager $statRechercheManager
     ) {
         $this->session = $session;
         $this->connectedUser = $connectedUser;
@@ -98,6 +115,7 @@ class RequeteSession
         $this->referencementModulation = $referencementModulation;
         $this->referenceManager = $referenceManager;
         $this->requeteManager = $requeteManager;
+        $this->statRechercheManager = $statRechercheManager;
 
         $this->domaine = $currentDomaine->get();
     }
@@ -337,6 +355,38 @@ class RequeteSession
         $requete->setRechercheTextuelle($this->getSearchedText());
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
+    }
+
+    /**
+     * Sauvegarde la statistique de cette requête.
+     *
+     * @param int $resultsCount Nombre de résultats
+     */
+    public function saveStatistique($resultsCount)
+    {
+        /** @var StatRecherche $statRecherche */
+        $statRecherche = $this->statRechercheManager->createEmpty();
+
+        $referencesTree = $this->referenceTree->getOrderedReferences(null, null, [$this->domaine], true);
+        $referenceIds = $this->getReferenceIds();
+        $categoryFilters = $this->getCategoryFilters();
+        $modulatedReferenceIds = $this->referencementModulation
+            ->getModulatedReferenceIds($referenceIds, $referencesTree)
+        ;
+        $modulatedReferences = $this->referenceManager->findBy(['id' => $modulatedReferenceIds]);
+
+        $statRecherche->setUser($this->connectedUser->get());
+        $statRecherche->setReferences($modulatedReferences);
+        $statRecherche->setDate(new \DateTime());
+        $statRecherche->setNbResultats($resultsCount);
+        $statRecherche->setRequete(json_encode($referenceIds));
+        $statRecherche->setIsRequeteSaved(null !== $this->getRequete());
+        $statRecherche->setCategPointDur(count($categoryFilters) > 0 ? json_encode($categoryFilters) : '');
+        if (!$this->connectedUser->is()) {
+            $statRecherche->setSessionId(session_id());
+        }
+
+        $this->statRechercheManager->save($statRecherche);
     }
 
     /**
