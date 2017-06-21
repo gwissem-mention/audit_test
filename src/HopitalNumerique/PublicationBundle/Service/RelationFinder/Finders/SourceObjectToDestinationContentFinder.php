@@ -2,9 +2,9 @@
 
 namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
-use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
+use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 
 /**
  * Class SourceObjectToDestinationContentFinder
@@ -68,11 +68,11 @@ class SourceObjectToDestinationContentFinder implements FinderInterface
                 $relatedObjectId = $relatedObject[1];
 
                 if ($relatedObjectType == 'INFRADOC') {
-                    $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                        $this->contentManager->findOneById(
-                            $relatedObjectId
-                        )
-                    );
+                    $entity = $this->contentManager->findOneById($relatedObjectId);
+
+                    if (null !== $entity) {
+                        $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees($entity);
+                    }
                 }
             }
         }

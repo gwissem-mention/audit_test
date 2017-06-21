@@ -2,9 +2,9 @@
 
 namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
-use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 
 /**
  * Class DestinationObjectToSourceObjectFinder
@@ -66,9 +66,11 @@ class DestinationObjectToSourceObjectFinder implements FinderInterface
         );
 
         foreach ($relatedObjects as $relatedObject) {
-            $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                $relatedObject
-            );
+            if (null !== $relatedObject) {
+                $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
+                    $relatedObject
+                );
+            }
         }
 
         return $relatedResources;

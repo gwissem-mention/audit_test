@@ -2,17 +2,17 @@
 
 namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
-use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
+use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 
 /**
  * Class SourceContentToDestinationContentFinder
  *
  * Retrieves objects related with current object (B->A1)
  */
-class DestinationObjectToSourceContent implements FinderInterface
+class DestinationObjectToSourceContentFinder implements FinderInterface
 {
     /**
      * @var ContenuManager
@@ -76,11 +76,13 @@ class DestinationObjectToSourceContent implements FinderInterface
                         || $relatedObjectType == 'ARTICLE')
                            && $relatedObjectId == $object->getId()
                     ) {
-                        $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                            $this->contentManager->findOneById(
-                                $content->getId()
-                            )
-                        );
+                        $entity = $this->contentManager->findOneById($content->getId());
+
+                        if (null !== $entity) {
+                            $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
+                                $entity
+                            );
+                        }
                     }
                 }
             }

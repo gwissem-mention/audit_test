@@ -110,7 +110,7 @@ services:
             - { name: resource.relation_finder }
 
     hopitalnumerique_publication.service.destination_object_source_content:
-        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationObjectToSourceContent
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationObjectToSourceContentFinder
         arguments:
             - "@hopitalnumerique_objet.manager.contenu"
             - "@hopitalnumerique_objet.dependency_injection.production_liee"
