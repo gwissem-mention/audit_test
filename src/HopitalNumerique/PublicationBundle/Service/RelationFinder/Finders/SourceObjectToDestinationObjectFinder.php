@@ -2,9 +2,9 @@
 
 namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
-use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 
 /**
  * Class SourceObjectToDestinationObjectFinder
@@ -68,11 +68,13 @@ class SourceObjectToDestinationObjectFinder implements FinderInterface
                 $relatedObjectId = $relatedObject[1];
 
                 if ($relatedObjectType == 'ARTICLE' || $relatedObjectType == 'PUBLICATION') {
-                    $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                        $this->objectManager->findOneById(
-                            $relatedObjectId
-                        )
-                    );
+                    $entity = $this->objectManager->findOneById($relatedObjectId);
+
+                    if (null !== $entity) {
+                        $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
+                            $entity
+                        );
+                    }
                 }
             }
         }
