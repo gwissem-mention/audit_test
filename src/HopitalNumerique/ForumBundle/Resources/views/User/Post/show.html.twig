@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.post.user.show.layout_template %}
 
 {%- block title -%}
-    {{- 'title.post.show' | trans({'%post_id%': post.getId}, 'CCDNForumForumBundle') -}}
+    {{ domaineCurrent.nom }} - {{ 'title.post.show' | trans({'%post_id%': post.getId}, 'CCDNForumForumBundle') -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}

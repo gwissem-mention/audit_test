@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.forum.admin.create.layout_template %}
 
 {%- block title -%}
-    {{- 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
+    {{ domaineCurrent.nom }} - {{ 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
 {%- endblock title -%}
 
 {% block javascripts %}
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <div id="titre-creation">
                         <h4>
-                            {{- 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
                         </h4>
                     </div>
                 </div>
