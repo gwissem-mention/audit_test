@@ -57,6 +57,7 @@ export class ResultComponent implements OnInit {
                 for (let result of results) {
                     if (result.getRawScore() > minScore) {
                         this.results.push(result);
+                    } else {
                         this.query.offset--;
                     }
                 }
