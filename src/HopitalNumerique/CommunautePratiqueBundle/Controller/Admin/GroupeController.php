@@ -2,18 +2,21 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Admin;
 
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 /**
  * Contrôleur des groupes dans l'admin.
  */
-class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class GroupeController extends Controller
 {
     /**
      * Affiche les groupes à gérer.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction()
     {
@@ -25,29 +28,44 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     /**
      * Ajoute un groupe.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function addAction(Request $request)
     {
-        $nouveauGroupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
+        $nouveauGroupe = $this->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
 
         if ($request->query->has('domaine')) {
-            $nouveauGroupe->setDomaine($this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById(intval($request->query->getInt('domaine'))));
+            $nouveauGroupe->setDomaine(
+                $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
+                    intval($request->query->getInt('domaine'))
+                )
+            );
         } elseif ($request->request->has('hopitalnumerique_communautepratiquebundle_groupe')) {
             $formPost = $request->request->get('hopitalnumerique_communautepratiquebundle_groupe');
 
-            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_add', ['domaine' => intval($formPost['domaine'])]));
+            return $this->redirect(
+                $this->generateUrl(
+                    'hopitalnumerique_communautepratique_admin_groupe_add',
+                    ['domaine' => intval($formPost['domaine'])]
+                )
+            );
         }
 
-        return $this->editAction($nouveauGroupe, $request);
+        return $this->editAction($request, $nouveauGroupe);
     }
 
     /**
      * Édite un groupe.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request  $request
+     * @param Groupe   $groupe
+     * @param int      $toRef
+     *
+     * @return Response
      */
-    public function editAction(Groupe $groupe, Request $request)
+    public function editAction(Request $request, Groupe $groupe, $toRef = 0)
     {
         $groupeForm = $this->createForm('hopitalnumerique_communautepratiquebundle_groupe', $groupe);
         $groupeForm->handleRequest($request);
@@ -58,7 +76,14 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 $this->get('session')->getFlashBag()->add('success', 'Groupe enregistré.');
                 $do = $this->container->get('request')->request->get('do');
 
-                return $this->redirect($do == 'save-close' ? $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_list') : $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_edit', ['id' => $groupe->getId()]));
+                return $this->redirect(
+                    $do == 'save-close'
+                        ? $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_list')
+                        : $this->generateUrl(
+                            'hopitalnumerique_communautepratique_admin_groupe_edit',
+                            ['id' => $groupe->getId()]
+                        )
+                );
             } else {
                 $this->get('session')->getFlashBag()->add('danger', 'Groupe non enregistré.');
             }
@@ -69,6 +94,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             [
                 'groupeForm' => $groupeForm->createView(),
                 'groupe' => $groupe,
+                'toRef' => (int) $toRef,
             ]
         );
     }
@@ -76,21 +102,24 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     /**
      * Supprime en masse les groupes.
      *
-     * @param int[] $primaryKeys Les ID des groupes à supprimer
+     * @param array $primaryKeys
      *
-     * @return \Component\HttpFoundation\RedirectResponse Redirection vers la liste
+     * @return RedirectResponse
      */
     public function deleteMassAction(array $primaryKeys)
     {
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $utilisateurConnecte = $this->getUser();
 
-        if ($this->container->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_deletemass'), $utilisateurConnecte) != -1) {
-            $groupes = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findBy(['id' => $primaryKeys]);
-            $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->delete($groupes);
+        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization(
+            $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_deletemass'),
+            $utilisateurConnecte
+        ) != -1) {
+            $groupes = $this->get('hopitalnumerique_communautepratique.manager.groupe')->findBy(['id' => $primaryKeys]);
+            $this->get('hopitalnumerique_communautepratique.manager.groupe')->delete($groupes);
 
-            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+            $this->addFlash('info', 'Suppression effectuée avec succès.');
         } else {
-            $this->get('session')->getFlashBag()->add('warning', 'Vous ne possédez pas les droits nécessaires pour supprimer des groupes.');
+            $this->addFlash('warning', 'Vous ne possédez pas les droits nécessaires pour supprimer des groupes.');
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_list'));

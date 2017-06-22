@@ -11,8 +11,20 @@
     {% endif %}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(window).load(function() {
+            Hn_Reference_Referencement_Popin.preparePopin();
+            if ($('#toRef').val() == 1) {
+                Hn_Reference_Referencement_Popin.open($('.open-popin-referencement').attr('href'));
+            }
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
-    
     <div class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
@@ -23,7 +35,7 @@
                 {% if groupe.id is not null -%}
                     <p class="text-right">
                         <strong>Note référencement :</strong> {{ referencement_note(groupe, groupe.domaine) }}
-                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':6, 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax"><i class="fa fa-cog"></i></a>
+                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':6, 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary"><i class="fa fa-cog"></i></a>
                     </p>
                 {%- endif -%}
 
@@ -75,4 +87,5 @@
         </div>
     </div>
 
+    <input type="hidden" id="toRef" value="{{ toRef }}" />
 {% endblock %}

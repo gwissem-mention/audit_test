@@ -3,10 +3,13 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\Validator\Constraints as Assert;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 /**
  * Entité Groupe.
@@ -101,7 +104,7 @@ class Groupe
     private $actif;
 
     /**
-     * @var \HopitalNumerique\DomaineBundle\Entity\Domaine
+     * @var Domaine
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
      * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", nullable=false, onDelete="CASCADE")
@@ -110,7 +113,7 @@ class Groupe
     private $domaine;
 
     /**
-     * @var \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
+     * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="communautePratiqueGroupes")
      * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id", nullable=false, onDelete="CASCADE")
@@ -411,11 +414,11 @@ class Groupe
     /**
      * Set domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      *
      * @return Groupe
      */
-    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function setDomaine(Domaine $domaine)
     {
         $this->domaine = $domaine;
 
@@ -425,7 +428,7 @@ class Groupe
     /**
      * Get domaine.
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
+     * @return Domaine
      */
     public function getDomaine()
     {
@@ -435,11 +438,11 @@ class Groupe
     /**
      * Set questionnaire.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      *
      * @return Groupe
      */
-    public function setQuestionnaire(\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
 
@@ -449,7 +452,7 @@ class Groupe
     /**
      * Get questionnaire.
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
+     * @return Questionnaire
      */
     public function getQuestionnaire()
     {
@@ -483,11 +486,11 @@ class Groupe
     /**
      * Add fiches.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     * @param Fiche $fiches
      *
      * @return Groupe
      */
-    public function addFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    public function addFiche(Fiche $fiches)
     {
         $this->fiches[] = $fiches;
 
@@ -497,9 +500,9 @@ class Groupe
     /**
      * Remove fiches.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     * @param Fiche $fiches
      */
-    public function removeFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    public function removeFiche(Fiche $fiches)
     {
         $this->fiches->removeElement($fiches);
     }
@@ -517,11 +520,11 @@ class Groupe
     /**
      * Add animateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $animateur
+     * @param User $animateur
      *
      * @return Groupe
      */
-    public function addAnimateur(\HopitalNumerique\UserBundle\Entity\User $animateur)
+    public function addAnimateur(User $animateur)
     {
         $this->animateurs[] = $animateur;
 
@@ -535,9 +538,9 @@ class Groupe
     /**
      * Remove animateurs.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $animateurs
+     * @param User $animateurs
      */
-    public function removeAnimateur(\HopitalNumerique\UserBundle\Entity\User $animateurs)
+    public function removeAnimateur(User $animateurs)
     {
         $this->animateurs->removeElement($animateurs);
     }
@@ -555,11 +558,11 @@ class Groupe
     /**
      * Add users.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     * @param User $users
      *
      * @return Groupe
      */
-    public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    public function addUser(User $users)
     {
         $this->addInscription(new Inscription($this, $users));
 
@@ -569,9 +572,9 @@ class Groupe
     /**
      * Remove users.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     * @param User $users
      */
-    public function removeUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         foreach ($this->getInscriptions() as $inscription) {
             if ($user->equals($inscription->getUser())) {
@@ -599,11 +602,11 @@ class Groupe
     /**
      * Add inscription.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $inscription
+     * @param User $inscription
      *
      * @return Groupe
      */
-    public function addInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $inscription)
+    public function addInscription(Inscription $inscription)
     {
         $this->inscriptions[] = $inscription;
 
@@ -613,9 +616,9 @@ class Groupe
     /**
      * Remove inscription.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $inscription
+     * @param User $inscription
      */
-    public function removeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $inscription)
+    public function removeInscription(Inscription $inscription)
     {
         $this->inscriptions->removeElement($inscription);
     }
@@ -633,11 +636,11 @@ class Groupe
     /**
      * Add documents.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     * @param Document $documents
      *
      * @return Groupe
      */
-    public function addDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
+    public function addDocument(Document $documents)
     {
         $this->documents[] = $documents;
 
@@ -647,9 +650,9 @@ class Groupe
     /**
      * Remove documents.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     * @param Document $documents
      */
-    public function removeDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
+    public function removeDocument(Document $documents)
     {
         $this->documents->removeElement($documents);
     }
@@ -667,11 +670,11 @@ class Groupe
     /**
      * Add publications.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
+     * @param Objet $publications
      *
      * @return Groupe
      */
-    public function addPublication(\HopitalNumerique\ObjetBundle\Entity\Objet $publications)
+    public function addPublication(Objet $publications)
     {
         $this->publications[] = $publications;
 
@@ -681,9 +684,9 @@ class Groupe
     /**
      * Remove publications.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
+     * @param Objet $publications
      */
-    public function removePublication(\HopitalNumerique\ObjetBundle\Entity\Objet $publications)
+    public function removePublication(Objet $publications)
     {
         $this->publications->removeElement($publications);
     }
@@ -701,11 +704,11 @@ class Groupe
     /**
      * Add commentaires.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
+     * @param Commentaire $commentaires
      *
      * @return Groupe
      */
-    public function addCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires)
+    public function addCommentaire(Commentaire $commentaires)
     {
         $this->commentaires[] = $commentaires;
 
@@ -715,9 +718,9 @@ class Groupe
     /**
      * Remove commentaires.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
+     * @param Commentaire $commentaires
      */
-    public function removeCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires)
+    public function removeCommentaire(Commentaire $commentaires)
     {
         $this->commentaires->removeElement($commentaires);
     }
@@ -769,11 +772,11 @@ class Groupe
     /**
      * Retourne si l'utilisateur est animateur du groupe.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return bool VRAI si animateur
      */
-    public function hasAnimateur(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function hasAnimateur(User $user)
     {
         foreach ($this->animateurs as $animateur) {
             if ($animateur->getId() == $user->getId()) {
@@ -808,11 +811,11 @@ class Groupe
     /**
      * Retourne si l'utilisateur est membre du groupe.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return bool VRAI si membre
      */
-    public function hasUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function hasUser(User $user)
     {
         if ($this->users != null) {
             foreach ($this->users as $membre) {
@@ -899,7 +902,7 @@ class Groupe
     /**
      * Retourne le total de tous les commentaires d'un utilisateur, fiches comprises.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return int Total des commentaires
      */
@@ -927,7 +930,7 @@ class Groupe
     /**
      * Retourne les fiches d'un utilisateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche> Fiches de l'utilisateur
      */
@@ -947,7 +950,7 @@ class Groupe
     /**
      * Retourne les documents d'un utilisateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Document> Documents de l'utilisateur
      */

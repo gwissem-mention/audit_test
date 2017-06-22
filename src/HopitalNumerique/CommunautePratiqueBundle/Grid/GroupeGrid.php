@@ -2,31 +2,35 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Grid;
 
+use Nodevo\GridBundle\Grid\Grid;
+use HopitalNumerique\UserBundle\Entity\User;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use Nodevo\GridBundle\Grid\Column\TextColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
-use Nodevo\GridBundle\Grid\Column\BooleanColumn;
 use Nodevo\GridBundle\Grid\Action\EditButton;
 use Nodevo\GridBundle\Grid\Action\DeleteMass;
+use Nodevo\GridBundle\Grid\Column\BooleanColumn;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Grid de Groupe.
  */
-class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
+class GroupeGrid extends Grid
 {
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     * @var User Utilisateur connecté
      */
     private $user;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        $this->user = $container->get('security.context')->getToken()->getUser();
-        if (!($this->user instanceof \HopitalNumerique\UserBundle\Entity\User)) {
+        $this->user = $container->get('security.token_storage')->getToken()->getUser();
+        if (!($this->user instanceof User)) {
             throw new \Exception('Aucun utilisateur connecté.');
         }
     }
@@ -54,6 +58,14 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
     public function setActionsButtons()
     {
         $this->addActionButton(new EditButton('hopitalnumerique_communautepratique_admin_groupe_edit'));
+
+        $referencesButton = new RowAction('', 'hopitalnumerique_communautepratique_admin_groupe_edit');
+        $referencesButton->setRouteParameters(['id', 'toRef' => 1]);
+        $referencesButton->setAttributes(
+            ['class' => 'btn btn-primary fa fa-cog', 'title' => 'Accès direct aux références']
+        );
+
+        $this->addActionButton($referencesButton);
     }
 
     /**
@@ -61,7 +73,7 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
      */
     public function setMassActions()
     {
-        $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
+        $utilisateurConnecte = $this->_container->get('security.token_storage')->getToken()->getUser();
 
         if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopitalnumerique_communautepratique_admin_groupe_deletemass'), $utilisateurConnecte) != -1) {
             $this->addMassAction(new DeleteMass('HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:deleteMass'));
