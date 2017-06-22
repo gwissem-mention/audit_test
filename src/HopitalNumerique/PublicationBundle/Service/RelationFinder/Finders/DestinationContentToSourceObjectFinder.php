@@ -2,11 +2,11 @@
 
 namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
-use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
+use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\PublicationBundle\Service\RelationFinder\RelationFinder;
 
 /**
@@ -93,9 +93,13 @@ class DestinationContentToSourceObjectFinder implements FinderInterface
                     $relatedContentId = $relatedContent[1];
 
                     if ($relatedContentType == 'INFRADOC' && $relatedContentId == $content->getId()) {
-                        $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                            $this->objectRepository->findOneBy(['id' => $object->getId()])
-                        );
+                        $entity = $this->objectRepository->findOneBy(['id' => $object->getId()]);
+
+                        if (null !== $entity) {
+                            $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
+                                $entity
+                            );
+                        }
                     }
                 }
             }

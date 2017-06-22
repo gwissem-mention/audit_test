@@ -538,6 +538,7 @@ class UserController extends Controller
             'domainesString' => 'Domaine(s) concerné(s)',
             'ipLastConnection' => 'Dernière ip de connexion',
             'UpToDateToString' => 'À jour',
+            'inscritCommunautePratiqueString' => 'Membre de la CDP',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

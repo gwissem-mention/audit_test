@@ -896,14 +896,24 @@ class ObjetManager extends BaseManager
             //switch Objet / Infra-doc
             if ($tab[0] == 'PUBLICATION') {
                 $objet = $this->findOneBy(['id' => $tab[1]]);
-                $element->titre = $objet->getTitre();
+                if (null === $objet) {
+                    $element->titre = 'La publication ' . $tab[1] . ' a été supprimée';
+                } else {
+                    $element->titre = $objet->getTitre();
+                }
                 $element->isObjet = 1;
             } elseif ($tab[0] == 'INFRADOC') {
                 $contenu = $this->contenuManager->findOneBy(['id' => $tab[1]]);
+                if (null === $contenu) {
+                    $element->titre = 'Le contenu ' . $tab[1] . ' a été supprimé';
+                }
                 $element->titre = '|--' . $contenu->getTitre();
                 $element->isObjet = 0;
             } elseif ($tab[0] == 'ARTICLE') {
                 $objet = $this->findOneBy(['id' => $tab[1]]);
+                if (null === $objet) {
+                    $element->titre = 'L\'article ' . $tab[1] . ' a été supprimé';
+                }
                 $element->titre = $objet->getTitre();
                 $element->isObjet = 1;
             }

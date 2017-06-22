@@ -4,6 +4,10 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
 
+    stat.manager.recherche:
+            class: HopitalNumerique\StatBundle\Manager\StatRechercheManager
+            arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference", "@security.context"]
+
     stat.repository.error:
             class: HopitalNumerique\StatBundle\Repository\ErrorUrlRepository
             factory: ["@doctrine.orm.entity_manager", "getRepository"]
