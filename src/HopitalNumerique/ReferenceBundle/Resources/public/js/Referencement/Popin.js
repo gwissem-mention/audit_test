@@ -36,15 +36,24 @@ $(document).ready(function () {
  */
 Hn_Reference_Referencement_Popin.preparePopin = function()
 {
-    $('.open-popin-referencement').fancybox({
-        'padding'   : 0,
-        'autoSize'  : false,
-        'width'     : '80%',
-        'scrolling' : 'auto',
-        'modal'     : true
+    $('.open-popin-referencement').click(function (e) {
+        e.preventDefault();
+        Hn_Reference_Referencement_Popin.open($(this).attr('href'));
     });
 };
 
+Hn_Reference_Referencement_Popin.open = function (url)
+{
+    $.fancybox.open({
+        padding   : 0,
+        autoSize  : false,
+        width     : '80%',
+        scrolling : 'auto',
+        modal     : true,
+        href      : url,
+        type      : 'ajax'
+    });
+};
 
 /**
  * Initialise la fenêtre.
