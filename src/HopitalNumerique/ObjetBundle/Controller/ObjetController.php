@@ -362,12 +362,10 @@ class ObjetController extends Controller
     public function getPublicationsAction($articles)
     {
         if ($articles == 1) {
-            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CATEGORIE_OBJET']);
+            $types = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('CATEGORIE_OBJET');
             $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo($types);
         } else {
-            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(
-                ['code' => 'CATEGORIE_ARTICLE']
-            );
+            $types = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('CATEGORIE_ARTICLE');
             $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getArticlesArbo($types);
         }
 
