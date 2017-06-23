@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.topic.moderator.change_board.layout_template %}
 
 {%- block title -%}
-    {{- 'title.topic.change_board' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
+    {{ domaineCurrent.nom }} - {{ 'title.topic.change_board' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
                         <h4>
-                            {{- 'title.topic.change_board' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.topic.change_board' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
                         </h4>
                     </div>
                 </div>

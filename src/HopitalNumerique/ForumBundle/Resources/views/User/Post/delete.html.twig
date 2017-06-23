@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.post.user.delete.layout_template %}
 
 {%- block title -%}
-    {{- 'title.post.delete' |trans({'%post_id%': post.id}, ForumBundle.translation) -}}
+    {{ domaineCurrent.nom }} - {{ 'title.post.delete' |trans({'%post_id%': post.id}, ForumBundle.translation) -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <div id="titre-creation">
                         <h4>
-                            {{- 'title.post.delete' |trans({'%post_id%': post.id}, ForumBundle.translation) -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.post.delete' |trans({'%post_id%': post.id}, ForumBundle.translation) -}}
                         </h4>
                     </div>
                 </div>

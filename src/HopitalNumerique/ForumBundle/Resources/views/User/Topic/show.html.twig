@@ -12,7 +12,7 @@
 {% endblock %}
 
 {%- block title -%}
-    {{- 'title.topic.show' | trans({'%topic_title%': topic.getTitle |capitalize}, 'CCDNForumForumBundle') -}}
+    {{ domaineCurrent.nom }} - {{ 'title.topic.show' | trans({'%topic_title%': topic.getTitle |capitalize}, 'CCDNForumForumBundle') -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}
