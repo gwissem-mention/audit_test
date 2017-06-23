@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.topic.user.reply.layout_template %}
 
 {%- block title -%}
-    {{- 'title.topic.reply' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
+    {{ domaineCurrent.nom }} - {{ 'title.topic.reply' | trans({'%topic_title%': topic.getTitle }, 'CCDNForumForumBundle') -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}
@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <div id="titre-creation">
                         <h4>
-                            {{- 'title.topic.reply' | trans({}, ForumBundle.translation ) -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.topic.reply' | trans({}, ForumBundle.translation ) -}}
                         </h4>
                         <h5>
                             {{- topic.getTitle -}}

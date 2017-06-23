@@ -485,32 +485,32 @@ class PublicationController extends Controller
             $this->get('hopitalnumerique_reference.manager.reference')->findOneById(188)
         );
 
+        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
         //get Type
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes($objet->getTypes());
 
         $references = $this->get('hopitalnumerique_reference.manager.entity_has_reference')
             ->findByEntityTypeAndEntityIdAndDomaines(
-                $this->get('hopitalnumerique_core.dependency_injection.entity')
-                    ->getEntityType($objet),
-                $this->get('hopitalnumerique_core.dependency_injection.entity')
-                    ->getEntityId($objet),
+                $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
                 [
-                    $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get(),
+                    $currentDomaine,
                 ]
             );
 
-        $isCommunautePratiqueArticle = false;
-        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        if ($currentDomaine && $article = $currentDomaine->getCommunautePratiqueArticle()) {
-            $urlToRedirect = base64_encode($this->generateUrl('hopitalnumerique_communautepratique_accueil_index', []));
+        $isCommunautePratiqueArticle =
+            $currentDomaine->getCommunautePratiqueArticle()
+            && $currentDomaine->getCommunautePratiqueArticle()->getId() === $objet->getId()
+        ;
+
+        if ($isCommunautePratiqueArticle) {
             $request->getSession()->set(
                 'urlToRedirect',
-                base64_decode(
-                    str_pad(strtr($urlToRedirect, '-_', '+/'), strlen($urlToRedirect) % 4, '=', STR_PAD_RIGHT)
-                )
+                $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
             );
-
-            $isCommunautePratiqueArticle = $article->getId() === $objet->getId();
+        } else {
+            $request->getSession()->remove('urlToRedirect');
         }
 
         //render

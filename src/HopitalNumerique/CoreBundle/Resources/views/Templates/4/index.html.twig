@@ -129,9 +129,6 @@
                     <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                 {% endif %}
             </div>
-            {# <p class="violet pull-right align-right">
-                Ce projet s’inscrit dans le cadre du programme
-            </p>#}
 
             <div class="common-sprite common-sprite-header"></div>
             <div class="clearfix"></div>
@@ -147,45 +144,40 @@
 
         <div class="clearfix"></div>
     </div>
-<div class="col-md-12 no-padding" id="content">
+    <div class="col-md-12 no-padding" id="content">
 
-    {{ block('flashBags') }}
-    {% if error is defined and error %}
-        <div class="alert nalert-warning" onclick="$(this).slideUp();" >
-            {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
-    {% endif %}
-    {% if invalid_username is defined %}
-        <div class="alert nalert-warning" onclick="$(this).slideUp();" >
-            {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
-        </div>
-    {% endif %}
-    {% block block_du_body %}
-        {% block prebody %}
-
-        {% endblock prebody %}
-        <div class="clearfix"></div>
-        {% block body %}
-            <div id="homepage" >
-                {% if domaineCurrent.homepage is not null %}
-                    {{domaineCurrent.homepage|parsePublication|raw}}
-                {% endif %}
+        {{ block('flashBags') }}
+        {% if error is defined and error %}
+            <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+                {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
-        {% endblock body %}
-<div class="clearfix"></div>
-    {% endblock %}
+        {% endif %}
+        {% if invalid_username is defined %}
+            <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+                {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
+            </div>
+        {% endif %}
+        {% block block_du_body %}
+            {% block prebody %}
 
-    <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />
-</div>
+            {% endblock prebody %}
+            <div class="clearfix"></div>
+            {% block body %}
+                <div id="homepage" >
+                    {% if domaineCurrent.homepage is not null %}
+                        {{domaineCurrent.homepage|parsePublication|raw}}
+                    {% endif %}
+                </div>
+            {% endblock body %}
+    <div class="clearfix"></div>
+        {% endblock %}
 
-<div class="col-md-12" id="footer">
-    {{ knp_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+        <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />
+    </div>
 
-{#    {% if app.user %}
-        <a class="reporting btn btn-xs" href="{{path('hopitalnumerique_report_homepage', {url: app.request.uri|base64Nodevo})}}">Signaler une anomalie sur cette page</a>
-    {% endif %}#}
-
-</div>
+    <div class="col-md-12" id="footer">
+        {{ knp_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+    </div>
 </div>
 
 {% if app.user and app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}

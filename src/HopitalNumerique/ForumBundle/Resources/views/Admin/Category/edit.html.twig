@@ -3,7 +3,7 @@
 {% set LayoutTemplate = ccdn_forum_forum.category.admin.edit.layout_template %}
 
 {%- block title -%}
-    {{- 'title.admin.manage-categories.edit' |trans({'%category_name%': category.name}, 'CCDNForumForumBundle') -}}
+    {{ domaineCurrent.nom }} - {{ 'title.admin.manage-categories.edit' |trans({'%category_name%': category.name}, 'CCDNForumForumBundle') -}}
 {%- endblock title -%}
 
 {%- block sidebar -%}
@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <div id="titre-creation">
                         <h4>
-                            {{- 'title.admin.manage-categories.edit' |trans({'%category_name%': category.name}, 'CCDNForumForumBundle') -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.admin.manage-categories.edit' |trans({'%category_name%': category.name}, 'CCDNForumForumBundle') -}}
                         </h4>
                     </div>
                 </div>
