@@ -298,3 +298,4 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 
 /* Lien synthèse */
 a.synthese{font-size: 11px; color:#161616; background: url('../../hopitalnumeriquepublication/img/synthese.png') no-repeat right center; padding-right:25px; margin-top:5px; display: block; height: 18px; float: right}
+.select2-dropdown { z-index: 10000 !important; }
