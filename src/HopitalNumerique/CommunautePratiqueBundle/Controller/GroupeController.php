@@ -43,7 +43,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     /**
      * Visualisation d'un groupe.
      */
-    public function viewAction(Groupe $groupe)
+    public function viewAction(Request $request, Groupe $groupe)
     {
         /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -94,31 +94,18 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 }
             }
         } else {
+            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', [
+                'groupe' => $groupe->getId(),
+            ]));
+
             return $this->redirect(
-                $this->generateUrl(
-                    'account_login',
-                    [
-                        'urlToRedirect' => base64_encode(
-                            $this->generateUrl(
-                                'hopitalnumerique_communautepratique_groupe_view',
-                                [
-                                    'groupe' => $groupe->getId(),
-                                ],
-                                RouterInterface::ABSOLUTE_PATH
-                            )
-                        ),
-                    ]
-                )
+                $this->generateUrl('account_login')
             );
         }
 
-        return $this->render(
-            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig',
-
-            [
-                'groupe' => $groupe,
-            ]
-        );
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
+            'groupe' => $groupe,
+        ]);
     }
 
     /**
