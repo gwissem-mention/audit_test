@@ -40,6 +40,8 @@ class ForumIndexable
             && null !== $post->getTopic()->getBoard()
             && null !== $post->getTopic()->getBoard()->getCategory()
             && null !== $post->getTopic()->getBoard()->getCategory()->getForum()
+            && null !== $post->getTopic()->getBoard()->getCategory()->getForum()->getDomain()
+            && $post->getTopic()->getBoard()->getCategory()->getForum()->getDomain()->getSlug() === $this->domaineSlug
         ;
     }
 
@@ -55,6 +57,8 @@ class ForumIndexable
         return null !== $topic->getBoard()
             && null !== $topic->getBoard()->getCategory()
             && null !== $topic->getBoard()->getCategory()->getForum()
-            ;
+            && null !== $topic->getBoard()->getCategory()->getForum()->getDomain()
+            && $topic->getBoard()->getCategory()->getForum()->getDomain()->getSlug() === $this->domaineSlug
+        ;
     }
 }

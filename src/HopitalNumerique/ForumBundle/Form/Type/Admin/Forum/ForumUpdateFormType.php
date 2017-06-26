@@ -66,9 +66,9 @@ class ForumUpdateFormType extends AbstractType
             ->add('domain', EntityType::class, [
                 'class' => Domaine::class,
                 'empty_value' => '-',
-//                'attr' => [
-//                    'class' => 'validate[required]',
-//                ],
+                'attr' => [
+                    'class' => 'validate[required]',
+                ],
             ])
             ->add('readAuthorisedRoles', 'choice',
                 [

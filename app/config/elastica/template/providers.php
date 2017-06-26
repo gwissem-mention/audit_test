@@ -6,6 +6,8 @@ use HopitalNumerique\SearchBundle\Service\Provider\ObjectProvider;
 use HopitalNumerique\SearchBundle\Service\Provider\ContentProvider;
 use HopitalNumerique\SearchBundle\Service\Provider\GroupProvider;
 use HopitalNumerique\SearchBundle\Service\Provider\UserProvider;
+use HopitalNumerique\SearchBundle\Service\Provider\ForumPostProvider;
+use HopitalNumerique\SearchBundle\Service\Provider\ForumTopicProvider;
 use Symfony\Component\DependencyInjection\Reference;
 
 $container
@@ -82,5 +84,35 @@ $container
     ->addTag('fos_elastica.provider', [
         'index' => $index,
         'type' => 'person',
+    ])
+;
+
+$container
+    ->setDefinition("hopital_numerique_search.provider.forum_topic.$serviceIdentifier", new Definition(
+        ForumTopicProvider::class,
+        [
+            $slug,
+            new Reference('hopitalnumerique_forum.repository.topic'),
+            new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'forum_topic')),
+        ]
+    ))
+    ->addTag('fos_elastica.provider', [
+        'index' => $index,
+        'type' => 'forum_topic',
+    ])
+;
+
+$container
+    ->setDefinition("hopital_numerique_search.provider.forum_post.$serviceIdentifier", new Definition(
+        ForumPostProvider::class,
+        [
+            $slug,
+            new Reference('hopitalnumerique_forum.repository.post'),
+            new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'forum_post')),
+        ]
+    ))
+    ->addTag('fos_elastica.provider', [
+        'index' => $index,
+        'type' => 'forum_post',
     ])
 ;
