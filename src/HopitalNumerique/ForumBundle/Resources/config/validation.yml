@@ -1,11 +1,13 @@
 
 #%ccdn_forum_forum.entity.forum.class%:
-CCDNForum\ForumBundle\Entity\Forum:
+HopitalNumerique\ForumBundle\Entity\Forum:
     properties:
         name:
             - Type: { type: string, groups: [forum_forum_create, forum_forum_update] }
             - NotBlank: { groups: [forum_forum_create, forum_forum_update] }
             - Length: { min: 3, max: 255, groups: [forum_forum_create, forum_forum_update] }
+        domain:
+            - NotNull: { groups: [forum_forum_create, forum_forum_update] }
 
 #%ccdn_forum_forum.entity.category.class%:
 CCDNForum\ForumBundle\Entity\Category:

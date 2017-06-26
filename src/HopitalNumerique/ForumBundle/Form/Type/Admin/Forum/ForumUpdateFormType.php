@@ -13,6 +13,8 @@
 
 namespace HopitalNumerique\ForumBundle\Form\Type\Admin\Forum;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -61,6 +63,13 @@ class ForumUpdateFormType extends AbstractType
                     ],
                 ]
             )
+            ->add('domain', EntityType::class, [
+                'class' => Domaine::class,
+                'empty_value' => '-',
+//                'attr' => [
+//                    'class' => 'validate[required]',
+//                ],
+            ])
             ->add('readAuthorisedRoles', 'choice',
                 [
                     'required' => false,
