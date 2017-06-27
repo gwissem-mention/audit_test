@@ -177,15 +177,25 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         ) {
             return new JsonResponse(['success' => false]);
         }
-        $inscription = $this->container->get('hopitalnumerique_communautepratique.manager.groupe.inscription')->getInscription($groupe, $user)[0];
+
+        $inscription = $this->container->get('hopitalnumerique_communautepratique.manager.groupe.inscription')
+            ->getInscription($groupe, $user)[0]
+        ;
+
         $etat = null;
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
 
             $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
             $urlGroupe = $currentDomaine->getUrl() . $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $groupe->getId()]);
             // Alerte l'utilisateur que son compte est activé
-            $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionValideMail($user->getEmail(), $groupe->getTitre(), $urlGroupe);
+            $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionValideMail(
+                $user->getEmail(),
+                $groupe->getTitre(),
+                $urlGroupe
+            );
+
             $etat = true;
         } else {
             $inscription->setActif(false);
