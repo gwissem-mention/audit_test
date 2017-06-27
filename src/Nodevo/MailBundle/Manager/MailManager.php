@@ -981,7 +981,7 @@ class MailManager extends BaseManager
      * @param \Nodevo\MailBundle\Entity\Mail           $mail
      * @param array                                    $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
-     * @return Swift_Message objet \Swift pour l'envoie du mail
+     * @return \Swift_Message objet \Swift pour l'envoie du mail
      */
     private function generationMail($user, $mail, $options = [], $check = 0)
     {
@@ -1086,7 +1086,8 @@ class MailManager extends BaseManager
         $bodyTxt = $template->render(['content' => strip_tags($body)]);
 
         //prepare Mail
-        $mail = \Swift_Message::newInstance()
+        $mail = \Swift_Message::newInstance();
+        $mail
             ->setSubject($this->replaceContent($subject, null, []))
             ->setFrom($from)
             ->setBody($bodyTxt)
@@ -1126,28 +1127,27 @@ class MailManager extends BaseManager
     public function sendInvitationMail(User $expediteur, $destinataires, $nomGroupe)
     {
         $courriel = $this->findOneById(67);
-        $courriel->setExpediteurMail($expediteur->getEmail());
-        $courriel->setExpediteurName($expediteur->getNom());
-        $content = $this->replaceContent($courriel->getBody(), $expediteur, ['nomGroupe' => $nomGroupe]);
-        $courriel->setBody($content);
-        $message = $this->generationMail($expediteur, $courriel);
+
+        $message = $this->generationMail(null, $courriel, [
+            'nomGroupe' => $nomGroupe,
+            'u' => $expediteur->getNomPrenom(),
+        ]);
 
         foreach ($destinataires as $destinataire) {
+            $message->setFrom([$expediteur->getEmail() => $expediteur->getNom()]);
             $message->setTo($destinataire);
             $this->mailer->send($message);
         }
     }
 
-    public function sendAlerteInscriptionMail($destinataires, $user, Groupe $groupe)
+    public function sendAlerteInscriptionMail($destinataires, User $user, Groupe $groupe)
     {
         $courriel = $this->findOneById(65);
 
-        $content = $this->replaceContent($courriel->getBody(), $user, [
+        $message = $this->generationMail(null, $courriel, [
             'g' => $groupe->getTitre(),
+            'u' => $user->getNomPrenom(),
         ]);
-        $courriel->setBody($content);
-
-        $message = $this->generationMail(null, $courriel);
 
         foreach ($destinataires as $destinataire) {
             $message->setTo($destinataire);
@@ -1159,18 +1159,13 @@ class MailManager extends BaseManager
     {
         $courriel = $this->findOneById(64);
 
-        $content = $this->replaceContent(
-            $courriel->getBody(),
-            null,
-            [
-                'nomGroupe' => $nomGroupe,
-                'urlGroupe' => $urlGroupe,
-            ]
-        );
-        $courriel->setBody($content);
+        $message = $this->generationMail(null, $courriel, [
+            'nomGroupe' => $nomGroupe,
+            'urlGroupe' => $urlGroupe,
+        ]);
 
-        $message = $this->generationMail(null, $courriel);
         $message->setTo($destinataire);
+
         $this->mailer->send($message);
     }
 
@@ -1178,17 +1173,14 @@ class MailManager extends BaseManager
     {
         /** @var Mail $courriel */
         $courriel = $this->findOneById(Mail::MAIL_SHARE_AUTODIAG_RESULT_ID);
-        $courriel
-            ->setExpediteurMail($expediteur)
-            ->setExpediteurName($expediteur)
-            ->setObjet($objet)
-            ->setBody($message)
-        ;
 
         /** @var \Swift_Message $message */
         $message = $this->generationMail(null, $courriel);
 
         $message->setTo($destinataire);
+        $message->setFrom([$expediteur => $expediteur]);
+        $message->setSubject($objet);
+        $message->setBody($message);
         $message->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
 
         $this->mailer->send($message);
