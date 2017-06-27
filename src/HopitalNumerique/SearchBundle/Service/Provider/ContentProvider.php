@@ -2,8 +2,6 @@
 
 namespace HopitalNumerique\SearchBundle\Service\Provider;
 
-use Doctrine\ORM\Query\Expr\Join;
-
 /**
  * Content type Provider
  */

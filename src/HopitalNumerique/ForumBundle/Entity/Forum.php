@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ForumBundle\Entity;
 
 use CCDNForum\ForumBundle\Entity\Forum as BaseForum;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -13,6 +14,11 @@ class Forum extends BaseForum
 {
     const FORUM_COMMUNAUTE_DE_PRATIQUES_ID = 13;
     const FORUM_PUBLIC_ID = 1;
+
+    /**
+     * @var Domaine
+     */
+    private $domain;
 
     public function getId()
     {
@@ -46,5 +52,25 @@ class Forum extends BaseForum
     public function getReadAuthorisedRoles()
     {
         return array_values(parent::getReadAuthorisedRoles());
+    }
+
+    /**
+     * @return Domaine
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Forum
+     */
+    public function setDomain(Domaine $domain)
+    {
+        $this->domain = $domain;
+
+        return $this;
     }
 }

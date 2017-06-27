@@ -132,8 +132,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "title_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'synthesis' => [
                             'type' => 'text',
@@ -143,8 +143,8 @@ $container->loadFromExtension('fos_elastica', [
                                 'exact' => [
                                     "type" => "text",
                                     "analyzer" => "content_exact_analyzer",
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'domaines' => [
                             'type' => 'nested',
@@ -162,8 +162,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "content_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'alias' => [
                             'type' => 'keyword',
@@ -205,8 +205,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "title_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'title_tree' => [
                             'type' => 'text',
@@ -216,8 +216,8 @@ $container->loadFromExtension('fos_elastica', [
                                 'exact' => [
                                     "type" => "text",
                                     "analyzer" => "title_exact_analyzer",
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'content' => [
                             'type' => 'text',
@@ -229,8 +229,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "content_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'content_code' => [
                             'type' => 'keyword',
@@ -298,8 +298,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "content_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'topic' => [
                             'type' => 'nested',
@@ -320,6 +320,9 @@ $container->loadFromExtension('fos_elastica', [
                     'persistence' => [
                         'driver' => 'orm',
                         'model' => Post::class,
+                        'provider' => [
+                            'service' => "hopital_numerique_search.provider.forum_post.$serviceIdentifier",
+                        ],
                     ],
                     'indexable_callback' => [
                         "@hopital_numerique_search.indexable.forum.$serviceIdentifier",
@@ -373,6 +376,9 @@ $container->loadFromExtension('fos_elastica', [
                     'persistence' => [
                         'driver' => 'orm',
                         'model' => Topic::class,
+                        'provider' => [
+                            'service' => "hopital_numerique_search.provider.forum_topic.$serviceIdentifier",
+                        ],
                     ],
                     'indexable_callback' => [
                         "@hopital_numerique_search.indexable.forum.$serviceIdentifier",
@@ -426,7 +432,7 @@ $container->loadFromExtension('fos_elastica', [
                         'model' => Groupe::class,
                         'provider' => [
                             'service' => "hopital_numerique_search.provider.group.$serviceIdentifier",
-                        ]
+                        ],
                     ],
                     'indexable_callback' => [
                         "@hopital_numerique_search.indexable.groupe.$serviceIdentifier",
@@ -453,8 +459,8 @@ $container->loadFromExtension('fos_elastica', [
                                 'exact' => [
                                     "type" => "text",
                                     "analyzer" => "content_exact_analyzer",
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'phone' => [
                             'property_path' => 'telephoneDirect',
@@ -466,7 +472,7 @@ $container->loadFromExtension('fos_elastica', [
                         ],
                         'email' => [
                             'index' => 'not_analyzed',
-                        ]
+                        ],
                     ],
                     'persistence' => [
                         'driver' => 'orm',
@@ -491,8 +497,8 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "title_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'chapter_label' => [
                             'type' => 'text',
@@ -503,13 +509,13 @@ $container->loadFromExtension('fos_elastica', [
                                     "type" => "text",
                                     "analyzer" => "title_exact_analyzer",
                                     'term_vector' => 'with_positions_offsets',
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'chapter_code' => [
                             'type' => 'keyword',
                             'property_path' => false,
-                        ]
+                        ],
                     ],
                     'persistence' => [
                         'model' => Chapter::class,
