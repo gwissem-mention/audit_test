@@ -20,3 +20,9 @@ HopitalNumerique\ForumBundle\Entity\Forum:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Category
             mappedBy: forum
             cascade: ["persist", "remove"]
+    manyToOne:
+        domain:
+            targetEntity: HopitalNumerique\DomaineBundle\Entity\Domaine
+            joinColumn:
+                referencedColumnName: dom_id
+
