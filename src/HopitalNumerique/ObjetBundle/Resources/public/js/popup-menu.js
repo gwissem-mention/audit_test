@@ -39,7 +39,7 @@ function savePublication()
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
-            $('#nodevo_menu_item_route option[value="'+data.url+'"]').prop('selected', true);
+            $('#nodevo_menu_item_route').val(data.url).trigger('change');
             html = '';
 
             //Only For Article
