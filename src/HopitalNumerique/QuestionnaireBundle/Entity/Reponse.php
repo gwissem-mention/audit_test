@@ -70,8 +70,8 @@ class Reponse
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_questionnaire_reponse_reference",
-     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
      * )
      * @ORM\OrderBy({"order" = "ASC"})
      */
@@ -86,8 +86,8 @@ class Reponse
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement")
      * @ORM\JoinTable(name="hn_questionnaire_reponse_etablissement",
-     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")}
+     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id", onDelete="CASCADE")}
      * )
      * @ORM\OrderBy({"nom" = "ASC"})
      */
