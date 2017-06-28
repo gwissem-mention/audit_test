@@ -5,6 +5,9 @@ namespace Nodevo\MenuBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 
 class ItemType extends AbstractType
 {
@@ -46,18 +49,7 @@ class ItemType extends AbstractType
                 'empty_value' => ' - ',
                 'label' => 'Route',
                 'required' => false,
-            ]);
-
-        //Handle Route Parameters
-        $route = isset($this->_allRoutes[$datas->getRoute()]) ? $this->_allRoutes[$datas->getRoute()] : null;
-        $builder->add('routeParameters', new ParamsType($route, $datas->getRouteParameters()), [
-            'required' => false,
-            'label' => 'Paramètres de la route sélectionnée',
-            'mapped' => false,
-            'data_class' => null,
-        ]);
-
-        $builder
+            ])
             ->add('uri', 'text', [
                 'max_length' => $this->_constraints['uri']['maxlength'],
                 'required' => false,
@@ -137,7 +129,34 @@ class ItemType extends AbstractType
                     ],
             ])
 
-            ->add('icon', 'hidden');
+            ->add('icon', 'hidden')
+        ;
+
+        $routeParamsModifier = function (FormInterface $form, $route) use ($datas) {
+            $form->add('routeParameters', new ParamsType($route, $datas->getRouteParameters()), [
+                'required' => false,
+                'label' => 'Paramètres de la route sélectionnée',
+                'mapped' => false,
+                'data_class' => null,
+            ]);
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($routeParamsModifier, $datas) {
+                $route = isset($this->_allRoutes[$datas->getRoute()]) ? $this->_allRoutes[$datas->getRoute()] : null;
+                $routeParamsModifier($event->getForm(), $route);
+            }
+        );
+
+        $builder->get('route')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($routeParamsModifier) {
+                $routeName = $event->getForm()->getData();
+                $route = isset($this->_allRoutes[$routeName]) ? $this->_allRoutes[$routeName] : null;
+                $routeParamsModifier($event->getForm()->getParent(), $route);
+            }
+        );
     }
 
     public function getName()

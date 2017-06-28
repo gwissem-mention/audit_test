@@ -8,27 +8,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ParamsType extends AbstractType
 {
-    private $_params = [];
-    private $_route = null;
+    private $params = [];
+    private $route = null;
 
     public function __construct($route, $params)
     {
-        $this->_params = json_decode($params, true);
-        $this->_route = $route;
+        $this->params = json_decode($params, true);
+        $this->route = $route;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if ($this->_route) {
+        if ($this->route) {
             $pattern = '/\{([a-zA-Z]+)\}/';
-            preg_match_all($pattern, $this->_route->getPattern(), $matches);
+            preg_match_all($pattern, $this->route->getPattern(), $matches);
 
             if (isset($matches[1])) {
                 foreach ($matches[1] as $param) {
                     $builder->add('routeParameters_' . $param, 'text', [
                         'label' => $param,
                         'mapped' => false,
-                        'data' => isset($this->_params[$param]) ? $this->_params[$param] : '',
+                        'data' => isset($this->params[$param]) ? $this->params[$param] : '',
                     ]);
                 }
             }
