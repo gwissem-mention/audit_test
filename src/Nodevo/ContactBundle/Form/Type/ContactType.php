@@ -39,7 +39,7 @@ class ContactType extends AbstractType
                         'attr' => [
                         'class' => $this->_constraints['prenom']['class'],
                         ],
-                        'data' => ('anon.' != $user && !is_null($user->getPrenom())) ? $user->getPrenom() : '',
+                        'data' => ('anon.' != $user && !is_null($user->getFirstname())) ? $user->getFirstname() : '',
             ])
             ->add('nom', 'text', [
                         'max_length' => $this->_constraints['nom']['maxlength'],
@@ -48,7 +48,7 @@ class ContactType extends AbstractType
                         'attr' => [
                         'class' => $this->_constraints['nom']['class'],
                         ],
-                        'data' => ('anon.' != $user && !is_null($user->getNom())) ? $user->getNom() : '',
+                        'data' => ('anon.' != $user && !is_null($user->getLastname())) ? $user->getLastname() : '',
             ])
             ->add('mail', 'repeated', [
                     'type' => 'text',
@@ -81,7 +81,7 @@ class ContactType extends AbstractType
                             'class' => $this->_constraints['telephone']['class'],
                             'data-mask' => $this->_constraints['telephone']['mask'],
                     ],
-                    'data' => ('anon.' != $user && !is_null($user->getTelephoneDirect())) ? $user->getTelephoneDirect() : '',
+                    'data' => ('anon.' != $user && !is_null($user->getPhoneNumber())) ? $user->getPhoneNumber() : '',
             ])
             ->add('message', 'textarea', [
                     'required' => true,

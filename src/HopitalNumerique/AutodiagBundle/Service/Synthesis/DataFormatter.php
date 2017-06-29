@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -80,7 +81,7 @@ class DataFormatter
         $currentSynthesesByAutodiag = [];
         $validSynthesesByAutodiag = [];
 
-        /** @var \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synth */
+        /** @var Synthesis $synth */
         foreach ($syntheses as $synth) {
             $autodiagUpdateDate = $synth->getAutodiag()->getPublicUpdatedDate();
 
@@ -122,8 +123,8 @@ class DataFormatter
                     'user' => $synth->getUser(),
                     'entries' => $synth->getEntries(),
                     'computing' => $synth->isComputing(),
-                    'share' => array_map(function ($share) {
-                        return $share->getPrenom() . ' ' . $share->getNom();
+                    'share' => array_map(function (User $share) {
+                        return $share->getFirstname() . ' ' . $share->getLastname();
                     }, $synth->getShares()->toArray()),
                 ];
             }

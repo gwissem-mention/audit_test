@@ -2,7 +2,12 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Commentaire;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * CommentaireRepository.
@@ -21,7 +26,7 @@ class CommentaireRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.id as objId, objet.titre as objTitre, contenu.id as contId, contenu.titre as contTitre, user.nom as userNom, user.prenom as userPrenom')
+        $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.id as objId, objet.titre as objTitre, contenu.id as contId, contenu.titre as contTitre, user.lastname as userNom, user.firstname as userPrenom')
             ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
             ->leftJoin('comm.objet', 'objet')
             ->leftJoin('comm.contenu', 'contenu')
@@ -36,7 +41,7 @@ class CommentaireRepository extends EntityRepository
      *
      * @param int $idDomaine Identifiant du domaine à filtrer
      *
-     * @return QueryBuilder
+     * @return Commentaire[]|ArrayCollection
      */
     public function findCommentaireByDomaine($idDomaine)
     {
@@ -50,7 +55,40 @@ class CommentaireRepository extends EntityRepository
             ->setParameter('idDomaine', $idDomaine)
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Count comment for domains array
+     *
+     * @param Domaine[] $domains
+     * @return mixed
+     */
+    public function countByDomains($domains)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        $qb = $this->createQueryBuilder('comment');
+
+        $qb
+            ->select($qb->expr()->count('comment.id'))
+            ->join('comment.objet', 'objet')
+            ->join(
+                'objet.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -74,5 +112,21 @@ class CommentaireRepository extends EntityRepository
         }
 
         return $results;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return integer
+     */
+    public function countForUser(User $user)
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('COUNT(c)')
+            ->from(Commentaire::class, 'c')
+            ->andWhere('c.user = :userId')->setParameter('userId', $user->getId())
+
+            ->getQuery()->getSingleScalarResult()
+        ;
     }
 }

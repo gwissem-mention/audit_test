@@ -1,0 +1,100 @@
+{% trans_default_domain 'widget' %}
+{% if data['processed'] is not empty or data['new'] is not empty %}
+    <div id="intervention-widget">
+        {% if data['new'] is not empty %}
+            <div class="widget-description">
+                {{ 'Module_moncompte_services_interventions_nouvelles'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+
+            <table class="widget-table table default">
+                <thead>
+                <tr>
+                    <th>{{ 'intervention.table.title.new'|trans }}</th>
+                    <th width="120">{{ 'intervention.table.actions'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in data['new'] %}
+                    <tr>
+                        <td>
+                            {{ item.information|join(' - ') }}
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                {% if item.actions.show is defined %}
+                                    <a href="{{ item.actions.show }}" class="btn btn-sm btn-success" title="{{ 'intervention.action.show'|trans }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                {% endif %}
+                                {% if item.actions.edit is defined %}
+                                    <a href="{{ item.actions.edit }}" class="btn btn-sm btn-primary" title="{{ 'intervention.action.edit'|trans }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if data['processed'] is not empty %}
+            <div class="widget-description">
+                {{ 'Module_moncompte_services_interventions'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+
+            <table class="widget-table table default">
+                <thead>
+                <tr>
+                    <th>{{ 'intervention.table.title.processed'|trans }}</th>
+                    <th width="120">{{ 'intervention.table.actions'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in data['processed'] %}
+                    <tr>
+                        <td>
+                            {{ item.information|join(' - ') }}
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                {% if item.actions.show is defined %}
+                                    <a href="{{ item.actions.show }}" class="btn btn-sm btn-success" title="{{ 'intervention.action.show'|trans }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                {% endif %}
+                                {% if item.actions.relaunch is defined %}
+                                    <a href="{{ item.actions.relaunch }}" class="btn btn-sm btn-warning relaunch-btn" title="{{ 'intervention.action.relaunch'|trans }}">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
+                                {% endif %}
+                                {% if item.actions.evaluation is defined %}
+                                    <a href="{{ item.actions.evaluation }}" class="btn btn-sm btn-primary" title="{{ 'intervention.action.evaluation'|trans }}">
+                                        <i class="fa fa-clipboard"></i>
+                                    </a>
+                                {% endif %}
+                                {% if item.actions.evaluate is defined %}
+                                    <a href="{{ item.actions.evaluate }}" class="btn btn-sm btn-primary" title="{{ 'intervention.action.evaluate'|trans }}">
+                                        <i class="fa fa-clipboard"></i>
+                                    </a>
+                                {% endif %}
+                                {% if item.actions.waiting is defined %}
+                                    <a class="btn btn-sm btn-warning" title="{{ 'intervention.action.waiting'|trans }}">
+                                        <i class="fa fa-clock-o" title="{{ 'intervention.action.waiting'|trans }}"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <script>
+        $('#intervention-widget').find('.relaunch-btn').on('click', function () {
+            return confirm('{{ 'intervention.relaunch.confirm'|trans }}');
+        });
+    </script>
+{% endif %}

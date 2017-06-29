@@ -369,8 +369,13 @@ abstract class Manager
                         }
                         //simple colonne
                     } else {
-                        $fct = 'get' . ucfirst($key);
-                        $val = call_user_func([$data, $fct]);
+                        $fct = 'is' . ucfirst($key);
+                        if (method_exists($data, $fct)) {
+                            $val = call_user_func([$data, $fct]);
+                        } else {
+                            $fct = 'get' . ucfirst($key);
+                            $val = call_user_func([$data, $fct]);
+                        }
                         $ligne[] = is_null($val) ? '' : $val;
                     }
                 }

@@ -2,7 +2,15 @@
 
 namespace HopitalNumerique\InterventionBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\PaiementBundle\Entity\Facture;
+use HopitalNumerique\PaiementBundle\Entity\FactureAnnulee;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
@@ -143,7 +151,7 @@ class InterventionDemande
     private $total;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesReferent")
      * @ORM\JoinColumns({
@@ -154,7 +162,7 @@ class InterventionDemande
     private $referent;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesAmbassadeur")
      * @ORM\JoinColumns({
@@ -166,7 +174,7 @@ class InterventionDemande
     private $ambassadeur;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesCmsi")
      * @ORM\JoinColumns({
@@ -176,7 +184,7 @@ class InterventionDemande
     private $cmsi;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesDirecteur")
      * @ORM\JoinColumns({
@@ -186,7 +194,7 @@ class InterventionDemande
     private $directeur;
 
     /**
-     * @var \InterventionInitiateur
+     * @var InterventionInitiateur
      *
      * @ORM\ManyToOne(targetEntity="InterventionInitiateur")
      * @ORM\JoinColumns({
@@ -196,7 +204,7 @@ class InterventionDemande
     private $interventionInitiateur;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
@@ -208,7 +216,7 @@ class InterventionDemande
     private $interventionType;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
@@ -218,7 +226,7 @@ class InterventionDemande
     private $interventionEtat;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
@@ -228,7 +236,7 @@ class InterventionDemande
     private $evaluationEtat;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
@@ -238,7 +246,7 @@ class InterventionDemande
     private $remboursementEtat;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinTable(name="hn_intervention_ambassadeur_historique",
@@ -253,7 +261,7 @@ class InterventionDemande
     private $ancienAmbassadeurs;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\EtablissementBundle\Entity\Etablissement")
      * @ORM\JoinTable(name="hn_intervention_etablissement_rattache",
@@ -268,7 +276,7 @@ class InterventionDemande
     private $etablissements;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinTable(name="hn_intervention_objet",
@@ -283,7 +291,7 @@ class InterventionDemande
     private $objets;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_intervention_connaissance_metier",
@@ -298,7 +306,7 @@ class InterventionDemande
     private $connaissances;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_intervention_connaissance_si",
@@ -313,14 +321,14 @@ class InterventionDemande
     private $connaissancesSI;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
      */
     private $interventionRegroupementsDemandesPrincipales;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove"})
      */
@@ -333,7 +341,7 @@ class InterventionDemande
     protected $facture;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\PaiementBundle\Entity\FactureAnnulee", mappedBy="interventions")
      */
@@ -375,9 +383,9 @@ class InterventionDemande
      */
     public function __construct()
     {
-        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs = new ArrayCollection();
+        $this->etablissements = new ArrayCollection();
+        $this->objets = new ArrayCollection();
         $this->facture = null;
         $this->total = null;
     }
@@ -683,11 +691,11 @@ class InterventionDemande
     /**
      * Set referent.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $referent
+     * @param User $referent
      *
      * @return InterventionDemande
      */
-    public function setReferent(\HopitalNumerique\UserBundle\Entity\User $referent = null)
+    public function setReferent(User $referent = null)
     {
         $this->referent = $referent;
 
@@ -697,7 +705,7 @@ class InterventionDemande
     /**
      * Get referent.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getReferent()
     {
@@ -707,11 +715,11 @@ class InterventionDemande
     /**
      * Set ambassadeur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     * @param User $ambassadeur
      *
      * @return InterventionDemande
      */
-    public function setAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur = null)
+    public function setAmbassadeur(User $ambassadeur = null)
     {
         $this->ambassadeur = $ambassadeur;
 
@@ -721,7 +729,7 @@ class InterventionDemande
     /**
      * Get ambassadeur.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getAmbassadeur()
     {
@@ -731,11 +739,11 @@ class InterventionDemande
     /**
      * Set cmsi.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi
+     * @param User $cmsi
      *
      * @return InterventionDemande
      */
-    public function setCmsi(\HopitalNumerique\UserBundle\Entity\User $cmsi = null)
+    public function setCmsi(User $cmsi = null)
     {
         $this->cmsi = $cmsi;
 
@@ -745,7 +753,7 @@ class InterventionDemande
     /**
      * Get cmsi.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getCmsi()
     {
@@ -755,11 +763,11 @@ class InterventionDemande
     /**
      * Set directeur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $directeur
+     * @param User $directeur
      *
      * @return InterventionDemande
      */
-    public function setDirecteur(\HopitalNumerique\UserBundle\Entity\User $directeur = null)
+    public function setDirecteur(User $directeur = null)
     {
         $this->directeur = $directeur;
 
@@ -769,7 +777,7 @@ class InterventionDemande
     /**
      * Get directeur.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getDirecteur()
     {
@@ -779,12 +787,11 @@ class InterventionDemande
     /**
      * Set interventionInitiateur.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur
+     * @param InterventionInitiateur $interventionInitiateur
      *
      * @return InterventionDemande
      */
-    public function setInterventionInitiateur(
-            \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur = null)
+    public function setInterventionInitiateur(InterventionInitiateur $interventionInitiateur = null)
     {
         $this->interventionInitiateur = $interventionInitiateur;
 
@@ -794,7 +801,7 @@ class InterventionDemande
     /**
      * Get interventionInitiateur.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur
+     * @return InterventionInitiateur
      */
     public function getInterventionInitiateur()
     {
@@ -804,11 +811,11 @@ class InterventionDemande
     /**
      * Set interventionType.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType
+     * @param Reference $interventionType
      *
      * @return InterventionDemande
      */
-    public function setInterventionType(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType = null)
+    public function setInterventionType(Reference $interventionType = null)
     {
         $this->interventionType = $interventionType;
 
@@ -818,7 +825,7 @@ class InterventionDemande
     /**
      * Get interventionType.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getInterventionType()
     {
@@ -828,11 +835,11 @@ class InterventionDemande
     /**
      * Set interventionEtat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat
+     * @param Reference $interventionEtat
      *
      * @return InterventionDemande
      */
-    public function setInterventionEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat = null)
+    public function setInterventionEtat(Reference $interventionEtat = null)
     {
         $this->interventionEtat = $interventionEtat;
 
@@ -842,7 +849,7 @@ class InterventionDemande
     /**
      * Get interventionEtat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getInterventionEtat()
     {
@@ -852,11 +859,11 @@ class InterventionDemande
     /**
      * Set evaluationEtat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat
+     * @param Reference $evaluationEtat
      *
      * @return InterventionDemande
      */
-    public function setEvaluationEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat = null)
+    public function setEvaluationEtat(Reference $evaluationEtat = null)
     {
         $this->evaluationEtat = $evaluationEtat;
 
@@ -866,7 +873,7 @@ class InterventionDemande
     /**
      * Get evaluationEtat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getEvaluationEtat()
     {
@@ -876,11 +883,11 @@ class InterventionDemande
     /**
      * Set remboursementEtat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat
+     * @param Reference $remboursementEtat
      *
      * @return InterventionDemande
      */
-    public function setRemboursementEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat = null)
+    public function setRemboursementEtat(Reference $remboursementEtat = null)
     {
         $this->remboursementEtat = $remboursementEtat;
 
@@ -890,7 +897,7 @@ class InterventionDemande
     /**
      * Get remboursementEtat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getRemboursementEtat()
     {
@@ -900,11 +907,11 @@ class InterventionDemande
     /**
      * Add ambassadeurs.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
+     * @param User $ancienAmbassadeur
      *
      * @return InterventionDemande
      */
-    public function addAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ancienAmbassadeur)
+    public function addAncienAmbassadeur(User $ancienAmbassadeur)
     {
         $this->ancienAmbassadeurs[] = $ancienAmbassadeur;
 
@@ -914,9 +921,9 @@ class InterventionDemande
     /**
      * Remove ambassadeurs.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
+     * @param User $ancienAmbassadeur
      */
-    public function removeAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ancienAmbassadeur)
+    public function removeAncienAmbassadeur(User $ancienAmbassadeur)
     {
         $this->ancienAmbassadeurs->removeElement($ancienAmbassadeur);
     }
@@ -924,7 +931,7 @@ class InterventionDemande
     /**
      * Get ambassadeurs.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAncienAmbassadeurs()
     {
@@ -934,11 +941,11 @@ class InterventionDemande
     /**
      * Add etablissements.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
+     * @param Etablissement $etablissements
      *
      * @return InterventionDemande
      */
-    public function addEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements)
+    public function addEtablissement(Etablissement $etablissements)
     {
         $this->etablissements[] = $etablissements;
 
@@ -948,9 +955,9 @@ class InterventionDemande
     /**
      * Remove etablissements.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
+     * @param Etablissement $etablissements
      */
-    public function removeEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements)
+    public function removeEtablissement(Etablissement $etablissements)
     {
         $this->etablissements->removeElement($etablissements);
     }
@@ -958,7 +965,7 @@ class InterventionDemande
     /**
      * Get etablissements.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getEtablissements()
     {
@@ -968,11 +975,11 @@ class InterventionDemande
     /**
      * Add objets.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     * @param Objet $objets
      *
      * @return InterventionDemande
      */
-    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    public function addObjet(Objet $objets)
     {
         $this->objets[] = $objets;
 
@@ -982,9 +989,9 @@ class InterventionDemande
     /**
      * Remove objets.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     * @param Objet $objets
      */
-    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    public function removeObjet(Objet $objets)
     {
         $this->objets->removeElement($objets);
     }
@@ -992,7 +999,7 @@ class InterventionDemande
     /**
      * Get objets.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getObjets()
     {
@@ -1002,7 +1009,7 @@ class InterventionDemande
     /**
      * Get InterventionRegroupementsDemandesPrincipales.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
+     * @return Collection
      */
     public function getInterventionRegroupementsDemandesPrincipales()
     {
@@ -1012,7 +1019,7 @@ class InterventionDemande
     /**
      * Get InterventionRegroupementsDemandesRegroupees.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
+     * @return Collection
      */
     public function getInterventionRegroupementsDemandesRegroupees()
     {
@@ -1022,11 +1029,11 @@ class InterventionDemande
     /**
      * Retourne si la demande d'intervention a déjà eu un ambassadeur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à vérifier parmi les anciens
+     * @param User $ambassadeur L'ambassadeur à vérifier parmi les anciens
      *
      * @return bool VRAI ssi l'ambassadeur avait été relié à cette demande d'intervention
      */
-    public function haveAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur)
+    public function haveAncienAmbassadeur(User $ambassadeur)
     {
         foreach ($this->ancienAmbassadeurs as $ancienAmbassadeur) {
             if ($ancienAmbassadeur->getId() == $ambassadeur->getId()) {
@@ -1048,24 +1055,6 @@ class InterventionDemande
     }
 
     /**
-     * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.
-     * Si priode modifiée, modifier également dans DemandesNouvellesGrid.php.
-     *
-     * @return \DateTime|null La date butoir du CMSI
-     */
-    public function getDateButoirCmsi()
-    {
-        if ($this->interventionEtatEstDemandeInitiale()) {
-            $dateButoir = new \DateTime($dateCreation);
-            $dateButoir->add(new \DateInterval('P' . InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS . 'D'));
-
-            return $dateButoir;
-        }
-
-        return null;
-    }
-
-    /**
      * Retourne la liste des IDs de régions où sont présents les établissements rattachés à cette demande.
      *
      * @return int[] IDs des régions où sont présents les établissements rattachés
@@ -1084,7 +1073,7 @@ class InterventionDemande
     /**
      * Retourne la liste des régions où sont présents les établissements rattachés à cette demande.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference[] Régions où sont présents les établissements rattachés
+     * @return Reference[] Régions où sont présents les établissements rattachés
      */
     private function getEtablissementsRattachesRegions()
     {
@@ -1192,7 +1181,9 @@ class InterventionDemande
      */
     public function evaluationEtatEstAEvaluer()
     {
-        return $this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId();
+        return $this->evaluationEtat != null
+           && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId()
+        ;
     }
 
     /**
@@ -1202,13 +1193,15 @@ class InterventionDemande
      */
     public function evaluationEtatEstEvalue()
     {
-        return $this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId();
+        return $this->evaluationEtat != null
+            && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()
+        ;
     }
 
     /**
      * Get facture.
      *
-     * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     * @return Facture $facture
      */
     public function getFacture()
     {
@@ -1218,9 +1211,11 @@ class InterventionDemande
     /**
      * Set facture.
      *
-     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     * @param Facture $facture
+     *
+     * @return InterventionDemande
      */
-    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
+    public function setFacture(Facture $facture = null)
     {
         $this->facture = $facture;
 
@@ -1241,6 +1236,8 @@ class InterventionDemande
      * Set total.
      *
      * @param int $total
+     *
+     * @return InterventionDemande
      */
     public function setTotal($total)
     {
@@ -1263,6 +1260,8 @@ class InterventionDemande
      * Set objetsAutres.
      *
      * @param string $objetsAutres
+     *
+     * @return InterventionDemande
      */
     public function setObjetsAutres($objetsAutres)
     {
@@ -1322,12 +1321,13 @@ class InterventionDemande
     /**
      * Add interventionRegroupementsDemandesPrincipales.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+     * @param InterventionRegroupement $interventionRegroupementsDemandesPrincipales
      *
      * @return InterventionDemande
      */
-    public function addInterventionRegroupementsDemandesPrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales)
-    {
+    public function addInterventionRegroupementsDemandesPrincipale(
+        InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+    ) {
         $this->interventionRegroupementsDemandesPrincipales[] = $interventionRegroupementsDemandesPrincipales;
 
         return $this;
@@ -1336,22 +1336,26 @@ class InterventionDemande
     /**
      * Remove interventionRegroupementsDemandesPrincipales.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+     * @param InterventionRegroupement $interventionRegroupementsDemandesPrincipales
      */
-    public function removeInterventionRegroupementsDemandesPrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales)
-    {
-        $this->interventionRegroupementsDemandesPrincipales->removeElement($interventionRegroupementsDemandesPrincipales);
+    public function removeInterventionRegroupementsDemandesPrincipale(
+        InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+    ) {
+        $this->interventionRegroupementsDemandesPrincipales->removeElement(
+            $interventionRegroupementsDemandesPrincipales
+        );
     }
 
     /**
      * Add interventionRegroupementsDemandesRegroupees.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+     * @param InterventionRegroupement $interventionRegroupementsDemandesRegroupees
      *
      * @return InterventionDemande
      */
-    public function addInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
-    {
+    public function addInterventionRegroupementsDemandesRegroupee(
+        InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+    ) {
         $this->interventionRegroupementsDemandesRegroupees[] = $interventionRegroupementsDemandesRegroupees;
 
         return $this;
@@ -1360,21 +1364,22 @@ class InterventionDemande
     /**
      * Remove interventionRegroupementsDemandesRegroupees.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+     * @param InterventionRegroupement $interventionRegroupementsDemandesRegroupees
      */
-    public function removeInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
-    {
+    public function removeInterventionRegroupementsDemandesRegroupee(
+        InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+    ) {
         $this->interventionRegroupementsDemandesRegroupees->removeElement($interventionRegroupementsDemandesRegroupees);
     }
 
     /**
      * Add connaissances.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @param Reference $connaissances
      *
      * @return InterventionDemande
      */
-    public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    public function addConnaissance(Reference $connaissances)
     {
         $this->connaissances[] = $connaissances;
 
@@ -1384,9 +1389,9 @@ class InterventionDemande
     /**
      * Remove connaissances.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @param Reference $connaissances
      */
-    public function removeConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    public function removeConnaissance(Reference $connaissances)
     {
         $this->connaissances->removeElement($connaissances);
     }
@@ -1394,7 +1399,7 @@ class InterventionDemande
     /**
      * Get connaissances.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissances()
     {
@@ -1416,11 +1421,11 @@ class InterventionDemande
     /**
      * Add connaissancesSI.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
+     * @param Reference $connaissancesSI
      *
      * @return InterventionDemande
      */
-    public function addConnaissancesSI(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI)
+    public function addConnaissancesSI(Reference $connaissancesSI)
     {
         $this->connaissancesSI[] = $connaissancesSI;
 
@@ -1430,9 +1435,9 @@ class InterventionDemande
     /**
      * Remove connaissancesSI.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
+     * @param Reference $connaissancesSI
      */
-    public function removeConnaissancesSI(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI)
+    public function removeConnaissancesSI(Reference $connaissancesSI)
     {
         $this->connaissancesSI->removeElement($connaissancesSI);
     }
@@ -1440,7 +1445,7 @@ class InterventionDemande
     /**
      * Get connaissancesSI.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissancesSI()
     {
@@ -1459,29 +1464,24 @@ class InterventionDemande
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getConnaissancesByParent()
     {
         $connaissances = $this->connaissances;
         $connaissancesOrdered = [];
 
         foreach ($connaissances as $connaissance) {
-            /*if(is_null($connaissance->getParent()))
-            {
-                continue;
-            }
-
-            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
-            {
-                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
-            }
-
-            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;*/
             $connaissancesOrdered[0][] = $connaissance;
         }
 
         return $connaissancesOrdered;
     }
 
+    /**
+     * @return array
+     */
     public function getConnaissancesSIByParent()
     {
         $connaissancesSI = $this->connaissancesSI;
@@ -1529,11 +1529,11 @@ class InterventionDemande
     /**
      * Add facturesAnnulee.
      *
-     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
+     * @param FactureAnnulee $facturesAnnulee
      *
      * @return InterventionDemande
      */
-    public function addFacturesAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee)
+    public function addFacturesAnnulee(FactureAnnulee $facturesAnnulee)
     {
         $this->facturesAnnulees[] = $facturesAnnulee;
 
@@ -1543,9 +1543,9 @@ class InterventionDemande
     /**
      * Remove facturesAnnulee.
      *
-     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
+     * @param FactureAnnulee $facturesAnnulee
      */
-    public function removeFacturesAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee)
+    public function removeFacturesAnnulee(FactureAnnulee $facturesAnnulee)
     {
         $this->facturesAnnulees->removeElement($facturesAnnulee);
     }
@@ -1553,7 +1553,7 @@ class InterventionDemande
     /**
      * Get facturesAnnulees.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFacturesAnnulees()
     {

@@ -1,5 +1,19 @@
 /* STYLES GLOBAUX */
 
+.avatar {
+    background-color: #e5e5e5;
+    background-size: cover;
+    background-position: center center;
+    border-color: #fff;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 3px;
+    height: 60px;
+    margin: auto;
+    width: 60px;
+}
+
+
 /* <-- Alignement responsive */
 .text-xs-left { text-align: left; }
 .text-xs-right { text-align: right; }

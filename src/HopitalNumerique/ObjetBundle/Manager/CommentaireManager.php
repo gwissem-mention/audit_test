@@ -83,14 +83,4 @@ class CommentaireManager extends BaseManager
         //save
         $this->em->flush();
     }
-
-    /**
-     * @param $idDomaine
-     *
-     * @return mixed
-     */
-    public function findCommentaireByDomaine($idDomaine)
-    {
-        return $this->getRepository()->findCommentaireByDomaine($idDomaine)->getQuery()->getResult();
-    }
 }

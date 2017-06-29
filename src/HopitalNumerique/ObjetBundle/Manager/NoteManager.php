@@ -44,14 +44,4 @@ class NoteManager extends BaseManager
     {
         return $this->getRepository()->countReviewByMark($objectId, $isContenu)->getQuery()->getResult();
     }
-
-    /**
-     * @param $idDomaine
-     *
-     * @return mixed
-     */
-    public function findNoteByDomaine($idDomaine)
-    {
-        return $this->getRepository()->findNoteByDomaine($idDomaine)->getQuery()->getResult();
-    }
 }

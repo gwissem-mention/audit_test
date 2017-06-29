@@ -1,0 +1,63 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block title %}{{parent()}} - {{ 'account.title'|trans }}{% endblock %}
+{% block metadesc %}{{ 'account.meta_description'|trans({'%domainName%': domaineCurrent.nom}) }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-layout.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueaccount/css/layout.css'
+        'bundles/newaccount/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-account.js"
+        'bundles/newaccount/js/account.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="my-account">
+
+        <div class="row account-links">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_profile') }}">
+                    <span id="profile-page"><i class="fa fa-user"></i> {{ 'account.profile.title'|trans }}</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_service') }}">
+                    <span id="service-page"><i class="fa fa-briefcase"></i> {{ 'account.service.title'|trans }}</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_cart') }}">
+                    <span id="cart-page" ><i class="fa fa-shopping-cart"></i> {{ 'account.cart.title'|trans }}</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_parameter') }}">
+                    <span id="parameter-page"><i class="fa fa-cogs"></i> {{ 'account.parameters.title'|trans }}</span>
+                </a>
+            </div>
+        </div>
+
+        <br><br>
+        <div class="row">
+            <div class="col-md-12">
+                {% block content %}
+
+                {% endblock %}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}

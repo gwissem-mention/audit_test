@@ -11,7 +11,6 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-//Asserts Stuff
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -355,13 +354,13 @@ class Objet implements RoutedItemInterface
     /**
      * @var FichierModifiable
      *
-     * @ORM\OneToOne(targetEntity="FichierModifiable", inversedBy="objet")
+     * @ORM\OneToOne(targetEntity="FichierModifiable", mappedBy="objet")
      * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
      */
     protected $fichierModifiable;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"}, inversedBy="objets")
      * @ORM\JoinTable(name="hn_domaine_gestions_objet",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
@@ -948,8 +947,6 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param $ambassadeurs
-     *
-     * @internal param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
      */
     public function removeAmbassadeurs($ambassadeurs)
     {
@@ -971,7 +968,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|User[]
      */
     public function getAmbassadeurs()
     {
@@ -979,7 +976,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|MaitriseUser[]
      */
     public function getMaitriseUsers()
     {
@@ -1220,12 +1217,18 @@ class Objet implements RoutedItemInterface
         return substr($result, strrpos($result, '.') + 1);
     }
 
+    /**
+     * @return string
+     */
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
+    /**
+     * @return string
+     */
     public function getUploadDir()
     {
         return 'medias/Objets/Fichiers';
@@ -1667,26 +1670,41 @@ class Objet implements RoutedItemInterface
 
     // vvvv     Flux RSS      vvvv
 
+    /**
+     * @return string
+     */
     public function getFeedItemTitle()
     {
         return $this->titre;
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemDescription()
     {
         return ''; //$this->resume;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getFeedItemPubDate()
     {
         return is_null($this->dateModification) ? $this->dateCreation : $this->dateModification;
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemRouteName()
     {
         return 'hopital_numerique_publication_publication_objet';
     }
 
+    /**
+     * @return array
+     */
     public function getFeedItemRouteParameters()
     {
         return [
@@ -1695,6 +1713,9 @@ class Objet implements RoutedItemInterface
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemUrlAnchor()
     {
         return '';

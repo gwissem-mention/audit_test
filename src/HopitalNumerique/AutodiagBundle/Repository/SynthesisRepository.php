@@ -160,7 +160,7 @@ class SynthesisRepository extends EntityRepository
                 'entries'
             )
             ->leftJoin('synthesis.user', 'user')
-            ->leftJoin('user.etablissementRattachementSante', 'etablissement')
+            ->leftJoin('user.organization', 'etablissement')
             ->leftJoin('synthesis.shares', 'shares')
             ->leftJoin('synthesis.entries', 'entries')
             ->where('synthesis.autodiag = :autodiag')
@@ -251,9 +251,9 @@ class SynthesisRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb
             ->select(
-                'CONCAT(user.prenom, \' \', user.nom) as fullname',
+                'CONCAT(user.firstname, \' \', user.lastname) as fullname',
                 'etab.nom as etablissement',
-                'user.autreStructureRattachementSante as autre_etablissement',
+                'user.organizationLabel as autre_etablissement',
                 's.name',
                 's.createdAt',
                 's.updatedAt',
@@ -261,7 +261,7 @@ class SynthesisRepository extends EntityRepository
                 's.completion'
             )
             ->join('s.user', 'user')
-            ->leftJoin('user.etablissementRattachementSante', 'etab')
+            ->leftJoin('user.organization', 'etab')
             ->where('s.id = :id')
             ->setParameter('id', $synthesisId);
 
@@ -316,5 +316,36 @@ class SynthesisRepository extends EntityRepository
         ;
 
         return $qb;
+    }
+
+    /**
+     * @param User           $user
+     * @param Domaine[]|null $domains
+     *
+     * @return array
+     */
+    public function findByUserOrderedByAutodiagNameAndSynthesisUpdate(User $user, $domains = null)
+    {
+        $qb = $this->createQueryBuilder('synthesis')
+            ->addSelect('autodiag', 'presets', 'entries', 'user')
+            ->leftJoin('synthesis.autodiag', 'autodiag')
+            ->join('synthesis.user', 'user', Join::WITH, 'user.id = :userId')
+            ->leftJoin('autodiag.presets', 'presets')
+            ->join('synthesis.entries', 'entries')
+            ->setParameter('userId', $user->getId())
+        ;
+        
+        if (null !== $domains) {
+            $qb->join('autodiag.domaines', 'domains', Join::WITH, 'domains.id IN (:domains)')
+                ->setParameter('domains', $domains)
+                ->addSelect('domains')
+            ;
+        }
+
+        return $qb->orderBy('autodiag.title')
+           ->addOrderBy('synthesis.updatedAt', 'DESC')
+           ->getQuery()
+           ->getResult()
+        ;
     }
 }

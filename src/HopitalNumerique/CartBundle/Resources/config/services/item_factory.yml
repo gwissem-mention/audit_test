@@ -1,0 +1,53 @@
+services:
+    hopitalnumerique_cart.factory.item:
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\ItemFactory
+        arguments:
+            - '@translator'
+
+    hopitalnumerique_cart.factory.item_person:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\PersonFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_user.repository.user'
+
+    hopitalnumerique_cart.factory.item_object:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\ObjectFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_objet.repository.objet'
+
+    hopitalnumerique_cart.factory.item_content:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\ContentFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_objet.repository.contenu'
+
+    hopitalnumerique_cart.factory.item_forum_topic:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\ForumTopicFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_forum.repository.topic'
+
+    hopitalnumerique_cart.factory.item_autodiag_chapter:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\AutodiagChapterFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@autodiag.repository.container'
+
+    hopitalnumerique_cart.factory.item_cdp_group:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\CDPGroupFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_communautepratique.repository.groupe'

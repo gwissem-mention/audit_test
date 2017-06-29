@@ -29,7 +29,7 @@ class Annuaire
     /**
      * @var string Libellé du filtre Profil d'ES
      */
-    const FILTRE_ES_PROFIL_LABEL = 'profilEtablissementSante';
+    const FILTRE_ES_PROFIL_LABEL = 'profileType';
 
     /**
      * @var string Libellé du filtre Région
@@ -39,35 +39,39 @@ class Annuaire
     /**
      * @var string Libellé du filtre Type d'ES
      */
-    const FILTRE_ES_TYPE_LABEL = 'statutEtablissementSante';
+    const FILTRE_ES_TYPE_LABEL = 'organizationType';
 
     /**
      * @var string Libellé du filtre Type d'activité
      */
-    const FILTRE_ACTIVITE_TYPE_LABEL = 'typeActivite';
+    const FILTRE_ACTIVITE_TYPE_LABEL = 'activities';
 
     /**
-     * @var string Valeur des filtres
+     * @var array Valeur des filtres
      */
     private static $FILTRES = [];
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
+     * @var SessionInterface Session
      */
     private $session;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     * @var UserManager UserManager
      */
     private $userManager;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     * @var ReferenceManager ReferenceManager
      */
     private $referenceManager;
 
     /**
      * Constructeur.
+     *
+     * @param SessionInterface $session
+     * @param UserManager      $userManager
+     * @param ReferenceManager $referenceManager
      */
     public function __construct(SessionInterface $session, UserManager $userManager, ReferenceManager $referenceManager)
     {
@@ -81,9 +85,11 @@ class Annuaire
     /**
      * Retourne les membres à afficher.
      *
-     * @param int $page Numéro de page
+     * @param      $page
+     * @param null $domaine
+     * @param null $membreId
      *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
+     * @return Pagerfanta
      */
     public function getPagerfantaUsers($page, $domaine = null, $membreId = null)
     {
@@ -99,10 +105,10 @@ class Annuaire
     /**
      * Retourne les membres d'un groupe à afficher.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
-     * @param int                                                      $page   Numéro de page
+     * @param Groupe $groupe
+     * @param        $page
      *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
+     * @return Pagerfanta
      */
     public function getPagerfantaUsersByGroupe(Groupe $groupe, $page)
     {
@@ -119,7 +125,9 @@ class Annuaire
     /**
      * Applique les filtres sur la requête de récupération des membres.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\QueryBuilder $query QueryBuilder
+     * @param QueryBuilder $queryBuilder
+     *
+     * @return QueryBuilder
      */
     private function applyFiltersInQueryBuilder(QueryBuilder &$queryBuilder)
     {
@@ -128,7 +136,13 @@ class Annuaire
                 switch ($filtreLibelle) {
                     case self::FILTRE_NOMINATION_LABEL:
                         $queryBuilder
-                            ->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('user.nom', ':' . $filtreLibelle), $queryBuilder->expr()->like('user.prenom', ':' . $filtreLibelle), $queryBuilder->expr()->like('user.email', ':' . $filtreLibelle)))
+                            ->andWhere(
+                                $queryBuilder->expr()->orX(
+                                    $queryBuilder->expr()->like('user.lastname', ':' . $filtreLibelle),
+                                    $queryBuilder->expr()->like('user.firstname', ':' . $filtreLibelle),
+                                    $queryBuilder->expr()->like('user.email', ':' . $filtreLibelle)
+                                )
+                            )
                             ->setParameter($filtreLibelle, '%' . $filtreValeur . '%')
                         ;
                         break;
@@ -191,7 +205,9 @@ class Annuaire
                 case self::FILTRE_REGION_LABEL:
                 case self::FILTRE_ES_TYPE_LABEL:
                 case self::FILTRE_ACTIVITE_TYPE_LABEL:
-                    $filtres[$filtreLibelle] = (null !== $filtreValeur && (count($filtreValeur) > 0) ? $this->referenceManager->findBy(['id' => $filtreValeur]) : null);
+                    $filtres[$filtreLibelle] = (null !== $filtreValeur && (count($filtreValeur) > 0)
+                        ? $this->referenceManager->findBy(['id' => $filtreValeur]) : null
+                    );
                     break;
                 default:
                     $filtres[$filtreLibelle] = $filtreValeur;
@@ -215,7 +231,9 @@ class Annuaire
             case self::FILTRE_REGION_LABEL:
             case self::FILTRE_ES_TYPE_LABEL:
             case self::FILTRE_ACTIVITE_TYPE_LABEL:
-                return null !== self::$FILTRES[$filtreLibelle] && (count(self::$FILTRES[$filtreLibelle]) > 0) ? $this->referenceManager->findBy(['id' => self::$FILTRES[$filtreLibelle]]) : null;
+                return null !== self::$FILTRES[$filtreLibelle] && (count(self::$FILTRES[$filtreLibelle]) > 0)
+                    ? $this->referenceManager->findBy(['id' => self::$FILTRES[$filtreLibelle]]) : null
+                ;
         }
 
         return self::$FILTRES[$filtreLibelle];
@@ -230,7 +248,10 @@ class Annuaire
     {
         if ($request->request->has('hopitalnumerique_communautepratiquebundle_user_recherche')) {
             foreach ($this->getFiltreLibelles() as $filtreLibelle) {
-                $this->setFiltre($filtreLibelle, $request->request->get('hopitalnumerique_communautepratiquebundle_user_recherche'));
+                $this->setFiltre(
+                    $filtreLibelle,
+                    $request->request->get('hopitalnumerique_communautepratiquebundle_user_recherche')
+                );
             }
         }
     }
@@ -253,7 +274,10 @@ class Annuaire
      */
     private function setFiltre($filtreLibelle, array $requestPost)
     {
-        self::$FILTRES[$filtreLibelle] = (isset($requestPost[$filtreLibelle]) && '' != $requestPost[$filtreLibelle] ? $requestPost[$filtreLibelle] : null);
+        self::$FILTRES[$filtreLibelle] = (isset($requestPost[$filtreLibelle]) && '' != $requestPost[$filtreLibelle]
+            ? $requestPost[$filtreLibelle] : null
+        );
+
         $this->saveFiltreSession($filtreLibelle);
     }
 

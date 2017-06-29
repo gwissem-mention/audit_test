@@ -227,13 +227,13 @@
                 </div>
                 <div class="col-md-4">
                     <div class="clearfix"></div>
-                    {% if user.statutEtablissementSante is not null %}
+                    {% if user.organizationType is not null %}
                     <div class="type">
                         <em class="icon icon-hospital11"></em>
                         <div class="contenu">
-                            {{ user.statutEtablissementSante.libelle }}
-                            {% if user.typeActivite|length > 0 -%}
-                                &nbsp;({% for activite in user.typeActivite -%}
+                            {{ user.organizationType.libelle }}
+                            {% if user.activities|length > 0 -%}
+                                &nbsp;({% for activite in user.activities -%}
                                     {{ (loop.first ? '' : ', ')~(activite.libelle) }}
                                 {%- endfor %})
                             {%- endif -%}
@@ -242,11 +242,11 @@
                     {% endif %}
                 </div>
                 <div class="col-md-4">
-                   {% if user.fonctionDansEtablissementSante != '' %}
+                   {% if user.jobLabel != '' %}
                     <div class="fonction">
                         <em class="icon icon-users149"></em>
                         <div class="contenu">
-                            {{ user.fonctionDansEtablissementSante }}
+                            {{ user.jobLabel }}
                         </div>
                     </div>
                     {% endif %}
@@ -324,7 +324,7 @@
                     <div class="active-member">
                         <div style="" data-toggle="tooltip" data-placement="left" data-html="true" title="
                                 <b>Utilisateur parmi les plus actifs :</b><br />
-                                {% if activeMembers[user.id]['nbVisite'] != 0 %}Nombre&nbsp;de&nbsp;visites&nbsp;sur&nbsp;la&nbsp;plateforme&nbsp;:&nbsp;{{ activeMembers[user.id]['nbVisite'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['visitCount'] != 0 %}Nombre&nbsp;de&nbsp;visites&nbsp;sur&nbsp;la&nbsp;plateforme&nbsp;:&nbsp;{{ activeMembers[user.id]['visitCount'] }}<br />{% endif %}
                                 {% if activeMembers[user.id]['nbPost'] != 0 %}Nombre&nbsp;de&nbsp;posts&nbsp;renseignés&nbsp;sur&nbsp;les&nbsp;forums&nbsp;:&nbsp;{{ activeMembers[user.id]['nbPost'] }}<br />{% endif %}
                                 {% if activeMembers[user.id]['nbComment'] != 0 %}Nombre&nbsp;de&nbsp;commentaires&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ activeMembers[user.id]['nbComment'] }}<br />{% endif %}
                                 {% if activeMembers[user.id]['nbNote'] != 0 %}Nombre&nbsp;de&nbsp;notations&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ activeMembers[user.id]['nbNote'] }}<br />{% endif %}
@@ -365,10 +365,10 @@
                 </div>
                 <div class="region">
                     {{ user.region ? user.region.libelle : '' }}
-                    {% if user.etablissementRattachementSante is not null and user.region.libelle != '' and user.etablissementRattachementSante.codePostal != '' %}
+                    {% if user.organization is not null and user.region.libelle != '' and user.organization.codePostal != '' %}
                         -
                     {% endif %}
-                    {{ user.etablissementRattachementSante ? user.etablissementRattachementSante.codePostal : '' }}
+                    {{ user.organization ? user.organization.codePostal : '' }}
                 </div>
                 {% if groupe is not null and groupe.hasAnimateur(user) %}
                     <div class="animateur">
@@ -380,9 +380,9 @@
             <div class="contact">
                 <span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto:{{ user.email }}">Envoyer un e-mail</a>
-                    {% if user.telephoneDirect != '' or user.telephonePortable != '' %}
+                    {% if user.phoneNumber != '' or user.cellPhoneNumber != '' %}
                         <br />
-                        <i class="fa fa-phone"></i> {{ user.telephoneDirect != '' ? user.telephoneDirect : '' }}{{ user.telephoneDirect != '' and user.telephonePortable != '' ? ', ' : '' }}{{ user.telephonePortable != '' ? user.telephonePortable : '' }}
+                        <i class="fa fa-phone"></i> {{ user.phoneNumber != '' ? user.phoneNumber : '' }}{{ user.phoneNumber != '' and user.cellPhoneNumber != '' ? ', ' : '' }}{{ user.cellPhoneNumber != '' ? user.cellPhoneNumber : '' }}
                     {% endif %}
                 </span>
                 <br />
@@ -397,26 +397,26 @@
                 {% endif %}
             </div>
 
-            {% if user.etablissementRattachementSante is not null or user.autreStructureRattachementSante != '' %}
+            {% if user.organization is not null or user.organizationLabel != '' %}
             <div class="etablissement">
                 <em class="icon icon-hospital11"></em>
                 <div class="contenu">
-                    {% if user.etablissementRattachementSante is not null %}
-                        {{ user.etablissementRattachementSante.nom }}
-                    {% elseif user.autreStructureRattachementSante != '' %}
-                        {{ user.autreStructureRattachementSante }}
+                    {% if user.organization is not null %}
+                        {{ user.organization.nom }}
+                    {% elseif user.organizationLabel != '' %}
+                        {{ user.organizationLabel }}
                     {% endif %}
                 </div>
             </div>
             {% endif %}
 
-            {% if user.statutEtablissementSante is not null %}
+            {% if user.organizationType is not null %}
             <div class="type">
                 <em class="icon icon-medical55"></em>
                 <div class="contenu">
-                    {{ user.statutEtablissementSante.libelle }}
-                    {% if user.typeActivite|length > 0 -%}
-                        <br>({% for activite in user.typeActivite -%}
+                    {{ user.organizationType.libelle }}
+                    {% if user.activities|length > 0 -%}
+                        <br>({% for activite in user.activities -%}
                             {{ (loop.first ? '' : ', ')~(activite.libelle) }}
                         {%- endfor %})
                     {%- endif -%}
@@ -424,14 +424,14 @@
             </div>
             {% endif %}
 
-            {% if user.fonctionDansEtablissementSante != '' or user.fonctionDansEtablissementSanteReferencement is not null %}
+            {% if user.jobLabel != '' or user.jobType is not null %}
             <div class="fonction">
                 <em class="icon icon-users149"></em>
                 <div class="contenu">
-                    {% if user.fonctionDansEtablissementSante != '' %}
-                        {{ user.fonctionDansEtablissementSante }}
-                    {% elseif user.fonctionDansEtablissementSanteReferencement is not null %}
-                        {{ user.fonctionDansEtablissementSanteReferencement.libelle }}
+                    {% if user.jobLabel != '' %}
+                        {{ user.jobLabel }}
+                    {% elseif user.jobType is not null %}
+                        {{ user.jobType.libelle }}
                     {% endif %}
                 </div>
             </div>
@@ -552,7 +552,7 @@
                     <p>
                         <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                         {% for animateur in groupe.animateurs %}
-                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:animateur.id }) }}"> {{ animateur.prenom }} {{ animateur.nom }}</a>{{ loop.last ? '' : ', ' }}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:animateur.id }) }}"> {{ animateur.firstname }} {{ animateur.lastname }}</a>{{ loop.last ? '' : ', ' }}
                         {% endfor -%}
                     </p>
                 {%- endif -%}
@@ -561,7 +561,7 @@
                     <p>
                         <strong>Membre{{ groupe.usersWithoutAnimateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                         {% for membre in groupe.usersWithoutAnimateurs %}
-                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:membre.id }) }}"> {{ membre.prenom }} {{ membre.nom }}</a>{{ loop.last ? '' : ', ' }}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:membre.id }) }}"> {{ membre.firstname }} {{ membre.lastname }}</a>{{ loop.last ? '' : ', ' }}
                         {% endfor -%}
                     </p>
                 {%- endif -%}

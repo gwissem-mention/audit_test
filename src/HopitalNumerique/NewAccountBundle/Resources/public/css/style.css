@@ -1,0 +1,113 @@
+#my-account .panel.with-nav-tabs .panel-heading {
+    padding: 0;
+}
+
+#my-account .panel.with-nav-tabs .nav-tabs {
+    border-bottom: none;
+}
+
+#my-account .no-background {
+    background: none !important;
+    border: none !important;
+}
+
+#my-account .panel-body {
+    background-color: #eee !important;
+}
+
+#my-account .tab-content {
+    background: none !important;
+    border: none !important;
+}
+
+#my-account .panel-body hr {
+    border-bottom: 1px solid #cacaca;
+    margin: 20px 15px;
+}
+
+#my-account .panel-body p {
+    margin: 0 15px;
+}
+
+#my-account .panel-body a {
+    cursor: pointer;
+}
+
+#my-account .spacer {
+    margin-top: 25px !important;
+}
+
+#my-account .tab-completion {
+    font-weight: normal;
+}
+
+#my-account .submit-btn {
+    float: right;
+    margin-bottom: 20px;
+}
+
+#my-account .custom-panel-heading {
+    background: #f6f6f6;
+    color: #6F3596 !important;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#my-account .panel .panel-body {
+    border: 1px solid #e3e3e3;
+}
+
+#my-account input[type="checkbox"] {
+    box-shadow: none;
+}
+
+#my-account .btn.btn-link {
+    padding-top: 20px !important;
+}
+
+#my-account textarea {
+    resize: vertical;
+}
+
+#my-account .account-links {
+    margin-top: 15px;
+}
+
+#my-account .account-links .btn-menu {
+    padding: 20px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-radius: 0;
+    width: 100%;
+}
+
+#my-account .btn-menu span {
+    text-decoration: none;
+    color: black;
+}
+
+#my-account ul.nav-tabs li a {
+    background-color:#f6f6f6;
+    border-color:#e3e3e3;
+    color:#6F3596;
+    font-size:13px;
+    font-weight:bold;
+}
+
+#my-account ul.nav-tabs li.active a {
+    background-color:#6F3596;
+    color:#fff;
+}
+
+#my-account .hobby-item {
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding: 0 15px;
+}
+
+#my-account .password-information {
+    margin: 20px 0 0 0;
+}

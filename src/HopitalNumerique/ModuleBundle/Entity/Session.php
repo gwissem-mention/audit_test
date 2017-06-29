@@ -2,8 +2,13 @@
 
 namespace HopitalNumerique\ModuleBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 //Asserts Stuff
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -30,7 +35,7 @@ class Session
     protected $id;
 
     /**
-     * @var int
+     * @var Module
      *
      * @ORM\ManyToOne(targetEntity="Module", inversedBy="sessions")
      * @ORM\JoinColumn(name="mod_module", referencedColumnName="mod_id")
@@ -115,12 +120,12 @@ class Session
     protected $description;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
      *
-     * @GRID\Column(field="formateur.nom")
+     * @GRID\Column(field="formateur.lastname")
      */
     protected $formateur;
 
@@ -128,7 +133,7 @@ class Session
      * @var int
      *
      * @Nodevo\Javascript(class="validate[custom[integer],min[0]]")
-     * @ORM\Column(name="ses_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles de la session"})
+     * @ORM\Column(name="ses_nombrePlaceDisponible", type="integer", nullable=true)
      */
     protected $nombrePlaceDisponible;
 
@@ -192,7 +197,7 @@ class Session
 
     /**
      * @var string
-     * @ORM\Column(name="ses_textMailRappel", type="text", nullable=true, options = {"comment" = "Texte du mail de rappel de la session"})
+     * @ORM\Column(name="ses_textMailRappel", type="text", nullable=true)
      */
     protected $textMailRappel;
 
@@ -201,7 +206,7 @@ class Session
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Nodevo\Javascript(class="validate[required]")
      *
-     * @GRID\Column(field="etat.libelle", options = {"comment" = "Statut pointant sur la table reference avec le code STATUT_SESSION_FORMATION de la session"})
+     * @GRID\Column(field="etat.libelle")
      */
     protected $etat;
 
@@ -219,8 +224,8 @@ class Session
     {
         $this->archiver = false;
         $this->dateOuvertureInscription = new \DateTime();
-        $this->connaissances = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->connaissancesMetier = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissances = new ArrayCollection();
+        $this->connaissancesMetier = new ArrayCollection();
     }
 
     /**
@@ -233,6 +238,9 @@ class Session
         return $this->id;
     }
 
+    /**
+     * @return Module
+     */
     public function getModule()
     {
         return $this->module;
@@ -338,11 +346,11 @@ class Session
     /**
      * Set formateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $formateur
+     * @param User|null $formateur
      *
-     * @return Reponse
+     * @return Session
      */
-    public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
+    public function setFormateur(User $formateur = null)
     {
         $this->formateur = $formateur;
 
@@ -352,7 +360,7 @@ class Session
     /**
      * Get formateur.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getFormateur()
     {
@@ -362,7 +370,7 @@ class Session
     /**
      * Get duree.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
+     * @return Reference $duree
      */
     public function getDuree()
     {
@@ -372,15 +380,11 @@ class Session
     /**
      * Set duree.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
+     * @param Reference $duree
      */
     public function setDuree($duree)
     {
-        if ($duree instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
-            $this->duree = $duree;
-        } else {
-            $this->duree = null;
-        }
+        $this->duree = $duree instanceof Reference ? $duree : null;
     }
 
     /**
@@ -526,11 +530,11 @@ class Session
     /**
      * Add restrictionAcces.
      *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
+     * @param Role $role
      *
-     * @return Objet
+     * @return Session
      */
-    public function addRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
+    public function addRestrictionAcces(Role $role)
     {
         $this->restrictionAcces[] = $role;
 
@@ -540,9 +544,9 @@ class Session
     /**
      * Remove restrictionAcces.
      *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
+     * @param Role $role
      */
-    public function removeRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
+    public function removeRestrictionAcces(Role $role)
     {
         $this->restrictionAcces->removeElement($role);
     }
@@ -550,9 +554,9 @@ class Session
     /**
      * Set restrictionsAcces.
      *
-     * @param \Doctrine\Common\Collections\Collection $restrictionsAcces
+     * @param Collection $restrictionsAcces
      *
-     * @return Objet
+     * @return Session
      */
     public function setRestrictionAcces($restrictionsAcces)
     {
@@ -564,7 +568,7 @@ class Session
     /**
      * Get restrictionsAcces.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getRestrictionAcces()
     {
@@ -574,7 +578,7 @@ class Session
     /**
      * Get etat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @return Reference $etat
      */
     public function getEtat()
     {
@@ -584,7 +588,7 @@ class Session
     /**
      * Get etat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @return Reference $etat
      */
     public function getEtatId()
     {
@@ -594,25 +598,21 @@ class Session
     /**
      * Set etat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @param Reference $etat
      */
     public function setEtat($etat)
     {
-        if ($etat instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
-            $this->etat = $etat;
-        } else {
-            $this->etat = null;
-        }
+        $this->etat = $etat instanceof Reference ? $etat : null;
     }
 
     /**
      * Add inscriptions.
      *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
+     * @param Inscription $inscriptions
      *
-     * @return Menu
+     * @return Session
      */
-    public function addInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
+    public function addInscription(Inscription $inscriptions)
     {
         $this->inscriptions[] = $inscriptions;
 
@@ -622,9 +622,9 @@ class Session
     /**
      * Remove inscriptions.
      *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
+     * @param Inscription $inscriptions
      */
-    public function removeInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
+    public function removeInscription(Inscription $inscriptions)
     {
         $this->inscriptions->removeElement($inscriptions);
     }
@@ -632,12 +632,13 @@ class Session
     /**
      * Get inscriptions.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array
      */
     public function getInscriptions()
     {
         $inscriptions = [];
 
+        /** @var Inscription $inscription */
         foreach ($this->inscriptions as $inscription) {
             $inscriptions[$inscription->getDateInscription()->format('dmY') . $inscription->getId()] = $inscription;
         }
@@ -650,17 +651,23 @@ class Session
     /**
      * Get inscriptions.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array
      */
     public function getInscriptionsAccepte()
     {
         $inscriptionsAcceptees = [];
 
+        /**
+         * @var             $key
+         * @var Inscription $inscription
+         */
         foreach ($this->inscriptions as $key => $inscription) {
             //Récupération de l'état de l'inscription courante
             $etatInscription = $inscription->getEtatInscription();
             if (407 === $etatInscription->getId()) {
-                $inscriptionsAcceptees[$inscription->getUser()->getNom() . ' ' . $inscription->getUser()->getPrenom()] = $inscription;
+                $inscriptionsAcceptees[$inscription->getUser()->getLastname() . ' ' . $inscription->getUser()->getFirstname()]
+                    = $inscription
+                ;
             }
         }
         ksort($inscriptionsAcceptees);
@@ -671,17 +678,18 @@ class Session
     /**
      * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session.
      *
-     * @param HopitalNumeriqueUserBundleEntityUser $user utilisateur à vérifier
+     * @param User $user utilisateur à vérifier
      *
      * @return bool Utilisateur passé en param inscrit
      */
-    public function userIsInscrit(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function userIsInscrit(User $user)
     {
         if (is_null($user)) {
             return false;
         }
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
+        /** @var Inscription $inscription */
         foreach ($this->inscriptions as $inscription) {
             //Si l'utilisateur existe
             if ($inscription->getUser()->getId() === $user->getId()) {
@@ -696,17 +704,18 @@ class Session
     /**
      * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session.
      *
-     * @param HopitalNumeriqueUserBundleEntityUser $user utilisateur à vérifier
+     * @param User $user utilisateur à vérifier
      *
      * @return bool Utilisateur passé en param inscrit
      */
-    public function userIsInscritAndAnnule(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function userIsInscritAndAnnule(User $user)
     {
         if (is_null($user)) {
             return false;
         }
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
+        /** @var Inscription $inscription */
         foreach ($this->inscriptions as $inscription) {
             //Si l'utilisateur existe
             if ($inscription->getUser()->getId() === $user->getId()
@@ -884,11 +893,11 @@ class Session
     /**
      * Add restrictionAcces.
      *
-     * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
+     * @param Role $restrictionAcces
      *
      * @return Session
      */
-    public function addRestrictionAcce(\Nodevo\RoleBundle\Entity\Role $restrictionAcces)
+    public function addRestrictionAcce(Role $restrictionAcces)
     {
         $this->restrictionAcces[] = $restrictionAcces;
 
@@ -898,9 +907,9 @@ class Session
     /**
      * Remove restrictionAcces.
      *
-     * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
+     * @param Role $restrictionAcces
      */
-    public function removeRestrictionAcce(\Nodevo\RoleBundle\Entity\Role $restrictionAcces)
+    public function removeRestrictionAcce(Role $restrictionAcces)
     {
         $this->restrictionAcces->removeElement($restrictionAcces);
     }
@@ -908,11 +917,11 @@ class Session
     /**
      * Add connaissances.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @param Reference $connaissances
      *
      * @return Session
      */
-    public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    public function addConnaissance(Reference $connaissances)
     {
         $this->connaissances[] = $connaissances;
 
@@ -922,9 +931,9 @@ class Session
     /**
      * Remove connaissances.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @param Reference $connaissances
      */
-    public function removeConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    public function removeConnaissance(Reference $connaissances)
     {
         $this->connaissances->removeElement($connaissances);
     }
@@ -932,7 +941,7 @@ class Session
     /**
      * Get connaissances.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissances()
     {
@@ -941,6 +950,8 @@ class Session
 
     /**
      * Set connaissances.
+     *
+     * @param $connaissances
      *
      * @return Session
      */
@@ -956,6 +967,7 @@ class Session
         $connaissances = $this->connaissances;
         $connaissancesOrdered = [];
 
+        /** @var Reference $connaissance */
         foreach ($connaissances as $connaissance) {
             foreach ($connaissance->getParents() as $parent) {
                 if (!array_key_exists($parent->getId(), $connaissancesOrdered)) {
@@ -974,11 +986,11 @@ class Session
     /**
      * Add connaissancesMetier.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     * @param Reference $connaissancesMetier
      *
      * @return Session
      */
-    public function addConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    public function addConnaissanceMetier(Reference $connaissancesMetier)
     {
         $this->connaissancesMetier[] = $connaissancesMetier;
 
@@ -988,9 +1000,9 @@ class Session
     /**
      * Remove connaissancesMetier.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     * @param Reference $connaissancesMetier
      */
-    public function removeConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    public function removeConnaissanceMetier(Reference $connaissancesMetier)
     {
         $this->connaissancesMetier->removeElement($connaissancesMetier);
     }
@@ -998,7 +1010,7 @@ class Session
     /**
      * Get connaissancesMetier.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissancesMetier()
     {
@@ -1007,6 +1019,8 @@ class Session
 
     /**
      * Set connaissancesMetier.
+     *
+     * @param $connaissancesMetier
      *
      * @return Session
      */

@@ -21,3 +21,9 @@ services:
         arguments: ['@hopitalnumerique_reference.manager.synonyme']
         tags:
             - { name: 'form.type' }
+
+    hopitalnumerique_reference.form.type.hobby:
+        class: 'HopitalNumerique\ReferenceBundle\Form\Type\HobbyType'
+        arguments: ['@hopitalnumerique_reference.repository.hobby']
+        tags:
+            - { name: 'form.type' }

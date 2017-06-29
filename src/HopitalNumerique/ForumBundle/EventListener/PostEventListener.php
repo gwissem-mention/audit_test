@@ -141,9 +141,7 @@ class PostEventListener implements EventSubscriberInterface
                 'theme' => $post->getTopic()->getBoard()->getName(),
                 'fildiscusssion' => $post->getTopic()->getTitle(),
                 'lienversmessage' => 'lien',
-                'pseudouser' => !is_null($user->getPseudonymeForum())
-                    ? $user->getPseudonymeForum()
-                    : $user->getNomPrenom(),
+                'pseudouser' => !is_null($user->getPseudonym()) ? $user->getPseudonym() : $user->getNomPrenom(),
                 'shortMessage' => $post->getBody(),
             ];
 

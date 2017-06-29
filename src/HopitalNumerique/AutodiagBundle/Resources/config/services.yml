@@ -250,3 +250,16 @@ services:
             - '@autodiag.score_calculator'
             - '@autodiag.repository.compare'
             - '@doctrine.orm.entity_manager'
+
+    autodiag.widget.synthesis:
+        class: HopitalNumerique\AutodiagBundle\Service\Widget\AutodiagnosticWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 50 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@autodiag.repository.synthesis'
+            - '@router'
+            - '@hopitalnumerique_domaine.service.base_url_provider'
+        public: false

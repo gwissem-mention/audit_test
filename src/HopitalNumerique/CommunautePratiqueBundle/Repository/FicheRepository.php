@@ -1,9 +1,9 @@
 <?php
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
+
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Repository de Fiche.
@@ -11,20 +11,32 @@ use HopitalNumerique\UserBundle\Entity\User;
 class FicheRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
-     * @param Domaine $domain
+     * @param Domaine[] $domains
      *
      * @return int
      */
-    public function countPending(Domaine $domain)
+    public function countPending($domains)
     {
-        return $this->createQueryBuilder('f')
+        $qb = $this->createQueryBuilder('f');
+
+        return $qb
             ->select('COUNT(f.id)')
             ->join('f.groupe', 'g')
-            ->join('g.domaine', 'd', Join::WITH, 'd.id = :domaine')
-            ->setParameter('domaine', $domain->getId())
+            ->join(
+                'g.domaine',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->andWhere('f.resolu = FALSE')
 
-            ->getQuery()->getSingleScalarResult()
+            ->getQuery()
+            ->getSingleScalarResult()
         ;
     }
 }

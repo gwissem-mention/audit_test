@@ -2,9 +2,10 @@
 
 namespace HopitalNumerique\ExpertBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
-//Asserts Stuff
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
@@ -83,7 +84,7 @@ class ActiviteExpert
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_type_activite", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="typeActivite.libelle", options = {"comment" = "Type d activite sur la table référence avec le code ACTIVITE_TYPE"})
+     * @GRID\Column(field="activities.libelle", options = {"comment" = "Type d activite sur la table référence avec le code ACTIVITE_TYPE"})
      */
     protected $typeActivite;
 
@@ -141,10 +142,10 @@ class ActiviteExpert
      */
     public function __construct()
     {
-        $this->expertConcernes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->anapiens = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expertConcernes = new ArrayCollection();
+        $this->anapiens = new ArrayCollection();
         $this->etatValidation = false;
-        $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paiements = new ArrayCollection();
     }
 
     /**
@@ -278,13 +279,13 @@ class ActiviteExpert
     }
 
     /**
-     * Set typeActivite.
+     * Set activities.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     * @param Reference $typeActivite
      *
      * @return ActiviteExpert
      */
-    public function setTypeActivite(\HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite = null)
+    public function setTypeActivite(Reference $typeActivite = null)
     {
         $this->typeActivite = $typeActivite;
 
@@ -292,9 +293,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get typeActivite.
+     * Get activities.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getTypeActivite()
     {
@@ -304,11 +305,11 @@ class ActiviteExpert
     /**
      * Add expertConcernes.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $expertConcernes
+     * @param User $expertConcernes
      *
      * @return ActiviteExpert
      */
-    public function addExpertConcerne(\HopitalNumerique\UserBundle\Entity\User $expertConcernes)
+    public function addExpertConcerne(User $expertConcernes)
     {
         $this->expertConcernes[] = $expertConcernes;
 
@@ -318,9 +319,9 @@ class ActiviteExpert
     /**
      * Remove expertConcernes.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $expertConcernes
+     * @param User $expertConcernes
      */
-    public function removeExpertConcerne(\HopitalNumerique\UserBundle\Entity\User $expertConcernes)
+    public function removeExpertConcerne(User $expertConcernes)
     {
         $this->expertConcernes->removeElement($expertConcernes);
     }
@@ -338,11 +339,11 @@ class ActiviteExpert
     /**
      * Set uniteOeuvreConcerne.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $uniteOeuvreConcerne
+     * @param Reference $uniteOeuvreConcerne
      *
      * @return ActiviteExpert
      */
-    public function setUniteOeuvreConcerne(\HopitalNumerique\ReferenceBundle\Entity\Reference $uniteOeuvreConcerne = null)
+    public function setUniteOeuvreConcerne(Reference $uniteOeuvreConcerne = null)
     {
         $this->uniteOeuvreConcerne = $uniteOeuvreConcerne;
 
@@ -352,7 +353,7 @@ class ActiviteExpert
     /**
      * Get uniteOeuvreConcerne.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getUniteOeuvreConcerne()
     {
@@ -362,11 +363,11 @@ class ActiviteExpert
     /**
      * Add anapiens.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $anapiens
+     * @param User $anapiens
      *
      * @return ActiviteExpert
      */
-    public function addAnapien(\HopitalNumerique\UserBundle\Entity\User $anapiens)
+    public function addAnapien(User $anapiens)
     {
         $this->anapiens[] = $anapiens;
 
@@ -376,9 +377,9 @@ class ActiviteExpert
     /**
      * Remove anapiens.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $anapiens
+     * @param User $anapiens
      */
-    public function removeAnapien(\HopitalNumerique\UserBundle\Entity\User $anapiens)
+    public function removeAnapien(User $anapiens)
     {
         $this->anapiens->removeElement($anapiens);
     }
@@ -396,11 +397,11 @@ class ActiviteExpert
     /**
      * Set prestataire.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $prestataire
+     * @param Reference $prestataire
      *
      * @return ActiviteExpert
      */
-    public function setPrestataire(\HopitalNumerique\ReferenceBundle\Entity\Reference $prestataire = null)
+    public function setPrestataire(Reference $prestataire = null)
     {
         $this->prestataire = $prestataire;
 
@@ -410,7 +411,7 @@ class ActiviteExpert
     /**
      * Get prestataire.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getPrestataire()
     {
@@ -420,11 +421,11 @@ class ActiviteExpert
     /**
      * Set etat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @param Reference $etat
      *
      * @return ActiviteExpert
      */
-    public function setEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $etat = null)
+    public function setEtat(Reference $etat = null)
     {
         $this->etat = $etat;
 
@@ -434,7 +435,7 @@ class ActiviteExpert
     /**
      * Get etat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getEtat()
     {
@@ -444,11 +445,11 @@ class ActiviteExpert
     /**
      * Add evenements.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
+     * @param EvenementExpert $evenements
      *
      * @return ActiviteExpert
      */
-    public function addEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements)
+    public function addEvenement(EvenementExpert $evenements)
     {
         $this->evenements[] = $evenements;
 
@@ -458,9 +459,9 @@ class ActiviteExpert
     /**
      * Remove evenements.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
+     * @param EvenementExpert $evenements
      */
-    public function removeEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements)
+    public function removeEvenement(EvenementExpert $evenements)
     {
         $this->evenements->removeElement($evenements);
     }
@@ -485,6 +486,7 @@ class ActiviteExpert
         $nbMiniPresence = -1;
 
         $presenceExpertByActivite = [];
+        /** @var EvenementExpert $evenement */
         foreach ($this->evenements as $evenement) {
             foreach ($evenement->getExperts() as $expertPresence) {
                 if ($expertPresence->getPresent()) {
@@ -492,7 +494,9 @@ class ActiviteExpert
                         $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()] = 0;
                     }
 
-                    $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()] += $evenement->getNbVacation();
+                    $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()]
+                        += $evenement->getNbVacation()
+                    ;
                 }
             }
         }
@@ -509,11 +513,11 @@ class ActiviteExpert
     /**
      * Add dateFictives.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
+     * @param EvenementExpert $dateFictives
      *
      * @return ActiviteExpert
      */
-    public function addDateFictive(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives)
+    public function addDateFictive(EvenementExpert $dateFictives)
     {
         $this->dateFictives[] = $dateFictives;
 
@@ -523,9 +527,9 @@ class ActiviteExpert
     /**
      * Remove dateFictives.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
+     * @param EvenementExpert $dateFictives
      */
-    public function removeDateFictive(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives)
+    public function removeDateFictive(EvenementExpert $dateFictives)
     {
         $this->dateFictives->removeElement($dateFictives);
     }
@@ -543,11 +547,11 @@ class ActiviteExpert
     /**
      * Add paiement.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
+     * @param ActiviteExpert\Paiement $paiement
      *
      * @return ActiviteExpert
      */
-    public function addPaiement(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement)
+    public function addPaiement(ActiviteExpert\Paiement $paiement)
     {
         $this->paiements[] = $paiement;
 
@@ -557,9 +561,9 @@ class ActiviteExpert
     /**
      * Remove paiement.
      *
-     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
+     * @param ActiviteExpert\Paiement $paiement
      */
-    public function removePaiement(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement)
+    public function removePaiement(ActiviteExpert\Paiement $paiement)
     {
         $this->paiements->removeElement($paiement);
     }
@@ -585,7 +589,7 @@ class ActiviteExpert
     /**
      * Retourne si l'expert est présent.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     * @param User $expert Expert
      *
      * @return bool Vrai présent
      */
@@ -603,7 +607,7 @@ class ActiviteExpert
     /**
      * Retourne si le paiement d'un expert existe.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     * @param User $expert Expert
      *
      * @return bool Vrai s'il existe
      */
@@ -621,7 +625,7 @@ class ActiviteExpert
     /**
      * Supprime le paiement d'un expert.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     * @param User $expert Expert
      */
     public function removePaiementForExpert(User $expert)
     {

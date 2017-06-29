@@ -3,6 +3,7 @@
 namespace HopitalNumerique\EtablissementBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Export controller.
@@ -12,18 +13,20 @@ class ExportController extends Controller
     /**
      * Export CSV de la liste des etablissement sélectionnés.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return Response
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
-        //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_etablissement.grid.etablissement')->getRawData();
             foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
         }
+
         $refs = $this->get('hopitalnumerique_etablissement.manager.etablissement')->getDatasForExport($primaryKeys);
 
         $colonnes = [
@@ -40,38 +43,50 @@ class ExportController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $refs, 'export-etablissements.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $refs,
+            'export-etablissements.csv',
+            $kernelCharset
+        );
     }
 
     /**
      * Export CSV de la liste des etablissement sélectionnés.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return Response
      */
     public function exportCsvAutresAction($primaryKeys, $allPrimaryKeys)
     {
-        //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_user.grid.etablissement')->getRawData();
             foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
         }
+
         $refs = $this->get('hopitalnumerique_user.manager.user')->getEtablissementForExport($primaryKeys);
 
         $colonnes = [
-                            'id' => 'id',
-                            'username' => 'Nom d\'utilisateur',
-                            'nom' => 'Nom',
-                            'prenom' => 'Prénom',
-                            'region' => 'Région',
-                            'autreStructureRattachementSante' => 'Autre structure de rattachement santé',
-                            'archiver' => 'Archivé ?',
-                        ];
+            'id'                              => 'id',
+            'username'                        => 'Nom d\'utilisateur',
+            'lastname'                        => 'Nom',
+            'firstname'                       => 'Prénom',
+            'region'                          => 'Région',
+            'organizationLabel'               => 'Autre structure de rattachement santé',
+            'archiver'                        => 'Archivé ?',
+        ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $refs, 'export-etablissements-autres.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $refs,
+            'export-etablissements-autres.csv',
+            $kernelCharset
+        );
     }
 }

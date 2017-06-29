@@ -31,3 +31,7 @@ HopitalNumerique\ForumBundle\Entity\Category:
                 name: fk_forum_id
                 referencedColumnName: id
                 onDelete: SET NULL
+    manyToMany:
+        domaines:
+            targetEntity: HopitalNumerique\DomaineBundle\Entity\Domaine
+            mappedBy: communautePratiqueForumCategories

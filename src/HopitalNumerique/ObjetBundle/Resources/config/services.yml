@@ -27,6 +27,18 @@ services:
         arguments:
             - 'HopitalNumeriqueObjetBundle:Objet'
 
+    hopitalnumerique_objet.repository.contenu:
+            class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueObjetBundle:Contenu'
+
+    hopitalnumerique_objet.repository.consultation:
+            class: HopitalNumerique\ObjetBundle\Repository\ConsultationRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueObjetBundle:Consultation'
+
     hopitalnumerique_objet.repository.related_board:
         class: HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -159,3 +171,65 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_objet.repository.related_board"
+
+    hopitalnumerique_objet.widgets.updated_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\ObjectUpdatedWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+
+    hopitalnumerique_objet.widgets.most_viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\MostViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+    hopitalnumerique_objet.widgets.last_viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\LastViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+    hopitalnumerique_objet.widgets.objects_suggestion:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\SuggestionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+    hopitalnumerique_objet.widgets.viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\ViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 60 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@hopitalnumerique_objet.repository.contenu'
+            - '@router'
+            - '@hopitalnumerique_domaine.service.base_url_provider'
+        public: false

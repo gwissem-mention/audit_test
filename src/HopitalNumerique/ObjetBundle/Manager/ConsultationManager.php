@@ -75,6 +75,7 @@ class ConsultationManager extends BaseManager
                 //update
             } else {
                 $consultation->setDateLastConsulted(new \DateTime());
+                $consultation->setViewsCount($consultation->getViewsCount()+1);
             }
         } else {
             /** @var Consultation $consultation */
@@ -114,6 +115,7 @@ class ConsultationManager extends BaseManager
                 $consultation->setSessionId(session_id());
             } else {
                 $consultation->setDateLastConsulted(new \DateTime());
+                $consultation->setViewsCount($consultation->getViewsCount()+1);
             }
         }
 
@@ -148,7 +150,7 @@ class ConsultationManager extends BaseManager
     {
         if ($user instanceof User) {
             // get date Inscription user
-            $dateInscription = $user->getDateInscription();
+            $dateInscription = $user->getRegistrationDate();
 
             // get consulted objets and formate them
             $results = $this->getLastsConsultations($user, $domaineId);

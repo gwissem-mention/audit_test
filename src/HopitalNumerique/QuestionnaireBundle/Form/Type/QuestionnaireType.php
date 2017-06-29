@@ -644,7 +644,7 @@ class QuestionnaireType extends AbstractType
                         $attr,
                         $reponseCourante
                     ) {
-                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $etabAttr = ['class' => 'ajax-list-select2', 'data-url' => '/etablissement/load/'];
                         $fieldOptions = [
                             'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
                             'choice_label' => 'appellation',
@@ -711,7 +711,7 @@ class QuestionnaireType extends AbstractType
                         $attr,
                         $reponseCourante
                     ) {
-                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $etabAttr = ['class' => 'ajax-list-select2', 'data-url' => '/etablissement/load/'];
                         $fieldOptions = [
                             'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
                             'choice_label' => 'appellation',

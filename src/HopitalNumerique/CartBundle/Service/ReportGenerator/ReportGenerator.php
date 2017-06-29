@@ -1,0 +1,149 @@
+<?php
+
+namespace HopitalNumerique\CartBundle\Service\ReportGenerator;
+
+use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
+use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\CartBundle\Service\ItemFactory\ItemFactory;
+use Knp\Snappy\GeneratorInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
+class ReportGenerator
+{
+    /**
+     * @var ItemGeneratorInterface[]
+     */
+    protected $generators = [];
+
+    /**
+     * @var ItemFactory $itemFactory
+     */
+    protected $itemFactory;
+
+    /**
+     * @var \Twig_Environment $twig
+     */
+    protected $twig;
+
+    /**
+     * @var string $rootDir
+     */
+    protected $rootDir;
+
+    /**
+     * @var GeneratorInterface $pdfGenerator
+     */
+    protected $pdfGenerator;
+
+    /**
+     * ReportGenerator constructor.
+     *
+     * @param ItemFactory $itemFactory
+     * @param \Twig_Environment $twig
+     * @param string $rootDir
+     * @param GeneratorInterface $pdfGenerator
+     */
+    public function __construct(ItemFactory $itemFactory, \Twig_Environment $twig, $rootDir, GeneratorInterface $pdfGenerator)
+    {
+        $this->itemFactory = $itemFactory;
+        $this->twig = $twig;
+        $this->rootDir = $rootDir;
+        $this->pdfGenerator = $pdfGenerator;
+    }
+
+    /**
+     * @param ItemGeneratorInterface $generator
+     */
+    public function addGenerator(ItemGeneratorInterface $generator)
+    {
+        $this->generators[] = $generator;
+    }
+
+    /**
+     * Generate PDF file for given Report
+     *
+     * @param Report $report
+     */
+    public function generate(Report $report)
+    {
+        $items = $this->getItems($report);
+        
+        $html = $this->twig->render('@HopitalNumeriqueCart/report/generator/reportPDF.html.twig', [
+            'report' => $report,
+            'items' => $items,
+        ]);
+
+        $fs = new Filesystem();
+        $fs->dumpFile(
+            $this->getReportFile($report),
+            $this->pdfGenerator->getOutputFromHtml($html, [
+                'footer-html' => $this->twig->render('@HopitalNumeriqueCart/report/generator/reportPDFFooter.html.twig'),
+            ])
+        );
+    }
+
+    /**
+     * Get all items for given Report
+     *
+     * @param Report $report
+     *
+     * @return array
+     */
+    private function getItems(Report $report)
+    {
+        $items = [];
+
+        foreach ($report->getItems() as $item) {
+            $items[] = $this->generateItem($item);
+
+        }
+
+        return $items;
+    }
+
+    /**
+     * Retrieve item data to build ReportItem object with the right generator
+     *
+     * @param ReportItem $reportItem
+     *
+     * @return \HopitalNumerique\CartBundle\Model\Report\ItemInterface
+     */
+    private function generateItem(ReportItem $reportItem)
+    {
+        $item = $this->itemFactory->build($reportItem);
+
+        foreach ($this->generators as $generator) {
+            if ($generator->support($item->getObject())) {
+                return $generator->process($item->getObject(), $reportItem->getReport());
+            }
+        }
+
+        throw new \LogicException();
+    }
+
+    /**
+     * Remove report file
+     *
+     * @param Report $report
+     */
+    public function removeReport(Report $report)
+    {
+        $filepath = $this->getReportFile($report);
+
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
+    }
+
+    /**
+     * Get the absolute storage path of the report
+     *
+     * @param Report $report
+     *
+     * @return string
+     */
+    public function getReportFile(Report $report)
+    {
+        return sprintf('%s/../files/cart/report-%d.pdf', $this->rootDir, $report->getId());
+    }
+}

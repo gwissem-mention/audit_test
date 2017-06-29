@@ -4,6 +4,9 @@ namespace HopitalNumerique\PaiementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport as ForfaitTransportService;
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\PaiementBundle\Entity\Remboursement;
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -14,12 +17,15 @@ class RemboursementManager extends BaseManager
     protected $class = 'HopitalNumerique\PaiementBundle\Entity\Remboursement';
 
     /**
-     * @var \HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport ForfaitTransportService
+     * @var ForfaitTransportService ForfaitTransportService
      */
     private $forfaitTransportService;
 
     /**
      * Constructeur.
+     *
+     * @param EntityManager           $em
+     * @param ForfaitTransportService $forfaitTransportService
      */
     public function __construct(EntityManager $em, ForfaitTransportService $forfaitTransportService)
     {
@@ -48,15 +54,20 @@ class RemboursementManager extends BaseManager
             $row = new \StdClass();
 
             //build Referent + etablissement
+            /** @var User $referent */
             $referent = $intervention->getReferent();
-            $etablissement = $referent->getEtablissementRattachementSante() ? $referent->getEtablissementRattachementSante()->getNom() : $referent->getAutreStructureRattachementSante();
+            $etablissement = $referent->getOrganization() ? $referent->getOrganization()->getNom()
+                : $referent->getOrganizationLabel()
+            ;
 
-            if (null === $intervention->getReferent()->getEtablissementRattachementSante() || null === $intervention->getAmbassadeur()->getEtablissementRattachementSante()) {
+            if (null === $intervention->getReferent()->getOrganization()
+                || null === $intervention->getAmbassadeur()->getOrganization()
+            ) {
                 $forfaitTransport = 0;
             } else {
                 $forfaitTransport = $this->forfaitTransportService->getCoutForDistanceBetweenEtablissements(
-                    $intervention->getReferent()->getEtablissementRattachementSante(),
-                    $intervention->getAmbassadeur()->getEtablissementRattachementSante()
+                    $intervention->getReferent()->getOrganization(),
+                    $intervention->getAmbassadeur()->getOrganization()
                 );
             }
 
@@ -69,14 +80,19 @@ class RemboursementManager extends BaseManager
             $row->discr = 'intervention';
 
             //calcul total
-            $ambassadeurRegion = (null === $intervention->getAmbassadeur()->getRegion() ? '0' : $intervention->getAmbassadeur()->getRegion()->getId());
+            $ambassadeurRegion = (null === $intervention->getAmbassadeur()->getRegion() ? '0'
+                : $intervention->getAmbassadeur()->getRegion()->getId())
+            ;
             $row->total = ['prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport];
 
             $results[] = $row;
         }
 
         //Manage fomartions (inscriptions to sessions)
+        /** @var Inscription|null $lastInscription */
         $lastInscription = null;
+
+        /** @var Inscription $formation */
         foreach ($formations as $formation) {
             if (is_null($formation->getUser())
                 || is_null($formation->getUser()->getRegion())
@@ -100,14 +116,23 @@ class RemboursementManager extends BaseManager
             ];
 
             if (is_null($lastInscription)) {
+                /** @var Inscription $lastInscription */
                 $lastInscription = $formation;
             } else {
-                //Test si la date de la session courante et celle de la session d'avant (s'il y en a une) sont consécutives.
-                if (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 1
+                // Test si la date de la session courante et
+                // celle de la session d'avant (s'il y en a une) sont consécutives.
+                if (intval($formation->getSession()->getDateSession()->diff(
+                    $lastInscription->getSession()->getDateSession()
+                )->days) == 1
                     // Ou si il y a un écart de 2 jours mais que la session précedente à durée plus d'une journée
-                    || (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 2
-                            && $lastInscription->getSession()->getDuree()->getId() > 401)) {
-                    $row->total['prix'] = 140;
+                || (intval(
+                    $formation->getSession()->getDateSession()->diff(
+                        $lastInscription->getSession()->getDateSession()
+                    )->days
+                ) == 2
+                && $lastInscription->getSession()->getDuree()->getId() > 401)
+                ) {
+                    $row->total['prix']          = 140;
                     $row->total['hasSupplement'] = false;
                 }
                 $lastInscription = $formation;
@@ -134,11 +159,16 @@ class RemboursementManager extends BaseManager
     {
         $remboursements = $this->findAll();
         $prix = [];
+
+        /** @var Remboursement $remboursement */
         foreach ($remboursements as $remboursement) {
             $total = intval($remboursement->getRepas() + $remboursement->getGestion());
 
             $prix['interventions'][$remboursement->getRegion()->getId()]['total'] = $total;
-            $prix['formations'][$remboursement->getRegion()->getId()] = is_null($remboursement->getSupplement()) ? null : intval($total + $remboursement->getSupplement());
+
+            $prix['formations'][$remboursement->getRegion()->getId()] = is_null($remboursement->getSupplement()) ? null
+                : intval($total + $remboursement->getSupplement())
+            ;
         }
 
         return $prix;

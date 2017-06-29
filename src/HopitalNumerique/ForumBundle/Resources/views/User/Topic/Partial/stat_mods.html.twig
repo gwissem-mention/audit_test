@@ -10,8 +10,8 @@
                     {% if forum.id == 4 %}
                         <i>Anonyme</i>
                     {% else %}
-                        {% if topic.getDeletedBy.getPseudonymeForum() %}
-                            {{- topic.getDeletedBy.getPseudonymeForum() -}}
+                        {% if topic.getDeletedBy.getPseudonym() %}
+                            {{- topic.getDeletedBy.getPseudonym() -}}
                         {% else %}
                             {{- topic.getDeletedBy.getNomPrenom() -}}
                         {% endif %}
@@ -35,19 +35,6 @@
                 {%- endif -%}
             </div>
         {%- endif -%}
-
-{#        {%- if topic.isSticky -%}
-            <div class="alert alert-info">
-                <i class="glyphicon glyphicon-bullhorn"></i>
-
-                {{- 'topic.stickied-by' | trans({}, ForumBundle.translation ) |raw -}}
-                {{- topic.stickiedBy -}}
-
-                &nbsp;&#183;
-
-                {{- topic.getStickiedDate |date(ccdn_forum_forum.topic.user.show.deleted_datetime_format) -}}
-            </div>
-        {%- endif -%}#}
     </section>
 
 {%- endspaceless -%}

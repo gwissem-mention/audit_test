@@ -67,6 +67,13 @@ class Consultation
      */
     protected $sessionId;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $viewsCount = 1;
+
     public function __construct()
     {
         $this->dateLastConsulted = new \DateTime();
@@ -208,5 +215,25 @@ class Consultation
     public function getsessionId()
     {
         return $this->sessionId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getViewsCount()
+    {
+        return $this->viewsCount;
+    }
+
+    /**
+     * @param int $viewsCount
+     *
+     * @return Consultation
+     */
+    public function setViewsCount($viewsCount)
+    {
+        $this->viewsCount = $viewsCount;
+
+        return $this;
     }
 }

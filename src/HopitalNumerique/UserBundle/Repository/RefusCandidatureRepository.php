@@ -20,7 +20,7 @@ class RefusCandidatureRepository extends EntityRepository
     public function getDatasForGrid()
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('refCand.id, refCand.dateRefus, refCand.motifRefus, user.id as userId, user.nom as userNom, user.prenom as userPrenom, refRegion.libelle as userRegion')
+        $qb->select('refCand.id, refCand.dateRefus, refCand.motifRefus, user.id as userId, user.lastname as userNom, user.firstname as userPrenom, refRegion.libelle as userRegion')
             ->from('HopitalNumeriqueUserBundle:RefusCandidature', 'refCand')
             ->leftJoin('refCand.user', 'user')
             ->leftJoin('user.region', 'refRegion')

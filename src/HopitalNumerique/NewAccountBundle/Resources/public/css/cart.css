@@ -1,0 +1,15 @@
+table.dataTable > thead > tr > th.cart-items-all {
+    padding-right: 0;
+}
+
+table.dataTable > thead > tr > th:last-child {
+    width: 135px;
+}
+
+table.dataTable thead .cart-items-all::after {
+    display: none;
+}
+
+.dataTables_info {
+    display: none;
+}

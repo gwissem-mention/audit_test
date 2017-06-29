@@ -1,0 +1,84 @@
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="autodiagnostic-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_autodiagnostics'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'autodiagnostic.table.autodiag'|trans }}</th>
+                <th width="200">{{ 'autodiagnostic.table.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr class="parent-row">
+                    <td>
+                        {{ item.autodiag.title }}
+                    </td>
+                    <td class="actions-column">
+                        <a href="{{ item.autodiag.actions.add }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.new'|trans }}">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% for synthesis in item.syntheses %}
+                    <tr>
+                        <td>
+                            {% if item.autodiag.lastUpdate > synthesis.lastUpdate %}
+                                <i class="fa fa-bullhorn" title="{{ 'autodiagnostic.synthesis.updated'|trans }}"></i>
+                            {% endif %}
+                            {{ synthesis.lastUpdate|date('d/m/y') }}
+                            -
+                            {{ synthesis.completion }}%
+                            -
+                            {{ synthesis.isValid ? 'autodiagnostic.synthesis.state.valid'|trans : 'autodiagnostic.synthesis.state.invalid'|trans }}
+                            -
+                            <span class="inplace-edit-text" data-url="{{ path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id}) }}">{{ synthesis.name }}</span>
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                {% if synthesis.showUrl is not null %}
+                                    <a href="{{ synthesis.showUrl }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.show'|trans }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                {% endif %}
+                                <a href="{{ synthesis.sendUrl }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'autodiagnostic.action.send'|trans }}">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                                {% if synthesis.isValid %}
+                                    <a href="{{ synthesis.validationUrl }}" class="btn btn-sm btn-warning" title="{{ 'autodiagnostic.action.open'|trans }}">
+                                        <i class="fa fa-unlock"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ synthesis.validationUrl }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.validate'|trans }}">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+                                {% endif %}
+                                <a href="{{ synthesis.shareUrl }}" class="btn btn-sm btn-primary {{ synthesis.isValid == false ? 'disabled' }}" title="{{ 'autodiagnostic.action.share'|trans }}">
+                                    <i class="fa fa-exchange"></i>
+                                </a>
+                                <a href="{{ synthesis.deleteUrl }}" class="btn btn-sm btn-danger delete-synthesis-btn" title="{{ 'autodiagnostic.action.delete'|trans }}">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $('.inplace-edit-text').each(function() {
+            new InplaceEditor($(this), $(this).data("url"), {'title': '{{ 'autodiagnostic.action.change_name'|trans }}'});
+        });
+
+        $('#autodiagnostic-widget').find('.delete-synthesis-btn').on('click', function () {
+            return confirm('{{ 'autodiagnostic.delete.confirm'|trans }}');
+        });
+    </script>
+{% endif %}

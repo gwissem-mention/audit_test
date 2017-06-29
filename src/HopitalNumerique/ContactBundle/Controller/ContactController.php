@@ -67,7 +67,7 @@ class ContactController extends NodevoController
                 $variablesTemplate = [
                         'nomdestinataire' => '',
                         'maildestinataire' => '',
-                        'nomexpediteur' => $contact->getCivilite()->getLibelle() . ' ' . $contact->getPrenom() . ' ' . $contact->getNom(),
+                        'nomexpediteur' => $contact->getPrenom() . ' ' . $contact->getNom(),
                         'mailexpediteur' => $contact->getMail(),
                         'contact' => $formContact,
                 ];

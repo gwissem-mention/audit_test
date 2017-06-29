@@ -3,9 +3,12 @@
 namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * InscriptionRepository.
@@ -29,21 +32,20 @@ class InscriptionRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
+     * @param \StdClass $condition
      *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return QueryBuilder
      */
     public function getDatasForGrid(\StdClass $condition)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('insc.id,
                      user.id as userId,
-                     user.nom as userNom,
-                     user.prenom as userPrenom,
+                     user.lastname as userNom,
+                     user.firstname as userPrenom,
                      user.roles,
                      session.id as sessionId,
-                     refProfilEtablissementSante.libelle as userProfil,
+                     refProfileType.libelle as userProfil,
                      refRegion.libelle as userRegion,
                      insc.commentaire,
                      refEtatInscription.libelle as etatInscription,
@@ -52,14 +54,14 @@ class InscriptionRepository extends EntityRepository
             ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
             ->leftJoin('insc.user', 'user')
             ->leftJoin('user.region', 'refRegion')
-            ->leftJoin('user.profilEtablissementSante', 'refProfilEtablissementSante')
+            ->leftJoin('user.profileType', 'refProfileType')
             ->leftJoin('insc.etatInscription', 'refEtatInscription')
             ->leftJoin('insc.etatParticipation', 'refEtatParticipation')
             ->leftJoin('insc.etatEvaluation', 'refEtatEvaluation')
             ->leftJoin('insc.session', 'session')
             ->where('session.id = :idSession')
             ->setParameter('idSession', $condition->value)
-            ->orderBy('user.nom');
+            ->orderBy('user.lastname');
 
         return $qb;
     }
@@ -67,10 +69,7 @@ class InscriptionRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
-     *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return QueryBuilder
      */
     public function getAllDatasForGrid($domainesIds, $condition)
     {
@@ -89,7 +88,7 @@ class InscriptionRepository extends EntityRepository
                 ->andWhere('refEtat.id = 403')
             ->leftJoin('ins.user', 'user')
             ->groupBy('ins.id', 'domaine.id')
-            ->orderBy('user.nom');
+            ->orderBy('user.lastname');
 
         return $qb;
     }
@@ -97,7 +96,7 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne la liste des inscriptions de l'utilisateur pour la création des factures.
      *
-     * @param User $user
+     * @param null $user
      *
      * @return QueryBuilder
      */
@@ -135,6 +134,8 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne la liste des inscriptions d'une facture ordonnée par dateSession.
      *
+     * @param $facture
+     *
      * @return QueryBuilder
      */
     public function getInscriptionsForFactureOrdered($facture)
@@ -152,30 +153,43 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne la liste des inscriptions de l'utilisateur.
      *
-     * @return QueryBuilder
+     * @param $user
+     *
+     * @return array
      */
     public function getInscriptionsForUser($user)
     {
         return $this->_em->createQueryBuilder()
-                         ->select('insc')
-                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
-                         ->leftJoin('insc.session', 'session')
-                         ->leftJoin('insc.etatInscription', 'refEtatInscription')
-                         ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
-                         ->setParameter('user', $user)
-                         ->orderBy('session.dateSession', 'DESC');
+            ->select('insc')
+            ->addSelect('session', 'refEtatInscription', 'user')
+            ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+            ->leftJoin('insc.session', 'session')
+            ->leftJoin('insc.etatInscription', 'refEtatInscription')
+            ->leftJoin('insc.user', 'user')
+            ->andWhere('user = :user', 'refEtatInscription.id != 409')
+            ->setParameter('user', $user)
+            ->orderBy('session.dateSession', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**
      * Retourne la date de début de session de la première inscription de chaque utilisateur pour chaque module.
+     *
+     * @param $usersId
+     *
+     * @return QueryBuilder
      */
     public function getInscriptionsByUser($usersId)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id as userId,
-                     session.dateSession as date,
-                     session.id as sessionId,
-                     module.id as moduleId'
+        $qb
+            ->select(
+                'user.id as userId,
+                session.dateSession as date,
+                session.id as sessionId,
+                module.id as moduleId'
             )
             ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
             ->leftJoin('insc.user', 'user')
@@ -194,13 +208,13 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne le nombre d'inscriptions pour l'année.
      *
-     * @param int $annee Année
+     * @param int     $annee Année
+     * @param Domaine[] $domains
      *
      * @return int Total
      */
-    public function getCountForYear($annee, Domaine $domaine)
+    public function countInscriptionsByYear($annee, $domains)
     {
-        $queryBuilder = $this->createQueryBuilder('inscription');
         $anneeCourantePremierJour = new \DateTime();
         $anneeCourantePremierJour->setDate($annee, 1, 1);
         $anneeCourantePremierJour->setTime(0, 0, 0);
@@ -208,18 +222,28 @@ class InscriptionRepository extends EntityRepository
         $anneeSuivanteDernierJour->setDate($annee + 1, 1, 1);
         $anneeSuivanteDernierJour->setTime(0, 0, 0);
 
+        $queryBuilder = $this->createQueryBuilder('inscription');
         $queryBuilder
             ->select('COUNT(DISTINCT(inscription.id)) AS total')
             ->innerJoin('inscription.session', 'session')
             ->innerJoin('session.module', 'module')
-            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
+            ->innerJoin(
+                'module.domaines',
+                'domaine',
+                Join::WITH,
+                $queryBuilder->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->where($queryBuilder->expr()->andX(
                 $queryBuilder->expr()->gte('session.dateSession', ':anneeCourantePremierJour'),
                 $queryBuilder->expr()->lt('session.dateSession', ':anneeSuivanteDernierJour')
             ))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->setParameters([
-                'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour,
@@ -232,13 +256,13 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
      *
-     * @param int $annee Année
+     * @param int     $annee Année
+     * @param Domaine[] $domains
      *
      * @return int Total
      */
-    public function getUsersCountForYear($annee, Domaine $domaine)
+    public function countUsersByYear($annee, $domains)
     {
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $anneeCourantePremierJour = new \DateTime();
         $anneeCourantePremierJour->setDate($annee, 1, 1);
         $anneeCourantePremierJour->setTime(0, 0, 0);
@@ -246,19 +270,29 @@ class InscriptionRepository extends EntityRepository
         $anneeSuivanteDernierJour->setDate($annee + 1, 1, 1);
         $anneeSuivanteDernierJour->setTime(0, 0, 0);
 
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('COUNT(DISTINCT(user.id)) AS total')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->innerJoin('user.inscriptions', 'inscription')
-            ->innerJoin('inscription.session', 'session', Expr\Join::WITH, $queryBuilder->expr()->andX(
+            ->innerJoin('inscription.session', 'session', Join::WITH, $queryBuilder->expr()->andX(
                 $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
                 $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
             ))
             ->innerJoin('session.module', 'module')
-            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
+            ->innerJoin(
+                'module.domaines',
+                'domaine',
+                Join::WITH,
+                $queryBuilder->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->setParameters([
-                'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour,
@@ -284,5 +318,57 @@ class InscriptionRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count ambassadors trained in MAPF module, in corresponding $domains.
+     *
+     * @param $domains
+     *
+     * @return int
+     */
+    public function countAmbassadorsTrainedInMAPFByDomains($domains)
+    {
+        $qb = $this->createQueryBuilder('inscription');
+        $qb
+            ->select('COUNT(inscription.id)')
+            // Only done participation
+            ->join(
+                'inscription.etatParticipation',
+                'participation',
+                Join::WITH,
+                $qb->expr()->eq('participation.id', Reference::PARTICIPATED_ID)
+            )
+            // Only AMBASSADEUR user role
+            ->join(
+                'inscription.user',
+                'user',
+                Join::WITH,
+                $qb->expr()->like(
+                    'user.roles',
+                    $qb->expr()->literal(sprintf('%%%s%%', Role::$ROLE_AMBASSADEUR_LABEL))
+                )
+            )
+            ->join('inscription.session', 'session')
+            // Only MAPF module
+            ->join('session.module', 'module', Join::WITH, $qb->expr()->eq('module.id', 6))
+            // Only active module
+            ->join('module.statut', 'status', Join::WITH, $qb->expr()->eq('status.id', Reference::STATUT_ACTIF_ID))
+            // Only active sessions
+            ->join('session.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_SESSION_ACTIVE_ID))
+            ->join(
+                'module.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }

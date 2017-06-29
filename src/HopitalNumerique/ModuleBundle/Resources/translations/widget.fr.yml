@@ -1,0 +1,32 @@
+session:
+    title: Mes sessions
+    registration:
+        table:
+            title: Inscriptions aux sessions
+            actions: Actions
+        state:
+            valid: Acceptée
+            invalid: Refusée
+        action:
+            see: Voir l'évaluation
+            export: Exporter la liste des participants
+            download: Télécharger l'attestation de présence
+            cancel: Annuler mon inscription
+            module: Voir la fiche du module
+        delete:
+            confirm: Annuler votre inscription ?
+    bill:
+        paid: Payée
+        unpaid: Non payée
+        currency: €
+    session:
+        table:
+            title: Sessions en tant que formateur
+            actions: Actions
+        action:
+            module: Voir la fiche du module
+            description: Description de la session
+            participations: Gestion des participations à la session
+            registrations: Télécharger l'ensemble des inscriptions à la session
+            sheet: Télécharger la feuille d'émargement
+            evaluations: Télécharger l'ensemble des évaluations de la session

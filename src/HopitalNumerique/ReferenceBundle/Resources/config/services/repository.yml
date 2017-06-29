@@ -16,3 +16,9 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueReferenceBundle:ReferenceCode'
+
+    hopitalnumerique_reference.repository.hobby:
+        class: 'HopitalNumerique\ReferenceBundle\Repository\HobbyRepository'
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueReferenceBundle:Reference\Hobby'

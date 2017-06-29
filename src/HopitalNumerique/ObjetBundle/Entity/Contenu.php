@@ -2,9 +2,10 @@
 
 namespace HopitalNumerique\ObjetBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-//Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
@@ -108,7 +109,7 @@ class Contenu
     private $types;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove"})
      */
     protected $consultations;
 
@@ -120,12 +121,12 @@ class Contenu
     protected $nbVue;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="contenu", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="contenu", cascade={"persist", "remove"})
      */
     protected $listeCommentaires;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="contenu", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="contenu", cascade={"persist", "remove"})
      */
     protected $listeNotes;
 
@@ -137,7 +138,7 @@ class Contenu
     private $objets;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="contenus")
      * @ORM\JoinTable(name="hn_domaine_gestions_contenu",
      *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
@@ -157,8 +158,8 @@ class Contenu
         $this->parent = null;
         $this->order = 0;
         $this->nbVue = 0;
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new ArrayCollection();
+        $this->domaines = new ArrayCollection();
     }
 
     /**
@@ -303,11 +304,11 @@ class Contenu
     /**
      * Add child.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     * @param Contenu $child
      *
      * @return Contenu
      */
-    public function addChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    public function addChild(Contenu $child)
     {
         $this->children[] = $child;
 
@@ -317,9 +318,9 @@ class Contenu
     /**
      * Remove child.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     * @param Contenu $child
      */
-    public function removeChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    public function removeChild(Contenu $child)
     {
         $this->children->removeElement($child);
     }
@@ -347,7 +348,9 @@ class Contenu
     /**
      * Set nbVue.
      *
-     * @param int $nbVue
+     * @param $nbVue
+     *
+     * @return Contenu
      */
     public function setNbVue($nbVue)
     {
@@ -383,11 +386,11 @@ class Contenu
     /**
      * Add type.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     * @param Reference $type
      *
      * @return Contenu
      */
-    public function addType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    public function addType(Reference $type)
     {
         $this->types[] = $type;
 
@@ -397,9 +400,9 @@ class Contenu
     /**
      * Remove type.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     * @param Reference $type
      */
-    public function removeType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    public function removeType(Reference $type)
     {
         $this->types->removeElement($type);
     }
@@ -409,7 +412,7 @@ class Contenu
      */
     public function removeTypes()
     {
-        $this->types = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->types = new ArrayCollection();
 
         return $this;
     }
@@ -469,7 +472,7 @@ class Contenu
      *
      * @param \DateTime $dateModification
      *
-     * @return Objet
+     * @return Contenu
      */
     public function setDateModification($dateModification)
     {
@@ -491,7 +494,7 @@ class Contenu
     /**
      * Get consultations.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return ArrayCollection $consultations
      */
     public function getConsultations()
     {
@@ -501,11 +504,11 @@ class Contenu
     /**
      * Set consultations.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @param ArrayCollection $consultations
      *
-     * @return Objet
+     * @return Contenu
      */
-    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    public function setConsultations(ArrayCollection $consultations)
     {
         $this->consultations = $consultations;
 
@@ -515,7 +518,7 @@ class Contenu
     /**
      * Get listeCommentaires.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @return ArrayCollection $listeCommentaires
      */
     public function getListeCommentaires()
     {
@@ -525,11 +528,11 @@ class Contenu
     /**
      * Set listeCommentaires.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @param ArrayCollection $listeCommentaires
      *
-     * @return Objet
+     * @return Contenu
      */
-    public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
+    public function setListeCommentaires(ArrayCollection $listeCommentaires)
     {
         $this->listeCommentaires = $listeCommentaires;
 
@@ -539,7 +542,7 @@ class Contenu
     /**
      * Get listeNotes.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @return ArrayCollection $listeNotes
      */
     public function getListeNotes()
     {
@@ -549,11 +552,11 @@ class Contenu
     /**
      * Set listeNotes.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @param ArrayCollection $listeNotes
      *
-     * @return Objet
+     * @return Contenu
      */
-    public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
+    public function setListeNotes(ArrayCollection $listeNotes)
     {
         $this->listeNotes = $listeNotes;
 
@@ -589,7 +592,7 @@ class Contenu
      */
     public function removeObjets()
     {
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new ArrayCollection();
 
         return $this;
     }
@@ -621,11 +624,11 @@ class Contenu
     /**
      * Add domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      *
      * @return Contenu
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function addDomaine(Domaine $domaine)
     {
         $this->domaines[] = $domaine;
 
@@ -635,9 +638,9 @@ class Contenu
     /**
      * Remove domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function removeDomaine(Domaine $domaine)
     {
         $this->domaines->removeElement($domaine);
     }
@@ -647,7 +650,7 @@ class Contenu
      */
     public function removeDomaines()
     {
-        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->domaines = new ArrayCollection();
 
         return $this;
     }
@@ -665,11 +668,11 @@ class Contenu
     /**
      * Retourne si le contenu possède ce domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
      *
      * @return bool Si domaine
      */
-    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function hasDomaine(Domaine $domaine)
     {
         foreach ($this->domaines as $contenuDomaine) {
             if ($contenuDomaine->getId() === $domaine->getId()) {
@@ -727,7 +730,7 @@ class Contenu
     /**
      * Retourne les domaines du contenu (ceux de l'objet si aucun objet lié directement au contenu).
      *
-     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     * @return ArrayCollection
      */
     public function getRealDomaines()
     {
@@ -751,8 +754,8 @@ class Contenu
     /**
      * Retourne le préfixe d'un contenu.
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
-     * @param string                                       $prefix  Préfixe
+     * @param Contenu $contenu Contenu
+     * @param string  $prefix  Préfixe
      *
      * @return string Préfixe
      */
@@ -773,5 +776,52 @@ class Contenu
     public function hasContenu()
     {
         return '' != $this->getContenu();
+    }
+
+    /**
+     * @param string $separator
+     *
+     * @return string
+     */
+    public function getFullTitle($separator = ' > ')
+    {
+        return
+            $this->getObjet()->getTitre()
+            . $separator
+            . $this->getParentTitle($this, $separator)
+        ;
+    }
+
+    /**
+     * @param string $separator
+     *
+     * @return string
+     */
+    public function getShortTitle($separator = ' > ')
+    {
+        return
+            $this->getObjet()->getTitre()
+            . $separator
+            . $this->getPrefix()
+            . ' '
+            . $this->getTitre()
+        ;
+    }
+
+    /**
+     * @param Contenu $content
+     * @param string  $separator
+     *
+     * @return string
+     */
+    private function getParentTitle(Contenu $content, $separator = ' > ')
+    {
+        $title = $content->getPrefix() . ' ' . $content->getTitre();
+
+        if (null !== $content->getParent()) {
+            $title = $this->getParentTitle($content->getParent()) . $separator . $title;
+        }
+
+        return $title;
     }
 }

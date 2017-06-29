@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
@@ -79,7 +80,7 @@ class ExpBesoin
      */
     public function __construct()
     {
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponses = new ArrayCollection();
     }
 
     /**
@@ -105,7 +106,9 @@ class ExpBesoin
     /**
      * Set order.
      *
-     * @param int $order
+     * @param $order
+     *
+     * @return ExpBesoin
      */
     public function setOrder($order)
     {
@@ -141,11 +144,11 @@ class ExpBesoin
     /**
      * Add reponses.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses
+     * @param ExpBesoinReponses $reponses
      *
-     * @return Menu
+     * @return ExpBesoin
      */
-    public function addReponse(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses)
+    public function addReponse(ExpBesoinReponses $reponses)
     {
         $this->reponses[] = $reponses;
 
@@ -155,9 +158,9 @@ class ExpBesoin
     /**
      * Remove reponses.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses
+     * @param ExpBesoinReponses $reponses
      */
-    public function removeReponse(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses)
+    public function removeReponse(ExpBesoinReponses $reponses)
     {
         $this->reponses->removeElement($reponses);
     }
@@ -199,11 +202,11 @@ class ExpBesoin
     /**
      * Set expBesoinGestion.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion
+     * @param ExpBesoinGestion $expBesoinGestion
      *
      * @return ExpBesoin
      */
-    public function setExpBesoinGestion(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion = null)
+    public function setExpBesoinGestion(ExpBesoinGestion $expBesoinGestion = null)
     {
         $this->expBesoinGestion = $expBesoinGestion;
 
@@ -213,7 +216,7 @@ class ExpBesoin
     /**
      * Get expBesoinGestion.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion
+     * @return ExpBesoinGestion
      */
     public function getExpBesoinGestion()
     {

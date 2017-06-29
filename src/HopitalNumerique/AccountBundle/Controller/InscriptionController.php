@@ -80,19 +80,18 @@ class InscriptionController extends Controller
     /**
      * Complète l'utilisateur nouveau avec des valeurs obligatoires par défaut.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request Request
-     * @param \HopitalNumerique\UserBundle\Entity\User  $user    User
+     * @param Request $request Request
+     * @param User    $user    User
      */
     private function completeUser(Request $request, User &$user)
     {
         $passwordTool = new Password();
 
-        $user->setDateInscription(new \DateTime());
+        $user->setRegistrationDate(new \DateTime());
         $user->setDateLastUpdate(new \DateTime());
         $user->setPlainPassword(str_shuffle($passwordTool->generate(3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') . $passwordTool->generate(3, 'abcdefghijklmnopqrstuvwyyz') . $passwordTool->generate(2, '1234567890')));
-        $user->setCivilite($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MONSIEUR_ID));
-        $user->setNom(' ');
-        $user->setPrenom(' ');
+        $user->setLastname(' ');
+        $user->setFirstname(' ');
         $user->setEtat($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::STATUT_ACTIF_ID));
         $user->addDomaine($this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
         $user->setRoles([$this->container->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ENREGISTRE_9'])->getRole()]);

@@ -99,7 +99,8 @@ class InscriptionManager extends BaseManager
         $result = [];
 
         /**
-         * @var Inscription
+         * @var             $key
+         * @var Inscription $inscription
          */
         foreach ($inscriptions as $key => $inscription) {
             $nomPrenom = $inscription->getUser()->getAppellation();
@@ -133,19 +134,18 @@ class InscriptionManager extends BaseManager
                 'moduleTitre' => $inscription->getSession()->getModule()->getTitre(),
                 'dateSession' => $inscription->getSession()->getDateSession(),
                 'nomPrenom' => $nomPrenom,
-                'userRegion' => (!is_null($inscription->getUser()->getRegion())) ? $inscription->getUser()
-                                                                                                        ->getRegion()
-                                                                                                        ->getLibelle()
+                'userRegion' => (!is_null($inscription->getUser()->getRegion()))
+                    ? $inscription->getUser()->getRegion()->getLibelle()
                     : '',
-                'userProfil' => (!is_null($inscription->getUser()->getProfilEtablissementSante()))
-                    ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
+                'userProfil' => (!is_null($inscription->getUser()->getProfileType()))
+                    ? $inscription->getUser()->getProfileType()->getLibelle() : '',
                 'roles' => $inscription->getUser()->getRoles(),
                 'commentaire' => $inscription->getCommentaire(),
                 'etatInscription' => $inscription->getEtatInscription()->getLibelle(),
                 'nbInscrits' => $nbInscritsAccepte,
                 'nbInscritsEnAttente' => $nbInscritsEnAttente,
                 'placeRestantes' => $nbPlacesRestantes . '/' . $inscription->getSession()
-                                                                                ->getNombrePlaceDisponible(),
+                    ->getNombrePlaceDisponible(),
                 'domaineNom' => $domaineNom,
             ];
         }
@@ -166,7 +166,6 @@ class InscriptionManager extends BaseManager
             $this->em->persist($inscription);
         }
 
-        //save
         $this->em->flush();
     }
 
@@ -183,7 +182,6 @@ class InscriptionManager extends BaseManager
             $this->em->persist($inscription);
         }
 
-        //save
         $this->em->flush();
     }
 
@@ -232,7 +230,7 @@ class InscriptionManager extends BaseManager
      *
      * @param User $user L'utilisateur concerné
      *
-     * @return array
+     * @return bool
      */
     public function allInscriptionsIsOk($user)
     {
@@ -240,6 +238,7 @@ class InscriptionManager extends BaseManager
         $inscriptions = $this->findBy(['user' => $user, 'etatParticipation' => 411]);
 
         //Parcours des résultats
+        /** @var Inscription $inscription */
         foreach ($inscriptions as $inscription) {
             //Il faut que TOUTES les inscriptions de l'utilisateur soient "A participé" et "Évaluée"
             if ($inscription->getEtatParticipation()->getId() !== 411
@@ -262,23 +261,23 @@ class InscriptionManager extends BaseManager
      */
     public function getInscriptionsForUser($user)
     {
-        return $this->getRepository()->getInscriptionsForUser($user)->getQuery()->getResult();
+        return $this->getRepository()->getInscriptionsForUser($user);
     }
 
     /**
      * Créer un tableau formaté pour l'export CSV.
      *
-     * @param array $modules     liste des modules
-     * @param array $users       liste des utilisateurs
+     * @param array $modules Liste des modules
+     * @param array $users   Liste des utilisateurs
      * @param       $primaryKeys
      *
-     * @return type
+     * @return array
      */
     public function buildForExport($modules, $users, $primaryKeys)
     {
         $colonnes = [
-            'nom' => 'Nom',
-            'prenom' => 'Prénom',
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
         ];
 
         foreach ($modules as $module) {
@@ -295,8 +294,8 @@ class InscriptionManager extends BaseManager
         foreach ($users as $user) {
             $row = [];
 
-            $row['nom'] = $user->getNom();
-            $row['prenom'] = $user->getPrenom();
+            $row['lastname'] = $user->getLastname();
+            $row['firstname'] = $user->getFirstname();
             foreach ($modules as $module) {
                 $row['module' . $module->getId()] = isset($donnees[$user->getId()][$module->getId()])
                     ? $donnees[$user->getId()][$module->getId()] : '';
@@ -306,31 +305,5 @@ class InscriptionManager extends BaseManager
         }
 
         return ['colonnes' => $colonnes, 'datas' => $datas];
-    }
-
-    /**
-     * Retourne le nombre d'inscriptions pour l'année.
-     *
-     * @param int     $annee   Année
-     * @param Domaine $domaine
-     *
-     * @return int Total
-     */
-    public function getCountForYear($annee, Domaine $domaine)
-    {
-        return $this->getRepository()->getCountForYear($annee, $domaine);
-    }
-
-    /**
-     * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
-     *
-     * @param int     $annee   Année
-     * @param Domaine $domaine
-     *
-     * @return int Total
-     */
-    public function getUsersCountForYear($annee, Domaine $domaine)
-    {
-        return $this->getRepository()->getUsersCountForYear($annee, $domaine);
     }
 }

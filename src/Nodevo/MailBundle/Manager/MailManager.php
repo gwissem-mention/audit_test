@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -444,10 +445,10 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail d'acceptation de l'inscription à une session d'un module.
      *
-     * @param Inscriptions $inscriptions
-     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param Inscription[] $inscriptions
+     * @param array         $options
      *
-     * @return Swift_Message
+     * @return array
      */
     public function sendRappelInscriptionMail($inscriptions, $options)
     {
@@ -478,10 +479,10 @@ class MailManager extends BaseManager
     /**
      * Envoie un mail pour acceder au formulaire d'évaluation à une session d'un module.
      *
-     * @param Inscriptions $inscriptions
-     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param Inscription[] $inscriptions
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
-     * @return Swift_Message
+     * @return array
      */
     public function sendFormulaireEvaluationsMassMail($inscriptions, $options)
     {
@@ -707,6 +708,31 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @return object
+     */
+    public function getCartReportMail()
+    {
+        return $this->findOneById(73);
+    }
+
+    /**
+     * @param string $subject
+     * @param string $sender
+     * @param string $recipient
+     * @param string $content
+     * @param string $filepath
+     *
+     * @return \Swift_Message
+     */
+    public function sendCartReport($subject, $sender, $recipient, $content, $filepath)
+    {
+        $mail = $this->sendMail($subject, $sender, $recipient, $content);
+        $mail->attach(\Swift_Attachment::fromPath($filepath));
+
+        return $mail;
+    }
+
+    /**
      * Envoie un mail de partage de résultat d'autodiag (différent des autres envois de mail).
      *
      * @param array                                            $options  Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -723,7 +749,7 @@ class MailManager extends BaseManager
         }
 
         $user = $resultat->getUser();
-        $options['nomexpediteur'] = $user->getPrenom() . ' ' . $user->getNom();
+        $options['nomexpediteur'] = $user->getFirstname() . ' ' . $user->getLastname();
         $options['mailexpediteur'] = $user->getEmail();
         $destinataire = $options['destinataire'];
         $options = $this->getAllOptions($options);
@@ -1038,7 +1064,7 @@ class MailManager extends BaseManager
         }
 
         if (!is_null($user)) {
-            $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
+            $content = str_replace('%u', $user->getFirstname() . ' ' . $user->getLastname(), $content);
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
 
@@ -1271,8 +1297,8 @@ class MailManager extends BaseManager
                 $currentCourriel->getBody(),
                 null,
                 array_merge($parameters, [
-                    'nomUtilisateur' => $commentaire->getUser()->getNom(),
-                    'prenomUtilisateur' => $commentaire->getUser()->getPrenom(),
+                    'nomUtilisateur' => $commentaire->getUser()->getLastname(),
+                    'prenomUtilisateur' => $commentaire->getUser()->getFirstname(),
                 ])
             );
 

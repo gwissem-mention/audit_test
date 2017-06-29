@@ -9,12 +9,47 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * ObjetRepository.
  */
 class ObjetRepository extends EntityRepository
 {
+
+    /**
+     * @param integer $objectId
+     *
+     * @return Objet
+     */
+    public function findByIdWithJoin($objectId)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.domaines', 'd')->addSelect('d')
+
+            ->andWhere('o.id = :objectId')->setParameter('objectId', $objectId)
+
+            ->setMaxResults(1)
+            ->getQuery()->getSingleResult()
+        ;
+    }
+
+    /**
+     * @param $ids
+     *
+     * @return array
+     */
+    public function findByIdsWithJoin($ids)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.domaines', 'd')->addSelect('d')
+
+            ->andWhere('o.id IN (:objectIds)')->setParameter('objectIds', $ids)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
     /**
      * Returns the list of objects corresponding to ids.
      *
@@ -327,22 +362,36 @@ class ObjetRepository extends EntityRepository
 
     /**
      * Retourne l'ensemble des productions actives.
+     * @param Domaine[] $domains
+     * @return array
      */
-    public function getObjetsForDashboard()
+    public function getObjetsForDashboard($domains)
     {
+        if (empty($domains)) {
+            return null;
+        }
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types', 'refType')
             ->leftJoin('obj.etat', 'refEtat')
             ->leftJoin('refType.parents', 'parentType')
-            ->leftJoin('obj.domaines', 'domaine')
-            ->where('domaine.id = :idDomaine')
-            ->setParameter('idDomaine', 1)
+            ->join(
+                'obj.domaines',
+                'domaine',
+                Expr\Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->groupBy('obj.id')
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -567,5 +616,86 @@ class ObjetRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getUpdatedObjectsSinceLastView(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND o.dateModification > c.dateLastConsulted')
+            ->setParameter('userId', $user->getId())
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getMostViewedObjectsForUser(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND c.contenu IS NULL')
+            ->addSelect('c')
+            ->setParameter('userId', $user->getId())
+
+            ->orderBy('c.viewsCount', 'DESC')
+
+            ->setMaxResults(5)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getLastViewedObjects(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
+            ->setParameter('userId', $user->getId())
+
+            ->orderBy('c.dateLastConsulted', 'DESC')
+
+            ->setMaxResults(5)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User           $user
+     * @param Domaine[]|null $domains
+     *
+     * @return array
+     */
+    public function getViewedObjects(User $user, $domains = null)
+    {
+        $qb = $this->createQueryBuilder('object')
+            ->addSelect('consultations')
+            ->join('object.consultations', 'consultations', Expr\Join::WITH, 'consultations.user = :userId')
+            ->setParameter('userId', $user->getId())
+        ;
+
+        if (null !== $domains) {
+            $qb->join('consultations.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
+        }
+
+        return $qb
+            ->orderBy('consultations.dateLastConsulted', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

@@ -1,0 +1,14 @@
+form:
+    currentPassword:
+        label: Mot de passe actuel
+    newPassword:
+        first:
+            label: Nouveau mot de passe
+        second:
+            label: Confnirmation du nouveau mot de passe
+    publicationNotification:
+        label: Je souhaite recevoir les notifications des mises à jour des publications de mon historiqe
+    activityNewsletter:
+        label: J’autorise l’ANAP à m’envoyer d’autres informations concernant ses activités
+    notification:
+        success: Vos informations ont bien été enregistrées.

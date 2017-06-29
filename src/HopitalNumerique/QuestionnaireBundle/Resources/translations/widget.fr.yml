@@ -1,0 +1,11 @@
+survey:
+    title: Mes questionnaires
+    table:
+        title: Questionnaires
+        actions: Actions
+    action:
+        add: Ajouter une nouvelle occurrence
+        show: Consulter le questionnaire
+        delete: Supprimer le questionnaire
+    delete:
+        confirm: Supprimer ce questionnaire ?

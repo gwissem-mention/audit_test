@@ -2,15 +2,23 @@
 
 namespace HopitalNumerique\ContactBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Popup de contact.
  */
-class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class PopupController extends Controller
 {
     /**
      * Affichage de la popup.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     * @throws \Exception
      */
     public function indexAction(Request $request)
     {
@@ -37,6 +45,11 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
     /**
      * Affichage de la popup.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     * @throws \Exception
      */
     public function inviteAction(Request $request)
     {
@@ -59,6 +72,10 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
     /**
      * Lorsque le formulaire de la popup de d'invitation est soumis.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function submitInviteAction(Request $request)
     {
@@ -69,13 +86,16 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             $regex = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/';
             foreach ($destinataires as $destinataire) {
                 if (!preg_match($regex, $destinataire)) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Vérifiez le format des adresses e-mail renseignées.');
+                    $this->addFlash('danger', 'Vérifiez le format des adresses e-mail renseignées.');
 
                     return $this->redirect($form['urlRedirection']);
                 }
             }
 
-            $groupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findOneBy(['id' => $form['idGroupe']]);
+            $groupe = $this->get('hopitalnumerique_communautepratique.manager.groupe')->findOneBy(
+                ['id' => $form['idGroupe']]
+            );
+
             if ($groupe) {
                 $nomGroupe = $groupe->getTitre();
             } else {
@@ -84,9 +104,9 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
             $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->getUser(), $destinataires, $nomGroupe);
 
-            $this->get('session')->getFlashBag()->add('success', 'Votre invitation a été envoyée.');
+            $this->addFlash('success', 'Votre invitation a été envoyée.');
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'Invitation non envoyée.');
+            $this->addFlash('danger', 'Invitation non envoyée.');
         }
 
         return $this->redirect($form['urlRedirection']);
@@ -94,6 +114,10 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
     /**
      * Lorsque le formulaire de la popup de contact est soumis.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function submitAction(Request $request)
     {
@@ -101,9 +125,9 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $contactForm->handleRequest($request);
 
         if ($contactForm->isValid()) {
-            $this->get('session')->getFlashBag()->add('success', 'Votre message a été envoyé.');
+            $this->addFlash('success', 'Votre message a été envoyé.');
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'Message non envoyé.');
+            $this->addFlash('danger', 'Message non envoyé.');
         }
 
         return $this->redirect($contactForm->get('urlRedirection')->getData());

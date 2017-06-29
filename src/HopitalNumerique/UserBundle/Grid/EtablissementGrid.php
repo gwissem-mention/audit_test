@@ -31,8 +31,8 @@ class EtablissementGrid extends Grid implements GridInterface
     public function setColumns()
     {
         $this->addColonne(new Column\TextColumn('username', 'Identifiant (login)'));
-        $this->addColonne(new Column\TextColumn('nom', 'Nom'));
-        $this->addColonne(new Column\TextColumn('prenom', 'Prénom'));
+        $this->addColonne(new Column\TextColumn('lastname', 'Nom'));
+        $this->addColonne(new Column\TextColumn('firstname', 'Prénom'));
 
         $regionColonne = new Column\TextColumn('region', 'Région');
         $regionColonne->setSize(150);
@@ -41,7 +41,7 @@ class EtablissementGrid extends Grid implements GridInterface
         $regionColonne->setOperatorsVisible(false);
         $this->addColonne($regionColonne);
 
-        $this->addColonne(new Column\TextColumn('autreStructureRattachementSante', 'Etablissement autre'));
+        $this->addColonne(new Column\TextColumn('organizationLabel', 'Etablissement autre'));
 
         $archiverColonne = new Column\BooleanColumn('archiver', 'Archivé');
         $archiverColonne->setSize(100);

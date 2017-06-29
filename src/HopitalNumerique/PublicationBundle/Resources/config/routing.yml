@@ -4,37 +4,50 @@ hopital_numerique_publication_converter:
 
 #Publications
 hopital_numerique_publication_synthese:
-    pattern:  /publication/synthese/{id}
+    path:  /publication/synthese/{id}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:synthese", id:1 }
     requirements:
         id: \d+
 
 hopital_numerique_publication_publication_objet:
-    pattern:  /publication/{id}-{alias}
+    path:  /publication/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:objet", id:1, alias:alias }
     requirements:
         id: \d+
 
+hopital_numerique_publication_publication_object_recommendation:
+    path:  /publication/recommandation-objet/{object}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:objectRecommendation" }
+    requirements:
+        object: \d+
+
 hopital_numerique_publication_publication_pdf:
-    pattern: '/publication/{entityType}/{entityId}/pdf'
+    path: '/publication/{entityType}/{entityId}/pdf'
     defaults: { _controller: 'HopitalNumeriquePublicationBundle:Publication:pdf' }
     requirements:
         entityId: '\d+'
 
 hopital_numerique_publication_publication_contenu:
-    pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
+    path:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
 
+hopital_numerique_publication_publication_content_recommendation:
+    path:  /publication/recommandation-contenu/{content}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contentRecommendation" }
+    requirements:
+        content: \d+
+
+
 hopital_numerique_publication_publication_contenu_without_alias:
-    pattern:  /publication/{id}/{idc}
+    path:  /publication/{id}/{idc}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1}
     requirements:
         id: \d+
 
 hopital_numerique_publication_publication_article:
-    pattern:  /publication/{categorie}/{id}-{alias}
+    path:  /publication/{categorie}/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article", categorie:categorie, id:1, alias:alias }
     requirements:
         id: \d+
@@ -46,69 +59,69 @@ hopital_numerique_forum_user_topic_create:
 
 #Actualités
 hopital_numerique_publication_actualite:
-    pattern:  /actualites/{page}
+    path:  /actualites/{page}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index", page:1 }
     requirements:
         page: \d+
 
 hopital_numerique_publication_actualite_ambassadeur:
-    pattern:  /Ambassadeur-actualites
+    path:  /Ambassadeur-actualites
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:ambassadeur", page:1 }
 #    requirements:
 #        page: \d+
 
 hopital_numerique_publication_actualite_categorie:
-    pattern:  /actualites/{id}-{libelle}/{page}
+    path:  /actualites/{id}-{libelle}/{page}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle, type: normal, page:1 }
     requirements:
         page: \d+
 
 hopital_numerique_publication_actualite_categorie_ambassadeur:
-    pattern:  /Ambassadeur-actualites/{id}-{libelle}
+    path:  /Ambassadeur-actualites/{id}-{libelle}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle, type: ambassadeur}
 
 # Flux RSS
 hopitalnumerique_objet_objet_feed_rss:
-    pattern:  /publications.rss
+    path:  /publications.rss
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:feed" }
 
 #Commentaire
 #--Suppression
 hopital_numerique_publication_commentaire_delete:
-    pattern:  /publication/commentaire/delete/{id}.{_format}
+    path:  /publication/commentaire/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:delete", _format: json }
     requirements:
         id: \d+
         _method: POST|DELETE
 #--Ajout
 hopital_numerique_publication_commentaire_add:
-    pattern:  /publication/commentaire/add
+    path:  /publication/commentaire/add
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:add"}
 
 #Note
 #--Ajout
 hopital_numerique_publication_note_add:
-    pattern:  /publication/note/add.{_format}
+    path:  /publication/note/add.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:add", _format: json }
     requirements:
         _method: POST
 
 #--Calcul note moyenne
 hopital_numerique_publication_note_moyenne_objet:
-    pattern:  /publication/note/note_moyenne.{_format}
+    path:  /publication/note/note_moyenne.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:calculNoteMoyenne", _format: json }
     requirements:
         _method: GET|POST
 
 #--Suppression
 hopital_numerique_publication_note_delete:
-    pattern:  /publication/note/delete.{_format}
+    path:  /publication/note/delete.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:deleteNote", _format: json }
     requirements:
         _method: POST
 #--Export
 hopital_numerique_publication_front_export:
-    pattern:  /publication/export/{id}/{type}
+    path:  /publication/export/{id}/{type}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Export:export", id:1 }
     requirements:
         id: \d+

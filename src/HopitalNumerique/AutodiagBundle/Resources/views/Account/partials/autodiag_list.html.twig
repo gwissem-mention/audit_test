@@ -120,7 +120,7 @@
                                     <td>{{ synthesis.validated_at|date('d/m/Y') }}</td>
                                     <td>
                                         {% if synthesis.user != user and synthesis.share is not empty %}
-                                            {{ 'ad.account.synthesis.shared_by'|trans }} : {{ synthesis.user.prenom ~ ' ' ~ synthesis.user.nom }}
+                                            {{ 'ad.account.synthesis.shared_by'|trans }} : {{ synthesis.user.firstname ~ ' ' ~ synthesis.user.lastname }}
                                         {% elseif synthesis.share is not empty %}
                                             {{ 'ad.account.synthesis.shared_with'|trans }} : {{ synthesis.share|join(', ') }}
                                         {% else %}

@@ -155,8 +155,8 @@
 
                         <div class="description">
                             {% if app.user.region is not null 
-                                and app.user.profilEtablissementSante is not null 
-                                and (app.user.etablissementRattachementSante is not null or app.user.autreStructureRattachementSante|trim != "" or app.user.nomStructure|trim != "") %}
+                                and app.user.profileType is not null
+                                and (app.user.organization is not null or app.user.organizationLabel|trim != "") %}
                                 {# Render de la vue de récupérations des différentes modules #}
                                 {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }}
 
@@ -173,10 +173,10 @@
                                         {% if app.user.region is null %}
                                             <li><span class="champ_manquant"><strong>Région</strong></span></li>
                                         {% endif %}
-                                        {% if app.user.profilEtablissementSante is null %}
+                                        {% if app.user.profileType is null %}
                                             <li><span class="champ_manquant"><strong>Profil</strong></span></li>
                                         {% endif %}
-                                        {% if app.user.etablissementRattachementSante is null and app.user.autreStructureRattachementSante|trim == "" and app.user.nomStructure|trim == "" %}
+                                        {% if app.user.organization is null and app.user.organizationLabel|trim == "" %}
                                             <li><span class="champ_manquant"><strong>Établissement</strong></span></li>
                                         {% endif %}
                                     </ul>

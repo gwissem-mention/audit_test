@@ -1,0 +1,20 @@
+{% trans_default_domain 'cart' %}
+
+{% if item.references|length > 0 %}
+
+    <fieldset>
+        <legend>{{ 'generator.references.title'|trans }}</legend>
+
+        <ul>
+            {% for reference in item.references %}
+                <li>
+                    {% if reference.primary %}
+                        *
+                    {% endif %}
+                    {{ reference.reference.libelle }}
+                </li>
+            {% endfor %}
+        </ul>
+    </fieldset>
+
+{% endif %}

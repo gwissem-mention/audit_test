@@ -118,7 +118,7 @@ $(document).ready(function() {
                 {% endif %}
                 
                 <div class="actions">
-                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_ajax_delete', {'id':consultation.id})}}')"></div>
                 </div>
             </div>
         {% else %}

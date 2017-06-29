@@ -1,0 +1,39 @@
+{% trans_default_domain 'cart' %}
+
+<h2>
+    <small>{{ 'item.object_type.cdp_group'|trans }}</small>
+    {{ item.title }}
+</h2>
+
+{{ 'generator.cdp_group.beginningDate'|trans }} {{ item.beginningDate|date('d/m/Y') }}<br />
+{{ 'generator.cdp_group.endDate'|trans }} {{ item.endDate|date('d/m/Y') }}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
+    <fieldset>
+        <legend>
+            {{ 'generator.cdp_group.shortDescription'|trans }}
+        </legend>
+        {{ item.shortDescription|nl2br }}
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
+    <fieldset>
+        <legend>{{ 'generator.cdp_group.description'|trans }}</legend>
+        {{ item.description|raw }}
+    </fieldset>
+{% endif %}
+
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.summary|length > 0 %}
+    <fieldset>
+        <legend>{{ 'generator.cdp_group.summary'|trans }}</legend>
+        <ul>
+            {% for file in item.summary %}
+                <li>{{ file.questionPosee }}</li>
+            {% endfor %}
+        </ul>
+    </fieldset>
+{% endif %}
+
+{{ include('@HopitalNumeriqueCart/report/generator/item/partials/references.html.twig') }}

@@ -1,0 +1,136 @@
+{% trans_default_domain 'widget' %}
+{% if data['registrations'] is not empty or data['sessions'] is not empty %}
+    <div id="session-widget">
+        {% if data['registrations'] is not empty %}
+            <div class="widget-description">
+                {{ 'Module_moncompte_services_sessions_inscription'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+
+            <table class="widget-table table default">
+                <thead>
+                <tr>
+                    <th>{{ 'session.registration.table.title'|trans }}</th>
+                    <th width="200">{{ 'session.registration.table.actions'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for registration in data['registrations'] %}
+                    <tr>
+                        <td>
+                            {{ registration['info']|join(' - ') }}
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                {% if registration['actions']['module'] is defined %}
+                                    <a class="btn btn-success btn-sm" title="{{ 'session.registration.action.module'|trans }}" href="{{ registration['actions']['module'] }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if registration['actions']['evaluate'] is defined %}
+                                    <a class="btn btn-primary btn-sm" href="{{ registration['actions']['evaluate'] }}">
+                                        {{registration.etatEvaluation.libelle}}
+                                    </a>
+                                {% endif %}
+
+                                {% if registration['actions']['show'] is defined %}
+                                    <a class="btn btn-primary btn-sm" title="{{ 'session.registration.action.see'|trans }}" href="{{ registration['actions']['show'] }}">
+                                        <i class="fa fa-clipboard"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if registration['actions']['download'] is defined %}
+                                    <a class="btn btn-warning btn-sm" title="{{ 'session.registration.action.download'|trans }}" href="{{ registration['actions']['download'] }}">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if registration['actions']['export'] is defined %}
+                                    <a class="btn btn-info btn-sm" title="{{ 'session.registration.action.export'|trans }}" href="{{ registration['actions']['export'] }}">
+                                        <i class="fa fa-users"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if registration['actions']['cancel'] is defined %}
+                                    <a class="btn btn-danger btn-sm cancel-registration-btn" title="{{ 'session.registration.action.cancel'|trans }}" href="{{ registration['actions']['cancel'] }}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if data['sessions'] is not empty %}
+            <div class="widget-description">
+                {{ 'Module_moncompte_services_sessions'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+
+            <table class="widget-table table default">
+                <thead>
+                <tr>
+                    <th>{{ 'session.session.table.title'|trans }}</th>
+                    <th width="220">{{ 'session.session.table.actions'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for session in data['sessions'] %}
+                    <tr>
+                        <td>
+                            {{ session['info']|join(' - ') }}
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                {% if session['actions']['module'] is defined %}
+                                    <a class="btn btn-success btn-sm" title="{{ 'session.session.action.module'|trans }}" href="{{ session['actions']['module'] }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if session['actions']['description'] is defined %}
+                                    <a class="btn btn-info btn-sm fancybox fancybox.ajax" title="{{ 'session.session.action.description'|trans }}" href="{{ session['actions']['description'] }}">
+                                        <i class="fa fa-info-circle"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if session['actions']['participations'] is defined %}
+                                    <a class="btn btn-warning btn-sm fancybox fancybox.ajax" title="{{ 'session.session.action.participations'|trans }}" href="{{ session['actions']['participations'] }}">
+                                        <i class="fa fa-users"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if session['actions']['registrations'] is defined %}
+                                    <a class="btn btn-primary btn-sm" title="{{ 'session.session.action.registrations'|trans }}" href="{{ session['actions']['registrations'] }}">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if session['actions']['sheet'] is defined %}
+                                    <a class="btn btn-warning btn-sm" title="{{ 'session.session.action.sheet'|trans }}" href="{{ session['actions']['sheet'] }}">
+                                        <i class="fa fa-file-text"></i>
+                                    </a>
+                                {% endif %}
+
+                                {% if session['actions']['evaluations'] is defined %}
+                                    <a class="btn btn-primary btn-sm" title="{{ 'session.session.action.evaluations'|trans }}" href="{{ session['actions']['evaluations'] }}">
+                                        <i class="fa fa-clipboard"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <script>
+        $('#session-widget').find('.cancel-registration-btn').on('click', function () {
+            return confirm('{{ 'session.registration.delete.confirm'|trans }}');
+        });
+    </script>
+{% endif %}

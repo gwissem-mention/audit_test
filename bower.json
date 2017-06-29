@@ -39,6 +39,8 @@
     "jquery-file-upload": "9.11.*",
     "blueimp-tmpl": "2.5.*",
     "jstree": "3.2.*",
-    "gauge.js": "^1.2.1"
+    "gauge.js": "^1.2.1",
+    "handlebars": "^4.0.8",
+    "datatables": "^1.10.15"
   }
 }

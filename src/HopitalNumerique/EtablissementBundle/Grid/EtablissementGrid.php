@@ -64,7 +64,6 @@ class EtablissementGrid extends Grid implements GridInterface
     {
         $this->addActionButton(new Action\EditButton('hopitalnumerique_etablissement_edit'));
         $this->addActionButton(new Action\ShowButton('hopitalnumerique_etablissement_show'));
-        //$this->addActionButton( new Action\DeleteButton('hopitalnumerique_etablissement_delete') );
     }
 
     /**
@@ -72,7 +71,10 @@ class EtablissementGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction(new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Export:exportCsv'));
+        $this->addMassAction(
+            new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Export:exportCsv')
+        );
+
         $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueEtablissementBundle:Etablissement:deleteMass'));
     }
 }
