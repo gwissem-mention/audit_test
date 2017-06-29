@@ -867,4 +867,90 @@ class UserRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult()
         ;
     }
+
+    /**
+     * Count users in givent domains
+     *
+     * @param Domaine[] $domains
+     *
+     * @return int
+     */
+    public function countUsersByDomains($domains)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count users by domains who logged in since $since
+     *
+     * @param Domaine[] $domains
+     * @param $since
+     *
+     * @return int
+     */
+    public function countActiveUsersByDomains($domains, $since)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+        $qb
+            ->join('user.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_ACTIF_ID))
+            ->andWhere('user.lastLogin IS NOT NULL')
+            ->andWhere('user.lastLogin > :since')
+            ->setParameter('since', $since)
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count ES users by domains
+     *
+     * @param Domaine[] $domains
+     *
+     * @return int
+     */
+    public function countEsUsersByDomains($domains)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+        $qb
+            ->join('user.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_ACTIF_ID))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('user.roles', $qb->expr()->literal(sprintf('%%%s%%', Role::$ROLE_DIRECTEUR_LABEL))),
+                    $qb->expr()->like('user.roles', $qb->expr()->literal(sprintf('%%%s%%', Role::$ROLE_ES_LABEL)))
+                )
+            )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Create base query builder for user count by domains queries
+     *
+     * @param Domaine[] $domains
+     *
+     * @return QueryBuilder
+     */
+    private function createCountByDomainsQueryBuilder($domains)
+    {
+        $qb = $this->createQueryBuilder('user');
+        $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->join(
+                'user.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        return $qb;
+    }
 }
