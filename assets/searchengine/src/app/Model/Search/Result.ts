@@ -12,6 +12,8 @@ abstract class Result {
 
     abstract getLink(): string;
 
+    abstract getSource(): string;
+
     getRawScore(): number {
         return this.score;
     }

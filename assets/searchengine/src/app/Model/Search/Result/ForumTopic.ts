@@ -23,4 +23,8 @@ export default class ForumTopic extends Result {
     getLink(): string {
         return Routing.generate('ccdn_forum_user_topic_show', {'forumName': this.forumName, 'topicId': this.id});
     }
+
+    getSource(): string {
+        return null;
+    }
 }

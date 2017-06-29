@@ -3,6 +3,10 @@ $main-font-color: #000;
 
 #search-results-container {
 
+    .text-mutted {
+        color: #999;
+    }
+
     h2 {
         color: $main-color;
         font-size: 14px;
