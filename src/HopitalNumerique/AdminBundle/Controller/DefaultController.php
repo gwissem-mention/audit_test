@@ -44,7 +44,7 @@ class DefaultController extends Controller
         $userConf = $this->buildDashboardRows(json_decode($user->getDashboardBack(), true));
 
         //Initialisation des blocs
-        $blocUser = $this->getBlockuser();
+        list($blocUser, $blocAmbassadeur, $blocExpert) = $this->getBlockuser();
         $blocObjets = $this->getBlockObjets();
         $blocForum = $this->getBlockForum();
         $blocInterventions = $this->getBlockIntervention();
@@ -56,6 +56,8 @@ class DefaultController extends Controller
             'anneeEnCours' => date('Y'),
             'userConf' => $userConf,
             'blocUser' => $blocUser,
+            'blocAmbassadeur' => $blocAmbassadeur,
+            'blocExpert' => $blocExpert,
             'blocObjets' => $blocObjets,
             'blocForum' => $blocForum,
             'blocInterventions' => $blocInterventions,
@@ -205,122 +207,137 @@ class DefaultController extends Controller
      */
     private function getBlockuser()
     {
+        $userRepository = $this->get('hopitalnumerique_user.repository.user');
         $questionnaireManager = $this->get('hopitalnumerique_questionnaire.manager.questionnaire');
         $refusCandidatureManager = $this->get('hopitalnumerique_user.manager.refus_candidature');
         $inscriptionRepository = $this->get('hn.module.repository.inscription');
         $postRepository = $this->get('hopitalnumerique_forum.repository.post');
+        $contractManager = $this->get('hopitalnumerique_user.manager.contractualisation');
+
+        $domainNumeric = !empty(array_filter($this->domains, function (Domaine $domain) {
+            return $domain->getId() === Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID;
+        }));
 
         $expertContributionDate = new \DateTime();
         $expertContributionDate->modify('-7 day');
 
         $blocUser = [
-            'nb' => 0,
-            'actif' => 0,
-            'es' => 0,
-            'ambCandidats' => 0,
-            'ambassadeurs' => 0,
-            'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
-            'ambCandidatsRecues' => 0,
-            'conventions' => 0,
-            'expCandidats' => 0,
-            'experts' => 0,
-            'expCandidatsRecues' => 0,
-            'contribution' => $postRepository->countExpertContributionByDomains($this->domains, $expertContributionDate),
+            'nb' => $userRepository->countUsersByDomains($this->domains),
+            'actif' => $userRepository->countActiveUsersByDomains(
+                $this->domains,
+                (new \DateTime())->modify('last year')
+            ),
+            'es' => $userRepository->countEsUsersByDomains($this->domains),
         ];
-        /** @var User[] $users */
-        $users = $this->get('hopitalnumerique_user.manager.user')->findByDomaines(new ArrayCollection($this->domains));
-        $blocUser['nb'] = count($users);
 
-        //Get Questionnaire Infos
-        $idExpert = $questionnaireManager->getQuestionnaireId('expert');
-        $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
-
-        //Récupération des questionnaires et users
-        $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
-
-        //On récupère les candidatures refusées
-        $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
-
-        //get contractualisation stuff
-        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')
-            ->getContractualisationsARenouvelerForAmbassador()
+        $blocExpert = $domainNumeric
+            ? [
+                'expCandidats' => 0,
+                'experts' => 0,
+                'expCandidatsRecues' => 0,
+                'contribution' => $postRepository->countExpertContributionByDomains($this->domains, $expertContributionDate),
+            ]
+            : null
         ;
 
-        foreach ($users as $user) {
-            //Ne pas prendre en compte les utilisateurs inactifs
-            if ($user->getEtat()->getId() !== 3) {
-                continue;
-            }
+        $blocAmbassadeur = $domainNumeric
+            ? [
+                'ambCandidats' => 0,
+                'ambassadeurs' => 0,
+                'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
+                'ambCandidatsRecues' => 0,
+                'conventions' => $contractManager->getContractualisationsARenouvelerForAmbassador(),
+            ]
+            : null
+        ;
 
-            // Si l'utilisateur s'est connecté il y a moins de 1 an
-            if ($user->getLastLogin() !== null && $user->getLastLogin()->diff(new \DateTime())->y < 1) {
-                $blocUser['actif']++;
-            }
+        if ($domainNumeric) {
+            /** @var User[] $users */
+            $users = $this->get('hopitalnumerique_user.manager.user')->findByDomaines(new ArrayCollection($this->domains));
 
-            if ($user->hasRoleDirecteur() || $user->hasRoleEs()) {
-                $blocUser['es']++;
-            } elseif ($user->hasRoleAmbassadeur()) {
-                $blocUser['ambassadeurs']++;
-            } elseif ($user->hasRoleExpert()) {
-                $blocUser['experts']++;
-            }
+            //Get Questionnaire Infos
+            $idExpert = $questionnaireManager->getQuestionnaireId('expert');
+            $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
 
-            //Récupération des questionnaires rempli par l'utilisateur courant
-            $questionnairesByUser = [];
-            if (array_key_exists($user->getId(), $questionnaireByUser)) {
-                $questionnaireByUser = $questionnaireByUser[$user->getId()];
-            }
+            //Récupération des questionnaires et users
+            $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
 
-            // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
-            // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idExpert, $questionnairesByUser)
-                && !$user->hasRoleExpert()
-                && !$user->getAlreadyBeExpert()
-                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                    $user->getId(),
-                    $idExpert,
-                    $refusCandidature
-                )
-            ) {
-                $blocUser['expCandidats']++;
-            }
+            //On récupère les candidatures refusées
+            $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
 
-            // Récupération d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est
-            // pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idAmbassadeur, $questionnairesByUser)
-                && !$user->hasRoleAmbassadeur()
-                && !$user->getAlreadyBeAmbassadeur()
-                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                    $user->getId(),
-                    $idAmbassadeur,
-                    $refusCandidature
-                )
-            ) {
-                $blocUser['ambCandidats']++;
-            }
+            foreach ($users as $user) {
+                // Ne pas prendre en compte les utilisateurs inactifs
+                if ($user->getEtat()->getId() !== 3) {
+                    continue;
+                }
 
-            if (in_array($idExpert, $questionnairesByUser)
-                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                    $user->getId(),
-                    $idExpert,
-                    $refusCandidature
-                )
-            ) {
-                $blocUser['expCandidatsRecues']++;
-            }
+                if ($domainNumeric && $user->hasRoleAmbassadeur()) {
+                    $blocAmbassadeur['ambassadeurs']++;
+                } elseif ($domainNumeric && $user->hasRoleExpert()) {
+                    $blocExpert['experts']++;
+                }
 
-            if (in_array($idAmbassadeur, $questionnairesByUser)
-                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                    $user->getId(),
-                    $idAmbassadeur,
-                    $refusCandidature
-                )
-            ) {
-                $blocUser['ambCandidatsRecues']++;
+                //Récupération des questionnaires rempli par l'utilisateur courant
+                $questionnairesByUser = [];
+                if (array_key_exists($user->getId(), $questionnaireByUser)) {
+                    $questionnaireByUser = $questionnaireByUser[$user->getId()];
+                }
+
+                // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
+                // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+                if ($domainNumeric
+                    && in_array($idExpert, $questionnairesByUser)
+                    && !$user->hasRoleExpert()
+                    && !$user->getAlreadyBeExpert()
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idExpert,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocExpert['expCandidats']++;
+                }
+
+                // Récupération d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est
+                // pas expert et que sa candidature n'a pas encore été refusé
+                if ($domainNumeric
+                    && in_array($idAmbassadeur, $questionnairesByUser)
+                    && !$user->hasRoleAmbassadeur()
+                    && !$user->getAlreadyBeAmbassadeur()
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idAmbassadeur,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocAmbassadeur['ambCandidats']++;
+                }
+
+                if ($domainNumeric
+                    && in_array($idExpert, $questionnairesByUser)
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idExpert,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocExpert['expCandidatsRecues']++;
+                }
+
+                if ($domainNumeric
+                    && in_array($idAmbassadeur, $questionnairesByUser)
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idAmbassadeur,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocAmbassadeur['ambCandidatsRecues']++;
+                }
             }
         }
 
-        return $blocUser;
+        return [$blocUser, $blocAmbassadeur, $blocExpert];
     }
 
     public function getBlockIntervention()
