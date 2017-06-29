@@ -8,6 +8,7 @@ export default class Publication extends Result {
     alias: string;
     content: string;
     code: string;
+    source: string;
     types: string[] = [];
 
     children: Publication[] = [];
@@ -17,12 +18,18 @@ export default class Publication extends Result {
         id: number,
         score: number,
         title: string,
-        alias: string,
-        content: string = null
+        alias: string
     ) {
         super(id, score);
         this.title = title;
         this.alias = alias;
+    }
+
+    setSource(source: string) {
+        this.source = source;
+    }
+
+    setContent(content: string) {
         this.content = content;
     }
 
@@ -66,5 +73,9 @@ export default class Publication extends Result {
         }
 
         return Routing.generate('hopital_numerique_publication_publication_objet', {'id': this.id, 'alias': this.alias});
+    }
+    
+    getSource(): string {
+        return this.source;
     }
 }

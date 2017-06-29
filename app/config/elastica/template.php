@@ -168,6 +168,9 @@ $container->loadFromExtension('fos_elastica', [
                         'alias' => [
                             'type' => 'keyword',
                         ],
+                        'source' => [
+                            'type' => 'text',
+                        ],
                         'types' => [
                             'type' => 'nested',
                             'properties' => [

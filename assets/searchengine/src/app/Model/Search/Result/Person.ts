@@ -32,4 +32,8 @@ export default class Person extends Result {
             '\'}, window.location.href);'
         ;
     }
+
+    getSource(): string {
+        return null;
+    }
 }
