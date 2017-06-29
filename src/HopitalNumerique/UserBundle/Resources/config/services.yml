@@ -231,6 +231,12 @@ services:
             arguments:
                 - 'HopitalNumerique\UserBundle\Entity\Token'
 
+    hopitalnumerique_user.repository.contractualisation:
+        class: HopitalNumerique\UserBundle\Repository\ContractualisationRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\Contractualisation'
+
     hopitalnumerique_user.token.token_storage:
             class: HopitalNumerique\UserBundle\Service\TokenStorage
             arguments:
