@@ -1,18 +1,117 @@
-#inscription{ }
-#inscription h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 40px 0 18px;}
-#inscription form{ background: #f4f4f4; padding:60px 35px 15px 35px; position: relative; border:1px solid #e3e3e3;}
-#inscription form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
-#inscription form label{ color:#333333; font-size: 14px }
-#inscription form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
-#inscription form .champ-obligatoire .etoile{color: #e01958;}
-#inscription form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
-#inscription form h4{ text-align:left; padding: 30px 0px 10px 0px; }
-#inscription form .conditonsGenerales{cursor:pointer;text-align:right;}
-#inscription form .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
-#inscription form .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
-#inscription form .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
-#headerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:13px; padding:10px; color:#6F3596; }
-#footerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;padding:10px; }
-#footerDesc .text p{ font-size:11px;font-style:italic;}
-#footerDesc .lien a{font-size: 13px; margin-top:10px; text-decoration: underline;font-style:none;}
-#inscription form .panel-title { margin-bottom: 15px; display: block; }
+#registration .panel.with-nav-tabs .panel-heading {
+    padding: 0;
+}
+
+#registration .panel.with-nav-tabs .nav-tabs {
+    border-bottom: none;
+}
+
+#registration .no-background {
+    background: none !important;
+    border: none !important;
+}
+
+#registration .panel-body {
+    background-color: #eee !important;
+}
+
+#registration .tab-content {
+    background: none !important;
+    border: none !important;
+}
+
+#registration .panel-body hr {
+    border-bottom: 1px solid #cacaca;
+    margin: 20px 15px;
+}
+
+#registration .panel-body p {
+    margin: 0 15px;
+}
+
+#registration .panel-body a {
+    cursor: pointer;
+}
+
+#registration .spacer {
+    margin-top: 25px !important;
+}
+
+#registration .tab-completion {
+    font-weight: normal;
+}
+
+#registration .submit-btn {
+    float: right;
+    margin-bottom: 20px;
+}
+
+#registration .custom-panel-heading {
+    background: #f6f6f6;
+    color: #6F3596 !important;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#registration .panel .panel-body {
+    border: 1px solid #e3e3e3;
+}
+
+#registration input[type="checkbox"] {
+    box-shadow: none;
+}
+
+#registration .btn.btn-link {
+    padding-top: 20px !important;
+}
+
+#registration textarea {
+    resize: vertical;
+}
+
+#registration .btn-default {
+    padding: 20px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-radius: 0;
+    width: 100%;
+}
+
+#registration ul.nav-tabs li a {
+    background-color:#f6f6f6;
+    border-color:#e3e3e3;
+    color:#6F3596;
+    font-size:13px;
+    font-weight:bold;
+}
+
+#registration ul.nav-tabs li.active a {
+    background-color:#6F3596;
+    color:#fff;
+}
+
+#registration .header {
+    margin: 20px 0;
+    padding: 20px 40px;
+    border: 1px solid #e3e3e3;
+    background: #f6f6f6;
+}
+
+#registration .footer {
+    padding: 20px 40px;
+    border: 1px solid #e3e3e3;
+    background: #f6f6f6;
+}
+
+#registration .footer a {
+}
+
+#registration .header p {
+    margin-bottom: 0;
+}
+
+#registration .password-information {
+    margin: 20px 0 0 0;
+}

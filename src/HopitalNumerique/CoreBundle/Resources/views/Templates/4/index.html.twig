@@ -100,10 +100,10 @@
                     {% endif %}
                 </div>
                 {% if app.user %}
-                    {% if app.user.nom or app.user.prenom %}
+                    {% if app.user.lastname or app.user.firstname %}
                         <p>
-                            <i class="fa fa-user" ></i> {{ app.user.prenom|capitalize }}
-                            <span class="nom">{{ app.user.nom|capitalize }}</span>
+                            <i class="fa fa-user" ></i> {{ app.user.firstname|capitalize }}
+                            <span class="nom">{{ app.user.lastname|capitalize }}</span>
                         </p>
                     {% else %}
                         <p>

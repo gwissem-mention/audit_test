@@ -1,0 +1,28 @@
+updated_object:
+    title: Mises à jour
+
+viewed_objects:
+    title: Mes publications vues
+    publications: Publications
+    actions: Actions
+    show_all: Afficher tout
+    show_less: Afficher moins
+    delete_message:
+        confirm: Retirer cette publication de ma liste ?
+        success: La publication a bien été retirée.
+        error: Une erreur est survenue lors de la suppression de la publication.
+    see: Ouvrir la publication
+    send: Envoyer la publication
+    delete: Retirer cette publication de ma liste
+    update: La publication a été mise à jour depuis votre dernière consultation
+
+most_viewed_object:
+    title: Les 5 productions que vous avez le plus vues
+    views_count: '[0,1] (Vue %count% fois)|]1,Inf[ (Vue %count% fois)'
+
+last_viewed_objects:
+    title: Les 5 dernières productions regardées
+
+suggestion:
+    title: Vous serriez aussi intéressé par
+    content: En cours de création

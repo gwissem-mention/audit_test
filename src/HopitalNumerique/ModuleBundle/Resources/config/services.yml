@@ -99,3 +99,33 @@ services:
     hopitalnumerique_module.service.logger.cronlogger:
         class: "%hopitalnumerique_module.service.logger.cronlogger.class%"
         arguments: ["@logger", "@session"]
+
+    hopitalnumerique_module.widget.session:
+        class: HopitalNumerique\ModuleBundle\Service\Widget\SessionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 20 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_module.service.registration_transformer'
+            - '@hopitalnumerique_module.service.session_transformer'
+        public: false
+
+    hopitalnumerique_module.service.registration_transformer:
+        class: HopitalNumerique\ModuleBundle\Service\Widget\DataProvider\RegistrationProvider
+        arguments:
+            - '@hn.module.repository.inscription'
+            - '@security.token_storage'
+            - '@nodevo_acl.manager.acl'
+            - '@router'
+            - '@translator'
+
+    hopitalnumerique_module.service.session_transformer:
+        class: HopitalNumerique\ModuleBundle\Service\Widget\DataProvider\SessionProvider
+        arguments:
+            - '@hn.module.repository.session'
+            - '@security.token_storage'
+            - '@nodevo_acl.manager.acl'
+            - '@router'
+            - '@translator'

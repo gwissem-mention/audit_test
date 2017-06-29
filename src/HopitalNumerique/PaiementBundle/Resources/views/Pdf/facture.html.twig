@@ -5,21 +5,21 @@
                 <tr>
                     <td><strong>Nom Etablissement</strong></td>
                     <td>
-                        {% if facture.user.etablissementRattachementSante %}
-                            {{facture.user.etablissementRattachementSante.nom}}
+                        {% if facture.user.organization %}
+                            {{facture.user.organization.nom}}
                         {% else %}
-                            {{facture.user.autreStructureRattachementSante}}
+                            {{facture.user.organizationLabel}}
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td><strong>Adresse</strong></td>
                     <td>
-                        {% if facture.user.etablissementRattachementSante %}
-                            {% if facture.user.etablissementRattachementSante.adresse != '' %}
-                                {{facture.user.etablissementRattachementSante.adresse }},
+                        {% if facture.user.organization %}
+                            {% if facture.user.organization.adresse != '' %}
+                                {{facture.user.organization.adresse }},
                             {% endif %}
-                            {{facture.user.etablissementRattachementSante.codePostal ~ ' ' ~ facture.user.etablissementRattachementSante.ville}}
+                            {{facture.user.organization.codePostal ~ ' ' ~ facture.user.organization.ville}}
                         {% endif %}
                     </td>
                 </tr>

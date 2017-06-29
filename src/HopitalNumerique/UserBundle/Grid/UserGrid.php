@@ -50,7 +50,7 @@ class UserGrid extends Grid implements GridInterface
                 $filtres['etat'] = 'Actif';
                 $filtres['domaines'] = 'Mon Hôpital Numérique';
                 //Not working
-                $filtres['nbVisites'] = ['operator' => 'gt', 'from' => '0'];
+                $filtres['visitCount'] = ['operator' => 'gt', 'from' => '0'];
                 break;
             //Not working
             case 'Ambassadeur-docs-a-renouvler':
@@ -68,21 +68,21 @@ class UserGrid extends Grid implements GridInterface
     {
         $roles = $this->_container->get('nodevo_role.manager.role')->getRolesAsArray();
 
-        //Retirer username et pseudonymeForum des filtres
+        //Retirer username et pseudonym des filtres
         $usernameColonne = new Column\DateColumn('username', 'Username');
         $usernameColonne->setVisible(false);
         $usernameColonne->setFilterable(false);
         $this->addColonne($usernameColonne);
-        $pseudonymeColonne = new Column\DateColumn('pseudonymeForum', 'Pseudonyme forum');
+        $pseudonymeColonne = new Column\DateColumn('pseudonym', 'Pseudonyme forum');
         $pseudonymeColonne->setVisible(false);
         $pseudonymeColonne->setFilterable(false);
         $this->addColonne($pseudonymeColonne);
 
         $this->addColonne(new Column\NumberColumn('idUser', 'ID'));
-        $this->addColonne(new Column\DateColumn('dateInscription', 'Date d\'inscription'));
-        $this->addColonne(new Column\NumberColumn('nbVisites', 'Visites'));
-        $this->addColonne(new Column\TextColumn('nom', 'Nom'));
-        $this->addColonne(new Column\TextColumn('prenom', 'Prénom'));
+        $this->addColonne(new Column\DateColumn('registrationDate', 'Date d\'inscription'));
+        $this->addColonne(new Column\NumberColumn('visitCount', 'Visites'));
+        $this->addColonne(new Column\TextColumn('lastname', 'Nom'));
+        $this->addColonne(new Column\TextColumn('firstname', 'Prénom'));
         $this->addColonne(new Column\TextColumn('email', 'Adresse e-mail'));
 
         $regionColumn = new Column\TextColumn('region', 'Région');
@@ -136,6 +136,11 @@ class UserGrid extends Grid implements GridInterface
         $etatColonne->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
 
         $this->addColonne($etatColonne);
+
+        $activityNewsletterEnabledColumn = new Column\BooleanColumn('activityNewsletterEnabled', 'Newsletter');
+        $activityNewsletterEnabledColumn->setSize(60);
+
+        $this->addColonne($activityNewsletterEnabledColumn);
 
         if ($this->_container->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_1')) {
             $simulationColonne = new Column\TextColumn('usernameSimulated', 'Simuler');

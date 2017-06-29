@@ -1,0 +1,81 @@
+{% extends 'NewAccountBundle::layout.html.twig' %}
+
+{% block form_row %}
+    <div class ="form_vertical_row">
+        <div class="form-group">
+            <div class="col-md-11">
+                {{ form_label(form) }}
+                {% if form_errors(form) %}<div class="alert alert-danger col-md-12">{{ form_errors(form) }}</div>{% endif %}
+            </div>
+            <div class="col-md-1">
+                {{ form_widget(form) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
+
+{% form_theme form.publicationNotification _self %}
+{% form_theme form.activityNewsletter _self %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-md-offset-9 col-md-3 submit-btn">
+                <input type="submit" class="btn btn-success col-md-12" value="{{ 'account.save'|trans }}">
+            </div>
+        </div>
+
+        <fieldset class="panel panel-default">
+            <legend class="panel-heading custom-panel-heading">Mot de passe</legend>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.currentPassword) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 password-information">
+                        <p>
+                            Le mot de passe doit comporter au moins 6 caractères et être composé d'au moins une lettre minuscule, d'une lettre majuscule et d'un chiffre.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.newPassword.first) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.newPassword.second) }}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="panel panel-default">
+            <legend class="panel-heading custom-panel-heading">Notifications</legend>
+            <div class="panel-body">
+                {{ form_row(form.publicationNotification) }}
+                {{ form_row(form.activityNewsletter) }}
+            </div>
+        </fieldset>
+
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+    <fieldset class="panel panel-default">
+        <legend class="panel-heading custom-panel-heading">Me désinscrire</legend>
+        <div class="panel-body">
+            <p>
+                Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».<br /><br />
+                Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+            </p>
+
+            <a href="{{ path('hopital_numerique_user_desinscription') }}" class="btn btn-link">Me désinscrire de Mon Hôpital Numérique</a>
+        </div>
+    </fieldset>
+
+    {% if page is defined %}
+        <div id="current-page" data-page="{{ page }}" class="hide"></div>
+    {% endif %}
+{% endblock %}

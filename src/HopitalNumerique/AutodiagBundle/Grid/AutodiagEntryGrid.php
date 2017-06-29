@@ -253,7 +253,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
             $shares = [];
             if ($synthesis->getShares()->count() > 0) {
                 $shares = $synthesis->getShares()->map(function (User $user) {
-                    return sprintf('%s %s', $user->getPrenom(), $user->getNom());
+                    return sprintf('%s %s', $user->getFirstname(), $user->getLastname());
                 })->toArray();
             }
 
@@ -267,12 +267,12 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 'id' => $synthesis->getId(),
                 'name' => $synthesis->getName(),
                 'user' => $user !== null
-                    ? sprintf('%s %s', $user->getPrenom(), $user->getNom())
+                    ? sprintf('%s %s', $user->getFirstname(), $user->getLastname())
                     : 'Anonyme',
                 'user_id' => $user !== null ? $user->getId() : '',
                 'user_email' => $user !== null ? $user->getEmail() : '',
-                'etablissement' => null !== $user && null !== $user->getEtablissementRattachementSante()
-                    ? $user->getEtablissementRattachementSante()->getNom()
+                'etablissement' => null !== $user && null !== $user->getOrganization()
+                    ? $user->getOrganization()->getNom()
                     : '',
                 'region' => null !== $user && null !== $user->getRegion() ? $user->getRegion()->getLibelle() : '-',
                 'remplissage' => sprintf('%d%%', $synthesis->getCompletion()),

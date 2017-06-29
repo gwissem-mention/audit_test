@@ -20,7 +20,7 @@ CommunautePratique_User_Recherche.init = function()
  */
 CommunautePratique_User_Recherche.initChamps = function()
 {
-    $('#hopitalnumerique_communautepratiquebundle_user_recherche_profilEtablissementSante').multiselect({
+    $('#hopitalnumerique_communautepratiquebundle_user_recherche_profileType').multiselect({
         nonSelectedText: 'Profils',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
@@ -38,7 +38,7 @@ CommunautePratique_User_Recherche.initChamps = function()
         allSelectedText: 'Tous'
     });
 
-    $('#hopitalnumerique_communautepratiquebundle_user_recherche_statutEtablissementSante').multiselect({
+    $('#hopitalnumerique_communautepratiquebundle_user_recherche_organizationType').multiselect({
         nonSelectedText: 'Types d\'établissement',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
@@ -47,7 +47,7 @@ CommunautePratique_User_Recherche.initChamps = function()
         allSelectedText: 'Tous'
     });
 
-    $('#hopitalnumerique_communautepratiquebundle_user_recherche_typeActivite').multiselect({
+    $('#hopitalnumerique_communautepratiquebundle_user_recherche_activities').multiselect({
         nonSelectedText: 'Types d\'activité',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,

@@ -1,0 +1,11 @@
+{% trans_default_domain 'forumWidget' %}
+
+<ol>
+    {% for topic in topics %}
+        <li>
+            <a href="{{ path('ccdn_forum_user_topic_show', {'forumName': topic.board.category.forum.name, 'topicId': topic.id}) }}">
+                {{ topic.lastPost.createdDate|date('d/m/Y') }} - {{ topic.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ol>

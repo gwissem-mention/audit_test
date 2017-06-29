@@ -1,0 +1,54 @@
+services:
+    hopitalnumerique_cart.report_generator:
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\ReportGenerator
+        arguments:
+            - '@hopitalnumerique_cart.factory.item'
+            - '@twig'
+            - '%kernel.root_dir%'
+            - '@knp_snappy.pdf'
+
+    hopitalnumerique_cart.report_generator.forum_topic:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\ForumTopicGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.repository.entity_has_reference'
+
+    hopitalnumerique_cart.report_generator.autodiag_chapter:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\AutodiagChapterGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+
+    hopitalnumerique_cart.report_generator.cdp_group:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\CDPGroupGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.repository.entity_has_reference'
+
+    hopitalnumerique_cart.report_generator.publication:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\PublicationGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.repository.entity_has_reference'
+
+    hopitalnumerique_cart.report_generator.infradoc:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\InfradocGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.repository.entity_has_reference'
+
+    hopitalnumerique_cart.report_generator.person:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\PersonGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.repository.entity_has_reference'

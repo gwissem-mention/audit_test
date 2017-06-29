@@ -1,8 +1,0 @@
-{% if departements %}
-    <option value=""> - </option>
-    {% for departement in departements %}
-        <option value="{{departement.id}}">{{departement.libelle}}</option>
-    {% endfor %}
-{% else %}
-    <option value=""> Sélectionnez une région avant le département </option>
-{% endif %}

@@ -14,7 +14,7 @@ security:
 
         # Formulaire FRONT : connexion + reset password (accessible aux anonymes)
         comptehn_login:
-            pattern: (^/compte-hn/(connexion|(connexion\/\w+)|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription)|(^/compte-hn/acces-compte) # Cette expression régulière permet de prendre /login
+            pattern: (^/mon-compte/(connexion|(connexion\/\w+)|mot-de-passe-perdu(.*))$)|(^/mon-compte/inscription)|(^/mon-compte/acces-compte) # Cette expression régulière permet de prendre /login
             anonymous: true
             context: application
 
@@ -23,9 +23,9 @@ security:
             pattern: ^/(_(profiler|wdt)|compiled|js|css|images)/
             security: false
 
-        # Si on essaye d'accéder à l'url  /compte-hn, on redirige vers le form /compte-hn/login
+        # Si on essaye d'accéder à l'url  /mon-compte, on redirige vers le form /mon-compte/login
         frontoffice_connecte:
-            pattern: ^/(compte-hn|module|questionnaire|forum/Experts|compte-hn/acces-compte|forum/Ambassadeurs|forum/CMSI)
+            pattern: ^/(mon-compte|module|questionnaire|forum/Experts|mon-compte/acces-compte|forum/Ambassadeurs|forum/CMSI)
             anonymous: false
             form_login:
                 login_path: account_login
@@ -106,10 +106,14 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/compte-hn/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/compte-hn/quick-sign-up$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/compte-hn/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/compte-hn/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/quick-sign-up$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/mot-de-passe-perdu, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/, role: ROLE_USER }
+        - { path: ^/cart/add, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cart/, role: ROLE_USER }
         - { path: ^/forum/$, role: ROLE_USER }
         - { path: ^/forum/Public$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

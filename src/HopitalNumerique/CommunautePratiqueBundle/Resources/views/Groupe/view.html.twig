@@ -16,6 +16,11 @@
 
 {% block title_communaute_pratique %}Groupe thématique {{ groupe }}{% endblock %}
 
+{% block communaute_pratique_actions_before %}
+    <div class="clearfix"></div>
+    {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
+{% endblock %}
+
 {% block communaute_pratique_actions %}
     <div style= "float:right">
         {{ parent() }}
@@ -40,7 +45,7 @@
                 <p style="font-size:13px;">
                     <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                     {% for animateur in groupe.animateurs %}
-                        {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}
+                        {{ animateur.firstname }} {{ animateur.lastname }}{{ loop.last ? '' : ', ' }}
                     {% endfor -%}
                 </p>
             {%- endif -%}

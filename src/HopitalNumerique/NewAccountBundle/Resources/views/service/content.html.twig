@@ -1,0 +1,41 @@
+{% if widgets is not empty %}
+    <div class="panel panel-default">
+        <div class="panel-heading custom-panel-heading">
+            <div class="panel-title">
+                {{ 'account.service.quick_access'|trans }}
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="widget-description">
+                {{ 'Module_moncompte_services_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+
+            <ul class="introduction-summary">
+                {% for widget in widgets if widget is not null %}
+                    <li>
+                        <a href="#{{ widget.name ~ '-widget' }}">
+                            <i class="icon {{ widget.name }}"></i>
+                            {{ widget.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% for widget in widgets if widget is not null %}
+        <div id="{{ widget.name ~ '-widget' }}" class="panel panel-default service-widget">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">
+                    <i class="icon {{ widget.name }}"></i>
+                    {{ widget.title }}
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ widget.content|raw }}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    {{ 'account.service.no_data'|trans }}
+{% endif %}

@@ -69,7 +69,7 @@
                         <span>{{ "ad.restitution.synthesis"|trans }} : </span>
                         <ul>
                             {% for entry in synthesis.entries %}
-                                {% set fullname = entry.user is not null ? '(' ~ entry.user.prenom ~ ' ' ~ entry.user.nom ~ ')' : '' %}
+                                {% set fullname = entry.user is not null ? '(' ~ entry.user.firstname ~ ' ' ~ entry.user.lastname ~ ')' : '' %}
                                 <li>{{ entry.name }} {{ fullname }} - {{ entry.validatedAt|date('d/m/Y') }}</li>
                             {% endfor %}
                         </ul>

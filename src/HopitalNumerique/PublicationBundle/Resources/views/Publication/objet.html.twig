@@ -40,12 +40,19 @@
 
     <div id="publication">
         <div class="hidden-pdf">
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="text-right">
+                    {% if contenu is defined %}
+                        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id}) }}
+                    {% else %}
+                        {% if not objet.article %}
+                            {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'objet', objectId: objet.id}) }}
+                        {% endif %}
+                    {% endif %}
                     {% if showCog is defined and showCog == true %}
                         <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':(contenu is defined ? '2' :'1'), 'entityId':(contenu is defined ? contenu.id : objet.id), 'redirect': 'false' })}}" class="open-popin-referencement fancybox.ajax btn btn-sm btn-default" title="Référencer cette publication"><i class="fa fa-cog"></i></a>
                     {% endif %}
@@ -350,20 +357,16 @@
                 <h3 class="violet">Les ambassadeurs</h3>
                 {% for ambassadeur in ambassadeurs %}
                     <div class="ambassadeur">
-                        <p class="nom">{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</p>
+                        <p class="nom">{{ambassadeur.firstname|title ~ ' ' ~ ambassadeur.lastname|title}}</p>
                         <p class="etab">
-                            {% if ambassadeur.etablissementRattachementSante %}
-                                {{ambassadeur.etablissementRattachementSante.nom}}
+                            {% if ambassadeur.organization %}
+                                {{ambassadeur.organization.nom}}
                             {% else %}
-                                {{ambassadeur.autreStructureRattachementSante}}
+                                {{ambassadeur.organizationLabel}}
                             {% endif %}
                         </p>
                         <p class="fonction">
-                            {% if ambassadeur.fonctionDansEtablissementSante %}
-                                {{ambassadeur.fonctionDansEtablissementSante}}
-                            {% else %}
-                                {{ambassadeur.fonctionStructure}}
-                            {% endif %}
+                            {{ambassadeur.jobLabel}}
                         </p>
                         <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau_avec_objet',{'ambassadeur':ambassadeur.id, 'prod':objet.id})}}">Solliciter cet ambassadeur</a>
                     </div>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        {% stylesheets output="compiled/hopitalnumerique_cart_report_pdf.css" filter="cssrewrite, ?yui_css"
+            "@bootstrap_css"
+            "@font_awesome_css"
+            "@fancybox_css"
+        %}
+            <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+        {% endstylesheets %}
+    </head>
+
+    <body>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-xs-5">
+                <img src="{{ asset('bundles/hopitalnumeriquecore/img/logo-anap.png', null, true) }}">
+            </div>
+            <div class="col-xs-7">
+                <p class="text-right pull-right">
+                    {{ 'generator.generationDate'|trans({}, 'cart') }}<br />
+                    {{ 'now'|date('d/m/Y') }}
+                </p>
+                <h1>{{ report.name }}</h1>
+            </div>
+        </div>
+
+        {% for item in items %}
+            <div class="well">
+                {{ include('@HopitalNumeriqueCart/report/generator/item/'~item.type~'.html.twig') }}
+            </div>
+        {% endfor %}
+    </div>
+
+
+    </body>
+</html>

@@ -711,7 +711,7 @@ class Entity
                 return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
             case self::ENTITY_TYPE_AMBASSADEUR:
                 $parameters = json_encode([
-                    $entity->getEmail() => $entity->getPrenom() . ' ' . $entity->getNom(),
+                    $entity->getEmail() => $entity->getFirstname() . ' ' . $entity->getLastname(),
                 ]);
 
                 return 'javascript:Contact_Popup.display(' . $parameters . ', window.location.href);';

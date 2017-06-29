@@ -1,0 +1,27 @@
+services:
+    new_account.profile.completion_calculator:
+        class: HopitalNumerique\NewAccountBundle\Service\ProfileCompletionCalculator
+
+    new_account.dashboard.widgets_aggregator:
+        class: HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetsAggregator
+        arguments:
+            - '@translator'
+            - '@dmishh.settings.settings_manager'
+            - '@security.token_storage'
+
+    new_account.dashboard.widgets.profile:
+        class: HopitalNumerique\NewAccountBundle\Service\Widget\ProfileCompletionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setProfileCompletionCalculator, ['@new_account.profile.completion_calculator']]
+        public: false
+
+    new_account.dashboard.command_handler.reorder:
+        class: HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardHandler
+        arguments:
+            - '@dmishh.settings.settings_manager'

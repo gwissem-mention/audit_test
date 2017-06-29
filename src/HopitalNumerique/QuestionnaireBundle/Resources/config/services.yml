@@ -76,3 +76,23 @@ services:
         class: %hopitalnumerique_questionnaire.twig.extensions.class%
         tags:
             - { name: twig.extension }
+
+    hopitalnumerique_questionnaire.repository.response:
+        class: HopitalNumerique\QuestionnaireBundle\Repository\ReponseRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueQuestionnaireBundle:Reponse'
+
+
+    hopitalnumerique_questionnaire.widget.survey:
+        class: HopitalNumerique\QuestionnaireBundle\Service\Widget\SurveyWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 30 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@hopitalnumerique_questionnaire.repository.response'
+            - '@hopitalnumerique_domaine.service.base_url_provider'
+        public: false

@@ -646,4 +646,54 @@ class PublicationController extends Controller
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
     }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return string
+     */
+    public function contentRecommendationAction(Contenu $content)
+    {
+        $currentDomaineUrl = $this
+            ->get('hopitalnumerique_domaine.dependency_injection.current_domaine')
+            ->get()
+            ->getUrl()
+        ;
+
+        $contentUrl = $this->generateUrl(
+            'hopital_numerique_publication_publication_contenu',
+            [
+                'id'     => $content->getObjet()->getId(),
+                'alias'  => $content->getObjet()->getAlias(),
+                'idc'    => $content->getId(),
+                'aliasc' => $content->getAlias(),
+            ]
+        );
+
+        return $this->redirectToRoute('nodevo_mail_recommandation_popin', ['url' => $currentDomaineUrl . $contentUrl]);
+    }
+
+    /**
+     * @param Objet $object
+     *
+     * @return string
+     */
+    public function objectRecommendationAction(Objet $object)
+    {
+        $currentDomaineUrl = $this
+            ->get('hopitalnumerique_domaine.dependency_injection.current_domaine')
+            ->get()
+            ->getUrl()
+        ;
+
+        $objectUrl = $this->generateUrl(
+            'hopital_numerique_publication_publication_objet',
+            [
+                'id'    => $object->getId(),
+                'alias' => $object->getAlias(),
+            ]
+        );
+
+        return $this->redirectToRoute('nodevo_mail_recommandation_popin', ['url' => $currentDomaineUrl . $objectUrl]);
+    }
 }

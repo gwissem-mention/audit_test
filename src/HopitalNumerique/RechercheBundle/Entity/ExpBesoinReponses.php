@@ -40,9 +40,9 @@ class ExpBesoinReponses
     protected $libelle;
 
     /**
-     * @var int
+     * @var ExpBesoin
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin", inversedBy="reponses")
      * @ORM\JoinColumn(name="expb_id", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
      */
     protected $question;
@@ -67,7 +67,7 @@ class ExpBesoinReponses
     protected $imageFile;
 
     /**
-     * @var int
+     * @var ExpBesoin
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
      * @ORM\JoinColumn(name="expb_id_redirection", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
@@ -98,6 +98,8 @@ class ExpBesoinReponses
      * Set order.
      *
      * @param int $order
+     *
+     * @return ExpBesoinReponses
      */
     public function setOrder($order)
     {
@@ -111,7 +113,7 @@ class ExpBesoinReponses
      *
      * @param string $libelle
      *
-     * @return ExpBesoin
+     * @return ExpBesoinReponses
      */
     public function setLibelle($libelle)
     {
@@ -133,7 +135,7 @@ class ExpBesoinReponses
     /**
      * Get question.
      *
-     * @return ExpBesoin $question
+     * @return ExpBesoin
      */
     public function getQuestion()
     {
@@ -161,7 +163,7 @@ class ExpBesoinReponses
      *
      * @param bool $autreQuestion
      *
-     * @return ExpBesoin
+     * @return ExpBesoinReponses
      */
     public function setAutreQuestion($autreQuestion)
     {
@@ -193,7 +195,7 @@ class ExpBesoinReponses
     /**
      * Set redirigeQuestion.
      *
-     * @param ExpBesoin $question
+     * @param ExpBesoin $expBesoin
      */
     public function setRedirigeQuestion(ExpBesoin $expBesoin)
     {
@@ -201,7 +203,7 @@ class ExpBesoinReponses
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getImageUploadDir()
     {
@@ -209,7 +211,7 @@ class ExpBesoinReponses
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function imageFileIsValid()
     {

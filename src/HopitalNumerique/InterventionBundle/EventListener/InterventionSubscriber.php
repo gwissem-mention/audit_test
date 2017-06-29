@@ -102,7 +102,7 @@ class InterventionSubscriber implements EventSubscriber
         $this->logger->Logger(
             $action,
             $intervention,
-            sprintf('%s %s', $intervention->getAmbassadeur()->getNom(), $intervention->getAmbassadeur()->getPrenom()),
+            sprintf('%s %s', $intervention->getAmbassadeur()->getLastname(), $intervention->getAmbassadeur()->getFirstname()),
             InterventionDemande::class,
             $intervention->getReferent()
         );

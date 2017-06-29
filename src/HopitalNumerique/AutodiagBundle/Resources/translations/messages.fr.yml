@@ -40,7 +40,7 @@ ad:
                 at_least_2: Vous devez choisir au moins deux réponses pour générer une synthèse
                 empty_name: Le nom de la synthèse doit être renseigné
         delete:
-            succes: L'autodiagnostic a bien été supprimée.
+            succes: L'autodiagnostic a bien été supprimé.
             error: Une erreur est survenue lors de la suppression de la synthèse
             forbidden: Vous n'avez pas la permission de supprimer cette synthèse
         share:

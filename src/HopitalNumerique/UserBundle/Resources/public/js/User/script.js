@@ -1,7 +1,11 @@
 var loader;
 
 $(document).ready(function() {
-    $('#nodevo_user_user_telephoneDirect, #nodevo_user_user_telephonePortable').focus(function(){
+    new AjaxList($('.ajax-list-select2'));
+    new CountyList($('#nodevo_user_user_region'), $('#nodevo_user_user_county'));
+    new HobbyCollection();
+
+    $('#nodevo_user_user_phoneNumber, #nodevo_user_user_cellPhoneNumber').focus(function(){
         if( $(this).value() === "" ){
             $(this).value("");
         } else {
@@ -9,10 +13,9 @@ $(document).ready(function() {
         }
     });
 
-    $('#nodevo_user_user_typeActivite').select2({width: '100%'});
+    $('#nodevo_user_user_activities').select2({width: '100%'});
 
     loader = $('#form_edit_user').nodevoLoader();
-    var idDepartement = 0;
 
     // ------- Gestion de la photo de profil --------
     //Gestion du bouton delete : changement du fichier uploadé
@@ -27,97 +30,13 @@ $(document).ready(function() {
     // ------- Gestion des listes déroulantes en AJAX ----------
 
     //Récupération de l'id du département si il on est en édition
-    if(null !== $('#nodevo_user_user_departement').val())
-        idDepartement = $('#nodevo_user_user_departement').val();
-
-    // --- Département
-
-    //Chargement des départements du formulaire en fonction de la région selectionnée
-    chargementDepartement();
-
-    //Si le département était renseigné on le recharge une fois que la liste des département est correct
-    if( 0 != idDepartement )
-        $('#nodevo_user_user_departement').val(idDepartement);
-
-    //Ajout de la fonction de chargement des départements sur le on change des régions
-    $('#nodevo_user_user_region').on('change', function()
-    {
-        chargementDepartement();
-    });
 
     //Chargement des masks du formulaire
     chargementMaskFormulaire();
 
-    //Ouerture de l'onglet ayant des données : si l'un des champs de structure n'est pas vide on ouvre l'onglet
-    if('' != $('#nodevo_user_user_nomStructure').val()
-        || '' != $('#nodevo_user_user_fonctionStructure').val())
-    {
-        $('#autre_etablissement_sante_collapse').click();
-    }
-
     //bind de Validation Engine
     $('form.toValidate').validationEngine();
-
-    $(function() {
-        var $select = $('.ajax-select2-list');
-        $select.select2({
-            ajax: {
-                url: $select.data('url'),
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                    };
-                },
-                processResults: function (data, params) {
-                    return {
-                        results: data.results
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 3,
-            width: '100%',
-            language: {
-                inputTooShort: function (args) {
-                    var remainingChars = args.minimum - args.input.length;
-
-                    var message = 'Saisir ' + remainingChars + ' caractère';
-
-                    if (remainingChars !== 1) {
-                        message += 's';
-                    }
-
-                    message += ' du nom de votre structure, de la ville ou de son FINESS';
-
-                    return message;
-                }
-            }
-        });
-    });
 });
-
-/**
- * Permet de charger les départements en fonction de la région selectionné en ajax
- */
-function chargementDepartement(){
-    loader.start();
-
-    $.ajax({
-        url  : $('#departement-url').val(),
-        data : {
-            id : $('#nodevo_user_user_region').val(),
-        },
-        type    : 'POST',
-        success : function( data ){
-            var value = $('#nodevo_user_user_departement').val();
-            $('#nodevo_user_user_departement').html( data );
-            $('#nodevo_user_user_departement option[value="' + value + '"]').prop('selected', true);
-            loader.finished();
-        }
-    });
-}
 
 /**
  * Chargement des différents mask sur les inputs
@@ -125,8 +44,8 @@ function chargementDepartement(){
 function chargementMaskFormulaire()
 {
     //Mask
-    $("#nodevo_user_user_telephonePortable").mask($("#nodevo_user_user_telephonePortable").data("mask"));
-    $("#nodevo_user_user_telephoneDirect").mask($("#nodevo_user_user_telephoneDirect").data("mask"));
+    $("#nodevo_user_user_cellPhoneNumber").mask($("#nodevo_user_user_cellPhoneNumber").data("mask"));
+    $("#nodevo_user_user_phoneNumber").mask($("#nodevo_user_user_phoneNumber").data("mask"));
 }
 
 /**

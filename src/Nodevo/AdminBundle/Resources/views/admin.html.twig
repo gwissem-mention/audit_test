@@ -103,8 +103,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
                         <span class="hidden-xs">
-                            {% if app.user.nom or app.user.prenom %}
-                                {{ app.user.prenom|capitalize ~ ' ' ~ app.user.nom|capitalize }}
+                            {% if app.user.lastname or app.user.firstname %}
+                                {{ app.user.firstname|capitalize ~ ' ' ~ app.user.lastname|capitalize }}
                             {% else %}
                                 {{ app.user.username|capitalize }}
                             {% endif %}
@@ -118,8 +118,8 @@
                                 <div class="pull-left"><img class="userimg" src="{{asset('bundles/nodevoadmin/img/logo-small.png')}}" alt="{{ app.user.username|capitalize }}"/></div>
                                 <div class="pull-right">
                                     <h5>
-                                        {% if app.user.prenom %}
-                                            Bonjour {{ app.user.prenom|capitalize }} !
+                                        {% if app.user.firstname %}
+                                            Bonjour {{ app.user.firstname|capitalize }} !
                                         {% else %}
                                             Bonjour {{ app.user.username|capitalize }} !
                                         {% endif %}

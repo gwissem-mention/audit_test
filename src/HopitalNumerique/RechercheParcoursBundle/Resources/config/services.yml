@@ -38,3 +38,13 @@ services:
     hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie:
         class: 'HopitalNumerique\RechercheParcoursBundle\DependencyInjection\ParcoursGuideLie'
         arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours']
+
+    hopitalnumerique_recherche.widget.guided_search:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Widget\GuidedSearchWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 40 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        public: false

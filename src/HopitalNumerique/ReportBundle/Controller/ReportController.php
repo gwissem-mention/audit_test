@@ -34,7 +34,7 @@ class ReportController extends Controller
         //Récupération de l'entité en fonction du paramètre
         $report = $this->get('hopitalnumerique_report.manager.report')->findOneBy(['id' => $id]);
         $user = $report->getUser();
-        $etablissement = $user->getEtablissementRattachementSante();
+        $etablissement = $user->getOrganization();
 
         return $this->render('HopitalNumeriqueReportBundle:Report:show.html.twig', [
             'report' => $report,

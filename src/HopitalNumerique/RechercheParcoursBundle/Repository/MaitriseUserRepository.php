@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * MaitriseUserRepository.
@@ -16,23 +17,25 @@ class MaitriseUserRepository extends EntityRepository
      * Retourne la moyenne des notes pour les étapes passées en param.
      *
      * @param array $etapesId [description]
+     * @param       $user
      *
      * @return QueryBuilder
      */
     public function getAverage(array $etapesId, $user)
     {
         return $this->_em->createQueryBuilder()
-                         ->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne')
-                         ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
-                                ->andWhere('notes.nonConcerne = :nonConcerne')
-                                ->setParameter('nonConcerne', false)
-                                ->leftJoin('notes.rechercheParcoursDetails', 'etape')
-                                ->andWhere('etape.id IN (:ids)')
-                                ->setParameter('ids', $etapesId)
-                                ->andWhere('notes.user = :user')
-                                ->setParameter('user', $user)
-                         ->groupBy('etape.id')
-                         ->orderBy('etape.order');
+            ->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne')
+            ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+            ->andWhere('notes.nonConcerne = :nonConcerne')
+            ->setParameter('nonConcerne', false)
+            ->leftJoin('notes.rechercheParcoursDetails', 'etape')
+            ->andWhere('etape.id IN (:ids)')
+            ->setParameter('ids', $etapesId)
+            ->andWhere('notes.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('etape.id')
+            ->orderBy('etape.order')
+        ;
     }
 
     /**
@@ -47,35 +50,62 @@ class MaitriseUserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
 
         if ('profil' === $profilType) {
-            $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(DISTINCT notes.user) as nbUser, profilEtablissementSante.id as filtreId');
+            $qb->select(
+                'etape.id as etapeId,
+                avg(notes.pourcentageMaitrise) as moyenne,
+                count(notes.pourcentageMaitrise) as nbNote,
+                count(DISTINCT notes.user) as nbUser,
+                profileType.id as filtreId'
+            );
         } elseif ('typeES' === $profilType) {
-            $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(DISTINCT notes.user) as nbUser, statutEtablissementSante.id as filtreId');
+            $qb->select(
+                'etape.id as etapeId,
+                avg(notes.pourcentageMaitrise) as moyenne,
+                count(notes.pourcentageMaitrise) as nbNote,
+                count(DISTINCT notes.user) as nbUser,
+                organizationType.id as filtreId'
+            );
         } elseif ('fonction' === $profilType) {
-            $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(DISTINCT notes.user) as nbUser, fonction.id as filtreId');
+            $qb->select(
+                'etape.id as etapeId,
+                avg(notes.pourcentageMaitrise) as moyenne,
+                count(notes.pourcentageMaitrise) as nbNote,
+                count(DISTINCT notes.user) as nbUser,
+                fonction.id as filtreId'
+            );
         } else {
-            $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(SELECT DISTINCT notes.user) as nbUser');
+            $qb->select(
+                'etape.id as etapeId,
+                 avg(notes.pourcentageMaitrise) as moyenne,
+                 count(notes.pourcentageMaitrise) as nbNote,
+                 count(SELECT DISTINCT notes.user) as nbUser'
+            );
         }
 
-        $qb->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
-                            ->andWhere('notes.nonConcerne = :nonConcerne')
-                            ->leftJoin('notes.rechercheParcoursDetails', 'etape')
-                            ->leftJoin('notes.user', 'user')
-                            //Ne pas prendre en compte les admins (méthode moche)
-                            ->andWhere('user.roles != :adminId')
-                            ->setParameters([
-                                'adminId' => 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}',
-                                'nonConcerne' => false,
-                            ]);
+        $qb
+            ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+            ->andWhere('notes.nonConcerne = :nonConcerne')
+            ->leftJoin('notes.rechercheParcoursDetails', 'etape')
+            ->leftJoin('notes.user', 'user')
+            //Ne pas prendre en compte les admins (méthode moche)
+            ->andWhere('user.roles != :adminId')
+            ->setParameters([
+                'adminId' => 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}',
+                'nonConcerne' => false,
+            ]);
 
         if ('profil' === $profilType) {
-            $qb->leftJoin('user.profilEtablissementSante', 'profilEtablissementSante')
-                           ->groupBy('etape.id, profilEtablissementSante.id');
+            $qb->leftJoin('user.profileType', 'profileType')
+               ->groupBy('etape.id, profileType.id')
+            ;
         } elseif ('typeES' === $profilType) {
-            $qb->leftJoin('user.statutEtablissementSante', 'statutEtablissementSante')
-                           ->groupBy('etape.id, statutEtablissementSante.id');
+            $qb->leftJoin('user.organizationType', 'organizationType')
+               ->groupBy('etape.id, organizationType.id')
+            ;
         } elseif ('fonction' === $profilType) {
-            $qb->leftJoin('user.fonctionDansEtablissementSanteReferencement', 'fonction')
-                           ->groupBy('etape.id, fonction.id');
+            $qb->leftJoin('user.jobType', 'fonction')
+               ->groupBy('etape.id, fonction.id')
+            ;
         } else {
             $qb->groupBy('etape.id');
         }

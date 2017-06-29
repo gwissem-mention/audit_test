@@ -1,0 +1,95 @@
+{% trans_default_domain 'cart' %}
+{% import _self as self %}
+
+<h2>
+    <small>{{ 'item.object_type.autodiag_chapter'|trans }}</small>
+    {{ item.autodiagTitle }} - {{ item.title }}
+</h2>
+
+{{ item.lastUpdateDate|date('d/m/Y H\\hi') }}
+
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.subChapters|length > 0 %}
+    <fieldset>
+        <legend>{{ 'generator.autodiagChapter.summary'|trans }}</legend>
+
+        {{ self.buildChaptersTree(item.subChapters) }}
+
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
+    <fieldset>
+        <legend>{{ 'generator.autodiagChapter.questions'|trans }}</legend>
+
+        {{ self.buildQuestionsTree(item.chapter) }}
+
+    </fieldset>
+{% endif %}
+
+{{ include('@HopitalNumeriqueCart/report/generator/item/partials/references.html.twig') }}
+
+{% macro buildQuestionsTree(chapter) %}
+    {% import _self as self %}
+
+    {% if chapter.attributes|length > 0 %}
+        <table>
+            <tr>
+                <th>{{ 'generator.autodiagChapter.question.title'|trans }}</th>
+                <th>{{ 'generator.autodiagChapter.question.choices'|trans }}</th>
+            </tr>
+            {% for attribute in chapter.attributes %}
+                <tr>
+                    <td>
+                        {% if attribute.description %}
+                            {{ attribute.description }}<br />
+                        {% endif %}
+                        {{ attribute.extendedLabel }}
+                    </td>
+                    <td>
+                        {% if attribute.options|length > 0 %}
+                            <ul>
+                                {% for option in attribute.options %}
+                                    <li>
+                                        {{ option.label }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <ul>
+        {% for child in chapter.childs %}
+            <li>
+                {% if child.description %}
+                    {{ child.description }}<br />
+                {% endif %}
+                <b>{{ child.code ~ '. ' ~ child.label }}</b><br />
+                {{ child.additionalDescription }}
+                {{ self.buildQuestionsTree(child) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+
+{% macro buildChaptersTree(chapters) %}
+    {% import _self as self %}
+    <ul>
+        {% for chapter in chapters %}
+            <li>
+                {{ chapter.code ~ '. ' ~ chapter.label }}
+
+                {% if chapter.childs %}
+                    <ul>
+                        {{ self.buildChaptersTree(chapter.childs) }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

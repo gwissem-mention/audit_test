@@ -252,9 +252,9 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function findByCode($code, $actif = null)
+    public function findByCode($code, $actif = null, $labelOrdered = false)
     {
-        return $this->findByCodeParent($code, null, $actif);
+        return $this->findByCodeParent($code, null, $actif, $labelOrdered);
     }
 
     /**
@@ -262,7 +262,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function findByCodeParent($code, $parent = null, $actif = null)
+    public function findByCodeParent($code, $parent = null, $actif = null, $labelOrdered = false)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -287,6 +287,10 @@ class ReferenceRepository extends EntityRepository
                 ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :parent')
                 ->setParameter('parent', $parent)
             ;
+        }
+
+        if ($labelOrdered) {
+            $qb->orderBy('ref.libelle');
         }
 
         return $qb->getQuery()->getResult();

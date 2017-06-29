@@ -3,6 +3,9 @@
 namespace HopitalNumerique\PaiementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\PaiementBundle\Entity\Facture;
 
@@ -64,11 +67,11 @@ class FactureManager extends BaseManager
             $datas[] = [
                 $payment->getId(),
                 $payment->getDateCreation()->format('d/m/Y'),
-                $payment->getUser()->getNom(),
-                $payment->getUser()->getPrenom(),
+                $payment->getUser()->getLastname(),
+                $payment->getUser()->getFirstname(),
                 $payment->getUser()->getEmail(),
                 $payment->getUser()->getRegion()->getLibelle(),
-                $payment->getUser()->getEtablissementRattachementSanteString(),
+                $payment->getUser()->getOrganizationString(),
                 $payment->getTotal(),
                 $payment->isPayee() ? 'Payée' : 'Non payée',
                 $payment->isAnnulee() ? 'Annulée' : '',
@@ -96,6 +99,7 @@ class FactureManager extends BaseManager
     public function createFacture($user, $interventions, $formations, $supplement)
     {
         //create object facture
+        /** @var Facture $facture */
         $facture = $this->createEmpty();
         $facture->setUser($user);
         $this->save($facture);
@@ -109,6 +113,7 @@ class FactureManager extends BaseManager
         //handle interventions
         if ($interventions) {
             foreach ($interventions as $id => $prix) {
+                /** @var InterventionDemande $intervention */
                 $intervention = $this->_interventionManager->findOneBy(['id' => $id]);
                 $intervention->setFacture($facture);
                 $intervention->setRemboursementEtat($statutRemboursement);
@@ -180,8 +185,6 @@ class FactureManager extends BaseManager
      * Passe les interventions de la facture au statut payé.
      *
      * @param Facture $facture La facture
-     *
-     * @return empty
      */
     public function paye($facture)
     {
@@ -189,6 +192,7 @@ class FactureManager extends BaseManager
         $interventions = $facture->getInterventions()->toArray();
 
         //change interventions state
+        /** @var InterventionDemande $intervention */
         foreach ($interventions as &$intervention) {
             $intervention->setRemboursementEtat($statutRemboursement);
         }
@@ -206,7 +210,7 @@ class FactureManager extends BaseManager
      *
      * @param Facture $facture La facture
      *
-     * @return empty
+     * @return bool
      */
     public function changeEtat($facture)
     {
@@ -233,14 +237,14 @@ class FactureManager extends BaseManager
     /**
      * Retourne si la facture peut être générée.
      *
-     * @param array<\HopitalNumerique\InterventionBundle\Entity\InterventionDemande> $interventionDemandes Demandes d'intervention
+     * @param InterventionDemande[] $interventionDemandes
      *
-     * @return bool Vrai si la facture peut être générée
+     * @return bool
      */
     public function canGenererFacture(array $interventionDemandes)
     {
         foreach ($interventionDemandes as $interventionDemande) {
-            if (null !== $interventionDemande->getReferent() && null === $interventionDemande->getReferent()->getEtablissementRattachementSante()) {
+            if (null !== $interventionDemande->getReferent() && null === $interventionDemande->getReferent()->getOrganizationSante()) {
                 return false;
             }
         }
@@ -251,7 +255,7 @@ class FactureManager extends BaseManager
     /**
      * Annule la facture.
      *
-     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture Facture
+     * @param Facture $facture Facture
      */
     public function cancel(Facture $facture)
     {

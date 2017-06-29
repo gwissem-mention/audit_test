@@ -2,9 +2,14 @@
 
 namespace HopitalNumerique\PaiementBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Gedmo\Mapping\Annotation as Gedmo;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Facture.
@@ -54,11 +59,11 @@ class Facture
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      *
-     * @GRID\Column(field="user.nom")
-     * @GRID\Column(field="user.prenom")
+     * @GRID\Column(field="user.lastname")
+     * @GRID\Column(field="user.firstname")
      * @GRID\Column(field="user.email")
      * @GRID\Column(field="user.region.libelle")
-     * @GRID\Column(field="user.etablissementRattachementSante.nom")
+     * @GRID\Column(field="user.organization.nom")
      */
     protected $user;
 
@@ -77,7 +82,7 @@ class Facture
     private $payee;
 
     /**
-     * @var \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
+     * @var FactureAnnulee
      *
      * @ORM\OneToOne(targetEntity="FactureAnnulee", mappedBy="facture")
      * @GRID\Column(visible=false, filterable=true, field="factureAnnulee.facture.name")
@@ -107,8 +112,8 @@ class Facture
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-        $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->interventions = new ArrayCollection();
+        $this->formations = new ArrayCollection();
         $this->payee = false;
         $this->annulee = false;
     }
@@ -137,6 +142,8 @@ class Facture
      * Set name.
      *
      * @param string $name
+     *
+     * @return Facture
      */
     public function setName($name)
     {
@@ -196,7 +203,7 @@ class Facture
     /**
      * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User $user
+     * @return User $user
      */
     public function getUser()
     {
@@ -206,9 +213,11 @@ class Facture
     /**
      * Set user.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
+     *
+     * @return Facture
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -229,6 +238,8 @@ class Facture
      * Set total.
      *
      * @param int $total
+     *
+     * @return Facture
      */
     public function setTotal($total)
     {
@@ -251,6 +262,8 @@ class Facture
      * Set payee.
      *
      * @param bool $payee
+     *
+     * @return Facture
      */
     public function setPayee($payee)
     {
@@ -273,6 +286,8 @@ class Facture
      * Set annulee.
      *
      * @param bool $annulee
+     *
+     * @return Facture
      */
     public function setAnnulee($annulee)
     {
@@ -284,11 +299,11 @@ class Facture
     /**
      * Set factureAnnulee.
      *
-     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $factureAnnulee
+     * @param FactureAnnulee $factureAnnulee
      *
      * @return Facture
      */
-    public function setFactureAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $factureAnnulee = null)
+    public function setFactureAnnulee(FactureAnnulee $factureAnnulee = null)
     {
         $this->factureAnnulee = $factureAnnulee;
 
@@ -298,7 +313,7 @@ class Facture
     /**
      * Get factureAnnulee.
      *
-     * @return \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
+     * @return FactureAnnulee
      */
     public function getFactureAnnulee()
     {
@@ -308,11 +323,11 @@ class Facture
     /**
      * Add intervention.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
+     * @param InterventionDemande $intervention
      *
      * @return Facture
      */
-    public function addIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
+    public function addIntervention(InterventionDemande $intervention)
     {
         $this->interventions[] = $intervention;
 
@@ -322,9 +337,9 @@ class Facture
     /**
      * Remove intervention.
      *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
+     * @param InterventionDemande $intervention
      */
-    public function removeIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
+    public function removeIntervention(InterventionDemande $intervention)
     {
         $this->interventions->removeElement($intervention);
         $intervention->setFacture(null);
@@ -332,8 +347,6 @@ class Facture
 
     /**
      * Remove all interventions.
-     *
-     * @return \HopitalNumerique\PaiementBundle\Entity\Facture
      */
     public function removeInterventions()
     {
@@ -345,11 +358,11 @@ class Facture
     /**
      * Set interventions.
      *
-     * @param \Doctrine\Common\Collections\Collection $interventions
+     * @param Collection $interventions
      *
      * @return Facture
      */
-    public function setInterventions(\Doctrine\Common\Collections\Collection $interventions)
+    public function setInterventions(Collection $interventions)
     {
         $this->interventions = $interventions;
 
@@ -359,7 +372,7 @@ class Facture
     /**
      * Get interventions.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getInterventions()
     {
@@ -369,11 +382,11 @@ class Facture
     /**
      * Add formation.
      *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
+     * @param Inscription $formation
      *
      * @return Facture
      */
-    public function addFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
+    public function addFormation(Inscription $formation)
     {
         $this->formations[] = $formation;
 
@@ -383,9 +396,9 @@ class Facture
     /**
      * Remove formation.
      *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
+     * @param Inscription $formation
      */
-    public function removeFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
+    public function removeFormation(Inscription $formation)
     {
         $this->formations->removeElement($formation);
         $formation->setFacture(null);
@@ -393,8 +406,6 @@ class Facture
 
     /**
      * Remove all formations.
-     *
-     * @return \HopitalNumerique\PaiementBundle\Entity\Facture
      */
     public function removeFormations()
     {
@@ -406,11 +417,11 @@ class Facture
     /**
      * Set formations.
      *
-     * @param \Doctrine\Common\Collections\Collection $formations
+     * @param Collection $formations
      *
      * @return Facture
      */
-    public function setFormations(\Doctrine\Common\Collections\Collection $formations)
+    public function setFormations(Collection $formations)
     {
         $this->formations = $formations;
 
@@ -420,7 +431,7 @@ class Facture
     /**
      * Get formations.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFormations()
     {

@@ -87,48 +87,40 @@
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
-                                                    
-                                                <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
+
+                                                {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'person', objectId: ambassadeur.id, cssClass: 'btn-xs pull-right'}) }}
+
+                                                <h5>{{ambassadeur.firstname|title ~ ' ' ~ ambassadeur.lastname|title}}</h5>
 
                                                 <div class="col-md-3">
                                                     {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}
                                                         <img class="photo-silhouette" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
-                                                    {% elseif ambassadeur.civilite.id == 8 %}
-                                                        {# Monsieur #}
-                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-homme.png" width="90px" height="130px">
                                                     {% else %}
-                                                        {# Madame #}
-                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-femme.png" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-homme.png" width="90px" height="130px">
                                                     {% endif %}
                                                 </div>
 
                                                 <div class="col-md-9">
                                                     <div class="description">
-    					                                {% if ambassadeur.etablissementRattachementSante %}
+    					                                {% if ambassadeur.organization %}
     					                                   <div class="etab">
-    					                                       {{ambassadeur.etablissementRattachementSante.nom}}
+    					                                       {{ambassadeur.organization.nom}}
     				                                       </div>
-    					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
+    					                                {% elseif ambassadeur.organizationLabel is not empty %}
     					                                   <div class="etab">
-    					                                       {{ambassadeur.autreStructureRattachementSante}}
+    					                                       {{ambassadeur.organizationLabel}}
     				                                       </div>
-                                                        {% else %}
-                                                           <div class="etab">
-                                                               {{ambassadeur.nomStructure}}
-                                                           </div>
     					                                {% endif %}
                                                         <div class="etab">
-                                                            {% if ambassadeur.etablissementRattachementSante %}
-                                                                {% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} - {{ ambassadeur.etablissementRattachementSante.codepostal }}{% endif %}{% endif %}
+                                                            {% if ambassadeur.organization %}
+                                                                {% if ambassadeur.organization.ville is not null %}{{ ambassadeur.organization.ville }}{% if ambassadeur.organization.codepostal is not null %} - {{ ambassadeur.organization.codepostal }}{% endif %}{% endif %}
                                                             {% endif %}
                                                         </div>
-        					                            <div class="fonction" title="{% if ambassadeur.fonctionDansEtablissementSante is not empty %}{{ambassadeur.fonctionDansEtablissementSante}}{% else %}{{ambassadeur.fonctionStructure}}{% endif %}">
-        					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
-        					                                    {{ambassadeur.fonctionDansEtablissementSante}}
-        					                                {% else %}
-        					                                    {{ambassadeur.fonctionStructure}}
-        					                                {% endif %}
-        					                            </div>
+                                                        {% if ambassadeur.jobLabel is not null %}
+                                                            <div class="fonction" title="{{ambassadeur.jobLabel}}">
+                                                                {{ambassadeur.jobLabel}}
+                                                            </div>
+                                                        {% endif %}
                                                     
                                                         <div class="col-md-12">
                                                             <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Connaissances métiers</a>
@@ -140,9 +132,9 @@
         					
         					                            <div class="col-md-12 sol-button">
                                                             {% if app.user and not app.user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
-                                                                <a class="btn background-violet disabled" href="#">Solliciter cet ambassadeur</a>
+                                                                <a class="btn background-violet disabled solicit" href="#">Solliciter cet ambassadeur</a>
                                                             {% else %}
-                                                                <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
+                                                                <a class="btn background-violet solicit" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
                                                             {% endif %}
                                                         </div>
         					                            <div class="clearfix"></div>

@@ -21,7 +21,7 @@ class UserController extends Controller
     /**
      * Action qui renvoie une liste d'utilisateurs. Les paramètres passables sont :
      * <ul>
-     *   <li>etablissementRattachementSante : L'ID ou les IDs de l'établissement de l'utilisateur</li>
+     *   <li>organization : L'ID ou les IDs de l'établissement de l'utilisateur</li>
      * </ul>.
      *
      * @return \Symfony\Component\HttpFoundation\Response Un objet JSON comprenant la liste des utilisateurs
@@ -29,8 +29,8 @@ class UserController extends Controller
     public function jsonUsersAction()
     {
         $usersFiltres = ['enabled' => true];
-        if ($this->get('request')->query->has('etablissementRattachementSante')) {
-            $usersFiltres['etablissementRattachementSante'] = $this->get('request')->query->get('etablissementRattachementSante');
+        if ($this->get('request')->query->has('organization')) {
+            $usersFiltres['organization'] = $this->get('request')->query->get('organization');
         }
 
         $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonUsers($usersFiltres);
@@ -41,7 +41,7 @@ class UserController extends Controller
     /**
      * Action qui renvoie une liste de référents. Les paramètres passables sont :
      * <ul>
-     *   <li>etablissementRattachementSante : L'ID ou les IDs de l'établissement de l'utilisateur</li>
+     *   <li>organization : L'ID ou les IDs de l'établissement de l'utilisateur</li>
      * </ul>.
      *
      * @return \Symfony\Component\HttpFoundation\Response Un objet JSON comprenant la liste des utilisateurs
@@ -49,8 +49,8 @@ class UserController extends Controller
     public function jsonReferentsAction()
     {
         $usersFiltres = [];
-        if ($this->get('request')->query->has('etablissementRattachementSante')) {
-            $usersFiltres['etablissementRattachementSante'] = $this->get('request')->query->get('etablissementRattachementSante');
+        if ($this->get('request')->query->has('organization')) {
+            $usersFiltres['organization'] = $this->get('request')->query->get('organization');
         }
 
         $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonReferents($usersFiltres);

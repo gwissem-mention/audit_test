@@ -1,27 +1,31 @@
 hopital_numerique_intervention_evaluation_nouveau:
-    pattern:  /demande/{interventionDemande}/evaluation/nouveau
+    path:  /demande/{interventionDemande}/evaluation/nouveau
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Evaluation:nouveau", interventionDemande: 0 }
     requirements:
         _method:  GET|POST
         interventionDemande: \d+
 
 hopital_numerique_intervention_evaluation_form:
-    pattern:  /demande/{interventionDemande}/evaluation/form
+    path:  /demande/{interventionDemande}/evaluation/form
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Evaluation:form" }
     requirements:
         _method:  GET|POST
         interventionDemande: \d+
 
 hopital_numerique_intervention_evaluation_voir:
-    pattern:  /demande/{interventionDemande}/evaluation/voir
+    path:  /demande/{interventionDemande}/evaluation/voir
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:voir", interventionDemande: 0 }
     requirements:
         _method:  GET
         interventionDemande: \d+
 
 hopital_numerique_intervention_evaluation_envoi_relance:
-    pattern:  /demande/{interventionDemande}/evaluation/relance
+    path:  /demande/{interventionDemande}/evaluation/relance
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:ajaxEnvoiRelance" }
     requirements:
         _method:  GET
         interventionDemande: \d+
+
+hopital_numerique_intervention_evaluation_relaunch:
+    path:  /demande/{interventionDemande}/evaluation/envoi-relance
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:relaunch" }

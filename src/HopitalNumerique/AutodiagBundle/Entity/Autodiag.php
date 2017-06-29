@@ -116,7 +116,7 @@ class Autodiag
 
     /**
      * @var Questionnaire
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="outils")
      * @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="qst_id", onDelete="SET NULL")
      */
     private $questionnaire;
@@ -181,6 +181,9 @@ class Autodiag
      */
     private $computeBeginning;
 
+    /**
+     * Autodiag constructor.
+     */
     public function __construct()
     {
         $this->domaines = new ArrayCollection();
@@ -421,6 +424,11 @@ class Autodiag
         return $this;
     }
 
+    /**
+     * @param Collection $domaines
+     *
+     * @return $this
+     */
     public function setDomaines(Collection $domaines)
     {
         $this->domaines = $domaines;
@@ -452,6 +460,9 @@ class Autodiag
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getContainers()
     {
         return $this->containers;
@@ -528,6 +539,9 @@ class Autodiag
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getAttributes()
     {
         return $this->attributes;
@@ -581,6 +595,9 @@ class Autodiag
         return $this->references;
     }
 
+    /**
+     * @return int
+     */
     public function setComputing()
     {
         $this->computeBeginning = time();
@@ -588,11 +605,17 @@ class Autodiag
         return $this->computeBeginning;
     }
 
+    /**
+     * @return bool
+     */
     public function isComputing()
     {
         return $this->computeBeginning !== null && $this->computeBeginning + (12 * 60 * 60) > time();
     }
 
+    /**
+     * @return int
+     */
     public function getComputeBeginning()
     {
         return $this->computeBeginning;

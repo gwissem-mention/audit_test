@@ -41,9 +41,9 @@ class Inscription
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
-     * @ORM\OrderBy({"nom" = "ASC", "prenom" = "ASC"})
+     * @ORM\OrderBy({"lastname" = "ASC", "firstname" = "ASC"})
      *
-     * @GRID\Column(field="user.nom")
+     * @GRID\Column(field="user.lastname")
      * @Assert\NotBlank(message="L'utilisateur ne peut pas être vide.")
      */
     protected $user;
@@ -235,7 +235,7 @@ class Inscription
     /**
      * Get dateInscription.
      *
-     * @return DateTime $dateInscription
+     * @return \DateTime $dateInscription
      */
     public function getDateInscription()
     {
@@ -245,7 +245,9 @@ class Inscription
     /**
      * Set dateInscription.
      *
-     * @param DateTime $dateInscription
+     * @param \DateTime $dateInscription
+     *
+     * @return $this
      */
     public function setDateInscription($dateInscription)
     {

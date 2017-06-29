@@ -1,5 +1,6 @@
 <div class="chapter" data-chapter="{{ chapter.id }}">
     <div class="chapter-title">
+        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'autodiag_chapter', objectId: chapter.id, cssClass: 'pull-right'}) }}
         {{ chapter.title|glossaire_add(autodiag)|raw }}
     </div>
 

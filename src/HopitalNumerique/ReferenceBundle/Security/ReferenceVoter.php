@@ -39,6 +39,10 @@ class ReferenceVoter extends Voter
                 return $subject->getUser() === $user;
             }
 
+            if ($subject instanceof User) {
+                return $subject->getId() === $user->getId();
+            }
+
             return false;
         }
 

@@ -1,0 +1,35 @@
+{% trans_default_domain 'widget' %}
+
+<div class="row">
+    <div class="col-md-2">
+        <img src="{{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}" class="avatar">
+    </div>
+
+    <div class="col-md-10">
+        {% if user.firstname and user.lastname %}
+            {{ user.firstname }} {{ user.lastname }}
+        {% else %}
+            {{ 'specify_name'|trans }}
+        {% endif %}
+        <br />
+
+        {% if user.organizationLabel and user.jobLabel %}
+            {{ user.organizationLabel }} {{ user.jobLabel }}
+        {% else %}
+            {{ 'specify_job'|trans }}
+        {% endif %}
+    </div>
+</div>
+
+<div>
+    {{ 'profile_completion'|trans }}
+    <div class="progress progress-striped">
+        <div class="progress-bar" style="width: {{ completion }}%;">{{ completion }}%</div>
+    </div>
+
+    {% if completion == 100 %}
+        <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
+    {% else %}
+        <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToComplete)|trans({}, 'messages')}) }}</a>
+    {% endif %}
+</div>

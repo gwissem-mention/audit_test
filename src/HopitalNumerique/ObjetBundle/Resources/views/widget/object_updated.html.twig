@@ -1,0 +1,9 @@
+<ol>
+    {% for object in objects %}
+        <li>
+            <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': object.id}) }}">
+                {{ object.titre }}
+            </a>
+        </li>
+    {% endfor %}
+</ol>

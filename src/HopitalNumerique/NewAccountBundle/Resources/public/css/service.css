@@ -1,0 +1,60 @@
+#my-account #services .domains-row {
+    margin-bottom: 15px;
+}
+
+#my-account #services .widget-description {
+    margin-bottom: 20px;
+}
+
+#my-account #services .actions-column {
+    text-align: center;
+}
+
+#my-account #services ul.introduction-summary {
+    list-style: none;
+    line-height: 25px;
+}
+
+#my-account #services table .parent-row {
+    background-color: #c4c4c4;
+    color: #000;
+}
+
+#my-account #services table .parent-row td:nth-child(1) {
+    font-weight: bold;
+    font-size: 11px;
+}
+
+#my-account #services .icon {
+    font-family: 'FontAwesome', 'serif';
+    padding-right: 5px;
+    font-style: normal;
+}
+
+#my-account #services .icon.viewed-objects::before {
+    content: "\f06e";
+}
+
+#my-account #services .icon.saved-searches::before {
+    content: "\f002";
+}
+
+#my-account #services .icon.autodiagnostic::before {
+    content: "\f080";
+}
+
+#my-account #services .icon.guided-search::before {
+    content: "\f0a4";
+}
+
+#my-account #services .icon.survey::before {
+    content: "\f0ea";
+}
+
+#my-account #services .icon.sessions::before {
+    content: "\f086";
+}
+
+#my-account #services .icon.interventions::before {
+    content: "\f0fe";
+}

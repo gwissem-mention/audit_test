@@ -2,10 +2,15 @@
 
 namespace HopitalNumerique\UserBundle\Controller;
 
+use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
 use HopitalNumerique\UserBundle\UserEvents;
+use Nodevo\ToolsBundle\Tools\Password;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -21,21 +26,31 @@ class UserController extends Controller
      *
      * @var bool
      */
-    protected $_informationsPersonnelles = false;
+    protected $informationsPersonnelles = false;
 
     //---- Front Office ------
 
     /**
      * Affichage du formulaire d'inscription.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
-    public function inscriptionAction()
+    public function inscriptionAction(Request $request)
     {
         //Si il n'y a pas d'utilisateur connecté
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            if ($this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->isWantCreateUserWithContext()) {
+        if (!$this->isGranted('ROLE_USER')) {
+            if ($this->container->get('hopitalnumerique_account.doctrine.reference.contexte')
+                ->isWantCreateUserWithContext()
+            ) {
                 //Création d'un nouvel user avec contexte préremplis
-                $referenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
-                $user = $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getNewUserWithContexte($referenceIds);
+                $referenceIds = $this->container->get(
+                    'hopitalnumerique_recherche.dependency_injection.referencement.requete_session'
+                )->getReferenceIds();
+                $user = $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')
+                    ->getNewUserWithContexte($referenceIds)
+                ;
             } else {
                 $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
             }
@@ -43,17 +58,29 @@ class UserController extends Controller
             //Tableau des options à passer à la vue twig
             $options = [
                 //Récupération de l'article des conditions générales
-                'conditionsGenerales' => ['conditionsGenerales' => $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => 264])],
+                'conditionsGenerales' => [
+                    'conditionsGenerales' => $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(
+                        ['id' => 264]
+                    ),
+                ],
             ];
 
             //Récupérations de la liste des catégories des conditions générales
             $tmp = $options['conditionsGenerales']['conditionsGenerales'];
             $categories = $tmp->getTypes();
 
-            //Récupération de la première catégorie des conditions générales (en principe il ne devrait y en avoir qu'une)
+            // Récupération de la première catégorie des conditions générales
+            // (en principe il ne devrait y en avoir qu'une)
             $options['conditionsGenerales']['categorie'] = $categories[0];
 
-            return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig', $options);
+            $request->request->add(['do' => 'inscription']);
+
+            return $this->renderForm(
+                'nodevo_user_registration',
+                $user,
+                'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig',
+                $options
+            );
         }
 
         return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
@@ -61,6 +88,10 @@ class UserController extends Controller
 
     /**
      * Affichage du formulaire d'inscription.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function desinscriptionAction(Request $request)
     {
@@ -84,7 +115,10 @@ class UserController extends Controller
             $this->get('request')->getSession()->invalidate();
 
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-            $this->get('session')->getFlashBag()->add('success', $user->getAppellation() . ', vous venez de vous désinscrire.');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $user->getAppellation() . ', vous venez de vous désinscrire.'
+            );
 
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
@@ -103,9 +137,13 @@ class UserController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->getUser();
 
-        $this->_informationsPersonnelles = true;
+        $this->informationsPersonnelles = true;
 
-        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig');
+        return $this->renderForm(
+            'nodevo_user_user',
+            $user,
+            'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig'
+        );
     }
 
     /**
@@ -113,7 +151,7 @@ class UserController extends Controller
      *
      * @internal param int $id Identifiant de l'utilisateur
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function motDePasseAction()
     {
@@ -138,7 +176,11 @@ class UserController extends Controller
                 $encoder = $factory->getEncoder($user);
 
                 //Vérifie si le mot de passe entré dans le formulaire correspondant au mot de passe de l'utilisateur
-                if ($encoder->isPasswordValid($user->getPassword(), $form->get('oldPassword')->getData(), $user->getSalt())) {
+                if ($encoder->isPasswordValid(
+                    $user->getPassword(),
+                    $form->get('oldPassword')->getData(),
+                    $user->getSalt()
+                )) {
                     //Mise à jour / création de l'utilisateur
                     $this->get('fos_user.user_manager')->updateUser($user);
 
@@ -164,6 +206,10 @@ class UserController extends Controller
 
     /**
      * Changement de l'état de notification des mises à jour des publications.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function toggleNotificationRequeteAction(Request $request)
     {
@@ -207,6 +253,10 @@ class UserController extends Controller
 
     /**
      * Affichage des utilisateurs.
+     *
+     * @param null $filtre
+     *
+     * @return Response
      */
     public function indexFiltreAction($filtre = null)
     {
@@ -236,9 +286,9 @@ class UserController extends Controller
     /**
      * Affichage du formulaire d'utilisateur.
      *
-     * @param intger $id Identifiant de l'utilisateur
+     * @param int $id Identifiant de l'utilisateur
      *
-     * @return Form|redirect
+     * @return Form|RedirectResponse
      */
     public function editAction($id)
     {
@@ -263,24 +313,25 @@ class UserController extends Controller
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', [
             'user' => $user,
-            'questionnaireExpert' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
-            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
+            'questionnaireExpert' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')
+                ->getQuestionnaireId('expert'),
+            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')
+                ->getQuestionnaireId('ambassadeur'),
             'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles' => $roles,
         ]);
     }
 
     /**
-     * [historiqueAction description].
+     * @param User $user
      *
-     * @param User $user [description]
-     *
-     * @return [type]
+     * @return Response
      */
     public function historiqueAction(User $user)
     {
-        //get History
         $em = $this->getDoctrine()->getManager();
+
+        /** @var LogEntryRepository $repo */
         $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
         $logs = $repo->getLogEntries($user);
 
@@ -337,25 +388,57 @@ class UserController extends Controller
             $this->get('hopitalnumerique_user.manager.user')->delete($user);
             $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas supprimer un utilisateur vérouillé.');
+            $this->get('session')->getFlashBag()->add(
+                'danger',
+                'Vous ne pouvez pas supprimer un utilisateur vérouillé.'
+            );
         }
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_user_homepage') . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_user_homepage') . '"}',
+            200
+        );
     }
 
     /**
-     * Génère la liste des département en fonction de l'id de la région.
+     * Returns the list of counties in the selected region
+     *
+     * @return Response
      */
-    public function ajaxEditDepartementsAction()
+    public function ajaxLoadCountiesAction()
     {
         $id = $this->get('request')->request->get('id');
-        $departements = [];
+        $counties = [];
+
         if ('' != $id) {
-            $departements = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($id));
+            $counties = $this->get('hopitalnumerique_reference.manager.reference')->findByParent(
+                $this->get('hopitalnumerique_reference.manager.reference')->findOneById($id)
+            );
         }
 
-        return $this->render('HopitalNumeriqueUserBundle:User:departements.html.twig', [
-            'departements' => $departements,
+        return $this->render('HopitalNumeriqueUserBundle:User:counties.html.twig', [
+            'counties' => $counties,
+        ]);
+    }
+
+    /**
+     * @return Response
+     */
+    public function ajaxLoadOrganizationsAction()
+    {
+        $county = $this->get('request')->request->get('county');
+        $organizationType = $this->get('request')->request->get('organizationType');
+
+        $organizations = [];
+        if ('' != $county && '' != $organizationType) {
+            $organizations = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy([
+                'departement' => $county,
+                'typeOrganisme' => $organizationType,
+            ]);
+        }
+
+        return $this->render('HopitalNumeriqueUserBundle:User:organizations.html.twig', [
+            'organizations' => $organizations,
         ]);
     }
 
@@ -382,18 +465,24 @@ class UserController extends Controller
     /**
      * Suppression de masse des users.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param $primaryKeys
+     * @param $allPrimaryKeys
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
         //check connected user ACL
         $user = $this->getUser();
 
-        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopital_numerique_user_delete', ['id' => 1]), $user) == -1) {
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour supprimer des utilisateurs.');
+        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization(
+            $this->generateUrl('hopital_numerique_user_delete', ['id' => 1]),
+            $user
+        ) == -1) {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                'Vous n\'avez pas les droits suffisants pour supprimer des utilisateurs.'
+            );
 
             return $this->redirect($this->generateUrl('hopital_numerique_user_homepage'));
         }
@@ -420,15 +509,21 @@ class UserController extends Controller
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function desactiverMassAction($primaryKeys, $allPrimaryKeys)
     {
         //check connected user ACL
         $user = $this->getUser();
 
-        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopital_numerique_user_delete', ['id' => 1]), $user) == -1) {
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour désactiver des utilisateurs.');
+        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization(
+            $this->generateUrl('hopital_numerique_user_delete', ['id' => 1]),
+            $user
+        ) == -1) {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                'Vous n\'avez pas les droits suffisants pour désactiver des utilisateurs.'
+            );
 
             return $this->redirect($this->generateUrl('hopital_numerique_user_homepage'));
         }
@@ -458,15 +553,21 @@ class UserController extends Controller
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function activerMassAction($primaryKeys, $allPrimaryKeys)
     {
         //check connected user ACL
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopital_numerique_user_delete', ['id' => 1]), $user) == -1) {
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour activer des utilisateurs.');
+        if ($this->get('nodevo_acl.manager.acl')->checkAuthorization(
+            $this->generateUrl('hopital_numerique_user_delete', ['id' => 1]),
+            $user
+        ) == -1) {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                'Vous n\'avez pas les droits suffisants pour activer des utilisateurs.'
+            );
 
             return $this->redirect($this->generateUrl('hopital_numerique_user_homepage'));
         }
@@ -495,6 +596,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
@@ -505,45 +608,52 @@ class UserController extends Controller
                 $primaryKeys[] = $data['id'];
             }
         }
+
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy(['id' => $primaryKeys]);
 
         $colonnes = [
             'id' => 'id',
-            'nom' => 'Nom',
-            'prenom' => 'Prénom',
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
             'username' => 'Identifiant (login)',
-            'pseudonymeForum' => 'Pseudonyme pour le forum',
             'email' => 'Adresse e-mail',
+            'pseudonym' => 'Pseudonyme pour le forum',
             'etat.libelle' => 'Etat',
+            'phoneNumber' => 'Téléphone Direct',
+            'cellPhoneNumber' => 'Téléphone Portable',
+            'otherContact' => 'Autres contacts',
+            'profileType.libelle' => 'Profil Etablissement Santé',
+            'jobType.libelle' => 'Rôle',
+            'jobLabel' => 'Libelle rôle',
+            'organization.nom' => 'Structure',
+            'activitiesString' => 'Activités',
+            'organizationLabel' => 'Nom de votre structure si non disponible dans la liste précédente',
+            'organizationType.libelle' => 'Type de structure',
             'region.libelle' => 'Région',
-            'titre.libelle' => 'Titre',
-            'civilite.libelle' => 'Civilité',
-            'telephoneDirect' => 'Téléphone Direct',
-            'telephonePortable' => 'Téléphone Portable',
-            'departement.libelle' => 'Département',
+            'county.libelle' => 'Département',
+            'presentation' => 'Présentation',
+            'computerSkillsString' => 'Logiciels maîtrisés',
             'lastLoginString' => 'Dernière connexion',
-            'contactAutre' => 'Contact Autre',
             'role' => 'Roles',
-            'statutEtablissementSante.libelle' => 'Statut Etablissement Santé',
-            'profilEtablissementSante.libelle' => 'Profil Etablissement Santé',
-            'autreStructureRattachementSante' => 'Nom de votre structure si non disponible dans la liste précédente Santé',
-            'nomStructure' => 'Nom structure',
-            'fonctionStructure' => 'Fonction structure',
-            'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
-            'dateInscriptionString' => 'Date d\'inscription',
-            'fonctionDansEtablissementSante' => 'Fonction dans l\'établissement de Santé',
-            'nbVisites' => 'Nombre de visites',
+            'registrationDateString' => 'Date d\'inscription',
+            'visitCount' => 'Nombre de visites',
             'raisonDesinscription' => 'Raison de désinscription',
             'remarque' => 'Remarque pour la gestion',
             'domainesString' => 'Domaine(s) concerné(s)',
             'ipLastConnection' => 'Dernière ip de connexion',
             'UpToDateToString' => 'À jour',
+            'activityNewsletterEnabled' => 'Newsletter des activités de l\'ANAP',
             'inscritCommunautePratiqueString' => 'Membre de la CDP',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $users, 'export-utilisateurs.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $users,
+            'export-utilisateurs.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -552,7 +662,7 @@ class UserController extends Controller
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function sessionsMassAction($primaryKeys, $allPrimaryKeys)
     {
@@ -565,20 +675,29 @@ class UserController extends Controller
         }
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy(['id' => $primaryKeys]);
         $modules = $this->get('hopitalnumerique_module.manager.module')->findAll();
-        $results = $this->get('hopitalnumerique_module.manager.inscription')->buildForExport($modules, $users, $primaryKeys);
+        $results = $this->get('hopitalnumerique_module.manager.inscription')->buildForExport(
+            $modules,
+            $users,
+            $primaryKeys
+        );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($results['colonnes'], $results['datas'], 'ambassadeurs_sessions.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $results['colonnes'],
+            $results['datas'],
+            'ambassadeurs_sessions.csv',
+            $kernelCharset
+        );
     }
 
     /**
      * Envoyer un mail aux utilisateurs.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param $primaryKeys
+     * @param $allPrimaryKeys
      *
-     * @return Redirect
+     * @return Response
      */
     public function envoyerMailMassAction($primaryKeys, $allPrimaryKeys)
     {
@@ -600,14 +719,14 @@ class UserController extends Controller
         }
 
         //to
-        $to = $this->get('security.context')->getToken()->getUser()->getEmail();
+        $to = $this->getUser()->getEmail();
 
         //bcc list
         $bcc = join(',', $list);
 
         return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', [
             'mailto' => 'mailto:' . $to . '?bcc=' . $bcc,
-            'list' => $list,
+            'list'   => $list,
         ]);
     }
 
@@ -616,6 +735,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvExpertsAction($primaryKeys, $allPrimaryKeys)
     {
@@ -630,7 +751,12 @@ class UserController extends Controller
         $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport(1, $users);
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($results['colonnes'], $results['datas'], 'export-experts.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $results['colonnes'],
+            $results['datas'],
+            'export-experts.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -638,6 +764,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvAmbassadeursAction($primaryKeys, $allPrimaryKeys)
     {
@@ -652,7 +780,12 @@ class UserController extends Controller
         $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport(2, $users);
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($results['colonnes'], $results['datas'], 'export-ambassadeurs.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $results['colonnes'],
+            $results['datas'],
+            'export-ambassadeurs.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -660,6 +793,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvProductionsAction($primaryKeys, $allPrimaryKeys)
     {
@@ -678,6 +813,8 @@ class UserController extends Controller
         //prepare datas
         $datas = [];
         $nbProdMax = 0;
+
+        /** @var User $user */
         foreach ($users as $user) {
             //prepare row
             $row = [];
@@ -686,6 +823,8 @@ class UserController extends Controller
 
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($user->getId());
             $nbProd = 0;
+
+            /** @var Objet $objet */
             foreach ($objets as $objet) {
                 $row['prod' . $nbProd] = $objet->getTitre();
                 ++$nbProd;
@@ -715,7 +854,12 @@ class UserController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $datas, 'export-productions.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-productions.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -723,6 +867,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvDomainesAction($primaryKeys, $allPrimaryKeys)
     {
@@ -741,6 +887,8 @@ class UserController extends Controller
         //prepare datas
         $datas = [];
         $nbDomaineMax = 0;
+
+        /** @var User $user */
         foreach ($users as $user) {
             //prepare row
             $row = [];
@@ -749,6 +897,7 @@ class UserController extends Controller
 
             $connaissances = $user->getConnaissancesAmbassadeurs();
             $nbDomaine = 0;
+
             foreach ($connaissances as $connaissance) {
                 if (!is_null($connaissance->getConnaissance())) {
                     $row['domaine' . $nbDomaine] = $connaissance->getDomaine()->getLibelle();
@@ -782,7 +931,12 @@ class UserController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $datas, 'export-domaines.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-domaines.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -790,6 +944,8 @@ class UserController extends Controller
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Response
      */
     public function exportCsvConnaissancesSIAction($primaryKeys, $allPrimaryKeys)
     {
@@ -808,6 +964,8 @@ class UserController extends Controller
         //prepare datas
         $datas = [];
         $nbDomaineMax = 0;
+
+        /** @var User $user */
         foreach ($users as $user) {
             //prepare row
             $row = [];
@@ -849,7 +1007,12 @@ class UserController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $datas, 'export-domaines.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-domaines.csv',
+            $kernelCharset
+        );
     }
 
     /**
@@ -860,7 +1023,7 @@ class UserController extends Controller
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      * @param array  $options  Tableaux d'options envoyé au formulaire
      *
-     * @return Form | redirect
+     * @return RedirectResponse|Response
      */
     private function renderForm($formName, $user, $view, $options = [])
     {
@@ -868,8 +1031,9 @@ class UserController extends Controller
         //Création du formulaire via le service
         $form = $this->createForm($formName, $user);
 
-        //Si on est en FO dans informations personelles, on affiche pas le mot de passe. Il est géré dans un autre formulaire
-        if ($this->_informationsPersonnelles) {
+        //Si on est en FO dans informations personelles, on affiche pas le mot de passe.
+        //Il est géré dans un autre formulaire
+        if ($this->informationsPersonnelles) {
             $form->remove('plainPassword');
             $form->remove('remarque');
             $form->remove('biographie');
@@ -879,7 +1043,7 @@ class UserController extends Controller
         }
 
         //GME : ticket 3088 = un admin de domaine ne peut modifier son propre role ni ses domaines
-        if ($this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')
+        if ($this->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')
             && ($this->getUser()->getId() === $user->getId())
         ) {
             $form->remove('roles');
@@ -896,9 +1060,9 @@ class UserController extends Controller
             $form->handleRequest($request);
 
             //Vérification d'un utilisateur connecté
-            if ($this->get('security.context')->isGranted('ROLE_USER')) {
+            if ($this->isGranted('ROLE_USER')) {
                 //Si un utilisateur est connecté mais qu'on est en FO : informations personnelles
-                if (!$this->_informationsPersonnelles) {
+                if (!$this->informationsPersonnelles) {
                     //--Backoffice--
                     //Vérification de la présence rôle
                     $role = $form->get('roles')->getData();
@@ -911,9 +1075,17 @@ class UserController extends Controller
             } else {
                 //--FO-- inscription
                 //Set de l'état
-                $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
-                $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => $idEtatActif]));
-                $user->setDomaines([$this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))]);
+                $idEtatActif = intval(
+                    $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')
+                );
+                $user->setEtat(
+                    $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => $idEtatActif])
+                );
+                $user->setDomaines([
+                    $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
+                        $request->getSession()->get('domaineId')
+                    ),
+                ]);
             }
 
             //si le formulaire est valide
@@ -923,16 +1095,10 @@ class UserController extends Controller
 
                 //Generate password for new users
                 if ($new) {
-                    $passwordTool = new \Nodevo\ToolsBundle\Tools\Password();
-                    $mdp = $passwordTool->generate(3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-                    $mdp .= $passwordTool->generate(3, 'abcdefghijklmnopqrstuvwyyz');
-                    $mdp .= $passwordTool->generate(2, '1234567890');
-                    $mdp = str_shuffle($mdp);
-                    $user->setPlainPassword($mdp);
-                    $user->setDateInscription(new \DateTime());
+                    $user->setRegistrationDate(new \DateTime());
 
                     //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
-                    if ($this->get('security.context')->isGranted('ROLE_USER')) {
+                    if ($this->isGranted('ROLE_USER')) {
                         //--BO--
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user, []);
                         $this->get('mailer')->send($mail);
@@ -960,22 +1126,26 @@ class UserController extends Controller
                 }
 
                 //Vérification d'un utilisateur connecté
-                if ($this->get('security.context')->isGranted('ROLE_USER')) {
-                    if ($this->_informationsPersonnelles) {
+                if ($this->isGranted('ROLE_USER')) {
+                    if ($this->informationsPersonnelles) {
                         //--Frontoffice-- Informations personnelles
                         //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                        $connectedUser = $this->get('security.context')->getToken()->getUser();
+                        $connectedUser = $this->getUser();
                         $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getUserRole($connectedUser);
 
                         //Test etab user
                         if ($roleUserConnectedLabel == 'ROLE_ENREGISTRE_9' || $roleUserConnectedLabel == 'ROLE_ES_8') {
-                            if (!is_null($user->getEtablissementRattachementSante())) {
+                            if (!is_null($user->getOrganization())) {
                                 $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ES_8']);
                             } else {
-                                $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ENREGISTRE_9']);
+                                $role = $this->get('nodevo_role.manager.role')->findOneBy(
+                                    ['role' => 'ROLE_ENREGISTRE_9']
+                                );
                             }
                         } else {
-                            $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => $roleUserConnectedLabel]);
+                            $role = $this->get('nodevo_role.manager.role')->findOneBy(
+                                ['role' => $roleUserConnectedLabel]
+                            );
                         }
 
                         $user->setRoles([$role]);
@@ -983,14 +1153,6 @@ class UserController extends Controller
                         //Reforce l'username
                         $user->setUsername($user->getUsername());
                     } else {
-                        // //Test etab user
-                        // if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
-                        //     if( !is_null($user->getEtablissementRattachementSante()) )
-                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
-                        //     else
-                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
-                        // }
-
                         //--BO--
                         //set Role for User : not mapped field
                         $user->setRoles([$role->getRole()]);
@@ -1004,7 +1166,7 @@ class UserController extends Controller
                 } else {
                     //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
-                    if (!is_null($user->getEtablissementRattachementSante())) {
+                    if (!is_null($user->getOrganization())) {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ES_8']);
                     } else {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ENREGISTRE_9']);
@@ -1015,24 +1177,35 @@ class UserController extends Controller
                 if (null == $user->getRegion()) {
                     //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
                     if ($role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
-                        $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.');
+                        $this->get('session')->getFlashBag()->add(
+                            'danger',
+                            'Il est obligatoire de choisir une région pour le groupe sélectionné.'
+                        );
 
                         $this->customRenderView($view, $form, $user, $options);
                     }
                 }
 
                 //Cas particulier : 2 utilisateur ES - Direction générale par structure de rattachement
-                if (null != $user->getEtablissementRattachementSante() && $role->getRole() == 'ROLE_ES_DIRECTION_GENERALE_5') {
+                if (null != $user->getOrganization()
+                    && $role->getRole()
+                       == 'ROLE_ES_DIRECTION_GENERALE_5'
+                ) {
                     $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection($user);
                     if (!is_null($result)) {
-                        $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
+                        $this->get('session')->getFlashBag()->add(
+                            'danger',
+                            'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.'
+                        );
 
                         $this->customRenderView($view, $form, $user, $options);
                     }
                 }
 
                 //bind Référence Etat with Enable FosUserField
-                if (intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId() && $this->get('security.context')->isGranted('ROLE_USER')) {
+                if (intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'))
+                    === $user->getEtat()->getId() && $this->isGranted('ROLE_USER')
+                ) {
                     $user->setEnabled(1);
                 } else {
                     $user->setEnabled(0);
@@ -1042,8 +1215,14 @@ class UserController extends Controller
 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser($user);
-                if ($new && $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
-                    $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
+                if ($new
+                    && $this->container->get(
+                        'hopitalnumerique_recherche.dependency_injection.referencement.requete_session'
+                    )->isWantToSaveRequete()
+                ) {
+                    $this->container->get(
+                        'hopitalnumerique_recherche.dependency_injection.referencement.requete_session'
+                    )->saveAsNewRequete($user);
                 }
 
                 $do = $request->request->get('do');
@@ -1053,10 +1232,16 @@ class UserController extends Controller
                     //<-- Connexion automatique
                     $token = new UsernamePasswordToken($user, null, 'frontoffice_connecte', $user->getRoles());
                     $this->get('security.context')->setToken($token);
-                    $this->get('event_dispatcher')->dispatch('security.interactive_login', new InteractiveLoginEvent($request, $token));
+                    $this->get('event_dispatcher')->dispatch(
+                        'security.interactive_login',
+                        new InteractiveLoginEvent($request, $token)
+                    );
                     //-->
                 } else {
-                    $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.'));
+                    $this->get('session')->getFlashBag()->add(
+                        ($new ? 'success' : 'info'),
+                        'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.')
+                    );
                 }
 
                 switch ($do) {
@@ -1065,7 +1250,11 @@ class UserController extends Controller
                         $urlParameter = $request->getSession()->get('urlToRedirect');
                         $request->getSession()->remove('urlToRedirect');
 
-                        return $this->redirect(is_null($urlParameter) || $urlParameter == '' ? $this->generateUrl('hopital_numerique_homepage') : $urlParameter);
+                        return $this->redirect(
+                            is_null($urlParameter) || $urlParameter == '' ? $this->generateUrl(
+                                'hopital_numerique_homepage'
+                            ) : $urlParameter
+                        );
                         break;
                     case 'information-personnelles':
                         return $this->redirect($this->generateUrl('hopital_numerique_user_informations_personnelles'));
@@ -1074,7 +1263,9 @@ class UserController extends Controller
                         return $this->redirect($this->generateUrl('hopital_numerique_user_homepage'));
                         break;
                     default:
-                        return $this->redirect($this->generateUrl('hopital_numerique_user_edit', ['id' => $user->getId()]));
+                        return $this->redirect(
+                            $this->generateUrl('hopital_numerique_user_edit', ['id' => $user->getId()])
+                        );
                         break;
                 }
             }
@@ -1084,14 +1275,12 @@ class UserController extends Controller
     }
 
     /**
-     * [customRenderView description].
+     * @param $view
+     * @param $form
+     * @param $user
+     * @param $options
      *
-     * @param [type] $view    [description]
-     * @param [type] $form    [description]
-     * @param [type] $user    [description]
-     * @param [type] $options [description]
-     *
-     * @return [type]
+     * @return Response
      */
     private function customRenderView($view, $form, $user, $options)
     {
@@ -1100,7 +1289,8 @@ class UserController extends Controller
             'user' => $user,
             'twigOptions' => $options,
             'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityDomainesCommunsWithUser($user, $this->getUser()),
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                ->getEntityDomainesCommunsWithUser($user, $this->getUser()),
         ]);
     }
 }

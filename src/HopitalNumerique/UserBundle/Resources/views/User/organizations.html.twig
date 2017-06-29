@@ -1,0 +1,8 @@
+{% if organizations %}
+    <option value=""> - </option>
+    {% for organization in organizations %}
+        <option value="{{organization.id}}">{{organization.nom}}</option>
+    {% endfor %}
+{% else %}
+    <option value="">Sélectionnez un département et un type de structure avant</option>
+{% endif %}

@@ -58,7 +58,7 @@ class ActiveMemberCalculator
             $activeMembers[] = [
                 'idUser' => $user->getId(),
                 'nbComment' => $nbComment,
-                'nbVisite' => $user->getNbVisites(),
+                'visitCount' => $user->getVisitCount(),
                 'nbPost' => $nbPost,
                 'nbNote' => $nbNote,
                 'score' => $score,

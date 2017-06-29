@@ -78,6 +78,9 @@ class AppKernel extends Kernel
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
+            new HopitalNumerique\NewAccountBundle\NewAccountBundle(),
+            new HopitalNumerique\CartBundle\HopitalNumeriqueCartBundle(),
+            new Dmishh\SettingsBundle\DmishhSettingsBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new HopitalNumerique\SearchBundle\HopitalNumeriqueSearchBundle(),
         );

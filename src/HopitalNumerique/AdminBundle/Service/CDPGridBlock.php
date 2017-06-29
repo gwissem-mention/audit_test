@@ -45,17 +45,17 @@ class CDPGridBlock
     }
 
     /**
-     * @param Domaine $domain
+     * @param Domaine[] $domains
      *
      * @return array
      */
-    public function getBlockDatas(Domaine $domain)
+    public function getBlockDatas($domains)
     {
         $CDPDatas = [
-            'members' => $this->userRepository->countCDPUsers($domain),
-            'GTMembers' => $this->userRepository->countUsersInCDP($domain),
-            'pendingRecords' => $this->ficheRepository->countPending($domain),
-            'comments' => $this->commentaireRepository->getLatestCommentsCount($domain),
+            'members' => $this->userRepository->countCDPUsers($domains),
+            'GTMembers' => $this->userRepository->countUsersInCDP($domains),
+            'pendingRecords' => $this->ficheRepository->countPending($domains),
+            'comments' => $this->commentaireRepository->getLatestCommentsCount($domains),
         ];
 
         return $CDPDatas;

@@ -5,14 +5,55 @@ namespace HopitalNumerique\ForumBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ForumBundle\Entity\Topic;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * TopicRepository.
  */
 class TopicRepository extends EntityRepository
 {
+    /**
+     * @param integer $topicId
+     *
+     * @return Topic
+     */
+    public function findByIdWithJoin($topicId)
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.board', 'b')->addSelect('b')
+            ->leftJoin('b.category', 'c')->addSelect('c')
+            ->leftJoin('c.domaines', 'd')->addSelect('d')
+            ->leftJoin('c.forum', 'f')->addSelect('f')
+
+            ->andWhere('t.id = :topicId')->setParameter('topicId', $topicId)
+
+            ->setMaxResults(1)
+            ->getQuery()->getSingleResult()
+        ;
+    }
+
+    /**
+     * @param array $topicIds
+     *
+     * @return Topic[]
+     */
+    public function findByIdsWithJoin($topicIds)
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.board', 'b')->addSelect('b')
+            ->leftJoin('b.category', 'c')->addSelect('c')
+            ->leftJoin('c.domaines', 'd')->addSelect('d')
+            ->leftJoin('c.forum', 'f')->addSelect('f')
+
+            ->andWhere('t.id IN (:topicIds)')->setParameter('topicIds', $topicIds)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
     /**
      * Récupère les derniers topics commentés par type de forum.
      *
@@ -132,5 +173,103 @@ class TopicRepository extends EntityRepository
         ;
 
         return intval($qb->getQuery()->getSingleScalarResult());
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getLastTopicWhereUserIsInvolved(User $user)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.lastPost', 'flp')
+            ->leftJoin('t.board', 'b')->addSelect('b')
+            ->leftJoin('b.category', 'c')->addSelect('c')
+            ->leftJoin('c.forum', 'f')->addSelect('f')
+            ->leftJoin('t.posts', 'fp', Join::WITH, 'fp.createdBy = :userId')
+            ->leftJoin('t.subscriptions', 's', Join::WITH, 's.ownedBy = :userId')
+            ->setParameter('userId', $user->getId())
+
+            ->andWhere('s.id IS NOT NULL OR fp.id IS NOT NULL')
+
+            ->addOrderBy('flp.createdDate', 'DESC')
+
+            ->setMaxResults(5)
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * Count Topic with a least one post, by domains. If $since is givent, filter posts created after $since.
+     *
+     * @param Domaine[] $domains
+     * @param \DateTime|null $since
+     *
+     * @return mixed
+     */
+    public function countActiveTopicsByDomains($domains, \DateTime $since = null)
+    {
+        $qb = $this->createQueryBuilder('topic');
+        $qb
+            ->select('COUNT(DISTINCT(topic.id))')
+            ->join('topic.posts', 'posts')
+            ->join('topic.board', 'board')
+            ->join('board.category', 'category')
+            ->join('category.forum', 'forum')
+            ->join(
+                'forum.domain',
+                'domain',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domain',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        if (null !== $since) {
+            $qb
+                ->andWhere('posts.createdDate >= :since')
+                ->setParameters([
+                    'since' => $since
+                ])
+            ;
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count unreplyed topics by domains
+     *
+     * @param Domaine[] $domains
+     * @return mixed
+     */
+    public function countUnreplyedTopcisByDomains($domains)
+    {
+        $qb = $this->createQueryBuilder('topic');
+        $qb
+            ->select('COUNT(DISTINCT(topic.id))')
+            ->join('topic.board', 'board')
+            ->join('board.category', 'category')
+            ->join('category.forum', 'forum')
+            ->join(
+                'forum.domain',
+                'domain',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domain',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+            ->andWhere($qb->expr()->eq('topic.cachedReplyCount', 0))
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

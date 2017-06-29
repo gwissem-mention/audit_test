@@ -2,8 +2,12 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\RefusCandidature;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
@@ -14,6 +18,8 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  */
 class Questionnaire
 {
+    const MODULE_EVALUATION_SURVEY_ID = 4;
+
     /**
      * @var int
      *
@@ -52,7 +58,7 @@ class Questionnaire
     private $occurrenceMultiple;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Occurrence", mappedBy="questionnaire")
      */
@@ -95,10 +101,10 @@ class Questionnaire
      */
     public function __construct()
     {
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions = new ArrayCollection();
         $this->lock = false;
         $this->occurrenceMultiple = false;
-        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueGroupes = new ArrayCollection();
     }
 
     /**
@@ -194,11 +200,11 @@ class Questionnaire
     /**
      * Add occurrences.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     * @param Occurrence $occurrences
      *
      * @return Questionnaire
      */
-    public function addOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    public function addOccurrence(Occurrence $occurrences)
     {
         $this->occurrences[] = $occurrences;
 
@@ -208,9 +214,9 @@ class Questionnaire
     /**
      * Remove occurrences.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     * @param Occurrence $occurrences
      */
-    public function removeOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    public function removeOccurrence(Occurrence $occurrences)
     {
         $this->occurrences->removeElement($occurrences);
     }
@@ -228,11 +234,11 @@ class Questionnaire
     /**
      * Add questions.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $questions
+     * @param Question $questions
      *
      * @return Questionnaire
      */
-    public function addQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $questions)
+    public function addQuestion(Question $questions)
     {
         $this->questions[] = $questions;
 
@@ -242,9 +248,9 @@ class Questionnaire
     /**
      * Remove questions.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $questions
+     * @param Question $questions
      */
-    public function removeQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $questions)
+    public function removeQuestion(Question $questions)
     {
         $this->questions->removeElement($questions);
     }
@@ -278,11 +284,11 @@ class Questionnaire
     /**
      * Add refusCandidature.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
+     * @param RefusCandidature $refusCandidature
      *
      * @return Questionnaire
      */
-    public function addRefusCandidature(\HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature)
+    public function addRefusCandidature(RefusCandidature $refusCandidature)
     {
         $this->refusCandidature[] = $refusCandidature;
 
@@ -292,9 +298,9 @@ class Questionnaire
     /**
      * Remove refusCandidature.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
+     * @param RefusCandidature $refusCandidature
      */
-    public function removeRefusCandidature(\HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature)
+    public function removeRefusCandidature(RefusCandidature $refusCandidature)
     {
         $this->refusCandidature->removeElement($refusCandidature);
     }
@@ -370,11 +376,11 @@ class Questionnaire
     /**
      * Add domaines.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @param Domaine $domaines
      *
      * @return Questionnaire
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function addDomaine(Domaine $domaines)
     {
         $this->domaines[] = $domaines;
 
@@ -384,9 +390,9 @@ class Questionnaire
     /**
      * Remove domaines.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @param Domaine $domaines
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function removeDomaine(Domaine $domaines)
     {
         $this->domaines->removeElement($domaines);
     }
@@ -434,11 +440,11 @@ class Questionnaire
     /**
      * Add communautePratiqueGroupes.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @param Groupe $communautePratiqueGroupes
      *
      * @return Questionnaire
      */
-    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupes)
     {
         $this->communautePratiqueGroupes[] = $communautePratiqueGroupes;
 
@@ -448,9 +454,9 @@ class Questionnaire
     /**
      * Remove communautePratiqueGroupes.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @param Groupe $communautePratiqueGroupes
      */
-    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    public function removeCommunautePratiqueGroupe(Groupe $communautePratiqueGroupes)
     {
         $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
     }

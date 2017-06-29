@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Requete.
  *
  * @ORM\Table(name="hn_requete")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\RequeteRepository")
  */
 class Requete
 {

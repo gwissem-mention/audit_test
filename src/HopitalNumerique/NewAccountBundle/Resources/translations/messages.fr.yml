@@ -1,0 +1,73 @@
+account:
+    title: Mon compte
+    meta_description: Connectez-vous à votre compte '%domainName%' pour accéder aux outils proposés par l'ANAP
+    dashboard:
+        title: Tableau de bord
+    profile:
+        title: Mon profil
+        completion: Complétion du profil
+        personal_information: Données personnelles
+        contact_information: Coordonnées
+        profile: Mon profil
+        structure: Ma structure
+        skills: Mes compétences
+    service:
+        title: Mes services
+        quick_access: Accès directs
+        domain_list:
+            label: Sélectionnez un domaine
+            all: Tous mes domaines
+        no_data: Aucune donnée
+    cart:
+        title: Mon panier
+    parameters:
+        title: Mes paramètres
+    save: Enregistrer les modifications
+    message:
+        save:
+            success: Vos informations ont bien été enregistrées.
+        invalid_field: Champ(s) invalide(s)
+    user:
+        lastname: Nom
+        firstname: Prénom
+        email: Adresse e-mail
+        pseudonym: Pseudonyme pour le forum
+        phoneNumber: Téléphone fixe
+        cellPhoneNumber: Téléphone portable
+        otherContact: Autres contacts
+        profileType: Profil
+        jobType: Rôle
+        jobLabel: Libellé rôle
+        file: Photo du profil
+        region: Région
+        county: Département
+        organizationType: Type de structure
+        organization: Structure
+        organizationLabel: Nom de votre structure si non disponible dans la liste précédente
+        activities: Activités
+        computerSkills: Les applications que je connais
+        computerSkills: Les applications que je connais
+        missingComputerSkills: Une des applications n'est pas dans la liste ?
+        presentation: Je me présente
+        knowledge: Mes connaissances
+        hobbies: Centres d'intérêt
+        addHobbies: Ajouter
+    cdp:
+        join: Rejoindre la communauté
+        access: Accéder à la communauté
+        missingInformation: Certaines informations de votre profil sont nécessaires pour rejoindre la communauté
+
+cart:
+    items:
+        title: Mes objets placés dans mon panier
+        header:
+            object_type: Type de l'objet
+            object_title: Titre de l'objet
+        add:
+            label: Ajouter les objets sélectionnés au rapport
+        action:
+            open:
+                title: Ouvrir l'objet
+            remove:
+                title: Supprimer l'objet
+                confirm: Retirer cet objet de mon panier  ?

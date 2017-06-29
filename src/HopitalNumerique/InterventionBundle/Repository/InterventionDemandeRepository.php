@@ -8,6 +8,7 @@
 namespace HopitalNumerique\InterventionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -91,7 +92,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -113,7 +114,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -132,7 +133,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->setParameter('aujourdhui', new \DateTime())
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -151,7 +152,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -170,7 +171,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -191,23 +192,23 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
+                'CONCAT(referent.lastname, \' \', referent.firstname) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
-                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
+                'CONCAT(ambassadeur.lastname, \' \', ambassadeur.firstname, \' - \', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'objet.id AS objetId',
                 'GROUP_CONCAT(objet.titre) AS objetsInformations',
                 'interventionEtat.id AS interventionEtatId',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionDemande.dateCreation',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
                 'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                    ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                    ->leftJoin('referent.organization', 'referentEtablissement')
                     ->leftJoin('referent.region', 'referentRegion')
                 // Ambassadeur
                 ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
@@ -234,7 +235,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->groupBy('interventionDemande.id')
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -256,17 +257,17 @@ class InterventionDemandeRepository extends EntityRepository
             ->select(
                 'interventionDemande.id AS id',
                 'referent.id AS referentId',
-                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
+                'CONCAT(referent.lastname, \' \', referent.firstname) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
                 'interventionInitiateur.type AS interventionInitiateurType',
-                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
-                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'CONCAT(ambassadeur.lastname, \' \', ambassadeur.firstname, \' \', ambassadeurRegion.libelle) AS ambassadeurInformations',
+                'interventionDemande.dateCreation',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
-                'CONCAT(interventionDemande.evaluationDate, \'\') AS evaluationDateLibelle',
-                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'interventionDemande.cmsiDateChoix',
+                'interventionDemande.evaluationDate',
+                'interventionDemande.ambassadeurDateChoix',
                 'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
@@ -275,7 +276,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.organization', 'referentEtablissement')
                 ->leftJoin('referent.region', 'referentRegion')
                 // Initiateur
                 ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
@@ -306,7 +307,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->groupBy('interventionDemande.id')
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -323,11 +324,11 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
+                'CONCAT(referent.lastname, \' \', referent.firstname) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
-                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
+                'CONCAT(\'<strong>\', ambassadeur.lastname, \' \', ambassadeur.firstname, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',
@@ -344,11 +345,11 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('directeur', $directeur)
             // Référent
             ->innerJoin('interventionDemande.referent', 'referent')
-                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.organization', 'referentEtablissement')
                 ->leftJoin('referent.region', 'referentRegion')
             // Ambassadeur
             ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
-            ->innerJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
+            ->innerJoin('ambassadeur.organization', 'ambassadeurEtablissement')
             ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
             // Initiateur
             ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
@@ -381,7 +382,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->groupBy('interventionDemande.id')
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -403,16 +404,16 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
+                'CONCAT(referent.lastname, \' \', referent.firstname) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
                 'interventionInitiateur.type AS interventionInitiateurType',
-                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionDemande.dateCreation',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
-                'CONCAT(interventionDemande.evaluationDate, \'\') AS evaluationDateLibelle',
-                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'interventionDemande.cmsiDateChoix',
+                'interventionDemande.evaluationDate',
+                'interventionDemande.ambassadeurDateChoix',
                 'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
@@ -421,7 +422,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                    ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                    ->leftJoin('referent.organization', 'referentEtablissement')
                     ->leftJoin('referent.region', 'referentRegion')
                 // Initiateur
                 ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
@@ -462,7 +463,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->groupBy('interventionDemande.id')
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -492,12 +493,12 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionDemande.id AS id',
                 'interventionInitiateur.id AS interventionInitiateurId',
                 'interventionInitiateur.type AS interventionInitiateurType',
-                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
-                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'CONCAT(ambassadeur.lastname, \' \', ambassadeur.firstname, \' - \', ambassadeurRegion.libelle) AS ambassadeurInformations',
+                'interventionDemande.dateCreation',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
-                'CONCAT(interventionDemande.evaluationDate, \'\') AS evaluationDateLibelle',
-                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'interventionDemande.cmsiDateChoix',
+                'interventionDemande.evaluationDate',
+                'interventionDemande.ambassadeurDateChoix',
                 'evaluationEtat.id AS evaluationEtatId',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
                 'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
@@ -538,7 +539,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->addGroupBy('interventionDemande.id')
             ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -586,17 +587,17 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',
 
-                'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
+                'CONCAT(cmsi.lastname, \' \', cmsi.firstname) AS cmsi_nom',
                 'cmsiEtablissement.nom AS cmsiEtablissementNom',
                 'cmsiEtablissement.finess AS cmsiEtablissementFiness',
 
-                'CONCAT(ambassadeur.nom, \' \', ambassadeur.prenom) AS ambassadeur_nom',
+                'CONCAT(ambassadeur.lastname, \' \', ambassadeur.firstname) AS ambassadeur_nom',
                 'ambassadeurEtablissement.nom AS ambassadeurEtablissementNom',
                 'ambassadeurEtablissement.finess AS ambassadeurEtablissementFiness',
                 'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
 
                 'referent.id AS referentId',
-                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
+                'CONCAT(referent.lastname, \' \', referent.firstname) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
@@ -617,14 +618,14 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
             // CMSI
             ->innerJoin('interventionDemande.cmsi', 'cmsi')
-                ->leftJoin('cmsi.etablissementRattachementSante', 'cmsiEtablissement')
+                ->leftJoin('cmsi.organization', 'cmsiEtablissement')
             // Ambassadeur
             ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
-                ->leftJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
+                ->leftJoin('ambassadeur.organization', 'ambassadeurEtablissement')
                 ->leftJoin('ambassadeur.region', 'ambassadeurRegion')
             // Référent
             ->innerJoin('interventionDemande.referent', 'referent')
-                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.organization', 'referentEtablissement')
                 ->leftJoin('referent.region', 'referentRegion')
             // Objets
             ->leftJoin('interventionDemande.objets', 'objet')
@@ -641,7 +642,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->groupBy('interventionDemande.id')
         ;
 
-        return $requete->getQUery()->getResult();
+        return $requete->getQuery()->getResult();
     }
 
     /**
@@ -837,5 +838,112 @@ class InterventionDemandeRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getOpenRequestForReferent(User $user)
+    {
+        return $this->createQueryBuilder('d')
+            ->join('d.interventionEtat', 'e', Join::WITH, 'e.id NOT IN (:closedIds)')
+            ->setParameter('closedIds', [InterventionEtat::INTERVENTION_ETAT_TERMINE, InterventionEtat::INTERVENTION_ETAT_CLOTURE, InterventionEtat::INTERVENTION_ETAT_REFUSED])
+
+            ->andWhere('d.referent = :userId')->setParameter('userId', $user->getId())
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User $ambassador
+     *
+     * @return array
+     */
+    public function getStatsForAmbassador(User $ambassador)
+    {
+        $interventions = $this->createQueryBuilder('d')
+            ->andWhere('d.ambassadeur = :ambassadorId')->setParameter('ambassadorId', $ambassador->getId())
+
+            ->getQuery()->getResult()
+        ;
+
+        return $this->computeStats($interventions);
+    }
+
+    /**
+     * @param User $ambassador
+     *
+     * @return array
+     */
+    public function getStatsForCMSI(User $cmsi)
+    {
+        $interventions = $this->createQueryBuilder('d')
+            ->andWhere('d.cmsi = :cmsiId')->setParameter('cmsiId', $cmsi->getId())
+
+            ->getQuery()->getResult()
+        ;
+
+        return $this->computeStats($interventions);
+    }
+
+    /**
+     * Compute statistics
+     */
+    public function getStats()
+    {
+        return $this->computeStats(
+            $this->findAll()
+        );
+    }
+
+    /**
+     * @param InterventionDemande[] $interventions
+     *
+     * @return array
+     */
+    private function computeStats($interventions)
+    {
+        $result = [
+            'total' => count($interventions),
+            'open' => 0,
+            'initial' => 0,
+            'accepted' => 0,
+            'waiting' => 0,
+            'refused' => 0,
+            'canceled' => 0,
+            'ambassadorsCount' => 0,
+        ];
+        foreach ($interventions as $intervention) {
+            switch ($intervention->getInterventionEtat()->getId()) {
+                case InterventionEtat::INTERVENTION_ETAT_OPENED:
+                    $result['open']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_DEMANDE_INITIALE:
+                    $result['initial']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_ATTENTE_CMSI:
+                    $result['waiting']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_REFUS_CMSI:
+                    $result['refused']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT:
+                    $result['canceled']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_ACCEPTATION_CMSI:
+                case InterventionEtat::INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_1:
+                case InterventionEtat::INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_2:
+                    $result['accepted']++;
+                    break;
+                case InterventionEtat::INTERVENTION_ETAT_ACCEPTATION_AMBASSADEUR:
+                    $result['ambassadorsCount']++;
+                    break;
+            }
+        }
+
+        return $result;
     }
 }

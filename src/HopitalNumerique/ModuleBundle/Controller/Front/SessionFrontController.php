@@ -2,10 +2,12 @@
 
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 class SessionFrontController extends Controller
 {
@@ -13,8 +15,10 @@ class SessionFrontController extends Controller
      * Affiche la description d'une session dans une popin.
      *
      * @param Session $session Session à afficher
+     *
+     * @return Response
      */
-    public function descriptionAction(\HopitalNumerique\ModuleBundle\Entity\Session $session)
+    public function descriptionAction(Session $session)
     {
         $connaissances = $session->getConnaissances();
         $connaissancesOrderedByParent = [];
@@ -36,18 +40,22 @@ class SessionFrontController extends Controller
     /**
      * Liste toutes les informations de la session.
      *
-     * @param HopitalNumeriqueModuleBundleEntitySession $session [description]
+     * @param Session $session
      *
-     * @return [type]
+     * @return Response
      */
-    public function informationAction(\HopitalNumerique\ModuleBundle\Entity\Session $session)
+    public function informationAction(Session $session)
     {
         //On récupère l'utilisateur qui est connecté
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if (($session->getNombrePlaceDisponible() - count($session->getInscriptions())) == 0 && !$session->userIsInscrit($user)) {
-            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
-            $this->get('session')->getFlashBag()->add(('danger'), 'Cette session est complète, vous ne pouvez pas vous inscrire. Veuillez-choisir une autre session de ce module thèmatique.');
+        if (($session->getNombrePlaceDisponible() - count($session->getInscriptions())) == 0
+            && !$session->userIsInscrit($user)
+        ) {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas :
+            // suppression manuelle sur le serveur
+
+            $this->addFlash('danger', 'Cette session est complète, vous ne pouvez pas vous inscrire. Veuillez-choisir une autre session de ce module thèmatique.');
         }
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Session:index.html.twig', [
@@ -59,11 +67,11 @@ class SessionFrontController extends Controller
     /**
      * Envoie un mail de rappel à tout les utilisateurs inscrits et acceptés de la session.
      *
-     * @param HopitalNumeriqueModuleBundleEntitySession $session [description]
+     * @param Session $session
      *
-     * @return [type]
+     * @return Response
      */
-    public function mailRappelAction(\HopitalNumerique\ModuleBundle\Entity\Session $session)
+    public function mailRappelAction(Session $session)
     {
         //récupérations des inscriptions acceptées
         $inscriptions = $session->getInscriptionsAccepte();
@@ -78,11 +86,12 @@ class SessionFrontController extends Controller
             }
         }
 
-        // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
-        $this->get('session')->getFlashBag()->add(('success'), 'Mails de rappel envoyé aux utilisateurs acceptés à cette session.');
+        // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas :
+        // suppression manuelle sur le serveur
+        $this->addFlash('success', 'Mails de rappel envoyé aux utilisateurs acceptés à cette session.');
 
         if ($i != 0) {
-            $this->get('session')->getFlashBag()->add(('danger'), "Le mail n'a pas été envoyé à " . $i . ' utilisateur(s) inactif(s).');
+            $this->addFlash('danger', "Le mail n'a pas été envoyé à " . $i . ' utilisateur(s) inactif(s).');
         }
 
         return new Response('Mails de rappel envoyés.');
@@ -91,7 +100,9 @@ class SessionFrontController extends Controller
     /**
      * Compte HN : Génère le fichier CSV des formulaires d'évaluation.
      *
-     * @return view
+     * @param Session $session
+     *
+     * @return Response
      */
     public function evaluationAction(Session $session)
     {
@@ -99,12 +110,21 @@ class SessionFrontController extends Controller
         $datas = [];
 
         $inscriptions = $session->getInscriptionsAccepte();
+
+        /** @var Inscription $inscription */
         foreach ($inscriptions as $inscription) {
             $hasReponses = false;
             $user = $inscription->getUser();
-            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser(4, $user->getId(), true, null, $session->getId());
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser(
+                4,
+                $user->getId(),
+                true,
+                null,
+                $session->getId()
+            );
             $row = [];
 
+            /** @var Reponse $reponse */
             foreach ($reponses as $reponse) {
                 $question = $reponse->getQuestion();
                 $idQuestion = $question->getId();
@@ -120,9 +140,9 @@ class SessionFrontController extends Controller
                         $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non');
                         break;
                     case 'entityradio':
-                        $question = $reponse->getQuestion();
-
-                        $referenceReponse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => $reponse->getReponse()]);
+                        $referenceReponse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(
+                            ['id' => $reponse->getReponse()]
+                        );
 
                         if (!is_null($referenceReponse)) {
                             $row[$idQuestion] = $referenceReponse->getLibelle();
@@ -157,11 +177,20 @@ class SessionFrontController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_module.manager.session')->exportCsv($colonnes, $datas, 'export-evaluations.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-evaluations.csv',
+            $kernelCharset
+        );
     }
 
     /**
      * POPIN : Partage de resultat.
+     *
+     * @param Session $session
+     *
+     * @return Response
      */
     public function parametrageAction(Session $session)
     {
@@ -172,8 +201,12 @@ class SessionFrontController extends Controller
 
     /**
      * POPIN : gestion de la présence des experts.
+     *
+     * @param Session $session
+     *
+     * @return Response
      */
-    public function parametrageSaveAction(Session $session, Request $request)
+    public function parametrageSaveAction(Session $session)
     {
         //Mise à jour de la présence des experts
         $inscriptionsId = json_decode($this->get('request')->request->get('inscriptions'));
@@ -185,6 +218,7 @@ class SessionFrontController extends Controller
         $refEvalCanceled = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(430);
 
         $mails = [];
+        /** @var Inscription $inscription */
         foreach ($inscriptions as &$inscription) {
             if (in_array($inscription->getId(), $inscriptionsId)) {
                 $etatparticip = $inscription->getEtatParticipation()->getId();
@@ -192,7 +226,10 @@ class SessionFrontController extends Controller
                 $inscription->setEtatEvaluation($refEval);
                 //Envoyer mail du formulaire d'évluation de la session
                 if (411 != $etatparticip) {
-                    $mails = array_merge($mails, $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail([$inscription], []));
+                    $mails = array_merge(
+                        $mails,
+                        $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail([$inscription], [])
+                    );
                 }
             } else {
                 $inscription->setEtatParticipation($refPasParticipation);
@@ -212,11 +249,12 @@ class SessionFrontController extends Controller
     /**
      * Compte HN : Génère le fichier CSV des formulaires d'évaluation.
      *
-     * @return view
+     * @param User $user
+     *
+     * @return Response
      */
-    public function exportCommentaireCSVAction(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function exportCommentaireCSVAction(User $user)
     {
-        $colonnes = [];
         $datas = [];
 
         //get sessions terminées where user connected == formateur
@@ -232,7 +270,9 @@ class SessionFrontController extends Controller
         ];
 
         //Pour chaque session, on parcourt les inscriptions pour les lister
+        /** @var Session $session */
         foreach ($sessions as $session) {
+            /** @var Inscription $inscription */
             foreach ($session->getInscriptions() as $inscription) {
                 $row = [];
 
@@ -249,17 +289,23 @@ class SessionFrontController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_module.manager.session')->exportCsv($colonnes, $datas, 'export-commentaire-formateur.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-commentaire-formateur.csv',
+            $kernelCharset
+        );
     }
 
     /**
      * Compte HN : Génère le fichier CSV des formulaires d'évaluation par session.
      *
-     * @return view
+     * @param Session $session
+     *
+     * @return Response
      */
     public function exportCommentaireCSVBySessionAction(Session $session)
     {
-        $colonnes = [];
         $datas = [];
 
         $colonnes = [
@@ -276,17 +322,27 @@ class SessionFrontController extends Controller
             'Commentaire',
         ];
 
+        /** @var Inscription $inscription */
         foreach ($session->getInscriptions() as $inscription) {
             $row = [];
 
             $row[0] = $session->getModule()->getTitre();
             $row[1] = $session->getDateSession()->format('d/m/Y');
             $row[2] = $inscription->getUser()->getAppellation();
-            $row[3] = !is_null($inscription->getUser()->getEtablissementRattachementSante()) ? $inscription->getUser()->getEtablissementRattachementSante()->getNom() : ($inscription->getUser()->getAutreStructureRattachementSante());
-            $row[4] = !is_null($inscription->getUser()->getRegion()) ? $inscription->getUser()->getRegion()->getLibelle() : '-';
+            $row[3] = !is_null($inscription->getUser()->getOrganization())
+                ? $inscription->getUser()->getOrganization()->getNom()
+                : ($inscription->getUser()->getOrganizationLabel())
+            ;
+            $row[4] = !is_null($inscription->getUser()->getRegion())
+                ? $inscription->getUser()->getRegion()->getLibelle()
+                : '-'
+            ;
             $row[5] = $inscription->getUser()->getEmail();
-            $row[6] = !is_null($inscription->getUser()->getFonctionDansEtablissementSanteReferencement()) ? $inscription->getUser()->getFonctionDansEtablissementSanteReferencement()->getLibelle() : '-';
-            $row[7] = $inscription->getUser()->getFonctionDansEtablissementSante();
+            $row[6] = !is_null($inscription->getUser()->getJobType())
+                ? $inscription->getUser()->getJobType()->getLibelle()
+                : '-'
+            ;
+            $row[7] = $inscription->getUser()->getJobLabel();
             $row[8] = $inscription->getDateInscription()->format('d/m/Y');
             $row[9] = $inscription->getEtatInscription()->getLibelle();
             $row[10] = $inscription->getCommentaire();
@@ -296,6 +352,11 @@ class SessionFrontController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_module.manager.session')->exportCsv($colonnes, $datas, 'export-commentaire-formateur-session.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv(
+            $colonnes,
+            $datas,
+            'export-commentaire-formateur-session.csv',
+            $kernelCharset
+        );
     }
 }

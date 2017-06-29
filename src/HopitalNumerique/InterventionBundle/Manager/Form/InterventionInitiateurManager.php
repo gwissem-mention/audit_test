@@ -28,9 +28,7 @@ class InterventionInitiateurManager
     }
 
     /**
-     * Retourne la liste des civilités pour les listes de formulaire.
-     *
-     * @return array Liste des civilités pour les listes de formulaire
+     * @return array
      */
     public function getInterventionInitiateursChoices()
     {

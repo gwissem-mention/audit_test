@@ -78,7 +78,7 @@ class History
     private function __construct(Autodiag $autodiag, User $user, $notify)
     {
         $this->autodiag = $autodiag;
-        $this->username = $user->getPrenom() . ' ' . $user->getNom();
+        $this->username = $user->getFirstname() . ' ' . $user->getLastname();
         $this->dateTime = new \DateTime();
         $this->notify = $notify;
     }

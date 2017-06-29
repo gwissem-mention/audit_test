@@ -1,0 +1,160 @@
+addToCart:
+    title: Ajouter au panier
+
+modal:
+    report_details:
+        loading: Chargement en cours...
+        object_type_name: Type de l'objet
+        object_title: Titre de l'objet
+    report_duplicated:
+        title: Dupliquer mon rapport
+        name:
+            label: Nom du raport
+        submit:
+            label: Dupliquer
+    report_share:
+        title: Partager mon rapport
+        email:
+            label: "Partager mon rapport avec :"
+            placeholder: exemple@mail.com
+        submit:
+            label: Partager
+        sharedWith: "Partagé avec :"
+        noShares: Personne
+    report_copy:
+        title: Copier mon rapport
+        email:
+            label: "Copier mon rapport avec :"
+            placeholder: exemple@mail.com
+        submit:
+            label: Copier
+        sharedWith: "Copié avec :"
+        noShares: Personne
+
+notification:
+    reportSended:
+        success: Votre rapport a bien été envoyée.
+        error: Une erreur s'est produite, veuillez vérifier les champs renseignés.
+    shareReport:
+        userNotFounded: Email non trouvé sur la plateforme.
+        alreadyShared: Ce raport est déjà partagé avec cet utilisateur
+        share:
+            success: Votre rapport a bien été partagé.
+        copy:
+            success: Votre rapport a bien été copié.
+    reportDuplicated: Votre rapport a bien été dupliqué.
+    reportRemoved: Le rapport à bien été supprimé.
+    reportAborted: Vos modifications ont bien été annulées.
+    reportGenerated: Votre rapport à bien été généré; retrouvez-le dans le tableau "Mes rapports".
+    addToCart:
+        success: L'élément à bien été ajouté au panier
+        error: L'élément est déjà dans votre panier
+    removeFromCart:
+        success: L'objet a bien été retiré de votre panier
+        error: Impossible de retirer cet objet de votre panier
+
+item:
+    object_type:
+        forum_topic: Topic du forum
+        objet: Publication
+        contenu: Contenu
+        autodiag_chapter: Chapitre d'autodiagnostic
+        cdp_group: Groupe de CDP
+        person: Personne
+
+form:
+    fields:
+        name:
+            label: Nom du rapport
+        generate:
+            label: Générer le rapport
+        update:
+            label: Mettre à jour mon rapport
+        abort:
+            label: Annuler
+
+sendReportForm:
+    fields:
+        recipient:
+            label: Destinataire
+        sender:
+            label: Expéditeur
+        subject:
+            label: Objet
+        content:
+            label: Message
+        submit:
+            label: Envoyer
+
+list:
+    title: Mes rapports
+    empty: Aucun rapport pour le moment
+    header:
+        name: Nom du rapport
+        createdAt: Date de création
+        updatedAt: Date de dernière mise à jour
+        itemsCount: Nombre d'objets
+    actions:
+        edit:
+            title: Modifier le rapport
+        download:
+            title: Télécharger le rapport en PDF
+        send:
+            title: Envoyer le rapport
+        share:
+            title: Dupliquer / Partager / Copier mon rapport
+        remove:
+            title: Supprimer mon rapport
+            confirm: Confirmez-vous la suppression du rapport ?
+
+columns:
+    resume: Résumé
+    synthesis: Synthèse
+    content: Contenu
+    comment: Commentaire
+    reference: Référencement
+    summary: Table des matières
+
+generator:
+    generationDate: "Raport généré le :"
+    references:
+        title: Références
+    forumTopic:
+        firstPostDate: "Premier post :"
+        lastPostDate: "Dernier post :"
+    publication:
+        publicationDate: "Date de modification :"
+        source: "Source :"
+        shortResume: Résumé court
+        resume: Résumé long
+        synthesis: Synthèse
+        summary: Table des matières
+        comments: Commentaires
+    infradoc:
+        lastUpdateDate: "Date de modification :"
+        resume: Résumé
+        subChapters: Sous châpitres
+        comments: Commentaires
+    autodiagChapter:
+        summary: Sous châpitres
+        questions: Questions
+        question:
+            title: Titre
+            choices: Choix
+    cdp_group:
+        beginningDate: "Date de début :"
+        endDate: "Date de fin :"
+        shortDescription: Description courte
+        description: Description
+        summary: Liste des fiches problématique
+    person:
+        userInfos:
+            title: Informations utilisateur
+            phone: Téléphone
+            email: Adresse e-mail
+            county: Région
+            system: Établissement
+        biography: Biographie
+        skills: Connaissances
+        hobbies: Centres d'intérêts
+        computerSkills: Logiciels

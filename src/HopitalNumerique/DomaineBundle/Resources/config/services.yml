@@ -39,3 +39,14 @@ services:
     hopitalnumerique_domaine.dependency_injection.current_domaine:
         class: 'HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine'
         arguments: ['@session', '@hopitalnumerique_domaine.manager.domaine']
+
+    hopitalnumerique_domaine.repository.domaine:
+        class: 'HopitalNumerique\DomaineBundle\Repository\DomaineRepository'
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\DomaineBundle\Entity\Domaine'
+
+    hopitalnumerique_domaine.service.base_url_provider:
+        class: HopitalNumerique\DomaineBundle\Service\BaseUrlProvider
+        arguments:
+            - '@hopitalnumerique_domaine.twig_extension.domaine'

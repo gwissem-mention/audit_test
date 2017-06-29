@@ -452,14 +452,14 @@ class ReferenceManager extends BaseManager
         return $this->getRepository()->findByParent($parent);
     }
 
-    public function findByCode($code, $isActif = true)
+    public function findByCode($code, $isActif = true, $labelOrdered = false)
     {
-        return $this->getRepository()->findByCode($code, $isActif);
+        return $this->getRepository()->findByCode($code, $isActif, $labelOrdered);
     }
 
-    public function findByCodeParent($code, $idParent, $isActif = true)
+    public function findByCodeParent($code, $idParent, $isActif = true, $labelOrdered = false)
     {
-        return $this->getRepository()->findByCodeParent($code, $idParent, $isActif);
+        return $this->getRepository()->findByCodeParent($code, $idParent, $isActif, $labelOrdered);
     }
 
     /**

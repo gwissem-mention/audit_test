@@ -82,3 +82,29 @@ services:
     hopitalnumerique_recherche.doctrine.referencement.reader:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Reader'
         arguments: ['@router', '@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_recherche.doctrine.referencement.modulation', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu', '@security.context']
+
+    hopitalnumerique_recherche.repository.requete:
+        class: HopitalNumerique\RechercheBundle\Repository\RequeteRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheBundle\Entity\Requete'
+
+    hopitalnumerique_recherche.widget.new_search_results:
+        class: HopitalNumerique\RechercheBundle\Service\Widget\NewSearchResultsWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        public: false
+
+    hopitalnumerique_recherche.widget.saved_searches:
+            class: HopitalNumerique\RechercheBundle\Service\Widget\SavedSearchesWidget
+            tags:
+                - { name: new_account.dashboard_widget, type: service, priority: 70 }
+            arguments:
+                - '@twig'
+                - '@security.token_storage'
+                - '@translator'
+            public: false

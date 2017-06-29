@@ -120,15 +120,12 @@ class ReponseManager extends BaseManager
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param.
      *
-     * @param int $idExpert      Identifiant du questionnaire expert
-     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
-     *
      * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
      */
-    public function reponseExiste($idExpert, $idAmbassadeur)
+    public function reponseExiste()
     {
         $result = [];
-        $reponses = $this->getRepository()->reponseExiste($idExpert, $idAmbassadeur)->getResult();
+        $reponses = $this->getRepository()->reponseExiste()->getResult();
 
         foreach ($reponses as $key => $reponse) {
             if (array_key_exists($key, $reponses)) {

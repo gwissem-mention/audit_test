@@ -5,27 +5,48 @@ namespace HopitalNumerique\UserBundle\Twig;
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class UserExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface CsrfTokenManager
+     * @var CsrfTokenManagerInterface
      */
     private $csrfTokenManagerInterface;
 
-    private $_refManager;
-    private $_etabManager;
+    /**
+     * @var ReferenceManager
+     */
+    private $refManager;
+
+    /**
+     * @var EtablissementManager
+     */
+    private $etabManager;
+
+    /**
+     * @var QuestionnaireManager
+     */
     private $questionnaireManager;
 
     /**
      * Construit l'extension Twig.
+     *
+     * @param CsrfTokenManagerInterface $csrfTokenManagerInterface
+     * @param ReferenceManager          $refManager
+     * @param EtablissementManager      $etabManager
+     * @param QuestionnaireManager      $questionnaireManager
      */
-    public function __construct(CsrfTokenManagerInterface $csrfTokenManagerInterface, ReferenceManager $refManager, EtablissementManager $etabManager, QuestionnaireManager $questionnaireManager)
-    {
+    public function __construct(
+        CsrfTokenManagerInterface $csrfTokenManagerInterface,
+        ReferenceManager $refManager,
+        EtablissementManager $etabManager,
+        QuestionnaireManager $questionnaireManager
+    ) {
         $this->csrfTokenManagerInterface = $csrfTokenManagerInterface;
-        $this->_refManager = $refManager;
-        $this->_etabManager = $etabManager;
+        $this->refManager = $refManager;
+        $this->etabManager = $etabManager;
         $this->questionnaireManager = $questionnaireManager;
     }
 
@@ -44,7 +65,7 @@ class UserExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getFunctions()
     {
@@ -53,6 +74,11 @@ class UserExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
     public function getFrenchAction($data)
     {
         $value = [
@@ -80,10 +106,10 @@ class UserExtension extends \Twig_Extension
     /**
      * Vérifie que l'utilisateur a bien renseignés certains champs.
      *
-     * @param User   $user                 User a vérifier
-     * @param string $questionnaireLibelle Questionnaire qui nécessite la vérification
+     * @param User $user
+     * @param null $questionnaireId
      *
-     * @return bool
+     * @return array
      */
     public function informationsManquantes($user, $questionnaireId = null)
     {
@@ -94,16 +120,21 @@ class UserExtension extends \Twig_Extension
 
         $resultat = ['ok' => []];
 
-        //Pour chacun des éléments ci-dessous, si sa valeur correspondante est nulle alors on créé un tableau contenant le label à afficher
-        $resultat['telephoneDirect'] = (is_null($user->getTelephoneDirect())) ? ['label' => 'Téléphone direct'] : [];
+        // Pour chacun des éléments ci-dessous, si sa valeur correspondante
+        // est nulle alors on créé un tableau contenant le label à afficher
+        $resultat['phoneNumber'] = (is_null($user->getPhoneNumber())) ? ['label' => 'Téléphone direct'] : [];
         $resultat['region'] = (is_null($user->getRegion())) ? ['label' => 'Région'] : [];
-        $resultat['departement'] = (is_null($user->getDepartement())) ? ['label' => 'Département'] : [];
+        $resultat['county'] = (is_null($user->getCounty())) ? ['label' => 'Département'] : [];
 
         //Obligatoire uniquement pour l'ambassadeur
         if (null === $questionnaire || $questionnaire->getNom() !== 'Expert') {
             //Si 'structure de rattachement' n'est pas renseigné on vérifie le 'autre structure'
-            $resultat['rattachementSante'] = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? ['label' => 'Structure de rattachement / Nom de votre structure si non disponible dans la liste précédente'] : []) : [];
-            $resultat['profilEtablissement'] = (is_null($user->getProfilEtablissementSante())) ? ['label' => 'Profil'] : [];
+            $resultat['rattachementSante'] = (is_null($user->getOrganization())) ? (is_null($user->getOrganizationLabel()) ? ['label' => 'Structure de rattachement / Nom de votre structure si non disponible dans la liste précédente'] : []) : [];
+
+            $resultat['profileType'] = is_null($user->getProfileType())
+                ? ['label' => 'Profil']
+                : []
+            ;
         }
 
         if (null !== $questionnaire && !$questionnaire->getLock()) {
@@ -126,7 +157,8 @@ class UserExtension extends \Twig_Extension
     /**
      * Retourne la donnée d'historique formatée correctement.
      *
-     * @param array $datas La donnée
+     * @param $data
+     * @param $field
      *
      * @return string
      */
@@ -137,11 +169,11 @@ class UserExtension extends \Twig_Extension
         if (is_array($data)) {
             //Ref handle
             if (isset($data['id'])) {
-                if ($field == 'etablissementRattachementSante') {
-                    $etab = $this->_etabManager->findOneBy(['id' => $data['id']]);
+                if ($field == 'organization') {
+                    $etab = $this->etabManager->findOneBy(['id' => $data['id']]);
                     $return = $etab->getNom();
                 } else {
-                    $ref = $this->_refManager->findOneBy(['id' => $data['id']]);
+                    $ref = $this->refManager->findOneBy(['id' => $data['id']]);
                     if (null !== $ref) {
                         $return = $ref->getLibelle();
                     }

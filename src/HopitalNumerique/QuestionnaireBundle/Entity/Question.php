@@ -263,8 +263,6 @@ class Question
     }
 
     /**
-     * Set civilite.
-     *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion $typeQuestion
      */
     public function setTypeQuestion($typeQuestion)

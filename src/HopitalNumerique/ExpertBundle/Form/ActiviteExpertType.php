@@ -2,34 +2,50 @@
 
 namespace HopitalNumerique\ExpertBundle\Form;
 
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class ActiviteExpertType
+ */
 class ActiviteExpertType extends AbstractType
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     * @var ReferenceManager
      */
     private $referenceManager;
 
+    /**
+     * ActiviteExpertType constructor.
+     *
+     * @param ReferenceManager $referenceManager
+     */
     public function __construct(ReferenceManager $referenceManager)
     {
         $this->referenceManager = $referenceManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('titre', 'text', [
+            ->add('titre', TextType::class, [
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Titre',
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('typeActivite', 'entity', [
+            ->add('typeActivite', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices' => $this->referenceManager->findByCode('ACTIVITE_TYPE'),
                 'property' => 'libelle',
@@ -38,7 +54,7 @@ class ActiviteExpertType extends AbstractType
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('dateDebut', 'genemu_jquerydate', [
+            ->add('dateDebut', DateType::class, [
                 'required' => true,
                 'label' => 'Date de début',
                 'widget' => 'single_text',
@@ -62,14 +78,14 @@ class ActiviteExpertType extends AbstractType
                         return $er->findUsersByRole('ROLE_EXPERT_6');
                     },
             ])
-            ->add('nbVacationParExpert', 'integer', [
+            ->add('nbVacationParExpert', IntegerType::class, [
                 'required' => true,
                 'label' => 'Nombre de vacations par expert',
                 'attr' => [
                         'class' => 'validate[required,custom[integer],min[0]]',
                 ],
             ])
-            ->add('prestataire', 'entity', [
+            ->add('prestataire', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'required' => true,
@@ -78,7 +94,7 @@ class ActiviteExpertType extends AbstractType
                 'choices' => $this->referenceManager->findByCode('PRESTATAIRE'),
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('uniteOeuvreConcerne', 'entity', [
+            ->add('uniteOeuvreConcerne', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices' => $this->referenceManager->findByCode('UO_PRESTATAIRE'),
                 'property' => 'libelle',
@@ -99,7 +115,7 @@ class ActiviteExpertType extends AbstractType
                         return $er->findUsersByDomaine(1);
                     },
             ])
-            ->add('etat', 'entity', [
+            ->add('etat', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices' => $this->referenceManager->findByCode('ACTIVITE_EXPERT_ETAT'),
                 'property' => 'libelle',
@@ -108,20 +124,22 @@ class ActiviteExpertType extends AbstractType
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'validate[required]'],
             ])
-            // ->add('etatValidation', 'checkbox', array(
-            //     'required'   => false,
-            //     'label'      => 'Validation'
-            // ))
-            ;
+        ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert',
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'hopitalnumerique_expert_activiteexpert';

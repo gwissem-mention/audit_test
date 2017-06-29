@@ -116,7 +116,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
     var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
     
-    var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
+    var changementEtatUrl = '/mon-compte/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
 
     $.ajax(changementEtatUrl, {
         method:'GET',
@@ -154,7 +154,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInte
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
     var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
     
-    var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
+    var changementEtatUrl = '/mon-compte/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
     
     $.ajax(changementEtatUrl, {
         method:'GET',
@@ -317,9 +317,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
             
             $.getJSON
             (
-                '/compte-hn/intervention/referents/json',
+                '/mon-compte/intervention/referents/json',
                 {
-                    etablissementRattachementSante:autresEtablissementsIds
+                    organization:autresEtablissementsIds
                 },
                 function(users)
                 {
@@ -457,7 +457,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAmbass
         {
             var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
             $.ajax({
-                url:'/compte-hn/intervention/ambassadeurs/json',
+                url:'/mon-compte/intervention/ambassadeurs/json',
                 dataType:'json',
                 async:false,
                 data:
@@ -506,13 +506,13 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
                 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
                 
                 var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
-                var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
+                var changementAmbassadeurUrl = '/mon-compte/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change';
             
                 $.ajax(changementAmbassadeurUrl, {
                     success:function(reponse) {
                         if (reponse != '1')
                             alert('L\'ambassadeur n\'a pu être modifié.');
-                        else Nodevo_Web.redirect('/compte-hn/intervention/demandes/liste');
+                        else Nodevo_Web.redirect('/mon-compte/intervention/demandes/liste');
 
                         loaderAjax.finished();
                     }
@@ -551,7 +551,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeObjets
             var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
             
             $.getJSON(
-                '/compte-hn/intervention/objetsByAmbassadeur/json/' + ambassadeurId,
+                '/mon-compte/intervention/objetsByAmbassadeur/json/' + ambassadeurId,
                 function(objets)
                 {
                     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampObjets(objets);
@@ -614,7 +614,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterv
     {
         if (reponse)
         {
-            var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
+            var interventionRegroupementUrl = '/mon-compte/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
             
             $.ajax(interventionRegroupementUrl, {
                 method:'POST',

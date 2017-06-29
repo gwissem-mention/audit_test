@@ -183,7 +183,7 @@ class Domaine
     /**
      * @var Category
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ForumBundle\Entity\Category", cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ForumBundle\Entity\Category", inversedBy="domaines", cascade={"remove"})
      * @ORM\JoinTable(name="hn_forum_category_domaine",
      *      joinColumns={@ORM\JoinColumn(name="domaine_id", referencedColumnName="dom_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")})}

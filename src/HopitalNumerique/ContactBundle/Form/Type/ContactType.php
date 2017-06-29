@@ -33,29 +33,6 @@ class ContactType extends NodevoContactType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-
-        $user = $this->_securityContext->getToken()->getUser();
-
-        $builder
-
-        ->add('civilite', EntityType::class, [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'required' => true,
-                'label' => 'Civilite',
-                'empty_value' => ' - ',
-                'attr' => ['class' => $this->_constraints['civilite']['class']],
-                'data' => ('anon.' != $user && !is_null($user->getCivilite())) ? $user->getCivilite() : '',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                        ->leftJoin('ref.codes', 'codes')
-                        ->where('codes.label = :etat')
-                        ->setParameter('etat', 'CIVILITE')
-                        ->orderBy('ref.order', 'ASC');
-                },
-        ])
-
-        ;
     }
 
     /**

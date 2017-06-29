@@ -25,7 +25,7 @@ class Paiement
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert", inversedBy="paiements")
      * @ORM\JoinColumn(name="exp_id", referencedColumnName="exp_id", nullable=false)
      */
     private $activiteExpert;

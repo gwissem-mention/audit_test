@@ -1,0 +1,7 @@
+{% trans_default_domain 'core' %}
+
+<p class="copyright text-muted text-center">
+    © {{ 'organizationName'|trans }}<br />
+    {{ 'copyright'|trans({'%link%': '<a href="http://www.anap.fr" target="_blank">'~ ('organizationName'|trans) ~'</a>'})|raw|nl2br }}
+
+</p>

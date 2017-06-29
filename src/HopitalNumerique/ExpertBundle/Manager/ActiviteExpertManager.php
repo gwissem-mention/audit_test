@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ExpertBundle\Manager;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 
@@ -34,10 +35,15 @@ class ActiviteExpertManager extends BaseManager
             if (!array_key_exists($activiteExpert['id'], $activiteExpertsForGrid)) {
                 $activiteExpertsForGrid[$activiteExpert['id']] = $activiteExpert;
             } else {
-                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['anapiens'], $activiteExpert['anapiens']) === false)) {
+                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['anapiens'], $activiteExpert['anapiens'])
+                     === false)
+                ) {
                     $activiteExpertsForGrid[$activiteExpert['id']]['anapiens'] .= ';' . $activiteExpert['anapiens'];
                 }
-                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['experts'], $activiteExpert['experts']) === false)) {
+
+                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['experts'], $activiteExpert['experts'])
+                     === false)
+                ) {
                     $activiteExpertsForGrid[$activiteExpert['id']]['experts'] .= ';' . $activiteExpert['experts'];
                 }
             }
@@ -57,8 +63,9 @@ class ActiviteExpertManager extends BaseManager
     {
         $experts = [];
 
+        /** @var User $expert */
         foreach ($activiteExpert->getExpertConcernes() as $expert) {
-            $experts[$expert->getId()] = $expert->getPrenom() . ' ' . strtoupper($expert->getNom());
+            $experts[$expert->getId()] = $expert->getFirstname() . ' ' . strtoupper($expert->getLastname());
         }
 
         return $experts;
@@ -173,8 +180,8 @@ class ActiviteExpertManager extends BaseManager
                 $activiteExpert->getUniteOeuvreConcerne(),
                 implode(', ', $anapienNoms),
                 $activiteExpert->getEtat(),
-                $expertConcerne->getPrenom(),
-                $expertConcerne->getNom(),
+                $expertConcerne->getFirstname(),
+                $expertConcerne->getLastname(),
                 $expertConcerne->getEmail(),
             ];
         }

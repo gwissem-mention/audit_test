@@ -1,0 +1,9 @@
+activity:
+    title: Mon activité sur le Centre de ressources
+    saved_searches: "[0,1] %count% recherche enregistrée |]1,Inf[ %count% recherches enregistrées"
+    objects_readed: "[0,1] %count% production consultée |]1,Inf[ %count% productions consultées"
+    comments: "[0,1] %count% note et commentaire déposé |]1,Inf[ %count% notes et commentaires déposés"
+    forum_post: "[0,1] %count% contribution au forum |]1,Inf[ %count% contributions au forum"
+    content_shared: "[0,1] %count% partage de contenu |]1,Inf[ %count% partages de contenu"
+    autodiag: "[0,1] %count% autodiagnostic en cours ou validé |]1,Inf[ %count% autodiagnostics en cours ou validés"
+    guided_tour: "[0,1] %count% parcours guidé |]1,Inf[ %count% parcours guidés"
