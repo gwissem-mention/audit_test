@@ -262,6 +262,9 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                                 'id' => null,
                                 'alias' => null,
+                                'source' => [
+                                    'type' => 'text',
+                                ],
                                 'types' => [
                                     'type' => 'nested',
                                     'properties' => [
