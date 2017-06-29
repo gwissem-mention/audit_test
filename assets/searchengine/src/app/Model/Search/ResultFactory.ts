@@ -40,14 +40,24 @@ export default class ResultFactory {
 
                 return new Autodiag(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.chapter_code, resultData._source.autodiag_id);
             case "object":
-                result = new Publication(resultData._id, resultData._score, title, resultData._source.alias, content);
+                result = new Publication(
+                    resultData._id,
+                    resultData._score,
+                    title,
+                    resultData._source.alias
+                );
+                result.setSource(resultData._source.source);
+                result.setContent(content);
+
                 result.types = resultData._source.types.map((x: any) => x.libelle);
 
                 return result;
             case "content":
                 let parentData = resultData._source.parent;
-                result = new Publication(resultData._id, resultData._score, title, resultData._source.alias,  content);
+                result = new Publication(resultData._id, resultData._score, title, resultData._source.alias);
+                result.setContent(content);
                 result.types = resultData._source.types.map((x: any) => x.libelle);
+
                 let parent = new Publication(parentData.id, 0, parentData.title, parentData.alias);
                 result.setParent(parent);
                 result.setCode(resultData._source.content_code);

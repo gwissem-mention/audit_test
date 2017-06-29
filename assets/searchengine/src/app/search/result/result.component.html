@@ -21,6 +21,7 @@
 
             <div *ngIf="mode != 'lite'" class="type">
                 {{ this.text.get('type.' + result.getType(), result.getType()) }}
+                <span class="external-source text-mutted" *ngIf="result.getSource()">({{ result.getSource() }})</span>
             </div>
 
 

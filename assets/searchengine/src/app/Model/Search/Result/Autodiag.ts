@@ -30,4 +30,8 @@ export default class Autodiag extends Result {
             + this.chapterId
         ;
     }
+
+    getSource(): string {
+        return null;
+    }
 }
