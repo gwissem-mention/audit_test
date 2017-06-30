@@ -212,7 +212,7 @@ class DefaultController extends Controller
         $refusCandidatureManager = $this->get('hopitalnumerique_user.manager.refus_candidature');
         $inscriptionRepository = $this->get('hn.module.repository.inscription');
         $postRepository = $this->get('hopitalnumerique_forum.repository.post');
-        $contractManager = $this->get('hopitalnumerique_user.manager.contractualisation');
+        $contractRepository = $this->get('hopitalnumerique_user.repository.contractualisation');
 
         $domainNumeric = !empty(array_filter($this->domains, function (Domaine $domain) {
             return $domain->getId() === Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID;
@@ -246,7 +246,7 @@ class DefaultController extends Controller
                 'ambassadeurs' => 0,
                 'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
                 'ambCandidatsRecues' => 0,
-                'conventions' => $contractManager->getContractualisationsARenouvelerForAmbassador(),
+                'conventions' => $contractRepository->countExpiredContractForAmbassadorByDomains($this->domains),
             ]
             : null
         ;
