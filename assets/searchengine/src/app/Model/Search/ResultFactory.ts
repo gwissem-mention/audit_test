@@ -54,8 +54,10 @@ export default class ResultFactory {
                 return result;
             case "content":
                 let parentData = resultData._source.parent;
+                
                 result = new Publication(resultData._id, resultData._score, title, resultData._source.alias);
                 result.setContent(content);
+                result.setSource(parentData.source);
                 result.types = resultData._source.types.map((x: any) => x.libelle);
 
                 let parent = new Publication(parentData.id, 0, parentData.title, parentData.alias);
