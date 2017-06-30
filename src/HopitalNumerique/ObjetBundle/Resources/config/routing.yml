@@ -4,8 +4,8 @@ hopitalnumerique_objet_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
 hopitalnumerique_objet_objet_filtre:
-    path:  /objet-avec-filtre/{filtre}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", filtre: null }
+    path:  /objet-avec-filtre/{filtre}/{domain}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", domain: null }
 
 hopitalnumerique_objet_objet_add:
     path:  /objet/add/{type}

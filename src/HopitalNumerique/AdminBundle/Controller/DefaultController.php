@@ -18,6 +18,9 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  */
 class DefaultController extends Controller
 {
+    /**
+     * @var Domaine[]
+     */
     protected $domains;
 
     /**
@@ -73,6 +76,7 @@ class DefaultController extends Controller
             'blockCDP' => $blocCDP,
             'userDomains' => $userDomains,
             'selectedDomain' => $selectedDomainId,
+            'domainForFilters' => 1 === count($this->domains) ? current($this->domains)->getNom() : null,
         ]);
     }
 
