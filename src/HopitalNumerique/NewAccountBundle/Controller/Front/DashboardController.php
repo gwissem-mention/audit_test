@@ -32,7 +32,7 @@ class DashboardController extends Controller
      */
     public function reorderAction(Request $request)
     {
-        $command = new ReorderDashboardCommand($request->request->get('datas'), $this->getUser());
+        $command = new ReorderDashboardCommand('dashboard', $request->request->get('datas'), $this->getUser());
 
         $this->get('new_account.dashboard.command_handler.reorder')->handle($command);
 

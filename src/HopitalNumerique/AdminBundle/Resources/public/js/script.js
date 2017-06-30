@@ -15,8 +15,8 @@ $(function() {
     gridster = $(".gridster ul").gridster({
         widget_margins         : [5, 10],
         widget_base_dimensions : [330, 155],
-        min_cols               : 1,
-        max_cols               : 10,
+        min_cols               : 3,
+        max_cols               : 3,
         serialize_params       : function($w, wgd) {
             return {
                 col: wgd.col,
@@ -52,7 +52,7 @@ $(function() {
     };
 
     var showBlock = function (block, persist = true) {
-        gridster.add_widget(block.html, 1, 1, block.row, block.col);
+        gridster.add_widget(block.html, 1, 1, block.col, block.row);
         if (persist) {
             savePositions();
         }

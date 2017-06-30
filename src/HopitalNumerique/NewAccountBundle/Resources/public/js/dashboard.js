@@ -9,7 +9,7 @@ $(function () {
         min_cols: 2,
         shift_larger_widgets_down: false,
         serialize_params: function ($w, wgd) {
-            return {col: wgd.col, row: wgd.row, id: $w.data('id'), type: $w.data('type')}
+            return {col: wgd.col, row: wgd.row, id: $w.data('id')}
         },
         draggable: {
             handle: '.draggable',

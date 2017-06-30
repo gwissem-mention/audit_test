@@ -10,8 +10,13 @@ use Dmishh\SettingsBundle\Entity\SettingsOwnerInterface;
 class ReorderDashboardCommand
 {
     /**
+     * @var string 
+     */
+    protected $type;
+
+    /**
      * @var array $positions
-     * ['id' => X, 'col' => N, 'row' => N][...]
+     * ['id' => X, 'col' => N, 'row' => N], 'visible' => bool][...]
      */
     protected $positions;
 
@@ -23,13 +28,23 @@ class ReorderDashboardCommand
     /**
      * ReorderDashboardCommand constructor.
      *
+     * @param string $type
      * @param array $positions
      * @param SettingsOwnerInterface $user
      */
-    public function __construct(array $positions, SettingsOwnerInterface $user)
+    public function __construct($type, array $positions, SettingsOwnerInterface $user)
     {
+        $this->type = $type;
         $this->positions = $positions;
         $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
