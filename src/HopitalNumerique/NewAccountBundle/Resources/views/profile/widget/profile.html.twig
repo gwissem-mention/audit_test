@@ -24,7 +24,7 @@
 <div class="profile-completion">
     {{ 'profile_completion'|trans }}
     <div class="progress progress-striped">
-        <div class="progress-bar" style="width: {{ completion }}%;">{{ completion }}%</div>
+        <div class="progress-bar progress-bar-{{ completion < 33 ? 'danger' : completion >= 66 ? 'success' : 'warning' }}" style="width: {{ completion }}%;">{{ completion }}%</div>
     </div>
 
     {% if completion == 100 %}
