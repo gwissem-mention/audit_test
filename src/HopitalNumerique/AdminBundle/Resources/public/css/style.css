@@ -10,3 +10,11 @@
 .gridster ul li .panel .panel-body div.message p.titre{text-decoration: underline; margin: 0;}
 .gridster ul li .panel .panel-body h4{font-size: 16px}
 .gridster ul li .panel .panel-body ol{list-style: none; padding: 0;}
+
+
+.dashboard-selectors {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
