@@ -1,6 +1,6 @@
 title: Mon profil
 specify_name: Précisez votre nom et votre prénom
-specify_job: Précisez votre fonction et nom d'établissement
+specify_job: Précisez votre rôle et nom d'établissement
 profile_completion: "Votre profil est complet à :"
 profile_link:
     complete:

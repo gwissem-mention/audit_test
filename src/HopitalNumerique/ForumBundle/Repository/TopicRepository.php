@@ -188,7 +188,7 @@ class TopicRepository extends EntityRepository
             ->leftJoin('b.category', 'c')->addSelect('c')
             ->leftJoin('c.forum', 'f')->addSelect('f')
             ->leftJoin('t.posts', 'fp', Join::WITH, 'fp.createdBy = :userId')
-            ->leftJoin('t.subscriptions', 's', Join::WITH, 's.ownedBy = :userId')
+            ->leftJoin('t.subscriptions', 's', Join::WITH, 's.ownedBy = :userId AND s.isSubscribed = 1')
             ->setParameter('userId', $user->getId())
 
             ->andWhere('s.id IS NOT NULL OR fp.id IS NOT NULL')

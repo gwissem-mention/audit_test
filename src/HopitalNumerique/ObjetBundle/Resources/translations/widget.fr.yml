@@ -1,5 +1,6 @@
 updated_object:
     title: Mises à jour
+    empty: - Aucune mise à jour -
 
 viewed_objects:
     title: Mes publications vues
@@ -17,12 +18,14 @@ viewed_objects:
     update: La publication a été mise à jour depuis votre dernière consultation
 
 most_viewed_object:
-    title: Les 5 productions que vous avez le plus vues
+    title: Les 5 publications que vous avez le plus vues
     views_count: '[0,1] (Vue %count% fois)|]1,Inf[ (Vue %count% fois)'
+    empty: - Aucune publication consultée -
 
 last_viewed_objects:
-    title: Les 5 dernières productions regardées
+    title: Les 5 dernières publications regardées
+    empty: - Aucune publication consultée -
 
 suggestion:
     title: Vous serriez aussi intéressé par
-    content: En cours de création
+    content: Bientôt disponible
