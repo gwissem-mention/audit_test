@@ -575,3 +575,6 @@ VALUES
   (32, 14),
   (32, 15),
   (32, 17);
+
+
+UPDATE hn_objet_consultation set viewsCount = 1;
