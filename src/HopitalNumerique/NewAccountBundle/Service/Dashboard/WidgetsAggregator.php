@@ -91,11 +91,11 @@ class WidgetsAggregator
         if (isset($positions[$type])) {
             $typedPositions = $positions[$type];
             usort($widgets, function (Widget $a, Widget $b) use ($typedPositions) {
-                if (!isset($typedPositions[$a->getName()]) || !isset($typedPositions[$b->getName()])) {
+                if (!isset($typedPositions[$a->getName()]['position']) || !isset($typedPositions[$b->getName()]['position'])) {
                     return 1;
                 }
 
-                return $typedPositions[$a->getName()] < $typedPositions[$b->getName()] ? -1 : 1;
+                return $typedPositions[$a->getName()]['position'] - $typedPositions[$b->getName()]['position'];
             });
         }
 

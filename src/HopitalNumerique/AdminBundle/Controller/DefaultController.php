@@ -4,6 +4,7 @@ namespace HopitalNumerique\AdminBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardCommand;
 use HopitalNumerique\UserBundle\Entity\Contractualisation;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,7 +42,13 @@ class DefaultController extends Controller
         }
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
-        $userConf = $this->buildDashboardRows(json_decode($user->getDashboardBack(), true));
+        $positions = $this
+            ->get('dmishh.settings.settings_manager')
+            ->get('account_dashboard_order', $this->get('security.token_storage')->getToken()->getUser())
+        ;
+        $positions = isset($positions['dashboard_back']) ? $positions['dashboard_back'] : null;
+
+        $userConf = $this->buildDashboardRows($positions);
 
         //Initialisation des blocs
         list($blocUser, $blocAmbassadeur, $blocExpert) = $this->getBlockuser();
@@ -78,24 +85,11 @@ class DefaultController extends Controller
      */
     public function reorderAction(Request $request)
     {
-        $datas = $request->request->get('datas');
-        $dashboardBack = [];
-        foreach ($datas as $one) {
-            $dashboardBack[$one['id']] = [
-                'row' => $one['row'],
-                'col' => $one['col'],
-                'visible' => true,
-            ];
-        }
+        $command = new ReorderDashboardCommand('dashboard_back', $request->request->get('datas'), $this->getUser());
 
-        //On récupère l'user connecté
-        $user = $this->getUser();
-        $user->setDashboardBack(json_encode($dashboardBack));
-        $this->getDoctrine()->getManager()->flush();
+        $this->get('new_account.dashboard.command_handler.reorder')->handle($command);
 
-        return new JsonResponse([
-            'success' => true,
-        ]);
+        return new JsonResponse();
     }
 
     /**
@@ -414,32 +408,59 @@ class DefaultController extends Controller
     /**
      * Construit le tableau du dashboard user.
      *
-     * @param array $dashboardBack Tableau de la config dashboard
+     * @param array $settings Tableau de la config dashboard
      *
      * @return array
      */
-    private function buildDashboardRows($dashboardBack)
+    private function buildDashboardRows($settings)
     {
-        $visible = null === $dashboardBack;
-
         $datas = [];
-        $datas['users'] = ['row' => 1, 'col' => 1, 'visible' => $visible];
-        $datas['ambassadeurs'] = ['row' => 1, 'col' => 2, 'visible' => $visible];
-        $datas['experts'] = ['row' => 1, 'col' => 3, 'visible' => $visible];
-        $datas['publications'] = ['row' => 2, 'col' => 1, 'visible' => $visible];
-        $datas['top5-points-dur'] = ['row' => 2, 'col' => 2, 'visible' => $visible];
-        $datas['bottom5-points-dur'] = ['row' => 2, 'col' => 3, 'visible' => $visible];
-        $datas['top5-productions'] = ['row' => 3, 'col' => 1, 'visible' => $visible];
-        $datas['bottom5-productions'] = ['row' => 3, 'col' => 2, 'visible' => $visible];
-        $datas['interventions'] = ['row' => 3, 'col' => 3, 'visible' => $visible];
-        $datas['inscriptions'] = ['row' => 4, 'col' => 1, 'visible' => $visible];
-        $datas['sessions'] = ['row' => 4, 'col' => 2, 'visible' => $visible];
-        $datas['paiements'] = ['row' => 4, 'col' => 3, 'visible' => $visible];
-        $datas['cdp'] = ['row' => 5, 'col' => 3, 'visible' => $visible];
-        $datas['forum'] = ['row' => 6, 'col' => 1, 'visible' => $visible];
+        $datas['users'] = ['row' => 1, 'col' => 1];
+        $datas['ambassadeurs'] = ['row' => 1, 'col' => 2];
+        $datas['experts'] = ['row' => 1, 'col' => 3];
+        $datas['publications'] = ['row' => 2, 'col' => 1];
+        $datas['top5-points-dur'] = ['row' => 2, 'col' => 2];
+        $datas['bottom5-points-dur'] = ['row' => 2, 'col' => 3];
+        $datas['top5-productions'] = ['row' => 3, 'col' => 1];
+        $datas['bottom5-productions'] = ['row' => 3, 'col' => 2];
+        $datas['interventions'] = ['row' => 3, 'col' => 3];
+        $datas['inscriptions'] = ['row' => 4, 'col' => 1];
+        $datas['sessions'] = ['row' => 4, 'col' => 2];
+        $datas['paiements'] = ['row' => 4, 'col' => 3];
+        $datas['cdp'] = ['row' => 5, 'col' => 3];
+        $datas['forum'] = ['row' => 6, 'col' => 1];
 
-        if (!is_null($dashboardBack)) {
-            $datas = array_replace_recursive($datas, $dashboardBack);
+        if (!is_null($settings)) {
+            // Sort widgets
+            uksort($datas, function ($a, $b) use ($settings) {
+                if (!isset($settings[$a]['position']) || !isset($settings[$b]['position'])) {
+                    return 1;
+                }
+
+                return $settings[$a]['position'] < $settings[$b]['position'] ? -1 : 1;
+            });
+
+            // Set widget visibility and position
+            $i = 0;
+            $total = count($datas);
+            foreach ($datas as $key => &$data) {
+                $widgetSettings = isset($settings[$key]) ? $settings[$key] : null;
+
+                if (null !== $widgetSettings) {
+                    $data['visible'] = isset($widgetSettings['visible']) ? $widgetSettings['visible'] : true;
+
+                    if (isset($widgetSettings['position'])) {
+                        $position = $widgetSettings['position'];
+                        $data['col'] = 1 + (($position - 1 ) % 3);
+                        $data['row'] = (int) (1 + (floor(($position - 1 )/ 3)));
+                    }
+                } else {
+                    $data['visible'] = true;
+                    $data['col'] = 1 + (($total - $i - 1) % 3);
+                    $data['row'] = (int) (1 + (floor(($total - $i) / 3)));
+                }
+                $i++;
+            }
         }
 
         return $datas;
