@@ -443,28 +443,28 @@ class DefaultController extends Controller
 
                 return $settings[$a]['position'] < $settings[$b]['position'] ? -1 : 1;
             });
+        }
 
-            // Set widget visibility and position
-            $i = 0;
-            $total = count($datas);
-            foreach ($datas as $key => &$data) {
-                $widgetSettings = isset($settings[$key]) ? $settings[$key] : null;
+        // Set widget visibility and position
+        $i = 0;
+        $total = count($datas);
+        foreach ($datas as $key => &$data) {
+            $widgetSettings = (null !== $settings && isset($settings[$key])) ? $settings[$key] : null;
 
-                if (null !== $widgetSettings) {
-                    $data['visible'] = isset($widgetSettings['visible']) ? $widgetSettings['visible'] : true;
+            if (null !== $widgetSettings) {
+                $data['visible'] = isset($widgetSettings['visible']) ? $widgetSettings['visible'] : true;
 
-                    if (isset($widgetSettings['position'])) {
-                        $position = $widgetSettings['position'];
-                        $data['col'] = 1 + (($position - 1 ) % 3);
-                        $data['row'] = (int) (1 + (floor(($position - 1 )/ 3)));
-                    }
-                } else {
-                    $data['visible'] = true;
-                    $data['col'] = 1 + (($total - $i - 1) % 3);
-                    $data['row'] = (int) (1 + (floor(($total - $i) / 3)));
+                if (isset($widgetSettings['position'])) {
+                    $position = $widgetSettings['position'];
+                    $data['col'] = 1 + (($position - 1 ) % 3);
+                    $data['row'] = (int) (1 + (floor(($position - 1 )/ 3)));
                 }
-                $i++;
+            } else {
+                $data['visible'] = true;
+                $data['col'] = 1 + (($total - $i - 1) % 3);
+                $data['row'] = (int) (1 + (floor(($total - $i) / 3)));
             }
+            $i++;
         }
 
         return $datas;
