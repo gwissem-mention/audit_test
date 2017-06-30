@@ -74,8 +74,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique'})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-actif'})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs (12 derniers mois)</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique', 'domain': domainForFilters})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-actif', 'domain': domainForFilters})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs (12 derniers mois)</a></li>
                                     <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
                                     <li><strong>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
                                 </ol>
@@ -96,8 +96,8 @@
 
                                 <div class="panel-body">
                                     <ol>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur'})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur'})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
+                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
+                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
                                         <li><strong>{{blocAmbassadeur['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
                                         <li><strong>{{blocAmbassadeur['ambCandidatsRecues']}}</strong> candidatures reçues</li>
                                         <li><strong>{{blocAmbassadeur['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
@@ -120,8 +120,8 @@
 
                                 <div class="panel-body">
                                     <ol>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert'})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert'})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
+                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
+                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
                                         <li><strong>{{blocExpert['expCandidatsRecues']}}</strong> candidatures reçues</li>
                                         <li><strong>{{blocExpert['contribution']}}</strong> contributions au forum depuis 7 jours</li>
                                     </ol>
@@ -142,9 +142,9 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'point-dur'})}}"><strong>{{blocObjets['points-durs']}}</strong> points durs</a></li>
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'point-dur', 'domain': domainForFilters})}}"><strong>{{blocObjets['points-durs']}}</strong> points durs</a></li>
                                     <li><strong>{{blocObjets['productions']}}</strong> productions</li>
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'non-publie'})}}"><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</a></li>
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'non-publie', 'domain': domainForFilters})}}"><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</a></li>
                                     <li><strong>{{blocObjets['nb-notes']}}</strong> notes</span>, <strong>{{blocObjets['nb-commentaires']}}</strong> commentaires</li>
                                     <li><strong>{{blocObjets['pourcent-note-publication']}}</strong>% des notes > 3,5/5</li>
                                 </ol>

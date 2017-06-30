@@ -24,9 +24,25 @@ class UserGrid extends Grid implements GridInterface
         $this->setButtonSize(49);
     }
 
-    public function setDefaultFiltreFromController($filtre)
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->_grid->setId($id);
+    }
+
+    /**
+     * @param string $filtre
+     * @param string|null $domain
+     */
+    public function setDefaultFiltreFromController($filtre, $domain = null)
     {
         $filtres = [];
+
+        if (null !== $domain) {
+            $filtres['domaines'] = $domain;
+        }
 
         $this->setPersistence(false);
 
@@ -43,12 +59,8 @@ class UserGrid extends Grid implements GridInterface
             case 'Candidat-expert':
                 $filtres['expert'] = 1;
                 break;
-            case 'Utilisateur-hopital-numerique':
-                $filtres['domaines'] = 'Mon Hôpital Numérique';
-                break;
             case 'Utilisateur-actif':
                 $filtres['etat'] = 'Actif';
-                $filtres['domaines'] = 'Mon Hôpital Numérique';
                 //Not working
                 $filtres['visitCount'] = ['operator' => 'gt', 'from' => '0'];
                 break;
