@@ -166,10 +166,15 @@
                         {%- set KnpMenu = knp_menu_get('menu-admin', [], {'breadcrumb' : 'yes'}) %}
                         {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::breadcrumbs.html.twig', 'currentAsLink':'0'}) }}
 
-                        <h1>{% block h1Title %}{% endblock %}</h1>
-                        <div class="options">
-                            <div class="btn-toolbar">
-                                {% block toolbarButton %}{% endblock %}
+                        <div id="main-title">
+                            <h1>{% block h1Title %}{% endblock %}</h1>
+
+                            {% block title_description %}{% endblock %}
+
+                            <div class="options">
+                                <div class="btn-toolbar">
+                                    {% block toolbarButton %}{% endblock %}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -6,6 +6,28 @@
     Tableau de bord
 {% endblock %}
 
+{% block title_description %}
+    <div class="dashboard-selectors">
+        <div class="form-inline">
+            <div class="form-group">
+                <select class="form-control" name="domains_select" id="domains-select">
+                    <option value="all" data-url="{{ path('hopital_numerique_admin_homepage') }}">{{ 'account.service.domain_list.all'|trans }}</option>
+                    {% for domain in userDomains %}
+                        <option value="{{ domain.id }}" {{ domain.id == selectedDomain ? 'selected' : '' }}  data-url="{{ path('hopital_numerique_admin_homepage', {"domaine": domain.id}) }}">{{ domain.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id="populate-block" class="form-inline text-right">
+            <label class="control-label" for="block-select">Ajouter un widget</label>
+            <div class="form-group">
+                <select class="form-control" name="block_select" id="block-select"></select>
+            </div>
+            <button class="btn btn-default">Ajouter</button>
+        </div>
+    </div>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-admin-default-index.js"
@@ -37,30 +59,6 @@
 {% block body %}
     <div class="tdb">
         {% if 1 in app.user.getDomainesId() %}
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <select class="form-control" name="domains_select" id="domains-select">
-                                <option value="all" data-url="{{ path('hopital_numerique_admin_homepage') }}">{{ 'account.service.domain_list.all'|trans }}</option>
-                                {% for domain in userDomains %}
-                                    <option value="{{ domain.id }}" {{ domain.id == selectedDomain ? 'selected' : '' }}  data-url="{{ path('hopital_numerique_admin_homepage', {"domaine": domain.id}) }}">{{ domain.nom }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div id="populate-block" class="form-inline text-right">
-                        <label class="control-label" for="block-select">Ajouter un widget</label>
-                        <div class="form-group">
-                            <select class="form-control" name="block_select" id="block-select"></select>
-                        </div>
-                        <button class="btn btn-default">Ajouter</button>
-                    </div>
-                </div>
-            </div>
 
             <div class="gridster-data hidden">
                 <ul class="list-unstyled">

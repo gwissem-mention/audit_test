@@ -15,8 +15,8 @@ $(function() {
     gridster = $(".gridster ul").gridster({
         widget_margins         : [5, 10],
         widget_base_dimensions : [330, 155],
-        max_cols               : 3,
-        min_cols               : 3,
+        min_cols               : 1,
+        max_cols               : 10,
         serialize_params       : function($w, wgd) {
             return {
                 col: wgd.col,
