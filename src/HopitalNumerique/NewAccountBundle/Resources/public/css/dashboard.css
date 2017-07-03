@@ -1,55 +1,67 @@
-.gridster ul li .panel .panel-body {
+#account-dashboard .sticked-brick {
+    margin: 0 10px;
+}
+
+#account-dashboard ul.sticked-brick li {
+    margin-bottom: 20px;
+}
+
+#account-dashboard .gridster ul li .panel .panel-body {
     overflow: hidden;
     overflow-y: auto;
     height: 200px;
 }
 
-.gridster ul li .panel .panel-body ol {
+#account-dashboard .gridster ul li .panel .panel-body ol {
     padding: 0;
 }
 
-.gridster ul li .panel .panel-body ol li {
+#account-dashboard .gridster ul li .panel .panel-body ol li {
     list-style: none;
 }
 
 
-.dashboard-brick .icon {
+#account-dashboard .dashboard-brick .icon {
     font-family: "FontAwesome";
     display: inline-block;
     font-style: normal;
     margin-right: 5px;
-
+    font-weight: normal;
 }
 
-.dashboard-brick .icon.profile::before {
+#account-dashboard .dashboard-brick .icon.profile::before {
     content: "\f007";
 }
 
-.dashboard-brick .icon.intervention-request::before,
-.dashboard-brick .icon.cdp::before {
+#account-dashboard .dashboard-brick .icon.intervention-request::before,
+#account-dashboard .dashboard-brick .icon.cdp::before {
     content: "\f075";
 }
 
-.dashboard-brick .icon.most-viewed-object::before,
-.dashboard-brick .icon.last-viewed-object::before,
-.dashboard-brick .icon.object-suggestion::before
+#account-dashboard .dashboard-brick .icon.most-viewed-object::before,
+#account-dashboard .dashboard-brick .icon.last-viewed-object::before,
+#account-dashboard .dashboard-brick .icon.object-suggestion::before
 {
     content: "\f06e";
 }
 
-.dashboard-brick .icon.object-updated::before {
+#account-dashboard .dashboard-brick .icon.object-updated::before {
     content: "\f129";
 }
 
-.dashboard-brick .icon.user-activity::before {
+#account-dashboard .dashboard-brick .icon.user-activity::before {
     content: "\f080";
 }
 
 
-.dashboard-brick .icon.forum::before {
+#account-dashboard .dashboard-brick .icon.forum::before {
     content: "\f0c0";
 }
 
-.dashboard-brick .icon.new-search-results::before {
+#account-dashboard .dashboard-brick .icon.new-search-results::before {
     content: "\f002";
+}
+
+#account-dashboard .dashboard-brick .profile-completion {
+    margin-top: 20px;
 }

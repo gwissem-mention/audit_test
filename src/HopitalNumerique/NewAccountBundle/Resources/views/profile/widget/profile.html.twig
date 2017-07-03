@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-2">
-        <img src="{{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}" class="avatar">
+        <div class="avatar" style="background-image: url({{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}"></div>
     </div>
 
     <div class="col-md-10">
@@ -15,16 +15,18 @@
 
         {% if user.organizationLabel and user.jobLabel %}
             {{ user.organizationLabel }} {{ user.jobLabel }}
+        {% elseif user.organization and user.jobLabel %}
+            {{ user.organization.nom }} {{ user.jobLabel }}
         {% else %}
             {{ 'specify_job'|trans }}
         {% endif %}
     </div>
 </div>
 
-<div>
+<div class="profile-completion">
     {{ 'profile_completion'|trans }}
     <div class="progress progress-striped">
-        <div class="progress-bar" style="width: {{ completion }}%;">{{ completion }}%</div>
+        <div class="progress-bar progress-bar-{{ completion < 33 ? 'danger' : completion >= 66 ? 'success' : 'warning' }}" style="width: {{ completion }}%;">{{ completion }}%</div>
     </div>
 
     {% if completion == 100 %}

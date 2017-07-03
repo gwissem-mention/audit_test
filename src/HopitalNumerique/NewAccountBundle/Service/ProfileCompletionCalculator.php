@@ -32,7 +32,6 @@ class ProfileCompletionCalculator
         // Specific conditions for structure
         if (!empty($propertyAccessor->getValue($user, 'organization'))) {
             $structureFields = ['organization', 'activities'];
-
         } elseif (!empty($propertyAccessor->getValue($user, 'organizationLabel'))) {
             $structureFields = ['organizationType', 'organizationLabel', 'region', 'county'];
         } else {
@@ -43,7 +42,7 @@ class ProfileCompletionCalculator
             list($fieldsCount, $fieldsCompletedCount) = $this->testField($fieldsCount, $fieldsCompletedCount, $user, $field);
         }
 
-        return $this->round($fieldsCompletedCount / ($fieldsCount ?: 1) * 100);
+        return round($fieldsCompletedCount / ($fieldsCount ?: 1) * 100);
     }
 
     /**
@@ -99,28 +98,6 @@ class ProfileCompletionCalculator
     }
 
     /**
-     * Round value with specific rules.
-     * Round step => 5
-     * More than 95 => round to 95
-     *
-     * @param $value
-     *
-     * @return float|int
-     */
-    private function round($value)
-    {
-        if ($value === 100) {
-            return 100;
-        }
-
-        if ($value >= 95 && $value < 100) {
-            return 95;
-        }
-
-        return ceil($value / 5) * 5;
-    }
-
-    /**
      * Get required fields to check for completion rate calcul
      *
      * @return array
@@ -146,8 +123,6 @@ class ProfileCompletionCalculator
             ],
             'skills' => [
                 'presentation',
-                'computerSkills',
-                'hobbies',
             ],
         ];
     }

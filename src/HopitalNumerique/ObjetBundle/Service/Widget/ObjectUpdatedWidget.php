@@ -30,7 +30,7 @@ class ObjectUpdatedWidget extends WidgetAbstract
     public function getWidget()
     {
         $objects = $this->objectRepository->getUpdatedObjectsSinceLastView($this->tokenStorage->getToken()->getUser());
-
+        
         $html = $this->twig->render('HopitalNumeriqueObjetBundle:widget:object_updated.html.twig', [
             'objects' => $objects,
         ]);

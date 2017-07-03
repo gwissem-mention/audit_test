@@ -1,9 +1,15 @@
-<ol>
-    {% for object in objects %}
-        <li>
-            <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': object.id}) }}">
-                {{ object.titre }}
-            </a>
-        </li>
-    {% endfor %}
-</ol>
+{% trans_default_domain 'widget' %}
+
+{% if objects|length %}
+    <ol>
+        {% for object in objects %}
+            <li>
+                <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': object.id}) }}">
+                    {{ object.titre }}
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <b>{{ 'last_viewed_objects.empty'|trans }}</b>
+{% endif %}

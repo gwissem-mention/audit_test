@@ -26,31 +26,34 @@
         {% set hasStickedWidget = true %}
     {% endfor %}
 
-    {% if hasStickedWidget %}
-        <ul class="list-unstyled" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
-            {% set k = 0 %}
-            {% for widget in widgets if widget.sticked %}
-                {{ block('brick') }}
-                {% set k = k + 1 %}
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div id="account-dashboard">
+        {% if hasStickedWidget %}
+            <ul class="list-unstyled sticked-brick" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
+                {% set k = 0 %}
+                {% for widget in widgets if widget.sticked %}
+                    {{ block('brick') }}
+                    {% set k = k + 1 %}
+                {% endfor %}
+            </ul>
+        {% endif %}
 
-    <div class="gridster">
-        <ul class="list-unstyled" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
-            {% set k = 0 %}
-            {% for widget in widgets if not widget.sticked %}
-                {{ block('brick') }}
-                {% set k = k + 1 %}
-            {% endfor %}
-        </ul>
+        <div class="gridster">
+            <ul class="list-unstyled" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
+                {% set k = 0 %}
+                {% for widget in widgets if not widget.sticked %}
+                    {{ block('brick') }}
+                    {% set k = k + 1 %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
 {% endblock %}
 
 {% block brick %}
     <li data-col="{{ k%2+1 }}" data-row="{{ ((k+2)/2)|round(0, 'floor') }}" data-sizex="{{ widget.isSticked ? 2 : 1 }}" data-sizey="1" data-id="{{ widget.name }}">
         <div class="panel panel-default dashboard-brick">
-            <div class="panel-heading">
+            <div class="panel-heading custom-panel-heading">
                 <div class="options pull-right">
                     {% if not widget.sticked %}
                         <i class="fa fa-arrows draggable"></i>
