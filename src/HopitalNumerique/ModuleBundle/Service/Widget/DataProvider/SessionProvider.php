@@ -111,6 +111,10 @@ class SessionProvider
                 'hopitalnumerique_module_module_show_front',
                 ['id' => $session->getModule()->getId()]
             ),
+            'certificate' => $this->router->generate(
+                'hopitalnumerique_module_inscription_attestation_front',
+                ['id' => $session->getModule()->getId()]
+            ),
             'description' => $this->router->generate(
                 'hopitalnumerique_module_session_description_front',
                 ['id' => $session->getId()]
