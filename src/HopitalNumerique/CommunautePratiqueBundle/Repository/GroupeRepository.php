@@ -98,6 +98,22 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @return integer
+     */
+    public function countActiveGroups()
+    {
+        return $this->createQueryBuilder('g')
+            ->select('COUNT(g)')
+            ->andWhere('g.actif = TRUE')
+            ->andWhere('g.dateDemarrage <= :today')
+            ->andWhere('g.dateFin >= :today')
+            ->setParameter('today', (new \DateTime())->setTime(0, 0, 0))
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
      * Retourne les groupes terminés.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine

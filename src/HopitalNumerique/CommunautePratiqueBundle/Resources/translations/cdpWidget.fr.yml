@@ -1,2 +1,5 @@
 title: Communauté de pratiques
-content: En cours de création
+
+members_count: "{0,1} %count% membre de la communaute |[1, Inf] %count% membres de la communauté"
+groups_count: "{0,1} %count% groupe en cours |[1, Inf] %count% groupes en cours"
+group_membership: "Je participe à :"

@@ -835,6 +835,20 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @return integer
+     */
+    public function countAddCDPUsers()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('COUNT(DISTINCT user.id)')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
      * @param Domaine[] $domains
      *
      * @return integer
