@@ -30,35 +30,35 @@
                         <a
                             href="{{ path('hopital_numerique_cart_report_factory_get', {'report': report.id}) }}"
                             data-add-do-report-uri="{{ path('hopital_numerique_cart_report_item_add', {'report': report.id}) }}"
-                            class="btn btn-primary btn-xs report-edit"
+                            class="btn btn-primary btn-sm report-edit"
                             title="{{ 'list.actions.edit.title'|trans|e }}"
                         >
                             <i class="fa fa-pencil"></i>
                         </a>
                         <a
                             href="{{ path('hopital_numerique_cart_report_download', {'report': report.id}) }}"
-                            class="btn btn-success btn-xs"
+                            class="btn btn-success btn-sm"
                             title="{{ 'list.actions.download.title'|trans|e }}"
                         >
                             <i class="fa fa-download"></i>
                         </a>
                         <a
                             href="{{ path('hopital_numerique_cart_report_send', {'report': report.id}) }}"
-                            class="btn btn-default btn-xs report-send"
+                            class="btn btn-default btn-sm report-send"
                             title="{{ 'list.actions.send.title'|trans|e }}"
                         >
                             <i class="fa fa-envelope-o"></i>
                         </a>
                         <a
                             href="{{ path('hopital_numerique_cart_report_get_shares', {'report': report.id}) }}"
-                            class="btn btn-info btn-xs report-share"
+                            class="btn btn-info btn-sm report-share"
                             title="{{ 'list.actions.share.title'|trans|e }}"
                         >
                             <i class="fa fa-share"></i>
                         </a>
                         <a
                             href="{{ path('hopital_numerique_cart_report_remove', {'report': report.id}) }}"
-                            class="btn btn-danger btn-xs report-remove"
+                            class="btn btn-danger btn-sm report-remove"
                             data-confirm="{{ 'list.actions.remove.confirm'|trans }}"
                             title="{{ 'list.actions.remove.title'|trans|e }}"
                         >

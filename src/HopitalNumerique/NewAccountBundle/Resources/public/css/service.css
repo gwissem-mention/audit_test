@@ -7,12 +7,16 @@
 }
 
 #my-account #services .actions-column {
-    text-align: center;
+    text-align: right;
 }
 
 #my-account #services ul.introduction-summary {
     list-style: none;
     line-height: 25px;
+}
+
+#my-account #services table td {
+    vertical-align: middle;
 }
 
 #my-account #services table .parent-row {
@@ -22,13 +26,14 @@
 
 #my-account #services table .parent-row td:nth-child(1) {
     font-weight: bold;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 #my-account #services .icon {
     font-family: 'FontAwesome', 'serif';
     padding-right: 5px;
     font-style: normal;
+    font-weight: normal;
 }
 
 #my-account #services .icon.viewed-objects::before {
