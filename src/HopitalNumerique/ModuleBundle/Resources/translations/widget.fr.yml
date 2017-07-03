@@ -30,3 +30,12 @@ session:
             registrations: Télécharger l'ensemble des inscriptions à la session
             sheet: Télécharger la feuille d'émargement
             evaluations: Télécharger l'ensemble des évaluations de la session
+
+module_session:
+    title: Mes modules
+    to_evaluate:
+        title: Sessions à évaluer
+        empty: - Aucune session à évaluer -
+    next:
+        title: Sessions à venir
+        empty: - Aucune session à venir -

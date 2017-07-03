@@ -1,0 +1,35 @@
+{% trans_default_domain 'widget' %}
+
+{{ 'module_session.to_evaluate.title'|trans }}<br />
+{% if sessions|length %}
+    <ol>
+        {% for session in sessions %}
+            <li>
+                <a href="{{ session.actions.certificate }}" class="pull-right" target="_blank"><i class="fa fa-file"></i></a>
+                - <a href="{{ session.actions.module }}" target="_blank">{{ session.info.module_title }} ({{ session.info.date_session }})</a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <div class="text-center">
+        {{ 'module_session.to_evaluate.empty'|trans }}
+    </div>
+{% endif %}
+
+<hr>
+
+
+{{ 'module_session.next.title'|trans }}<br />
+{% if registrations|length %}
+    <ol>
+        {% for registration in registrations %}
+            <li>
+                - <a href="{{ registration.actions.module }}" target="_blank">{{ registration.info.module_title }} ({{ registration.info.session_date }})</a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <div class="text-center">
+        {{ 'module_session.next.empty'|trans }}
+    </div>
+{% endif %}

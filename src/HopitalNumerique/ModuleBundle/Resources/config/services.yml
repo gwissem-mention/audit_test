@@ -112,6 +112,18 @@ services:
             - '@hopitalnumerique_module.service.session_transformer'
         public: false
 
+    hopitalnumerique_module.widget.module_session:
+        class: HopitalNumerique\ModuleBundle\Service\Widget\ModuleSessionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_module.service.registration_transformer'
+            - '@hopitalnumerique_module.service.session_transformer'
+        public: false
+
     hopitalnumerique_module.service.registration_transformer:
         class: HopitalNumerique\ModuleBundle\Service\Widget\DataProvider\RegistrationProvider
         arguments:
