@@ -153,7 +153,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 // Envoi du mail d'alert pour les animateurs
                 $destinataires = [];
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
-                    $destinataires[$animateur->getNom()] = $animateur->getEmail();
+                    $destinataires[$animateur->getName()] = $animateur->getEmail();
                 }
                 $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires, $user, $groupe);
             }

@@ -1,3 +1,17 @@
 {% trans_default_domain 'cdpWidget' %}
 
-<b>{{ 'content'|trans }}</b>
+{{ 'members_count'|transchoice(cdpMembersCount) }}<br />
+{{ 'groups_count'|transchoice(groupsCount) }}<br />
+
+
+{% if userGroups|length %}
+    <hr>
+    {{ 'group_membership'|trans }}
+    <ul>
+        {% for group in userGroups %}
+            <li>
+                {{ group.titre }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

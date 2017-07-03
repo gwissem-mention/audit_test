@@ -62,6 +62,8 @@ services:
             - '@twig'
             - '@security.token_storage'
             - '@translator'
+        calls:
+            - [setRepositories, ['@hopitalnumerique_user.repository.user', '@hopitalnumerique_communautepratique.repository.groupe']]
         public: false
 
     hopitalnumerique_communautepratique.repository.group:
