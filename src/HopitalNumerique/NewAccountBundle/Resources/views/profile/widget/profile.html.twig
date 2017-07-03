@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-2">
-        <img src="{{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}" class="avatar">
+        <div class="avatar" style="background-image: url({{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}"></div>
     </div>
 
     <div class="col-md-10">
