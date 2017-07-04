@@ -56,10 +56,7 @@ class RiskSynthesisFactory
 
                 $riskSynthesis->parents[$parentReference->getReference()->getLibelle()] = RiskSynthesisRiskDTO::createFromGuidedSearchSteps($steps, $user);
 
-                $step = $steps->first();
-                if ($step) {
-                    $riskSynthesis->parents[$parentReference->getReference()->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generate($step);
-                }
+                $riskSynthesis->parents[$parentReference->getReference()->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generateFromGuidedSearchAndStepPath($guidedSearch, $parentReference->getId());
 
                 if ($parentReference->getShowChildren() && $parentReference->getReference()->getEnfants()->count() > 0) {
                     foreach ($parentReference->getReference()->getEnfants() as $subReference) {
@@ -76,10 +73,7 @@ class RiskSynthesisFactory
 
                         $riskSynthesis->subReferences[$parentReference->getReference()->getLibelle()][$subReference->getLibelle()] = RiskSynthesisRiskDTO::createFromGuidedSearchSteps($steps, $user);
 
-                        $step = $steps->first();
-                        if ($step) {
-                            $riskSynthesis->subReferences[$parentReference->getReference()->getLibelle()][$subReference->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generate($step);
-                        }
+                        $riskSynthesis->subReferences[$parentReference->getReference()->getLibelle()][$subReference->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generateFromGuidedSearchAndStepPath($guidedSearch, $parentReference->getId() . ':' . $subReference->getId());
                     }
                 }
             }
