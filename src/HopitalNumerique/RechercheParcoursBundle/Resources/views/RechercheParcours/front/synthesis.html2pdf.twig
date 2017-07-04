@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-synthesis-export.css" filter="cssrewrite, ?yui_css"
+        "@bootstrap_css"
+        "@font_awesome_css"
+        "@fancybox_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+    %}
+        <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+    {% endstylesheets %}
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="guided-search-synthesis" id="recherche-par-parcours-details">
+
+        <div class="row">
+            <div class="col-xs-5">
+                <img src="{{ asset('bundles/hopitalnumeriquecore/img/logo-anap.png', null, true) }}">
+            </div>
+            <div class="col-xs-7">
+                <h3>{{ guidedSearch.guidedSearchReference.reference.libelle }}</h3>
+            </div>
+        </div>
+
+        {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/synthesis.html.twig') }}
+
+    </div>
+</div>
+
+
+</body>
+</html>

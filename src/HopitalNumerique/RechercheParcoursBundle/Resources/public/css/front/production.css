@@ -1,0 +1,63 @@
+#recherche-par-parcours-details .productions .count {
+    color: #d60030;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 20px 0 2px 0;
+    text-transform: uppercase;
+}
+
+#recherche-par-parcours-details .productions .count .name {
+    border-style: solid;
+    border-width: 0 0 4px 0;
+}
+
+#recherche-par-parcours-details .productions .result .category {
+    color: #d60030;
+    font-size: 12px;
+    margin: 20px 0 0 0;
+    text-transform: uppercase;
+}
+
+#recherche-par-parcours-details .productions .result .title {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+#recherche-par-parcours-details .productions .result .title a {
+    font-size: 16px;
+    color: #000;
+}
+
+#recherche-par-parcours-details .productions .result .title a .source {
+    color: #5d5d5d;
+    font-size: 85%;
+}
+
+#recherche-par-parcours-details .productions .result .title a .subTitle {
+    color: #5d5d5d;
+    font-size: 85%;
+    margin-left: 15px;
+    margin-top: 3px;
+}
+
+#recherche-par-parcours-details .productions .result .description {
+    font-size: 13px;
+}
+
+#recherche-par-parcours-details .productions .result .related {
+    text-align: right;
+}
+
+#recherche-par-parcours-details .productions .result .related a {
+    margin-left: 30px;
+    color: #000;
+    font-weight: bold;
+}
+
+#recherche-par-parcours-details .productions .result .related .modal {
+    text-align: left;
+}
+
+#recherche-par-parcours-details .productions .result .related .modal a {
+    margin: 0;
+}

@@ -708,6 +708,31 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @return Mail|object
+     */
+    public function getGuidedSearchSynthesisMail()
+    {
+        return $this->findOneById(74);
+    }
+
+    /**
+     * @param string $subject
+     * @param string $sender
+     * @param string $recipient
+     * @param string $content
+     * @param string $filepath
+     *
+     * @return \Swift_Message
+     */
+    public function sendGuidedSearchSynthesis($subject, $sender, $recipient, $content, $filepath)
+    {
+        $mail = $this->sendMail($subject, $sender, $recipient, $content);
+        $mail->attach(\Swift_Attachment::fromPath($filepath));
+
+        return $mail;
+    }
+
+    /**
      * @return object
      */
     public function getCartReportMail()

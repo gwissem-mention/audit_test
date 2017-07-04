@@ -1,0 +1,15 @@
+hopitalnumerique_objet_related_risks_list:
+    path:  /list/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedRisk:list" }
+
+hopitalnumerique_objet_related_risks_add:
+    path:  /{object}/add
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedRisk:add" }
+
+hopitalnumerique_objet_related_risks_reorder:
+    path:  /reorder/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedRisk:reorder" }
+
+hopitalnumerique_objet_related_risks_unlink:
+    path:  /unlink/{object}/{risk}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedRisk:unlink" }

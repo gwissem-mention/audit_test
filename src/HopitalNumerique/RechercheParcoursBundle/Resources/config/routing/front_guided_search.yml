@@ -1,0 +1,16 @@
+hopital_numerique_guided_search_show:
+    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:show }
+
+hopital_numerique_guided_search_step:
+    path: /{guidedSearch}/{guidedSearchReference}-{guidedSearchReferenceAlias}/{parentReference}-{alias}/{subReference}-{subAlias}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:step, subReference: null, subAlias: null }
+
+hopital_numerique_guided_search_step_analyse:
+    path: /analyse/{guidedSearchStep}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:analyse }
+
+hopital_numerique_guided_search_step_share:
+    path: /share/{guidedSearchStep}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:share }
+    methods: POST

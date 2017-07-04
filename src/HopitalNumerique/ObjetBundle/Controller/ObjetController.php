@@ -206,6 +206,7 @@ class ObjetController extends Controller
             'relatedObjects' => $relatedObjects,
             'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
                                                          ->getEntityDomainesCommunsWithUser($objet, $user),
+            'relatedRisks' => $objet->getRelatedRisks(),
         ];
 
         return $this->renderForm(
@@ -496,6 +497,7 @@ class ObjetController extends Controller
                     'note' => isset($options['note']) ? $options['note'] : 0,
                     'productions' => isset($options['productions']) ? $options['productions'] : [],
                     'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
+                    'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                     'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
@@ -524,6 +526,7 @@ class ObjetController extends Controller
                         'note' => isset($options['note']) ? $options['note'] : 0,
                         'productions' => isset($options['productions']) ? $options['productions'] : [],
                         'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
+                        'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                         'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
@@ -638,6 +641,7 @@ class ObjetController extends Controller
                 'note' => isset($options['note']) ? $options['note'] : 0,
                 'productions' => isset($options['productions']) ? $options['productions'] : [],
                 'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
+                'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                 'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],

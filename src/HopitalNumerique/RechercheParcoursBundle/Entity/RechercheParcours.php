@@ -128,7 +128,7 @@ class RechercheParcours
     /**
      * Get recherchesParcoursDetails.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|RechercheParcoursDetails[]
      */
     public function getRecherchesParcoursDetails()
     {
@@ -138,7 +138,7 @@ class RechercheParcours
     /**
      * Get recherchesParcoursDetails ids.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array
      */
     public function getRecherchesParcoursDetailsIds()
     {
@@ -165,10 +165,14 @@ class RechercheParcours
      * Set reference.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     *
+     * @return RechercheParcours
      */
     public function setReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
     {
         $this->reference = $reference;
+
+        return $this;
     }
 
     /**

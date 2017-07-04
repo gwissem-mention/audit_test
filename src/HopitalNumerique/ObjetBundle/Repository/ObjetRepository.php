@@ -5,8 +5,10 @@ namespace HopitalNumerique\ObjetBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -616,6 +618,48 @@ class ObjetRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $mandatoryReferencesId
+     * @param array $optionalReferencesId
+     * @param int $entityType
+     *
+     * @return Objet[]
+     */
+    public function getObjectForReferences($mandatoryReferencesId = [], $optionalReferencesId = [], $entityType = Entity::ENTITY_TYPE_OBJET)
+    {
+        $queryBuilder = $this->createQueryBuilder('o')
+            ->setParameter('entityType', $entityType)
+        ;
+
+        foreach ($mandatoryReferencesId as $k => $referenceId) {
+            $queryBuilder
+                ->join(
+                    EntityHasReference::class,
+                    sprintf('ehr%d', $k),
+                    Expr\Join::WITH,
+                    sprintf('ehr%d.entityId = o.id AND ehr%d.entityType = :entityType', $k, $k)
+                )
+                ->join(
+                    sprintf('ehr%d.reference', $k),
+                    sprintf('r%d', $k),
+                    Expr\Join::WITH,
+                    sprintf('r%d.id = :referenceId%d', $k, $k)
+                )
+                ->setParameter(sprintf('referenceId%d', $k), $referenceId)
+            ;
+        }
+
+        if (count($optionalReferencesId)) {
+            $queryBuilder
+                ->join(EntityHasReference::class, 'ehr', Expr\Join::WITH, 'ehr.entityId = o.id AND ehr.entityType = :entityType')
+                ->join('ehr.reference', 'r', Expr\Join::WITH, 'r.id IN (:referencesId)')
+                ->setParameter('referencesId', $optionalReferencesId)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

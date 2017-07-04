@@ -1,0 +1,138 @@
+list:
+    publication_type:
+        risk: Risques
+        production: Productions
+        hot_point: Points durs
+
+title: Parcours guidé
+
+entry_point:
+    metadesc: Page de recherche par parcours
+    metakeywords: recherche par parcours
+    highlight: Parcourir les étapes projets
+
+edit:
+    form:
+        title: Informations
+
+step:
+    objects:
+        result_count: "{0} %name% Aucun résultat|{1} %name% %count% résultat|[1, Inf[ %name% %count% résultats"
+        related_risk: "{0} Aucun risque associé|{1} %count% risque associé|[1, Inf[ %count% risques associés"
+        related_hot_point: "{0} Aucun point dur associé|{1} %count% point dur associé|[1, Inf[ %count% points durs associés"
+        related_production: "{0} Aucune production associée|{1} %count% production associée|[1, Inf[ %count% productions associées"
+    risks:
+        header:
+            step: Étape
+            sub_step: Sous-étape
+            nature: Nature
+            label: Libellé
+            probability: Probabilité
+            impact: Impact
+            criticality: Criticité
+            initialSkills: Maitrise initiale
+            currentSkills: Maitrise actuelle
+            relatedResources: |
+                Ressources
+                suggérées
+            relatedResourcesSL: Ressources suggérées
+            comment: Commentaire
+            action: Action de maîtrise
+            actor: Acteur
+            deadline: Échéance
+            state: État d'avancement
+        skills_rate:
+            empty: NC
+            rate: %rate% %
+        actions:
+            remove: Retirer de la liste
+            analyse:
+                text: Analyse
+            export:
+                csv:
+                    label: Export CSV
+                xls:
+                    label: Export Excel
+        remove:
+            notifications:
+                success: Le risque a bien été retiré.
+        add:
+            title: Ajouter un risque
+            submit: Ajouter
+            notifications:
+                success: Le risque a bien été créé.
+        removed_risks:
+            title: Les éléments retirés de ma liste
+            submit: Remettre le risque dans la liste
+            notifications:
+                success: Le risque a bien été ajouté.
+                error: Une erreur s'est produite. Vérifier votre saisie avant de recommencer.
+        excluded_objects:
+            description: Masquer la ressource dans les exports.
+            header:
+                title: Titre
+                exclude: Exclure
+        modal:
+            close:
+                label: Fermer
+            save:
+                label: Sauvegarder
+    share:
+        btn:
+            title: Partager
+        modal:
+            title: Partage de recherche guidée
+            already_shared:
+                description: 'Cette recherche guidée est déjà partagée avec :'
+            form:
+                email:
+                    label: Adresse e-mail
+                initial_data:
+                    label: Partager aussi mes réponses, y compris mes commentaires
+            close:
+                label: Fermer
+            save:
+                label: Partager
+        notifications:
+            error: Une erreur s'est produite. Veuillez vérifier les informations renseignées dans le formulaire.
+            already_shared_with_user: La recherche guidée est déjà partagée avec cet utilisateur.
+            user_not_found: E-mail non trouvé sur la plateforme.
+    synthesis:
+        title: Synthèse
+        actions:
+            mail:
+                title: Envoyer le PDF par e-mail
+                notifications:
+                    success: Votre synthèse d'analyse a bien été envoyée.
+                form:
+                    recipient:
+                        label: Destinataire
+                    sender:
+                        label: Expéditeur
+                    subject:
+                        label: Sujet
+                    content:
+                        label: Message
+                save:
+                    text: Envoyer
+            pdf:
+                title: Export PDF
+            csv:
+                title: Export CSV
+            xlsx:
+                title: Export Excel
+        global:
+            title: Analyse globale
+        main:
+            title: Étapes principales
+        secondary:
+            title: Étapes secondaires de %name%
+        step:
+            title: Analyse par étape
+        initial_skills_rate: "Maîtrise totale initiale :"
+        current_skills_rate: "Maîtrise totale actuelle :"
+        uncontrolled_critical_risks: "Nombre de risques critiques non maîtrisés :"
+        controlled_critical_risks: "Nombre de risques critiques maîtrisés :"
+        highest_critical_risks:
+            label: "Liste des 5 risques résiduels les plus critiques :"
+            related: "{1} - %count% ressource suggérée|]1,Inf[ - %count% ressources suggérées"

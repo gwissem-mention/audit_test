@@ -1,0 +1,49 @@
+#recherche-par-parcours-details fieldset {
+    margin-bottom: 25px;
+}
+
+#recherche-par-parcours-details .range-selector,
+#recherche-par-parcours-details .actions,
+#recherche-par-parcours-details .criticality {
+    width: 100px;
+}
+
+#recherche-par-parcours-details .probability,
+#recherche-par-parcours-details .impact
+{
+    width: 100%;
+}
+
+#recherche-par-parcours-details tbody .criticality {
+    background-color: #2ecc71;
+    text-align: center;
+    font-weight: bold;
+}
+
+#recherche-par-parcours-details tbody .criticality.high {
+    background-color: #e74c3c;
+}
+
+#recherche-par-parcours-details tbody .criticality.medium {
+    background-color: #e67e22;
+}
+
+#recherche-par-parcours-details tbody .criticality.low {
+    background-color: #f1c40f;
+}
+
+#recherche-par-parcours-details .skillsRate {
+    display: block;
+    margin-left: 5px;
+    margin-top: 8px;
+    margin-right: 50px;
+}
+
+#recherche-par-parcours-details .skillsRateLabel {
+    text-align: center;
+    width: 40px;
+}
+
+#recherche-par-parcours-details .noInitialSkill {
+    display: none;
+}

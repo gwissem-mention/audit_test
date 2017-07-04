@@ -393,6 +393,14 @@ class Objet implements RoutedItemInterface
     protected $relatedBoards;
 
     /**
+     * @var ArrayCollection|RelatedRisk
+     *
+     * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    protected $relatedRisks;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -419,6 +427,7 @@ class Objet implements RoutedItemInterface
         $this->maitriseUsers = [];
         $this->domaines = new ArrayCollection();
         $this->relatedBoards = new ArrayCollection();
+        $this->relatedRisks = new ArrayCollection();
     }
 
     /**
@@ -1906,6 +1915,45 @@ class Objet implements RoutedItemInterface
     public function removeRelatedBoard(RelatedBoard $relatedBoard)
     {
         $this->relatedBoards->removeElement($relatedBoard);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|RelatedRisk[]
+     */
+    public function getRelatedRisks()
+    {
+        return $this->relatedRisks;
+    }
+
+    /**
+     * @param RelatedRisk $relatedRisk
+     *
+     * @return Objet
+     */
+    public function removeRelatedRisk(RelatedRisk $relatedRisk)
+    {
+        $this->relatedRisks->removeElement($relatedRisk);
+
+        return $this;
+    }
+
+    /**
+     * @param Risk $risk
+     * @param integer|null $position
+     *
+     * @return Objet
+     */
+    public function linkRisk(Risk $risk, $position = null)
+    {
+        foreach ($this->relatedRisks as $relatedRisk) {
+            if ($relatedRisk->getRisk()->getId() === $risk->getId()) {
+                return $this;
+            }
+        }
+
+        $this->relatedRisks->add(new RelatedRisk($this, $risk, $position));
 
         return $this;
     }

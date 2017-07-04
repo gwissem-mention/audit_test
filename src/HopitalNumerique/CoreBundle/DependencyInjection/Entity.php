@@ -28,6 +28,7 @@ use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -716,7 +717,13 @@ class Entity
 
                 return 'javascript:Contact_Popup.display(' . $parameters . ', window.location.href);';
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
+                return $this->router->generate(
+                    'hopital_numerique_guided_search_show',
+                    [
+                        'guidedSearchReference' => $entityId,
+                        'guidedSearchReferenceAlias' => (new Chaine($entity->getReference()->getLibelle()))->minifie()
+                    ]
+                );
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
             case self::ENTITY_TYPE_SUGGESTION:

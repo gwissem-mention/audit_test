@@ -447,6 +447,36 @@
                                         </fieldset>
                                     </div>
                                 </div>
+
+                                <div class="row resource-row">
+                                    <div class="col-md-12">
+                                        <a href="{{path('hopitalnumerique_objet_related_risks_list', {'object':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un risque lié"><i class="fa fa-plus"></i></a>
+
+                                        <fieldset>
+                                            <legend>Risques liés</legend>
+
+                                            <p class="designForBlank" style="{% if relatedRisks|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un risque.</p>
+                                            <div class="dd" id="risks-nestable" data-reorder-uri="{{ path('hopitalnumerique_objet_related_risks_reorder', {'object': objet.id}) }}">
+                                                <ol class="dd-list">
+                                                    {% for relatedRisk in relatedRisks %}
+                                                        <li class="dd-item dd3-item" data-id="{{ relatedRisk.risk.id }}">
+                                                            <div class="dd-handle dd3-handle"></div>
+                                                            <div class="dd3-content">
+                                                                {{ relatedRisk.risk }}
+                                                            </div>
+                                                            <div class="dd3-actions">
+                                                                <a href="#" class="pull-right dd3-trash" onclick="deleteWithConfirm('{{ path('hopitalnumerique_objet_related_risks_unlink', { 'object':relatedRisk.object.id, 'risk': relatedRisk.risk.id }) }}', false)">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </a>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ol>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
                             </div>
                         {% endif %}
                     </div>

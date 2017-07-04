@@ -5,6 +5,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -207,6 +208,21 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine $domain
+     * @param Reference $reference
+     *
+     * @return array
+     */
+    public function getByDomainAndParent(Domaine $domain, Reference $reference)
+    {
+        return $this
+            ->getRefsByDomaineByParent($reference->getId(), $domain->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * Récupère les différents ref_code des références.
      *
      * @return QueryBuilder
@@ -255,6 +271,23 @@ class ReferenceRepository extends EntityRepository
     public function findByCode($code, $actif = null, $labelOrdered = false)
     {
         return $this->findByCodeParent($code, null, $actif, $labelOrdered);
+    }
+
+    /**
+     * @return Reference[]
+     */
+    public function getPublicationTypes()
+    {
+        return $this->createQueryBuilder('r', 'r.id')
+            ->join('r.codes', 'rc', Expr\Join::WITH, 'rc.label = :code')
+            ->setParameter('code', 'CATEGORIE_OBJET')
+            ->leftJoin('r.parents', 'rp')
+            ->andWhere('r.etat = :active')
+            ->setParameter('active', Reference::STATUT_ACTIF_ID)
+            ->andWhere('rp.id IS NULL')
+
+            ->getQuery()->getResult()
+        ;
     }
 
     /**
