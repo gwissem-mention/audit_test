@@ -1,9 +1,5 @@
-#account-dashboard .sticked-brick {
-    margin: 0 10px;
-}
-
-#account-dashboard ul.sticked-brick li {
-    margin-bottom: 20px;
+#account-dashboard .gridster ul {
+    margin-left: -10px;
 }
 
 #account-dashboard .gridster ul li .panel .panel-body {
