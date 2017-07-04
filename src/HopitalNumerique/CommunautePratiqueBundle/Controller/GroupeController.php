@@ -2,30 +2,37 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
  */
-class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class GroupeController extends Controller
 {
     /**
      * Affiche tous les groupes disponibles.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function listAction(Request $request)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()) {
+        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
-        $groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        $groupeUserEnCour = $this->get('hopitalnumerique_communautepratique.manager.groupe')
         ->findEnCoursByUser($domaine, $this->getUser());
-        $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        $groupeUserAVenir = $this->get('hopitalnumerique_communautepratique.manager.groupe')
         ->findNonDemarresByUser($domaine, $this->getUser());
         $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
 
@@ -33,8 +40,8 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
 
             [
-                'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
-                'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
+                'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
+                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
                 'userGroupesEnCours' => $groupeUser,
             ]
         );
@@ -42,6 +49,11 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
     /**
      * Visualisation d'un groupe.
+     *
+     * @param Request $request
+     * @param Groupe  $groupe
+     *
+     * @return RedirectResponse|Response
      */
     public function viewAction(Request $request, Groupe $groupe)
     {
@@ -55,10 +67,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         }
 
         if ('anon.' != $user) {
-            $inscription = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
+            $inscription = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
 
             if ($inscription->hasInformationManquante($user) || !$user->isInscritCommunautePratique()) {
-                $this->container->get('session')->getFlashBag()->add(
+                $this->addFlash(
                     'warning',
                     'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.'
                 );
@@ -76,7 +88,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
             }
 
-            $security = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security');
+            $security = $this->get('hopitalnumerique_communautepratique.dependency_injection.security');
             if (!$security->canAccessGroupe($groupe)) {
                 if (!$user->hasCommunautePratiqueGroupe($groupe)) {
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_inscrit', [
@@ -85,7 +97,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 }
 
                 if (!$user->isActifInGroupe($groupe)) {
-                    $this->container->get('session')->getFlashBag()->add(
+                    $this->addFlash(
                         'success',
                         'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.'
                     );
@@ -110,6 +122,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
     /**
      * Demande d'inscription d'un membre à un groupe.
+     *
+     * @param Groupe $groupe
+     *
+     * @return RedirectResponse|Response
      */
     public function inscritAction(Groupe $groupe)
     {
@@ -139,23 +155,43 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
     /**
      * Valide l'inscription à la soumission du formulaire.
+     *
+     * @param Groupe $groupe
+     *
+     * @return RedirectResponse
      */
     public function validInscriptionAction(Groupe $groupe)
     {
         $user = $this->getUser();
 
         if (null !== $user && !$user->hasCommunautePratiqueGroupe($groupe)) {
-            if (count($this->container->get('hopitalnumerique_questionnaire.manager.reponse')
-                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0) {
+            if (count($this->get('hopitalnumerique_questionnaire.manager.reponse')
+                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0
+            ) {
                 $user->addCommunautePratiqueGroupe($groupe);
-                $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activée prochainement par un animateur.');
+                $this->get('hopitalnumerique_user.manager.user')->save($user);
+                $this->addFlash('success', 'Votre inscription sera activée prochainement par un animateur.');
                 // Envoi du mail d'alert pour les animateurs
                 $destinataires = [];
+
+                /** @var User $animateur */
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
                     $destinataires[$animateur->getNom()] = $animateur->getEmail();
                 }
-                $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires, $user, $groupe);
+
+                $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
+                $urlGroupe = $currentDomaine->getUrl() . $this->generateUrl(
+                    'hopitalnumerique_communautepratique_groupe_view',
+                    ['groupe' => $groupe->getId()]
+                );
+
+                $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail(
+                    $destinataires,
+                    $user,
+                    $groupe,
+                    $urlGroupe
+                );
             }
         }
 
@@ -164,34 +200,40 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
     /**
      * Contenu de la fenêtre "En savoir plus sur un groupe".
+     *
+     * @param Groupe $groupe
+     *
+     * @return Response
      */
     public function panelInformationsAction(Groupe $groupe)
     {
-        return $this->render(
-            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_informations.html.twig',
-
-            [
-                'groupe' => $groupe,
-            ]
-        );
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_informations.html.twig', [
+            'groupe' => $groupe,
+        ]);
     }
 
     /**
      * Affiche le contenu de la fenêtre de participation aux groupes d'un utilisateur.
+     *
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return Response
      */
     public function panelUserGroupesAction(User $user, Request $request)
     {
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
+        /** @var Domaine $domaine */
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')
             ->findOneById($request->getSession()->get('domaineId'));
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_user_groupes.html.twig',
             [
-                'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                'groupesTermines' => $this->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findTerminesByUser($domaine, $user),
-                'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonDemarresByUser($domaine, $user),
-                'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findEnCoursByUser($domaine, $user),
             ]
         );

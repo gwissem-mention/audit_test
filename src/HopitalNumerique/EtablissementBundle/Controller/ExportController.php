@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\EtablissementBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -12,8 +13,10 @@ class ExportController extends Controller
     /**
      * Export CSV de la liste des etablissement sélectionnés.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return Response
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
@@ -40,14 +43,19 @@ class ExportController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $refs, 'export-etablissements.csv', $kernelCharset);
+        return $this
+            ->get('hopitalnumerique_user.manager.user')
+            ->exportCsv($colonnes, $refs, 'export-etablissements.csv', $kernelCharset)
+        ;
     }
 
     /**
      * Export CSV de la liste des etablissement sélectionnés.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return Response
      */
     public function exportCsvAutresAction($primaryKeys, $allPrimaryKeys)
     {
@@ -61,17 +69,21 @@ class ExportController extends Controller
         $refs = $this->get('hopitalnumerique_user.manager.user')->getEtablissementForExport($primaryKeys);
 
         $colonnes = [
-                            'id' => 'id',
-                            'username' => 'Nom d\'utilisateur',
-                            'nom' => 'Nom',
-                            'prenom' => 'Prénom',
-                            'region' => 'Région',
-                            'autreStructureRattachementSante' => 'Autre structure de rattachement santé',
-                            'archiver' => 'Archivé ?',
-                        ];
+            'id' => 'id',
+            'username' => 'Nom d\'utilisateur',
+            'nom' => 'Nom',
+            'prenom' => 'Prénom',
+            'region' => 'Région',
+            'autreStructureRattachementSante' => 'Autre structure de rattachement santé',
+            'domainName' => 'Domaine(s)',
+            'archiver' => 'Archivé ?',
+        ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $refs, 'export-etablissements-autres.csv', $kernelCharset);
+        return $this
+            ->get('hopitalnumerique_user.manager.user')
+            ->exportCsv($colonnes, $refs, 'export-etablissements-autres.csv', $kernelCharset)
+        ;
     }
 }

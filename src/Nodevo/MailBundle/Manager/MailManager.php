@@ -1140,13 +1140,14 @@ class MailManager extends BaseManager
         }
     }
 
-    public function sendAlerteInscriptionMail($destinataires, User $user, Groupe $groupe)
+    public function sendAlerteInscriptionMail($destinataires, User $user, Groupe $groupe, $urlGroupe)
     {
         $courriel = $this->findOneById(65);
 
         $message = $this->generationMail(null, $courriel, [
             'g' => $groupe->getTitre(),
             'u' => $user->getNomPrenom(),
+            'lienGroupe' => $urlGroupe,
         ]);
 
         foreach ($destinataires as $destinataire) {
