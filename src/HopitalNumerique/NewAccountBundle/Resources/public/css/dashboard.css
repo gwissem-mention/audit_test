@@ -20,6 +20,13 @@
     list-style: none;
 }
 
+#account-dashboard .dashboard-brick ol {
+    margin-top: 3px;
+}
+
+#account-dashboard .dashboard-brick ol li:not(:last-child) {
+    padding-bottom: 4px;
+}
 
 #account-dashboard .dashboard-brick .icon {
     font-family: "FontAwesome";
