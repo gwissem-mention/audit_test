@@ -163,32 +163,33 @@ class UserType extends AbstractType
 
         //Si il y a un utilisateur connecté nous sommes en BO ou dans informations perso
         if ($this->_securityContext->isGranted('ROLE_USER')) {
-            $builder->add('roles', 'entity', [
-                'class' => 'NodevoRoleBundle:Role',
-                'property' => 'name',
-                'required' => true,
-                'label' => 'Groupe associé',
-                'mapped' => false,
-                'empty_value' => ' - ',
-                'attr' => ['class' => 'validate[required]'],
-                'query_builder' => function (EntityRepository $er) {
-                    $qb = $er->createQueryBuilder('ro')
-                        ->where('ro.etat != :etat')
-                        ->setParameter('etat', 4)
-                    ;
-
-                    if (!$this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
-                        $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
-                            ->setParameter('rolesAdmins', [1, 106])
+            $builder
+                ->add('roles', 'entity', [
+                    'class' => 'NodevoRoleBundle:Role',
+                    'property' => 'name',
+                    'required' => true,
+                    'label' => 'Groupe associé',
+                    'mapped' => false,
+                    'empty_value' => ' - ',
+                    'attr' => ['class' => 'validate[required]'],
+                    'query_builder' => function (EntityRepository $er) {
+                        $qb = $er->createQueryBuilder('ro')
+                            ->where('ro.etat != :etat')
+                            ->setParameter('etat', 4)
                         ;
-                    }
 
-                    $qb->orderBy('ro.name');
+                        if (!$this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
+                            $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
+                                ->setParameter('rolesAdmins', [1, 106])
+                            ;
+                        }
 
-                    return $qb;
-                },
-                'data' => $this->_managerRole->findOneBy(['role' => $roles[0]]),
-            ])
+                        $qb->orderBy('ro.name');
+
+                        return $qb;
+                    },
+                    'data' => $this->_managerRole->findOneBy(['role' => $roles[0]]),
+                ])
                 ->add('domaines', 'entity', [
                     'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                     'property' => 'nom',
@@ -230,14 +231,15 @@ class UserType extends AbstractType
 
         //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
         if (!($this->_securityContext->isGranted('ROLE_ARS_CMSI_4'))) {
-            $builder->add('region', 'entity', [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices' => $this->referenceManager->findByCode('REGION'),
-                'property' => 'libelle',
-                'required' => false,
-                'label' => 'Région',
-                'empty_value' => ' - ',
-            ])
+            $builder
+                ->add('region', 'entity', [
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices' => $this->referenceManager->findByCode('REGION'),
+                    'property' => 'libelle',
+                    'required' => false,
+                    'label' => 'Région',
+                    'empty_value' => ' - ',
+                ])
                 ->add('departement', 'entity', [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices' => $this->referenceManager->findByCode('DEPARTEMENT'),
@@ -319,14 +321,15 @@ class UserType extends AbstractType
             $currentResponse,
             $etablissementFieldOptions
         ) {
-
             if (!is_null($etabId)) {
                 $etablissementFieldOptions = array_merge(
                     $etablissementFieldOptions,
                     [
                         'query_builder' => function (EntityRepository $er) use ($etabId) {
-                            return $er->createQueryBuilder('eta')
-                                  ->orderBy('eta.nom', 'ASC')
+                            return $er->createQueryBuilder('etablissement')
+                                ->andWhere('etablissement.id = :id')
+                                ->setParameter('id', $etabId)
+                                ->orderBy('etablissement.nom', 'ASC')
                             ;
                         },
                     ]
@@ -338,7 +341,6 @@ class UserType extends AbstractType
                         : [$currentResponse->getEtablissementRattachementSante()]
                 ;
             }
-
             $form->add('etablissementRattachementSante', EntityType::class, $etablissementFieldOptions);
         };
 
@@ -352,7 +354,10 @@ class UserType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                $etablissementRattachementSanteModifier($event->getForm(), $event->getForm()->getData());
+                $etablissementRattachementSanteModifier(
+                    $event->getForm(),
+                    $event->getData()['etablissementRattachementSante']
+                );
             }
         );
 
