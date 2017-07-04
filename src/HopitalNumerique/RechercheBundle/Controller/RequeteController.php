@@ -2,10 +2,18 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use HopitalNumerique\RechercheBundle\Entity\Requete;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Class RequeteController
+ */
 class RequeteController extends Controller
 {
     /**
@@ -26,8 +34,8 @@ class RequeteController extends Controller
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy([
             'user' => $user,
             'domaine' => $domaineId,
-        ])
-        ;
+        ]);
+
         $consultations = $this->get('hopitalnumerique_objet.manager.consultation')
             ->getLastsConsultations($user, $domaineId)
         ;
@@ -45,13 +53,40 @@ class RequeteController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Requete $search
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(Request $request, Requete $search)
+    {
+        if ($this->getUser()->getId() !== $search->getUser()->getId()) {
+            throw new AccessDeniedException();
+        }
+
+        try {
+            $this->get('doctrine.orm.entity_manager')->remove($search);
+
+            $this->get('doctrine.orm.entity_manager')->flush();
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $this->get('translator')->trans('saved_searches.delete.error', [], 'widget'));
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
+        $this->addFlash('success', $this->get('translator')->trans('saved_searches.delete.success', [], 'widget'));
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
      * Delete d'une requete (AJAX).
      *
      * @param int $id ID de la requete à supprimer
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function ajaxDeleteAction($id)
     {
         $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy(['id' => $id]);
 
@@ -72,7 +107,7 @@ class RequeteController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
+        return new JsonResponse(['success' => true, 'url' => $this->generateUrl('hopital_numerique_requete_homepage')]);
     }
 
     /**
@@ -93,7 +128,7 @@ class RequeteController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Recherche mise à jour avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
+        return new JsonResponse(['success' => true, 'url' => $this->generateUrl('hopital_numerique_requete_homepage')]);
     }
 
     /**
@@ -110,6 +145,8 @@ class RequeteController extends Controller
 
         //get requetes
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy(['user' => $user]);
+
+        /** @var Requete $requete */
         foreach ($requetes as $requete) {
             $isDefault = ($requete->getId() == $id);
             $requete->setDefault($isDefault);
@@ -118,6 +155,33 @@ class RequeteController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Recherche par défaut modifiée avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
+        return new JsonResponse(['success' => true, 'url' => $this->generateUrl('hopital_numerique_requete_homepage')]);
+    }
+
+    /**
+     * @param Request   $request
+     * @param Requete   $search
+     *
+     * @return JsonResponse
+     */
+    public function changeNameAction(Request $request, Requete $search)
+    {
+        if ($this->getUser()->getId() !== $search->getUser()->getId()) {
+            throw new AccessDeniedException();
+        }
+
+        $form = $this->createForm(RequeteType::class, $search, [
+            'csrf_protection' => false,
+        ]);
+
+        $form->submit([
+            'nom' => $request->request->get('text'),
+        ]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get('doctrine.orm.entity_manager')->flush($search);
+        }
+
+        return new JsonResponse();
     }
 }

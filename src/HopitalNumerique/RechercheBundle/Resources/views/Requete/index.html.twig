@@ -53,7 +53,7 @@
                 <div class="actions pull-right">
                     <div class="fa fa-eye" title="Voir le détail" onclick="showDetails('{{path('hopitalnumerique_recherche_referencement_requete_popindetail',{'requete':requete.id})}}')"></div>
                     <div class="fa fa-edit" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_ajax_delete',{'id':requete.id})}}')"></div>
                 </div>
 
                 <div class="clearfix"></div>
