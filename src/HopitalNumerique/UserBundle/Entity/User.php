@@ -2605,7 +2605,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     public function getCommunautePratiqueGroupes()
     {
         foreach ($this->getGroupeInscription() as $inscrit) {
-            $this->communautePratiqueGroupes[] = $inscrit->getGroupe();
+            $this->communautePratiqueGroupes[$inscrit->getGroupe()->getId()] = $inscrit->getGroupe();
         }
 
         return $this->communautePratiqueGroupes;
