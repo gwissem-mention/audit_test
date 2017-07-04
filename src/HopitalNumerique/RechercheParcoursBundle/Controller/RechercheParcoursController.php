@@ -59,21 +59,4 @@ class RechercheParcoursController extends Controller
 
         return new Response('{"success":true}', 200);
     }
-
-    // ----------- FRONT --------------
-
-    /**
-     * Index du front Action.
-     */
-    public function indexFrontAction(Request $request, RechercheParcoursGestion $rechercheParcoursGestion)
-    {
-        $request->getSession()->set('urlToRedirect', $request->getUri());
-
-        //Tableau des étapes du projet
-        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion], ['order' => 'ASC']);
-
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/index.html.twig', [
-            'etapes' => $etapes,
-        ]);
-    }
 }

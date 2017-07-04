@@ -1,0 +1,53 @@
+{% trans_default_domain 'guided_search' %}
+
+<table class="table table-bordered synthesis">
+    <caption>{{ stepTitle }}</caption>
+
+    <thead>
+    <tr>
+        <th></th>
+        {% for label, riskSynthesisRisk in riskSynthesisRisks %}
+            <th>
+                <a href="{{ riskSynthesisRisk.directLink }}">
+                    {{ label }}
+                </a>
+            </th>
+        {% endfor %}
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <th>{{ 'step.synthesis.initial_skills_rate'|trans }}</th>
+        {% for riskSynthesisRisk in riskSynthesisRisks %}
+            <td>
+                {{ riskSynthesisRisk.initialSkillsRate|round }}%
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>{{ 'step.synthesis.current_skills_rate'|trans }}</th>
+        {% for riskSynthesisRisk in riskSynthesisRisks %}
+            <td>
+                {{ riskSynthesisRisk.currentSkillsRate|round }}%
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>{{ 'step.synthesis.uncontrolled_critical_risks'|trans }}</th>
+        {% for riskSynthesisRisk in riskSynthesisRisks %}
+            <td>
+                {{ riskSynthesisRisk.uncontrolledCriticalRisks }}
+            </td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>{{ 'step.synthesis.controlled_critical_risks'|trans }}</th>
+        {% for riskSynthesisRisk in riskSynthesisRisks %}
+            <td>
+                {{ riskSynthesisRisk.controlledCriticalRisks }}
+            </td>
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>

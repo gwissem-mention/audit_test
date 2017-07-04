@@ -1,0 +1,30 @@
+{% trans_default_domain 'guided_search' %}
+
+<fieldset>
+    <legend><h4>{{ 'step.synthesis.global.title'|trans }}</h4></legend>
+
+    <b>{{ 'step.synthesis.initial_skills_rate'|trans }}</b> {{ riskSynthesis.global.initialSkillsRate|round }}%<br />
+    <b>{{ 'step.synthesis.current_skills_rate'|trans }}</b> {{ riskSynthesis.global.currentSkillsRate|round }}%<br />
+    <b>{{ 'step.synthesis.uncontrolled_critical_risks'|trans }}</b> {{ riskSynthesis.global.uncontrolledCriticalRisks }}<br />
+    <b>{{ 'step.synthesis.controlled_critical_risks'|trans }}</b> {{ riskSynthesis.global.controlledCriticalRisks }}<br />
+    <b>{{ 'step.synthesis.highest_critical_risks.label'|trans }}</b>
+    <ul>
+        {% for riskAnalysis in riskSynthesis.global.highestCriticalRisksAnalysis %}
+            <li>
+                {{ riskAnalysis.risk.nature.libelle }} - {{ riskAnalysis.risk.label }} : {{ riskAnalysis.skillsRate|default(0) }}%
+                {% if riskAnalysis.risk.relatedRisks|length %}
+                    {{ 'step.synthesis.highest_critical_risks.related'|transchoice(riskAnalysis.risk.relatedRisks|length) }}
+
+                    {% set types = [] %}
+                    {% for label, count in riskAnalysis.risk.countRelatedRisksObjectType %}
+                        {% set types = types|merge([count~' '~label]) %}
+                    {% endfor %}
+
+                    ({{ types|join(', ') }})
+
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+</fieldset>

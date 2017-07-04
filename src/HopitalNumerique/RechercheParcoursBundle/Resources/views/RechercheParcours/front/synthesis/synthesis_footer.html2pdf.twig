@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-synthesis-export.css" filter="cssrewrite, ?yui_css"
+        "@bootstrap_css"
+        "@font_awesome_css"
+        "@fancybox_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+    %}
+        <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+    {% endstylesheets %}
+</head>
+
+<body>
+
+<div class="container-fluid">
+    {{ include('HopitalNumeriqueCoreBundle:partials:copyright.html.twig') }}
+</div>
+
+
+</body>
+</html>

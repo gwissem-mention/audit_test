@@ -36,8 +36,9 @@
 
 /* En-tête de la page */
 #recherche-par-parcours-details h3{color:#672F9E;font-size: 24px;font-weight: bold;}
-#recherche-par-parcours-details .toolbar .btn {margin-top: 20px;}
+#recherche-par-parcours-details .toolbar > .btn {margin-top: 20px;}
 #recherche-par-parcours-details .en-tete {margin-top: 25px;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
+#recherche-par-parcours-details .publication-type-container {padding-top: 15px;}
 
 /* -- Description + moyenne générale -- */
 #recherche-par-parcours-details .en-tete .description { margin-top: 20px; padding-left: O;}
@@ -85,6 +86,16 @@
 #recherche-par-parcours-details .note .pourcentage.green{color:#5CB85C;}
 #recherche-par-parcours-details .note .pourcentage.yellow{color:#DA7F2C;}
 #recherche-par-parcours-details .note .pourcentage.red{color:#C93358;}
+
+/** Synthesis **/
+#recherche-par-parcours-details.guided-search-synthesis fieldset {
+    margin-top: 20px;
+}
+#recherche-par-parcours-details.guided-search-synthesis table.synthesis caption {
+    font-size: 18px;
+    text-decoration: underline;
+    padding: 8px;
+}
 
 #pointsdurs .slider-range-min{width: 90%; margin: 0 auto;}
 #pointsdurs .nonConcerne {width: 300px; margin-top: 5px;}

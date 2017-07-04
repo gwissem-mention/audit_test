@@ -1,3 +1,15 @@
+hopital_numerique_guided_search:
+    prefix: /recherche-par-parcours/details
+    resource: "routing/front_guided_search.yml"
+
+hopital_numerique_guided_search_risk:
+    prefix: /recherche-par-parcours/details/risque
+    resource: "routing/front_guided_search_risk.yml"
+
+hopital_numerique_guided_search_risk_synthesis:
+    prefix: /recherche-par-parcours/details/risque/synthese
+    resource: "routing/front_guided_search_risk_synthesis.yml"
+
 hopital_numerique_recherche_parcours_homepage:
     pattern:  /admin/recherche-par-parcours/{id}
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:index, id: 1 }
@@ -66,10 +78,10 @@ hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion:
         _method: GET|POST
 
 hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_add:
-    pattern:  /admin/recherche-par-parcours/gestion/add
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:add" }
+    path:  /admin/recherche-par-parcours/gestion/add
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit" }
     requirements: 
-        _method: GET|POST
+        _methods: GET|POST
 
 hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_show:
     pattern:  /admin/recherche-par-parcours/gestion/show/{id}
@@ -79,11 +91,11 @@ hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_show:
         _method: GET
 
 hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit:
-    pattern:  /admin/recherche-par-parcours/gestion/edit/{id}
+    path:  /admin/recherche-par-parcours/gestion/edit/{rechercheParcoursGestion}
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit" }
     requirements:
         id: \d+
-        _method: GET|POST
+        _methods: GET|POST
 
 hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_delete:
     pattern:  /admin/recherche-par-parcours/gestion/delete/{id}.{_format}
@@ -97,17 +109,7 @@ hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_delete:
 #----------------------------------------------------------------------
 hopital_numerique_recherche_parcours_homepage_front:
     pattern:  /recherche-par-parcours/{id}
-    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }
-
-
-#Recherche par parcours - détails
-hopital_numerique_recherche_parcours_details_index_front:
-    pattern:  /recherche-par-parcours/details/{id}-{alias}/{idEtape}-{etape}/{idRefEtapeChild}-{libRefEtapeChild}
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '', idRefEtapeChild: null, libRefEtapeChild:'' }
-    requirements:
-        id : \d+
-        idEtape : \d+
-        idRefEtapeChild : \d*
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:index }
 
 #sauvegarde des notes
 hopital_numerique_recherche_parcours_details_save_note_front:

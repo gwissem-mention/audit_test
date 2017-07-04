@@ -101,6 +101,10 @@ services:
         class: %hopitalnumerique_objet.grid.objet.class%
         arguments: ["@service_container"]
 
+    hopitalnumerique_objet.grid.risk:
+        class: HopitalNumerique\ObjetBundle\Grid\RiskGrid
+        arguments: ["@service_container"]
+
     #twig extensions
     hopitalnumerique_objet.twig.objet_extension:
         class: HopitalNumerique\ObjetBundle\Twig\ObjetExtension
@@ -154,6 +158,12 @@ services:
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Note'
 
+    hopitalnumerique_objet.repository.risk:
+        class: HopitalNumerique\ObjetBundle\Repository\RiskRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\Risk'
+
     hopitalnumerique_objet.link_board_to_object_handler:
         class: HopitalNumerique\ObjetBundle\Domain\Command\LinkBoardToObjectHandler
         arguments:
@@ -171,6 +181,43 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_objet.repository.related_board"
+
+    hopitalnumerique_objet.reorder_related_risks_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\ReorderRelatedRisksHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.add_related_risks_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\LinkRisksToObjectHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.repository.risk"
+
+    hopitalnumerique_objet.unlink_risk_to_object_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\UnlinkRiskToObjectHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.handler.edit_risk:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\EditRiskHandler
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.risk_fusion"
+
+    hopitalnumerique_objet.form.edit_risk:
+        class: HopitalNumerique\ObjetBundle\Form\RiskType
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@security.token_storage"
+        tags:
+            - { name: form.type }
+
+    hopitalnumerique_objet.risk_fusion:
+        class: HopitalNumerique\ObjetBundle\Service\Risk\Fusion
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_rechercheparcours.repository.risk_analysis"
 
     hopitalnumerique_objet.widgets.updated_objects:
         class: HopitalNumerique\ObjetBundle\Service\Widget\ObjectUpdatedWidget

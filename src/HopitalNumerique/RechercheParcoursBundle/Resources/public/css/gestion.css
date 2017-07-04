@@ -1,0 +1,26 @@
+.publicationsTypes .item .dd3-actions {
+    text-indent: 0;
+}
+
+.publicationsTypes .item .dd3-actions .active {
+    height: 28px;
+    position: relative;
+    display: block;
+    width: 80px;
+    margin-top: 5px;
+    margin-right: 5px;
+    text-align: right;
+}
+
+.publicationsTypes .item .dd3-actions .active input {
+    height: 50%;
+    display: inline-block;
+    width: auto;
+}
+
+.publicationsTypes .item .dd3-actions .active label {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+    margin: 0 5px 0 0;
+}

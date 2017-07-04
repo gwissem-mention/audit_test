@@ -1,0 +1,56 @@
+{% trans_default_domain 'guided_search' %}
+
+{% import _self as macro %}
+
+{% if guidedSearchStep.analyzed %}
+    {{ include('@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/risk/analyzed.html.twig') }}
+{% else %}
+    {{ include('@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/risk/not_analyzed.html.twig') }}
+{% endif %}
+
+<fieldset>
+    <legend>{{ 'step.risks.add.title'|trans }}</legend>
+
+    {{ form_start(riskStep.addForm, {attr: {class: 'toValidate', novalidate: 'novalidate', action: path('hopital_numerique_guided_search_step_risk_add', {guidedSearchStep: guidedSearchStep.id})}}) }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_widget(riskStep.addForm.nature) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_widget(riskStep.addForm.label, {attr: {class: 'validate[required,minSize[3]]'}}) }}
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="{{ 'step.risks.add.submit'|trans }}" class="btn btn-success">
+        </div>
+    </div>
+    {{ form_end(riskStep.addForm) }}
+
+</fieldset>
+
+{% if guidedSearchStep.excludedRisks|length > 0 %}
+
+<fieldset>
+    <legend>{{ 'step.risks.removed_risks.title'|trans }}</legend>
+
+    {{ form_start(riskStep.showRiskForm, {attr: {action: path('hopital_numerique_guided_search_step_risk_show', {guidedSearchStep: guidedSearchStep.id})}}) }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_widget(riskStep.showRiskForm.risk) }}
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="{{ 'step.risks.removed_risks.submit'|trans }}" class="btn btn-success">
+        </div>
+    </div>
+    {{ form_end(riskStep.showRiskForm) }}
+</fieldset>
+
+{% endif %}
+
+{% macro riskSelect(riskId, value, type) %}
+    <select class="{{ type }}" name="{{ type }}" id="{{ type~'-'~riskId }}">
+        <option value=""{{ not value ? ' selected' }}>-</option>
+        {% for n in range(1, 4) %}
+            <option value="{{ n }}"{{ value ==  n ? ' selected' }}>{{ n }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}

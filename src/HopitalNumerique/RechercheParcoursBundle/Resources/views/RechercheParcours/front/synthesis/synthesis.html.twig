@@ -1,0 +1,14 @@
+{% trans_default_domain 'guided_search' %}
+
+{{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/global.html.twig') }}
+
+<fieldset>
+    <legend><h4>{{ 'step.synthesis.step.title'|trans }}</h4></legend>
+
+    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {'stepTitle': 'step.synthesis.main.title'|trans, 'riskSynthesisRisks': riskSynthesis.parents}) }}
+
+    {% for parentLabel, subReference in riskSynthesis.subReferences %}
+        {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {'stepTitle': 'step.synthesis.secondary.title'|trans({'%name%': parentLabel}), 'riskSynthesisRisks': subReference}) }}
+    {% endfor %}
+
+</fieldset>

@@ -103,6 +103,11 @@ assetic:
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery-ui-i18n.min.js"
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-fr.min.js"
             filters : [ ?yui_js ]
+        jquery_ui_slider_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/jquery.ui.slider.min.js"
+                - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery-ui-i18n.min.js"
+            filters : [ ?yui_js ]
         bootstrap_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap/dist/js/bootstrap.min.js"

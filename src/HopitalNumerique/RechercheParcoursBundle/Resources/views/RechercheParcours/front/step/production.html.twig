@@ -1,0 +1,57 @@
+{% trans_default_domain 'guided_search' %}
+
+<div class="productions">
+    <h2 class="count">
+        {{ 'step.objects.result_count'|transchoice(productionStep['items']|length, {'%name%': '<span class="name">'~ "list.publication_type.production"|trans~' :</span>'})|raw }}
+    </h2>
+
+    {% for k, object in productionStep['items'] %}
+        <div class="result">
+            <div class="category">
+                {{ object.types|join(', ') }}
+            </div>
+            <h3 class="title">
+                <a href="{{ object.directLink }}" target="_blank">
+                    {{ object.title }}
+
+                    {% if object.source %}
+                        <span class="source">
+                            - {{ object.source }}
+                        </span>
+                    {% endif %}
+
+                    {% if object.subTitle %}
+                        <div class="subTitle">
+                            <i class="fa fa-share fa-flip-vertical"></i>
+                            {{ object.subTitle }}
+                        </div>
+                    {% endif %}
+                </a>
+            </h3>
+            <div class="description">
+                {{ object.description[:400]|striptags|raw ~ '...' }}
+            </div>
+
+            <div class="related">
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_HOT_POINT')) %}
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#hot-point-{{ section.type}}-{{ k }}">
+                        {{ 'step.objects.related_hot_point'|transchoice(object.relatedHotPoints|length) }}
+                    </a>
+
+                    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/step/production/hot_points.html.twig') }}
+                {% endif %}
+
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_RISK')) %}
+                    <a href="#risks-{{ section.type}}-{{ k }}" class="btn btn-link" data-toggle="modal" data-target="#risks-{{ section.type}}-{{ k }}">
+                        {{ 'step.objects.related_risk'|transchoice(object.relatedRisks|length) }}
+                    </a>
+
+                    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/step/production/risks.html.twig') }}
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+    {% endfor %}
+
+</div>
