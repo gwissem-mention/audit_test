@@ -56,7 +56,7 @@ class ErrorUrl
      * @var Objet
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
-     * @ORM\JoinColumn(referencedColumnName="obj_id")
+     * @ORM\JoinColumn(referencedColumnName="obj_id", onDelete="CASCADE")
      */
     private $object;
 
@@ -64,7 +64,7 @@ class ErrorUrl
      * @var Contenu
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Contenu")
-     * @ORM\JoinColumn(referencedColumnName="con_id", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
      */
     private $content;
 
