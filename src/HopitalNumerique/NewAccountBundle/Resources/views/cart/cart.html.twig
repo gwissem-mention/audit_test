@@ -70,14 +70,14 @@
                 <td class="text-right">
                     <div class="btn-group">
                         {% if item.route %}
-                            <a href="{{ getItemUrl(item) }}" class="btn btn-xs btn-primary" title="{{ 'cart.items.action.open.title'|trans|e }}">
+                            <a href="{{ getItemUrl(item) }}" class="btn btn-sm btn-primary" title="{{ 'cart.items.action.open.title'|trans|e }}">
                                 <i class="fa fa-eye"></i>
                             </a>
                         {% endif %}
                         {% spaceless %}
                             <a
                                 href="{{ path('hopital_numerique_cart_remove', {objectType: item.objectType, objectId: item.objectId}) }}"
-                                class="btn btn-xs btn-danger item-remove"
+                                class="btn btn-sm btn-danger item-remove"
                                 data-confirm="{{ 'cart.items.action.remove.confirm'|trans|e }}"
                                 title="{{ 'cart.items.action.remove.title'|trans|e }}"
                             >

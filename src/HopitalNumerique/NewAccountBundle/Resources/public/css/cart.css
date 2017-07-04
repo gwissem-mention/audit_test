@@ -3,7 +3,7 @@ table.dataTable > thead > tr > th.cart-items-all {
 }
 
 table.dataTable > thead > tr > th:last-child {
-    width: 135px;
+    width: 175px;
 }
 
 table.dataTable thead .cart-items-all::after {
@@ -12,4 +12,8 @@ table.dataTable thead .cart-items-all::after {
 
 .dataTables_info {
     display: none;
+}
+
+#my-account table.cart-items td, #my-account table.report-list td {
+    vertical-align: middle;
 }
