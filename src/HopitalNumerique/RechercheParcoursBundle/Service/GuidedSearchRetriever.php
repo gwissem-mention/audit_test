@@ -68,38 +68,38 @@ class GuidedSearchRetriever
      * 2. Session if defined
      * 3. Or create a new one
 
-     * @param RechercheParcours $guidedSearchParent
+     * @param RechercheParcours $guidedSearchReference
      *
      * @return GuidedSearch
      */
-    public function retrieve(RechercheParcours $guidedSearchParent)
+    public function retrieve(RechercheParcours $guidedSearchReference)
     {
         if (
             $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') &&
-            !is_null($guidedSearch = $this->guidedSearchRepository->findLatestByOwnerAndGuidedSearchReference($this->tokenStorage->getToken()->getUser(), $guidedSearchParent))
+            !is_null($guidedSearch = $this->guidedSearchRepository->findLatestByOwnerAndGuidedSearchReference($this->tokenStorage->getToken()->getUser(), $guidedSearchReference))
         ) {
             return $guidedSearch;
         }
 
         if (
             !is_null($guidedSearchId = $this->session->get(self::SESSION_ID)) &&
-            !is_null($guidedSearch = $this->guidedSearchRepository->findOneBy(['id' => $guidedSearchId, 'guidedSearchParent' => $guidedSearchParent->getId()]))
+            !is_null($guidedSearch = $this->guidedSearchRepository->findOneBy(['id' => $guidedSearchId, 'guidedSearchReference' => $guidedSearchReference->getId()]))
         ) {
             return $guidedSearch;
         }
 
-        return $this->createNewOne($guidedSearchParent);
+        return $this->createNewOne($guidedSearchReference);
     }
 
     /**
-     * @param RechercheParcours $guidedSearchParent
+     * @param RechercheParcours $guidedSearchReference
      *
      * @return GuidedSearch
      */
-    private function createNewOne(RechercheParcours $guidedSearchParent)
+    private function createNewOne(RechercheParcours $guidedSearchReference)
     {
         $guidedSearch = new GuidedSearch();
-        $guidedSearch->setGuidedSearchReference($guidedSearchParent);
+        $guidedSearch->setGuidedSearchReference($guidedSearchReference);
 
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $guidedSearch->setOwner($this->tokenStorage->getToken()->getUser());
