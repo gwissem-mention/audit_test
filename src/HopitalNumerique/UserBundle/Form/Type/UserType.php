@@ -6,32 +6,32 @@
 namespace HopitalNumerique\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
-use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\ReferenceBundle\Form\Type\HobbyType;
 use Nodevo\RoleBundle\Entity\Role;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Nodevo\RoleBundle\Manager\RoleManager;
-use Nodevo\ToolsBundle\Manager\Manager;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Nodevo\ToolsBundle\Manager\Manager;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Nodevo\RoleBundle\Manager\RoleManager;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Manager\UserManager;
-use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Symfony\Component\Security\Core\SecurityContext;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use HopitalNumerique\ReferenceBundle\Form\Type\HobbyType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 
 /**
  * Class UserType
@@ -235,10 +235,10 @@ class UserType extends AbstractType
                     'class' => $this->constraints['organizationLabel']['class'] . ' etablissement_sante',
                 ],
             ])
-            ->add('computerSkills', EntityType::class, [
-                'class' => Reference::class,
-                'choices' => $this->referenceManager->findByCode('LOGICIELS'),
-                'choice_label' => 'libelle',
+        ->add('computerSkills', EntityType::class, [
+'class' => Reference::class,
+        'choices' => $this->referenceManager->findByCode('LOGICIELS'),
+        'choice_label' => 'libelle',
                 'multiple' => true,
                 'required' => false,
                 'label' => 'Logiciels maîtrisés'
@@ -260,8 +260,8 @@ class UserType extends AbstractType
             ])
             ->add('region', EntityType::class, [
                 'class' => Reference::class,
-                'choices' => $this->referenceManager->findByCode('REGION'),
-                'choice_label' => 'libelle',
+                'choices' =>$this->referenceManager->findByCode('REGION'),
+            'choice_label' => 'libelle',
                 'required' => false,
                 'label' => 'Région',
                 'empty_value' => ' - ',
@@ -285,8 +285,7 @@ class UserType extends AbstractType
                 'required' => true,
                 'label' => 'Etat',
                 'attr' => ['class' => $this->constraints['etat']['class']],
-            ])
-            ->add('roles', EntityType::class, [
+            ])->add('roles', EntityType::class, [
                 'class' => Role::class,
                 'choice_label' => 'name',
                 'required' => true,
@@ -296,58 +295,58 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'validate[required]'],
                 'query_builder' => function (EntityRepository $er) {
                     $qb = $er->createQueryBuilder('ro')
-                             ->where('ro.etat != :etat')
-                             ->setParameter('etat', 4)
+                        ->where('ro.etat != :etat')
+                        ->setParameter('etat', 4)
                     ;
 
                     if (!$this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
                         $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
-                           ->setParameter('rolesAdmins', [1, 106])
+                            ->setParameter('rolesAdmins', [1, 106])
                         ;
                     }
 
-                    $qb->orderBy('ro.name');
+                        $qb->orderBy('ro.name');
 
                     return $qb;
                 },
                 'data' => $this->managerRole->findOneBy(['role' => $roles[0]]),
             ])
-            ->add('domaines', EntityType::class, [
-                'class' => Domaine::class,
-                'choice_label' => 'nom',
-                'required' => true,
-                'multiple' => true,
-                'label' => 'Domaine(s) concerné(s)',
-                'empty_value' => ' - ',
-                'attr' => ['class' => 'validate[required]'],
-                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
-                    if ($this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
-                        return $er->createQueryBuilder('dom')->orderBy('dom.nom');
-                    } else {
-                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                    }
-                },
-            ])
-            ->add('remarque', TextareaType::class, [
-                'required' => false,
-                'label' => 'Remarque pour la gestion',
-            ])
-            ->add('biographie', TextareaType::class, [
-                'required' => false,
-                'label' => 'Biographie',
-                'attr' => [
-                    'rows' => 8,
-                ],
-            ])
-            ->add('raisonDesinscription', TextareaType::class, [
-                'required' => false,
-                'label' => 'Raison de la désinscription',
-            ])
-            ->add('file', FileType::class, [
-                'required' => false,
-                'label' => 'Photo de profil',
-            ])
-            ->add('path', HiddenType::class)
+                ->add('domaines', EntityType::class, [
+                    'class' => Domaine::class,
+                    'choice_label' => 'nom',
+                    'required' => true,
+                    'multiple' => true,
+                    'label' => 'Domaine(s) concerné(s)',
+                    'empty_value' => ' - ',
+                    'attr' => ['class' => 'validate[required]'],
+                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                        if ($this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
+                            return $er->createQueryBuilder('dom')->orderBy('dom.nom');
+                        } else {
+                            return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                        }
+                    },
+                ])
+                ->add('remarque', TextareaType::class, [
+                    'required' => false,
+                    'label' => 'Remarque pour la gestion',
+                ])
+                ->add('biographie', TextareaType::class, [
+                    'required' => false,
+                    'label' => 'Biographie',
+                    'attr' => [
+                        'rows' => 8,
+                    ],
+                ])
+                ->add('raisonDesinscription', TextareaType::class, [
+                    'required' => false,
+                    'label' => 'Raison de la désinscription',
+                ])
+                ->add('file', FileType::class, [
+                    'required' => false,
+                    'label' => 'Photo de profil',
+                ])
+                ->add('path', HiddenType::class)
         ;
 
         if ($builder->getData()->hasRoleAmbassadeur()) {
@@ -389,14 +388,15 @@ class UserType extends AbstractType
             $currentResponse,
             $organizationFieldOptions
         ) {
-
             if (!is_null($etabId)) {
                 $organizationFieldOptions = array_merge(
                     $organizationFieldOptions,
                     [
                         'query_builder' => function (EntityRepository $er) use ($etabId) {
-                            return $er->createQueryBuilder('eta')
-                                  ->orderBy('eta.nom', 'ASC')
+                            return $er->createQueryBuilder('etablissement')
+                                ->andWhere('etablissement.id = :id')
+                                ->setParameter('id', $etabId)
+                                ->orderBy('etablissement.nom', 'ASC')
                             ;
                         },
                     ]
@@ -408,7 +408,6 @@ class UserType extends AbstractType
                         : [$currentResponse->getOrganization()]
                 ;
             }
-
             $form->add('organization', EntityType::class, $organizationFieldOptions);
         };
 
@@ -422,7 +421,10 @@ class UserType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($organizationModifier) {
-                $organizationModifier($event->getForm(), $event->getForm()->getData());
+                $organizationModifier(
+                    $event->getForm(),
+                    $event->getData()['etablissementRattachementSante']
+                );
             }
         );
     }

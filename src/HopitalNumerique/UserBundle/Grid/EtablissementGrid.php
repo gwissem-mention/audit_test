@@ -2,10 +2,12 @@
 
 namespace HopitalNumerique\UserBundle\Grid;
 
+use APY\DataGridBundle\Grid\Row;
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
+use Nodevo\GridBundle\Grid\GridInterface;
+use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * Configuration du Grid User.
@@ -20,6 +22,7 @@ class EtablissementGrid extends Grid implements GridInterface
         $this->setSource('hopitalnumerique_user.manager.user');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setFunctionName('getEtablissementForGrid');
+        $this->setSourceCondition('user', $this->_container->get('security.token_storage')->getToken()->getUser());
         $this->setNoDataMessage('Aucun établissement "autre" référencé.');
         $this->setButtonSize(43);
         $this->setDefaultFilters(['archiver' => false]);
@@ -43,6 +46,8 @@ class EtablissementGrid extends Grid implements GridInterface
 
         $this->addColonne(new Column\TextColumn('organizationLabel', 'Etablissement autre'));
 
+        $this->addColonne(new Column\TextColumn('domainName', 'Domaine(s)'));
+
         $archiverColonne = new Column\BooleanColumn('archiver', 'Archivé');
         $archiverColonne->setSize(100);
         $this->addColonne($archiverColonne);
@@ -57,9 +62,9 @@ class EtablissementGrid extends Grid implements GridInterface
         $this->addActionButton(new Action\EditButton('hopital_numerique_user_edit'));
 
         //Custom Archive button : Affiche le bouton archiver
-        $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_etablissement_archiver');
+        $archiveButton = new RowAction('', 'hopitalnumerique_etablissement_archiver');
         $archiveButton->setRouteParameters(['id']);
-        $archiveButton->manipulateRender(function (\APY\DataGridBundle\Grid\Action\RowAction $action, \APY\DataGridBundle\Grid\Row $row) {
+        $archiveButton->manipulateRender(function (RowAction $action, Row $row) {
             if (!$row->getField('archiver')) {
                 $action->setAttributes(['class' => 'btn btn-warning fa fa-archive', 'title' => 'Archiver']);
             } else {

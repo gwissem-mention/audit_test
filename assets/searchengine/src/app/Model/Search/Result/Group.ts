@@ -27,4 +27,8 @@ export default class Group extends Result {
     getLink(): string {
         return Routing.generate('hopitalnumerique_communautepratique_groupe_view', {'groupe': this.id});
     }
+
+    getSource(): string {
+        return null;
+    }
 }

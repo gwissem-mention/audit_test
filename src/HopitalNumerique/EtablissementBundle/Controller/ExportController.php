@@ -2,8 +2,8 @@
 
 namespace HopitalNumerique\EtablissementBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Export controller.
@@ -43,12 +43,10 @@ class ExportController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
-            $colonnes,
-            $refs,
-            'export-etablissements.csv',
-            $kernelCharset
-        );
+        return $this
+            ->get('hopitalnumerique_user.manager.user')
+            ->exportCsv($colonnes, $refs, 'export-etablissements.csv', $kernelCharset)
+        ;
     }
 
     /**
@@ -71,22 +69,21 @@ class ExportController extends Controller
         $refs = $this->get('hopitalnumerique_user.manager.user')->getEtablissementForExport($primaryKeys);
 
         $colonnes = [
-            'id'                              => 'id',
-            'username'                        => 'Nom d\'utilisateur',
-            'lastname'                        => 'Nom',
-            'firstname'                       => 'Prénom',
-            'region'                          => 'Région',
-            'organizationLabel'               => 'Autre structure de rattachement santé',
-            'archiver'                        => 'Archivé ?',
+            'id' => 'id',
+            'username' => 'Nom d\'utilisateur',
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
+            'region' => 'Région',
+            'organizationLabel' => 'Autre structure de rattachement santé',
+            'domainName' => 'Domaine(s)',
+            'archiver' => 'Archivé ?',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
-            $colonnes,
-            $refs,
-            'export-etablissements-autres.csv',
-            $kernelCharset
-        );
+        return $this
+            ->get('hopitalnumerique_user.manager.user')
+            ->exportCsv($colonnes, $refs, 'export-etablissements-autres.csv', $kernelCharset)
+        ;
     }
 }

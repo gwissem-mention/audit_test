@@ -2,18 +2,18 @@
 
 namespace HopitalNumerique\UserBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use Doctrine\ORM\Query\Expr;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * UserRepository.
@@ -36,7 +36,9 @@ class UserRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return qb
+     * @param $conditions
+     *
+     * @return QueryBuilder
      */
     public function getDatasForGrid($conditions)
     {
@@ -86,8 +88,14 @@ class UserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getEtablissementForGrid()
+    public function getEtablissementForGrid($conditions)
     {
+        /** @var User $currentUser */
+        $currentUser = $conditions->value;
+        $domainIds = $currentUser->getDomaines()->map(function (Domaine $domaine) {
+            return $domaine->getId();
+        });
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
                      user.username,
@@ -96,12 +104,17 @@ class UserRepository extends EntityRepository
                      refRegion.libelle as region,
                      user.organizationLabel,
                      user.archiver
+                     GROUP_CONCAT(domains.nom SEPARATOR \', \') as domainName
 
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->join('user.domaines', 'domains', Join::WITH, 'domains.id IN (:domainIds)')
+            ->setParameter('domainIds', $domainIds)
             ->leftJoin('user.region', 'refRegion')
             ->where('user.organizationLabel IS NOT NULL')
-            ->orderBy('user.username');
+            ->groupBy('user.id')
+            ->orderBy('user.username')
+        ;
 
         return $qb;
     }
@@ -122,11 +135,14 @@ class UserRepository extends EntityRepository
                      user.firstname,
                      refRegion.libelle as region,
                      user.organizationLabel,
-                     user.archiver
+                     user.archiver,
+                     GROUP_CONCAT(domaines.nom SEPARATOR \', \') as domainName
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.region', 'refRegion')
+            ->leftJoin('user.domaines', 'domaines')
             ->andWhere('user.organizationLabel IS NOT NULL', 'user.id IN (:ids)')
+            ->groupBy('user.id')
             ->orderBy('user.username')
             ->setParameter('ids', $ids);
 
@@ -185,6 +201,11 @@ class UserRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * @param $criteres
+     *
+     * @return QueryBuilder
+     */
     public function getUsersGroupeEtablissement($criteres)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -390,7 +411,7 @@ class UserRepository extends EntityRepository
      *
      * @param array $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
+     * @return User[] La liste des ambassadeurs
      */
     public function getAmbassadeurs(array $criteres = [])
     {
@@ -402,7 +423,7 @@ class UserRepository extends EntityRepository
      *
      * @param array $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des experts
+     * @return User[] La liste des experts
      */
     public function getExperts(array $criteres = [])
     {
@@ -414,7 +435,7 @@ class UserRepository extends EntityRepository
      *
      * @param array $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     * @return User[] La liste des utilisateurs
      */
     public function getESAndEnregistres(array $criteres = [])
     {
@@ -426,7 +447,7 @@ class UserRepository extends EntityRepository
      *
      * @param array $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     * @return User[] La liste des utilisateurs
      */
     public function getAdmins(array $criteres = [])
     {
@@ -438,7 +459,7 @@ class UserRepository extends EntityRepository
      *
      * @param array $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     * @return User[] La liste des utilisateurs
      */
     public function getcmsis(array $criteres = [])
     {
@@ -451,7 +472,7 @@ class UserRepository extends EntityRepository
      * @param string|array $role     Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
      * @param array        $criteres Filtres à appliquer sur la liste
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     * @return User[] La liste des utilisateurs
      */
     private function findByRole($role, array $criteres)
     {
@@ -619,9 +640,9 @@ class UserRepository extends EntityRepository
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
-     * @param Groupe  $groupe (optionnel) Groupe des membres
-     * @param Domaine $domaine
-     * @param null    $membreId
+     * @param Groupe|null  $groupe
+     * @param Domaine|null $domaine
+     * @param null         $membreId
      *
      * @return QueryBuilder
      */
@@ -705,7 +726,7 @@ class UserRepository extends EntityRepository
      *
      * @param Groupe $groupe Groupe
      *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     * @return User[] Utilisateurs
      */
     public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe = null)
     {
@@ -749,7 +770,7 @@ class UserRepository extends EntityRepository
      * @param int        $nombreMembres
      * @param array|null $ignores
      *
-     * @return array
+     * @return User[]
      */
     public function findCommunautePratiqueRandomMembres(Domaine $domaine, $nombreMembres, array $ignores = null)
     {
