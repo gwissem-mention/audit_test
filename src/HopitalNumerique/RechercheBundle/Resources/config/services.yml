@@ -107,4 +107,6 @@ services:
                 - '@twig'
                 - '@security.token_storage'
                 - '@translator'
+                - '@router'
+                - '@hopitalnumerique_recherche.repository.requete'
             public: false

@@ -1,5 +1,51 @@
-<div id="saved-searches-widget">
-    <div class="widget-description">
-        {{ 'Module_moncompte_services_recherches'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="saved-searches-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_recherches'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'saved_searches.table.title'|trans }}</th>
+                <th width="120">{{ 'saved_searches.table.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for search in data %}
+                <tr>
+                    <td>
+                        <span class="inplace-edit-search" data-url="{{ search.actions.edit }}">{{ search.information.name }}</span>
+                    </td>
+                    <td class="actions-column">
+                        <div class="btn-group">
+                            <a href="{{ search.actions.show }}" class="btn btn-sm btn-success fancybox fancybox.ajax" title="{{ 'saved_searches.action.show'|trans }}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ search.actions.launch }}" class="btn btn-sm btn-primary" title="{{ 'saved_searches.action.launch'|trans }}">
+                                <i class="fa fa-search"></i>
+                            </a>
+                            <a href="{{ search.actions.delete }}" class="btn btn-sm btn-danger delete-search-btn" title="{{ 'saved_searches.action.delete'|trans }}">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
+
+    <script>
+        $(document).ready(function () {
+            $('.inplace-edit-search').each(function() {
+                new InplaceEditor($(this), $(this).data("url"), {'title': '{{ 'saved_searches.action.edit'|trans }}'});
+            });
+
+            $('#saved-searches-widget').find('.delete-search-btn').on('click', function () {
+                return confirm('{{ 'saved_searches.delete.confirm'|trans }}');
+            });
+        });
+    </script>
+{% endif %}

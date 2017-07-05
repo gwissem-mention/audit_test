@@ -8,11 +8,15 @@ hopital_numerique_recherche_homepage_requete_generator:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:generateManuallyRequete, refs:'', q:'', type:''}
 
 #Requêtes de recherche
-hopital_numerique_requete_delete:
+hopital_numerique_requete_ajax_delete:
     path:  /requetes/delete/{id}.{_format}
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete, id:1, _format:json }
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:ajaxDelete, id:1, _format:json }
     requirements:
         id: \d+
+
+hopital_numerique_requete_delete:
+    path: /requete/{search}/delete
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete }
 
 hopital_numerique_requete_edit:
     path:  /requetes/edit/{id}
@@ -25,6 +29,10 @@ hopital_numerique_requete_toggle:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:toggle, id:1}
     requirements:
         id: \d+
+
+hopital_numerique_requete_change_name:
+    path:  /requete/{search}/change-name
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:changeName }
 
 hopital_numerique_requete_consultation_ajax_delete:
     path:  /requetes/consultation/ajax-delete/{id}.{_format}
