@@ -1,5 +1,50 @@
-<div id="guided-search-widget">
-    <div class="widget-description">
-        {{ 'Module_moncompte_services_parcours'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="guided-search-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_parcours'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'guided_search.table.title'|trans }}</th>
+                <th width="160">{{ 'guided_search.table.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>
+                        {{ item.information|join(' - ') }}
+                    </td>
+                    <td class="actions-column">
+                        <div class="btn-group">
+                            <a href="{{ item.actions.continue }}" class="btn btn-sm btn-success" title="{{ 'guided_search.action.continue'|trans }}">
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                            <a href="{{ item.actions.send }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'guided_search.action.send'|trans }}">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                            <a href="{{ item.actions.copy }}" class="btn btn-sm btn-warning" title="{{ 'guided_search.action.copy'|trans }}">
+                                <i class="fa fa-share"></i>
+                            </a>
+                            <a href="{{ item.actions.delete }}" class="btn btn-sm btn-danger delete-guided-search-btn" title="{{ 'guided_search.action.delete'|trans }}">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
+
+    <script>
+        $(document).ready(function () {
+            $('#guided-search-widget').find('.delete-guided-search-btn').on('click', function () {
+                return confirm('{{ 'guided_search.delete.confirm'|trans }}');
+            });
+        });
+    </script>
+{% endif %}

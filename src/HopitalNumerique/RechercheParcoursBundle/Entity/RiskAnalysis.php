@@ -2,11 +2,11 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * RiskAnalysis
@@ -88,9 +88,8 @@ class RiskAnalysis
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinTable(name="hn_guided_search_risk_analysis_excluded_object",
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
-     *   }
+     *   joinColumns={@ORM\JoinColumn(onDelete="cascade")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="cascade")}
      * )
      */
     protected $excludedObjects;

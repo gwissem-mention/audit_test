@@ -52,6 +52,18 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@hopitalnumerique_user.repository.user'
 
+    hopitalnumerique_rechercheparcours.handler.remove_guided_search_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\RemoveGuidedSearchHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.handler.send_guided_search_analyzes_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\SendAnalyzesHandler
+        arguments:
+            - '@nodevo_mail.manager.mail'
+            - '@hopitalnumerique_rechercheparcours.synthesis_export_xlsx'
+            - '@hopitalnumerique_rechercheparcours.synthesis_export_csv'
+
     hopitalnumerique_rechercheparcours.handler.analyse_guided_search_step_command:
         class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\AnalyseGuidedSearchStepHandler
         arguments:
@@ -225,4 +237,6 @@ services:
             - '@twig'
             - '@security.token_storage'
             - '@translator'
+            - '@router'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
         public: false

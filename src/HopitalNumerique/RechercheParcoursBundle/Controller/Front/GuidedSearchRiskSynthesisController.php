@@ -8,6 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Form\Type\Risk\SendSynthesisType;
 
+/**
+ * Class GuidedSearchRiskSynthesisController
+ */
 class GuidedSearchRiskSynthesisController extends Controller
 {
     /**

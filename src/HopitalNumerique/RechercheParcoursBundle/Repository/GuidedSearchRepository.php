@@ -3,9 +3,9 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * GuidedSearchRepository.
@@ -25,7 +25,8 @@ class GuidedSearchRepository extends EntityRepository
     }
 
     /**
-     * @param User $owner
+     * @param User              $owner
+     * @param RechercheParcours $guidedSearchParent
      *
      * @return GuidedSearch|null
      */
@@ -42,6 +43,27 @@ class GuidedSearchRepository extends EntityRepository
             ->setMaxResults(1)
 
             ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * Returns the user's guided searches and those that have been shared with him.
+     *
+     * @param User $user
+     *
+     * @return GuidedSearch[]
+     */
+    public function findByUserWithShares(User $user)
+    {
+        return $this->createQueryBuilder('guidedSearch')
+            ->leftJoin('guidedSearch.owner', 'owner')
+            ->leftJoin('guidedSearch.shares', 'shares')
+            ->where('owner.id = :userId')
+            ->orWhere('shares.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->orderBy('guidedSearch.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
         ;
     }
 }

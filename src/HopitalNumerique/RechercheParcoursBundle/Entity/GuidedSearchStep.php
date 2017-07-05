@@ -2,10 +2,9 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
-use HopitalNumerique\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * GuidedSearchStep
@@ -50,7 +49,7 @@ class GuidedSearchStep
     /**
      * @var ArrayCollection|RiskAnalysis[]
      *
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis", mappedBy="step")
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis", mappedBy="step", cascade={"remove"}, orphanRemoval=true)
      */
     protected $risksAnalysis;
 
@@ -183,6 +182,18 @@ class GuidedSearchStep
     public function getRisksAnalysis()
     {
         return $this->risksAnalysis;
+    }
+
+    /**
+     * @param RiskAnalysis $riskAnalysis
+     *
+     * @return GuidedSearchStep
+     */
+    public function removeRiskAnalysis(RiskAnalysis $riskAnalysis)
+    {
+        $this->risksAnalysis->removeElement($riskAnalysis);
+
+        return $this;
     }
 
     /**

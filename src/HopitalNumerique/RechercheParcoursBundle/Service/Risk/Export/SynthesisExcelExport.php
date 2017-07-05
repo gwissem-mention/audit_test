@@ -5,11 +5,13 @@ namespace HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 
+/**
+ * Class SynthesisExcelExport
+ */
 class SynthesisExcelExport extends SynthesisExport
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function exportGuidedSearch(GuidedSearch $guidedSearch, User $user = null)
     {

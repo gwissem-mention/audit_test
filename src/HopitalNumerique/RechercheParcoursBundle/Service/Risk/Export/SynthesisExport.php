@@ -9,6 +9,9 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
 
+/**
+ * Class SynthesisExport
+ */
 abstract class SynthesisExport
 {
     /**
@@ -27,7 +30,7 @@ abstract class SynthesisExport
     }
 
     /**
-     * Output CSV of Excel file
+     * Output CSV or Excel file
      *
      * @param GuidedSearch $guidedSearch
      * @param User|null $user
