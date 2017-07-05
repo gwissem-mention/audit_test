@@ -235,10 +235,10 @@ class UserType extends AbstractType
                     'class' => $this->constraints['organizationLabel']['class'] . ' etablissement_sante',
                 ],
             ])
-        ->add('computerSkills', EntityType::class, [
-'class' => Reference::class,
-        'choices' => $this->referenceManager->findByCode('LOGICIELS'),
-        'choice_label' => 'libelle',
+            ->add('computerSkills', EntityType::class, [
+                'class' => Reference::class,
+                'choices' => $this->referenceManager->findByCode('LOGICIELS'),
+                'choice_label' => 'libelle',
                 'multiple' => true,
                 'required' => false,
                 'label' => 'Logiciels maîtrisés'
@@ -261,7 +261,7 @@ class UserType extends AbstractType
             ->add('region', EntityType::class, [
                 'class' => Reference::class,
                 'choices' =>$this->referenceManager->findByCode('REGION'),
-            'choice_label' => 'libelle',
+                'choice_label' => 'libelle',
                 'required' => false,
                 'label' => 'Région',
                 'empty_value' => ' - ',
@@ -285,7 +285,8 @@ class UserType extends AbstractType
                 'required' => true,
                 'label' => 'Etat',
                 'attr' => ['class' => $this->constraints['etat']['class']],
-            ])->add('roles', EntityType::class, [
+            ])
+            ->add('roles', EntityType::class, [
                 'class' => Role::class,
                 'choice_label' => 'name',
                 'required' => true,
@@ -311,42 +312,42 @@ class UserType extends AbstractType
                 },
                 'data' => $this->managerRole->findOneBy(['role' => $roles[0]]),
             ])
-                ->add('domaines', EntityType::class, [
-                    'class' => Domaine::class,
-                    'choice_label' => 'nom',
-                    'required' => true,
-                    'multiple' => true,
-                    'label' => 'Domaine(s) concerné(s)',
-                    'empty_value' => ' - ',
-                    'attr' => ['class' => 'validate[required]'],
-                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
-                        if ($this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
-                            return $er->createQueryBuilder('dom')->orderBy('dom.nom');
-                        } else {
-                            return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                        }
-                    },
-                ])
-                ->add('remarque', TextareaType::class, [
-                    'required' => false,
-                    'label' => 'Remarque pour la gestion',
-                ])
-                ->add('biographie', TextareaType::class, [
-                    'required' => false,
-                    'label' => 'Biographie',
-                    'attr' => [
-                        'rows' => 8,
-                    ],
-                ])
-                ->add('raisonDesinscription', TextareaType::class, [
-                    'required' => false,
-                    'label' => 'Raison de la désinscription',
-                ])
-                ->add('file', FileType::class, [
-                    'required' => false,
-                    'label' => 'Photo de profil',
-                ])
-                ->add('path', HiddenType::class)
+            ->add('domaines', EntityType::class, [
+                'class' => Domaine::class,
+                'choice_label' => 'nom',
+                'required' => true,
+                'multiple' => true,
+                'label' => 'Domaine(s) concerné(s)',
+                'empty_value' => ' - ',
+                'attr' => ['class' => 'validate[required]'],
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                    if ($this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
+                        return $er->createQueryBuilder('dom')->orderBy('dom.nom');
+                    } else {
+                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                    }
+                },
+            ])
+            ->add('remarque', TextareaType::class, [
+                'required' => false,
+                'label' => 'Remarque pour la gestion',
+            ])
+            ->add('biographie', TextareaType::class, [
+                'required' => false,
+                'label' => 'Biographie',
+                'attr' => [
+                    'rows' => 8,
+                ],
+            ])
+            ->add('raisonDesinscription', TextareaType::class, [
+                'required' => false,
+                'label' => 'Raison de la désinscription',
+            ])
+            ->add('file', FileType::class, [
+                'required' => false,
+                'label' => 'Photo de profil',
+            ])
+            ->add('path', HiddenType::class)
         ;
 
         if ($builder->getData()->hasRoleAmbassadeur()) {
@@ -423,7 +424,7 @@ class UserType extends AbstractType
             function (FormEvent $event) use ($organizationModifier) {
                 $organizationModifier(
                     $event->getForm(),
-                    $event->getData()['etablissementRattachementSante']
+                    $event->getData()['organization']
                 );
             }
         );

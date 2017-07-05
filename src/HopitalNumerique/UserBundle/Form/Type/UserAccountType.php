@@ -156,7 +156,7 @@ class UserAccountType extends AbstractType
 
         $currentOrganization = $this->user->getOrganization();
 
-        $organizationFormModifier = function (FormInterface $form, $full = false) use ($currentOrganization) {
+        $organizationFormModifier = function (FormInterface $form, $organizationId = null) use ($currentOrganization) {
             $fieldOptions = [
                 'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
                 'property'    => 'appellation',
@@ -164,12 +164,17 @@ class UserAccountType extends AbstractType
                 'empty_value' => '-',
             ];
 
-            if ($full) {
+            if (!is_null($organizationId)) {
                 $fieldOptions = array_merge(
                     $fieldOptions,
                     [
-                        'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
+                        'query_builder' => function (EntityRepository $er) use ($organizationId) {
+                            return $er
+                                ->createQueryBuilder('etablissement')
+                                ->andWhere('etablissement.id = :id')
+                                ->setParameter('id', $organizationId)
+                                ->orderBy('etablissement.nom', 'ASC')
+                            ;
                         },
                     ]
                 );
@@ -193,7 +198,10 @@ class UserAccountType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($organizationFormModifier) {
-                $organizationFormModifier($event->getForm(), true);
+                $organizationFormModifier(
+                    $event->getForm(),
+                    $event->getData()['organization']
+                );
             }
         );
     }
