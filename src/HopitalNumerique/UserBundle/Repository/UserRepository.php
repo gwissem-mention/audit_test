@@ -74,8 +74,14 @@ class UserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getEtablissementForGrid()
+    public function getEtablissementForGrid($conditions)
     {
+        /** @var User $currentUser */
+        $currentUser = $conditions->value;
+        $domainIds = $currentUser->getDomaines()->map(function (Domaine $domaine) {
+            return $domaine->getId();
+        });
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
                      user.username,
@@ -88,11 +94,13 @@ class UserRepository extends EntityRepository
 
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.domaines', 'domains')
+            ->join('user.domaines', 'domains', Join::WITH, 'domains.id IN (:domainIds)')
+            ->setParameter('domainIds', $domainIds)
             ->leftJoin('user.region', 'refRegion')
             ->where('user.autreStructureRattachementSante IS NOT NULL')
             ->groupBy('user.id')
-            ->orderBy('user.username');
+            ->orderBy('user.username')
+        ;
 
         return $qb;
     }
