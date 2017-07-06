@@ -106,6 +106,20 @@ class Parse
     }
 
     /**
+     * @param Domaine $domain
+     *
+     * @return array
+     */
+    private function getReferencesByDomain(Domaine $domain)
+    {
+        if (is_null(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID)) {
+            $this->initGlossaire();
+        }
+
+        return self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domain->getId()];
+    }
+
+    /**
      * Tri les références de glossaire du mot le plus grand au plus petit.
      */
     private function sortGlossaireReferences(Reference $glossaireReference1, Reference $glossaireReference2)
@@ -255,10 +269,23 @@ class Parse
     /**
      * Retourne la liste des sigles trouvés dans un texte.
      *
+     * @param Domaine $domain
+     * @param string $text
+     *
+     * @return array
+     */
+    public function getFoundSiglesByDomainAndText(Domaine $domain, $text)
+    {
+        return $this->getFoundSiglesByText($this->getReferencesByDomain($domain), $text, true);
+    }
+
+    /**
+     * Retourne la liste des sigles trouvés dans un texte.
+     *
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $glossaireReferences Références du glossaire à rechercher
      * @param string                                                    $text                Texte
      */
-    private function getFoundSiglesByText(array $glossaireReferences, $text)
+    private function getFoundSiglesByText(array $glossaireReferences, $text, $provideEntity = false)
     {
         $foundSigles = [];
         /**
@@ -274,7 +301,7 @@ class Parse
 
             foreach ($sigleMatches[0] as $sigleMatch) {
                 if (!in_array($sigleMatch[1], $siglePositions)) {
-                    $foundSigles[] = $glossaireReference->getId();
+                    $foundSigles[] = $provideEntity ? $glossaireReference : $glossaireReference->getId();
                     $siglePositions[] = $sigleMatch[1];
                 }
             }

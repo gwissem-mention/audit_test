@@ -1,0 +1,11 @@
+title: Vous êtes perdu ?
+previous_page: Vous étiez en train de consulter %entityTitle%.
+resources_list: 'Ces services proposent différentes ressources :'
+discover:
+    title: 'Vous pouvez par exemple découvrir :'
+    last_publication: la dernière publication
+    best_rated_publication: la publication la mieux notée
+    most_viewed_publication: la publication la plus consultée
+    random_publication: une publication au hasard
+    autodiagnostic: un autodiagnostic
+    guided_search: un parcours guidé

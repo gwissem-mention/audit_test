@@ -7,7 +7,11 @@ services:
 
     hopitalnumerique.twig.extension.glossaire:
         class: 'HopitalNumerique\ReferenceBundle\Twig\GlossaireExtension'
-        arguments : ['@router', '@hopitalnumerique_reference.doctrine.glossaire.reader', '@hopitalnumerique_domaine.dependency_injection.current_domaine']
+        arguments:
+            - '@router'
+            - '@hopitalnumerique_reference.doctrine.glossaire.reader'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.doctrine.glossaire.parse'
         tags:
             - { name: 'twig.extension' }
 

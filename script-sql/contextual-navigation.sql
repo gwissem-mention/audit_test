@@ -1,0 +1,2 @@
+INSERT INTO core_textedynamique_code (txt_code, txt_texte) VALUE ('Module_contextualNavigation_lostPage_description', '<p>Le centre de ressources de l''ANAP offre différents services: recherche, parcours guidé, forum de discussion, communauté de pratique, autodiagnostics.</p>');
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) SELECT (SELECT txt_id FROM core_textedynamique_code WHERE txt_code = 'Module_contextualNavigation_lostPage_description' LIMIT 1), dom_id FROM hn_domaine;
