@@ -22,6 +22,7 @@ class EtablissementGrid extends Grid implements GridInterface
         $this->setSource('hopitalnumerique_user.manager.user');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setFunctionName('getEtablissementForGrid');
+        $this->setSourceCondition('user', $this->_container->get('security.token_storage')->getToken()->getUser());
         $this->setNoDataMessage('Aucun établissement "autre" référencé.');
         $this->setButtonSize(43);
         $this->setDefaultFilters(['archiver' => false]);

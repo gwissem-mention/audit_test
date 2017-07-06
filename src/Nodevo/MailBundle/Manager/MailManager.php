@@ -1170,21 +1170,19 @@ class MailManager extends BaseManager
         $this->mailer->send($message);
     }
 
+    /**
+     * @param $expediteur
+     * @param $destinataire
+     * @param $objet
+     * @param $message
+     * @param $pdf
+     */
     public function sendAutodiagResultMail($expediteur, $destinataire, $objet, $message, $pdf)
     {
-        /** @var Mail $courriel */
-        $courriel = $this->findOneById(Mail::MAIL_SHARE_AUTODIAG_RESULT_ID);
+        $email = $this->sendMail($objet, $expediteur, $destinataire, $message);
+        $email->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
 
-        /** @var \Swift_Message $message */
-        $message = $this->generationMail(null, $courriel);
-
-        $message->setTo($destinataire);
-        $message->setFrom([$expediteur => $expediteur]);
-        $message->setSubject($objet);
-        $message->setBody($message);
-        $message->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
-
-        $this->mailer->send($message);
+        $this->mailer->send($email);
     }
 
     /**

@@ -129,9 +129,11 @@ class UserManager extends BaseManager
     /**
      * Override : Récupère les données Etablissement pour le grid sous forme de tableau.
      *
+     * @param \StdClass $condition
+     *
      * @return array
      */
-    public function getEtablissementForGrid($condition = null)
+    public function getEtablissementForGrid(\StdClass $condition)
     {
         return $this->getRepository()->getEtablissementForGrid($condition)->getQuery()->getResult();
     }
