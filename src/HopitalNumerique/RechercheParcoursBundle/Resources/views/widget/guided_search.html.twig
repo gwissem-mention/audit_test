@@ -5,7 +5,7 @@
             {{ 'Module_moncompte_services_parcours'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
 
-        <table class="widget-table table default">
+        <table class="widget-table account-table table default">
             <thead>
             <tr>
                 <th>{{ 'guided_search.table.title'|trans }}</th>
@@ -30,7 +30,7 @@
                                 <i class="fa fa-share"></i>
                             </a>
                             <a href="{{ item.actions.delete }}" class="btn btn-sm btn-danger delete-guided-search-btn" title="{{ 'guided_search.action.delete'|trans }}">
-                                <i class="fa fa-times"></i>
+                                <i class="fa fa-trash-o"></i>
                             </a>
                         </div>
                     </td>

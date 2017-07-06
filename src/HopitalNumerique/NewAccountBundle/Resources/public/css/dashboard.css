@@ -24,19 +24,14 @@
     padding-bottom: 4px;
 }
 
-#account-dashboard .dashboard-brick .icon {
-    font-family: "FontAwesome";
-    display: inline-block;
-    font-style: normal;
-    margin-right: 5px;
-    font-weight: normal;
-}
-
 #account-dashboard .dashboard-brick .icon.profile::before {
     content: "\f007";
 }
 
-#account-dashboard .dashboard-brick .icon.intervention-request::before,
+#account-dashboard .dashboard-brick .icon.intervention-request::before {
+    content: "\f0fe";
+}
+
 #account-dashboard .dashboard-brick .icon.cdp::before {
     content: "\f075";
 }
@@ -54,6 +49,10 @@
 
 #account-dashboard .dashboard-brick .icon.user-activity::before {
     content: "\f080";
+}
+
+#account-dashboard .dashboard-brick .icon.sessions::before {
+    content: "\f086";
 }
 
 

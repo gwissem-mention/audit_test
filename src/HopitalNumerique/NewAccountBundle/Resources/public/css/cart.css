@@ -17,3 +17,15 @@ table.dataTable thead .cart-items-all::after {
 #my-account table.cart-items td, #my-account table.report-list td {
     vertical-align: middle;
 }
+
+#my-account .icon.cart-items-icon::before {
+    content: "\f07a";
+}
+
+#my-account .icon.report-settings::before {
+    content: "\f0ad";
+}
+
+#my-account .icon.report-list-icon::before {
+    content: "\f0ea";
+}

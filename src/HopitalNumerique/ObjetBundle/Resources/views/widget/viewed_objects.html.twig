@@ -5,7 +5,7 @@
             {{ 'Module_moncompte_services_publications'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
 
-        <table class="widget-table table default">
+        <table class="widget-table account-table table default">
             <thead>
             <tr>
                 <th>{{ 'viewed_objects.publications'|trans }}</th>
@@ -33,7 +33,7 @@
                                 <i class="fa fa-envelope"></i>
                             </a>
                             <a href="{{ path('hopital_numerique_requete_consultation_delete', { consultation: item.consultationId }) }}" class="btn btn-sm btn-danger delete-consultation-btn" title="{{ 'viewed_objects.delete'|trans }}">
-                                <i class="fa fa-times"></i>
+                                <i class="fa fa-trash-o"></i>
                             </a>
                         </div>
                     </td>

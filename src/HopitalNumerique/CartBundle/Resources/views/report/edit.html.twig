@@ -1,67 +1,76 @@
 {% trans_default_domain 'cart' %}
-
-<div class="new-report" data-uri="{{ path('hopital_numerique_cart_report_factory_get_pending') }}">
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
-    </p>
-
-    <div class="new-report-prototype hidden">
-        {{ include('@HopitalNumeriqueCart/report/partials/report_item_line.html.twig') }}
-    </div>
-    <div class="new-report-items" data-reorder-uri="#">
-        <div class="alert alert-default">
-            <b>Aucun item dans le rapport.</b>
+<div class="panel panel-default">
+    <div class="panel-heading custom-panel-heading">
+        <div class="panel-title">
+            <i class="icon report-settings"></i>
+            {{ 'edit.title'|trans }}
         </div>
     </div>
+    <div class="panel-body">
+        <div class="new-report" data-uri="{{ path('hopital_numerique_cart_report_factory_get_pending') }}">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
+            </p>
 
-    <hr>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-    </p>
-
-    <hr>
-
-    <div class="form-wrapper">
-
-    </div>
-
-    <div class="form-prototype hidden">
-        <form action="{{ '{{form_action}}' }}" method="{{ reportForm.vars.method }}">
-
-            <div class="form-group">
-                {% for column in reportForm.columns %}
-                    {% set columnName = column.vars.value %}
-                    <label for="{{ 'report-column-'~columnName }}" class="checkbox-inline">
-                        {{ '{{#report_columns.'~columnName~'}}' }}
-                            <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" checked="checked" value="{{ columnName }}">
-                        {{ '{{else}}' }}
-                            <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" value="{{ columnName }}">
-                        {{ '{{/report_columns.'~columnName~'}}' }}
-                        {{ ('columns.'~columnName)|trans }}
-                    </label>
-                {% endfor %}
+            <div class="new-report-prototype hidden">
+                {{ include('@HopitalNumeriqueCart/report/partials/report_item_line.html.twig') }}
             </div>
-
-
-            <div class="form-group">
-                <label for="{{ reportForm.name.vars.id }}" class="control-label">
-                    {{ 'form.fields.name.label'|trans }}
-                </label>
-                <input type="text" class="form-control" name="{{ reportForm.name.vars.full_name }}" id="{{ reportForm.name.vars.id }}" value="{{ '{{report_name}}' }}">
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="btn-group pull-right">
-                        {{ '{{#report_id}}' }}
-                        <input type="submit" name="{{ reportForm.submit.vars.full_name }}" class="btn btn-success" value="{{ 'form.fields.update.label'|trans|e }}">
-                        <input type="submit" name="{{ reportForm.abort.vars.full_name }}" class="btn btn-danger abort" value="{{ 'form.fields.abort.label'|trans|e }}">
-                        {{ '{{else}}' }}
-                        <input type="submit" name="{{ reportForm.submit.vars.full_name }}" class="btn btn-success" value="{{ 'form.fields.generate.label'|trans|e }}">
-                        {{ '{{/report_id}}' }}
-                    </div>
+            <div class="new-report-items" data-reorder-uri="#">
+                <div class="alert alert-warning">
+                    <strong>{{ 'edit.no_items'|trans }}</strong>
                 </div>
             </div>
-        </form>
+
+            <hr>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+            </p>
+
+            <hr>
+
+            <div class="form-wrapper">
+
+            </div>
+
+            <div class="form-prototype hidden">
+                <form action="{{ '{{form_action}}' }}" method="{{ reportForm.vars.method }}">
+                    <div class="form-group">
+                        {% for column in reportForm.columns %}
+                            {% set columnName = column.vars.value %}
+                            <label for="{{ 'report-column-'~columnName }}" class="checkbox-inline">
+                                {{ '{{#report_columns.'~columnName~'}}' }}
+                                <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" checked="checked" value="{{ columnName }}">
+                                {{ '{{else}}' }}
+                                <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" value="{{ columnName }}">
+                                {{ '{{/report_columns.'~columnName~'}}' }}
+                                {{ ('columns.'~columnName)|trans }}
+                            </label>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="{{ reportForm.name.vars.id }}" class="control-label">
+                            {{ 'form.fields.name.label'|trans }}
+                        </label>
+                        <input type="text" class="form-control" name="{{ reportForm.name.vars.full_name }}" id="{{ reportForm.name.vars.id }}" value="{{ '{{report_name}}' }}">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn-group pull-right">
+                                {{ '{{#report_id}}' }}
+                                <input type="submit" name="{{ reportForm.submit.vars.full_name }}" class="btn btn-success" value="{{ 'form.fields.update.label'|trans|e }}">
+                                <input type="submit" name="{{ reportForm.abort.vars.full_name }}" class="btn btn-danger abort" value="{{ 'form.fields.abort.label'|trans|e }}">
+                                {{ '{{else}}' }}
+                                <input type="submit" name="{{ reportForm.submit.vars.full_name }}" class="btn btn-success" value="{{ 'form.fields.generate.label'|trans|e }}">
+                                {{ '{{/report_id}}' }}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>

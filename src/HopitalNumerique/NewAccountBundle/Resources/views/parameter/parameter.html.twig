@@ -1,5 +1,14 @@
 {% extends 'NewAccountBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-parameters.css" filter="cssrewrite, ?yui_css"
+        'bundles/newaccount/css/parameters.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block form_row %}
     <div class ="form_vertical_row">
         <div class="form-group">
@@ -28,7 +37,10 @@
         </div>
 
         <fieldset class="panel panel-default">
-            <legend class="panel-heading custom-panel-heading">Mot de passe</legend>
+            <div class="panel-heading custom-panel-heading">
+                <i class="icon password-icon"></i>
+                {{ 'account.parameters.password'|trans }}
+            </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -53,7 +65,10 @@
         </fieldset>
 
         <fieldset class="panel panel-default">
-            <legend class="panel-heading custom-panel-heading">Notifications</legend>
+            <div class="panel-heading custom-panel-heading">
+                <i class="icon notifications-icon"></i>
+                {{ 'account.parameters.notifications'|trans }}
+            </div>
             <div class="panel-body">
                 {{ form_row(form.publicationNotification) }}
                 {{ form_row(form.activityNewsletter) }}
@@ -64,7 +79,10 @@
     {{ form_end(form) }}
 
     <fieldset class="panel panel-default">
-        <legend class="panel-heading custom-panel-heading">Me désinscrire</legend>
+        <div class="panel-heading custom-panel-heading">
+            <i class="icon unsubscribe-icon"></i>
+            {{ 'account.parameters.unsubscribe'|trans }}
+        </div>
         <div class="panel-body">
             <p>
                 Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».<br /><br />

@@ -15,25 +15,8 @@
     line-height: 25px;
 }
 
-#my-account #services table td {
-    vertical-align: middle;
-}
-
-#my-account #services table .parent-row {
-    background-color: #c4c4c4;
-    color: #000;
-}
-
-#my-account #services table .parent-row td:nth-child(1) {
-    font-weight: bold;
-    font-size: 12px;
-}
-
-#my-account #services .icon {
-    font-family: 'FontAwesome', 'serif';
-    padding-right: 5px;
-    font-style: normal;
-    font-weight: normal;
+#my-account #services .icon.quick-access::before {
+    content: "\f0c9";
 }
 
 #my-account #services .icon.viewed-objects::before {

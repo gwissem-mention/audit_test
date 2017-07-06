@@ -5,7 +5,7 @@
             {{ 'Module_moncompte_services_autodiagnostics'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
 
-        <table class="widget-table table default">
+        <table class="widget-table account-table table default">
             <thead>
             <tr>
                 <th>{{ 'autodiagnostic.table.autodiag'|trans }}</th>
@@ -61,7 +61,7 @@
                                     <i class="fa fa-exchange"></i>
                                 </a>
                                 <a href="{{ synthesis.deleteUrl }}" class="btn btn-sm btn-danger delete-synthesis-btn" title="{{ 'autodiagnostic.action.delete'|trans }}">
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </a>
                             </div>
                         </td>

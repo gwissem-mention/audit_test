@@ -5,7 +5,7 @@
             {{ 'Module_moncompte_services_questionnaires'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
 
-        <table class="widget-table table default">
+        <table class="widget-table account-table table default">
             <thead>
             <tr>
                 <th>{{ 'survey.table.title'|trans }}</th>
@@ -31,7 +31,7 @@
                             {% endif %}
                             {% if item.survey.actions.delete is defined %}
                                 <a href="{{ item.survey.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </a>
                             {% endif %}
                             {% if item.survey.actions.add is defined %}
@@ -55,7 +55,7 @@
                                     <i class="fa fa-eye"></i>
                                 </a>
                                 <a href="{{ response.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </a>
                             </div>
                         </td>
