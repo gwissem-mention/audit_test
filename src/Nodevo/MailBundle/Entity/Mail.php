@@ -32,6 +32,9 @@ class Mail
     /** ID e-mail de nouveau commentaire sur une fiche de la communauté de pratique */
     const MAIL_CM_COMMENTAIRE_FICHE = 72;
 
+    /** @var int ID du courriel de partage des analyses du parcours guidé */
+    const MAIL_SHARE_GUIDED_SEARCH_ID = 75;
+
     /**
      * @var int
      *

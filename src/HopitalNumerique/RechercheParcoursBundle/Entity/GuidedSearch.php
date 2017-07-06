@@ -2,10 +2,10 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ObjetBundle\Entity\Risk;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * GuidedSearch
@@ -46,7 +46,7 @@ class GuidedSearch
     /**
      * @var ArrayCollection|GuidedSearchStep[]
      *
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep", mappedBy="guidedSearch")
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep", mappedBy="guidedSearch", cascade={"remove"})
      */
     protected $steps;
 
@@ -101,6 +101,16 @@ class GuidedSearch
     }
 
     /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isOwner(User $user)
+    {
+        return $this->owner->getId() === $user->getId();
+    }
+
+    /**
      * @param User|null $owner
      *
      * @return GuidedSearch
@@ -129,6 +139,28 @@ class GuidedSearch
     {
         if (!$this->shares->contains($user)) {
             $this->shares->add($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return GuidedSearch
+     */
+    public function removeShare(User $user)
+    {
+        if ($this->shares->contains($user)) {
+            $this->shares->removeElement($user);
+        }
+
+        foreach ($this->steps as $step) {
+            foreach ($step->getRisksAnalysis() as $riskAnalysis) {
+                if ($riskAnalysis->getOwner()->getId() === $user->getId()) {
+                    $step->removeRiskAnalysis($riskAnalysis);
+                }
+            }
         }
 
         return $this;

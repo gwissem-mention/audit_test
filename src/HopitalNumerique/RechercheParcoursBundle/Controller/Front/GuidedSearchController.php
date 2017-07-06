@@ -2,15 +2,18 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Controller\Front;
 
+use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Nodevo\MailBundle\Form\Type\RecommandationType;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
-use HopitalNumerique\RechercheParcoursBundle\Security\GuidedSearchVoter;
 use HopitalNumerique\RechercheParcoursBundle\Form\Type\Risk\AddRiskType;
 use HopitalNumerique\RechercheParcoursBundle\Form\Type\Risk\ShowRiskType;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
@@ -20,17 +23,22 @@ use HopitalNumerique\RechercheParcoursBundle\Domain\Command\AddPrivateRiskComman
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchConfigPublicationType;
 use HopitalNumerique\RechercheParcoursBundle\Form\Type\GuidedSearch\ShareGuidedSearchType;
 use HopitalNumerique\RechercheParcoursBundle\Domain\Command\AnalyseGuidedSearchStepCommand;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\SendAnalyzesCommand;
 use HopitalNumerique\RechercheParcoursBundle\Exception\GuidedSearch\Share\UserNotFoundException;
 use HopitalNumerique\RechercheParcoursBundle\Exception\GuidedSearch\Share\AlreadySharedException;
 use HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\ShareGuidedSearchCommand;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\RemoveGuidedSearchCommand;
 
+/**
+ * Class GuidedSearchController
+ */
 class GuidedSearchController extends Controller
 {
     /**
      * @param Request $request
      * @param RechercheParcoursGestion $guidedSearchConfig
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function indexAction(Request $request, RechercheParcoursGestion $guidedSearchConfig)
     {
@@ -45,11 +53,12 @@ class GuidedSearchController extends Controller
 
     /**
      * @param RechercheParcours $guidedSearchReference
-     * @param $guidedSearchReferenceAlias
+     * @param                   $guidedSearchReferenceAlias
+     * @param GuidedSearch|null $guidedSearch
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
-    public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias)
+    public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch = null)
     {
         /** @var RechercheParcoursDetails $reference */
         $reference = $guidedSearchReference->getRecherchesParcoursDetails()->first();
@@ -71,7 +80,9 @@ class GuidedSearchController extends Controller
             }
         }
 
-        $guidedSearch = $this->get('hopitalnumerique_rechercheparcours.guided_search_retriever')->retrieve($guidedSearchReference);
+        if (null === $guidedSearch) {
+            $guidedSearch = $this->get('hopitalnumerique_rechercheparcours.guided_search_retriever')->retrieve($guidedSearchReference);
+        }
 
         return $this->redirectToRoute('hopital_numerique_guided_search_step', array_merge([
             'guidedSearch' => $guidedSearch->getId(),
@@ -88,7 +99,7 @@ class GuidedSearchController extends Controller
      * @param GuidedSearch $guidedSearch
      * @param Reference|null $subReference
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function stepAction(
         RechercheParcours $guidedSearchReference,
@@ -186,7 +197,7 @@ class GuidedSearchController extends Controller
      * @param Request $request
      * @param GuidedSearchStep $guidedSearchStep
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function analyseAction(Request $request, GuidedSearchStep $guidedSearchStep)
     {
@@ -207,7 +218,7 @@ class GuidedSearchController extends Controller
      * @param Request $request
      * @param GuidedSearchStep $guidedSearchStep
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function shareAction(Request $request, GuidedSearchStep $guidedSearchStep)
     {
@@ -235,5 +246,85 @@ class GuidedSearchController extends Controller
         }
 
         return $this->redirect($this->get('hopitalnumerique_rechercheparcours.helper.step_url_generator')->generate($guidedSearchStep));
+    }
+
+    /**
+     * @param Request      $request
+     * @param GuidedSearch $guidedSearch
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(Request $request, GuidedSearch $guidedSearch)
+    {
+        $this->denyAccessUnlessGranted('access', $guidedSearch);
+
+        $command = new RemoveGuidedSearchCommand($guidedSearch, $this->getUser());
+
+        try {
+            $this->get('hopitalnumerique_rechercheparcours.handler.remove_guided_search_command')->handle($command);
+
+            $this->addFlash('success', $this->get('translator')->trans('guided_search.delete.success', [], 'widget'));
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $this->get('translator')->trans('guided_search.delete.error', [], 'widget'));
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @param Request      $request
+     * @param GuidedSearch $guidedSearch
+     *
+     * @return RedirectResponse|Response
+     * @throws \Exception
+     */
+    public function sendAction(Request $request, GuidedSearch $guidedSearch)
+    {
+        $this->denyAccessUnlessGranted('access', $guidedSearch);
+
+        $sendResultMail =
+            $this->get('nodevo_mail.manager.mail')->findOneById(Mail::MAIL_SHARE_GUIDED_SEARCH_ID);
+        if (null === $sendResultMail) {
+            throw new \Exception($this->get('translator')->trans('guided_search.send.not_found', [], 'widget'));
+        }
+
+        $shareForm = $this->createForm(RecommandationType::class, null, [
+            'mail' => $sendResultMail,
+            'expediteur' => $this->getUser(),
+            'url' => $request->headers->get('referer'),
+            'action' => $this
+                ->redirectToRoute('hopital_numerique_guided_search_send', ['guidedSearch' => $guidedSearch->getId()])
+                ->getTargetUrl()
+            ,
+        ]);
+        $shareForm->handleRequest($request);
+
+        if ($shareForm->isSubmitted()) {
+            $command = new SendAnalyzesCommand(
+                $guidedSearch,
+                $this->getUser(),
+                $shareForm->get('expediteur')->getData(),
+                $shareForm->get('destinataire')->getData(),
+                $shareForm->get('objet')->getData(),
+                $shareForm->get('message')->getData()
+            );
+
+            $this->get('hopitalnumerique_rechercheparcours.handler.send_guided_search_analyzes_command')->handle(
+                $command
+            );
+
+            $this->addFlash('success', $this->get('translator')->trans('guided_search.send.success', [], 'widget'));
+
+            return $this->redirect($shareForm->get('url')->getData());
+        }
+
+        return $this->render(
+            '@HopitalNumeriqueAutodiag/Restitution/popin.html.twig',
+            [
+                'recommandationForm' => $shareForm->createView(),
+            ]
+        );
     }
 }
