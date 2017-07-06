@@ -1,0 +1,6 @@
+help_block:
+    description:
+        full: Vous êtes actuellement sur la page consacrée à %resourceName% qui traite de %references%.
+        light: Vous êtes actuellement sur la page consacrée à %resourceName%.
+    lost_btn:
+        text: Vous êtes perdu ?

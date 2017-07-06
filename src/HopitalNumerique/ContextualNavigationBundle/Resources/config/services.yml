@@ -1,0 +1,8 @@
+services:
+    hopital_numerique_contextual_navigation.twig.help_block:
+        class: HopitalNumerique\ContextualNavigationBundle\Twig\HelpBlockExtension
+        arguments:
+            - '@twig'
+            - '@hopitalnumerique_core.dependency_injection.entity'
+        tags:
+            - { name: twig.extension }

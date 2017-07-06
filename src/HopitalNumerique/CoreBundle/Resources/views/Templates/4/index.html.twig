@@ -175,6 +175,8 @@
         <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />
     </div>
 
+    {{ block('helpBlock') }}
+
     <div class="col-md-12" id="footer">
         {{ knp_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
     </div>

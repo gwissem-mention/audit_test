@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -23,7 +24,9 @@ use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -164,6 +167,11 @@ class Entity
     private $suggestionRepository;
 
     /**
+     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     */
+    protected $entityHasReferenceRepository;
+
+    /**
      * Constructeur.
      *
      * @param RouterInterface                 $router
@@ -185,6 +193,7 @@ class Entity
      * @param                                 $refComPratiqueId
      * @param                                 $refExpressionBesoinReponseId
      * @param                                 $refForumBoardId
+     * @param EntityHasReferenceRepository $entityHasReferenceRepository
      */
     public function __construct(
         RouterInterface $router,
@@ -205,7 +214,8 @@ class Entity
         $refRechercheParcoursId,
         $refComPratiqueId,
         $refExpressionBesoinReponseId,
-        $refForumBoardId
+        $refForumBoardId,
+        $entityHasReferenceRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -226,6 +236,7 @@ class Entity
         $this->refComPratiqueId = $refComPratiqueId;
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
         $this->refForumBoardId = $refForumBoardId;
+        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
     }
 
     /**
@@ -379,6 +390,8 @@ class Entity
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return [$entity->getCategory()->getForum()->getDomain()];
             case self::ENTITY_TYPE_CONTENU:
                 return $this->getDomainesByEntity($entity->getObjet());
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
@@ -542,6 +555,9 @@ class Entity
             case self::ENTITY_TYPE_FORUM_BOARD:
                 $title = $entity->getName();
                 break;
+            case self::ENTITY_TYPE_AUTODIAG:
+                $title = $entity->getTitle();
+                break;
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -688,6 +704,31 @@ class Entity
         }
 
         return $description;
+    }
+
+    /**
+     * @param $entity
+     * @param bool $onlyPrimary
+     *
+     * @return EntityHasReference[]
+     */
+    public function getReferencesByEntity($entity, $onlyPrimary = false)
+    {
+        $domains = $this->getDomainesByEntity($entity);
+
+        $references = $this->entityHasReferenceRepository->findByEntityTypeAndEntityIdAndDomaines(
+            $this->getEntityType($entity),
+            $this->getEntityId($entity),
+            $domains instanceof Collection ? $domains->toArray() : $domains
+        );
+
+        if ($onlyPrimary) {
+            $references = array_filter($references, function (EntityHasReference $reference) {
+                return $reference->isPrimary() === true;
+            });
+        }
+
+        return $references;
     }
 
     //<-- URL
