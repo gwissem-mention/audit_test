@@ -29,8 +29,8 @@ var HobbyCollection = (function() {
         },
 
         addDeleteLink: function (element) {
-            var deleteLink = $('<em class="fa fa-times" style="color: #d60030;"></em>');
-            var deleteLinkLayout = $('<a></a>');
+            var deleteLink = $('<em class="fa fa-trash-o" style="color: #d60030;"></em>');
+            var deleteLinkLayout = $('<a title="Retirer le centre d\'intérêt de la liste"></a>');
             deleteLinkLayout.append(deleteLink);
             element.append(deleteLinkLayout);
 

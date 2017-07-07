@@ -29,7 +29,7 @@
 
                 {% if user.getAbsolutePath() is not null %}
                     <img class="uploadedFile" src="/{{ user.getWebPath() }}" alt="{{ 'account.user.file'|trans }}" height="132px">
-                    <div class="deleteUploadedFile btn btn-danger btn-xs" ><i class="fa fa-trash-o"></i></div>
+                    <div class="deleteUploadedFile btn btn-danger btn-xs" title="{{ 'account.profile.picture.delete'|trans }}"><i class="fa fa-trash-o"></i></div>
                 {% endif %}
             </div>
             <div class="col-md-12">

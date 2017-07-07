@@ -11,6 +11,8 @@ account:
         profile: Mon profil
         structure: Ma structure
         skills: Mes compétences
+        picture:
+            delete: Supprimer la photo
     service:
         title: Mes services
         quick_access: Accès directs
@@ -22,6 +24,9 @@ account:
         title: Mon panier
     parameters:
         title: Mes paramètres
+        password: Mot de passe
+        notifications: Notifications
+        unsubscribe: Me désinscrire
     save: Enregistrer les modifications
     message:
         save:
@@ -51,7 +56,8 @@ account:
         presentation: Je me présente
         knowledge: Mes connaissances
         hobbies: Centres d'intérêt
-        addHobbies: Ajouter
+        hobby:
+            add: Ajouter
     cdp:
         join: Rejoindre la communauté
         access: Accéder à la communauté

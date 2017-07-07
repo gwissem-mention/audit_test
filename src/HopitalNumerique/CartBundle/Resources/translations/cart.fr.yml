@@ -107,6 +107,10 @@ list:
             title: Supprimer mon rapport
             confirm: Confirmez-vous la suppression du rapport ?
 
+edit:
+    title: Paramétrer mon rapport
+    no_items: Aucun item dans le rapport.
+
 columns:
     resume: Résumé
     synthesis: Synthèse

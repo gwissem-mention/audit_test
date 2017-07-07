@@ -1,3 +1,38 @@
+#my-account table.account-table {
+    border-collapse: collapse;
+}
+
+#my-account table.account-table th {
+    text-transform: uppercase;
+    background-color: #6F3596;
+    color :#FFFFFF;
+    font-weight: bold;
+    font-size: 11px;
+    border: 1px solid #ddd;
+}
+
+#my-account table.account-table .parent-row {
+    background-color: #c4c4c4;
+    color: #000;
+}
+
+#my-account table.account-table .parent-row td:nth-child(1) {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#my-account table.account-table td {
+    vertical-align: middle;
+}
+
+#my-account .icon {
+    font-family: 'FontAwesome', 'serif';
+    padding-right: 5px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+
 #my-account .panel.with-nav-tabs .panel-heading {
     padding: 0;
 }
