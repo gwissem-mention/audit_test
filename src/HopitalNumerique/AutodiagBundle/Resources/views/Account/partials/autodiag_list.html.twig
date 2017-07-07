@@ -90,7 +90,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th></th>
+                        {% if datasForSyntheses.canGenerateSynthesis %}<th></th>{% endif %}
                         <th>{{ 'ad.account.table.name'|trans }}</th>
                         <th>{{ 'ad.account.table.validation_date'|trans }}</th>
                         <th>{{ 'ad.account.table.share'|trans }}</th>
@@ -98,18 +98,21 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% set colspan = datasForSyntheses.canGenerateSynthesis ? 5 : 4 %}
                     {% if datasForSyntheses.validSyntheses is empty %}
-                        <tr><td colspan="5" class="autodiag-title">{{ 'ad.account.table.none'|trans }}</td></tr>
+                        <tr><td colspan="{{ colspan }}" class="autodiag-title">{{ 'ad.account.table.none'|trans }}</td></tr>
                     {% else %}
                         {% for autodiag in datasForSyntheses.validSyntheses %}
-                            <tr><td colspan="5" class="autodiag-title">{{ autodiag.name }}{% if autodiag.updated %} <i class="attribute-tooltip maj" data-toggle="tooltip" title="{{ 'ad.account.autodiag.updated'|trans }}"></i>{% endif %}</td></tr>
+                            <tr><td colspan="{{ colspan }}" class="autodiag-title">{{ autodiag.name }}{% if autodiag.updated %} <i class="attribute-tooltip maj" data-toggle="tooltip" title="{{ 'ad.account.autodiag.updated'|trans }}"></i>{% endif %}</td></tr>
                             {% for synthesis in autodiag.syntheses %}
                                 <tr>
-                                    <td>
-                                        {% if autodiag.synthesisAllowed == true %}
-                                            <input name="synthesis-choice[{{ autodiag.id }}][]" type="checkbox" value="{{ synthesis.id }}">
-                                        {% endif %}
-                                    </td>
+                                    {% if datasForSyntheses.canGenerateSynthesis %}
+                                        <td>
+                                            {% if autodiag.synthesisAllowed %}
+                                                <input name="synthesis-choice[{{ autodiag.id }}][]" type="checkbox" value="{{ synthesis.id }}">
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
                                     {% if synthesis.entries|length > 1 %}
                                         <td>{{ 'ad.account.synthesis.name'|trans }} : <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id})}}">{{ synthesis.name }}</span></td>
                                     {% else %}
@@ -163,7 +166,7 @@
             </div>
         </div>
 
-        {% if datasForSyntheses.validSyntheses is not empty %}
+        {% if datasForSyntheses.canGenerateSynthesis %}
             <div class="col-md-12 synthesis-creation">
                 <div class="row-account">
                     {{ 'ad.account.synthesis.create.label'|trans }}
