@@ -107,12 +107,11 @@
 }
 
 #my-account .account-links {
-    margin: 30px 0 10px;
+    margin: 30px 0 40px;
 }
 
 #my-account .account-links a.btn-menu {
     font-size: 16px;
-    text-transform: uppercase;
     font-weight: normal;
     background: transparent;
     border-color: transparent;

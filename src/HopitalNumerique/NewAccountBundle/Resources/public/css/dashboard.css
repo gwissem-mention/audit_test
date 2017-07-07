@@ -65,7 +65,47 @@
 }
 
 
+/** PROFILE BRICK **/
+#account-dashboard .dashboard-brick.dashboard-brick-profile .brick-container {
+    display: flex;
+    align-items: center;
+    height: 180px;
+}
 
-#account-dashboard .dashboard-brick .profile-completion {
-    margin-top: 20px;
+#account-dashboard .dashboard-brick.dashboard-brick-profile .avatar {
+    height: 100px;
+    width: 100px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .wrapper {
+    width: 100%;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content {
+    margin-left: 120px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion {
+    margin-top: 10px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion .completion-bar,
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion b {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion b {
+    margin-right: 10px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion .completion-bar {
+    max-width: 300px;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .profile-completion a {
+    margin-top: 10px;
+    display: inline-block;
 }
