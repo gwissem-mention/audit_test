@@ -2,7 +2,7 @@
     color: #d60030;
     font-size: 14px;
     font-weight: bold;
-    margin: 20px 0 2px 0;
+    margin: 5px 0 20px 0;
     text-transform: uppercase;
 }
 
@@ -14,7 +14,7 @@
 #recherche-par-parcours-details .productions .result .category {
     color: #d60030;
     font-size: 12px;
-    margin: 20px 0 0 0;
+    margin: 0;
     text-transform: uppercase;
 }
 
@@ -26,6 +26,7 @@
 #recherche-par-parcours-details .productions .result .title a {
     font-size: 16px;
     color: #000;
+    display: block;
 }
 
 #recherche-par-parcours-details .productions .result .title a .source {
