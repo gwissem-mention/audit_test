@@ -1,3 +1,47 @@
+#my-account #services .guick-access {
+
+}
+
+#my-account #services .guick-access h2 {
+    text-align: center;
+}
+
+#my-account #services .guick-access ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0;
+    margin: 0 0 30px;
+}
+
+#my-account #services .guick-access ul li {
+    display: inline-block;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 100%;
+}
+
+#my-account #services .guick-access ul li a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    min-height: 100%;
+
+    color: #777;
+}
+
+#my-account #services .guick-access ul li a:hover {
+    background: #eee;
+    color: #555;
+}
+
+#my-account #services .guick-access ul li a .picto {
+    display: block;
+    font-size: 60px;
+}
+
 #my-account #services .domains-row {
     margin-bottom: 15px;
 }
@@ -8,11 +52,6 @@
 
 #my-account #services .actions-column {
     text-align: right;
-}
-
-#my-account #services ul.introduction-summary {
-    list-style: none;
-    line-height: 25px;
 }
 
 #my-account #services .icon.quick-access::before {
