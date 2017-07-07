@@ -69,7 +69,7 @@ class RechercheParcoursGestion
     /**
      * @var array|string[]
      *
-     * @ORM\OneToMany(targetEntity="GuidedSearchConfigPublicationType", mappedBy="guidedSearchConfig")
+     * @ORM\OneToMany(targetEntity="GuidedSearchConfigPublicationType", mappedBy="guidedSearchConfig", cascade={"remove"})
      * @ORM\OrderBy({"order" = "ASC"})
      */
     protected $publicationsType;
