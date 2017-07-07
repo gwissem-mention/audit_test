@@ -27,7 +27,7 @@ account:
         password: Mot de passe
         notifications: Notifications
         unsubscribe: Me désinscrire
-    save: Enregistrer les modifications
+    save: Enregistrer
     message:
         save:
             success: Vos informations ont bien été enregistrées.
