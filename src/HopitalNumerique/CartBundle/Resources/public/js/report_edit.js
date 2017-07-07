@@ -73,7 +73,7 @@ var ReportEdit;
 
             $.get(component.$wrapper.data('uri'), null, function(reportFactory) {
                 if (reportFactory.factoryItems.length > 0) {
-                    $('.new-report-items .alert').addClass('hidden');
+                    $('.new-report-items .no-result').addClass('hidden');
                 }
 
                 component.$factoryItemsWrapper.attr('data-reorder-uri', Routing.generate('hopital_numerique_cart_report_item_reorder', {'reportFactory': reportFactory.id}));
@@ -151,7 +151,7 @@ var ReportEdit;
             var component = this;
 
             if (component.$form.find('.new-report-items .item-line').length === 0) {
-                component.$form.find('.new-report-items .alert').removeClass('hidden');
+                component.$form.find('.new-report-items .no-result').removeClass('hidden');
             }
         }
     };
