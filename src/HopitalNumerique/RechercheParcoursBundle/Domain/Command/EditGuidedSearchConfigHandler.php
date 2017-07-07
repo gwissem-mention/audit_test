@@ -60,7 +60,7 @@ class EditGuidedSearchConfigHandler
 
         $rechercheParcoursGestion
             ->setNom($command->name)
-            ->setDomaines($rechercheParcoursGestion->getDomaines())
+            ->setDomaines($command->domaines)
             ->setReferencesVentilations($command->referencesVentilations)
             ->setReferencesParentes($command->referencesParentes)
         ;
@@ -114,6 +114,10 @@ class EditGuidedSearchConfigHandler
      */
     private function handleParentsReferences(RechercheParcoursGestion $rechercheParcoursGestion)
     {
+        if (!$rechercheParcoursGestion->getRechercheParcours()) {
+            return;
+        }
+
         $rechercheParcoursNew = [];
         $recherchesParcours = clone $rechercheParcoursGestion->getRechercheParcours();
 
