@@ -25,28 +25,32 @@
 {% block body %}
     <div id="my-account">
 
-        <div class="row account-links">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_profile') }}">
-                    <span id="profile-page"><i class="fa fa-user"></i> {{ 'account.profile.title'|trans }}</span>
+        <ul class="account-links nav nav-tabs">
+            <li>
+                <a class="btn-menu" href="{{ path('account_profile') }}" id="profile-page">
+                    <i class="picto fa fa-user"></i>
+                    {{ 'account.profile.title'|trans }}
                 </a>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_service') }}">
-                    <span id="service-page"><i class="fa fa-briefcase"></i> {{ 'account.service.title'|trans }}</span>
+            </li>
+            <li>
+                <a class="btn-menu" href="{{ path('account_service') }}" id="service-page">
+                    <i class="picto fa fa-briefcase"></i>
+                    {{ 'account.service.title'|trans }}
                 </a>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_cart') }}">
-                    <span id="cart-page" ><i class="fa fa-shopping-cart"></i> {{ 'account.cart.title'|trans }}</span>
+            </li>
+            <li>
+                <a class="btn-menu" href="{{ path('account_cart') }}" id="cart-page">
+                    <i class="picto fa fa-shopping-cart"></i>
+                    {{ 'account.cart.title'|trans }}
                 </a>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <a class="btn btn-default btn-lg btn-block btn-menu" href="{{ path('account_parameter') }}">
-                    <span id="parameter-page"><i class="fa fa-cogs"></i> {{ 'account.parameters.title'|trans }}</span>
+            </li>
+            <li>
+                <a class="btn-menu" href="{{ path('account_parameter') }}" id="parameter-page">
+                    <i class="picto fa fa-cogs"></i>
+                    {{ 'account.parameters.title'|trans }}
                 </a>
-            </div>
-        </div>
+            </li>
+        </ul>
 
         <br><br>
         <div class="row">
