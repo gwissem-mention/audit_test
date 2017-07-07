@@ -67,6 +67,7 @@
 
 #restitution .item-row.pdf {
     display: block;
+    page-break-inside: avoid !important;
 }
 
 #restitution .item-row > .item {
@@ -139,9 +140,9 @@
 
 }
 
-    /**
-    * JAUGE
-    */
+/**
+* JAUGE
+*/
 #restitution .jauge {
     display: -webkit-box;
     display: -ms-flexbox;
