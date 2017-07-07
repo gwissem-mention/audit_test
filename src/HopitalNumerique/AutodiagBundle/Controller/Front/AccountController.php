@@ -127,7 +127,9 @@ class AccountController extends Controller
 
         $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.generator.success'));
 
-        return $this->redirect($request->headers->get('referer'));
+        return $this->redirectToRoute('hopitalnumerique_autodiag_restitution_index', [
+            'synthesis' => $newSynthesis->getId(),
+        ]);
     }
 
     /**
