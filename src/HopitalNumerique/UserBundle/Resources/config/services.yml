@@ -209,6 +209,8 @@ services:
             - "@hopitalnumerique_objet.repository.commentaire"
             - "@hopitalnumerique_objet.repository.note"
             - "@ccdn_forum_forum.repository.post"
+            - "@nodevo_mail.repository.recommendation_mail_log"
+            - '@hopitalnumerique_user.repository.user'
 
     hopitalnumerique_user.form.type.account:
         class: HopitalNumerique\UserBundle\Form\Type\UserAccountType
@@ -258,14 +260,12 @@ services:
             - '@twig'
             - '@security.token_storage'
             - '@translator'
+            - '@hopitalnumerique_user.service.active_member_calculator'
         calls:
             - method: setRepositories
               arguments:
                 - '@hopitalnumerique_recherche.repository.requete'
                 - '@hopitalnumerique_objet.repository.consultation'
-                - '@hopitalnumerique_forum.repository.post'
-                - '@hopitalnumerique_objet.repository.note'
-                - '@hopitalnumerique_objet.repository.commentaire'
                 - '@autodiag.repository.autodiagentry'
-                - '@nodevo_mail.repository.recommendation_mail_log'
+                - '@hopitalnumerique_user.repository.user'
         public: false

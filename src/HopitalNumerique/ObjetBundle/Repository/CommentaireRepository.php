@@ -106,12 +106,12 @@ class CommentaireRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
+        $comments = [];
         foreach ($results as $key => $result) {
-            $results[$result['idUser']] = intval($result['nbComment']);
-            unset($results[$key]);
+            $comments[$result['idUser']] = intval($result['nbComment']);
         }
 
-        return $results;
+        return $comments;
     }
 
     /**

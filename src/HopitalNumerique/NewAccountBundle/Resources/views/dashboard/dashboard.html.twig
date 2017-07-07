@@ -55,6 +55,12 @@
         <div class="panel panel-default dashboard-brick">
             <div class="panel-heading custom-panel-heading">
                 <div class="options pull-right">
+
+                    {% for extension in widget.extensions %}
+                        {{ extension.content|raw }}
+                    {% endfor %}
+
+
                     {% if not widget.sticked %}
                         <i class="fa fa-arrows draggable"></i>
                     {% endif %}

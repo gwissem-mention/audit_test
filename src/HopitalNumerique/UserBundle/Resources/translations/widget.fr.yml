@@ -7,3 +7,13 @@ activity:
     content_shared: "[0,1] %count% partage de contenu |]1,Inf[ %count% partages de contenu"
     autodiag: "[0,1] %count% autodiagnostic en cours ou validé |]1,Inf[ %count% autodiagnostics en cours ou validés"
     guided_tour: "[0,1] %count% parcours guidé |]1,Inf[ %count% parcours guidés"
+
+    member_activity_ratio:
+        top: Vous faites partie des utilisateurs les plus contributifs
+        bottom: Vous ne faites pas encore partie des utilisateurs les plus actifs ; participez davantage
+        criteria:
+            visitsCount: 'Nombre de visites sur la plateforme :'
+            forumPostsCount: 'Nombre de posts renseignés sur les forums : '
+            commentsCount: 'Nombre de commentaires sur les publications : '
+            notesCount: 'Nombre de notations sur les publications : '
+            recommendationsCount: 'Nombre de recommandations : '

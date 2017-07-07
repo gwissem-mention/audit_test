@@ -3,6 +3,7 @@
 namespace Nodevo\MailBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\MailBundle\Entity\RecommendationMailLog;
 
@@ -22,5 +23,27 @@ class RecommendationMailLogRepository extends EntityRepository
 
             ->getQuery()->getSingleScalarResult()
         ;
+    }
+
+    /**
+     * @return array
+     */
+    public function countGroupByUser()
+    {
+        $results = $this->createQueryBuilder('rl')
+            ->select('COUNT(rl) as recommendationsCount, u.id')
+            ->join('rl.sendedBy', 'u')
+
+            ->addGroupBy('u.id')
+
+            ->getQuery()->getResult()
+        ;
+
+        $recommendationsCount = [];
+        foreach ($results as $result) {
+            $recommendationsCount[$result['id']] = (int) $result['recommendationsCount'];
+        }
+
+        return $recommendationsCount;
     }
 }

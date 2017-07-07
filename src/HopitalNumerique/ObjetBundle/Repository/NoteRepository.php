@@ -119,12 +119,12 @@ class NoteRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
+        $notes = [];
         foreach ($results as $key => $result) {
-            $results[$result['idUser']] = intval($result['nbNote']);
-            unset($results[$key]);
+            $notes[$result['idUser']] = intval($result['nbNote']);
         }
 
-        return $results;
+        return $notes;
     }
 
     /**

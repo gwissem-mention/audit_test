@@ -25,6 +25,11 @@ class Widget
     protected $sticked = false;
 
     /**
+     * @var WidgetExtension[]
+     */
+    protected $extensions = [];
+
+    /**
      * Widget constructor.
      *
      * @param string $name
@@ -70,5 +75,25 @@ class Widget
     public function isSticked()
     {
         return $this->sticked;
+    }
+
+    /**
+     * @param WidgetExtension $widgetExtension
+     *
+     * @return Widget
+     */
+    public function addExtension(WidgetExtension $widgetExtension)
+    {
+        $this->extensions[] = $widgetExtension;
+
+        return $this;
+    }
+
+    /**
+     * @return WidgetExtension[]
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
     }
 }

@@ -27,4 +27,14 @@ $(function () {
             }
         }
     }).data('gridster');
+
+
+
+    $('.memberActivityRatio').tooltip({
+        placement: 'left',
+        html: true,
+        title: function () {
+            return $(this).siblings('.memberActivityRatio-tooltipContent').html();
+        }
+    })
 });

@@ -24,6 +24,10 @@
     padding-bottom: 4px;
 }
 
+#account-dashboard .dashboard-brick .yellow {
+    color: #FFD700;
+}
+
 #account-dashboard .dashboard-brick .icon.profile::before {
     content: "\f007";
 }
@@ -66,4 +70,10 @@
 
 #account-dashboard .dashboard-brick .profile-completion {
     margin-top: 20px;
+}
+
+#account-dashboard .dashboard-brick .tooltip-inner {
+    padding: 10px;
+    max-width: 500px;
+    font-weight: normal;
 }

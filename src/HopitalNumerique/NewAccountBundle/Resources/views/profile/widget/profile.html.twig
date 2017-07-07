@@ -14,9 +14,9 @@
         <br />
 
         {% if user.organizationLabel and user.jobLabel %}
-            {{ user.organizationLabel }} - {{ user.jobLabel }}
+            {{ user.jobLabel }} - {{ user.organizationLabel }}
         {% elseif user.organization and user.jobLabel %}
-            {{ user.organization.nom }} - {{ user.jobLabel }}
+            {{ user.jobLabel }} - {{ user.organization.nom }}
         {% else %}
             {{ 'specify_job'|trans }}
         {% endif %}

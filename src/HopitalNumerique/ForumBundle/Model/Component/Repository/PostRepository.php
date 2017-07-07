@@ -54,11 +54,11 @@ class PostRepository extends CCDNPostRepository
 
         $results = $qb->getQuery()->getResult();
 
+        $posts = [];
         foreach ($results as $key => $result) {
-            $results[$result['idUser']] = intval($result['nbPost']);
-            unset($results[$key]);
+            $posts[$result['idUser']] = intval($result['nbPost']);
         }
 
-        return $results;
+        return $posts;
     }
 }

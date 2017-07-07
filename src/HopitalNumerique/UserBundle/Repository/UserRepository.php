@@ -613,6 +613,30 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @return User[]
+     */
+    public function getUsersId()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+
+            ->getQuery()->getScalarResult()
+        ;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisitsCountGroupedByUser()
+    {
+        return $this->createQueryBuilder('user', 'user.id')
+            ->select('user.id, user.visitCount')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * Récupère le nombre d'établissements connectés.
      *
      * @param Domaine $domaine
