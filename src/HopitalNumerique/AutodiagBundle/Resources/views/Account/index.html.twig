@@ -39,7 +39,7 @@
     </div>
 
     <div id="syntheses-content">
-        {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'compare': true } %}
+        {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'compare': comparisonForm is not null } %}
     </div>
 
     <script>
