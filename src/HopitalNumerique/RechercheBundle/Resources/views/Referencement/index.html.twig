@@ -148,16 +148,22 @@
                 {% macro buildTreePart(referencesTreePart, level) -%}
                     {% if referencesTreePart.reference.id != 222 %}
                         {% import _self as mySelf %}
+
+                        {% set hasChildren = false %}
+                        {% for child in referencesTreePart.enfants if child.reference.id != 222 %}
+                            {% set hasChildren = true %}
+                        {% endfor %}
+
                         <li data-libelle="{{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
                             <a class="reference">
                                 <span class="add"><i class="fa fa-plus-circle"></i></span>
-                                {%- if referencesTreePart.enfants|length > 0 -%}
+                                {%- if hasChildren -%}
                                     <span class="toggle"><i class="fa fa-chevron-right"></i></span>
                                 {%- endif -%}
                                 {{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}
                             </a>
 
-                            {%- if referencesTreePart.enfants|length > 0 -%}
+                            {%- if hasChildren -%}
                                 <ul>
                                     {%- for referenceEnfantTree in referencesTreePart.enfants -%}
                                         {{ mySelf.buildTreePart(referenceEnfantTree, level + 1) }}
