@@ -44,9 +44,7 @@
             </div>
         </div>
         <div class="panel-body cart">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
-            </p>
+            {{ 'Module_cart_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
 
             {% if cartItems|length > 0 %}
                 <table class="table cart-items account-table">

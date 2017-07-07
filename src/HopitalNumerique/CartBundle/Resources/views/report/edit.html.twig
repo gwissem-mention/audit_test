@@ -8,9 +8,7 @@
     </div>
     <div class="panel-body">
         <div class="new-report" data-uri="{{ path('hopital_numerique_cart_report_factory_get_pending') }}">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
-            </p>
+            {{ 'Module_cart_report_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
 
             <div class="new-report-prototype hidden">
                 {{ include('@HopitalNumeriqueCart/report/partials/report_item_line.html.twig') }}
@@ -22,9 +20,8 @@
             </div>
 
             <hr>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            </p>
+
+            {{ 'Module_cart_report_form_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
 
             <hr>
 
