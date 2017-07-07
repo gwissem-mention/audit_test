@@ -77,3 +77,4 @@ cart:
             remove:
                 title: Supprimer l'objet
                 confirm: Retirer cet objet de mon panier  ?
+    no_items: "- Aucun item dans le panier -"
