@@ -39,10 +39,15 @@ class AccountController extends Controller
             }
         }
 
-        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
-            'user' => $this->getUser(),
-            'domaine' => $domain,
-        ]);
+        // Check if there is at least one comparable synthesis
+        $comparableSyntheses = $this->get('autodiag.repository.synthesis')->findComparable($this->getUser(), $domain);
+        $comparisonForm = null;
+        if (count($comparableSyntheses) > 0) {
+            $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
+                'user' => $this->getUser(),
+                'domaine' => $domain,
+            ]);
+        }
 
         $dataFormatter = $this->get('autodiag.synthesis.dataformatter');
         $datasForSyntheses = $dataFormatter->getSynthesesOrderByAutodiag($currentUser, $domain);
@@ -59,7 +64,7 @@ class AccountController extends Controller
             'domainesUser' => $domainesUser,
             'user' => $currentUser,
             'currentDomain' => $domain,
-            'comparisonForm' => $comparisonForm->createView(),
+            'comparisonForm' => $comparisonForm ? $comparisonForm->createView() : null,
         ]);
     }
 
