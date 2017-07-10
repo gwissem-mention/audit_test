@@ -392,7 +392,7 @@ class ReferenceController extends Controller
 
     /**
      * @param Reference $reference
-     * 
+     *
      * @return JsonResponse
      */
     public function getReferenceTreeAction(Reference $reference)

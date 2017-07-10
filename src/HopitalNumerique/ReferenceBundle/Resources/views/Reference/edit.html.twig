@@ -27,8 +27,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            var $referenceTree = $('#reference-tree');
 
-            $.get($('#reference-tree').data('refresh-uri'), function (response) {
+            var referenceTreeLoader = $referenceTree.nodevoLoader().start();
+
+            $.get($referenceTree.data('refresh-uri'), function (response) {
+                referenceTreeLoader.finished();
                 var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_reference_reference_parents');
                 referenceTree.display(response);
                 referenceTree.container.on('ready.jstree', function () {
