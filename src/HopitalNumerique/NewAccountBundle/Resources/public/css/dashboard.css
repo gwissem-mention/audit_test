@@ -73,8 +73,8 @@
 }
 
 #account-dashboard .dashboard-brick.dashboard-brick-profile .avatar {
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
 }
 
 #account-dashboard .dashboard-brick.dashboard-brick-profile .wrapper {
@@ -82,7 +82,7 @@
 }
 
 #account-dashboard .dashboard-brick.dashboard-brick-profile .content {
-    margin-left: 120px;
+    margin-left: 140px;
 }
 
 #account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion {

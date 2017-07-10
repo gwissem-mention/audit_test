@@ -1,5 +1,7 @@
 #my-account #services .quick-access h2 {
-    text-align: center;
+    font-size: 16px;
+    color: #6F3596;
+    font-weight: bold;
 }
 
 #my-account #services .quick-access ul {
@@ -29,7 +31,7 @@
 }
 
 #my-account #services .quick-access ul li a:hover {
-    background: #ccc;
+    background: #ddd;
     color: #6F3596;
 }
 
@@ -40,6 +42,10 @@
 
 #my-account #services .domains-row {
     margin-bottom: 15px;
+}
+
+#my-account #services .domains-row #domains-select {
+    margin-left: 15px;
 }
 
 #my-account #services .widget-description {

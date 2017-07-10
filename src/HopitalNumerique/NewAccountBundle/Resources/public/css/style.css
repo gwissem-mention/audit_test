@@ -112,11 +112,11 @@
 
 #my-account .account-links a.btn-menu {
     font-size: 16px;
-    font-weight: normal;
     background: transparent;
     border-color: transparent;
     text-decoration: none;
     color: #777;
+    font-weight: bold;
 }
 
 #my-account .account-links li a.btn-menu:hover,
