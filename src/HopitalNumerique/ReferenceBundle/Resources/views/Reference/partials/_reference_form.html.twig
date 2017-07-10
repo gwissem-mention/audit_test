@@ -53,7 +53,7 @@
 
         <h3>{{ form_label(form.parents) }}</h3>
         <div class="hide">{{ form_widget(form.parents) }}</div>
-        <div id="reference-tree"></div>
+        <div id="reference-tree" data-refresh-uri="{{ path('hopitalnumerique_reference_reference_get_tree', {'reference': reference.id}) }}"></div>
 
         <br>{{ form_row(form.etat) }}
 

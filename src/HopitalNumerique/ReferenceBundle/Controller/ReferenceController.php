@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Controller;
 
 use HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand;
 use HopitalNumerique\ReferenceBundle\Form\Type\SwitchReferenceType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -255,17 +256,6 @@ class ReferenceController extends Controller
      */
     private function renderForm(Reference $reference)
     {
-        $referenceTreeOptions = [];
-
-        if ($reference->getLock() != true) {
-            $referenceTreeOptions = $this->get('hopitalnumerique_reference.dependency_injection.reference.tree')
-                ->getOptions(
-                    $this->getUser()->getDomaines(),
-                    [$reference->getId()]
-                )
-            ;
-        }
-
         $this->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
             ->setInitialReference($reference)
         ;
@@ -397,8 +387,27 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:edit.html.twig', [
             'form' => $form->createView(),
             'reference' => $reference,
-            'referenceTreeOptions' => json_encode($referenceTreeOptions),
         ]);
+    }
+
+    /**
+     * @param Reference $reference
+     * 
+     * @return JsonResponse
+     */
+    public function getReferenceTreeAction(Reference $reference)
+    {
+        $referenceTreeOptions = [];
+        if ($reference->getLock() != true) {
+            $referenceTreeOptions = $this->get('hopitalnumerique_reference.dependency_injection.reference.tree')
+                ->getOptions(
+                    $this->getUser()->getDomaines(),
+                    [$reference->getId()]
+                )
+            ;
+        }
+
+        return new JsonResponse($referenceTreeOptions);
     }
 
     /**

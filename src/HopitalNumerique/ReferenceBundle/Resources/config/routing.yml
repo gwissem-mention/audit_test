@@ -16,6 +16,10 @@ hopitalnumerique_reference_reference_edit:
     requirements:
         id: \d+
 
+hopitalnumerique_reference_reference_get_tree:
+    pattern:  /reference/tree/{reference}
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:getReferenceTree" }
+
 hopitalnumerique_reference_reference_show:
     pattern:  /reference/show/{id}
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:show", id:1 }
