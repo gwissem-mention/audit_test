@@ -52,7 +52,7 @@
 
 {% block brick %}
     <li data-col="{{ k%2+1 }}" data-row="{{ ((k+2)/2)|round(0, 'floor') }}" data-sizex="{{ widget.isSticked ? 2 : 1 }}" data-sizey="1" data-id="{{ widget.name }}">
-        <div class="panel panel-default dashboard-brick">
+        <div class="panel panel-default dashboard-brick dashboard-brick-{{ widget.name }}">
             <div class="panel-heading custom-panel-heading">
                 <div class="options pull-right">
 
@@ -71,7 +71,7 @@
                     {{ widget.title }}
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body brick-container">
                 {{ widget.content|raw }}
             </div>
         </div>

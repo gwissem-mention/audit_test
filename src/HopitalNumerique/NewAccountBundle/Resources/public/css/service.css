@@ -1,5 +1,51 @@
+#my-account #services .quick-access h2 {
+    font-size: 16px;
+    color: #6F3596;
+    font-weight: bold;
+}
+
+#my-account #services .quick-access ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0;
+    margin: 0 0 30px;
+}
+
+#my-account #services .quick-access ul li {
+    display: inline-block;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 100%;
+}
+
+#my-account #services .quick-access ul li a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    min-height: 100%;
+
+    color: #777;
+}
+
+#my-account #services .quick-access ul li a:hover {
+    background: #ddd;
+    color: #6F3596;
+}
+
+#my-account #services .quick-access ul li a .picto {
+    display: block;
+    font-size: 60px;
+}
+
 #my-account #services .domains-row {
     margin-bottom: 15px;
+}
+
+#my-account #services .domains-row #domains-select {
+    margin-left: 15px;
 }
 
 #my-account #services .widget-description {
@@ -8,11 +54,6 @@
 
 #my-account #services .actions-column {
     text-align: right;
-}
-
-#my-account #services ul.introduction-summary {
-    list-style: none;
-    line-height: 25px;
 }
 
 #my-account #services .icon.quick-access::before {

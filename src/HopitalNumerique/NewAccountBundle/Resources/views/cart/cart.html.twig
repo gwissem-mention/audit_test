@@ -36,10 +36,6 @@
 {% block content %}
     <div id="current-page" data-page="cart-page" class="hide"></div>
 
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
-    </p>
-
     <div class="panel panel-default">
         <div class="panel-heading custom-panel-heading">
             <div class="panel-title">
@@ -47,7 +43,9 @@
                 {{ 'cart.items.title'|trans }}
             </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body cart">
+            {{ 'Module_cart_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
             {% if cartItems|length > 0 %}
                 <table class="table cart-items account-table">
                     <thead>
@@ -101,7 +99,9 @@
                     <button data-uri="{{ path('hopital_numerique_cart_report_item_add_staging') }}" class="btn btn-success cart-add-to-report" disabled="disabled">{{ 'cart.items.add.label'|trans }}</button>
                 </div>
             {% else %}
-                <strong>{{ 'cart.no_items'|trans }}</strong>
+                <p class="no-result">
+                    <strong>{{ 'cart.no_items'|trans }}</strong>
+                </p>
             {% endif %}
         </div>
     </div>

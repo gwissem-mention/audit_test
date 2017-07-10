@@ -1,11 +1,9 @@
 {% trans_default_domain 'widget' %}
 
-<div class="row">
-    <div class="col-md-2">
-        <div class="avatar" style="background-image: url({{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}"></div>
-    </div>
+<div class="wrapper">
+    <div class="pull-left avatar" style="background-image: url({{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}"></div>
 
-    <div class="col-md-10">
+    <div class="content">
         {% if user.firstname and user.lastname %}
             {{ user.firstname }} {{ user.lastname }}
         {% else %}
@@ -20,18 +18,18 @@
         {% else %}
             {{ 'specify_job'|trans }}
         {% endif %}
-    </div>
-</div>
 
-<div class="profile-completion">
-    {{ 'profile_completion'|trans }}
-    <div class="progress progress-striped">
-        <div class="progress-bar progress-bar-{{ completion < 33 ? 'danger' : completion >= 66 ? 'success' : 'warning' }}" style="width: {{ completion }}%;">{{ completion }}%</div>
-    </div>
+        <div class="profile-completion">
+            <b>{{ 'profile_completion'|trans }}</b>
+            <div class="completion-bar progress progress-striped">
+                <div class="progress-bar progress-bar-{{ completion < 33 ? 'danger' : completion >= 66 ? 'success' : 'warning' }}" style="width: {{ completion }}%;">{{ completion }}%</div>
+            </div><br />
 
-    {% if completion == 100 %}
-        <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
-    {% else %}
-        <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToComplete)|trans({}, 'messages')}) }}</a>
-    {% endif %}
+            {% if completion == 100 %}
+                <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
+            {% else %}
+                <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToComplete)|trans({}, 'messages')}) }}</a>
+            {% endif %}
+        </div>
+    </div>
 </div>

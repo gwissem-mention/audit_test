@@ -107,33 +107,45 @@
 }
 
 #my-account .account-links {
-    margin-top: 15px;
+    margin: 30px 0 40px;
 }
 
-#my-account .account-links .btn-menu {
-    padding: 20px 0;
+#my-account .account-links a.btn-menu {
     font-size: 16px;
-    text-transform: uppercase;
-    border-radius: 0;
-    width: 100%;
+    background: transparent;
+    border-color: transparent;
+    text-decoration: none;
+    color: #777;
+    font-weight: bold;
 }
 
-#my-account .btn-menu span {
-    text-decoration: none;
-    color: black;
+#my-account .account-links li a.btn-menu:hover,
+#my-account .account-links li.active a.btn-menu {
+    border-color: #e3e3e3 #e3e3e3 #fff;
+    background: #fff;
+    color: #333;
+}
+
+#my-account .account-links .btn-menu i.picto {
+    margin-right: 8px;
+}
+
+#my-account .account-links li a.btn-menu:hover i.picto,
+#my-account .account-links li.active a.btn-menu i.picto {
+    color: #6F3596;
 }
 
 #my-account ul.nav-tabs li a {
-    background-color:#f6f6f6;
-    border-color:#e3e3e3;
-    color:#6F3596;
-    font-size:13px;
-    font-weight:bold;
+    background-color: #f6f6f6;
+    border-color: #e3e3e3;
+    color: #6F3596;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 #my-account ul.nav-tabs li.active a {
-    background-color:#6F3596;
-    color:#fff;
+    background-color: #6F3596;
+    color: #fff;
 }
 
 #my-account .hobby-item {
