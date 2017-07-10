@@ -112,7 +112,7 @@ class ActiveMemberCalculator
                 'score' => $score,
                 'activeUser' => false,
             ];
-        },$usersId);
+        }, $usersId);
 
         // Tri par score croissant
         usort($activeMembers, function ($a, $b) {
@@ -120,7 +120,8 @@ class ActiveMemberCalculator
         });
 
         // Top 20% setted as active user
-        for ($i = count($activeMembers) - (count($activeMembers) / 5); $i <= count($activeMembers); $i++) {
+        $activeMembersCount = count($activeMembers);
+        for ($i = $activeMembersCount - ($activeMembersCount / 5); $i < $activeMembersCount; $i++) {
             $activeMembers[$i]['activeUser'] = true;
         }
 
