@@ -79,29 +79,33 @@
                 </div>
             {% endif %}
 
-
             <br>
-            <h1>{{ 'ad.share.synthesis_results'|trans }}</h1>
-            <div class="mysep background-rose"></div>
-            <p>
-                {{'Module_autodiagnostic_syntheses'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
-            </p>
-            <div class="domain-choice">
-                <div class="row-account">
-                    <p>{{ 'ad.account.domain_selection'|trans }}</p>
+
+
+            {% if datasForSyntheses.canGenerateSynthesis %}
+                <h1>{{ 'ad.share.synthesis_results'|trans }}</h1>
+                <div class="mysep background-rose"></div>
+                <p>
+                    {{'Module_autodiagnostic_syntheses'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+                </p>
+                <div class="domain-choice">
+                    <div class="row-account">
+                        <p>{{ 'ad.account.domain_selection'|trans }}</p>
+                    </div>
+                    <div class="row-account">
+                        <select id="domain-choice">
+                            <option data-url="{{ path('hopitalnumerique_autodiag_share_index', {'synthesis': synthesis.id}) }}">{{ 'ad.account.domain_all'|trans }}</option>
+                            {% for domaine in domainesUser %}
+                                <option data-url="{{ path('hopitalnumerique_autodiag_share_index_domain', {'synthesis': synthesis.id, 'domain': domaine.id}) }}"{% if currentDomain is not null and currentDomain.id == domaine.id %} selected{% endif %}>{{ domaine.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                <div class="row-account">
-                    <select id="domain-choice">
-                        <option data-url="{{ path('hopitalnumerique_autodiag_share_index', {'synthesis': synthesis.id}) }}">{{ 'ad.account.domain_all'|trans }}</option>
-                        {% for domaine in domainesUser %}
-                            <option data-url="{{ path('hopitalnumerique_autodiag_share_index_domain', {'synthesis': synthesis.id, 'domain': domaine.id}) }}"{% if currentDomain is not null and currentDomain.id == domaine.id %} selected{% endif %}>{{ domaine.nom }}</option>
-                        {% endfor %}
-                    </select>
+
+                <div id="syntheses-content">
+                    {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'currentSynthesisId': synthesis.id, 'compare': false} %}
                 </div>
-            </div>
-            <div id="syntheses-content">
-                {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'currentSynthesisId': synthesis.id, 'compare': false} %}
-            </div>
+            {% endif %}
         </div>
     </div>
 
