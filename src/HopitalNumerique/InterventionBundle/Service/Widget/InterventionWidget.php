@@ -294,7 +294,7 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
             }
         }
 
-        if (empty($data)) {
+        if (empty($data['new']) && empty($data['processed'])) {
             return null;
         }
 

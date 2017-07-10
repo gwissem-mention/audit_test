@@ -74,7 +74,7 @@ class SessionWidget extends WidgetAbstract implements DomainAwareInterface
             'sessions' => $this->sessionProvider->getSessionData(),
         ];
 
-        if (empty($data)) {
+        if (empty($data['registrations']) && empty($data['sessions'])) {
             return null;
         }
 
