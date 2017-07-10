@@ -134,9 +134,10 @@ class ReferenceType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($referenceId) {
                     $qb = $er->createQueryBuilder('ref')
                         ->andWhere('ref.lock = 0')
-                        ->leftJoin('ref.parents', 'parent')
-                        ->leftJoin('ref.codes', 'codes')
-                        ->orderBy('parent.id, codes.label, ref.order', 'ASC');
+                        ->leftJoin('ref.parents', 'parent')->addSelect('parent')
+                        ->leftJoin('ref.codes', 'codes')->addSelect('codes')
+                        ->orderBy('parent.id, codes.label, ref.order', 'ASC')
+                    ;
 
                     if ($referenceId) {
                         $qb->andWhere("ref.id != $referenceId");

@@ -61,7 +61,7 @@ class ReferenceController extends Controller
     public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById($id);
+        $reference = $this->get('hopitalnumerique_reference.repository.reference')->findOneByIdWithJoin($id);
 
         if (null === $reference) {
             return $this->redirectToRoute('hopitalnumerique_reference_reference');
@@ -258,15 +258,15 @@ class ReferenceController extends Controller
         $referenceTreeOptions = [];
 
         if ($reference->getLock() != true) {
-            $referenceTreeOptions = $this->container->get(
-                'hopitalnumerique_reference.dependency_injection.reference.tree'
-            )->getOptions(
-                $this->getUser()->getDomaines(),
-                [$reference->getId()]
-            );
+            $referenceTreeOptions = $this->get('hopitalnumerique_reference.dependency_injection.reference.tree')
+                ->getOptions(
+                    $this->getUser()->getDomaines(),
+                    [$reference->getId()]
+                )
+            ;
         }
 
-        $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
+        $this->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
             ->setInitialReference($reference)
         ;
 
