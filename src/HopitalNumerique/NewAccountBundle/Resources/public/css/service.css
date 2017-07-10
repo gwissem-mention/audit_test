@@ -1,8 +1,8 @@
-#my-account #services .guick-access h2 {
+#my-account #services .quick-access h2 {
     text-align: center;
 }
 
-#my-account #services .guick-access ul {
+#my-account #services .quick-access ul {
     list-style-type: none;
     display: flex;
     justify-content: space-between;
@@ -11,14 +11,14 @@
     margin: 0 0 30px;
 }
 
-#my-account #services .guick-access ul li {
+#my-account #services .quick-access ul li {
     display: inline-block;
     flex-grow: 1;
     width: 100%;
     min-height: 100%;
 }
 
-#my-account #services .guick-access ul li a {
+#my-account #services .quick-access ul li a {
     display: block;
     text-align: center;
     text-decoration: none;
@@ -28,12 +28,12 @@
     color: #777;
 }
 
-#my-account #services .guick-access ul li a:hover {
+#my-account #services .quick-access ul li a:hover {
     background: #eee;
     color: #555;
 }
 
-#my-account #services .guick-access ul li a .picto {
+#my-account #services .quick-access ul li a .picto {
     display: block;
     font-size: 60px;
 }
