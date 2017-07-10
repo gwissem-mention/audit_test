@@ -23,6 +23,9 @@ class CommunautePratiqueEnrolmentSubscriber implements EventSubscriberInterface
         $this->subscriptionModel = $subscriptionManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -49,7 +52,7 @@ class CommunautePratiqueEnrolmentSubscriber implements EventSubscriberInterface
     /**
      * @param User $user
      *
-     * @return mixed
+     * @return Board[]
      */
     private function getBoards(User $user)
     {
