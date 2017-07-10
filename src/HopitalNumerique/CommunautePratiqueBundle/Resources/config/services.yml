@@ -3,6 +3,7 @@ imports:
     - { resource: "services/form.yml" }
     - { resource: "services/grid.yml" }
     - { resource: "services/twig.yml" }
+    - { resource: "services/handlers.yml" }
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:

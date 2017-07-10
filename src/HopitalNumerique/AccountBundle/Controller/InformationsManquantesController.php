@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\AccountBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserHandler;
 use HopitalNumerique\UserBundle\Form\Type\User\InformationsManquantesType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,8 +50,7 @@ class InformationsManquantesController extends Controller
                         ->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
                         ->hasInformationManquante($user)) {
                     if (!$user->isInscritCommunautePratique()) {
-                        $user->setInscritCommunautePratique(true);
-                        $this->container->get('hopitalnumerique_user.manager.user')->save($user);
+                        $this->get(EnrollUserHandler::class)->handle(new EnrollUserCommand($user));
                         $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratique a été confirmée.');
                     }
 
