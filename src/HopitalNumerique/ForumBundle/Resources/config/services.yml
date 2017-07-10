@@ -95,3 +95,11 @@ services:
             - "@ccdn_forum_forum.repository.post"
         tags:
             - { name: 'kernel.event_subscriber' }
+
+
+    HopitalNumerique\ForumBundle\EventListener\CommunautePratiqueEnrolmentSubscriber:
+        class: HopitalNumerique\ForumBundle\EventListener\CommunautePratiqueEnrolmentSubscriber
+        arguments:
+            - '@ccdn_forum_forum.model.subscription'
+        tags:
+            - { name: 'kernel.event_subscriber' }

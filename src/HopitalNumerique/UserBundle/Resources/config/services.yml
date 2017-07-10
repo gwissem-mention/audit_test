@@ -179,6 +179,13 @@ services:
             tags:
                 - { name: 'kernel.event_subscriber' }
 
+    hopitalnumerique_user.subscriber.communaute_pratique:
+                class: HopitalNumerique\UserBundle\EventListener\CommunautePratiqueSubscriber
+                arguments:
+                    - '@hopitalnumerique_user.manager.user'
+                tags:
+                    - { name: 'kernel.event_subscriber' }
+
     #--Handler
     hopitalnumerique_user.handler.login:
         class:  %hopitalnumerique_user.handler.login.class%
