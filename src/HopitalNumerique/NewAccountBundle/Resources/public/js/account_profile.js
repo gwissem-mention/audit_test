@@ -127,10 +127,10 @@ $(function() {
 
 function updateKnownStructureFields(updatedField) {
     if ('' === $(updatedField).val() || null === $(updatedField).val()) {
-        $('.known-structure').stop().show('slow');
+        $('.known-structure').stop().show();
         $('.known-structure .completion').removeClass('ignore-completion');
     } else {
-        $('.known-structure').stop().hide('slow');
+        $('.known-structure').stop().hide();
         $('.known-structure .completion').addClass('ignore-completion');
     }
 
@@ -140,10 +140,10 @@ function updateKnownStructureFields(updatedField) {
 
 function updateUnknownStructureFields(updatedField) {
     if ('' === $(updatedField).val() || null === $(updatedField).val()) {
-        $('.unknown-structure').stop().show('slow');
+        $('.unknown-structure').stop().show();
         $('.unknown-structure .completion').removeClass('ignore-completion')
     } else {
-        $('.unknown-structure').stop().hide('slow');
+        $('.unknown-structure').stop().hide();
         $('.unknown-structure .completion').addClass('ignore-completion')
     }
 
