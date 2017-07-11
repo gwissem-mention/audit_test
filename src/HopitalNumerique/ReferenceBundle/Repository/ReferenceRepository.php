@@ -12,6 +12,25 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
  */
 class ReferenceRepository extends EntityRepository
 {
+
+    /**
+     * @param integer $reference
+     *
+     * @return Reference
+     */
+    public function findOneByIdWithJoin($referenceId)
+    {
+        return $this->createQueryBuilder('reference')
+            ->leftJoin('reference.domaines', 'domain')->addSelect('domain')
+            ->leftJoin('reference.domainesDisplay', 'domainDisplay')->addSelect('domainDisplay')
+            ->leftJoin('reference.codes', 'code')->addSelect('code')
+
+            ->andWhere('reference.id = :referenceId')->setParameter('referenceId', $referenceId)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
     public function getAllIndexedById()
     {
         return $this->createQueryBuilder('r', 'r.id')
