@@ -41,7 +41,7 @@
                         <td class="actions-column">
                             <div class="btn-group">
                                 {% if synthesis.showUrl is not null %}
-                                    <a href="{{ synthesis.showUrl }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.show'|trans }}">
+                                    <a href="{{ synthesis.showUrl }}" {{ not synthesis.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.show'|trans }}">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 {% endif %}

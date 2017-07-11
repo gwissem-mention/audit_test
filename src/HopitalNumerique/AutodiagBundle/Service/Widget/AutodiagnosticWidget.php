@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -36,6 +37,11 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
     protected $baseUrlProvider;
 
     /**
+     * @var CurrentDomaine $currentDomainService
+     */
+    protected $currentDomainService;
+
+    /**
      * AutodiagnosticWidget constructor.
      *
      * @param \Twig_Environment     $twig
@@ -44,6 +50,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
      * @param SynthesisRepository   $synthesisRepository
      * @param RouterInterface       $router
      * @param BaseUrlProvider       $baseUrlProvider
+     * @param CurrentDomaine $currentDomainService
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -51,13 +58,15 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         TranslatorInterface $translator,
         SynthesisRepository $synthesisRepository,
         RouterInterface $router,
-        BaseUrlProvider $baseUrlProvider
+        BaseUrlProvider $baseUrlProvider,
+        CurrentDomaine $currentDomainService
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->synthesisRepository = $synthesisRepository;
         $this->router = $router;
         $this->baseUrlProvider = $baseUrlProvider;
+        $this->currentDomainService = $currentDomainService;
     }
 
     /**
@@ -139,6 +148,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'isValid' => $synthesis->isValidated(),
                 'entryId' => $entryId,
                 'showUrl' => $showUrl,
+                'sameDomain' => $baseUrl === $this->currentDomainService->get()->getUrl(),
                 'sendUrl' => $sendUrl,
                 'validationUrl' => $validationUrl,
                 'shareUrl' => $shareUrl,
