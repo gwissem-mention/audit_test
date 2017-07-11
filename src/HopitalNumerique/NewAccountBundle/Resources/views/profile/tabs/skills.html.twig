@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <ul class="row list-unstyled" id="reference_hobbies_form" data-prototype="{{ form_widget(form.hobbies.vars.prototype.label)|e }}">
+        <ul class="row list-unstyled" id="reference_hobbies_form" data-prototype="{{ form_widget(form.hobbies.vars.prototype.label, {'attr': {'class': 'hobby-input'}})|e }}">
             {% for hobby in form.hobbies %}
                 <li class="col-md-12">
                     <div class="hobby-item">

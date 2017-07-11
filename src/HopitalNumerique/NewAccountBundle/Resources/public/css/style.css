@@ -155,6 +155,11 @@
     padding: 0 15px;
 }
 
+#my-account .hobby-input {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 #my-account .password-information {
     margin: 20px 0 0 0;
 }
