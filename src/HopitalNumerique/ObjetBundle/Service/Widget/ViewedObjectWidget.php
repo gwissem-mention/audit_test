@@ -11,6 +11,7 @@ use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
 use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\ObjetBundle\Repository\ContenuRepository;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareTrait;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareInterface;
@@ -44,6 +45,11 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
     protected $baseUrlProvider;
 
     /**
+     * @var CurrentDomaine $currentDomainService
+     */
+    protected $currentDomainService;
+
+    /**
      * ViewedObjectWidget constructor.
      *
      * @param \Twig_Environment     $twig
@@ -53,6 +59,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
      * @param ContenuRepository     $contentRepository
      * @param RouterInterface       $router
      * @param BaseUrlProvider       $baseUrlProvider
+     * @param CurrentDomaine $currentDomainService
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -61,13 +68,15 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         ObjectRepository $objectRepository,
         ContenuRepository $contentRepository,
         RouterInterface $router,
-        BaseUrlProvider $baseUrlProvider
+        BaseUrlProvider $baseUrlProvider,
+        CurrentDomaine $currentDomainService
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
         $this->objectRepository = $objectRepository;
         $this->contentRepository = $contentRepository;
         $this->router = $router;
         $this->baseUrlProvider = $baseUrlProvider;
+        $this->currentDomainService = $currentDomainService;
     }
 
     /**
@@ -84,6 +93,8 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
             $this->tokenStorage->getToken()->getUser(),
             $this->domains
         );
+
+        $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
         $data = [];
 
@@ -108,6 +119,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     'hopital_numerique_publication_publication_object_recommendation',
                     ['object' => $object->getId()]
                 ),
+                'sameDomain' => $baseUrl === $currentDomainUrl,
             ];
         }
 
@@ -137,6 +149,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     'hopital_numerique_publication_publication_content_recommendation',
                     ['content' => $content->getId()]
                 ),
+                'sameDomain' => $baseUrl === $currentDomainUrl,
             ];
         }
 
