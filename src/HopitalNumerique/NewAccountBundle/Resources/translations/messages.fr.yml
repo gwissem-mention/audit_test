@@ -43,7 +43,7 @@ account:
         profileType: Profil
         jobType: Rôle
         jobLabel: Libellé rôle
-        file: Photo du profil
+        file: Photo du profil (maximum 200ko)
         region: Région
         county: Département
         organizationType: Type de structure

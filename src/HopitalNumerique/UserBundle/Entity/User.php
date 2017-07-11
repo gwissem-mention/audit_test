@@ -530,13 +530,13 @@ class User extends BaseUser implements SettingsOwnerInterface
 
     /**
      * @Assert\File(
-     *     maxSize = "1000k",
+     *     maxSize = "200k",
      *     mimeTypes = {
      *         "image/gif",
      *         "image/jpeg",
      *         "image/png",
      *     },
-     *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
+     *     mimeTypesMessage = "Choisissez une image"
      * )
      */
     protected $file;
