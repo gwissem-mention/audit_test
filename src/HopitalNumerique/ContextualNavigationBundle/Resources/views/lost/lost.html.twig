@@ -1,0 +1,89 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% trans_default_domain 'lost' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-contextual-navigation-lost.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquecontextualnavigation/css/lost.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{{parent()}} - {{ 'title'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="contextual-navigation-lost">
+        <h1>{{ 'title'|trans }}</h1>
+
+        <p>
+            {{ 'previous_page'|trans({'%entityTitle%': '<b>'~entityTitle~'</b>'})|raw }}
+        </p>
+
+        {{ 'Module_contextualNavigation_lostPage_description'|nodevoTexteDynamique(domaineCurrent.id)|glossaireParse|raw }}
+
+        <p>
+            {{ 'resources_list'|trans() }}
+        </p>
+
+        <ul>
+            {% for reference in references %}
+                <li>
+                    {{ reference.libelle }}
+                    {% if reference.enfants|length > 0 %}
+                        <ul>
+                            {% for child in reference.enfants %}
+                                <li>{{ child.libelle }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p>
+            {{ 'discover.title'|trans() }}<br />
+
+            {% set discoverLinks = [] %}
+            {% set discoverFields = {
+                last_publication: lastPublication,
+                best_rated_publication: bestRatedPublication,
+                most_viewed_publication: mostViewedPublication,
+                random_publication: randomPublication
+            }%}
+
+            {% for key, obj in discoverFields %}
+                {% if obj %}
+                    {% set translation = ('discover.'~key)|trans %}
+
+                    {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopital_numerique_publication_publication_objet', {id: obj.id, alias: obj.alias})~'">
+                        '~translation~'
+                    </a>']) %}
+                {% endif %}
+
+            {% endfor %}
+
+            {% if randomAutodiag %}
+                {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopitalnumerique_autodiag_entry_add', {autodiag: randomAutodiag.id})~'">
+                    '~('discover.autodiagnostic'|trans)~'
+                </a>']) %}
+            {% endif %}
+
+            {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopital_numerique_recherche_parcours_homepage_front', {id: 1})~'">
+                '~('discover.guided_search'|trans)~'
+            </a>']) %}
+
+            {{ discoverLinks|join(', ')|raw }}
+
+        </p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".glosstool").tooltip({
+                placement : 'top'
+            });
+        });
+    </script>
+{% endblock %}

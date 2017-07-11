@@ -6,14 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SearchController extends Controller
 {
-    public function indexAction()
-    {
-
-
-        die('poc');
-
-
-    }
 
     /**
      * Génération manuelle d'une requete de recherche en fonction

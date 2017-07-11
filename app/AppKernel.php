@@ -83,6 +83,7 @@ class AppKernel extends Kernel
             new Dmishh\SettingsBundle\DmishhSettingsBundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new HopitalNumerique\SearchBundle\HopitalNumeriqueSearchBundle(),
+            new HopitalNumerique\ContextualNavigationBundle\HopitalNumeriqueContextualNavigationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

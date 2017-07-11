@@ -742,4 +742,91 @@ class ObjetRepository extends EntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Objet
+     */
+    public function getLastObject(Domaine $domain)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+
+            ->addOrderBy('o.dateParution', 'DESC')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Objet
+     */
+    public function getBestRatedObject(Domaine $domain)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addSelect('AVG(n.note) as HIDDEN note, COUNT(n.id) as HIDDEN notes')
+            ->join('o.listeNotes', 'n')
+            ->groupBy('o')
+            ->orderBy('note', 'DESC')
+            ->orderBy('notes', 'DESC')
+            ->orderBy('o.dateParution', 'DESC')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Objet
+     */
+    public function getMostViewedObject(Domaine $domain)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addSelect('SUM(c.viewsCount) as HIDDEN viewsCount')
+            ->join('o.consultations', 'c')
+            ->groupBy('o')
+            ->orderBy('viewsCount', 'DESC')
+            ->orderBy('o.dateParution', 'DESC')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Objet
+     */
+    public function getRandomObject(Domaine $domain)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->addSelect('RAND() as HIDDEN random')
+            ->andWhere('o.isArticle = FALSE')
+            ->orderBy('random')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
 }

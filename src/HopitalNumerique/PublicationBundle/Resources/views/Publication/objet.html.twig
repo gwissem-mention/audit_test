@@ -468,3 +468,7 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% block helpBlock %}
+    {{ contextualNavigationHelpBlock(contenu is defined ? contenu : objet) }}
+{% endblock %}

@@ -453,4 +453,31 @@ class ReferenceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @param string $code
+     *
+     * @return Reference[]
+     */
+    public function getParentsByCode($code)
+    {
+        return $this->createQueryBuilder('r')
+            ->addSelect('COUNT(rpc.id) as HIDDEN codesCount')
+            ->join('r.codes', 'c', Expr\Join::WITH, 'c.label = :code')
+            ->leftJoin('r.enfants', 'rc')->addSelect('rc')
+
+            ->join('r.parents', 'rp')
+            ->leftJoin('rp.codes', 'rpc', Expr\Join::WITH, 'rpc.label = :code')
+
+            ->addGroupBy('r.id, rc.id')
+            ->having('codesCount = 0')
+
+            ->addOrderBy('r.libelle')
+            ->addOrderBy('rc.libelle')
+
+            ->setParameter('code', $code)
+
+            ->getQuery()->getResult()
+        ;
+    }
 }
