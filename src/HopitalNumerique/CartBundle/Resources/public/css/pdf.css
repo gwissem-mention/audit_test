@@ -28,6 +28,9 @@ h2 .date {
     margin-top: 6px;
 }
 
+.well {
+    page-break-inside: avoid !important;
+}
 
 fieldset legend small {
     font-size: 14px;
