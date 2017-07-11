@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-md-12">
+        {{ 'Module_moncompte_competences_presentation'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
         {{ form_row(form.presentation, { 'attr': {'class': 'completion' }}) }}
     </div>
 </div>
@@ -17,9 +18,14 @@
 
 <div class="row spacer">
     <div class="col-md-12">
-        <p>
-            <label>{{ 'account.cdp.join'|trans }}</label>
-        </p>
+        {{ 'Module_moncompte_competences_joindre_cdp'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label">{{ 'account.cdp.join'|trans }}</label>
+                </div>
+            </div>
+        </div>
         {% if missingInformation|length > 0 %}
             <p><a href="#" class="btn btn-primary disabled">{{ 'account.cdp.access'|trans }}</a></p>
             <p class="spacer">
@@ -74,6 +80,8 @@
 
 <div class="row">
     <div class="col-md-12">
+        {{ 'Module_moncompte_competences_hobbies'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
         <div class="form_vertical_row">
             <div class="form-group">
                 <div class="col-md-12">

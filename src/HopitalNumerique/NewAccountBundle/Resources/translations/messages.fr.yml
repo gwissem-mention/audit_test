@@ -55,9 +55,9 @@ account:
         missingComputerSkills: Une des applications n'est pas dans la liste ?
         presentation: Je me présente
         knowledge: Mes connaissances
-        hobbies: Centres d'intérêt
+        hobbies: Mes centres d'intérêt
         hobby:
-            add: Ajouter
+            add: Ajouter un centre d'intérêt
     cdp:
         join: Rejoindre la communauté
         access: Accéder à la communauté
