@@ -35,6 +35,7 @@ services:
         tags:
             - { name: cart_bundle.report_generator }
         arguments:
+            - '@hopitalnumerique_objet.manager.contenu'
             - '@hopitalnumerique_reference.repository.entity_has_reference'
 
     hopitalnumerique_cart.report_generator.infradoc:

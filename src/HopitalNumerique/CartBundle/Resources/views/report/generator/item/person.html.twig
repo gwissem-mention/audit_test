@@ -24,25 +24,22 @@
             </tr>
             <tr>
                 <th>{{ 'generator.person.userInfos.system'|trans }}</th>
-                <td>{{ item.system|default('-') }}{{ item.systemJob ? ' ('~item.systemJob~')'}}</td>
+                <td>{{ item.systemJob }} - {{ item.system|default('-') }}</td>
             </tr>
         </table>
     </fieldset>
 {% endif %}
 
-{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns and item.biography%}
     <fieldset>
         <legend>{{ 'generator.person.biography'|trans }}</legend>
-        {{ item.biography|default('-') }}
+        <p>
+            {{ item.biography|nl2br|raw }}
+        </p><br />
     </fieldset>
 {% endif %}
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
-    <fieldset>
-        <legend>{{ 'generator.person.biography'|trans }}</legend>
-        {{ item.biography|default('-') }}
-    </fieldset>
-
     {% if item.skills|length > 0 %}
         <fieldset>
             <legend>{{ 'generator.person.skills'|trans }}</legend>
@@ -55,7 +52,7 @@
                         {% endif %}
                     </li>
                 {% endfor %}
-            </ul>
+            </ul><br />
         </fieldset>
     {% endif %}
 
@@ -66,7 +63,7 @@
                 {% for hobby in item.hobbies %}
                     <li>{{ hobby.label }}</li>
                 {% endfor %}
-            </ul>
+            </ul><br />
         </fieldset>
     {% endif %}
 
@@ -77,7 +74,7 @@
                 {% for skill in item.computerSkills %}
                     <li>{{ skill.libelle }}</li>
                 {% endfor %}
-            </ul>
+            </ul><br />
         </fieldset>
     {% endif %}
 

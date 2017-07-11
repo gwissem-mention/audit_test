@@ -14,6 +14,11 @@ class Publication implements ItemInterface
     protected $object;
 
     /**
+     * @var Contenu[] $content
+     */
+    protected $content;
+
+    /**
      * @var array $references
      */
     protected $references;
@@ -22,11 +27,13 @@ class Publication implements ItemInterface
      * Publication constructor.
      *
      * @param Objet
+     * @param Contenu[] $content
      * @param array $references
      */
-    public function __construct(Objet $objet, $references)
+    public function __construct(Objet $objet, $content, $references)
     {
         $this->object = $objet;
+        $this->content = $content;
         $this->references = $references;
     }
 
@@ -79,11 +86,11 @@ class Publication implements ItemInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Contenu[]
      */
     public function getContents()
     {
-        return $this->object->getContenus();
+        return $this->content;
     }
 
     /**

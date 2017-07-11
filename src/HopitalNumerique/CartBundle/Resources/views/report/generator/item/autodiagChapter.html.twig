@@ -4,9 +4,11 @@
 <h2>
     <small>{{ 'item.object_type.autodiag_chapter'|trans }}</small>
     {{ item.autodiagTitle }} - {{ item.title }}
-</h2>
 
-{{ item.lastUpdateDate|date('d/m/Y H\\hi') }}
+    <span class="date">
+        {{ item.lastUpdateDate|date('d/m/Y H\\hi') }}
+    </span>
+</h2>
 
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.subChapters|length > 0 %}
@@ -33,10 +35,10 @@
     {% import _self as self %}
 
     {% if chapter.attributes|length > 0 %}
-        <table>
+        <table class="table">
             <tr>
                 <th>{{ 'generator.autodiagChapter.question.title'|trans }}</th>
-                <th>{{ 'generator.autodiagChapter.question.choices'|trans }}</th>
+                <th width="30%">{{ 'generator.autodiagChapter.question.choices'|trans }}</th>
             </tr>
             {% for attribute in chapter.attributes %}
                 <tr>
@@ -48,13 +50,12 @@
                     </td>
                     <td>
                         {% if attribute.options|length > 0 %}
-                            <ul>
-                                {% for option in attribute.options %}
-                                    <li>
-                                        {{ option.label }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            {% set labels = [] %}
+                            {% for option in attribute.options %}
+                                {% set labels = labels|merge([option.label]) %}
+                            {% endfor %}
+
+                            {{ labels|join(', ') }}
                         {% endif %}
                     </td>
                 </tr>

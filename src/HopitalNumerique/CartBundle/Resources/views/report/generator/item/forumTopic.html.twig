@@ -3,19 +3,21 @@
 <h2>
     <small>{{ 'item.object_type.forum_topic'|trans }}</small>
     {{ item.title }}
-</h2>
 
-<p>
-    {{ 'generator.forumTopic.firstPostDate'|trans }} {{ item.firstPostPublicationDate|date('d/m/Y H\\hi') }}<br />
-    {{ 'generator.forumTopic.lastPostDate'|trans }} {{ item.lastPostPublicationDate|date('d/m/Y H\\hi') }}<br />
-</p>
+    <span class="date">
+        {{ 'generator.forumTopic.firstPostDate'|trans }} {{ item.firstPostPublicationDate|date('d/m/Y H\\hi') }}<br />
+        {{ 'generator.forumTopic.lastPostDate'|trans }} {{ item.lastPostPublicationDate|date('d/m/Y H\\hi') }}<br />
+    </span>
+</h2>
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
     <fieldset>
         <legend>
-            {{ item.firstPost.createdBy.username }}
+            {{ item.firstPost.createdBy.pseudonym ?: item.firstPost.createdBy.username }}
         </legend>
-        {{ item.firstPost.body|raw|nl2br }}
+        <p>
+            {{ item.firstPost.body|raw|nl2br }}
+        </p><br />
     </fieldset>
 {% endif %}
 
@@ -23,10 +25,12 @@
     {% for post in item.posts %}
         <fieldset>
             <legend>
-                {{ post.createdBy.username }} -
-                {{ post.createdDate|date('d/m/Y H\\hi') }}
+                {{ post.createdBy.pseudonym ?: post.createdBy.username }} -
+                <small>{{ post.createdDate|date('d/m/Y H\\hi') }}</small>
             </legend>
-            {{ post.body|raw|nl2br }}
+            <p>
+                {{ post.body|raw|nl2br }}
+            </p><br />
         </fieldset>
     {% endfor %}
 {% endif %}

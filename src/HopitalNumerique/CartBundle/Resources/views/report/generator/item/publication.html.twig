@@ -1,27 +1,36 @@
 {% trans_default_domain 'cart' %}
 
+{% import _self as macro %}
+
 <h2>
     <small>{{ 'item.object_type.objet'|trans }}</small>
     {{ item.title }}
+
+    <span class="date">
+        {{ 'generator.publication.publicationDate'|trans }} {{ item.publicationDate|date('d/m/Y') }}
+    </span>
 </h2>
 
-{{ 'generator.publication.publicationDate'|trans }} {{ item.publicationDate|date('d/m/Y') }}
 
 {% if item.source %}
     {{ 'generator.publication.source'|trans }} {{ item.source }}
 {% endif %}
 
-{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns and item.shortResume %}
     <fieldset>
         <legend>{{ 'generator.publication.shortResume'|trans }}</legend>
-        {{ item.shortResume|default('-')|raw }}
+        <p>
+            {{ item.shortResume|raw }}
+        </p><br />
     </fieldset>
 {% endif %}
 
-{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns and item.synthesis %}
     <fieldset>
         <legend>{{ 'generator.publication.synthesis'|trans }}</legend>
-        {{ item.synthesis|default('-')|raw }}
+        <p>
+            {{ item.synthesis|raw }}
+        </p><br />
     </fieldset>
 {% endif %}
 
@@ -30,20 +39,22 @@
         <legend>{{ 'generator.publication.summary'|trans }}</legend>
         <ul>
             {% for content in item.contents %}
-                <li>{{ content.titre }}</li>
+                {{ macro.buildTree(content) }}
             {% endfor %}
-        </ul>
+        </ul><br />
     </fieldset>
 {% endif %}
 
-{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns and item.resume %}
     <fieldset>
         <legend>{{ 'generator.publication.resume'|trans }}</legend>
-        {{ item.resume|default('-')|raw }}
+        <p>
+            {{ item.resume|raw }}
+        </p><br />
     </fieldset>
 {% endif %}
 
-{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::COMMENT_COLUMN') in report.columns %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::COMMENT_COLUMN') in report.columns and item.comments|length > 0 %}
     <fieldset>
         <legend>{{ 'generator.publication.comments'|trans }}</legend>
         {% for comment in item.comments %}
@@ -58,3 +69,20 @@
 {% endif %}
 
 {{ include('@HopitalNumeriqueCart/report/generator/item/partials/references.html.twig') }}
+
+
+{% macro buildTree(contenu, parentOrder) %}
+    <li>
+        {{ (parentOrder ? parentOrder~'.')~contenu.order~'.' }}
+        {{ contenu.titre }}
+
+        {% if contenu.childs %}
+            <ul>
+                {% import _self as mySelf %}
+                {% for child in contenu.childs %}
+                    {{ mySelf.buildTree(child, (parentOrder ? parentOrder~'.')~contenu.order) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}

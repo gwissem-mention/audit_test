@@ -77,6 +77,9 @@ class ReportGenerator
         $fs->dumpFile(
             $this->getReportFile($report),
             $this->pdfGenerator->getOutputFromHtml($html, [
+                'header-html' => $this->twig->render('@HopitalNumeriqueCart/report/generator/report_pdf_header.html.twig', [
+                    'report' => $report,
+                ]),
                 'footer-html' => $this->twig->render('@HopitalNumeriqueCart/report/generator/reportPDFFooter.html.twig'),
             ])
         );
