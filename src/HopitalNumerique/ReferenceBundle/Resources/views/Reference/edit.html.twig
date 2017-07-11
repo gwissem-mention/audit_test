@@ -26,10 +26,18 @@
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
-            var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_reference_reference_parents');
-            referenceTree.display({{ referenceTreeOptions|raw }});
-            referenceTree.container.on('ready.jstree', function () {
-                referenceTree.select({{ reference.parentIds|json_encode }});
+
+            var $referenceTree = $('#reference-tree');
+
+            var referenceTreeLoader = $referenceTree.nodevoLoader().start();
+
+            $.get($referenceTree.data('refresh-uri'), function (response) {
+                referenceTreeLoader.finished();
+                var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_reference_reference_parents');
+                referenceTree.display(response);
+                referenceTree.container.on('ready.jstree', function () {
+                    referenceTree.select({{ reference.parentIds|json_encode }});
+                });
             });
         });
     </script>
