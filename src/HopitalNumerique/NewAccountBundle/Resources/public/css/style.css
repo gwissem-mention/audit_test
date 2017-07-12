@@ -148,11 +148,22 @@
     color: #fff;
 }
 
+#my-account .profile-avatar {
+    width: 130px;
+    height: 130px;
+    display: inline-block;
+}
+
 #my-account .hobby-item {
     float: left;
     position: relative;
     min-height: 1px;
     padding: 0 15px;
+}
+
+#my-account .hobby-input {
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 #my-account .password-information {

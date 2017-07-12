@@ -3,6 +3,8 @@
 <fieldset class="{{ type }}">
     <legend>{{ ('modal.report_'~type~'.title')|trans }}</legend>
 
+    {{ ('Module_cart_report_share_'~type)|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
     <div class="row">
         <div class="col-md-6">
             <form action="{{ '{{'~type~'ReportUri}}' }}" method="post" novalidate>

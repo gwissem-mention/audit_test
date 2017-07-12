@@ -262,4 +262,5 @@ services:
             - '@autodiag.repository.synthesis'
             - '@router'
             - '@hopitalnumerique_domaine.service.base_url_provider'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         public: false

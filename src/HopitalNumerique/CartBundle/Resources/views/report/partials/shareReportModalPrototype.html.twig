@@ -3,12 +3,14 @@
 <script type="x-template" id="share-modal-prototype">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Partager le rapport : <b>{{ '{{reportTitle}}' }}</b></h4>
+        <h4 class="modal-title">{{ '{{reportTitle}}' }}</h4>
     </div>
     <div class="modal-body">
 
         <fieldset class="duplicate">
             <legend>{{ 'modal.report_duplicated.title'|trans }}</legend>
+
+            {{ 'Module_cart_report_share_duplicate'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
 
             <form action="{{ '{{duplicateReportUri}}' }}" method="post">
                 <div class="form-group">

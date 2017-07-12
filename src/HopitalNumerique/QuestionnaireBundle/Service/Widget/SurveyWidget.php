@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Service\Widget;
 
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
@@ -36,6 +37,11 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
     protected $baseUrlProvider;
 
     /**
+     * @var CurrentDomaine $currentDomainService
+     */
+    protected $currentDomainService;
+
+    /**
      * SurveyWidget constructor.
      *
      * @param \Twig_Environment     $twig
@@ -44,6 +50,7 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
      * @param RouterInterface       $router
      * @param ReponseRepository     $responseRepository
      * @param BaseUrlProvider       $baseUrlProvider
+     * @param CurrentDomaine $currentDomainService
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -51,13 +58,15 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
         TranslatorInterface $translator,
         RouterInterface $router,
         ReponseRepository $responseRepository,
-        BaseUrlProvider $baseUrlProvider
+        BaseUrlProvider $baseUrlProvider,
+        CurrentDomaine $currentDomainService
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->router = $router;
         $this->responseRepository = $responseRepository;
         $this->baseUrlProvider = $baseUrlProvider;
+        $this->currentDomainService = $currentDomainService;
     }
 
     /**
@@ -70,6 +79,8 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
         $responses = $this->responseRepository->findByUserOrderedBySurveyNameAndResponseUpdate($user, $this->domains);
 
         $data = [];
+
+        $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
         /** @var Reponse $response */
         foreach ($responses as $response) {
@@ -87,6 +98,7 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
                         'actions' => [],
                     ],
                     'responses' => [],
+                    'sameDomain' => $currentDomainUrl === $baseUrl,
                 ];
 
                 if (null === $entry) {

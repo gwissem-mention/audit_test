@@ -25,7 +25,7 @@
                     <td class="actions-column">
                         <div class="btn-group">
                             {% if item.survey.actions.show is defined %}
-                                <a href="{{ item.survey.actions.show }}" class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             {% endif %}
@@ -51,7 +51,7 @@
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">
-                                <a href="{{ response.actions.show }}" class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
                                     <i class="fa fa-eye"></i>
                                 </a>
                                 <a href="{{ response.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">
