@@ -6,17 +6,17 @@
             "@bootstrap_css"
             "@font_awesome_css"
             "@fancybox_css"
+            "bundles/hopitalnumeriquecart/css/pdf.css"
         %}
             <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
         {% endstylesheets %}
     </head>
 
-    <body>
+    <body class=footer>
 
     <div class="container-fluid">
         {{ include('@HopitalNumeriqueCore/partials/copyright.html.twig') }}
     </div>
-
 
     </body>
 </html>

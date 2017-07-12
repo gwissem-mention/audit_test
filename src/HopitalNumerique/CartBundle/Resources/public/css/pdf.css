@@ -1,0 +1,37 @@
+.header {
+    height: 125px;
+}
+
+.footer {
+    padding-top: 30px;
+    height: 80px;
+}
+
+h1 {
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+h2 small {
+    font-size: 100%;
+}
+
+
+h2 .date {
+    display: block;
+    font-size: 0.8em;
+    margin-top: 6px;
+}
+
+.well {
+    page-break-inside: avoid !important;
+}
+
+fieldset legend small {
+    font-size: 14px;
+}

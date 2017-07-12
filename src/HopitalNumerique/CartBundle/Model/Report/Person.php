@@ -68,7 +68,7 @@ class Person implements ItemInterface
      */
     public function getSystem()
     {
-        return $this->person->getNomStructure();
+        return $this->person->getNomEtablissement();
     }
 
     /**
