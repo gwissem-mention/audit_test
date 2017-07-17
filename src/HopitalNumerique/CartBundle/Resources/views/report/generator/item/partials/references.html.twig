@@ -1,6 +1,6 @@
 {% trans_default_domain 'cart' %}
 
-{% if item.references|length > 0 %}
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::REFERENCE_COLUMN') in report.columns and item.references|length > 0 %}
 
     <fieldset>
         <legend>{{ 'generator.references.title'|trans }}</legend>
