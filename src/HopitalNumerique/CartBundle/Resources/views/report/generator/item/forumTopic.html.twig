@@ -5,8 +5,8 @@
     {{ item.title }}
 
     <span class="date">
-        {{ 'generator.forumTopic.firstPostDate'|trans }} {{ item.firstPostPublicationDate|date('d/m/Y H\\hi') }}<br />
-        {{ 'generator.forumTopic.lastPostDate'|trans }} {{ item.lastPostPublicationDate|date('d/m/Y H\\hi') }}<br />
+        {{ 'generator.forumTopic.firstPostDate'|trans }} {{ item.firstPostPublicationDate|date('d/m/Y') }}<br />
+        {{ 'generator.forumTopic.lastPostDate'|trans }} {{ item.lastPostPublicationDate|date('d/m/Y') }}<br />
     </span>
 </h2>
 
@@ -26,7 +26,7 @@
         <fieldset>
             <legend>
                 {{ post.createdBy.pseudonym ?: post.createdBy.username }} -
-                <small>{{ post.createdDate|date('d/m/Y H\\hi') }}</small>
+                <small>{{ post.createdDate|date('d/m/Y') }}</small>
             </legend>
             <p>
                 {{ post.body|raw|nl2br }}
