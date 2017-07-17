@@ -364,17 +364,22 @@ class MailManager extends BaseManager
     }
 
     /**
+     * Parse post body with BBCode, remove HTML, truncate to max $length characters and remove line endings.
+     *
      * @param $body
+     * @param int $length
      *
      * @return string
      */
-    private function truncatePostBody($body)
+    private function truncatePostBody($body, $length = 150)
     {
         $body = trim(strip_tags(html_entity_decode($this->bbcodeEngine->process($body))));
 
-        if (strlen($body) > 50) {
-            $body = substr($body, 0, strrpos(substr($body, 0, 50), ' ') ?: strrpos(substr($body, 0, 50), "\n") ?: 50);
+        if (strlen($body) > $length) {
+            $body = substr($body, 0, strrpos(substr($body, 0, $length), ' ') ?: strrpos(substr($body, 0, $length), "\n") ?: $length);
         }
+
+        $body = preg_replace("/\r\n|\r|\n/", " ", $body);
 
         return $body;
     }
@@ -1265,19 +1270,10 @@ class MailManager extends BaseManager
      */
     public function sendAutodiagResultMail($expediteur, $destinataire, $objet, $message, $pdf)
     {
-        /** @var Mail $courriel */
-        $courriel = $this->findOneById(Mail::MAIL_SHARE_AUTODIAG_RESULT_ID);
+        $email = $this->sendMail($objet, $expediteur, $destinataire, $message);
+        $email->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
 
-        /** @var \Swift_Message $message */
-        $message = $this->generationMail(null, $courriel);
-
-        $message->setTo($destinataire);
-        $message->setFrom([$expediteur => $expediteur]);
-        $message->setSubject($objet);
-        $message->setBody($message);
-        $message->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
-
-        $this->mailer->send($message);
+        $this->mailer->send($email);
     }
 
     /**

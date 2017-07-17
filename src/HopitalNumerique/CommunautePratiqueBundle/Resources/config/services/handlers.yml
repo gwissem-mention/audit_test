@@ -1,0 +1,12 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\DisenrollUserHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\DisenrollUserHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'

@@ -1,7 +1,7 @@
 {% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {# Référencement #}
-{% block title %}{{parent()}} - Mail envoyé{% endblock %}
+{% block title %}{{parent()}} - Email envoyé{% endblock %}
 {% block metadesc %}Connectez-vous à votre compte "{{domaineCurrent.nom}}" pour accéder aux outils proposés par l'ANAP{% endblock %}
 
 {% block stylesheets %}
@@ -15,7 +15,7 @@
 
 {% block body %}
     <div class="col-md-8 col-md-offset-2" id="login">
-        <h3>Mail envoyé !</h3>
+        <h3>Un email de réinitialisation de mot de passe a été envoyé</h3>
         <form action="{{ path("fos_user_resetting_send_email") }}" class="form-horizontal fos_user_resetting_request" method="post" >
             <div class="background-violet"></div>
             <p>

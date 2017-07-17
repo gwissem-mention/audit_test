@@ -2,6 +2,10 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\DisenrollUserCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\DisenrollUserHandler;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,8 +27,7 @@ class InscriptionController extends Controller
                  ->hasInformationManquante($user)
         ) {
             if (!$user->isInscritCommunautePratique()) {
-                $user->setInscritCommunautePratique(true);
-                $this->get('hopitalnumerique_user.manager.user')->save($user);
+                $this->get(EnrollUserHandler::class)->handle(new EnrollUserCommand($user));
                 $this->addFlash(
                     'success',
                     'L\'inscription à la communauté de pratique a été confirmée.'
@@ -82,11 +85,8 @@ class InscriptionController extends Controller
         $user = $this->getUser();
 
         if (null !== $user) {
-            $this->container->get('hopitalnumerique_user.manager.user')->desinscritCommunautePratique($user);
-            $this->addFlash(
-                'success',
-                'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !'
-            );
+            $this->get(DisenrollUserHandler::class)->handle(new DisenrollUserCommand($user));
+            $this->addFlash('success', 'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !');
 
             return new JsonResponse([
                 'url' => $this->get('communautepratique_router')->getUrl(),

@@ -140,9 +140,14 @@ class DataFormatter
             }
         }
 
+        $canGenerateSynthesis = array_reduce($validSynthesesByAutodiag, function ($carry, $data) {
+            return $carry || ($data['synthesisAllowed'] && count($data['syntheses']) > 1);
+        }, false);
+
         return [
             'currentSyntheses' => $currentSynthesesByAutodiag,
             'validSyntheses' => $validSynthesesByAutodiag,
+            'canGenerateSynthesis' => $canGenerateSynthesis,
         ];
     }
 }

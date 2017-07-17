@@ -76,6 +76,7 @@ class SynthesisRepository extends EntityRepository
 
     /**
      * Find comparable syntheses for user and by domaine.
+     * That means that there must be at least 2 syntheses for one autodiag
      *
      * @param User         $user
      * @param Domaine|null $domaine
@@ -86,7 +87,18 @@ class SynthesisRepository extends EntityRepository
     {
         $qb = $this->createComparableQueryBuilder($user, $domaine, $autodiag);
 
-        return $qb->getQuery()->getResult();
+        $comparable = $qb->getQuery()->getResult();
+
+        $autodiagGroup = [];
+        /** @var Synthesis $synthesis */
+        foreach ($comparable as $synthesis) {
+            $id = $synthesis->getAutodiag()->getId();
+            array_key_exists($id, $autodiagGroup) ? $autodiagGroup[$id]++ : $autodiagGroup[$id] = 1;
+        }
+
+        return array_filter($comparable, function (Synthesis $synthesis) use ($autodiagGroup) {
+            return $autodiagGroup[$synthesis->getAutodiag()->getId()] > 1;
+        });
     }
 
     /**
@@ -283,14 +295,14 @@ class SynthesisRepository extends EntityRepository
             ->setParameter('user', $user)
         ;
 
-        if ($domain != null) {
+        if (null !== $domain) {
             $qb
                 ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
                 ->setParameter('domain', $domain)
             ;
         }
 
-        if ($autodiag != null) {
+        if (null !== $autodiag) {
             $qb
                 ->andWhere('autodiag.id = :autodiag_id')
                 ->setParameter('autodiag_id', $autodiag->getId())
@@ -300,6 +312,18 @@ class SynthesisRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * A synthesis is comparable if :
+     *  - it is validated
+     *  - it is on autodiag wich allow comparison
+     *  - has only one entry
+     *
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @param Autodiag|null $autodiag
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     protected function createComparableQueryBuilder(User $user, Domaine $domaine = null, Autodiag $autodiag = null)
     {
         $qb = $this->createByUserQueryBuilder($user, $domaine, $autodiag);

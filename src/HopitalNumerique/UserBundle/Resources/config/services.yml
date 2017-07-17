@@ -178,12 +178,19 @@ services:
             - { name: 'kernel.event_subscriber' }
 
     hopitalnumerique_user.subscriber.token:
-            class: HopitalNumerique\UserBundle\EventListener\TokenSubscriber
-            arguments:
-                - '@session'
-                - '@hopitalnumerique_user.token.token_storage'
-            tags:
-                - { name: 'kernel.event_subscriber' }
+        class: HopitalNumerique\UserBundle\EventListener\TokenSubscriber
+        arguments:
+            - '@session'
+            - '@hopitalnumerique_user.token.token_storage'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    HopitalNumerique\UserBundle\EventListener\CommunautePratiqueSubscriber:
+        class: HopitalNumerique\UserBundle\EventListener\CommunautePratiqueSubscriber
+        arguments:
+            - '@hopitalnumerique_user.manager.user'
+        tags:
+            - { name: 'kernel.event_subscriber' }
 
     #--Handler
     hopitalnumerique_user.handler.login:

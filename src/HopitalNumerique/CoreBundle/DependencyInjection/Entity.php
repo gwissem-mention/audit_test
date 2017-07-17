@@ -389,7 +389,12 @@ class Entity
 
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_FORUM_TOPIC:
-                return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
+                $hasDomain = null !== $entity->getBoard()
+                    && null !== $entity->getBoard()->getCategory()
+                    && null !== $entity->getBoard()->getCategory()->getForum()
+                    && null !== $entity->getBoard()->getCategory()->getForum()->getDomain()
+                ;
+                return $hasDomain ? [$entity->getBoard()->getCategory()->getForum()->getDomain()] : [];
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return [$entity->getCategory()->getForum()->getDomain()];
             case self::ENTITY_TYPE_CONTENU:

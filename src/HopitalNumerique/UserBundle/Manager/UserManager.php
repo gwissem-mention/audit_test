@@ -471,8 +471,6 @@ class UserManager extends BaseManager
      */
     public function desinscritCommunautePratique(User $user)
     {
-        $user->setInscritCommunautePratique(false);
-
         // On supprime les liens entre le membre et les groupes
         if ($user->getCommunautePratiqueGroupes() !== null) {
             foreach ($user->getCommunautePratiqueGroupes() as $groupe) {

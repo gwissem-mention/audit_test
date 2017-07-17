@@ -312,7 +312,7 @@ class ReferenceManager extends BaseManager
                 $tmp = new \stdClass();
                 $tmp->id = $result->getId();
                 $tmp->libelle = $result->getLibelle();
-                $tmp->code = $result->getCode();
+                $tmp->codes = $result->getCodes();
                 $tmp->parent = $result->getParents()[0]->getLibelle();
                 $tmp->selected = false;
 

@@ -18,15 +18,20 @@ class FicheController extends Controller
     /**
      * Visualisation d'une fiche.
      *
+     * @param Request $request
      * @param Fiche $fiche
      *
      * @return RedirectResponse|Response
      */
-    public function viewAction(Fiche $fiche)
+    public function viewAction(Request $request, Fiche $fiche)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAccessFiche($fiche)) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        $canAccess = $this->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessFiche($fiche)
+        ;
+
+        if (!$canAccess) {
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+            throw $this->createAccessDeniedException();
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Fiche:view.html.twig', [
