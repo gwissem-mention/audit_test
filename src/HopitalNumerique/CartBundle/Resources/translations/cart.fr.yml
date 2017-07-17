@@ -136,6 +136,7 @@ generator:
         comments: Commentaires
     infradoc:
         lastUpdateDate: "Date de modification :"
+        creationDate: "Date de création :"
         short_resume: Résumé court
         resume: Résumé
         subChapters: Sous châpitres

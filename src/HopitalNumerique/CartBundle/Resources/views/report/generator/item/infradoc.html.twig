@@ -7,7 +7,11 @@
     {{ item.parentsTitles|join(' > ') }} > {{ item.title }}
 
     <span class="date">
-        {{ 'generator.infradoc.lastUpdateDate'|trans }} {{ item.lastUpdateDate|date('d/m/Y') }}
+        {% if item.lastUpdateDate %}
+            {{ 'generator.infradoc.lastUpdateDate'|trans }} {{ item.lastUpdateDate|date('d/m/Y') }}
+        {% else %}
+            {{ 'generator.infradoc.creationDate'|trans }} {{ item.creationDate|date('d/m/Y') }}
+        {% endif %}
     </span>
 </h2>
 
