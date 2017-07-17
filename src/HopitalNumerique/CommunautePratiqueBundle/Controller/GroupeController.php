@@ -66,7 +66,7 @@ class GroupeController extends Controller
             $cpArticle = $currentDomaine->getCommunautePratiqueArticle();
         }
 
-        if ('anon.' != $user) {
+        if ($user instanceof User) {
             $inscription = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
 
             if ($inscription->hasInformationManquante($user) || !$user->isInscritCommunautePratique()) {

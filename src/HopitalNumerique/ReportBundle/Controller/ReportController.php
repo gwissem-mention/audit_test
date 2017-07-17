@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReportBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,9 +70,9 @@ class ReportController extends Controller
      */
     public function signalerAction($url)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if ('anon.' == $user) {
+        if (!$user instanceof User) {
             $this->get('session')->getFlashBag()->add('danger', 'Vous devez vous connecter pour avoir accès au signalement de bug.');
 
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));

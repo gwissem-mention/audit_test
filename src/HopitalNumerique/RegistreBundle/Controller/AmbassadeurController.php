@@ -4,6 +4,7 @@ namespace HopitalNumerique\RegistreBundle\Controller;
 
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,7 +36,7 @@ class AmbassadeurController extends Controller
         //Recupère l'utilisateur connecté
         $user = $this->getUser();
 
-        if ($user === 'anon.') {
+        if (!$user instanceof User) {
             $this->addFlash(
                 'warning',
                 'Solliciter un ambassadeur nécessite d\'être identifié. Créez un compte ou identifiez-vous.'
@@ -44,7 +45,7 @@ class AmbassadeurController extends Controller
 
         //get User Role
         //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
-        $roles = 'anon.' === $user ? [] : $user->getRoles();
+        $roles = $user instanceof User ? $user->getRoles() : [];
         $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles) ? true : false;
 
         //On prépare la session
@@ -87,7 +88,7 @@ class AmbassadeurController extends Controller
                 }
             }
         } else { //Sinon on charge la région de l'utilisateur
-            if ('anon.' === $user || is_null($user->getRegion())) {
+            if (!$user instanceof User || is_null($user->getRegion())) {
                 // Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y
                 // aura aucune région selectionné par défaut
                 $regionsJSON = json_encode([]);
