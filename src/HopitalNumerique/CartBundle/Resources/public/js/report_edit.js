@@ -86,8 +86,6 @@ var ReportEdit;
                         title = item.parentTitle + ' > ' + title;
                     }
 
-                    console.log(item.objectTypeName);
-
                     var itemLine = component.itemLineTemplate({
                         'id': item.itemId,
                         'objectTypeName': item.objectTypeName,
