@@ -60,7 +60,7 @@
         {% for comment in item.comments %}
             <fieldset>
                 <legend>
-                    {{ comment.user.username }} - {{ comment.dateCreation|date('d/m/Y H\\hi') }}
+                    {{ comment.user.username }} - {{ comment.dateCreation|date('d/m/Y') }}
                 </legend>
                 {{ comment.texte|nl2br }}
             </fieldset>

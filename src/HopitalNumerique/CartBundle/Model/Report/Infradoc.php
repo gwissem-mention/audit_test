@@ -17,11 +17,6 @@ class Infradoc implements ItemInterface
     protected $references;
 
     /**
-     * @var \DateTime $lastUpdateDate
-     */
-    public $lastUpdateDate;
-
-    /**
      * Infradoc constructor.
      *
      * @param Contenu $content
@@ -47,6 +42,14 @@ class Infradoc implements ItemInterface
     public function getLastUpdateDate()
     {
         return $this->content->getDateModification();
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->content->getDateCreation();
     }
 
     /**
