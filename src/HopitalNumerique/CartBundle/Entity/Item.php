@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Item
 {
     const CONTENT_TYPE = 'contenu';
+    const HOT_POINT_TYPE = 'hot_point';
     const OBJECT_TYPE = 'objet';
     const FORUM_TOPIC_TYPE = 'forum_topic';
     const AUTODIAG_CHAPTER_TYPE = 'autodiag_chapter';
