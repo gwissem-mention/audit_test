@@ -3,7 +3,7 @@
 {% import _self as macro %}
 
 <h2>
-    <small>{{ 'item.object_type.objet'|trans }}</small>
+    <small>{{ ('item.object_type.'~item.type)|trans }}</small>
     {{ item.title }}
 
     <span class="date">

@@ -106,6 +106,10 @@ class Publication implements ItemInterface
      */
     public function getType()
     {
+        if ($this->object->isPointDur()) {
+            return 'hot_point';
+        }
+
         return 'publication';
     }
 

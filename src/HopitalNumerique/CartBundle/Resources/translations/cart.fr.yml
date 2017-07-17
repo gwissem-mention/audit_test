@@ -56,6 +56,7 @@ notification:
 item:
     object_type:
         forum_topic: Topic du forum
+        hot_point: Point-dur
         objet: Publication
         contenu: Contenu
         autodiag_chapter: Chapitre d'autodiagnostic
