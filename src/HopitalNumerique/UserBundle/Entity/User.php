@@ -2,28 +2,28 @@
 
 namespace HopitalNumerique\UserBundle\Entity;
 
-use Dmishh\SettingsBundle\Entity\SettingsOwnerInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
-use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
-use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use APY\DataGridBundle\Grid\Mapping as GRID;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Gedmo\Mapping\Annotation as Gedmo;
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\Collection;
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
+use Dmishh\SettingsBundle\Entity\SettingsOwnerInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 
 /**
  * User.
@@ -692,7 +692,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     private $inscriptions;
 
     /**
-     * @var Collection
+     * @var Reference[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinTable(name="hn_user_computer_skill",
@@ -710,7 +710,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     private $presentation;
 
     /**
-     * @var Collection
+     * @var Reference\Hobby[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Hobby", cascade={"persist"})
      * @ORM\JoinTable(name="hn_user_hobby",
@@ -2883,6 +2883,12 @@ class User extends BaseUser implements SettingsOwnerInterface
      */
     public function addHobby(Reference\Hobby $hobby)
     {
+        foreach ($this->hobbies as $userHobby) {
+            if ($userHobby->getLabel() === $hobby->getLabel()) {
+                return $this;
+            }
+        }
+
         $this->hobbies->add($hobby);
 
         return $this;
@@ -2928,5 +2934,4 @@ class User extends BaseUser implements SettingsOwnerInterface
     {
         return $this->getId();
     }
-
 }
