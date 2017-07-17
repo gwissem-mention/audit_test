@@ -32,5 +32,5 @@
         </div>
     {% endfor %}
 {% else %}
-    {{ 'account.service.no_data'|trans }}
+    {{ 'Module_moncompte_service_nodata'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
 {% endif %}
