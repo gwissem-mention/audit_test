@@ -303,7 +303,7 @@ class AmbassadeurController extends Controller
         $domaines = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
 
         $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->getConnaissanceAmbassadersOrderedByDomaine($user, $domaines['ids']);
-        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR'], ['order' => 'ASC']);
+        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('CONNAISSANCES_AMBASSADEUR');
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', [
             'user' => $user,
@@ -376,7 +376,7 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
 
         //récupération des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR_SI']);
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('CONNAISSANCES_AMBASSADEUR_SI');
         $domainesIds = [];
         $affichageDomaines = [];
 
@@ -406,7 +406,7 @@ class AmbassadeurController extends Controller
         }
 
         $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->getConnaissanceAmbassadersSIOrderedByDomaine($user, $domainesIds);
-        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR'], ['order' => 'ASC']);
+        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('CONNAISSANCES_AMBASSADEUR');
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:connaissancesSI.html.twig', [
             'user' => $user,
