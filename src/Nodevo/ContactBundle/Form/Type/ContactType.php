@@ -2,6 +2,7 @@
 
 namespace Nodevo\ContactBundle\Form\Type;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -39,7 +40,7 @@ class ContactType extends AbstractType
                         'attr' => [
                         'class' => $this->_constraints['prenom']['class'],
                         ],
-                        'data' => ('anon.' != $user && !is_null($user->getFirstname())) ? $user->getFirstname() : '',
+                        'data' => ($user instanceof User && !is_null($user->getFirstname())) ? $user->getFirstname() : '',
             ])
             ->add('nom', 'text', [
                         'max_length' => $this->_constraints['nom']['maxlength'],
@@ -48,7 +49,7 @@ class ContactType extends AbstractType
                         'attr' => [
                         'class' => $this->_constraints['nom']['class'],
                         ],
-                        'data' => ('anon.' != $user && !is_null($user->getLastname())) ? $user->getLastname() : '',
+                        'data' => ($user instanceof User && !is_null($user->getLastname())) ? $user->getLastname() : '',
             ])
             ->add('mail', 'repeated', [
                     'type' => 'text',
@@ -61,7 +62,7 @@ class ContactType extends AbstractType
                                     'autocomplete' => 'off',
                                     'class' => $this->_constraints['mail']['class'],
                             ],
-                            'data' => ('anon.' != $user && !is_null($user->getEmail())) ? $user->getEmail() : '',
+                            'data' => ($user instanceof User && !is_null($user->getEmail())) ? $user->getEmail() : '',
                             ],
                     'second_options' => [
                             'label' => 'Confirmer l\'adresse email',
@@ -70,7 +71,7 @@ class ContactType extends AbstractType
                                     'autocomplete' => 'off',
                                     'class' => $this->_constraints['mail']['class'] . 'validate[equals[hopital_numerique_contact_contact_mail_first]]',
                             ],
-                            'data' => ('anon.' != $user && !is_null($user->getEmail())) ? $user->getEmail() : '',
+                            'data' => ($user instanceof User && !is_null($user->getEmail())) ? $user->getEmail() : '',
                             ],
             ])
             ->add('telephone', 'text', [
@@ -81,7 +82,7 @@ class ContactType extends AbstractType
                             'class' => $this->_constraints['telephone']['class'],
                             'data-mask' => $this->_constraints['telephone']['mask'],
                     ],
-                    'data' => ('anon.' != $user && !is_null($user->getPhoneNumber())) ? $user->getPhoneNumber() : '',
+                    'data' => ($user instanceof User && !is_null($user->getPhoneNumber())) ? $user->getPhoneNumber() : '',
             ])
             ->add('message', 'textarea', [
                     'required' => true,

@@ -2,6 +2,7 @@
 
 namespace Nodevo\AclBundle\Security\Authorization\Voter;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\AclBundle\Manager\AclManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -52,7 +53,7 @@ class AclVoter implements VoterInterface
     public function vote(TokenInterface $token, $object, array $attributes)
     {
         //récupère la liste des rôles de l'user connecté
-        if ($token->getUser() != 'anon.') {
+        if ($token->getUser() instanceof User) {
             //récupère l'url demandée
             $url = $this->_requestStack->getCurrentRequest()->getRequestUri();
 

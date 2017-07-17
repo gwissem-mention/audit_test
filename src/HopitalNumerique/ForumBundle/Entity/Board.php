@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use CCDNForum\ForumBundle\Entity\Board as BaseBoard;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -37,7 +38,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->topicReplyAuthorisedRoles as $role) {
-            if ('anon.' === $securityContext->getToken()->getUser()) {
+            if (!$securityContext->getToken()->getUser() instanceof User) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
@@ -61,7 +62,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->topicCreateAuthorisedRoles as $role) {
-            if ('anon.' === $securityContext->getToken()->getUser()) {
+            if (!$securityContext->getToken()->getUser() instanceof User) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
@@ -85,7 +86,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->readAuthorisedRoles as $role) {
-            if ('anon.' === $securityContext->getToken()->getUser()) {
+            if (!$securityContext->getToken()->getUser() instanceof User) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
