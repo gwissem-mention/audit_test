@@ -200,7 +200,7 @@ class Report implements \JsonSerializable
     }
 
     /**
-     * @return ReportItem[]
+     * @return ReportItem[]|ArrayCollection
      */
     public function getItems()
     {

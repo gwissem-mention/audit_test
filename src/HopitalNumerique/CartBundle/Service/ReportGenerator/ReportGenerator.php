@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CartBundle\Service\ReportGenerator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CartBundle\Service\ItemFactory\ItemFactory;
@@ -96,7 +97,13 @@ class ReportGenerator
     {
         $items = [];
 
-        foreach ($report->getItems() as $item) {
+        $iterator = $report->getItems()->getIterator();
+        $iterator->uasort(function (ReportItem $a, ReportItem $b) {
+            return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
+        });
+        $reportItems = new ArrayCollection(iterator_to_array($iterator));
+
+        foreach ($reportItems as $item) {
             $items[] = $this->generateItem($item);
 
         }
