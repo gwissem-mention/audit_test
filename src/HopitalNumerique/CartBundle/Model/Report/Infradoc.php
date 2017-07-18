@@ -33,7 +33,7 @@ class Infradoc implements ItemInterface
      */
     public function getTitle()
     {
-        return $this->content->getTitre();
+        return sprintf('%s %s', $this->getTitleCode(), $this->content->getTitre());
     }
 
     /**
@@ -57,30 +57,43 @@ class Infradoc implements ItemInterface
      */
     public function getParentsTitles()
     {
-        $titles = [];
-        if (!is_null($this->content->getParent())) {
-            $titles = array_merge($titles, $this->getParentsTitle($this->content->getParent()));
+        $parents  = [];
+        $parent = $this->content->getParent();
+        while (!is_null($parent)) {
+            $parents[] = $parent;
+
+            $parent = $parent->getParent();
         }
-        $titles[] = $this->content->getObjet()->getTitre();
-        asort($titles);
+        $parents = array_reverse($parents);
+
+        $titles = [];
+        $codes = [];
+        foreach ($parents as $k => $parent) {
+            $codes[] = $parent->getOrder();
+            $titles[] = implode('.', $codes) . '. ' . $parent->getTitre();
+        }
 
         return $titles;
     }
 
     /**
-     * @param Contenu $contenu
-     *
-     * @return array
+     * @return string
      */
-    public function getParentsTitle(Contenu $contenu)
+    private function getTitleCode()
     {
-        $titles = [$contenu->getTitre()];
+        $parent = $this->content->getParent();
+        $codes = [];
+        while (!is_null($parent)) {
+            $codes[] = $parent->getOrder();
 
-        if (!is_null($contenu->getParent())) {
-            $titles = array_merge($titles, $this->getParentsTitle($contenu->getParent()));
+            $parent = $parent->getParent();
         }
 
-        return $titles;
+        $codes = array_reverse($codes);
+        $codes[] = $this->content->getOrder();
+        $parentsCode = implode('.', $codes);
+
+        return sprintf('%s.', $parentsCode);
     }
 
     /**
