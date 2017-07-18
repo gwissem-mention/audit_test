@@ -104,7 +104,7 @@ class Infradoc implements ItemInterface
      */
     public function getShortContent()
     {
-        return html_entity_decode(strip_tags($this->content->getContenu()), 2 | 0, 'UTF-8');
+        return mb_substr(html_entity_decode(strip_tags($this->content->getContenu()), ENT_COMPAT|ENT_NOQUOTES, 'UTF-8'), 0, 150);
     }
 
     public function getComments()
