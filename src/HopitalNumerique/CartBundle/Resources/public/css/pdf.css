@@ -35,3 +35,19 @@ h2 .date {
 fieldset legend small {
     font-size: 14px;
 }
+
+.comments {
+    margin-bottom: 10px;
+}
+
+.comments .comment {
+    padding-top: 10px;
+}
+
+.comments .comment .info {
+    font-size: 16px;
+}
+
+.comments .comment .info small {
+    font-size: 0.8em;
+}
