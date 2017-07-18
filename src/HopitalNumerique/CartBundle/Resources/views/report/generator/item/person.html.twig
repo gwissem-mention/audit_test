@@ -44,12 +44,10 @@
         <fieldset>
             <legend>{{ 'generator.person.skills'|trans }}</legend>
             <ul>
-                {% for skill in item.skills %}
+                {% for skill in item.skills if skill.connaissance is not null %}
                     <li>
                         {{ skill.domaine.libelle }}
-                        {% if skill.connaissance is not null %}
-                            <small>({{ skill.connaissance.libelle }})</small>
-                        {% endif %}
+                        <small>({{ skill.connaissance.libelle }})</small>
                     </li>
                 {% endfor %}
             </ul><br />
