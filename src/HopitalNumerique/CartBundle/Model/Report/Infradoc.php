@@ -59,7 +59,7 @@ class Infradoc implements ItemInterface
     {
         $parents  = [];
         $parent = $this->content->getParent();
-        while (!is_null($parent)) {
+        while (null !== $parent) {
             $parents[] = $parent;
 
             $parent = $parent->getParent();
@@ -83,7 +83,7 @@ class Infradoc implements ItemInterface
     {
         $parent = $this->content->getParent();
         $codes = [];
-        while (!is_null($parent)) {
+        while (null !== $parent) {
             $codes[] = $parent->getOrder();
 
             $parent = $parent->getParent();
@@ -126,7 +126,7 @@ class Infradoc implements ItemInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getType()
     {

@@ -36,7 +36,7 @@ class Contenu extends Item
     {
         $parents  = [];
         $parent = $this->content->getParent();
-        while (!is_null($parent)) {
+        while (null !== $parent) {
             $parents[] = $parent;
 
             $parent = $parent->getParent();
@@ -60,7 +60,7 @@ class Contenu extends Item
     {
         $parent = $this->content->getParent();
         $codes = [];
-        while (!is_null($parent)) {
+        while (null !== $parent) {
             $codes[] = $parent->getOrder();
 
             $parent = $parent->getParent();
