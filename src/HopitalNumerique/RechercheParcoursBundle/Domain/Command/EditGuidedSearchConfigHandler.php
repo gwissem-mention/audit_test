@@ -114,7 +114,7 @@ class EditGuidedSearchConfigHandler
      */
     private function handleParentsReferences(RechercheParcoursGestion $rechercheParcoursGestion)
     {
-        if (!$rechercheParcoursGestion->getRechercheParcours()) {
+        if (!$rechercheParcoursGestion->getReferencesParentes()) {
             return;
         }
 
@@ -122,7 +122,12 @@ class EditGuidedSearchConfigHandler
         $recherchesParcours = clone $rechercheParcoursGestion->getRechercheParcours();
 
         foreach ($rechercheParcoursGestion->getReferencesParentes() as $parentReference) {
-            if (!$recherchesParcours->contains($parentReference)) {
+
+            $containsParentReference = $recherchesParcours->filter(function (RechercheParcours $rechercheParcours) use ($parentReference) {
+                return $rechercheParcours->getReference() === $parentReference;
+            })->count() > 0;
+
+            if (!$containsParentReference) {
                 $rechercheParcours = new RechercheParcours();
                 $rechercheParcours
                     ->setReference($parentReference)
@@ -131,6 +136,7 @@ class EditGuidedSearchConfigHandler
                 ;
 
                 $rechercheParcoursNew[] = $rechercheParcours;
+                $this->entityManager->persist($rechercheParcours);
             }
         }
 
