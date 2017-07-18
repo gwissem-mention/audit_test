@@ -29,11 +29,6 @@ class Objet extends Item
         return $this->object;
     }
 
-    public function getParentTitle()
-    {
-        return null;
-    }
-
     public function getTitle()
     {
         return $this->object->getTitre();

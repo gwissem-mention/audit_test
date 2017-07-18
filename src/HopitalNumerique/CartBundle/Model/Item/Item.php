@@ -40,9 +40,9 @@ abstract class Item implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getParentTitle()
+    public function getParentsTitle()
     {
         return null;
     }
@@ -118,7 +118,7 @@ abstract class Item implements \JsonSerializable
             'route' => $this->getRoute(),
             'routeParameters' => $this->getRouteParameters(),
             'uriFragment' => $this->getUriFragment(),
-            'parentTitle' => $this->getParentTitle(),
+            'parentsTitle' => $this->getParentsTitle(),
             'title' => $this->getTitle(),
         ];
     }

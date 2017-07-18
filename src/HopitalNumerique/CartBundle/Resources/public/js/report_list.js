@@ -202,8 +202,8 @@ var ReportList;
                     var item = data[k];
 
                     title = item.title;
-                    if (item.parentTitle !== null) {
-                        title = item.parentTitle + ' > ' + title;
+                    if (item.parentsTitle !== null) {
+                        title = item.parentsTitle.join(' > ') + ' > ' + title;
                     }
 
                     modalData.reportItems.push({

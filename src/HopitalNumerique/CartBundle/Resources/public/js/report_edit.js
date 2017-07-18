@@ -82,8 +82,8 @@ var ReportEdit;
                 for (var key in reportFactory.factoryItems) {
                     var item = reportFactory.factoryItems[key];
                     title = item.title;
-                    if (item.parentTitle !== null) {
-                        title = item.parentTitle + ' > ' + title;
+                    if (item.parentsTitle !== null) {
+                        title = item.parentsTitle.join(' > ') + ' > ' + title;
                     }
 
                     var itemLine = component.itemLineTemplate({

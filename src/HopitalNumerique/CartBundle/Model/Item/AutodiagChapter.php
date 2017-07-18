@@ -30,10 +30,12 @@ class AutodiagChapter extends Item
         return $this->chapter;
     }
 
-
-    public function getParentTitle()
+    /**
+     * @inheritdoc
+     */
+    public function getParentsTitle()
     {
-        return $this->chapter->getAutodiag()->getTitle();
+        return [$this->chapter->getAutodiag()->getTitle()];
     }
 
     public function getTitle()
