@@ -53,3 +53,4 @@ services:
             - { name: cart_bundle.report_generator }
         arguments:
             - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_core.dependency_injection.entity'
