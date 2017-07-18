@@ -658,7 +658,7 @@ class Contenu
     /**
      * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|Domaine[]
      */
     public function getDomaines()
     {

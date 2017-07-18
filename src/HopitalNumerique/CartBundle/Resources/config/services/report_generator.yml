@@ -13,7 +13,7 @@ services:
         tags:
             - { name: cart_bundle.report_generator }
         arguments:
-            - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
 
     hopitalnumerique_cart.report_generator.autodiag_chapter:
         public: false
@@ -27,7 +27,7 @@ services:
         tags:
             - { name: cart_bundle.report_generator }
         arguments:
-            - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
 
     hopitalnumerique_cart.report_generator.publication:
         public: false
@@ -36,7 +36,7 @@ services:
             - { name: cart_bundle.report_generator }
         arguments:
             - '@hopitalnumerique_objet.manager.contenu'
-            - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
 
     hopitalnumerique_cart.report_generator.infradoc:
         public: false
@@ -44,7 +44,7 @@ services:
         tags:
             - { name: cart_bundle.report_generator }
         arguments:
-            - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
 
     hopitalnumerique_cart.report_generator.person:
         public: false
@@ -52,5 +52,5 @@ services:
         tags:
             - { name: cart_bundle.report_generator }
         arguments:
-            - '@hopitalnumerique_reference.repository.entity_has_reference'
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
             - '@hopitalnumerique_core.dependency_injection.entity'

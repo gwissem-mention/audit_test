@@ -4,6 +4,7 @@ namespace HopitalNumerique\CartBundle\Service\ReportGenerator\Generator;
 
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CartBundle\Model\Report\Person;
@@ -13,9 +14,9 @@ use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
 class PersonGenerator implements ItemGeneratorInterface
 {
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var Referencement $referencement
      */
-    protected $entityHasReferenceRepository;
+    protected $referencement;
 
     /**
      * @var Entity $entity
@@ -25,12 +26,12 @@ class PersonGenerator implements ItemGeneratorInterface
     /**
      * PersonGenerator constructor.
      *
-     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param Referencement $referencement
      * @param Entity $entity
      */
-    public function __construct(EntityHasReferenceRepository $entityHasReferenceRepository, Entity $entity)
+    public function __construct(Referencement $referencement, Entity $entity)
     {
-        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->referencement = $referencement;
         $this->entity = $entity;
     }
 
@@ -54,7 +55,11 @@ class PersonGenerator implements ItemGeneratorInterface
     {
         $references = [];
         if (!is_null($entityType = $this->entity->getEntityType($person))) {
-            $references = $this->entityHasReferenceRepository->findByTypeAndId($entityType, $person->getId());
+            $references = $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
+                $person->getDomaines(),
+                $entityType,
+                $person->getId()
+            );
         }
 
         $item = new Person($person, $references);

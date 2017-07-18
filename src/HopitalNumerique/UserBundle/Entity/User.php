@@ -1125,7 +1125,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     /**
      * Get domaines.
      *
-     * @return Collection
+     * @return Collection|Domaine[]
      */
     public function getDomaines()
     {
