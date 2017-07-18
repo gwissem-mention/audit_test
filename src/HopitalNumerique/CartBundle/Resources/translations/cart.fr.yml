@@ -123,37 +123,37 @@ columns:
 generator:
     generationDate: "Raport généré le :"
     references:
-        title: Références
+        title: Référencement
     forumTopic:
         firstPostDate: "Premier post :"
         lastPostDate: "Dernier post :"
     publication:
         publicationDate: "Date de modification :"
         source: "Source :"
-        shortResume: Résumé court
-        resume: Résumé long
+        shortResume: Résumé
+        resume: Contenu
         synthesis: Synthèse
         summary: Table des matières
         comments: Commentaires
     infradoc:
         lastUpdateDate: "Date de modification :"
         creationDate: "Date de création :"
-        short_resume: Résumé court
-        resume: Résumé
-        subChapters: Sous châpitres
+        short_resume: Résumé
+        resume: Contenu
+        subChapters: Table des matières
         comments: Commentaires
     autodiagChapter:
-        summary: Sous châpitres
-        questions: Questions
+        summary: Sous-chapitres
+        questions: Contenu
         question:
             title: Titre
             choices: Choix
     cdp_group:
         beginningDate: "Date de début :"
         endDate: "Date de fin :"
-        shortDescription: Description courte
-        description: Description
-        summary: Liste des fiches problématique
+        shortDescription: Résumé
+        description: Contenu
+        summary: Liste des fiches de problématique
     person:
         userInfos:
             title: Informations utilisateur
@@ -162,6 +162,6 @@ generator:
             county: Région
             system: Établissement
         biography: Biographie
-        skills: Connaissances
-        hobbies: Centres d'intérêts
-        computerSkills: Logiciels
+        skills: Connaissances métier
+        hobbies: Centres d'intérêt
+        computerSkills: Logiciels maitrisés
