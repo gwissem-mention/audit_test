@@ -66,8 +66,8 @@
                             </td>
                             <td>{{ ('item.object_type.'~item.objectType)|trans({}, 'cart') }}</td>
                             <td>
-                                {% if item.parentTitle is not null %}
-                                    {{ item.parentTitle }} >
+                                {% if item.parentsTitle is not null %}
+                                    {{ item.parentsTitle|join(' > ') }} >
                                 {% endif %}
                                 {{ item.title }}
                             </td>

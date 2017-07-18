@@ -29,11 +29,6 @@ class ForumTopic extends Item
         return $this->topic;
     }
 
-    public function getParentTitle()
-    {
-        return null;
-    }
-
     public function getTitle()
     {
         return $this->topic->getTitle();

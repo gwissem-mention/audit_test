@@ -29,14 +29,56 @@ class Contenu extends Item
         return $this->content;
     }
 
-    public function getParentTitle()
+    /**
+     * @inheritdoc
+     */
+    public function getParentsTitle()
     {
-        return $this->content->getObjet()->getTitre();
+        $parents  = [];
+        $parent = $this->content->getParent();
+        while (null !== $parent) {
+            $parents[] = $parent;
+
+            $parent = $parent->getParent();
+        }
+        $parents = array_reverse($parents);
+
+        $titles = [];
+        $codes = [];
+        foreach ($parents as $k => $parent) {
+            $codes[] = $parent->getOrder();
+            $titles[] = implode('.', $codes) . '. ' . $parent->getTitre();
+        }
+
+        return $titles;
     }
 
+    /**
+     * @return string
+     */
+    private function getTitleCode()
+    {
+        $parent = $this->content->getParent();
+        $codes = [];
+        while (null !== $parent) {
+            $codes[] = $parent->getOrder();
+
+            $parent = $parent->getParent();
+        }
+
+        $codes = array_reverse($codes);
+        $codes[] = $this->content->getOrder();
+        $parentsCode = implode('.', $codes);
+
+        return sprintf('%s.', $parentsCode);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getTitle()
     {
-        return $this->content->getTitre();
+        return sprintf('%s %s', $this->getTitleCode(), $this->content->getTitre());
     }
 
     /**
