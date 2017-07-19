@@ -60,6 +60,13 @@ class RechercheParcours
     protected $order;
 
     /**
+     * @var GuidedSearch[]
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch", mappedBy="guidedSearchReference", cascade={"remove"})
+     */
+    protected $guidedSearches;
+
+    /**
      * Constructor.
      */
     public function __construct()

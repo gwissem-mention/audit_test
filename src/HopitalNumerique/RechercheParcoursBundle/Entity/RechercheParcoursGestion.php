@@ -75,7 +75,7 @@ class RechercheParcoursGestion
     protected $publicationsType;
 
     /**
-     * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion")
+     * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion", cascade={"all"})
      */
     protected $rechercheParcours;
 
@@ -391,7 +391,7 @@ class RechercheParcoursGestion
     {
         foreach ($this->getPublicationsType() as $publicationType) {
             if ($publicationType->getType() === $publicationTypeSlug) {
-                return true;
+                return $publicationType->isActive();
             }
         }
 

@@ -61,7 +61,14 @@ class GuidedSearchController extends Controller
     public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch = null)
     {
         /** @var RechercheParcoursDetails $reference */
-        $reference = $guidedSearchReference->getRecherchesParcoursDetails()->first();
+        if (!$reference = $guidedSearchReference->getRecherchesParcoursDetails()->first()) {
+            return $this->redirectToRoute(
+                'hopital_numerique_recherche_parcours_homepage_front',
+                [
+                    'id' => $guidedSearchReference->getRecherchesParcoursGestion()->getId(),
+                ]
+            );
+        }
 
         $subReferenceParameters = [];
         if ($reference->getShowChildren()) {

@@ -7,6 +7,7 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
 use HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursDetailsRepository;
 use HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class GuidedSearchStepUrlGenerator
@@ -53,10 +54,11 @@ class GuidedSearchStepUrlGenerator
     /**
      * @param GuidedSearch $guidedSearch
      * @param              $stepPath
+     * @param int $referenceType
      *
      * @return string
      */
-    public function generateFromGuidedSearchAndStepPath(GuidedSearch $guidedSearch, $stepPath)
+    public function generateFromGuidedSearchAndStepPath(GuidedSearch $guidedSearch, $stepPath, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $guidedSearchReference = $guidedSearch->getGuidedSearchReference();
 
@@ -78,6 +80,6 @@ class GuidedSearchStepUrlGenerator
                 'guidedSearchReferenceAlias' => (new Chaine($guidedSearchReference->getReference()->getLibelle()))->minifie(),
                 'parentReference' => $parentReference->getId(),
                 'alias' => (new Chaine($parentReference->getReference()->getLibelle()))->minifie(),
-            ], $subReferenceParameters))."#risk";
+            ], $subReferenceParameters), $referenceType)."#risk";
     }
 }

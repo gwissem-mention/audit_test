@@ -2,12 +2,14 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Risk;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\DTO\RiskSynthesisDTO;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
 use HopitalNumerique\RechercheParcoursBundle\DTO\RiskSynthesisRiskDTO;
 use HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepUrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RiskSynthesisFactory
 {
@@ -56,10 +58,20 @@ class RiskSynthesisFactory
 
                 $riskSynthesis->parents[$parentReference->getReference()->getLibelle()] = RiskSynthesisRiskDTO::createFromGuidedSearchSteps($steps, $user);
 
-                $riskSynthesis->parents[$parentReference->getReference()->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generateFromGuidedSearchAndStepPath($guidedSearch, $parentReference->getId());
+                $riskSynthesis->parents[$parentReference->getReference()->getLibelle()]->directLink = $this->guidedSearchUrlGenerator->generateFromGuidedSearchAndStepPath($guidedSearch, $parentReference->getId(), UrlGeneratorInterface::ABSOLUTE_URL);
 
                 if ($parentReference->getShowChildren() && $parentReference->getReference()->getEnfants()->count() > 0) {
-                    foreach ($parentReference->getReference()->getEnfants() as $subReference) {
+                    $children = $parentReference->getReference()->getEnfants()->toArray();
+
+                    usort($children, function (Reference $a, Reference $b) {
+                        if ($a->getOrder() === $b->getOrder()) {
+                            return 0;
+                        }
+
+                        return ($a->getOrder() < $b->getOrder()) ? -1 : 1;
+                    });
+
+                    foreach ($children as $subReference) {
                         $steps = $guidedSearch->getSteps()->filter(function (GuidedSearchStep $guidedSearchStep) use ($parentReference, $subReference) {
                             $stepPath = explode(':', $guidedSearchStep->getStepPath());
                             if (count($stepPath) < 2) {
