@@ -73,6 +73,8 @@ class Infradoc implements ItemInterface
             $titles[] = implode('.', $codes) . '. ' . $parent->getTitre();
         }
 
+        array_unshift($titles, $this->content->getObjet()->getTitre());
+
         return $titles;
     }
 

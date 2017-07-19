@@ -58,6 +58,7 @@ item:
         forum_topic: Topic du forum
         hot_point: Point-dur
         objet: Publication
+        publication: Publication
         contenu: Contenu
         autodiag_chapter: Chapitre d'autodiagnostic
         cdp_group: Groupe de CDP
@@ -128,7 +129,8 @@ generator:
         firstPostDate: "Premier post :"
         lastPostDate: "Dernier post :"
     publication:
-        publicationDate: "Date de modification :"
+        publicationDate: "Date de publication :"
+        lastUpdateDate: "Date de modification :"
         source: "Source :"
         shortResume: Résumé
         resume: Contenu
