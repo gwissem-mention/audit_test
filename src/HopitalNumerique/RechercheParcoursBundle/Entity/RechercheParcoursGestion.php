@@ -75,7 +75,7 @@ class RechercheParcoursGestion
     protected $publicationsType;
 
     /**
-     * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion")
+     * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion", cascade={"all"})
      */
     protected $rechercheParcours;
 
