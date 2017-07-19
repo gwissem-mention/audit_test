@@ -391,7 +391,7 @@ class RechercheParcoursGestion
     {
         foreach ($this->getPublicationsType() as $publicationType) {
             if ($publicationType->getType() === $publicationTypeSlug) {
-                return true;
+                return $publicationType->isActive();
             }
         }
 

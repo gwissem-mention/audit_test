@@ -65,7 +65,7 @@
 
             <!-- Tab panes -->
             <div class="tab-content publication-type-container">
-                {% for section in guidedSearchConfig.publicationsType %}
+                {% for section in guidedSearchConfig.activePublicationsType %}
                     <div role="tabpanel" class="tab-pane{{ loop.first ? ' active' }}" id="{{ section.type }}">
                         {% include '@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/'~section.type~'.html.twig' ignore missing %}
                     </div>
@@ -73,7 +73,7 @@
             </div>
 
         {% else %}
-            {% for section in guidedSearchConfig.publicationsType %}
+            {% for section in guidedSearchConfig.activePublicationsType %}
                 {% include '@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/'~section.type~'.html.twig' ignore missing %}
             {% endfor %}
         {% endif %}
