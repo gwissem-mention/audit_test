@@ -98,7 +98,15 @@ class Publication implements ItemInterface
      */
     public function getPublicationDate()
     {
-        return $this->object->getDateModification() ? $this->object->getDateModification() : $this->object->getDateCreation();
+        return $this->object->getDateCreation();
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastUpdateDate()
+    {
+        return $this->object->getDateModification();
     }
 
     /**

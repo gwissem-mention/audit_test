@@ -66,3 +66,7 @@ fieldset legend small {
 .comments .comment .info small {
     font-size: 0.8em;
 }
+
+.person-info tr th {
+    width: 50%;
+}
