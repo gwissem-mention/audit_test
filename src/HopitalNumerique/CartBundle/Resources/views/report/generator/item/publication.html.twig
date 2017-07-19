@@ -8,6 +8,9 @@
 
     <span class="date">
         {{ 'generator.publication.publicationDate'|trans }} {{ item.publicationDate|date('d/m/Y') }}
+        {% if item.lastUpdateDate %}
+            <br />{{ 'generator.publication.lastUpdateDate'|trans }} {{ item.lastUpdateDate|date('d/m/Y') }}
+        {% endif %}
     </span>
 </h2>
 
