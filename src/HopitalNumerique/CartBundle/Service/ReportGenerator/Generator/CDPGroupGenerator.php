@@ -8,23 +8,24 @@ use HopitalNumerique\CartBundle\Model\Report\ItemInterface;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
 
 class CDPGroupGenerator implements ItemGeneratorInterface
 {
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var Referencement $referencement
      */
-    protected $entityHasReferenceRepository;
+    protected $referencement;
 
     /**
      * PublicationGenerator constructor.
      *
-     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param Referencement $referencement
      */
-    public function __construct(EntityHasReferenceRepository $entityHasReferenceRepository)
+    public function __construct(Referencement $referencement)
     {
-        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->referencement = $referencement;
     }
 
     /**
@@ -47,7 +48,11 @@ class CDPGroupGenerator implements ItemGeneratorInterface
     {
         $item = new CDPGroup(
             $group,
-            $this->entityHasReferenceRepository->findByTypeAndId(Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE, $group->getId())
+            $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
+                [$group->getDomaine()],
+                Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
+                $group->getId()
+            )
         );
 
         if ($group->getUsers()->contains($report->getOwner())) {

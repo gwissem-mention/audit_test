@@ -32,6 +32,7 @@ class CDPGroup implements ItemInterface
     public function __construct(Groupe $group, $references)
     {
         $this->group = $group;
+        $this->references = $references;
     }
 
     /**

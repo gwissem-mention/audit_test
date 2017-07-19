@@ -2,30 +2,29 @@
 
 namespace HopitalNumerique\CartBundle\Service\ReportGenerator\Generator;
 
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\CartBundle\Model\Report\Infradoc;
 use HopitalNumerique\CartBundle\Model\Report\ItemInterface;
-use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
-use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
+use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
 
 class InfradocGenerator implements ItemGeneratorInterface
 {
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var Referencement $referencement
      */
-    protected $entityHasReferenceRepository;
+    protected $referencement;
 
     /**
      * PublicationGenerator constructor.
      *
-     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param Referencement $referencement
      */
-    public function __construct(EntityHasReferenceRepository $entityHasReferenceRepository)
+    public function __construct(Referencement $referencement)
     {
-        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->referencement = $referencement;
     }
 
     /**
@@ -48,7 +47,11 @@ class InfradocGenerator implements ItemGeneratorInterface
     {
         $item = new Infradoc(
             $content,
-            $this->entityHasReferenceRepository->findByTypeAndId(Entity::ENTITY_TYPE_CONTENU, $content->getId())
+            $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
+                $content->getObjet()->getDomaines(),
+                Entity::ENTITY_TYPE_CONTENU,
+                $content->getId()
+            )
         );
 
         return $item;

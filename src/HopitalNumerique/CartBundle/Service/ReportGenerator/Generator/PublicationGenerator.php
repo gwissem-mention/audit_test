@@ -4,11 +4,11 @@ namespace HopitalNumerique\CartBundle\Service\ReportGenerator\Generator;
 
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\CartBundle\Model\Report\Publication;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\CartBundle\Model\Report\ItemInterface;
-use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
-use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
 
 class PublicationGenerator implements ItemGeneratorInterface
@@ -19,20 +19,22 @@ class PublicationGenerator implements ItemGeneratorInterface
     protected $contentManager;
 
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var Referencement $referencement
      */
-    protected $entityHasReferenceRepository;
+    protected $referencement;
 
     /**
      * PublicationGenerator constructor.
      *
      * @param ContenuManager $contentManager
-     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param Referencement $referencement
      */
-    public function __construct(ContenuManager $contentManager, EntityHasReferenceRepository $entityHasReferenceRepository)
-    {
+    public function __construct(
+        ContenuManager $contentManager,
+        Referencement $referencement
+    ) {
         $this->contentManager = $contentManager;
-        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->referencement = $referencement;
     }
 
     /**
@@ -53,10 +55,16 @@ class PublicationGenerator implements ItemGeneratorInterface
      */
     public function process($publication, Report $report)
     {
+        $referencesTree = $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
+            $publication->getDomaines(),
+            Entity::ENTITY_TYPE_OBJET,
+            $publication->getId()
+        );
+
         $item = new Publication(
             $publication,
             $this->contentManager->getArboForObjet($publication->getId()),
-            $this->entityHasReferenceRepository->findByTypeAndId(Entity::ENTITY_TYPE_OBJET, $publication->getId())
+            $referencesTree
         );
 
         return $item;

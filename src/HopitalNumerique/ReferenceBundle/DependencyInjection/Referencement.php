@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as TreeService;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
@@ -71,6 +72,64 @@ class Referencement
         $this->addEntitiesHasReferencesInReferencesSubtree($referencesTree, $entitiesHasReferences);
 
         return $referencesTree;
+    }
+
+    /**
+     * Retourne l'arbre des références uniquement si la branche a un enfant référencé
+     *
+     * @param Domaine[] $domains
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return array
+     */
+    public function getReferencesTreeOnlyWithEntitiesHasReferences($domains, $entityType, $entityId)
+    {
+        $referencesTree = $this->getReferencesTreeWithEntitiesHasReferences($domains, $entityType, $entityId);
+
+        return $this->cleanSubTree($referencesTree);
+    }
+
+    /**
+     * Remove branch if no child with reference registered
+     *
+     * @param array $children
+     *
+     * @return array
+     */
+    private function cleanSubTree($children)
+    {
+        foreach ($children as $k => $branch) {
+            if (!$this->branchHasReference($branch)) {
+                unset($children[$k]);
+            } else {
+                $children[$k]['enfants'] = $this->cleanSubTree($branch['enfants']);
+            }
+        }
+
+        return $children;
+    }
+
+    /**
+     * Test if branch has a reference registered
+     *
+     * @param array $branch
+     *
+     * @return bool
+     */
+    private function branchHasReference($branch)
+    {
+        if (!is_null($branch['entityHasReference'])) {
+            return true;
+        }
+
+        foreach ($branch['enfants'] as $child) {
+            if (!is_null($child['entityHasReference']) || $this->branchHasReference($child)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

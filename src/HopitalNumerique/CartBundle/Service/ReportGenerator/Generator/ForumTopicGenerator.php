@@ -7,24 +7,24 @@ use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\CartBundle\Model\Report\ForumTopic;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\CartBundle\Model\Report\ItemInterface;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ItemGeneratorInterface;
-use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
 
 class ForumTopicGenerator implements ItemGeneratorInterface
 {
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var Referencement $referencement
      */
-    protected $entityHasReferenceRepository;
+    protected $referencement;
 
     /**
      * PublicationGenerator constructor.
      *
-     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param Referencement $referencement
      */
-    public function __construct(EntityHasReferenceRepository $entityHasReferenceRepository)
+    public function __construct(Referencement $referencement)
     {
-        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->referencement = $referencement;
     }
 
     /**
@@ -38,7 +38,7 @@ class ForumTopicGenerator implements ItemGeneratorInterface
     }
 
     /**
-     * @param ForumTopic $object
+     * @param Topic $forumTopic
      * @param Report $report
      *
      * @return ItemInterface
@@ -47,7 +47,11 @@ class ForumTopicGenerator implements ItemGeneratorInterface
     {
         $item = new ForumTopic(
             $forumTopic,
-            $this->entityHasReferenceRepository->findByTypeAndId(Entity::ENTITY_TYPE_FORUM_TOPIC, $forumTopic->getId())
+            $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
+                $forumTopic->getBoard()->getCategory()->getDomaines(),
+                Entity::ENTITY_TYPE_FORUM_TOPIC,
+                $forumTopic->getId()
+            )
         );
 
         return $item;
