@@ -54,6 +54,7 @@ class GuidedSearchStepUrlGenerator
     /**
      * @param GuidedSearch $guidedSearch
      * @param              $stepPath
+     * @param int $referenceType
      *
      * @return string
      */
