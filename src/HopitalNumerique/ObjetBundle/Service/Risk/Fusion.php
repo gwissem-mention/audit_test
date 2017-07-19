@@ -65,9 +65,9 @@ class Fusion
         $targetRiskAnalysis = new ArrayCollection($this->riskAnalysisRepository->getRiskAnalysisForRisk($target));
 
         foreach ($riskAnalysis as $riskAnalyse) {
-            $hasTargetRiskAnalyse = $targetRiskAnalysis->exists(function (RiskAnalysis $targetRiskAnalyse) use ($riskAnalyse) {
+            $hasTargetRiskAnalyse = $targetRiskAnalysis->filter(function (RiskAnalysis $targetRiskAnalyse) use ($riskAnalyse) {
                 return $targetRiskAnalyse->getStep() === $riskAnalyse->getStep() && $targetRiskAnalyse->getOwner() === $riskAnalyse->getOwner();
-            });
+            })->count() > 0;
 
             if (!$hasTargetRiskAnalyse) {
                 $riskAnalyse->setRisk($target);
