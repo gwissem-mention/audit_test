@@ -115,15 +115,15 @@ class ProductionSearch
             }
 
             /** @var Objet $hotPoint */
-            $hotPoint = $this->objectRepository->find($id);
+            $relatedObject = $this->objectRepository->find($id);
             if (
                 (
-                    (!$hotPoint && in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $hotPoint->getTypeIds())) ||
-                    ($hotPoint && !in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $hotPoint->getTypeIds()))
+                    ($hotPoint && in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $relatedObject->getTypeIds())) ||
+                    (!$hotPoint && !in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $relatedObject->getTypeIds()))
                 ) &&
-                in_array($this->domainService->get()->getId(), $hotPoint->getDomainesId())
+                in_array($this->domainService->get()->getId(), $relatedObject->getDomainesId())
             ) {
-                $relatedHotPoints[] = $hotPoint;
+                $relatedHotPoints[] = $relatedObject;
             }
         }
 
