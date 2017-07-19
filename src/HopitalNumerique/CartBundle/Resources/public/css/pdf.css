@@ -1,14 +1,29 @@
+body {
+    font-size: 13px;
+}
+
 .header {
     height: 125px;
+}
+
+.header,
+.header img,
+.header .text-right {
+    padding-top: 10px;
+}
+
+.header img {
+    max-width: 100%;
 }
 
 .footer {
     padding-top: 30px;
     height: 80px;
+    font-size: 11px;
 }
 
 h1 {
-    font-size: 22px;
+    font-size: 18px;
 }
 
 h2 {

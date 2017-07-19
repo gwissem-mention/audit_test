@@ -82,6 +82,8 @@ class ReportGenerator
                     'report' => $report,
                 ]),
                 'footer-html' => $this->twig->render('@HopitalNumeriqueCart/report/generator/reportPDFFooter.html.twig'),
+                'margin-left' => 5,
+                'margin-right' => 5,
             ])
         );
     }
