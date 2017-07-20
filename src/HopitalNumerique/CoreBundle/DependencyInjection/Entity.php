@@ -14,6 +14,7 @@ use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
+use HopitalNumerique\ForumBundle\Repository\BoardRepository;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
@@ -132,6 +133,11 @@ class Entity
     private $forumTopicManager;
 
     /**
+     * @var BoardRepository $forumBoardRepository
+     */
+    protected $forumBoardRepository;
+
+    /**
      * @var DomaineManager DomaineManager
      */
     private $domaineManager;
@@ -194,6 +200,7 @@ class Entity
      * @param                                 $refExpressionBesoinReponseId
      * @param                                 $refForumBoardId
      * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param BoardRepository $boardRepository
      */
     public function __construct(
         RouterInterface $router,
@@ -215,7 +222,8 @@ class Entity
         $refComPratiqueId,
         $refExpressionBesoinReponseId,
         $refForumBoardId,
-        $entityHasReferenceRepository
+        $entityHasReferenceRepository,
+        BoardRepository $boardRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -237,6 +245,7 @@ class Entity
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
         $this->refForumBoardId = $refForumBoardId;
         $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->forumBoardRepository = $boardRepository;
     }
 
     /**
@@ -353,6 +362,8 @@ class Entity
                 return $this->expressionBesoinReponseManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_SUGGESTION:
                 return $this->suggestionRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return $this->forumBoardRepository->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "' . $type . '" introuvable.');

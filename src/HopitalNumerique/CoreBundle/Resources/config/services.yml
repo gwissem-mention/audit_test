@@ -27,6 +27,7 @@ services:
         - '%ref_expression_besoin_reponse_id%'
         - '%ref_forum_board_id%'
         - '@hopitalnumerique_reference.repository.entity_has_reference'
+        - '@hopitalnumerique_forum.repository.board'
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView
