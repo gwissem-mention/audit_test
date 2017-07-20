@@ -43,7 +43,7 @@ h2 .date {
     margin-top: 6px;
 }
 
-.well {
+.well, fieldset, p {
     page-break-inside: avoid !important;
 }
 
