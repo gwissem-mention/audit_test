@@ -15,9 +15,9 @@
 <div id="help-block" class="col-md-12">
     <p>
         {% if referencesLink %}
-            {{ 'help_block.description.full'|trans({'%resourceName%': '<b>'~entityTitle~'</b>', '%references%': referencesLink})|raw }}
+            {{ 'help_block.description.full'|trans({'%types%': types ? ' ('~types~')' : null, '%resourceName%': '<b>'~entityTitle~'</b>', '%references%': referencesLink})|raw }}
         {% else %}
-            {{ 'help_block.description.light'|trans({'%resourceName%': '<b>'~entityTitle~'</b>'})|raw }}
+            {{ 'help_block.description.light'|trans({'%types%': types ? ' ('~types~')' : null, '%resourceName%': '<b>'~entityTitle~'</b>'})|raw }}
         {% endif %}
     </p>
 

@@ -52,6 +52,11 @@ class HelpBlockExtension extends \Twig_Extension
         $entityTitle = $this->entity->getTitleByEntity($object);
         $references = $this->entity->getReferencesByEntity($object, true);
 
+        $types = null;
+        if (in_array($this->entity->getEntityType($object), [Entity::ENTITY_TYPE_OBJET, Entity::ENTITY_TYPE_CONTENU])) {
+            $types = $this->entity->getCategoryByEntity($object);
+        }
+
         return $this->twig->render(
             'HopitalNumeriqueContextualNavigationBundle:help_block:help_block.html.twig',
             [
@@ -59,6 +64,7 @@ class HelpBlockExtension extends \Twig_Extension
                 'entityId' => $entityId,
                 'entityTitle' => $entityTitle,
                 'references' => $references,
+                'types' => $types,
             ]
         );
     }
