@@ -129,7 +129,7 @@ generator:
         firstPostDate: "Premier post :"
         lastPostDate: "Dernier post :"
     publication:
-        publicationDate: "Date de publication :"
+        publicationDate: "Date de création :"
         lastUpdateDate: "Date de modification :"
         source: "Source :"
         shortResume: Résumé
