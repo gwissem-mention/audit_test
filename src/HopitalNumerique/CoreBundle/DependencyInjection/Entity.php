@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
@@ -178,6 +179,11 @@ class Entity
     protected $entityHasReferenceRepository;
 
     /**
+     * @var AutodiagRepository $autodiagRepository
+     */
+    protected $autodiagRepository;
+
+    /**
      * Constructeur.
      *
      * @param RouterInterface                 $router
@@ -201,6 +207,7 @@ class Entity
      * @param                                 $refForumBoardId
      * @param EntityHasReferenceRepository $entityHasReferenceRepository
      * @param BoardRepository $boardRepository
+     * @param AutodiagRepository $communautePratiqueGroupeManager
      */
     public function __construct(
         RouterInterface $router,
@@ -223,7 +230,8 @@ class Entity
         $refExpressionBesoinReponseId,
         $refForumBoardId,
         $entityHasReferenceRepository,
-        BoardRepository $boardRepository
+        BoardRepository $boardRepository,
+        AutodiagRepository $autodiagRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -246,6 +254,7 @@ class Entity
         $this->refForumBoardId = $refForumBoardId;
         $this->entityHasReferenceRepository = $entityHasReferenceRepository;
         $this->forumBoardRepository = $boardRepository;
+        $this->autodiagRepository = $autodiagRepository;
     }
 
     /**
@@ -364,6 +373,8 @@ class Entity
                 return $this->suggestionRepository->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return $this->forumBoardRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_AUTODIAG:
+                return $this->autodiagRepository->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "' . $type . '" introuvable.');
