@@ -62,7 +62,7 @@ class GuidedSearch
      * @var RechercheParcours $guidedSearchReference
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours", inversedBy="guidedSearches")
-     * @ORM\JoinColumn(referencedColumnName="rrp_id", onDelete="REMOVE")
+     * @ORM\JoinColumn(referencedColumnName="rrp_id", onDelete="CASCADE")
      */
     protected $guidedSearchReference;
 
