@@ -25,9 +25,11 @@
                         <li>
                             {{ '{{target}}' }}
                             {% if type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
-                                <a href="{{ '{{removeUri}}' }}">
-                                    <i class="fa fa-times"></i>
-                                </a>
+                                {{ '{{#if removeUri}}' }}
+                                    <a href="{{ '{{removeUri}}' }}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                {{ '{{/if}}' }}
                             {% endif %}
                         </li>
                     {{ '{{/'~type~'Shares}}' }}

@@ -133,7 +133,9 @@ class ReportController extends Controller
 
     public function sharesDataAction(Report $report)
     {
-        $shares = [];
+        $shares = [
+            'ownerFullName' => $report->getOwner()->getNomPrenom(),
+        ];
         foreach ($report->getShares() as $share) {
             if (!isset($shares[$share->getType()])) {
                 $shares[$share->getType()] = [];
