@@ -800,7 +800,7 @@ class ObjetRepository extends EntityRepository
             ->andWhere('o.isArticle = FALSE')
             ->addSelect('SUM(c.viewsCount) as HIDDEN viewsCount')
             ->join('o.consultations', 'c')
-            ->groupBy('o')
+            ->groupBy('o.id')
             ->orderBy('viewsCount', 'DESC')
             ->orderBy('o.dateParution', 'DESC')
 
