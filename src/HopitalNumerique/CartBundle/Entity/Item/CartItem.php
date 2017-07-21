@@ -29,15 +29,6 @@ class CartItem extends Item
     protected $addedAt;
 
     /**
-     * @var Domaine
-     *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
-     * @ORM\JoinColumn(referencedColumnName="dom_id")
-     */
-    protected $domain;
-
-
-    /**
      * CartItem constructor.
      *
      * @param $objectType
@@ -68,14 +59,6 @@ class CartItem extends Item
     public function getAddedAt()
     {
         return $this->addedAt;
-    }
-
-    /**
-     * @return Domaine
-     */
-    public function getDomain()
-    {
-        return $this->domain;
     }
 
     /**

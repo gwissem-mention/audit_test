@@ -21,6 +21,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@hopitalnumerique_cart.factory.item'
             - '@translator'
+            - '@hopitalnumerique_cart.repository.cart_item'
 
     hopitalnumerique_cart.remove_item_from_report_command_handler:
         class: HopitalNumerique\CartBundle\Domain\Command\RemoveItemFromReportCommandHandler

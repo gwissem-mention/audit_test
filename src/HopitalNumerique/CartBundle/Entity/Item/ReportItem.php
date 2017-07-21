@@ -5,6 +5,7 @@ namespace HopitalNumerique\CartBundle\Entity\Item;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CartBundle\Entity\Item;
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -33,13 +34,15 @@ class ReportItem extends Item
      *
      * @param $objectType
      * @param $objectId
+     * @param Domaine $domain
      * @param Report $report
      */
-    public function __construct($objectType, $objectId, Report $report = null)
+    public function __construct($objectType, $objectId, Domaine $domain, Report $report = null)
     {
         $this->objectType = $objectType;
         $this->objectId = $objectId;
         $this->report = $report;
+        $this->domain = $domain;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CartBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * @ORM\MappedSuperclass
@@ -39,6 +40,14 @@ class Item
      * @ORM\Column(type="integer")
      */
     protected $objectId;
+
+    /**
+     * @var Domaine
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinColumn(referencedColumnName="dom_id")
+     */
+    protected $domain;
 
     /**
      * @return int
@@ -86,6 +95,14 @@ class Item
         $this->objectId = $objectId;
 
         return $this;
+    }
+
+    /**
+     * @return Domaine
+     */
+    public function getDomain()
+    {
+        return $this->domain;
     }
 
     public function __clone()
