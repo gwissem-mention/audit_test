@@ -64,7 +64,7 @@
                             <td class="text-center">
                                 <input type="checkbox" class="cart-item-checkbox" name="item[{{ item.objectType }}][]" value="{{ item.objectId }}">
                             </td>
-                            <td>{{ ('item.object_type.'~item.objectType)|trans({}, 'cart') }}</td>
+                            <td>{{ ('item.object_type.'~item.objectTypeLabelSlug)|trans({}, 'cart') }}</td>
                             <td>
                                 {% if item.parentsTitle is not null %}
                                     {{ item.parentsTitle|join(' > ') }} >

@@ -58,6 +58,14 @@ abstract class Item implements \JsonSerializable
     abstract function getObjectType();
 
     /**
+     * @return string
+     */
+    public function getObjectTypeLabelSlug()
+    {
+        return $this->getObjectType();
+    }
+
+    /**
      * @param $name
      *
      * @return Item

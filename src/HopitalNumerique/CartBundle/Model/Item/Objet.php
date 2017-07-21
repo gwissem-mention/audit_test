@@ -39,6 +39,14 @@ class Objet extends Item
      */
     public function getObjectType()
     {
+        return \HopitalNumerique\CartBundle\Entity\Item::OBJECT_TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectTypeLabelSlug()
+    {
         if ($this->object->isPointDur()) {
             return \HopitalNumerique\CartBundle\Entity\Item::HOT_POINT_TYPE;
         }
