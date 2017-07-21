@@ -21,6 +21,27 @@
             {% for report in reports %}
                 <tr class="report-list-line" data-report-id="{{ report.id }}">
                     <td class="report-list-line-title">
+
+                        {% if report.shares %}
+                            {% set shares = [] %}
+                            {% for share in report.shares if share.type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
+                                {% set shares = shares|merge([share.target.nomPrenom]) %}
+                            {% endfor %}
+
+                            {% if shares|length > 0 %}
+                                {% set shares = shares|merge([report.owner.nomPrenom]) %}
+                                <span class="share-tooltip" title="{{ shares|join(', ')|e }}">
+                                    <i class="fa fa-share"></i>
+                                </span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if report.sharedBy is not null and report.sharedBy.report is not null %}
+                            <span class="share-tooltip" title="{{ report.sharedBy.report.owner.nomPrenom }}">
+                                <i class="fa fa-copy"></i>
+                            </span>
+                        {% endif %}
+
                         <a href="{{ path('hopital_numerique_cart_report_item_get', {'report': report.id}) }}" class="report-details">
                             {{ report.name }}
                         </a>

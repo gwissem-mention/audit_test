@@ -20,7 +20,11 @@ class ReportRepository extends EntityRepository
         return $this->createQueryBuilder('r')
             ->leftJoin('r.items', 'ri')->addSelect('ri')
             ->join('r.owner', 'u')->addSelect('u')
-            ->leftJoin('r.shares', 'rs', Join::WITH, 'rs.target = :userId AND rs.type = :shareType')->addSelect('rs')
+            ->leftJoin('r.shares', 'rs', Join::WITH, 'rs.target = :userId AND rs.type = :shareType')
+            ->leftJoin('r.shares', 'ras')->addSelect('ras')
+            ->leftJoin('r.sharedBy', 'rsb')->addSelect('rsb')
+            ->leftJoin('rsb.report', 'rsc')->addSelect('rsc')
+            ->leftJoin('rsc.owner', 'rsco')->addSelect('rsco')
             ->where('u.id = :userId')
             ->orWhere('rs.id IS NOT NULL')
 
