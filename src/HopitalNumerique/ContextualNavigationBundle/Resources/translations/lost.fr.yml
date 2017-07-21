@@ -15,3 +15,10 @@ stats:
     users: '[0,1] %count% utilisateur enregistré |]1,Inf[ %count% utilisateurs enregistrés'
     forum_topics: '[0,1] %count% discussion fur le forum |]1,Inf[ %count% discussions sur le forum'
     cdp_members: '[0,1] %count% membre de la communauté |]1,Inf[ %count% membres de la communauté'
+last:
+    lastObjects: Les dernières publications
+    bestRatedObjects: Les publications les mieux notées
+    mostViewedObjects: Les publications les plus consultées
+    mostCommentedObjects: Les publications les plus commentées
+    lastTopics: Les dernières discussions
+    empty: - Rien pour le moment -

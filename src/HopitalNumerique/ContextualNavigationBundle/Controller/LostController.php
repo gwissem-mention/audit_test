@@ -23,14 +23,26 @@ class LostController extends Controller
 
         $entity = $entityService->getEntityByTypeAndId($entityType, $entityId);
 
+        $lastObjects = $objectRepository->getLastObject($resourceDomain, 3);
+        $bestRatedObjects = $objectRepository->getBestRatedObject($resourceDomain, 3);
+        $mostViewedObjects = $objectRepository->getMostViewedObject($resourceDomain, 3);
+
         $entityTitle = $entityService->getTitleByEntity($entity);
-        $lastPublication = $objectRepository->getLastObject($resourceDomain);
-        $bestRatedPublication = $objectRepository->getBestRatedObject($resourceDomain);
-        $mostViewedPublication = $objectRepository->getMostViewedObject($resourceDomain);
+        $lastPublication = current($lastObjects);
+        $bestRatedPublication = current($bestRatedObjects);
+        $mostViewedPublication = current($mostViewedObjects);
         $randomPublication = $objectRepository->getRandomObject($resourceDomain);
         $randomAutodiag = $this->get('autodiag.repository.autodiag')->getRandomAutodiagForDomain($resourceDomain);
 
         $references = $this->get('hopitalnumerique_reference.repository.reference')->getParentsByCode('CATEGORIE_OBJET');
+
+        $last = [
+            'lastObjects' => $lastObjects,
+            'bestRatedObjects' => $bestRatedObjects,
+            'mostViewedObjects' => $mostViewedObjects,
+            'mostCommentedObjects' => $objectRepository->getMostCommentedObject($resourceDomain, 3),
+            'lastTopics' => $forumRepository->getLastTopic(3),
+        ];
 
         $stats = [
             'methodsTools' => $objectRepository->getProductionsCount(),
@@ -49,6 +61,7 @@ class LostController extends Controller
             'randomAutodiag' => $randomAutodiag,
             'references' => $references,
             'stats' => $stats,
+            'last' => $last,
         ]);
     }
 }

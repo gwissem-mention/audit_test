@@ -93,6 +93,21 @@ class TopicRepository extends EntityRepository
 
         return $qb;
     }
+    /**
+     * @param integer $count
+     *
+     * @return Topic[]
+     */
+    public function getLastTopic($role, $count = 1)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.firstPost', 'p')
+            ->orderBy('p.createdDate', 'DESC')
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
+        ;
+    }
 
     /**
      * Récupère les derniers topics commentés par type de forum.
