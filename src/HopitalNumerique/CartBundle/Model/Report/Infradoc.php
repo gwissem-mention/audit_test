@@ -119,7 +119,18 @@ class Infradoc implements ItemInterface
      */
     public function getShortContent()
     {
-        return mb_substr(html_entity_decode(strip_tags($this->content->getContenu()), ENT_COMPAT|ENT_NOQUOTES, 'UTF-8'), 0, 150);
+        $content = html_entity_decode(strip_tags($this->content->getContenu()), ENT_COMPAT|ENT_NOQUOTES, 'UTF-8');
+
+        if (strlen($content) > 150) {
+            $content = substr($content, 0, 150);
+            if (strrpos($content, ' ') > 0) {
+                $content = substr($content, 0, strrpos($content, ' '));
+            }
+
+            $content .= '...';
+        }
+
+        return $content;
     }
 
     public function getComments()
