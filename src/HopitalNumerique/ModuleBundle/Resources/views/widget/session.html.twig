@@ -29,7 +29,7 @@
 
                                 {% if registration['actions']['evaluate'] is defined %}
                                     <a class="btn btn-primary btn-sm" href="{{ registration['actions']['evaluate'] }}">
-                                        {{registration.etatEvaluation.libelle}}
+                                        {{ registration['info']['registration_state'] }}
                                     </a>
                                 {% endif %}
 

@@ -45,31 +45,31 @@
                 <div class="panel-heading no-background">
                     <ul class="nav nav-tabs">
                         <li>
-                            <a href="#personal_information" data-toggle="tab" class="profile-tab-nav nav-tab-1">
+                            <a href="#tab1" data-toggle="tab" class="profile-tab-nav nav-tab-1">
                                 {{ 'account.profile.personal_information'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#contact_information" data-toggle="tab" class="profile-tab-nav nav-tab-2">
+                            <a href="#tab2" data-toggle="tab" class="profile-tab-nav nav-tab-2">
                                 {{ 'account.profile.contact_information'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#profile" data-toggle="tab" class="profile-tab-nav nav-tab-3">
+                            <a href="#tab3" data-toggle="tab" class="profile-tab-nav nav-tab-3">
                                 {{ 'account.profile.profile'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#structure" data-toggle="tab" class="profile-tab-nav nav-tab-4">
+                            <a href="#tab4" data-toggle="tab" class="profile-tab-nav nav-tab-4">
                                 {{ 'account.profile.structure'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#skills" data-toggle="tab" class="profile-tab-nav nav-tab-5">
+                            <a href="#tab5" data-toggle="tab" class="profile-tab-nav nav-tab-5">
                                 {{ 'account.profile.skills'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
@@ -78,19 +78,19 @@
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
-                        <div class="profile-tab tab-pane fade in" id="personal_information">
+                        <div class="profile-tab tab-pane fade in" id="tab1">
                             {% include 'NewAccountBundle:profile/tabs:personal_information.html.twig' %}
                         </div>
-                        <div class="profile-tab tab-pane fade" id="contact_information">
+                        <div class="profile-tab tab-pane fade" id="tab2">
                             {% include 'NewAccountBundle:profile/tabs:contact_information.html.twig' %}
                         </div>
-                        <div class="profile-tab tab-pane fade" id="profile">
+                        <div class="profile-tab tab-pane fade" id="tab3">
                             {% include 'NewAccountBundle:profile/tabs:profile.html.twig' %}
                         </div>
-                        <div class="profile-tab tab-pane fade" id="structure">
+                        <div class="profile-tab tab-pane fade" id="tab4">
                             {% include 'NewAccountBundle:profile/tabs:structure.html.twig' %}
                         </div>
-                        <div class="profile-tab tab-pane fade" id="skills">
+                        <div class="profile-tab tab-pane fade" id="tab5">
                             {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
                         </div>
                     </div>
