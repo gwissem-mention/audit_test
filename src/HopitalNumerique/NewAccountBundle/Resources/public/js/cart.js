@@ -10,6 +10,8 @@ var NewAccountCart;
     NewAccountCart.prototype = {
         init: function () {
 
+            $('.share-tooltip').tooltip();
+
             if ($('.cart-items .item').length > 0) {
                 $('.cart-items').DataTable({
                     paging: false,
