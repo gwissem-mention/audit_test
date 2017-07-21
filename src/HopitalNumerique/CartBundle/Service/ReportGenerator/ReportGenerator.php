@@ -106,8 +106,9 @@ class ReportGenerator
         $reportItems = new ArrayCollection(iterator_to_array($iterator));
 
         foreach ($reportItems as $item) {
-            $items[] = $this->generateItem($item);
-
+            if (!is_null($generatedItem = $this->generateItem($item))) {
+                $items[] = $generatedItem;
+            }
         }
 
         return $items;
@@ -122,7 +123,9 @@ class ReportGenerator
      */
     private function generateItem(ReportItem $reportItem)
     {
-        $item = $this->itemFactory->build($reportItem);
+        if (is_null($item = $this->itemFactory->build($reportItem))) {
+            return null;
+        }
 
         foreach ($this->generators as $generator) {
             if ($generator->support($item->getObject())) {
