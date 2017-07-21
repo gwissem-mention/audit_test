@@ -16,24 +16,26 @@
                 <input type="submit" class="btn btn-success" value="{{ ('modal.report_'~type~'.submit.label')|trans|e }}">
             </form>
         </div>
-        <div class="col-md-6">
-            <b>{{ ('modal.report_'~type~'.sharedWith')|trans }}</b>
-            {{ '{{#if '~type~'Shares}}' }}
-            <ul>
-                {{ '{{#'~type~'Shares}}' }}
-                    <li>
-                        {{ '{{target}}' }}
-                        {% if type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
-                            <a href="{{ '{{removeUri}}' }}">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        {% endif %}
-                    </li>
-                {{ '{{/'~type~'Shares}}' }}
-            </ul>
-            {{ '{{else}}' }}
-            {{ ('modal.report_'~type~'.noShares')|trans }}
-            {{ '{{/if}}' }}
-        </div>
+        {% if constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') == type %}
+            <div class="col-md-6">
+                <b>{{ ('modal.report_'~type~'.sharedWith')|trans }}</b>
+                {{ '{{#if '~type~'Shares}}' }}
+                <ul>
+                    {{ '{{#'~type~'Shares}}' }}
+                        <li>
+                            {{ '{{target}}' }}
+                            {% if type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
+                                <a href="{{ '{{removeUri}}' }}">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            {% endif %}
+                        </li>
+                    {{ '{{/'~type~'Shares}}' }}
+                </ul>
+                {{ '{{else}}' }}
+                {{ ('modal.report_'~type~'.noShares')|trans }}
+                {{ '{{/if}}' }}
+            </div>
+        {% endif %}
     </div>
 </fieldset>

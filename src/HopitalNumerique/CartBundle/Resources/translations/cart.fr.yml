@@ -24,7 +24,7 @@ modal:
     report_copy:
         title: Copier mon rapport
         email:
-            label: "Copier mon rapport avec :"
+            label: "Copier mon rapport pour :"
             placeholder: exemple@mail.com
         submit:
             label: Copier
