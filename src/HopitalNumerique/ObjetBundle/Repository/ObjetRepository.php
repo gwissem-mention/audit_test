@@ -829,4 +829,16 @@ class ObjetRepository extends EntityRepository
             ->getQuery()->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @return integer
+     */
+    public function getProductionsCount()
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->andWhere('o.isArticle = FALSE')
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
 }

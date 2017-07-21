@@ -77,6 +77,14 @@
             {{ discoverLinks|join(', ')|raw }}
 
         </p>
+
+        <p>
+            <b>{{ 'stats.title'|trans }}</b><br />
+            {{ 'stats.methods_tools'|transchoice(stats.methodsTools) }}<br />
+            {{ 'stats.users'|transchoice(stats.users) }}<br />
+            {{ 'stats.forum_topics'|transchoice(stats.forumTopics) }}<br />
+            {{ 'stats.cdp_members'|transchoice(stats.cdpMembers) }}<br />
+        </p>
     </div>
 
     <script>

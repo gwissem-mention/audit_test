@@ -272,4 +272,15 @@ class TopicRepository extends EntityRepository
 
         return $qb->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * @return integer
+     */
+    public function countAllTopics()
+    {
+        return $this->createQueryBuilder('topic')
+            ->select('COUNT(topic.id)')
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
 }

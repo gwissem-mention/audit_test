@@ -17,6 +17,7 @@ class LostController extends Controller
     {
         $entityService = $this->get('hopitalnumerique_core.dependency_injection.entity');
         $objectRepository = $this->get('hopitalnumerique_objet.repository.objet');
+        $forumRepository = $this->get('hopitalnumerique_forum.repository.topic');
 
         $resourceDomain = $this->get('hopitalnumerique_domaine.repository.domaine')->find($this->getParameter('resource_domain_id'));
 
@@ -31,6 +32,13 @@ class LostController extends Controller
 
         $references = $this->get('hopitalnumerique_reference.repository.reference')->getParentsByCode('CATEGORIE_OBJET');
 
+        $stats = [
+            'methodsTools' => $objectRepository->getProductionsCount(),
+            'users' => $this->get('hopitalnumerique_user.repository.user')->countAllUsers(),
+            'forumTopics' => $forumRepository->countAllTopics(),
+            'cdpMembers' => $this->get('hopitalnumerique_user.repository.user')->countAddCDPUsers(),
+        ];
+
         return $this->render('HopitalNumeriqueContextualNavigationBundle:lost:lost.html.twig', [
             'entityTitle' => $entityTitle,
             'resourceDomain' => $resourceDomain,
@@ -40,6 +48,7 @@ class LostController extends Controller
             'randomPublication' => $randomPublication,
             'randomAutodiag' => $randomAutodiag,
             'references' => $references,
+            'stats' => $stats,
         ]);
     }
 }

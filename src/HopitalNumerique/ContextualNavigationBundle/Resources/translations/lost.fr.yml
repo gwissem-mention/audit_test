@@ -9,3 +9,9 @@ discover:
     random_publication: une publication au hasard
     autodiagnostic: un autodiagnostic
     guided_search: un parcours guidé
+stats:
+    title: "Le centre de ressources de l'ANAP c'est :"
+    methods_tools: '[0,1] %count% méthode ou outil |]1,Inf[ %count% méthodes ou outils'
+    users: '[0,1] %count% utilisateur enregistré |]1,Inf[ %count% utilisateurs enregistrés'
+    forum_topics: '[0,1] %count% discussion fur le forum |]1,Inf[ %count% discussions sur le forum'
+    cdp_members: '[0,1] %count% membre de la communauté |]1,Inf[ %count% membres de la communauté'
