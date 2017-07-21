@@ -1012,4 +1012,15 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+
+    /**
+     * @return integer
+     */
+    public function countAllUsers()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
 }

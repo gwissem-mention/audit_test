@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -745,10 +746,11 @@ class ObjetRepository extends EntityRepository
 
     /**
      * @param Domaine $domain
+     * @param integer $count
      *
-     * @return Objet
+     * @return Objet[]
      */
-    public function getLastObject(Domaine $domain)
+    public function getLastObject(Domaine $domain, $count = 1)
     {
         return $this->createQueryBuilder('o')
             ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
@@ -757,18 +759,19 @@ class ObjetRepository extends EntityRepository
 
             ->addOrderBy('o.dateParution', 'DESC')
 
-            ->setMaxResults(1)
+            ->setMaxResults($count)
 
-            ->getQuery()->getOneOrNullResult()
+            ->getQuery()->getResult()
         ;
     }
 
     /**
      * @param Domaine $domain
+     * @param integer $count
      *
-     * @return Objet
+     * @return Objet[]
      */
-    public function getBestRatedObject(Domaine $domain)
+    public function getBestRatedObject(Domaine $domain, $count = 1)
     {
         return $this->createQueryBuilder('o')
             ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
@@ -781,18 +784,19 @@ class ObjetRepository extends EntityRepository
             ->orderBy('notes', 'DESC')
             ->orderBy('o.dateParution', 'DESC')
 
-            ->setMaxResults(1)
+            ->setMaxResults($count)
 
-            ->getQuery()->getOneOrNullResult()
+            ->getQuery()->getResult()
         ;
     }
 
     /**
      * @param Domaine $domain
+     * @param integer $count
      *
-     * @return Objet
+     * @return Objet[]
      */
-    public function getMostViewedObject(Domaine $domain)
+    public function getMostViewedObject(Domaine $domain, $count = 1)
     {
         return $this->createQueryBuilder('o')
             ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
@@ -804,9 +808,33 @@ class ObjetRepository extends EntityRepository
             ->orderBy('viewsCount', 'DESC')
             ->orderBy('o.dateParution', 'DESC')
 
-            ->setMaxResults(1)
+            ->setMaxResults($count)
 
-            ->getQuery()->getOneOrNullResult()
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $count
+     *
+     * @return Objet[]
+     */
+    public function getMostCommentedObject(Domaine $domain, $count = 1)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addSelect('COUNT(c.id) as HIDDEN commentsCount')
+            ->join('o.listeCommentaires', 'c')
+            ->groupBy('o.id')
+            ->orderBy('commentsCount', 'DESC')
+            ->orderBy('o.dateParution', 'DESC')
+
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
         ;
     }
 
@@ -827,6 +855,18 @@ class ObjetRepository extends EntityRepository
             ->setMaxResults(1)
 
             ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getProductionsCount()
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->andWhere('o.isArticle = FALSE')
+            ->getQuery()->getSingleScalarResult()
         ;
     }
 }

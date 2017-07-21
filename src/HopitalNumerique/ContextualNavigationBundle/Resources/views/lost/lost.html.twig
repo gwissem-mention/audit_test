@@ -77,6 +77,26 @@
             {{ discoverLinks|join(', ')|raw }}
 
         </p>
+
+        <div class="row">
+            {{ self.lastObjects('lastObjects', last, 'object') }}
+            {{ self.lastObjects('lastTopics', last, 'topic') }}
+        </div>
+        <div class="row">
+            {{ self.lastObjects('bestRatedObjects', last, 'object') }}
+            {{ self.lastObjects('mostCommentedObjects', last, 'object') }}
+        </div>
+        <div class="row">
+            {{ self.lastObjects('mostViewedObjects', last, 'object') }}
+        </div>
+
+        <p>
+            <b>{{ 'stats.title'|trans }}</b><br />
+            {{ 'stats.methods_tools'|transchoice(stats.methodsTools) }}<br />
+            {{ 'stats.users'|transchoice(stats.users) }}<br />
+            {{ 'stats.forum_topics'|transchoice(stats.forumTopics) }}<br />
+            {{ 'stats.cdp_members'|transchoice(stats.cdpMembers) }}<br />
+        </p>
     </div>
 
     <script>
@@ -87,3 +107,30 @@
         });
     </script>
 {% endblock %}
+
+
+{% import _self as self %}
+{% macro lastObjects(list, items, type) %}
+    <div class="col-md-6">
+        {{ ('last.'~list)|trans }}
+        <ul>
+            {% for item in items[list] %}
+                <li>
+                    {% if type == 'object' %}
+                        <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': item.id}) }}">
+                            {{ item.titre }}
+                        </a>
+                    {% elseif type == 'topic' %}
+                        <a href="{{ path('ccdn_forum_user_topic_show', {'forumName': item.board.category.forum.name, 'topicId': item.id}) }}">
+                            {{ item.title }}
+                        </a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>
+                    <b>{{ 'last.empty'|trans }}</b>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
