@@ -116,6 +116,6 @@ class ShareReportCommandHandler
     {
         return $report->getShares()->filter(function (ReportSharing $reportSharing) use ($user, $type) {
             return $reportSharing->getTarget() === $user && $reportSharing->getType() === $type;
-        })->count() > 0;
+        })->count() > 0 || $report->getOwner() === $user;
     }
 }
