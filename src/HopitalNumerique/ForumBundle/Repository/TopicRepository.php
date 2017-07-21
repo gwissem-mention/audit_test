@@ -98,7 +98,7 @@ class TopicRepository extends EntityRepository
      *
      * @return Topic[]
      */
-    public function getLastTopic($role, $count = 1)
+    public function getLastTopic($count = 1)
     {
         return $this->createQueryBuilder('t')
             ->join('t.firstPost', 'p')

@@ -780,9 +780,9 @@ class ObjetRepository extends EntityRepository
             ->addSelect('AVG(n.note) as HIDDEN note, COUNT(n.id) as HIDDEN notes')
             ->join('o.listeNotes', 'n')
             ->groupBy('o')
-            ->orderBy('note', 'DESC')
-            ->orderBy('notes', 'DESC')
-            ->orderBy('o.dateParution', 'DESC')
+            ->addOrderBy('note', 'DESC')
+            ->addOrderBy('notes', 'DESC')
+            ->addOrderBy('o.dateParution', 'DESC')
 
             ->setMaxResults($count)
 
@@ -802,11 +802,8 @@ class ObjetRepository extends EntityRepository
             ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
             ->setParameter('domainId', $domain->getId())
             ->andWhere('o.isArticle = FALSE')
-            ->addSelect('SUM(c.viewsCount) as HIDDEN viewsCount')
-            ->join('o.consultations', 'c')
-            ->groupBy('o.id')
-            ->orderBy('viewsCount', 'DESC')
-            ->orderBy('o.dateParution', 'DESC')
+            ->addOrderBy('o.nbVue', 'DESC')
+            ->addOrderBy('o.dateParution', 'DESC')
 
             ->setMaxResults($count)
 
@@ -829,8 +826,8 @@ class ObjetRepository extends EntityRepository
             ->addSelect('COUNT(c.id) as HIDDEN commentsCount')
             ->join('o.listeCommentaires', 'c')
             ->groupBy('o.id')
-            ->orderBy('commentsCount', 'DESC')
-            ->orderBy('o.dateParution', 'DESC')
+            ->addOrderBy('commentsCount', 'DESC')
+            ->addOrderBy('o.dateParution', 'DESC')
 
             ->setMaxResults($count)
 
@@ -850,7 +847,7 @@ class ObjetRepository extends EntityRepository
             ->setParameter('domainId', $domain->getId())
             ->addSelect('RAND() as HIDDEN random')
             ->andWhere('o.isArticle = FALSE')
-            ->orderBy('random')
+            ->addOrderBy('random')
 
             ->setMaxResults(1)
 
