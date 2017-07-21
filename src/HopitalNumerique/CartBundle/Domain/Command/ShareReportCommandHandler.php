@@ -99,7 +99,7 @@ class ShareReportCommandHandler
             if ($cartItems->filter(function (CartItem $cartItem) use ($item) {
                 return $cartItem->getObjectId() == $item->getObjectId() && $cartItem->getObjectType() == $item->getObjectType();
             })->count() === 0) {
-                $cartItem = new CartItem($item->getObjectType(), $item->getObjectId(), $target);
+                $cartItem = new CartItem($item->getObjectType(), $item->getObjectId(), $target, $item->getDomain());
                 $this->entityManager->persist($cartItem);
             }
         }

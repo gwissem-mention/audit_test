@@ -7,6 +7,7 @@ use HopitalNumerique\CartBundle\Entity\Item\ReportFactoryItem;
 use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CartBundle\Entity\ReportFactory;
+use HopitalNumerique\CartBundle\Repository\CartItemRepository;
 use HopitalNumerique\CartBundle\Repository\ReportFactoryRepository;
 use HopitalNumerique\CartBundle\Repository\ReportItemRepository;
 use HopitalNumerique\CartBundle\Service\ItemFactory\ItemFactory;
@@ -41,6 +42,11 @@ class AddCartItemsToReportFactoryCommandHandler
     protected $reportFactoryRepository;
 
     /**
+     * @var CartItemRepository $cartItemRepository
+     */
+    protected $cartItemRepository;
+
+    /**
      * AddCartItemsToReportCommandHandler constructor.
      *
      * @param ReportFactoryRepository $reportFactoryRepository
@@ -48,14 +54,22 @@ class AddCartItemsToReportFactoryCommandHandler
      * @param EntityManagerInterface $entityManager
      * @param ItemFactory $itemFactory
      * @param TranslatorInterface $translator
+     * @param CartItemRepository $cartItemRepository
      */
-    public function __construct(ReportFactoryRepository $reportFactoryRepository, ReportItemRepository $reportItemRepository, EntityManagerInterface $entityManager, ItemFactory $itemFactory, TranslatorInterface $translator)
-    {
+    public function __construct(
+        ReportFactoryRepository $reportFactoryRepository,
+        ReportItemRepository $reportItemRepository,
+        EntityManagerInterface $entityManager,
+        ItemFactory $itemFactory,
+        TranslatorInterface $translator,
+        CartItemRepository $cartItemRepository
+    ) {
         $this->reportFactoryRepository = $reportFactoryRepository;
         $this->reportItemRepository = $reportItemRepository;
         $this->entityManager = $entityManager;
         $this->itemFactory = $itemFactory;
         $this->translator = $translator;
+        $this->cartItemRepository = $cartItemRepository;
     }
 
     /**
@@ -81,7 +95,7 @@ class AddCartItemsToReportFactoryCommandHandler
 
         foreach ($command->items as $objectType => $objects) {
             foreach ($objects as $objectId) {
-                $reportItem = $this->getReportItem($reportItems, $objectType, $objectId);
+                $reportItem = $this->getReportItem($reportItems, $objectType, $objectId, $command->user);
 
                 $this->createItemLink($reportItem, $reportFactory, $command->user);
             }
@@ -98,7 +112,7 @@ class AddCartItemsToReportFactoryCommandHandler
      *
      * @return ReportItem
      */
-    private function getReportItem($reportItems, $objectType, $objectId, Report $report = null)
+    private function getReportItem($reportItems, $objectType, $objectId, User $user)
     {
         foreach ($reportItems as $reportItem) {
             if ($reportItem->getObjectType() == $objectType && $reportItem->getObjectId() == $objectId) {
@@ -106,7 +120,9 @@ class AddCartItemsToReportFactoryCommandHandler
             }
         }
 
-        $reportItem = new ReportItem($objectType, $objectId, $report);
+        $cartItem = $this->cartItemRepository->findByObjectAndOwner($objectType, $objectId, $user);
+
+        $reportItem = new ReportItem($objectType, $objectId, $cartItem->getDomain(), null);
         $this->entityManager->persist($reportItem);
 
         return $reportItem;

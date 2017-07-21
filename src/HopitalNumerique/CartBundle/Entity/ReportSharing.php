@@ -57,6 +57,7 @@ class ReportSharing
      * @var Report
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\CartBundle\Entity\Report", inversedBy="shares")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $report;
 
