@@ -81,7 +81,9 @@ var ReportList;
 
             $.get($e.prop('href'), {}, function(data) {
                 for (var type in data) {
-                    modalData[type+'Shares'] = [];
+                    modalData[type+'Shares'] = [
+                        {'target': data.ownerFullName}
+                    ];
 
                     for (var key in data[type]) {
                         var share = data[type][key];
