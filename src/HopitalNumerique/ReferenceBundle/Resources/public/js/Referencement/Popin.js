@@ -19,7 +19,7 @@ Hn_Reference_Referencement_Popin.ENTITY_ID = null;
 /**
  * @var string URL de redirection
  */
-Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
+Hn_Reference_Referencement_Popin.REDIRECTION_URL = window.location;
 
 /**
  * @var boolean Indique si un clic est en cours sur un toggle
@@ -320,7 +320,7 @@ Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose = function()
                 if (null !== Hn_Reference_Referencement_Popin.REDIRECTION_URL) {
                     Nodevo_Web.redirect(Hn_Reference_Referencement_Popin.REDIRECTION_URL);
                 } else {
-                    Nodevo_Web.reload();
+                    $.fancybox.close();
                 }
             }
         }

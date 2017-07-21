@@ -1,5 +1,7 @@
 $(function() {
 
+    Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
+
     if (window.location.hash) {
         $('[href='+window.location.hash+']').tab('show');
     } else {
