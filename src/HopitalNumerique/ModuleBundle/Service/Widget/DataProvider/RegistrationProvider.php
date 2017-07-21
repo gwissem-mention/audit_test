@@ -164,7 +164,7 @@ class RegistrationProvider
         } elseif (Reference::EVALUATED_ID === $registration->getEtatEvaluation()->getId()) {
             $actions['show']     = $this->router->generate(
                 'hopitalnumerique_module_evaluation_view_front',
-                ['id' => $registration->getId()]
+                ['id' => $registration->getSession()->getId()]
             );
             $actions['download'] = $this->router->generate(
                 'hopitalnumerique_module_inscription_attestation_front',
