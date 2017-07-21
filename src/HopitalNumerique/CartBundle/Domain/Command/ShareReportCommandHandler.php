@@ -64,7 +64,7 @@ class ShareReportCommandHandler
             throw new NoResultException();
         }
 
-        if ($this->isReportAlreadySharedToUser($command->report, $user, $command->type)) {
+        if ($command->type !== ReportSharing::TYPE_COPY && $this->isReportAlreadySharedToUser($command->report, $user, $command->type)) {
             throw new ReportAlreadySharedToUserException();
         }
 
