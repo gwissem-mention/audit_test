@@ -1,6 +1,10 @@
 hopital_numerique_guided_search_show:
-    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}/{guidedSearch}
-    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:show, guidedSearch: null }
+    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:show }
+
+hopital_numerique_guided_search_show_guided_search:
+    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}/guided-search/{guidedSearch}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:showGuidedSearch }
 
 hopital_numerique_guided_search_step:
     path: /{guidedSearch}/{guidedSearchReference}-{guidedSearchReferenceAlias}/{parentReference}-{alias}/{subReference}-{subAlias}

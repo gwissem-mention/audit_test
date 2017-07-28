@@ -17,6 +17,7 @@ class Item
     const AUTODIAG_CHAPTER_TYPE = 'autodiag_chapter';
     const CDP_GROUP_TYPE = 'cdp_group';
     const PERSON_TYPE = 'person';
+    const GUIDED_SEARCH_TYPE = 'guided_search';
 
     /**
      * @var int

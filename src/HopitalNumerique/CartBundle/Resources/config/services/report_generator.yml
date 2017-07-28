@@ -6,6 +6,7 @@ services:
             - '@twig'
             - '%kernel.root_dir%'
             - '@knp_snappy.pdf'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
 
     hopitalnumerique_cart.report_generator.forum_topic:
         public: false
@@ -54,3 +55,11 @@ services:
         arguments:
             - '@hopitalnumerique_reference.dependency_injection.referencement'
             - '@hopitalnumerique_core.dependency_injection.entity'
+
+    hopitalnumerique_cart.report_generator.guided_search:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\GuidedSearchGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.dependency_injection.referencement'

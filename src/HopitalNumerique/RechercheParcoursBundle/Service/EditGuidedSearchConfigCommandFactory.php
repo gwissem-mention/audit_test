@@ -38,6 +38,7 @@ class EditGuidedSearchConfigCommandFactory
         $editRechercheParcoursGestionCommand->referencesParentes = $rechercheParcoursGestion->getReferencesParentes();
         $editRechercheParcoursGestionCommand->referencesVentilations = $rechercheParcoursGestion->getReferencesVentilations();
         $editRechercheParcoursGestionCommand->update = true;
+        $editRechercheParcoursGestionCommand->broadcastDate = $rechercheParcoursGestion->getBroadcastDate();
 
         $this->hydratePublicationsTypes($editRechercheParcoursGestionCommand, $rechercheParcoursGestion);
 

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\DTO;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 class StepRiskDTO
 {
@@ -40,5 +41,17 @@ class StepRiskDTO
     public function __construct()
     {
         $this->excludedObjects = new ArrayCollection();
+    }
+
+    public function relatedRisksByDomain(Domaine $domain)
+    {
+        $relatedRisks = [];
+        foreach ($this->relatedRisks as $relatedRisk) {
+            if ($relatedRisk->getObject()->getDomaines()->contains($domain)) {
+                $relatedRisks[] = $relatedRisk;
+            }
+        }
+
+        return $relatedRisks;
     }
 }

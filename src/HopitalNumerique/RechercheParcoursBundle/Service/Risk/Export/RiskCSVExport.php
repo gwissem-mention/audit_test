@@ -14,7 +14,8 @@ class RiskCSVExport extends RiskExport
      */
     public function exportGuidedSearchStepRisks(GuidedSearchStep $guidedSearchStep, $risks)
     {
-        $out = fopen('php://output', 'w');
+        $filepath = $this->getFilePath();
+        $out = fopen($filepath, 'w');
         fputcsv($out, $this->getHeader());
 
         $this->reorderRisks($risks);
@@ -23,16 +24,18 @@ class RiskCSVExport extends RiskExport
             fputcsv($out, [
                 $risk->natureLabel,
                 $risk->label,
-                $risk->probability ?: '-',
-                $risk->impact ?: '-',
-                $risk->probability * $risk->impact,
-                $risk->initialSkillsRate  ?: '-',
-                $risk->currentSkillsRate ?: '-',
+                $risk->probability ?: '',
+                $risk->impact ?: '',
+                !$risk->probability || !$risk->impact ? '' : $risk->probability * $risk->impact,
+                $risk->initialSkillsRate  ?: '',
+                $risk->currentSkillsRate ?: '',
                 implode(', ', $this->getDisplayableResources($risk)),
                 $risk->comment,
             ]);
         }
 
         fclose($out);
+
+        return $filepath;
     }
 }

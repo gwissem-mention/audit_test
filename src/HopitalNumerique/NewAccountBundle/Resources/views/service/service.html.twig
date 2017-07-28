@@ -10,6 +10,7 @@
 
         <script>
             $(function() {
+                $('.service-tooltip').tooltip();
                 $('#domains-select').on('change', function () {
                     var container = $('#services .widgets-container');
                     var loader = container.nodevoLoader().start();

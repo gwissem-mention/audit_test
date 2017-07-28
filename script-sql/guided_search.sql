@@ -34,3 +34,8 @@ INSERT INTO core_mail (mail_id, mail_objet, mail_description, mail_expediteur_ma
 Voici une recherche guidée qui pourrait vous intéresser.
 
 Cordialement', '', 0);
+
+
+UPDATE hn_recherche_recherche_parcours_gestion SET broadcastDate = '2017-07-05';
+
+UPDATE core_textedynamique_code SET txt_code='Module_guidedSearch_risk_criticality' WHERE txt_code='Module_guidedSearch_risk_criticity';

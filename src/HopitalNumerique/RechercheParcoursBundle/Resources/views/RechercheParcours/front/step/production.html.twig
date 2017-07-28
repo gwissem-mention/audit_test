@@ -33,7 +33,7 @@
             </div>
 
             <div class="related">
-                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_HOT_POINT')) %}
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_HOT_POINT')) and object.relatedHotPoints|length > 0%}
                     <a href="#" class="btn btn-link" data-toggle="modal" data-target="#hot-point-{{ section.type}}-{{ k }}">
                         {{ 'step.objects.related_hot_point'|transchoice(object.relatedHotPoints|length) }}
                     </a>
@@ -41,7 +41,7 @@
                     {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/step/production/hot_points.html.twig') }}
                 {% endif %}
 
-                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_RISK')) %}
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_RISK')) and object.relatedRisks|length > 0 %}
                     <a href="#risks-{{ section.type}}-{{ k }}" class="btn btn-link" data-toggle="modal" data-target="#risks-{{ section.type}}-{{ k }}">
                         {{ 'step.objects.related_risk'|transchoice(object.relatedRisks|length) }}
                     </a>

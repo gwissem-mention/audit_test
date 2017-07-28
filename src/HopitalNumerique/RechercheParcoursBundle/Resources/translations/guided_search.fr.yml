@@ -30,8 +30,8 @@ step:
             probability: Probabilité
             impact: Impact
             criticality: Criticité
-            initialSkills: Maitrise initiale
-            currentSkills: Maitrise actuelle
+            initialSkills: Maîtrise initiale
+            currentSkills: Maîtrise actuelle
             relatedResources: |
                 Ressources
                 suggérées
@@ -71,12 +71,12 @@ step:
             description: Masquer la ressource dans les exports.
             header:
                 title: Titre
-                exclude: Exclure
+                exclude: Exclure du PDF
         modal:
             close:
                 label: Fermer
             save:
-                label: Sauvegarder
+                label: Enregistrer
     share:
         btn:
             title: Partager
@@ -99,6 +99,7 @@ step:
             user_not_found: E-mail non trouvé sur la plateforme.
     synthesis:
         title: Synthèse
+        tooltip: Accéder à la synthèse
         actions:
             mail:
                 title: Envoyer le PDF par e-mail

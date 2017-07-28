@@ -17,7 +17,7 @@
                 <tr>
                     <td>
                         {% if item.modificationDate > item.consultationDate %}
-                            <i class="fa fa-bullhorn" title="{{ 'viewed_objects.update'|trans }}"></i>
+                            <i class="fa fa-bullhorn service-tooltip" data-toggle="tooltip" title="{{ 'viewed_objects.update'|trans }}"></i>
                         {% endif %}
                         {{ item.consultationDate|date('d/m/y') }} -
                         <a href="{{ item.showLink }}" title="{{ item.fullTitle }}"{{ not item.sameDomain ? " target='_blank'" }}>

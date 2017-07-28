@@ -72,7 +72,7 @@ class RiskSynthesisRiskDTO
         foreach ($guidedSearchSteps as $guidedSearchStep) {
             $count += $guidedSearchStep->getRisksAnalysis()->filter(function (RiskAnalysis $riskAnalysis) use ($user, $controlled) {
                 return (is_null($riskAnalysis->getOwner()) || $riskAnalysis->getOwner() === $user) &&
-                    $riskAnalysis->getCriticality() > 12 && (
+                    $riskAnalysis->getCriticality() >= 12 && (
                         ($controlled && $riskAnalysis->getSkillsRate() >= 70) ||
                         (!$controlled && $riskAnalysis->getSkillsRate() < 70)
                     )
@@ -103,8 +103,10 @@ class RiskSynthesisRiskDTO
             });
 
             foreach ($riskAnalysis as $riskAnalyse) {
-                $weighting += $riskAnalyse->getCriticality();
-                $sum += $riskAnalyse->{sprintf('get%sSkillsRate', ucfirst($type))}() * $riskAnalyse->getCriticality();
+                if (!is_null($riskAnalyse->{sprintf('get%sSkillsRate', ucfirst($type))}())) {
+                    $weighting += $riskAnalyse->getCriticality();
+                    $sum += $riskAnalyse->{sprintf('get%sSkillsRate', ucfirst($type))}() * $riskAnalyse->getCriticality();
+                }
             }
 
         }

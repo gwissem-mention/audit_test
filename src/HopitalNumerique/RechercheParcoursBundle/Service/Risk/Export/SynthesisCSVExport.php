@@ -13,9 +13,9 @@ class SynthesisCSVExport extends SynthesisExport
     /**
      * {@inheritdoc}
      */
-    public function exportGuidedSearch(GuidedSearch $guidedSearch, User $user = null)
+    public function exportGuidedSearch(GuidedSearch $guidedSearch, User $user = null, $filepath = 'php://output')
     {
-        $out = fopen('php://output', 'w');
+        $out = fopen($filepath, 'w');
         fputcsv($out, $this->getHeader());
 
         foreach ($this->parseGuidedSearch($guidedSearch, $user) as $risk) {

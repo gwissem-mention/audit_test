@@ -8,6 +8,7 @@ use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\RechercheBundle\Repository\RequeteRepository;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
+use HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use HopitalNumerique\UserBundle\Service\ActiveMemberCalculator;
@@ -44,6 +45,10 @@ class ActivityWidget extends WidgetAbstract
      */
     protected $userRepository;
 
+    /**
+     * @var GuidedSearchRepository $guidedSearchRepository
+     */
+    protected $guidedSearchRepository;
 
     /**
      * ActivityWidget constructor.
@@ -52,12 +57,19 @@ class ActivityWidget extends WidgetAbstract
      * @param TokenStorageInterface $tokenStorage
      * @param TranslatorInterface $translator
      * @param ActiveMemberCalculator $activeMemberCalculator
+     * @param GuidedSearchRepository $guidedSearchRepository
      */
-    public function __construct(\Twig_Environment $twig, TokenStorageInterface $tokenStorage, TranslatorInterface $translator, ActiveMemberCalculator $activeMemberCalculator)
-    {
+    public function __construct(
+        \Twig_Environment $twig,
+        TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
+        ActiveMemberCalculator $activeMemberCalculator,
+        GuidedSearchRepository $guidedSearchRepository
+    ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->activeMemberCalculator = $activeMemberCalculator;
+        $this->guidedSearchRepository = $guidedSearchRepository;
     }
 
     /**
@@ -93,6 +105,7 @@ class ActivityWidget extends WidgetAbstract
             'commentsCount' => $activity['nbComment'] + $activity['nbNote'],
             'autodiagsCount' => $this->autodiagEntryRepository->countActiveForUser($user),
             'recommendationsLogCount' => $activity['recommendationsCount'],
+            'guidedSearchCount' => count($this->guidedSearchRepository->findByUserWithShares($user)),
         ]);
 
         $title = $this->translator->trans('activity.title', [], 'widget');

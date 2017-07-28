@@ -92,9 +92,8 @@
     margin-top: 20px;
 }
 #recherche-par-parcours-details.guided-search-synthesis table.synthesis caption {
-    font-size: 18px;
-    text-decoration: underline;
-    padding: 8px;
+    font-size: 16px;
+    padding: 8px 0;
 }
 
 #pointsdurs .slider-range-min{width: 90%; margin: 0 auto;}

@@ -47,6 +47,7 @@
 
 #recherche-par-parcours-details .productions .result .related {
     text-align: right;
+    height: 35px;
 }
 
 #recherche-par-parcours-details .productions .result .related a {
@@ -61,4 +62,5 @@
 
 #recherche-par-parcours-details .productions .result .related .modal a {
     margin: 0;
+    font-weight: normal;
 }

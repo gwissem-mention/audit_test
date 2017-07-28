@@ -8,6 +8,15 @@
     {{ include('@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/risk/not_analyzed.html.twig') }}
 {% endif %}
 
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <a href="{{ path('hopital_numerique_guided_search_step_analyse', {'guidedSearchStep': guidedSearchStep.id}) }}" class="guided-search-step-analyze btn btn-success btn-block disabled">
+            {{ 'step.risks.actions.analyse.text'|trans }}
+        </a>
+    </div>
+</div>
+
+
 <fieldset>
     <legend>{{ 'step.risks.add.title'|trans }}</legend>
 

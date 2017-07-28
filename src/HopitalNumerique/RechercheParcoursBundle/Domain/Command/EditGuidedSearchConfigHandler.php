@@ -60,6 +60,7 @@ class EditGuidedSearchConfigHandler
 
         $rechercheParcoursGestion
             ->setNom($command->name)
+            ->setBroadcastDate($command->broadcastDate)
             ->setDomaines($command->domaines)
             ->setReferencesVentilations($command->referencesVentilations)
             ->setReferencesParentes($command->referencesParentes)

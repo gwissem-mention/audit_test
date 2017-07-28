@@ -4,6 +4,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -80,10 +81,18 @@ class RechercheParcoursGestion
     protected $rechercheParcours;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date")
+     */
+    protected $broadcastDate;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->broadcastDate = new \DateTime();
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referencesParentes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referencesVentilations = new \Doctrine\Common\Collections\ArrayCollection();
@@ -165,7 +174,7 @@ class RechercheParcoursGestion
     /**
      * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|Domaine[]
      */
     public function getDomaines()
     {
@@ -327,6 +336,26 @@ class RechercheParcoursGestion
         }
 
         return $result;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBroadcastDate()
+    {
+        return $this->broadcastDate;
+    }
+
+    /**
+     * @param \DateTime $broadcastDate
+     *
+     * @return RechercheParcoursGestion
+     */
+    public function setBroadcastDate(\DateTime $broadcastDate)
+    {
+        $this->broadcastDate = $broadcastDate;
+
+        return $this;
     }
 
     /**

@@ -7,6 +7,8 @@
         "@font_awesome_css"
         "@fancybox_css"
         'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/risk.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/synthesis_pdf.css'
     %}
         <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
     {% endstylesheets %}
@@ -17,15 +19,6 @@
 <div class="container-fluid">
 
     <div class="guided-search-synthesis" id="recherche-par-parcours-details">
-
-        <div class="row">
-            <div class="col-xs-5">
-                <img src="{{ asset('bundles/hopitalnumeriquecore/img/logo-anap.png', null, true) }}">
-            </div>
-            <div class="col-xs-7">
-                <h3>{{ guidedSearch.guidedSearchReference.reference.libelle }}</h3>
-            </div>
-        </div>
 
         {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/synthesis.html.twig') }}
 

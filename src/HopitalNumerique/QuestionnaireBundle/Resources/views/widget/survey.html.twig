@@ -45,7 +45,7 @@
                 {% for response in item.responses %}
                     <tr>
                         <td>
-                            {{ item.survey.update|date('d/m/y') }}
+                            {{ response.update|date('d/m/y') }}
                             -
                             {{ response.name }}
                         </td>

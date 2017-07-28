@@ -22,6 +22,10 @@ body {
     font-size: 11px;
 }
 
+h2, fieldset legend {
+    color: #6F3596;
+}
+
 h1 {
     font-size: 18px;
 }
@@ -41,6 +45,7 @@ h2 .date {
     display: block;
     font-size: 0.8em;
     margin-top: 6px;
+    color: #000;
 }
 
 .well, fieldset, p {
@@ -69,4 +74,10 @@ fieldset legend small {
 
 .person-info tr th {
     width: 50%;
+}
+
+.truncate-height {
+    max-height: 102px;
+    overflow: hidden;
+
 }

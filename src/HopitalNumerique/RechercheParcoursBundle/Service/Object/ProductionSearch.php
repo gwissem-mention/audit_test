@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Object;
 
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -56,24 +57,25 @@ class ProductionSearch
      */
     public function search(GuidedSearchStep $guidedSearchStep)
     {
-        $references = [
-            $guidedSearchStep->getGuidedSearch()->getGuidedSearchReference()->getRecherchesParcoursDetails()->filter(function (RechercheParcoursDetails $guidedSearchParent) use ($guidedSearchStep) {
-                return $guidedSearchParent->getId() === $guidedSearchStep->getGuidedSearchParentReferenceId();
-            })->first()->getReference()->getId(),
-        ];
+        $parentReference = $guidedSearchStep->getGuidedSearch()->getGuidedSearchReference()->getRecherchesParcoursDetails()->filter(function (RechercheParcoursDetails $guidedSearchParent) use ($guidedSearchStep) {
+            return $guidedSearchParent->getId() === $guidedSearchStep->getGuidedSearchParentReferenceId();
+        })->first();
+
+        $references = [$parentReference->getReference()->getId()];
 
         if ($guidedSearchStep->getGuidedSearchSubReferenceId()) {
             $references[] = $guidedSearchStep->getGuidedSearchSubReferenceId();
         }
 
-        $objects = $this->objectRepository->getObjectForReferences($references, $this->getReferenceChildrenId($guidedSearchStep->getGuidedSearch()->getGuidedSearchReference()->getReference()));
+        $objects = $this->objectRepository->getObjectForReferences($references, $this->getReferenceChildrenId($parentReference, $guidedSearchStep->getGuidedSearch()->getGuidedSearchReference()->getReference()));
 
         $productions = [];
         foreach ($objects as $object) {
 
             if (
                 (!$this->hotPoint && in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $object->getTypeIds())) ||
-                ($this->hotPoint && !in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $object->getTypeIds()))
+                ($this->hotPoint && !in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $object->getTypeIds())) ||
+                !$object->getDomaines()->contains($this->domainService->get())
             ) {
                 continue;
             }
@@ -135,13 +137,17 @@ class ProductionSearch
      *
      * @return array
      */
-    private function getReferenceChildrenId(Reference $reference)
+    private function getReferenceChildrenId(RechercheParcoursDetails $parentReference, Reference $reference)
     {
+        if (!$parentReference->getShowChildren()) {
+            return [];
+        }
+        
         $ids = [];
         $ids[] = $reference->getId();
 
         foreach ($reference->getEnfants() as $child) {
-            $ids = array_merge($ids, $this->getReferenceChildrenId($child));
+            $ids = array_merge($ids, $this->getReferenceChildrenId($parentReference, $child));
         }
 
         return $ids;

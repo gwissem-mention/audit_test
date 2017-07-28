@@ -8,6 +8,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-synthesis.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/risk.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -28,8 +29,8 @@
         <h3>{{ guidedSearch.guidedSearchReference.reference.libelle }}</h3>
 
         <div class="text-right">
-            <a href="{{ guidedSearchLink }}" class="btn btn-default btn-xs">
-                <i class="fa fa-reply"></i>
+            <a href="{{ guidedSearchLink }}" class="btn btn-default">
+                <i class="fa fa-arrow-circle-left"></i>
             </a>
             {% spaceless %}
                 <a
@@ -37,7 +38,7 @@
                     data-toggle="modal"
                     data-toggle-tooltip
                     data-target="#send-mail-modal"
-                    class="btn btn-xs btn-default"
+                    class="btn btn-default"
                     title="{{ 'step.synthesis.actions.mail.title'|trans }}"
                 >
                     <i class="fa fa-envelope"></i>
@@ -47,9 +48,8 @@
                 <a
                     href="{{ path('hopital_numerique_guided_search_risk_synthesis_pdf_export', {'guidedSearch': guidedSearch.id}) }}"
                     target="_blank"
-                    class="btn btn-xs btn-default"
+                    class="btn btn-default"
                 >
-                    <i class="fa fa-download"></i>
                     {{ 'step.synthesis.actions.pdf.title'|trans }}
                 </a>
             {% endspaceless %}
@@ -57,9 +57,8 @@
                 <a
                     href="{{ path('hopital_numerique_guided_search_risk_synthesis_export', {'guidedSearch': guidedSearch.id, 'type': 'csv'}) }}"
                     target="_blank"
-                    class="btn btn-xs btn-default"
+                    class="btn btn-default"
                 >
-                    <i class="fa fa-file-o"></i>
                     {{ 'step.synthesis.actions.csv.title'|trans }}
                 </a>
             {% endspaceless %}
@@ -67,9 +66,8 @@
                 <a
                     href="{{ path('hopital_numerique_guided_search_risk_synthesis_export', {'guidedSearch': guidedSearch.id, 'type': 'xlsx'}) }}"
                     target="_blank"
-                    class="btn btn-xs btn-default"
+                    class="btn btn-default"
                 >
-                    <i class="fa fa-file-o"></i>
                     {{ 'step.synthesis.actions.xlsx.title'|trans }}
                 </a>
             {% endspaceless %}

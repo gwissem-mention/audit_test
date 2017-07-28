@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CartBundle\Service\ItemFactory\ItemFactory;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use Knp\Snappy\GeneratorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -37,19 +38,31 @@ class ReportGenerator
     protected $pdfGenerator;
 
     /**
+     * @var CurrentDomaine $currentDomainService
+     */
+    protected $currentDomainService;
+
+    /**
      * ReportGenerator constructor.
      *
      * @param ItemFactory $itemFactory
      * @param \Twig_Environment $twig
      * @param string $rootDir
      * @param GeneratorInterface $pdfGenerator
+     * @param CurrentDomaine $currentDomainService
      */
-    public function __construct(ItemFactory $itemFactory, \Twig_Environment $twig, $rootDir, GeneratorInterface $pdfGenerator)
-    {
+    public function __construct(
+        ItemFactory $itemFactory,
+        \Twig_Environment $twig,
+        $rootDir,
+        GeneratorInterface $pdfGenerator,
+        CurrentDomaine $currentDomaine
+    ) {
         $this->itemFactory = $itemFactory;
         $this->twig = $twig;
         $this->rootDir = $rootDir;
         $this->pdfGenerator = $pdfGenerator;
+        $this->currentDomainService = $currentDomaine;
     }
 
     /**
@@ -74,6 +87,8 @@ class ReportGenerator
             'items' => $items,
         ]);
 
+        $html = $this->makeImgPathAbsolute($html);
+
         $fs = new Filesystem();
         $fs->dumpFile(
             $this->getReportFile($report),
@@ -86,6 +101,13 @@ class ReportGenerator
                 'margin-right' => 5,
             ])
         );
+    }
+
+    private function makeImgPathAbsolute($html)
+    {
+        $regex = '/(<img\s[^>]*?src\s*=\s*[\'"]+)(?!http)([^\'\"]*?)([\'"][^>]*?>+)/i';
+
+        return preg_replace($regex, sprintf('${1}%s${2}${3}', $this->currentDomainService->getUrl()), $html);
     }
 
     /**

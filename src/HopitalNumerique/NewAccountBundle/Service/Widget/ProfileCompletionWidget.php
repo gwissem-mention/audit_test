@@ -33,10 +33,13 @@ class ProfileCompletionWidget extends WidgetAbstract
 
         $completionRate = $this->profileCompletionCalculator->calculateForUser($user);
 
+        list($tabToCompleteLabel, $tabToComplete) = $this->profileCompletionCalculator->getFirstTabToCompleteForUser($user);
+
         $html = $this->twig->render('NewAccountBundle:profile:widget/profile.html.twig', [
             'user' => $user,
             'completion' => $completionRate,
-            'firstTabToComplete' => $this->profileCompletionCalculator->getFirstTabToCompleteForUser($user),
+            'firstTabToCompleteLabel' => $tabToCompleteLabel,
+            'firstTabToComplete' => $tabToComplete,
         ]);
 
         $title = $this->translator->trans('title', [], 'widget');

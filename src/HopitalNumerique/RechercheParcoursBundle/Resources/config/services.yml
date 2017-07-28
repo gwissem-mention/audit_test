@@ -181,11 +181,15 @@ services:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\RiskCSVExport
         arguments:
             - '@translator'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
 
     hopitalnumerique_rechercheparcours.risk_export_xlsx:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\RiskExcelExport
         arguments:
             - '@translator'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
 
     hopitalnumerique_rechercheparcours.synthesis_export_csv:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\SynthesisCSVExport

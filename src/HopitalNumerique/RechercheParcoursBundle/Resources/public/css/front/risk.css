@@ -1,11 +1,26 @@
+#recherche-par-parcours-details .exports {
+    margin-bottom: 20px;
+}
+
+#recherche-par-parcours-details .guided-search-step-analyze {
+    margin: 20px 0;
+}
+
 #recherche-par-parcours-details fieldset {
     margin-bottom: 25px;
 }
 
+#recherche-par-parcours-details #guided-search-step-risks.table > tbody > tr.risk-analysis > td {
+    vertical-align: middle;
+}
+
 #recherche-par-parcours-details .range-selector,
-#recherche-par-parcours-details .actions,
 #recherche-par-parcours-details .criticality {
     width: 100px;
+}
+
+#recherche-par-parcours-details #guided-search-step-risks.table > tbody > tr.risk-analysis > td.actions {
+    width: 150px;
 }
 
 #recherche-par-parcours-details .probability,
@@ -15,7 +30,6 @@
 }
 
 #recherche-par-parcours-details tbody .criticality {
-    background-color: #2ecc71;
     text-align: center;
     font-weight: bold;
 }
@@ -32,6 +46,10 @@
     background-color: #f1c40f;
 }
 
+#recherche-par-parcours-details tbody .criticality.none {
+    background-color: #2ecc71;
+}
+
 #recherche-par-parcours-details .skillsRate {
     display: block;
     margin-left: 5px;
@@ -46,4 +64,52 @@
 
 #recherche-par-parcours-details .noInitialSkill {
     display: none;
+}
+
+#recherche-par-parcours-details .comment-modal {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+
+#guided-search-share-modal .form-group .col-md-1 input {
+    margin-top: -4px;
+}
+
+
+.guided-search-synthesis h4 {
+    color: #672F9E;
+}
+
+.guided-search-synthesis span.spaced {
+    display: block;
+    padding: 2px 0;
+}
+
+.guided-search-synthesis .global-synthesis {
+    margin-top: 20px;
+}
+
+.guided-search-synthesis .custom-panel-heading {
+    background: #f6f6f6;
+    color: #6F3596 !important;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.guided-search-synthesis .panel .panel-body {
+    border: 1px solid #e3e3e3;
+    background: #eee !important;
+}
+
+
+.guided-search-synthesis .panel .panel-body caption {
+    text-align: left;
+}
+
+.guided-search-synthesis .panel .panel-body caption .anchor {
+    color: #d60030;
 }

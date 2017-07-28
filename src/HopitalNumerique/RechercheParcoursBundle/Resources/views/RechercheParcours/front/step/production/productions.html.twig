@@ -8,19 +8,16 @@
                 <h4 class="modal-title">{{ 'step.objects.related_production'|transchoice(object.relatedProductions|length) }}</h4>
             </div>
             <div class="modal-body">
-                <table class="table">
-                    <tbody>
+                <ul>
                     {% for production in object.relatedProductions %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': production.id}) }}" target="_blank">
-                                    {{ production.titre }}
-                                </a>
-                            </td>
-                        </tr>
+                        <li>
+                            <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': production.id}) }}" target="_blank">
+                                {{ production.typeLabels|join(', ') }} -
+                                {{ production.titre }}
+                            </a>
+                        </li>
                     {% endfor %}
-                    </tbody>
-                </table>
+                </ul>
             </div>
         </div>
     </div>

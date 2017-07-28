@@ -24,7 +24,7 @@ class ProfileCompletionCalculator
         $fieldsCount = $fieldsCompletedCount = 0;
 
         foreach ($this->getFields() as $tab) {
-            foreach ($tab as $field) {
+            foreach ($tab['fields'] as $field) {
                 list($fieldsCount, $fieldsCompletedCount) = $this->testField($fieldsCount, $fieldsCompletedCount, $user, $field);
             }
         }
@@ -77,16 +77,16 @@ class ProfileCompletionCalculator
      *
      * @param User $user
      *
-     * @return string
+     * @return array
      */
     public function getFirstTabToCompleteForUser(User $user)
     {
         $propertyAccessor = new PropertyAccessor();
         foreach ($this->getFields() as $tabId => $tab) {
-            foreach ($tab as $field) {
+            foreach ($tab['fields'] as $field) {
                 if ($propertyAccessor->isReadable($user, $field)) {
                     if (empty($propertyAccessor->getValue($user, $field))) {
-                        return $tabId;
+                        return [$tabId, $tab['tab']];
                     }
                 } else {
                     throw new \LogicException($field);
@@ -94,7 +94,7 @@ class ProfileCompletionCalculator
             }
         }
 
-        return 'structure';
+        return ['structure', 'tab4'];
     }
 
     /**
@@ -106,23 +106,35 @@ class ProfileCompletionCalculator
     {
         return [
             'personal_information' => [
-                'firstname',
-                'lastname',
-                'email',
-                'pseudonym',
+                'tab' => 'tab1',
+                'fields' => [
+                    'firstname',
+                    'lastname',
+                    'email',
+                    'pseudonym',
+                ],
             ],
             'contact_information' => [
-                'phoneNumber',
-                'cellPhoneNumber',
-                'otherContact',
+                'tab' => 'tab2',
+                'fields' => [
+                    'phoneNumber',
+                    'cellPhoneNumber',
+                    'otherContact',
+                ],
             ],
             'profile' => [
-                'profileType',
-                'jobType',
-                'jobLabel',
+                'tab' => 'tab3',
+                'fields' => [
+                    'profileType',
+                    'jobType',
+                    'jobLabel',
+                ],
             ],
             'skills' => [
-                'presentation',
+                'tab' => 'tab5',
+                'fields' => [
+                    'presentation',
+                ],
             ],
         ];
     }

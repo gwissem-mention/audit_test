@@ -4,6 +4,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -67,6 +68,9 @@ class RechercheParcoursGestionType extends AbstractType
                 'type' => RechercheParcoursGestionPublicationTypeType::class,
                 'required' => false,
                 'label' => 'Type de publication à afficher',
+            ])
+            ->add('broadcastDate', DateType::class, [
+                'widget' => 'single_text',
             ])
         ;
         if ($builder->getData()->update) {

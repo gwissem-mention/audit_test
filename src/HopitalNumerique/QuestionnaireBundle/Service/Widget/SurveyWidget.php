@@ -123,6 +123,7 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
                 $data[$survey->getId()]['responses'][$entry->getId()] = [
                     'id' => $entry->getId(),
                     'name' => $entry->getLibelle(),
+                    'update' => $response->getDateUpdate(),
                     'actions' => [
                         'show' => $baseUrl . $this->router->generate(
                             'hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence',

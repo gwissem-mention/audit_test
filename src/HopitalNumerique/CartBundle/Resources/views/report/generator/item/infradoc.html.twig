@@ -19,9 +19,11 @@
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
     <fieldset>
         <legend>{{ 'generator.infradoc.short_resume'|trans }}</legend>
-        <p>
-            {{ item.shortContent|nl2br }}
-        </p><br />
+        <div class="truncate-height">
+            <p>
+                {{ item.shortContent|raw }}
+            </p><br />
+        </div>
     </fieldset>
 {% endif %}
 

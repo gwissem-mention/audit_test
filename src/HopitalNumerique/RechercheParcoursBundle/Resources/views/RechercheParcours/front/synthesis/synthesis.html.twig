@@ -1,14 +1,24 @@
 {% trans_default_domain 'guided_search' %}
 
-{{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/global.html.twig') }}
+<div class="global-synthesis">
+    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/global.html.twig') }}
+</div>
 
-<fieldset>
-    <legend><h4>{{ 'step.synthesis.step.title'|trans }}</h4></legend>
+<div class="panel panel-default">
+    <div class="panel-heading custom-panel-heading">
+        <div class="panel-title">
+            {{ 'step.synthesis.step.title'|trans }}
+        </div>
+    </div>
+    <div class="panel-body">
+        {% set anchor = 0 %}
 
-    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {'stepTitle': 'step.synthesis.main.title'|trans, 'riskSynthesisRisks': riskSynthesis.parents}) }}
+        {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {'stepTitle': 'step.synthesis.main.title'|trans, 'riskSynthesisRisks': riskSynthesis.parents}) }}
 
-    {% for parentLabel, subReference in riskSynthesis.subReferences %}
-        {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {'stepTitle': 'step.synthesis.secondary.title'|trans({'%name%': parentLabel}), 'riskSynthesisRisks': subReference}) }}
-    {% endfor %}
-
-</fieldset>
+        {% set anchor = 1 %}
+        {% for parentLabel, subReference in riskSynthesis.subReferences %}
+            {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/table.html.twig', {parentTitle: parentLabel, 'stepTitle': 'step.synthesis.secondary.title'|trans({'%name%': parentLabel}), 'riskSynthesisRisks': subReference}) }}
+            {% set anchor = anchor + 1 %}
+        {% endfor %}
+    </div>
+</div>

@@ -24,20 +24,26 @@
 
                         {% if report.shares %}
                             {% set shares = [] %}
+                            {% set hasShares = false %}
                             {% for share in report.shares if share.type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
-                                {% set shares = shares|merge([share.target.nomPrenom]) %}
+                                {% if app.user != share.target %}
+                                    {% set shares = shares|merge([share.target.nomPrenom]) %}
+                                {% endif %}
+                                {% set hasShares = true %}
                             {% endfor %}
 
-                            {% if shares|length > 0 %}
-                                {% set shares = shares|merge([report.owner.nomPrenom]) %}
-                                <span class="share-tooltip" title="{{ shares|join(', ')|e }}">
+                            {% if hasShares %}
+                                {% if app.user != report.owner %}
+                                    {% set shares = shares|merge([report.owner.nomPrenom]) %}
+                                {% endif %}
+                                <span class="share-tooltip" title="{{ 'list.shared_with'|trans }} {{ shares|join(', ')|e }}">
                                     <i class="fa fa-share"></i>
                                 </span>
                             {% endif %}
                         {% endif %}
 
                         {% if report.sharedBy is not null and report.sharedBy.report is not null %}
-                            <span class="share-tooltip" title="{{ report.sharedBy.report.owner.nomPrenom }}">
+                            <span class="share-tooltip" title="{{ 'list.copied_by'|trans }} {{ report.sharedBy.report.owner.nomPrenom }}">
                                 <i class="fa fa-copy"></i>
                             </span>
                         {% endif %}
@@ -79,7 +85,7 @@
                                         class="btn btn-warning btn-sm report-share"
                                         title="{{ 'list.actions.share.title'|trans|e }}"
                                 >
-                                    <i class="fa fa-share"></i>
+                                    <i class="fa fa-exchange"></i>
                                 </a>
                                 <a
                                         href="{{ path('hopital_numerique_cart_report_remove', {'report': report.id}) }}"

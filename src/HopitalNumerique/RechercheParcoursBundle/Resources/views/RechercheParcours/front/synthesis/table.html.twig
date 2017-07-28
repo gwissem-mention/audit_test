@@ -1,7 +1,12 @@
 {% trans_default_domain 'guided_search' %}
 
 <table class="table table-bordered synthesis">
-    <caption>{{ stepTitle }}</caption>
+    <caption>
+        {{ stepTitle }}
+        {% if anchor > 0 %}
+            <span class="anchor">({{ anchor }})</span>
+        {% endif %}
+    </caption>
 
     <thead>
     <tr>
@@ -9,7 +14,12 @@
         {% for label, riskSynthesisRisk in riskSynthesisRisks %}
             <th>
                 <a href="{{ riskSynthesisRisk.directLink }}">
-                    {{ label }}
+                    {% if riskSynthesis.subReferences[label] is defined %}
+                        {% set anchor = anchor + 1 %}
+                        {{ label }}<sup>{{ anchor }}</sup>
+                    {% else %}
+                        {{ label }}
+                    {% endif %}
                 </a>
             </th>
         {% endfor %}

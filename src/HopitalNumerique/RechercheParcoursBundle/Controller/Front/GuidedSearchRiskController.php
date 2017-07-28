@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Controller\Front;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use Symfony\Component\HttpFoundation\Response;
@@ -135,7 +136,7 @@ class GuidedSearchRiskController extends Controller
 
         $risks = $this->get('hopitalnumerique_rechercheparcours.factory.step_risks')->getStepRiskDTO($domain, $guidedSearchStep->getGuidedSearch(), $guidedSearchStep);
 
-        $response = new Response();
+        $response = new BinaryFileResponse($this->get(sprintf('hopitalnumerique_rechercheparcours.risk_export_%s', $type))->exportGuidedSearchStepRisks($guidedSearchStep, $risks));
         if ($type === 'csv') {
             $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
         } else {
@@ -143,10 +144,6 @@ class GuidedSearchRiskController extends Controller
         }
         $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s.%s"', 'export', $type));
         $response->headers->set('Cache-Control', 'max-age=0');
-        $response->prepare($request);
-        $response->sendHeaders();
-
-        $this->get(sprintf('hopitalnumerique_rechercheparcours.risk_export_%s', $type))->exportGuidedSearchStepRisks($guidedSearchStep, $risks);
 
         return $response;
     }

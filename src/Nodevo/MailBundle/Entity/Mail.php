@@ -33,7 +33,7 @@ class Mail
     const MAIL_CM_COMMENTAIRE_FICHE = 72;
 
     /** @var int ID du courriel de partage des analyses du parcours guidé */
-    const MAIL_SHARE_GUIDED_SEARCH_ID = 75;
+    const MAIL_SHARE_GUIDED_SEARCH_ID = 74;
 
     /**
      * @var int

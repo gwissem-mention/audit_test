@@ -36,6 +36,14 @@ services:
         arguments:
             - '@hopitalnumerique_forum.repository.topic'
 
+    hopitalnumerique_cart.factory.item_guided_search:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\GuidedSearchFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours'
+
     hopitalnumerique_cart.factory.item_autodiag_chapter:
         public: false
         class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\AutodiagChapterFactory

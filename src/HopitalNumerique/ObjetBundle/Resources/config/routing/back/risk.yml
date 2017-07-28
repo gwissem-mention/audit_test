@@ -9,3 +9,7 @@ hopitalnumerique_objet_risk_add:
 hopitalnumerique_objet_risk_edit:
     path:  /edit/{risk}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Risk:edit", risk: 1 }
+
+hopitalnumerique_objet_risk_delete:
+    path:  /delete/{risk}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Risk:delete" }

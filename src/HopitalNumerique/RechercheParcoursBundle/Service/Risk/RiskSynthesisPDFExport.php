@@ -56,7 +56,12 @@ class RiskSynthesisPDFExport
             ]),
             [
                 'encoding' => 'UTF-8',
+                'header-html' => $this->twig->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/synthesis_header.html2pdf.twig', [
+                    'guidedSearch' => $guidedSearch,
+                ]),
                 'footer-html' => $this->twig->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/synthesis/synthesis_footer.html2pdf.twig'),
+                'margin-left' => 5,
+                'margin-right' => 5,
             ]
         );
 

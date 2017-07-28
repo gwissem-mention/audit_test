@@ -205,6 +205,12 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_objet.risk_fusion"
 
+    hopitalnumerique_objet.handler.delete_risk:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\DeleteRiskHandler
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@doctrine.orm.entity_manager"
+
     hopitalnumerique_objet.form.edit_risk:
         class: HopitalNumerique\ObjetBundle\Form\RiskType
         arguments:

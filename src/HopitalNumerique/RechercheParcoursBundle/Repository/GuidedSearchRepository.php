@@ -3,6 +3,8 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
@@ -50,18 +52,32 @@ class GuidedSearchRepository extends EntityRepository
      * Returns the user's guided searches and those that have been shared with him.
      *
      * @param User $user
+     * @param Domaine[] $domains
      *
      * @return GuidedSearch[]
      */
-    public function findByUserWithShares(User $user)
+    public function findByUserWithShares(User $user, $domains = [])
     {
-        return $this->createQueryBuilder('guidedSearch')
+        $queryBuilder = $this->createQueryBuilder('guidedSearch')
             ->leftJoin('guidedSearch.owner', 'owner')
             ->leftJoin('guidedSearch.shares', 'shares')
             ->where('owner.id = :userId')
             ->orWhere('shares.id = :userId')
             ->setParameter('userId', $user->getId())
             ->orderBy('guidedSearch.createdAt', 'DESC')
+        ;
+
+        if (count($domains) > 0) {
+            $queryBuilder
+                ->join('guidedSearch.guidedSearchReference', 'guidedSearchReference')
+                ->join('guidedSearchReference.recherchesParcoursGestion', 'guidedSearchConfig')
+                ->join('guidedSearchConfig.domaines', 'domain', Join::WITH, $queryBuilder->expr()->in('domain.id', array_map(function (Domaine $domain) {
+                    return $domain->getId();
+                }, $domains)))
+            ;
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

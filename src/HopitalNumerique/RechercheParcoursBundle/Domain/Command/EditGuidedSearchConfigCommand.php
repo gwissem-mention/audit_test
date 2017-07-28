@@ -50,4 +50,19 @@ class EditGuidedSearchConfigCommand
      * @Assert\Count(min=1, groups={"update"})
      */
     public $referencesVentilations = [];
+
+    /**
+     * @var \DateTime
+     *
+     * @Assert\NotBlank()
+     */
+    public $broadcastDate;
+
+    /**
+     * EditGuidedSearchConfigCommand constructor.
+     */
+    public function __construct()
+    {
+        $this->broadcastDate = new \DateTime();
+    }
 }

@@ -146,6 +146,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'lastUpdate' => $synthesis->getUpdatedAt(),
                 'completion' => $synthesis->getCompletion(),
                 'isValid' => $synthesis->isValidated(),
+                'validationEnabled' => $synthesis->getCompletion() === 100 || $synthesis->getAutodiag()->isPartialResultsAuthorized(),
                 'entryId' => $entryId,
                 'showUrl' => $showUrl,
                 'sameDomain' => $baseUrl === $this->currentDomainService->get()->getUrl(),

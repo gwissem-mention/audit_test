@@ -62,7 +62,7 @@ class ItemFactory
             return null;
         }
 
-        $objectTypeName = $this->translator->trans(sprintf('item.object_type.%s', $obj->getObjectType()), [], 'cart');
+        $objectTypeName = $this->translator->trans(sprintf('item.object_type.%s', $obj->getObjectTypeLabelSlug()), [], 'cart');
         $obj
             ->setItem($item)
             ->setObjectTypeName($objectTypeName)

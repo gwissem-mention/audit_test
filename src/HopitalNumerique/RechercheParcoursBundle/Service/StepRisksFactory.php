@@ -59,15 +59,32 @@ class StepRisksFactory
             }
         }
 
-        usort($risks, function (Risk $a, Risk $b) {
-            if (($natureComp = strcasecmp($a->getNature()->getLibelle(), $b->getNature()->getLibelle())) !== 0) {
-                return $natureComp;
-            }
+        if (!$guidedSearchStep->isAnalyzed()) {
+            usort($risks, function (Risk $a, Risk $b) {
+                if ($a->getNature()->getOrder() !== $b->getNature()->getOrder()) {
+                    return $a->getNature()->getOrder() > $b->getNature()->getOrder();
+                }
 
-            return strcasecmp($a->getLabel(), $b->getLabel());
-        });
+                return strcasecmp($a->getLabel(), $b->getLabel());
+            });
+        }
 
-        return $this->risksToDTO($risks, $guidedSearchStep);
+        $risks = $this->risksToDTO($risks, $guidedSearchStep);
+
+        if ($guidedSearchStep->isAnalyzed()) {
+            usort($risks, function (StepRiskDTO $a, StepRiskDTO $b) {
+                $aCriticality = $a->impact * $a->probability;
+                $bCriticality = $b->impact * $b->probability;
+
+                if ($aCriticality === $bCriticality) {
+                    return 0;
+                }
+
+                return $aCriticality > $bCriticality ? -1 : 1;
+            });
+        }
+
+        return $risks;
     }
 
     /**

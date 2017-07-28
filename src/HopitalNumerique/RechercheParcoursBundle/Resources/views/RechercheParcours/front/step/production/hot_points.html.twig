@@ -8,19 +8,15 @@
                 <h4 class="modal-title">{{ 'step.objects.related_hot_point'|transchoice(object.relatedHotPoints|length) }}</h4>
             </div>
             <div class="modal-body">
-                <table class="table">
-                    <tbody>
+                <ul>
                     {% for hotPoint in object.relatedHotPoints %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': hotPoint.id}) }}" target="_blank">
-                                    {{ hotPoint.titre }}
-                                </a>
-                            </td>
-                        </tr>
+                        <li>
+                            <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': hotPoint.id}) }}" target="_blank">
+                                {{ hotPoint.titre }}
+                            </a>
+                        </li>
                     {% endfor %}
-                    </tbody>
-                </table>
+                </ul>
             </div>
         </div>
     </div>

@@ -7,14 +7,12 @@
     {% set hasInitialSkills = true %}
 {% endfor %}
 
-<div class="pull-right">
-    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'csv'}) }}" class="btn btn-default btn-xs">
-        <i class="fa fa-file-o"></i>
+<div class="pull-right exports">
+    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'csv'}) }}" class="btn btn-success">
         {{ 'step.risks.actions.export.csv.label'|trans }}
     </a>
 
-    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'xlsx'}) }}" class="btn btn-default btn-xs">
-        <i class="fa fa-file-o"></i>
+    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'xlsx'}) }}" class="btn btn-success">
         {{ 'step.risks.actions.export.xls.label'|trans }}
     </a>
 </div>
@@ -40,11 +38,10 @@
             </span>
         </th>
 
-        <th{{ not hasInitialSkills ? ' class="noInitialSkill"' }}>{{ 'step.risks.header.initialSkills'|trans }}</th>
+        {% if hasInitialSkills %}
+            <th>{{ 'step.risks.header.initialSkills'|trans }}</th>
+        {% endif %}
         <th>{{ 'step.risks.header.currentSkills'|trans }}</th>
-        <th>{{ 'step.risks.header.relatedResources'|trans|nl2br }}</th>
-        <th>{{ 'step.risks.header.comment'|trans }}</th>
-
         <th class="actions"></th>
     </tr>
     </thead>
@@ -52,9 +49,13 @@
     {% for risk in riskStep.risks %}
         <tr class="risk-analysis" data-analysis-uri="{{ path('hopital_numerique_guided_search_step_risk_analysis', {'guidedSearch': guidedSearch.id, 'risk': risk.riskId, 'stepPath': stepPath}) }}">
             <td class="nature">
-                <span data-toggle="tooltip" title="{{ risk.natureLabel }}">
-                    {{ risk.natureCode }}
-                </span>
+                {% if risk.natureCode %}
+                    <span data-toggle="tooltip" title="{{ risk.natureLabel }}">
+                        {{ risk.natureCode }}
+                    </span>
+                {% else %}
+                    {{ risk.natureLabel }}
+                {% endif %}
             </td>
             <td class="risk">
                 {% if risk.label|length > 30 %}
@@ -77,13 +78,35 @@
             <td>
                 {{ analyzed.skillsRate('initial', risk.initialSkillsRate) }}
             </td>
-            <td{{ not hasInitialSkills ? ' class="noInitialSkill"' }}>
-                {{ analyzed.skillsRate('current', risk.currentSkillsRate) }}
-            </td>
+            {% if hasInitialSkills %}
+                <td>
+                    {{ analyzed.skillsRate('current', risk.currentSkillsRate) }}
+                </td>
+            {% endif %}
             <td class="text-center">
-                <a href="#" class="btn btn-default btn-xs excluded-objects-btn">
-                    <i class="fa fa-eye"></i>
-                </a>
+                <div class="btn-group">
+                    {% if risk.relatedRisks|length > 0 %}
+                        <a href="#" class="btn btn-success btn-sm excluded-objects-btn">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    {% endif %}
+
+                    <a href="#" class="btn btn-primary btn-sm comment-btn">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a
+                        href="{{ path('hopital_numerique_guided_search_step_risk_remove', {risk: risk.riskId, guidedSearchStep: guidedSearchStep.id}) }}"
+                        class="btn btn-danger btn-sm"
+                        data-toggle="tooltip"
+                        title="{{ 'step.risks.actions.remove'|trans }}"
+                    >
+                        <i class="fa fa-trash-o"></i>
+                    </a>
+                </div>
+
+
+
                 <div class="excluded-objects-modal-content hide">
 
                     <p>{{ 'step.risks.excluded_objects.description'|trans }}</p>
@@ -95,10 +118,13 @@
                             <th>{{ 'step.risks.excluded_objects.header.exclude'|trans }}</th>
                         </tr>
                         </thead>
-                        {% for objectRelated in risk.relatedRisks %}
+                        {% for objectRelated in risk.relatedRisksByDomain(domaineCurrent) %}
                             <tr>
                                 <td>
-                                    {{ objectRelated.object.titre }}
+                                    <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': objectRelated.object.id}) }}" target="_blank">
+                                        {{ objectRelated.object.typeLabels|join(', ') }} -
+                                        {{ objectRelated.object.titre }}
+                                    </a>
                                 </td>
                                 <td>
                                     <input type="checkbox" id="{{ "object-"~risk.riskId~"-"~objectRelated.object.id }}" class="object-excluded" name="excludedObjects[]" value="{{ objectRelated.object.id }}"{{ risk.excludedObjects.contains(objectRelated.object) ? " checked='checked'" }} />
@@ -107,25 +133,11 @@
                         {% endfor %}
                     </table>
                 </div>
-            </td>
-            <td class="text-center">
-                <a href="#" class="btn btn-default btn-xs comment-btn">
-                    <i class="fa fa-edit"></i>
-                </a>
+
                 <input type="hidden" name="comment" class="comment" value="{{ risk.comment }}">
                 <div class="comment-modal-content hide">
                     <textarea class="comment-modal" cols="60" rows="10">{{ risk.comment }}</textarea>
                 </div>
-            </td>
-            <td class="text-center">
-                <a
-                    href="{{ path('hopital_numerique_guided_search_step_risk_remove', {risk: risk.riskId, guidedSearchStep: guidedSearchStep.id}) }}"
-                    class="btn btn-default btn-xs"
-                    data-toggle="tooltip"
-                    title="{{ 'step.risks.actions.remove'|trans }}"
-                >
-                    <i class="fa fa-times"></i>
-                </a>
             </td>
         </tr>
     {% endfor %}
@@ -142,8 +154,7 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'step.risks.modal.close.label'|trans }}</button>
-                <button type="button" class="save btn btn-primary">{{ 'step.risks.modal.save.label'|trans }}</button>
+                <button type="button" class="save btn btn-success">{{ 'step.risks.modal.save.label'|trans }}</button>
             </div>
         </div>
     </div>

@@ -2,9 +2,11 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export;
 
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ObjetBundle\Entity\RelatedRisk;
 use HopitalNumerique\RechercheParcoursBundle\DTO\StepRiskDTO;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class RiskExport
@@ -15,18 +17,34 @@ abstract class RiskExport
     protected $translator;
 
     /**
+     * @var RouterInterface $router
+     */
+    protected $router;
+
+    /**
+     * @var CurrentDomaine $currentDomainService
+     */
+    protected $currentDomainService;
+
+    /**
      * RiskExport constructor.
      *
      * @param TranslatorInterface $translator
+     * @param RouterInterface $router
+     * @param CurrentDomaine $currentDomainService
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, RouterInterface $router, CurrentDomaine $currentDomainService)
     {
         $this->translator = $translator;
+        $this->router = $router;
+        $this->currentDomainService = $currentDomainService;
     }
 
     /**
      * @param GuidedSearchStep $guidedSearchStep
      * @param StepRiskDTO[] $risks
+     *
+     * @return string Filepath
      */
     abstract public function exportGuidedSearchStepRisks(GuidedSearchStep $guidedSearchStep, $risks);
 
@@ -73,14 +91,30 @@ abstract class RiskExport
      */
     protected function getDisplayableResources(StepRiskDTO $risk)
     {
+        $currentDomain = $this->currentDomainService->get();
         $relatedRisks = [];
         /** @var RelatedRisk $relatedRisk */
         foreach ($risk->relatedRisks as $relatedRisk) {
-            if (!$risk->excludedObjects->contains($relatedRisk->getObject())) {
-                $relatedRisks[] = $relatedRisk->getObject()->getTitre();
+            if (
+                !$risk->excludedObjects->contains($relatedRisk->getObject()) &&
+                $relatedRisk->getObject()->getDomaines()->contains($currentDomain)
+            ) {
+                $relatedRisks[] = sprintf(
+                    '%s (%s)',
+                    $relatedRisk->getObject()->getTitre(),
+                    $this->router->generate('hopital_numerique_publication_publication_objet', ['id' => $relatedRisk->getObject()->getId()], RouterInterface::ABSOLUTE_URL)
+                );
             }
         }
 
         return $relatedRisks;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFilePath()
+    {
+        return stream_get_meta_data(tmpfile())['uri'];
     }
 }

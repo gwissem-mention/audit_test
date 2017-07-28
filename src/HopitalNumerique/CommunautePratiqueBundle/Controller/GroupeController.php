@@ -176,7 +176,7 @@ class GroupeController extends Controller
 
                 /** @var User $animateur */
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
-                    $destinataires[$animateur->getName()] = $animateur->getEmail();
+                    $destinataires[$animateur->getPrenomNom()] = $animateur->getEmail();
                 }
 
                 $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();

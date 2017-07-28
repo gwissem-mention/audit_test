@@ -88,6 +88,7 @@ class Risk
      * @var ArrayCollection|RelatedRisk[]
      *
      * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="risk", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position": "ASC"})
      */
     protected $relatedRisks;
 

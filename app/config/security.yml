@@ -110,6 +110,7 @@ security:
         - { path: ^/mon-compte/quick-sign-up$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/acces-compte, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/mot-de-passe-perdu, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/, role: ROLE_USER }
         - { path: ^/cart/add, role: IS_AUTHENTICATED_ANONYMOUSLY }

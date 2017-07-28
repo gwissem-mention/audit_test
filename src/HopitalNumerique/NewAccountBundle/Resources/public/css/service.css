@@ -1,3 +1,7 @@
+#my-account #services .service-tooltip {
+    cursor: help;
+}
+
 #my-account #services .quick-access h2 {
     font-size: 16px;
     color: #6F3596;

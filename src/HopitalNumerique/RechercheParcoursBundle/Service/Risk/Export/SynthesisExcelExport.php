@@ -13,7 +13,7 @@ class SynthesisExcelExport extends SynthesisExport
     /**
      * {@inheritdoc}
      */
-    public function exportGuidedSearch(GuidedSearch $guidedSearch, User $user = null)
+    public function exportGuidedSearch(GuidedSearch $guidedSearch, User $user = null, $filepath = 'php://output')
     {
         $phpexcel = new \PHPExcel();
         $letters = range('A', 'Z');
@@ -53,6 +53,6 @@ class SynthesisExcelExport extends SynthesisExport
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($phpexcel, 'Excel2007');
-        $objWriter->save('php://output');
+        $objWriter->save($filepath);
     }
 }

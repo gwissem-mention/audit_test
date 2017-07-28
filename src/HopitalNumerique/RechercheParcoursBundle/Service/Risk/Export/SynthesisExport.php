@@ -70,7 +70,7 @@ abstract class SynthesisExport
                     isset($stepPath[1]) ? $this->getSubStepLabel($guidedSearch, $stepPath[0], $stepPath[1]) : null,
                     $riskAnalyse->getRisk()->getNature()->getLibelle(),
                     $riskAnalyse->getRisk()->getLabel(),
-                    $riskAnalyse->getCriticality(),
+                    $riskAnalyse->getCriticality() ? $riskAnalyse->getCriticality() : '',
                     $riskAnalyse->getInitialSkillsRate(),
                     $riskAnalyse->getCurrentSkillsRate(),
                 ];

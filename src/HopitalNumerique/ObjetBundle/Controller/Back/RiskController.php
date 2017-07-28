@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller\Back;
 
+use HopitalNumerique\ObjetBundle\Domain\Command\DeleteRiskCommand;
 use HopitalNumerique\ObjetBundle\Domain\Command\EditRiskCommand;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Form\RiskType;
@@ -48,6 +50,25 @@ class RiskController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:back:risk\edit.html.twig', [
             'form' => $form->createView(),
             'risk' => $risk,
+        ]);
+    }
+
+    /**
+     * @param Risk $risk
+     *
+     * @return JsonResponse
+     */
+    public function deleteAction(Risk $risk)
+    {
+        if ($success = $this->get('hopitalnumerique_objet.handler.delete_risk')->handle(new DeleteRiskCommand($risk))) {
+            $this->addFlash('success', $this->get('translator')->trans('delete.notifications.success', [], 'risk'));
+        } else {
+            $this->addFlash('danger', $this->get('translator')->trans('delete.notifications.error', [], 'risk'));
+        }
+
+        return new JsonResponse([
+            'success' => $success,
+            'url' => $this->generateUrl('hopitalnumerique_objet_risk_list')
         ]);
     }
 }

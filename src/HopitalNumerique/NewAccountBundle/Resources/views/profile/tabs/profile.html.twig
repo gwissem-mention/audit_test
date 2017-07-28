@@ -13,28 +13,31 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="form-group">
-            <div class="col-md-12">
-                {{ form_label(form.file) }}
-            </div>
-            <div class="col-md-12">
-                {% if user.getAbsolutePath() is not null %}
-                    {% set visibility = 'none' %}
-                {% else %}
-                    {% set visibility = 'block' %}
-                {% endif %}
-                <div class="inputUpload" style="display:{{visibility}}">
-                    {{ form_widget(form.file) }}
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    {{ form_label(form.file) }}
                 </div>
+                <div class="col-md-12">
+                    {% if user.getAbsolutePath() is not null %}
+                        {% set visibility = 'none' %}
+                    {% else %}
+                        {% set visibility = 'block' %}
+                    {% endif %}
+                    <div class="inputUpload" style="display:{{visibility}}">
+                        {{ form_widget(form.file) }}
+                    </div>
 
-                {% if user.getAbsolutePath() is not null %}
-                    <div class="uploadedFile avatar profile-avatar" style="background-image: url(/{{ user.getWebPath() }});"></div>
-                    <div class="deleteUploadedFile btn btn-danger btn-xs" title="{{ 'account.profile.picture.delete'|trans }}"><i class="fa fa-trash-o"></i></div>
-                {% endif %}
+                    {% if user.getAbsolutePath() is not null %}
+                        <div class="uploadedFile avatar profile-avatar" style="background-image: url(/{{ user.getWebPath() }});"></div>
+                        <div class="deleteUploadedFile btn btn-danger btn-xs" title="{{ 'account.profile.picture.delete'|trans }}"><i class="fa fa-trash-o"></i></div>
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    {{ form_errors(form.file) }}
+                </div>
             </div>
-            <div class="col-md-12">
-                {{ form_errors(form.file) }}
-            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
 </div>

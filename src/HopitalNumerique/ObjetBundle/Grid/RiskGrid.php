@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Grid;
 
+use Nodevo\GridBundle\Grid\Action\DeleteButton;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Action\EditButton;
@@ -62,7 +63,12 @@ class RiskGrid extends Grid implements GridInterface
     {
         $editBtn = new EditButton('hopitalnumerique_objet_risk_edit');
         $editBtn->setRouteParametersMapping(['id' => 'risk']);
+
+        $deleteBtn = new DeleteButton('hopitalnumerique_objet_risk_delete');
+        $deleteBtn->setRouteParametersMapping(['id' => 'risk']);
+
         $this->addActionButton($editBtn);
+        $this->addActionButton($deleteBtn);
     }
 
     public function setMassActions()

@@ -145,9 +145,7 @@ var RiskAnalysis;
                     $(this).siblings('.skillsRateLabel').text(ui.value + " %");
                 },
                 stop: function (event, ui) {
-                    component.saveRisk($(this).parents('tr'), function() {
-                        component.$risksContainer.find('.noInitialSkill').removeClass('noInitialSkill');
-                    })
+                    component.saveRisk($(this).parents('tr'))
                 }
             });
         },
@@ -184,7 +182,7 @@ var RiskAnalysis;
             var $cell = $line.find('.criticality');
             var value = $cell.data('value');
 
-            $cell.removeClass('high').removeClass('medium').removeClass('low');
+            $cell.removeClass('high').removeClass('medium').removeClass('low').removeClass('none').text(value);
 
             if (value >= 12) {
                 $cell.addClass('high');
@@ -192,6 +190,10 @@ var RiskAnalysis;
                 $cell.addClass('medium');
             } else if (value >= 3) {
                 $cell.addClass('low');
+            } else if (value > 0) {
+                $cell.addClass('none');
+            } else {
+                $cell.text('');
             }
         }
     };

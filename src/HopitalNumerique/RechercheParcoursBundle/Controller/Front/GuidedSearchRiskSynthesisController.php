@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Controller\Front;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -56,6 +57,7 @@ class GuidedSearchRiskSynthesisController extends Controller
 
         $response = new Response($this->get('hopitalnumeriquerechercheparcours.export.pdf.risk_synthesis')->generatePDF($guidedSearch, $this->getUser()));
         $response->headers->set('Content-Disposition', 'attachment; filename="export.pdf";');
+        $response->headers->set('Content-Type', 'application/pdf');
 
         return $response;
     }
@@ -69,7 +71,11 @@ class GuidedSearchRiskSynthesisController extends Controller
      */
     public function exportAction(Request $request, GuidedSearch $guidedSearch, $type = 'csv')
     {
-        $response = new Response();
+        $filepath = stream_get_meta_data(tmpfile())['uri'];
+
+        $this->get(sprintf('hopitalnumerique_rechercheparcours.synthesis_export_%s', $type))->exportGuidedSearch($guidedSearch, $this->getUser(), $filepath);
+
+        $response = new BinaryFileResponse($filepath);
         if ($type === 'csv') {
             $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
         } else {
@@ -77,10 +83,6 @@ class GuidedSearchRiskSynthesisController extends Controller
         }
         $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s.%s"', 'export', $type));
         $response->headers->set('Cache-Control', 'max-age=0');
-        $response->prepare($request);
-        $response->sendHeaders();
-
-        $this->get(sprintf('hopitalnumerique_rechercheparcours.synthesis_export_%s', $type))->exportGuidedSearch($guidedSearch, $this->getUser());
 
         return $response;
     }

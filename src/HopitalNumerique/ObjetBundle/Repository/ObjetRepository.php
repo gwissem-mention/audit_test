@@ -757,7 +757,7 @@ class ObjetRepository extends EntityRepository
             ->setParameter('domainId', $domain->getId())
             ->andWhere('o.isArticle = FALSE')
 
-            ->addOrderBy('o.dateParution', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
 
             ->setMaxResults($count)
 
@@ -782,7 +782,7 @@ class ObjetRepository extends EntityRepository
             ->groupBy('o')
             ->addOrderBy('note', 'DESC')
             ->addOrderBy('notes', 'DESC')
-            ->addOrderBy('o.dateParution', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
 
             ->setMaxResults($count)
 
@@ -803,7 +803,7 @@ class ObjetRepository extends EntityRepository
             ->setParameter('domainId', $domain->getId())
             ->andWhere('o.isArticle = FALSE')
             ->addOrderBy('o.nbVue', 'DESC')
-            ->addOrderBy('o.dateParution', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
 
             ->setMaxResults($count)
 
@@ -825,9 +825,10 @@ class ObjetRepository extends EntityRepository
             ->andWhere('o.isArticle = FALSE')
             ->addSelect('COUNT(c.id) as HIDDEN commentsCount')
             ->join('o.listeCommentaires', 'c')
+            ->andWhere('c.contenu IS NULL')
             ->groupBy('o.id')
             ->addOrderBy('commentsCount', 'DESC')
-            ->addOrderBy('o.dateParution', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
 
             ->setMaxResults($count)
 

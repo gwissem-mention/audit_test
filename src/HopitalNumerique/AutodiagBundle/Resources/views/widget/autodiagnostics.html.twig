@@ -28,7 +28,7 @@
                     <tr>
                         <td>
                             {% if item.autodiag.lastUpdate > synthesis.lastUpdate %}
-                                <i class="fa fa-bullhorn" title="{{ 'autodiagnostic.synthesis.updated'|trans }}"></i>
+                                <i class="fa fa-bullhorn service-tooltip" data-toggle="tooltip" title="{{ 'autodiagnostic.synthesis.updated'|trans }}"></i>
                             {% endif %}
                             {{ synthesis.lastUpdate|date('d/m/y') }}
                             -
@@ -45,7 +45,7 @@
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 {% endif %}
-                                <a href="{{ synthesis.sendUrl }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'autodiagnostic.action.send'|trans }}">
+                                <a href="{{ synthesis.sendUrl }}" class="btn btn-sm btn-primary fancybox fancybox.ajax {{ synthesis.isValid == false ? 'disabled' }}" title="{{ 'autodiagnostic.action.send'|trans }}">
                                     <i class="fa fa-envelope"></i>
                                 </a>
                                 {% if synthesis.isValid %}
@@ -53,7 +53,7 @@
                                         <i class="fa fa-unlock"></i>
                                     </a>
                                 {% else %}
-                                    <a href="{{ synthesis.validationUrl }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.validate'|trans }}">
+                                    <a href="{{ synthesis.validationUrl }}" class="btn btn-sm btn-success {{ not synthesis.validationEnabled ? 'disabled' }}" title="{{ 'autodiagnostic.action.validate'|trans }}">
                                         <i class="fa fa-check"></i>
                                     </a>
                                 {% endif %}

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Widget;
 
 use Nodevo\ToolsBundle\Tools\Chaine;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
@@ -58,7 +59,8 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
     public function getWidget()
     {
         $guidedSearches = $this->guidedSearchRepository->findByUserWithShares(
-            $this->tokenStorage->getToken()->getUser()
+            $this->tokenStorage->getToken()->getUser(),
+            $this->domains
         );
 
         if (empty($guidedSearches)) {
@@ -70,6 +72,24 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
         /** @var GuidedSearch $guidedSearch */
         foreach ($guidedSearches as $guidedSearch) {
             $guidedSearchReference = $guidedSearch->getGuidedSearchReference();
+            $sharedWith = null;
+
+            if ($guidedSearch->getShares()->count() > 0) {
+                $userList = array_filter(array_map(
+                    function ($share) {
+                        /** @var User $share */
+                        if ($this->tokenStorage->getToken()->getUser()->getId() !== $share->getId()) {
+                            return $share->getFirstname() . " " . $share->getLastname();
+                        }
+
+                        return null;
+                    },
+                    $guidedSearch->getShares()->toArray()
+                ));
+
+                $sharedWith = count($userList) > 0 ? $this->translator->trans('guided_search.shared_with', [], 'widget') . " " . implode(", ", $userList) : null;
+            }
+
             $data[] = [
                 'information' => [
                     'creationDate' => $guidedSearch->getCreatedAt()->format('d/m/y'),
@@ -79,16 +99,14 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                         : $this->translator->trans('guided_search.status.private', [], 'widget')
                     ,
                 ],
+                'sharedWith' => $sharedWith,
                 'actions' => [
-                    'continue' => $this->router->generate('hopital_numerique_guided_search_show', [
+                    'continue' => $this->router->generate('hopital_numerique_guided_search_show_guided_search', [
                         'guidedSearchReference'      => $guidedSearchReference->getId(),
                         'guidedSearchReferenceAlias' => (new Chaine($guidedSearchReference->getReference()->getLibelle()))->minifie(),
                         'guidedSearch' => $guidedSearch->getId()
                     ]),
                     'send' => $this->router->generate('hopital_numerique_guided_search_send', [
-                        'guidedSearch' => $guidedSearch->getId(),
-                    ]),
-                    'copy' => $this->router->generate('hopital_numerique_guided_search_risk_synthesis', [
                         'guidedSearch' => $guidedSearch->getId(),
                     ]),
                     'delete' => $this->router->generate('hopital_numerique_guided_search_delete', [

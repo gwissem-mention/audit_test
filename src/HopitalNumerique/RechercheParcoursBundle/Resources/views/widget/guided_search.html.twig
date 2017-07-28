@@ -16,6 +16,9 @@
             {% for item in data %}
                 <tr>
                     <td>
+                        {% if item.sharedWith is defined and item.sharedWith is not null %}
+                            <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ item.sharedWith }}"></i>
+                        {% endif %}
                         {{ item.information|join(' - ') }}
                     </td>
                     <td class="actions-column">
@@ -25,9 +28,6 @@
                             </a>
                             <a href="{{ item.actions.send }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'guided_search.action.send'|trans }}">
                                 <i class="fa fa-envelope"></i>
-                            </a>
-                            <a href="{{ item.actions.copy }}" class="btn btn-sm btn-warning" title="{{ 'guided_search.action.copy'|trans }}">
-                                <i class="fa fa-share"></i>
                             </a>
                             <a href="{{ item.actions.delete }}" class="btn btn-sm btn-danger delete-guided-search-btn" title="{{ 'guided_search.action.delete'|trans }}">
                                 <i class="fa fa-trash-o"></i>

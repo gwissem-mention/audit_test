@@ -81,17 +81,22 @@ var ReportList;
 
             $.get($e.prop('href'), {}, function(data) {
                 for (var type in data) {
-                    modalData[type+'Shares'] = [
-                        {'target': data.ownerFullName}
-                    ];
+
+                    modalData[type+'Shares'] = [];
 
                     for (var key in data[type]) {
                         var share = data[type][key];
 
-                        modalData[type+'Shares'].push({
-                            'target': share.target,
-                            'removeUri': Routing.generate('hopital_numerique_cart_report_remove_sharing', {'reportSharing': share.id})
-                        })
+                        if (key === "ownerFullName") {
+                            modalData[type+'Shares'].push({
+                                'target': share
+                            });
+                        } else {
+                            modalData[type+'Shares'].push({
+                                'target': share.target,
+                                'removeUri': Routing.generate('hopital_numerique_cart_report_remove_sharing', {'reportSharing': share.id})
+                            });
+                        }
                     }
                 }
 

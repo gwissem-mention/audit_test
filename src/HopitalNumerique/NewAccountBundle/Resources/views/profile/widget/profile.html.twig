@@ -28,7 +28,7 @@
             {% if completion == 100 %}
                 <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
             {% else %}
-                <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToComplete)|trans({}, 'messages')}) }}</a>
+                <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToCompleteLabel)|trans({}, 'messages')}) }}</a>
             {% endif %}
         </div>
     </div>

@@ -16,9 +16,19 @@
 
 <body>
 
-<div class="footer">
-    {{ include('HopitalNumeriqueCoreBundle:partials:copyright.html.twig') }}
-</div>
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-4">
+                <img src="{{ asset('bundles/hopitalnumeriquecore/img/logo-anap.png', null, true) }}">
+            </div>
+            <div class="col-xs-8">
+                        <span class="text-right">
+                            {{ 'now'|date('d/m/Y') }}
+                        </span>
+                <h1>{{ guidedSearch.guidedSearchReference.reference.libelle }}</h1>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

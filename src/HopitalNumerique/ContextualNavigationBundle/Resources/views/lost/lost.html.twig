@@ -42,7 +42,7 @@
             {% endfor %}
         </ul>
 
-        <p>
+        <p class="spacer">
             {{ 'discover.title'|trans() }}<br />
 
             {% set discoverLinks = [] %}
@@ -78,19 +78,21 @@
 
         </p>
 
-        <div class="row">
-            {{ self.lastObjects('lastObjects', last, 'object') }}
-            {{ self.lastObjects('lastTopics', last, 'topic') }}
-        </div>
-        <div class="row">
-            {{ self.lastObjects('bestRatedObjects', last, 'object') }}
-            {{ self.lastObjects('mostCommentedObjects', last, 'object') }}
-        </div>
-        <div class="row">
-            {{ self.lastObjects('mostViewedObjects', last, 'object') }}
+        <div class="spacer">
+            <div class="row">
+                {{ self.lastObjects('lastObjects', last, 'object') }}
+                {{ self.lastObjects('lastTopics', last, 'topic') }}
+            </div>
+            <div class="row">
+                {{ self.lastObjects('bestRatedObjects', last, 'object') }}
+                {{ self.lastObjects('mostCommentedObjects', last, 'object') }}
+            </div>
+            <div class="row">
+                {{ self.lastObjects('mostViewedObjects', last, 'object') }}
+            </div>
         </div>
 
-        <p>
+        <p class="spacer">
             <b>{{ 'stats.title'|trans }}</b><br />
             {{ 'stats.methods_tools'|transchoice(stats.methodsTools) }}<br />
             {{ 'stats.users'|transchoice(stats.users) }}<br />

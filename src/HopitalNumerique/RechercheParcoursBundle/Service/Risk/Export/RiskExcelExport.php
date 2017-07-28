@@ -57,7 +57,7 @@ class RiskExcelExport extends RiskExport
             $sheet->setCellValue(sprintf('B%d', $line), $risk->label);
             $sheet->setCellValue(sprintf('C%d', $line), $risk->probability);
             $sheet->setCellValue(sprintf('D%d', $line), $risk->impact);
-            $sheet->setCellValue(sprintf('E%d', $line), sprintf('=PRODUCT(C%d:D%d)', $line, $line));
+            $sheet->setCellValue(sprintf('E%d', $line), sprintf('=IF(SUM(C%d:D%d) > 1, PRODUCT(C%d:D%d), "")', $line, $line, $line, $line));
             $sheet->getStyle(sprintf('E%d', $line))->setConditionalStyles($criticalityConditions);
             $sheet->setCellValue(sprintf('F%d', $line), $risk->initialSkillsRate);
             $sheet->setCellValue(sprintf('G%d', $line), $risk->currentSkillsRate);
@@ -73,7 +73,10 @@ class RiskExcelExport extends RiskExport
 
         $objWriter = \PHPExcel_IOFactory::createWriter($phpexcel, 'Excel2007');
         $objWriter->setPreCalculateFormulas();
-        $objWriter->save('php://output');
+        $filepath = $this->getFilePath();
+        $objWriter->save($filepath);
+
+        return $filepath;
     }
 
     /**

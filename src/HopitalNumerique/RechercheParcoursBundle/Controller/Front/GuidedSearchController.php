@@ -54,11 +54,34 @@ class GuidedSearchController extends Controller
     /**
      * @param RechercheParcours $guidedSearchReference
      * @param                   $guidedSearchReferenceAlias
+     * @param GuidedSearch $guidedSearch
+     *
+     * @return RedirectResponse
+     */
+    public function showGuidedSearchAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch)
+    {
+        return $this->redirectToGuidedSearch($guidedSearchReference, $guidedSearchReferenceAlias, $guidedSearch);
+    }
+
+    /**
+     * @param RechercheParcours $guidedSearchReference
+     * @param                   $guidedSearchReferenceAlias
+     *
+     * @return RedirectResponse
+     */
+    public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias)
+    {
+        return $this->redirectToGuidedSearch($guidedSearchReference, $guidedSearchReferenceAlias);
+    }
+
+    /**
+     * @param RechercheParcours $guidedSearchReference
+     * @param $guidedSearchReferenceAlias
      * @param GuidedSearch|null $guidedSearch
      *
      * @return RedirectResponse
      */
-    public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch = null)
+    private function redirectToGuidedSearch(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch = null)
     {
         /** @var RechercheParcoursDetails $reference */
         if (!$reference = $guidedSearchReference->getRecherchesParcoursDetails()->first()) {
