@@ -95,3 +95,11 @@ services:
             - "@ccdn_forum_forum.repository.post"
         tags:
             - { name: 'kernel.event_subscriber' }
+
+    ccdn_forum_forum.form.handler.post_update:
+        class: HopitalNumerique\ForumBundle\Form\Handler\User\Post\PostUpdateFormHandler
+        arguments:
+            - '@event_dispatcher'
+            - '@form.factory'
+            - '@ccdn_forum_forum.form.type.post_update'
+            - '@ccdn_forum_forum.model.post'
