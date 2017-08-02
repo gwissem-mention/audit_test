@@ -33,7 +33,7 @@ modal:
 
 notification:
     reportSended:
-        success: Votre rapport a bien été envoyée.
+        success: Votre rapport a bien été envoyé.
         error: Une erreur s'est produite, veuillez vérifier les champs renseignés.
     shareReport:
         userNotFounded: Email non trouvé sur la plateforme.
