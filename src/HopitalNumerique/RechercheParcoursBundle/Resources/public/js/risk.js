@@ -14,7 +14,10 @@ var RiskAnalysis;
         init: function () {
             var component = this;
 
-            component.$risksContainer.find('[data-toggle="tooltip"]').tooltip();
+            component.$risksContainer.find('[data-toggle="tooltip"]').tooltip({
+                container: 'body'
+            });
+
             $('.guided-search-toolbar .btn').tooltip();
 
             component.bindSaveEvent();
