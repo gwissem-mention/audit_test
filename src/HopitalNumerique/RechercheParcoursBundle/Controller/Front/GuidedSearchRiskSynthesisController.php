@@ -23,6 +23,12 @@ class GuidedSearchRiskSynthesisController extends Controller
     public function synthesisAction(Request $request, GuidedSearch $guidedSearch)
     {
         $this->denyAccessUnlessGranted('access', $guidedSearch);
+
+        if (null === $this->getUser()) {
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+
+            return $this->redirectToRoute('account_login');
+        }
         
         $riskSynthesis = $this->get('hopitalnumerique_rechercheparcours.factory.risk_synthesis')->buildRiskSynthesis($guidedSearch, $this->getUser());
 
