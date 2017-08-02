@@ -219,6 +219,7 @@ class GuidedSearchController extends Controller
             'hotPointStep' => isset($hotPointStep) ? $hotPointStep : [],
             'stepPath' => $stepPath,
             'shareForm' => $shareForm,
+            'labelReferenceId' => Reference::PARCOURS_GUIDE,
         ]);
     }
 

@@ -78,13 +78,16 @@ step:
                 label: Fermer
             save:
                 label: Enregistrer
+    back:
+        btn:
+            title: Retour vers "%parcours_guide%"
     share:
         btn:
             title: Partager
         modal:
-            title: Partage de recherche guidée
+            title: Partage de "%parcours_guide%"
             already_shared:
-                description: 'Cette recherche guidée est déjà partagée avec :'
+                description: 'Les informations sont déjà partagées avec :'
             form:
                 email:
                     label: Adresse e-mail
@@ -96,7 +99,7 @@ step:
                 label: Partager
         notifications:
             error: Une erreur s'est produite. Veuillez vérifier les informations renseignées dans le formulaire.
-            already_shared_with_user: La recherche guidée est déjà partagée avec cet utilisateur.
+            already_shared_with_user: Les informations sont déjà partagées avec cet utilisateur.
             user_not_found: E-mail non trouvé sur la plateforme.
     synthesis:
         title: Synthèse
