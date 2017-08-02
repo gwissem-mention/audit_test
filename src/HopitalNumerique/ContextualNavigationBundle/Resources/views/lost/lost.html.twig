@@ -43,7 +43,7 @@
         </ul>
 
         <p class="spacer">
-            {{ 'discover.title'|trans() }}<br />
+            {{ 'discover.title'|trans() }}
 
             {% set discoverLinks = [] %}
             {% set discoverFields = {
@@ -93,11 +93,11 @@
         </div>
 
         <p class="spacer">
-            <b>{{ 'stats.title'|trans }}</b><br />
-            {{ 'stats.methods_tools'|transchoice(stats.methodsTools) }}<br />
-            {{ 'stats.users'|transchoice(stats.users) }}<br />
-            {{ 'stats.forum_topics'|transchoice(stats.forumTopics) }}<br />
-            {{ 'stats.cdp_members'|transchoice(stats.cdpMembers) }}<br />
+            <b>{{ 'stats.title'|trans }}</b>
+            {{ 'stats.methods_tools'|transchoice(stats.methodsTools) }},
+            {{ 'stats.users'|transchoice(stats.users) }},
+            {{ 'stats.forum_topics'|transchoice(stats.forumTopics) }},
+            {{ 'stats.cdp_members'|transchoice(stats.cdpMembers) }}
         </p>
     </div>
 
