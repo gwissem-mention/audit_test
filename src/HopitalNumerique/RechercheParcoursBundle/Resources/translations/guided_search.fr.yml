@@ -45,6 +45,7 @@ step:
             empty: NC
             rate: %rate% %
         actions:
+            comment: Ajouter un commentaire
             remove: Retirer de la liste
             analyse:
                 text: Analyse
