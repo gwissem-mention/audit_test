@@ -15,7 +15,7 @@ hopital_numerique_requete_ajax_delete:
         id: \d+
 
 hopital_numerique_requete_delete:
-    path: /requete/{search}/delete
+    path: /requetes/{search}/delete
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete }
 
 hopital_numerique_requete_edit:
@@ -31,7 +31,7 @@ hopital_numerique_requete_toggle:
         id: \d+
 
 hopital_numerique_requete_change_name:
-    path:  /requete/{search}/change-name
+    path:  /requetes/{search}/change-name
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:changeName }
 
 hopital_numerique_requete_consultation_ajax_delete:
