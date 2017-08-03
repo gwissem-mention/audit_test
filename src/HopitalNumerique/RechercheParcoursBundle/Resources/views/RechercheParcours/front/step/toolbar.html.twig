@@ -1,11 +1,10 @@
 {% trans_default_domain 'guided_search' %}
-
 <div class="pull-right toolbar guided-search-toolbar">
     {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'guided_search', objectId: guidedSearchReference.id, btnSize: ' '}) }}
     <a
         class="btn btn-default"
         href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': guidedSearchReference.recherchesParcoursGestion.id}) }}"
-        title="Retour à la recherche guidée"
+        title="{{ 'step.back.btn.title'|trans({'%parcours_guide%': labelReferenceId|getReferenceText('')}) }}"
     >
         <i class="fa fa-arrow-circle-left"></i>
     </a>
@@ -26,7 +25,7 @@
                     {{ form_start(shareForm, {attr: {action: path('hopital_numerique_guided_search_step_share', {guidedSearchStep: guidedSearchStep.id})}}) }}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{ 'step.share.modal.title'|trans }}</h4>
+                        <h4 class="modal-title">{{ 'step.share.modal.title'|trans({'%parcours_guide%': labelReferenceId|getReferenceText('')}) }}</h4>
                     </div>
                     <div class="modal-body">
 

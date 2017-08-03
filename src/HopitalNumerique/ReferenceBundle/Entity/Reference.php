@@ -74,6 +74,11 @@ class Reference
     const EVALUATED_ID = 29;
 
     /**
+     * @var int ID de Parcours guidé
+     */
+    const PARCOURS_GUIDE = 1997;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", options = {"comment" = "ID de la référence"})

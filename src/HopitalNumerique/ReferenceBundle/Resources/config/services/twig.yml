@@ -1,7 +1,9 @@
 services:
     hopitalnumerique.twig.ref_extension:
         class: 'HopitalNumerique\ReferenceBundle\Twig\ReferenceExtension'
-        arguments : ['@hopitalnumerique_reference.manager.reference']
+        arguments :
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_reference.repository.reference'
         tags:
             - { name: 'twig.extension' }
 
