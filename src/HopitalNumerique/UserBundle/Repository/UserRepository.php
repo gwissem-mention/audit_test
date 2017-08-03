@@ -103,7 +103,7 @@ class UserRepository extends EntityRepository
                      user.firstname,
                      refRegion.libelle as region,
                      user.organizationLabel,
-                     user.archiver
+                     user.archiver,
                      GROUP_CONCAT(domains.nom SEPARATOR \', \') as domainName
 
             ')
