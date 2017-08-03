@@ -9,7 +9,7 @@ modal:
     report_duplicated:
         title: Dupliquer mon rapport
         name:
-            label: Nom du raport
+            label: Nom du rapport
         submit:
             label: Dupliquer
     report_share:
