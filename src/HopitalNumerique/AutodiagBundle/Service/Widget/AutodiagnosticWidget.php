@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -88,6 +89,27 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $autodiag = $synthesis->getAutodiag();
             $baseUrl = $this->baseUrlProvider->getBaseUrl($autodiag->getDomaines()->toArray(), $this->domains);
 
+            $sharedUsers = $sharedTitle = null;
+
+            $isOwner = $synthesis->getUser()->getId() === $user->getId();
+
+            if (!$isOwner) {
+                $sharedTitle = 'guided_search.shared_by';
+                $sharedUsers = [$synthesis->getUser()->getFirstname() . " " . $synthesis->getUser()->getLastname()];
+            } elseif ($synthesis->getShares()->count() > 0) {
+                $sharedTitle = 'guided_search.shared_with';
+                $sharedUsers = array_filter(array_map(
+                    function (User $share) use ($user) {
+                        if ($user->getId() !== $share->getId()) {
+                            return $share->getFirstname() . " " . $share->getLastname();
+                        }
+
+                        return null;
+                    },
+                    $synthesis->getShares()->toArray()
+                ));
+            }
+
             if (!isset($data[$autodiag->getId()])) {
                 $data[$autodiag->getId()] = [
                     'autodiag' => [
@@ -154,6 +176,10 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'validationUrl' => $validationUrl,
                 'shareUrl' => $shareUrl,
                 'deleteUrl' => $deleteUrl,
+                'sharedTitle' => $sharedTitle,
+                'sharedUsers' => $sharedUsers,
+                'isShared' => $sharedUsers !== null,
+                'isOwner' => $isOwner,
             ];
         }
 
