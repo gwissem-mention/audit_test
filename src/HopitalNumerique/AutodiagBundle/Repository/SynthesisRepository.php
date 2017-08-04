@@ -351,9 +351,10 @@ class SynthesisRepository extends EntityRepository
     public function findByUserOrderedByAutodiagNameAndSynthesisUpdate(User $user, $domains = null)
     {
         $qb = $this->createQueryBuilder('synthesis')
-            ->addSelect('autodiag', 'presets', 'entries', 'user')
+            ->addSelect('autodiag', 'shares', 'presets', 'entries', 'user')
             ->leftJoin('synthesis.autodiag', 'autodiag')
-            ->join('synthesis.user', 'user', Join::WITH, 'user.id = :userId')
+            ->leftJoin('synthesis.shares', 'shares')
+            ->join('synthesis.user', 'user', Join::WITH, 'user.id = :userId OR shares.id = :userId')
             ->leftJoin('autodiag.presets', 'presets')
             ->join('synthesis.entries', 'entries')
             ->setParameter('userId', $user->getId())
