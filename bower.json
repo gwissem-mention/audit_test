@@ -26,7 +26,7 @@
     "bootstrap-iconpicker": "*",
     "fontawesome": "~4.1",
     "nestable": "https://github.com/dbushell/Nestable.git",
-    "jquery-nicescroll": "*",
+    "jquery-nicescroll": "3.6.8",
     "enquire": "~2.1.0",
     "stepy": "https://github.com/wbotelhos/stepy.git",
     "highcharts.com": "4.0.0",
