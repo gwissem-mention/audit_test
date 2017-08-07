@@ -17,7 +17,11 @@
                 {% for item in data['new'] %}
                     <tr>
                         <td>
-                            {{ item.information|join(' - ') }}
+                            {% if item.actions.show is defined %}
+                                <a href="{{ utem.actions.show }}">{{ item.information|join(' - ') }}</a>
+                            {% else %}
+                                {{ item.information|join(' - ') }}
+                            {% endif %}
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">
@@ -54,7 +58,11 @@
                 {% for item in data['processed'] %}
                     <tr>
                         <td>
-                            {{ item.information|join(' - ') }}
+                            {% if item.actions.show is defined %}
+                                <a href="{{ item.actions.show }}">{{ item.information|join(' - ') }}</a>
+                            {% else %}
+                                {{ item.information|join(' - ') }}
+                            {% endif %}
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">

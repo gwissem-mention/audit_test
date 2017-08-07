@@ -16,7 +16,7 @@
             {% for search in data %}
                 <tr>
                     <td>
-                        <span class="inplace-edit-search" data-url="{{ search.actions.edit }}">{{ search.information.name }}</span>
+                        <span class="inplace-edit-search" data-url="{{ search.actions.edit }}" data-field-link="{{ search.actions.launch }}">{{ search.information.name }}</span>
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">
