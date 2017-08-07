@@ -20,12 +20,16 @@
                             {{ item.survey.update|date('d/m/y') }}
                             -
                         {% endif %}
-                        {{ item.survey.name }}
+                        {% if item.survey.actions.show is defined %}
+                            <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }}>{{ item.survey.name }}</a>
+                        {% else %}
+                            {{ item.survey.name }}
+                        {% endif %}
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">
                             {% if item.survey.actions.show is defined %}
-                                <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }} class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             {% endif %}
@@ -47,11 +51,11 @@
                         <td>
                             {{ response.update|date('d/m/y') }}
                             -
-                            {{ response.name }}
+                            <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }}>{{ response.name }}</a>
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">
-                                <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }} class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
                                     <i class="fa fa-eye"></i>
                                 </a>
                                 <a href="{{ response.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">

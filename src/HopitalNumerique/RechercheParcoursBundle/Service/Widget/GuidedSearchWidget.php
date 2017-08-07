@@ -90,10 +90,16 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                 $sharedWith = count($userList) > 0 ? $this->translator->trans('guided_search.shared_with', [], 'widget') . " " . implode(", ", $userList) : null;
             }
 
+            $continueLink = $this->router->generate('hopital_numerique_guided_search_show_guided_search', [
+                'guidedSearchReference'      => $guidedSearchReference->getId(),
+                'guidedSearchReferenceAlias' => (new Chaine($guidedSearchReference->getReference()->getLibelle()))->minifie(),
+                'guidedSearch' => $guidedSearch->getId()
+            ]);
+
             $data[] = [
                 'information' => [
                     'creationDate' => $guidedSearch->getCreatedAt()->format('d/m/y'),
-                    'name' => $guidedSearch->getGuidedSearchReference()->getReference()->getLibelle(),
+                    'name' => '<a href="' . $continueLink .'">' . $guidedSearch->getGuidedSearchReference()->getReference()->getLibelle() . '</a>',
                     'status' => $guidedSearch->getShares()->count() > 0
                         ? $this->translator->trans('guided_search.status.shared', [], 'widget')
                         : $this->translator->trans('guided_search.status.private', [], 'widget')
@@ -101,11 +107,7 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                 ],
                 'sharedWith' => $sharedWith,
                 'actions' => [
-                    'continue' => $this->router->generate('hopital_numerique_guided_search_show_guided_search', [
-                        'guidedSearchReference'      => $guidedSearchReference->getId(),
-                        'guidedSearchReferenceAlias' => (new Chaine($guidedSearchReference->getReference()->getLibelle()))->minifie(),
-                        'guidedSearch' => $guidedSearch->getId()
-                    ]),
+                    'continue' => $continueLink,
                     'send' => $this->router->generate('hopital_numerique_guided_search_send', [
                         'guidedSearch' => $guidedSearch->getId(),
                     ]),

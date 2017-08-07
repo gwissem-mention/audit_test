@@ -19,7 +19,7 @@
                         {% if item.sharedWith is defined and item.sharedWith is not null %}
                             <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ item.sharedWith }}"></i>
                         {% endif %}
-                        {{ item.information|join(' - ') }}
+                        {{ item.information|join(' - ')|raw }}
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">

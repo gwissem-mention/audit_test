@@ -39,7 +39,7 @@
                             -
                             {{ synthesis.isValid ? 'autodiagnostic.synthesis.state.valid'|trans : 'autodiagnostic.synthesis.state.invalid'|trans }}
                             -
-                            <span class="inplace-edit-text" data-url="{{ path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id}) }}">{{ synthesis.name }}</span>
+                            <span class="inplace-edit-text" data-url="{{ path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id}) }}" {% if synthesis.showUrl is not null %}data-field-link="{{ synthesis.showUrl }}" data-field-link-target="{{ not synthesis.sameDomain ? "_blank" }}"{% endif %}>{{ synthesis.name }}</span>
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">

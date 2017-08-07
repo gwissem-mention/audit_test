@@ -17,7 +17,11 @@
                 {% for registration in data['registrations'] %}
                     <tr>
                         <td>
-                            {{ registration['info']|join(' - ') }}
+                            {% if registration['actions']['module'] is defined %}
+                                <a href="{{ registration['actions']['module'] }}">{{ registration['info']|join(' - ') }}</a>
+                            {% else %}
+                                {{ registration['info']|join(' - ') }}
+                            {% endif %}
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">
@@ -80,7 +84,11 @@
                 {% for session in data['sessions'] %}
                     <tr>
                         <td>
-                            {{ session['info']|join(' - ') }}
+                            {% if session['actions']['module'] is defined %}
+                                <a href="{{ session['actions']['module'] }}">{{ session['info']|join(' - ') }}</a>
+                            {% else %}
+                                {{ session['info']|join(' - ') }}
+                            {% endif %}
                         </td>
                         <td class="actions-column">
                             <div class="btn-group">
