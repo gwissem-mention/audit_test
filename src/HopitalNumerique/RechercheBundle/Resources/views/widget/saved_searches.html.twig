@@ -9,7 +9,7 @@
             <thead>
             <tr>
                 <th>{{ 'saved_searches.table.title'|trans }}</th>
-                <th width="120">{{ 'saved_searches.table.actions'|trans }}</th>
+                <th width="150">{{ 'saved_searches.table.actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -23,7 +23,10 @@
                             <a href="{{ search.actions.show }}" class="btn btn-sm btn-success fancybox fancybox.ajax" title="{{ 'saved_searches.action.show'|trans }}">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a href="{{ search.actions.launch }}" class="btn btn-sm btn-primary" title="{{ 'saved_searches.action.launch'|trans }}">
+                            <a href="{{ search.actions.send }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'saved_searches.action.send'|trans }}">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                            <a href="{{ search.actions.launch }}" class="btn btn-sm btn-warning" title="{{ 'saved_searches.action.launch'|trans }}">
                                 <i class="fa fa-search"></i>
                             </a>
                             <a href="{{ search.actions.delete }}" class="btn btn-sm btn-danger delete-search-btn" title="{{ 'saved_searches.action.delete'|trans }}">

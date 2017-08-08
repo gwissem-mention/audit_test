@@ -2,8 +2,18 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Nodevo\MailBundle\Form\Type\RecommandationType;
+use HopitalNumerique\RechercheBundle\Entity\Requete;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\RechercheBundle\Service\SearchEmailGenerator;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/**
+ * Class SearchController
+ */
 class SearchController extends Controller
 {
 
@@ -15,7 +25,7 @@ class SearchController extends Controller
      * @param null   $q    Recherche textuelle
      * @param null   $type Liste des références à explode
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse [type]
+     * @return RedirectResponse
      */
     public function generateManuallyRequeteAction($refs = null, $q = null, $type = null)
     {
@@ -32,5 +42,54 @@ class SearchController extends Controller
         $referencementRequeteSession->setSearchedText($searchedText);
 
         return $this->redirectToRoute('hopital_numerique_recherche_homepage');
+    }
+
+    /**
+     * @param Request $request
+     * @param Requete $search
+     *
+     * @return RedirectResponse|Response
+     */
+    public function sendAction(Request $request, Requete $search)
+    {
+        if ($this->getUser()->getId() !== $search->getUser()->getId()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $sendSearchEmail = $this->get(SearchEmailGenerator::class)->generateSearchEmail($search);
+
+        $sendSearchForm = $this->createForm(RecommandationType::class, null, [
+            'mail' => $sendSearchEmail,
+            'expediteur' => $this->getUser(),
+            'url' => $request->headers->get('referer'),
+            'action' => $this->redirectToRoute(
+                'hopital_numerique_recherche_send',
+                [
+                    'search' => $search->getId(),
+                ]
+            )->getTargetUrl(),
+        ]);
+
+        $sendSearchForm->handleRequest($request);
+
+        if ($sendSearchForm->isSubmitted()) {
+            $this->container->get('nodevo_mail.manager.mail')->sendSearch(
+                $sendSearchForm->get('expediteur')->getData(),
+                $sendSearchForm->get('destinataire')->getData(),
+                $sendSearchForm->get('objet')->getData(),
+                $sendSearchForm->get('message')->getData()
+            );
+
+            $this->addFlash('success', $this->get('translator')->trans('saved_searches.send.success', [], 'widget'));
+
+            return $this->redirect($sendSearchForm->get('url')->getData());
+        }
+
+        return $this->render(
+            '@HopitalNumeriqueAutodiag/Restitution/popin.html.twig',
+            [
+                'recommandationForm' => $sendSearchForm->createView(),
+            ]
+        );
     }
 }

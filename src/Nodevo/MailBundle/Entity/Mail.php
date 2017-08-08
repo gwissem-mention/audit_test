@@ -3,10 +3,9 @@
 namespace Nodevo\MailBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-//Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Mail.
@@ -19,10 +18,13 @@ class Mail
 {
     /** @var int ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_AMI_ID = 63;
+
     /** @var int ID du courriel de partage des résultats d'autodiag */
     const MAIL_SHARE_AUTODIAG_RESULT_ID = 68;
+
     /** @var int ID du courriel d'alerte de publication d'un commentaire */
     const MAIL_ALERTE_PUBLICATION_COMMENTAIRE = 69;
+
     /** @var int ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_TOPIC_ID = 70;
 
@@ -35,10 +37,13 @@ class Mail
     /** @var int ID du courriel de partage des analyses du parcours guidé */
     const MAIL_SHARE_GUIDED_SEARCH_ID = 74;
 
+    /** @var int Share email ID */
+    const SHARE_SEARCH_EMAIL = 76;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="mail_id", type="integer", options = {"comment" = "ID du mail"})
+     * @ORM\Column(name="mail_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -54,7 +59,7 @@ class Mail
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'objet."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
-     * @ORM\Column(name="mail_objet", type="string", length=255, options = {"comment" = "Objet du mail"})
+     * @ORM\Column(name="mail_objet", type="string", length=255)
      */
     private $objet;
 
@@ -68,7 +73,7 @@ class Mail
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la description."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
-     * @ORM\Column(name="mail_description", type="string", length=255, options = {"comment" = "Description du mail"})
+     * @ORM\Column(name="mail_description", type="string", length=255)
      */
     private $description;
 
@@ -82,7 +87,7 @@ class Mail
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le mail de l'expéditeur."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
-     * @ORM\Column(name="mail_expediteur_mail", type="string", length=255, options = {"comment" = "Adresse mail de l expéditeur"})
+     * @ORM\Column(name="mail_expediteur_mail", type="string", length=255)
      */
     private $expediteurMail;
 
@@ -96,7 +101,7 @@ class Mail
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de l'expéditeur."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
-     * @ORM\Column(name="mail_expediteur_name", type="string", length=255, options = {"comment" = "Nom de l expéditeur"})
+     * @ORM\Column(name="mail_expediteur_name", type="string", length=255)
      */
     private $expediteurName;
 
@@ -104,14 +109,14 @@ class Mail
      * @var string
      * @Assert\NotBlank(message="Le contenu du mail ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
-     * @ORM\Column(name="mail_body", type="text", options = {"comment" = "Contenu du mail"})
+     * @ORM\Column(name="mail_body", type="text")
      */
     private $body;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="mail_notification_region_referent", type="boolean", nullable=false, options={"default"=false,"comment"="Indique si le référent de région est notifié"})
+     * @ORM\Column(name="mail_notification_region_referent", type="boolean", nullable=false, options={"default"=false})
      */
     private $notificationRegionReferent;
 
@@ -122,6 +127,9 @@ class Mail
      */
     private $params;
 
+    /**
+     * Mail constructor.
+     */
     public function __construct()
     {
         $this->params = [];

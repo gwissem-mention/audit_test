@@ -10,9 +10,12 @@ saved_searches:
     action:
         edit: Modifier le nom de ma recherche
         show: Voir le détail de ma recherche
-        launch: Lancer la recherche
+        send: Envoyer ma recherche
+        launch: Lancer ma recherche
         delete: Supprimer ma recherche
     delete:
         confirm: Supprimer cette recherche ?
         success: Votre recherche a bien été supprimée.
         error: Une erreur est survenue lors de la suppression de votre recherche.
+    send:
+        success: Votre recherche a bien été envoyée.

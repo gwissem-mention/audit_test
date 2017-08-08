@@ -2,7 +2,9 @@
 
 namespace Nodevo\MailBundle\Controller;
 
+use Nodevo\MailBundle\Entity\Mail;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -11,7 +13,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class MailController extends Controller
 {
     /**
-     * Affiche la liste des Mail.
+     * Affiche la liste des Mails.
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -29,6 +33,7 @@ class MailController extends Controller
      */
     public function addAction()
     {
+        /** @var Mail $mail */
         $mail = $this->get('nodevo_mail.manager.mail')->createEmpty();
 
         return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig');
@@ -36,10 +41,15 @@ class MailController extends Controller
 
     /**
      * Affiche le formulaire d'édition de Mail.
+     *
+     * @param $id
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
+        /** @var Mail $mail */
         $mail = $this->get('nodevo_mail.manager.mail')->findOneBy(['id' => $id]);
 
         return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig');
@@ -47,6 +57,10 @@ class MailController extends Controller
 
     /**
      * Affiche le Mail en fonction de son ID passé en paramètre.
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function showAction($id)
     {
@@ -63,6 +77,10 @@ class MailController extends Controller
      * Suppresion d'un Mail.
      *
      * @METHOD = POST|DELETE
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function deleteAction($id)
     {
@@ -71,23 +89,27 @@ class MailController extends Controller
         //Suppression de l'entitée
         $this->get('nodevo_mail.manager.mail')->delete($mail);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        $this->addFlash('info', 'Suppression effectuée avec succès.');
 
         return new Response('{"success":true, "url" : "' . $this->generateUrl('nodevo_mail_mail') . '"}', 200);
     }
 
     /**
      * Test d'envoi d'un Mail.
+     *
+     * @param $id
+     *
+     * @return RedirectResponse
      */
     public function sendTestAction($id)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $mail = $this->get('nodevo_mail.manager.mail')->sendMessageTest($id, $user);
 
         $this->get('mailer')->send($mail);
 
         $message = 'Message de test envoyé à ' . $this->get('nodevo_mail.manager.mail')->getDestinataire();
-        $this->get('session')->getFlashBag()->add('info', $message);
+        $this->addFlash('info', $message);
 
         return $this->redirect($this->generateUrl('nodevo_mail_mail_show', ['id' => $id]));
     }
@@ -99,7 +121,7 @@ class MailController extends Controller
      * @param Mail   $mail     Entité Mail
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
-     * @return Form | redirect
+     * @return RedirectResponse|Response
      */
     private function renderForm($formName, $mail, $view)
     {
@@ -122,7 +144,7 @@ class MailController extends Controller
                 $this->get('nodevo_mail.manager.mail')->save($mail);
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Template d\'e-mail ' . ($new ? 'ajouté.' : 'mis à jour.'));
+                $this->addFlash(($new ? 'success' : 'info'), 'Template d\'e-mail ' . ($new ? 'ajouté.' : 'mis à jour.'));
 
                 $do = $request->request->get('do');
 
