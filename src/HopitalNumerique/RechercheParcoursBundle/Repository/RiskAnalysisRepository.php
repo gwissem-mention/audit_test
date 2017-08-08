@@ -83,4 +83,24 @@ class RiskAnalysisRepository extends EntityRepository
 
         return $riskAnalysis;
     }
+
+    /**
+     * @param GuidedSearchStep $step
+     * @param User             $user
+     *
+     * @return RiskAnalysis[]
+     */
+    public function findByStepAndUser(GuidedSearchStep $step, User $user)
+    {
+        return $this->createQueryBuilder('riskAnalysis')
+            ->join('riskAnalysis.step', 'step', Join::WITH, 'step.id = :stepId')
+            ->setParameter('stepId', $step->getId())
+            ->join('riskAnalysis.owner', 'owner', Join::WITH, 'owner.id = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->andWhere('riskAnalysis.probability IS NOT NULL')
+            ->andWhere('riskAnalysis.impact IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

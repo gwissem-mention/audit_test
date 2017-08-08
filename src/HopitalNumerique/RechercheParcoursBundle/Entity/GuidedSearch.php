@@ -175,6 +175,35 @@ class GuidedSearch
     }
 
     /**
+     * Returns the guided search steps ordred by ascending step path.
+     *
+     * @return ArrayCollection|GuidedSearchStep[]
+     */
+    public function getStepsOrderedByPath()
+    {
+        $orderedSteps = $this->steps->toArray();
+
+        usort($orderedSteps, function ($a, $b) {
+            $aPath = explode(':', $a->getStepPath());
+            $bPath = explode(':', $b->getStepPath());
+
+            $i = 0;
+
+            while ($i < min(count($aPath), count($bPath))) {
+                if ($aPath[$i] !== $bPath[$i]) {
+                    return $aPath[$i] > $bPath[$i];
+                }
+
+                $i++;
+            }
+
+            return count($aPath) > count($bPath);
+        });
+
+        return $orderedSteps;
+    }
+
+    /**
      * @param mixed $steps
      *
      * @return GuidedSearch
