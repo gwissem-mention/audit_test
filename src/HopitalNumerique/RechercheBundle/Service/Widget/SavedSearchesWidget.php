@@ -94,6 +94,10 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
                             'type' => $resourceTypes,
                         ]
                     ),
+                    'send' => $this->router->generate(
+                        'hopital_numerique_recherche_send',
+                        ['search' => $search->getId()]
+                    ),
                     'delete' => $this->router->generate(
                         'hopital_numerique_requete_delete',
                         ['search' => $search->getId()]

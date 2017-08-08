@@ -100,13 +100,20 @@ services:
         public: false
 
     hopitalnumerique_recherche.widget.saved_searches:
-            class: HopitalNumerique\RechercheBundle\Service\Widget\SavedSearchesWidget
-            tags:
-                - { name: new_account.dashboard_widget, type: service, priority: 70 }
-            arguments:
-                - '@twig'
-                - '@security.token_storage'
-                - '@translator'
-                - '@router'
-                - '@hopitalnumerique_recherche.repository.requete'
-            public: false
+        class: HopitalNumerique\RechercheBundle\Service\Widget\SavedSearchesWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 70 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@hopitalnumerique_recherche.repository.requete'
+        public: false
+
+    HopitalNumerique\RechercheBundle\Service\SearchEmailGenerator:
+        class: HopitalNumerique\RechercheBundle\Service\SearchEmailGenerator
+        arguments:
+            - '@nodevo_mail.manager.mail'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@router'

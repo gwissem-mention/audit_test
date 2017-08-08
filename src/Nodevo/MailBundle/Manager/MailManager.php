@@ -1391,4 +1391,17 @@ class MailManager extends BaseManager
 
         $this->mailer->send($message);
     }
+
+    /**
+     * @param $expediteur
+     * @param $destinataire
+     * @param $objet
+     * @param $message
+     */
+    public function sendSearch($expediteur, $destinataire, $objet, $message)
+    {
+        $email = $this->sendMail($objet, $expediteur, $destinataire, $message);
+
+        $this->mailer->send($email);
+    }
 }
