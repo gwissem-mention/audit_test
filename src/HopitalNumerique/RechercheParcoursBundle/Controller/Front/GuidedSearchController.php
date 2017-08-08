@@ -302,12 +302,13 @@ class GuidedSearchController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request          $request
      * @param GuidedSearchStep $guidedSearchStep
+     * @param bool             $redirectPrevious
      *
      * @return RedirectResponse
      */
-    public function shareAction(Request $request, GuidedSearchStep $guidedSearchStep)
+    public function shareAction(Request $request, GuidedSearchStep $guidedSearchStep, $redirectPrevious = false)
     {
         $this->denyAccessUnlessGranted('access', $guidedSearchStep->getGuidedSearch());
 
@@ -323,6 +324,8 @@ class GuidedSearchController extends Controller
         if ($shareForm->isSubmitted() && $shareForm->isValid()) {
             try {
                 $this->get('hopitalnumerique_rechercheparcours.handler.share_guided_search_command')->handle($command);
+
+                $this->addFlash('success', $this->get('translator')->trans('step.share.notifications.success', [], 'guided_search'));
             } catch (AlreadySharedException $e) {
                 $this->addFlash('danger', $this->get('translator')->trans('step.share.notifications.already_shared_with_user', [], 'guided_search'));
             } catch (UserNotFoundException $e) {
@@ -330,6 +333,10 @@ class GuidedSearchController extends Controller
             }
         } else {
             $this->addFlash('danger', $this->get('translator')->trans('step.share.notifications.error', [], 'guided_search'));
+        }
+
+        if ($redirectPrevious) {
+            return $this->redirect($request->headers->get('referer'));
         }
 
         return $this->redirect($this->get('hopitalnumerique_rechercheparcours.helper.step_url_generator')->generate($guidedSearchStep));

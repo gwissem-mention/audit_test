@@ -101,6 +101,7 @@ step:
             error: Une erreur s'est produite. Veuillez vérifier les informations renseignées dans le formulaire.
             already_shared_with_user: Les informations sont déjà partagées avec cet utilisateur.
             user_not_found: E-mail non trouvé sur la plateforme.
+            success: Le parcours guidé a bien été partagé.
     synthesis:
         title: Synthèse
         tooltip: Accéder à la synthèse

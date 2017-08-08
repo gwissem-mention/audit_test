@@ -11,7 +11,7 @@ guided_search:
     status:
         shared: Partagé
         private: Privé
-    shared_with: Partagé avec %user%
+    shared_with: Partagé avec
     shared_by: Partagé par %user%
     delete:
         confirm: Supprimer ce parcours guidé ?

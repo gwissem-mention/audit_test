@@ -217,8 +217,8 @@ post:
     body-label:                        "Contenu :"
     subscribe-label:                   "S'abonner à ce fil de discussion."
     unlock-until-label:                "Déverrouiller jusqu'à :"
-    has_been_locked:                   "Ce message à été verouillé."
-    has_been_deleted:                  "Ce message à été supprimé."
+    has_been_locked:                   "Ce message a été verouillé."
+    has_been_deleted:                  "Ce message a été supprimé."
     user_post_count:                   "{0} Pas encore de messages |{1} %post_count% message |[2, Inf] %post_count% messages"
     delete_confirm:                    "Êtes-vous sûr de vouloir supprimer ce post ?"
     show:                              "Montrer"
@@ -265,4 +265,3 @@ flash:
 
 ccdn_component_bb_code.editor.button.link: 'Ajouter un lien interne'
 ccdn_component_bb_code.editor.button.externallink: 'Ajouter un lien externe'
-
