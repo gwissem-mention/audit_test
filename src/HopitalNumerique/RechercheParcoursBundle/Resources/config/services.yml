@@ -244,3 +244,17 @@ services:
             - '@router'
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
         public: false
+
+
+    HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress
+        arguments:
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_rechercheparcours.factory.step_risks'
+            - '@hopitalnumerique_rechercheparcours.repository.risk_analysis'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_details'
+
+    HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler
+        arguments:
+            - '@HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress'

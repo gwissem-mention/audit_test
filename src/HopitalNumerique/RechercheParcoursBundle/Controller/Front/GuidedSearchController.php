@@ -23,6 +23,8 @@ use HopitalNumerique\RechercheParcoursBundle\Domain\Command\AddPrivateRiskComman
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchConfigPublicationType;
 use HopitalNumerique\RechercheParcoursBundle\Form\Type\GuidedSearch\ShareGuidedSearchType;
 use HopitalNumerique\RechercheParcoursBundle\Domain\Command\AnalyseGuidedSearchStepCommand;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepCommand;
 use HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\SendAnalyzesCommand;
 use HopitalNumerique\RechercheParcoursBundle\Exception\GuidedSearch\Share\UserNotFoundException;
 use HopitalNumerique\RechercheParcoursBundle\Exception\GuidedSearch\Share\AlreadySharedException;
@@ -72,6 +74,60 @@ class GuidedSearchController extends Controller
     public function showAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias)
     {
         return $this->redirectToGuidedSearch($guidedSearchReference, $guidedSearchReferenceAlias);
+    }
+
+    /**
+     * Redirects to the first uncompleted step that have already been viewed by the current user.
+     *
+     * @param RechercheParcours $guidedSearchReference
+     * @param                   $guidedSearchReferenceAlias
+     * @param GuidedSearch      $guidedSearch
+     *
+     * @return RedirectResponse
+     */
+    public function continueAction(RechercheParcours $guidedSearchReference, $guidedSearchReferenceAlias, GuidedSearch $guidedSearch)
+    {
+        $rechercheParcoursDetails = $guidedSearchReference->getRecherchesParcoursDetails();
+        $subReferenceParameters = [];
+
+        $firstUncompletedStep = $this->get(FindFirstUncompletedStepHandler::class)->handle(
+            new FindFirstUncompletedStepCommand(
+                $rechercheParcoursDetails,
+                $guidedSearch,
+                $this->getUser()
+            )
+        );
+
+        if (null !== $firstUncompletedStep) {
+            $reference = $this
+                ->get('hopitalnumerique_rechercheparcours.repository.recherche_parcours_details')
+                ->findOneBy(['id' => $firstUncompletedStep->getStepPath()])
+            ;
+
+            $stepPath = explode(':', $firstUncompletedStep->getStepPath());
+
+            if ($reference->getShowChildren() && count($stepPath) > 1) {
+                $subReference = $this
+                    ->get('hopitalnumerique_reference.repository.reference')
+                    ->findOneBy(['id' => $stepPath[1]])
+                ;
+
+                $subReferenceParameters = [
+                    'subReference' => $subReference->getId(),
+                    'subAlias' => (new Chaine($subReference->getLibelle()))->minifie(),
+                ];
+            }
+        } else {
+            $reference = $rechercheParcoursDetails->first();
+        }
+
+        return $this->redirectToRoute('hopital_numerique_guided_search_step', array_merge([
+            'guidedSearch' => $guidedSearch->getId(),
+            'guidedSearchReference' => $guidedSearchReference->getId(),
+            'guidedSearchReferenceAlias' => $guidedSearchReferenceAlias,
+            'parentReference' => $reference->getId(),
+            'alias' => (new Chaine($reference->getReference()->getLibelle()))->minifie(),
+        ], $subReferenceParameters));
     }
 
     /**
