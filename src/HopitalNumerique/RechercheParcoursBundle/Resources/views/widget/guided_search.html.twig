@@ -30,13 +30,13 @@
                                 <i class="fa fa-envelope"></i>
                             </a>
                             {% if item.actions.share.stepId is not null %}
-                                <button class="btn btn-sm btn-primary" title="{{ 'step.share.btn.title'|trans({}, 'guided_search') }}" data-toggle="modal" data-target="#guided-search-share-modal">
+                                <button class="btn btn-sm btn-primary" title="{{ 'step.share.btn.title'|trans({}, 'guided_search') }}" data-toggle="modal" data-target="#guided-search-share-modal-{{ item.actions.share.guidedSearch.id }}">
                                     <i class="fa fa-exchange"></i>
                                 </button>
-                                <div id="guided-search-share-modal" class="modal fade" tabindex="-1" role="dialog" style="text-align: left;">
+                                <div id="guided-search-share-modal-{{ item.actions.share.guidedSearch.id }}" class="modal fade" tabindex="-1" role="dialog" style="text-align: left;">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            {{ form_start(shareForm, {attr: {action: path('hopital_numerique_guided_search_step_share', {guidedSearchStep: item.actions.share.stepId, redirectPrevious: true})}}) }}
+                                            {{ form_start(item.actions.share.shareForm, {attr: {action: path('hopital_numerique_guided_search_step_share', {guidedSearchStep: item.actions.share.stepId, redirectPrevious: true})}}) }}
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                 <h4 class="modal-title">{{ 'step.share.modal.title'|trans({'%parcours_guide%': item.information.name}, 'guided_search')|raw }}</h4>
@@ -57,14 +57,14 @@
                                                     <hr>
                                                 {% endif %}
 
-                                                {{ form_row(shareForm.email) }}
-                                                {{ form_row(shareForm.initialData) }}
+                                                {{ form_row(item.actions.share.shareForm.email) }}
+                                                {{ form_row(item.actions.share.shareForm.initialData) }}
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-success">{{ 'step.share.modal.save.label'|trans({}, 'guided_search') }}</button>
                                             </div>
-                                            {{ form_rest(shareForm) }}
-                                            {{ form_end(shareForm) }}
+                                            {{ form_rest(item.actions.share.shareForm) }}
+                                            {{ form_end(item.actions.share.shareForm) }}
                                         </div>
                                     </div>
                                 </div>

@@ -45,8 +45,25 @@ class Share
         $emails = explode(',', $string);
         foreach ($emails as $email) {
             $email = trim($email);
+            /** @var User $user */
             $user = $userRepository->findOneByEmail($email);
-            if ($user && $user !== $synthesis->getUser()) {
+            if ($user && $user->getId() !== $synthesis->getUser()->getId()) {
+                // Checks if the user has at least one domain of the autodiag
+                if ($synthesis->getAutodiag()->getDomaines()->count() > 0) {
+                    $founded = false;
+                    foreach ($synthesis->getAutodiag()->getDomaines() as $domain) {
+                        if ($user->hasDomaine($domain)) {
+                            $founded = true;
+                            break;
+                        }
+                    }
+
+                    // Adds the first domain of the autodiag if a common domain isn't found.
+                    if (!$founded) {
+                        $user->addDomaine($synthesis->getAutodiag()->getDomaines()->first());
+                    }
+                }
+
                 $synthesis->addShare($user);
             } else {
                 $notFounds[] = $email;
