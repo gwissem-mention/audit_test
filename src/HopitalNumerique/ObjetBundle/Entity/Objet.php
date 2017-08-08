@@ -235,7 +235,7 @@ class Objet implements RoutedItemInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet à été vue"})
+     * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet a été vue"})
      */
     protected $nbVue;
 

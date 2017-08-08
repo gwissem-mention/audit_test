@@ -243,6 +243,7 @@ services:
             - '@translator'
             - '@router'
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+            - '@form.factory'
         public: false
 
 

@@ -20,8 +20,8 @@ hopital_numerique_guided_search_step_analyse:
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:analyse }
 
 hopital_numerique_guided_search_step_share:
-    path: /share/{guidedSearchStep}
-    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:share }
+    path: /share/{guidedSearchStep}/{redirectPrevious}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearch:share, redirectPrevious: false }
     methods: POST
 
 hopital_numerique_guided_search_delete:

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Widget;
 
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\Form\FormFactory;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -13,6 +14,8 @@ use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareTrait;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareInterface;
 use HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use HopitalNumerique\RechercheParcoursBundle\Form\Type\GuidedSearch\ShareGuidedSearchType;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\ShareGuidedSearchCommand;
 
 /**
  * Class GuidedSearchWidget
@@ -32,6 +35,11 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
     protected $guidedSearchRepository;
 
     /**
+     * @var FormFactory
+     */
+    protected $formFactory;
+
+    /**
      * GuidedSearchWidget constructor.
      *
      * @param \Twig_Environment      $twig
@@ -39,18 +47,21 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
      * @param TranslatorInterface    $translator
      * @param RouterInterface        $router
      * @param GuidedSearchRepository $guidedSearchRepository
+     * @param FormFactory            $formFactory
      */
     public function __construct(
         \Twig_Environment $twig,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
         RouterInterface $router,
-        GuidedSearchRepository $guidedSearchRepository
+        GuidedSearchRepository $guidedSearchRepository,
+        FormFactory $formFactory
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->router = $router;
         $this->guidedSearchRepository = $guidedSearchRepository;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -114,12 +125,22 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                     'delete' => $this->router->generate('hopital_numerique_guided_search_delete', [
                         'guidedSearch' => $guidedSearch->getId(),
                     ]),
+                    'share' => [
+                        'stepId' => $guidedSearch->getSteps()->count() > 0 ? $guidedSearch->getSteps()->first()->getId() : null,
+                        'guidedSearch' => $guidedSearch,
+                    ]
                 ],
             ];
         }
 
+        $shareForm = $this->formFactory->create(
+            ShareGuidedSearchType::class,
+            new ShareGuidedSearchCommand($guidedSearch, $this->tokenStorage->getToken()->getUser())
+        )->createView();
+
         $html = $this->twig->render('HopitalNumeriqueRechercheParcoursBundle:widget:guided_search.html.twig', [
             'data' => $data,
+            'shareForm' => $shareForm,
         ]);
 
         $title = $this->translator->trans('guided_search.title', [], 'widget');

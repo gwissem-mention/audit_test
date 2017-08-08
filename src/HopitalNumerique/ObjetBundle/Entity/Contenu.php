@@ -116,7 +116,7 @@ class Contenu
     /**
      * @var int
      *
-     * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})
+     * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu a été vue"})
      */
     protected $nbVue;
 
