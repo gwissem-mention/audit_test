@@ -89,35 +89,18 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $autodiag = $synthesis->getAutodiag();
             $baseUrl = $this->baseUrlProvider->getBaseUrl($autodiag->getDomaines()->toArray(), $this->domains);
 
-            $sharedUsers = $sharedTitle = null;
-
             $isOwner = $synthesis->getUser()->getId() === $user->getId();
+            $sharedTitle = "";
 
             if (!$isOwner) {
-                $sharedTitle = $this->translator->trans('guided_search.shared_by', [], 'widget')
-                   . " "
-                   . $synthesis->getUser()->getFirstname()
-                   . " "
-                   . $synthesis->getUser()->getLastname()
-                ;
+                $transUser = $synthesis->getUser()->getFirstname() . " " . $synthesis->getUser()->getLastname();
+                $sharedTitle = $this->translator->trans('guided_search.shared_by', ['%user%' => $transUser], 'widget');
             } elseif ($synthesis->getShares()->count() > 0) {
-                $sharedUsers = array_filter(array_map(
-                    function (User $share) use ($user) {
-                        if ($user->getId() !== $share->getId()) {
-                            return $share->getFirstname() . " " . $share->getLastname();
-                        }
-
-                        return null;
-                    },
-                    $synthesis->getShares()->toArray()
-                ));
-
-                $sharedTitle = $this->translator->trans('guided_search.shared_with', [], 'widget');
-
-                $sharedTitle = $sharedTitle . ' ' . implode(', ', array_map(function ($user) {
+                $transUsers = implode(', ', array_map(function ($user) {
                     /** @var User $user */
                     return $user->getFirstName() . " " . $user->getLastName();
                 }, $synthesis->getShares()->toArray()));
+                $sharedTitle = $this->translator->trans('guided_search.shared_with', ['%users%' => $transUsers], 'widget');
             }
 
             if (!isset($data[$autodiag->getId()])) {
@@ -187,8 +170,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'shareUrl' => $shareUrl,
                 'deleteUrl' => $deleteUrl,
                 'sharedTitle' => $sharedTitle,
-                'sharedUsers' => $sharedUsers,
-                'isShared' => $sharedUsers !== null,
+                'isShared' => $synthesis->getShares()->count() > 0,
                 'isOwner' => $isOwner,
             ];
         }

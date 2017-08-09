@@ -28,7 +28,7 @@
                     <tr>
                         <td>
                             {% if synthesis.isShared %}
-                                <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ synthesis.sharedTitle|trans({'%user%': synthesis.sharedUsers|join(' ')}) }}"></i>
+                                <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ synthesis.sharedTitle }}"></i>
                             {% endif %}
                             {% if item.autodiag.lastUpdate > synthesis.lastUpdate %}
                                 <i class="fa fa-bullhorn service-tooltip" data-toggle="tooltip" title="{{ 'autodiagnostic.synthesis.updated'|trans }}"></i>

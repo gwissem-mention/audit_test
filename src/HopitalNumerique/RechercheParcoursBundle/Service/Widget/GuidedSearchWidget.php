@@ -98,7 +98,10 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                     $guidedSearch->getShares()->toArray()
                 ));
 
-                $sharedWith = count($userList) > 0 ? $this->translator->trans('guided_search.shared_with', [], 'widget') . " " . implode(", ", $userList) : null;
+                $sharedWith = count($userList) > 0
+                    ? $this->translator->trans('guided_search.shared_with', ['%users%' => implode(", ", $userList)], 'widget')
+                    : null
+                ;
             }
 
             $continueLink = $this->router->generate('hopital_numerique_guided_search_continue_guided_search', [
