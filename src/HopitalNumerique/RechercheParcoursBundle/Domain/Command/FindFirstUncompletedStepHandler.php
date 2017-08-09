@@ -44,7 +44,15 @@ class FindFirstUncompletedStepHandler
         foreach ($command->rechercheParcoursDetails as $detail) {
             foreach ($steps as $step) {
                 if ($detail->getId() === (int) explode(':', $step->getStepPath())[0]) {
-                    return $firstUncompletedStep = $step;
+                    if (!$detail->getShowChildren()) {
+                        return $step;
+                    }
+
+                    foreach ($detail->getReference()->getEnfants() as $enfant) {
+                        if ($enfant->getId() === (int) explode(':', $step->getStepPath())[1]) {
+                            return $step;
+                        }
+                    }
                 }
             }
         }

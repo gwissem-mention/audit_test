@@ -254,6 +254,7 @@ services:
             - '@hopitalnumerique_rechercheparcours.factory.step_risks'
             - '@hopitalnumerique_rechercheparcours.repository.risk_analysis'
             - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_details'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search_step'
 
     HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler:
         class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler
