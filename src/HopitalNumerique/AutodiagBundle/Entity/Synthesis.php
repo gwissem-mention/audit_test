@@ -2,11 +2,11 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Synthesis.
@@ -186,7 +186,7 @@ class Synthesis
      *
      * @param string $name
      *
-     * @return $this
+     * @return Synthesis
      */
     public function setName($name)
     {
@@ -225,7 +225,7 @@ class Synthesis
     /**
      * Validate.
      *
-     * @return $this|false
+     * @return Synthesis|false
      */
     public function validate()
     {
@@ -247,7 +247,7 @@ class Synthesis
     /**
      * Unvalidate.
      *
-     * @return $this
+     * @return Synthesis
      */
     public function unvalidate()
     {
@@ -306,7 +306,7 @@ class Synthesis
      *
      * @param AutodiagEntry $entry
      *
-     * @return $this
+     * @return Synthesis
      */
     public function addEntry(AutodiagEntry $entry)
     {
@@ -326,7 +326,7 @@ class Synthesis
      *
      * @param AutodiagEntry $entry
      *
-     * @return $this
+     * @return Synthesis
      */
     public function removeEntry(AutodiagEntry $entry)
     {
@@ -346,7 +346,7 @@ class Synthesis
     /**
      * @param User $user
      *
-     * @return $this
+     * @return Synthesis
      */
     public function setUser(User $user)
     {
@@ -370,7 +370,7 @@ class Synthesis
      *
      * @param ArrayCollection $shares
      *
-     * @return $this
+     * @return Synthesis
      */
     public function setShares(ArrayCollection $shares)
     {
@@ -384,7 +384,7 @@ class Synthesis
      *
      * @param User $user
      *
-     * @return $this
+     * @return Synthesis
      */
     public function addShare(User $user)
     {
@@ -400,7 +400,7 @@ class Synthesis
      *
      * @param User $user
      *
-     * @return $this
+     * @return Synthesis
      */
     public function removeShare(User $user)
     {

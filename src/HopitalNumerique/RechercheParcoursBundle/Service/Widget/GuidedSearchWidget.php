@@ -107,6 +107,11 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                 'guidedSearch' => $guidedSearch->getId()
             ]);
 
+            $shareForm = $this->formFactory->create(
+                ShareGuidedSearchType::class,
+                new ShareGuidedSearchCommand($guidedSearch, $this->tokenStorage->getToken()->getUser())
+            )->createView();
+
             $data[] = [
                 'information' => [
                     'creationDate' => $guidedSearch->getCreatedAt()->format('d/m/y'),
@@ -128,19 +133,14 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                     'share' => [
                         'stepId' => $guidedSearch->getSteps()->count() > 0 ? $guidedSearch->getSteps()->first()->getId() : null,
                         'guidedSearch' => $guidedSearch,
+                        'shareForm' => $shareForm,
                     ]
                 ],
             ];
         }
 
-        $shareForm = $this->formFactory->create(
-            ShareGuidedSearchType::class,
-            new ShareGuidedSearchCommand($guidedSearch, $this->tokenStorage->getToken()->getUser())
-        )->createView();
-
         $html = $this->twig->render('HopitalNumeriqueRechercheParcoursBundle:widget:guided_search.html.twig', [
             'data' => $data,
-            'shareForm' => $shareForm,
         ]);
 
         $title = $this->translator->trans('guided_search.title', [], 'widget');

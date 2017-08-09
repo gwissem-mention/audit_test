@@ -94,10 +94,13 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $isOwner = $synthesis->getUser()->getId() === $user->getId();
 
             if (!$isOwner) {
-                $sharedTitle = 'guided_search.shared_by';
-                $sharedUsers = [$synthesis->getUser()->getFirstname() . " " . $synthesis->getUser()->getLastname()];
+                $sharedTitle = $this->translator->trans('guided_search.shared_by', [], 'widget')
+                   . " "
+                   . $synthesis->getUser()->getFirstname()
+                   . " "
+                   . $synthesis->getUser()->getLastname()
+                ;
             } elseif ($synthesis->getShares()->count() > 0) {
-                $sharedTitle = 'guided_search.shared_with';
                 $sharedUsers = array_filter(array_map(
                     function (User $share) use ($user) {
                         if ($user->getId() !== $share->getId()) {
@@ -108,6 +111,13 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                     },
                     $synthesis->getShares()->toArray()
                 ));
+
+                $sharedTitle = $this->translator->trans('guided_search.shared_with', [], 'widget');
+
+                $sharedTitle = $sharedTitle . ' ' . implode(', ', array_map(function ($user) {
+                    /** @var User $user */
+                    return $user->getFirstName() . " " . $user->getLastName();
+                }, $synthesis->getShares()->toArray()));
             }
 
             if (!isset($data[$autodiag->getId()])) {

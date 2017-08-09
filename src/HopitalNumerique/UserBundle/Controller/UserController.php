@@ -276,6 +276,7 @@ class UserController extends Controller
      */
     public function addAction()
     {
+        /** @var User $user */
         $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
 
         $role = $this->get('nodevo_role.manager.role')->findOneBy(['role' => 'ROLE_ENREGISTRE_9']);
@@ -294,7 +295,7 @@ class UserController extends Controller
      */
     public function editAction($id)
     {
-        //Récupération de l'utilisateur passé en param
+        /** @var User $user */
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
 
         return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig');
