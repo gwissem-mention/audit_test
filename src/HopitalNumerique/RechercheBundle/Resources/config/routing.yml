@@ -8,7 +8,7 @@ hopital_numerique_recherche_homepage_requete_generator:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:generateManuallyRequete, refs:'', q:'', type:''}
 
 hopital_numerique_recherche_send:
-    path:  /send-search/{search}
+    path:  /requetes/partage/{search}/popin
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:send }
 
 #Requêtes de recherche

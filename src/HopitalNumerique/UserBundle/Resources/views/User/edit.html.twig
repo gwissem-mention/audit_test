@@ -36,6 +36,9 @@
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if twigOptions.isAllowedToSwitch is defined and twigOptions.isAllowedToSwitch %}
+        <a href="/?_switch_user={{ user.username }}" title="Simuler l'utilisateur" class="btn btn-default"><i class="fa fa-user"></i></a>
+    {% endif %}
     {% if user.id and not user.lock %}
         <div onclick='deleteWithConfirm("{{path('hopital_numerique_user_delete', {'id':user.id})}}" );' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
     {% endif %}
