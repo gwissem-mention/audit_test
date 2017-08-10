@@ -34,11 +34,14 @@
 
                             {% if hasShares %}
                                 {% if app.user != report.owner %}
-                                    {% set shares = shares|merge([report.owner.nomPrenom]) %}
+                                    <span class="share-tooltip" title="{{ 'list.shared_by'|trans({'%user%': report.owner.nomPrenom}) }}">
+                                        <i class="fa fa-share"></i>
+                                    </span>
+                                {% else %}
+                                    <span class="share-tooltip" title="{{ 'list.shared_with'|trans }} {{ shares|join(', ')|e }}">
+                                        <i class="fa fa-share"></i>
+                                    </span>
                                 {% endif %}
-                                <span class="share-tooltip" title="{{ 'list.shared_with'|trans }} {{ shares|join(', ')|e }}">
-                                    <i class="fa fa-share"></i>
-                                </span>
                             {% endif %}
                         {% endif %}
 
