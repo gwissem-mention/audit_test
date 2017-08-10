@@ -2,18 +2,24 @@
 
 namespace HopitalNumerique\ForumBundle\Controller;
 
-use CCDNForum\ForumBundle\Controller\UserPostController as UserPostControllerBase;
-use HopitalNumerique\ForumBundle\Domain\Command\SendEmailToSubscriberCommand;
 use HopitalNumerique\ForumBundle\Entity\Post;
-use HopitalNumerique\ForumBundle\Entity\Subscription;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use HopitalNumerique\ForumBundle\Domain\Command\SendEmailToSubscriberCommand;
+use CCDNForum\ForumBundle\Controller\UserPostController as UserPostControllerBase;
 
 class UserPostController extends UserPostControllerBase
 {
     use ForumControllerAuthorizationCheckerTrait;
 
+    /**
+     * @param string $forumName
+     * @param int    $postId
+     *
+     * @return RenderResponse|RedirectResponse
+     */
     public function editProcessAction($forumName, $postId)
     {
         $post = $this->getPostModel()->findOnePostByIdWithTopicAndBoard($postId, true);
@@ -25,9 +31,9 @@ class UserPostController extends UserPostControllerBase
     /**
      * Télécharge la PJ du post.
      *
-     * @param \HopitalNumerique\ForumBundle\Entity\Post $post
+     * @param Post $post
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function activierPostEnAttenteAction(Post $post)
     {
@@ -35,11 +41,13 @@ class UserPostController extends UserPostControllerBase
 
         $this->container->get('hopitalnumerique_forum.manager.post')->save($post);
 
-        $sendEmailToSubscriberCommand = new SendEmailToSubscriberCommand($this->getUser(), $post);
+        if (null === $post->getEditedDate()) {
+            $sendEmailToSubscriberCommand = new SendEmailToSubscriberCommand($this->getUser(), $post);
 
-        $this->container->get('hopitalnumerique_forum.send_email_to_subscriber_handler')->handle(
-            $sendEmailToSubscriberCommand
-        );
+            $this->container->get('hopitalnumerique_forum.send_email_to_subscriber_handler')->handle(
+                $sendEmailToSubscriberCommand
+            );
+        }
 
         $this->container->get('session')->getFlashBag()->add(
             'success',
@@ -54,9 +62,9 @@ class UserPostController extends UserPostControllerBase
     /**
      * Télécharge la PJ du post.
      *
-     * @param \HopitalNumerique\ForumBundle\Entity\Post $post
+     * @param Post $post
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function downloadPieceJointeAction(Post $post)
     {

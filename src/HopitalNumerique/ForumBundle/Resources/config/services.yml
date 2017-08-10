@@ -113,3 +113,11 @@ services:
         calls:
             - ['setTopicRepository', ['@hopitalnumerique_forum.repository.topic']]
         public: false
+
+    ccdn_forum_forum.form.handler.post_update:
+        class: HopitalNumerique\ForumBundle\Form\Handler\User\Post\PostUpdateFormHandler
+        arguments:
+            - '@event_dispatcher'
+            - '@form.factory'
+            - '@ccdn_forum_forum.form.type.post_update'
+            - '@ccdn_forum_forum.model.post'

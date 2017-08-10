@@ -45,6 +45,7 @@ class RestitutionExtension extends \Twig_Extension
                 'gridLineInterpolation' => 'polygon',
                 'lineWidth' => 0,
                 'min' => 0,
+                'max' => 100,
             ],
             'tooltip' => [
                 'shared' => true,
