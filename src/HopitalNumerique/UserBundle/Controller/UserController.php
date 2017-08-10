@@ -298,7 +298,13 @@ class UserController extends Controller
         /** @var User $user */
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig');
+        $options['isAllowedToSwitch'] = false;
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_1')) {
+            $options['isAllowedToSwitch'] = true;
+        }
+
+        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig', $options);
     }
 
     /**
@@ -1285,7 +1291,7 @@ class UserController extends Controller
      *
      * @return Response
      */
-    private function customRenderView($view, $form, $user, $options)
+    private function customRenderView($view, $form, $user, $options = [])
     {
         return $this->render($view, [
             'form' => $form->createView(),
