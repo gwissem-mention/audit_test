@@ -13,7 +13,7 @@
     {% for category in restitution.categories if category.items|length > 0 %}
         <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
             <p class="category-description">
-                {{ category.description }}
+                {{ category.description|raw }}
             </p>
 
             <div class="items-wrapper">
