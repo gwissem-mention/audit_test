@@ -99,6 +99,7 @@ list:
         itemsCount: Nombre d'objets
     copied_by: Copié par
     shared_with: Partagé avec
+    shared_by: Partagé par %user%
     actions:
         edit:
             title: Modifier le rapport
