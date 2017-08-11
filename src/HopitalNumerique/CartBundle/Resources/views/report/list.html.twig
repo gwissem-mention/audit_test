@@ -21,28 +21,10 @@
             {% for report in reports %}
                 <tr class="report-list-line" data-report-id="{{ report.id }}">
                     <td class="report-list-line-title">
-
-                        {% if report.shares %}
-                            {% set shares = [] %}
-                            {% set hasShares = false %}
-                            {% for share in report.shares if share.type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
-                                {% if app.user != share.target %}
-                                    {% set shares = shares|merge([share.target.nomPrenom]) %}
-                                {% endif %}
-                                {% set hasShares = true %}
-                            {% endfor %}
-
-                            {% if hasShares %}
-                                {% if app.user != report.owner %}
-                                    <span class="share-tooltip" title="{{ 'list.shared_by'|trans({'%user%': report.owner.nomPrenom}) }}">
-                                        <i class="fa fa-share"></i>
-                                    </span>
-                                {% else %}
-                                    <span class="share-tooltip" title="{{ 'list.shared_with'|trans }} {{ shares|join(', ')|e }}">
-                                        <i class="fa fa-share"></i>
-                                    </span>
-                                {% endif %}
-                            {% endif %}
+                        {% if reportsShareMessages[report.id] is not null %}
+                            <span class="share-tooltip" title="{{ reportsShareMessages[report.id] }}">
+                                <i class="fa fa-share"></i>
+                            </span>
                         {% endif %}
 
                         {% if report.sharedBy is not null and report.sharedBy.report is not null %}

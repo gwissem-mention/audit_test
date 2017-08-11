@@ -358,7 +358,7 @@ class Synthesis
     /**
      * Get shares.
      *
-     * @return Collection
+     * @return User[]|Collection
      */
     public function getShares()
     {

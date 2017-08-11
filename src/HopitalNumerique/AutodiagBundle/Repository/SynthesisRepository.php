@@ -2,15 +2,19 @@
 
 namespace HopitalNumerique\AutodiagBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 
+/**
+ * Class SynthesisRepository
+ */
 class SynthesisRepository extends EntityRepository
 {
     /**
@@ -258,6 +262,11 @@ class SynthesisRepository extends EntityRepository
         return array_keys($qb->getQuery()->getArrayResult());
     }
 
+    /**
+     * @param $synthesisId
+     *
+     * @return array|null
+     */
     public function getSynthesisDetailsForExport($synthesisId)
     {
         $qb = $this->createQueryBuilder('s');
@@ -280,6 +289,13 @@ class SynthesisRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    /**
+     * @param User          $user
+     * @param Domaine|null  $domain
+     * @param Autodiag|null $autodiag
+     *
+     * @return QueryBuilder
+     */
     protected function createByUserQueryBuilder(User $user, Domaine $domain = null, Autodiag $autodiag = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -322,7 +338,7 @@ class SynthesisRepository extends EntityRepository
      * @param Domaine|null $domaine
      * @param Autodiag|null $autodiag
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function createComparableQueryBuilder(User $user, Domaine $domaine = null, Autodiag $autodiag = null)
     {
@@ -371,6 +387,36 @@ class SynthesisRepository extends EntityRepository
            ->addOrderBy('synthesis.updatedAt', 'DESC')
            ->getQuery()
            ->getResult()
+        ;
+    }
+
+    /**
+     * @param Synthesis $synthesis
+     *
+     * @return User[]
+     */
+    public function getSynthesisShares(Synthesis $synthesis)
+    {
+        // Cannot select entity through identification variables without choosing at least one root entity alias
+        // And synthesis.shares doesn't return all shares.
+        $userIds = $this->createQueryBuilder('synthesis')
+            ->select('shares.id')
+            ->join('synthesis.shares', 'shares')
+            ->where('synthesis.id = :synthesisId')
+            ->setParameter('synthesisId', $synthesis->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('shares')
+            ->from('HopitalNumeriqueUserBundle:User', 'shares')
+            ->where('shares.id IN (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->getQuery()
+            ->getResult()
         ;
     }
 }

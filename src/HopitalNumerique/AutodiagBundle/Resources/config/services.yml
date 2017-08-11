@@ -263,4 +263,5 @@ services:
             - '@router'
             - '@hopitalnumerique_domaine.service.base_url_provider'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique\userbundle\service\sharemessagegenerator'
         public: false

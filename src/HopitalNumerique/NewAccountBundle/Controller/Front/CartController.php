@@ -2,10 +2,12 @@
 
 namespace HopitalNumerique\NewAccountBundle\Controller\Front;
 
+use HopitalNumerique\CartBundle\Entity\Report;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\CartBundle\Form\ReportType;
 use HopitalNumerique\CartBundle\Form\SendReportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\UserBundle\Service\ShareMessageGenerator;
 use HopitalNumerique\CartBundle\Domain\Command\GenerateReportCommand;
 
 /**
@@ -32,11 +34,29 @@ class CartController extends Controller
 
         $reports = $this->get('hopitalnumerique_cart.repository.report')->findAllForUser($this->getUser());
 
+        $reportsShareMessages = [];
+
+        /** @var Report $report */
+        foreach ($reports as $report) {
+            $shares = array_map(function ($share) {
+                return $share->getTarget();
+            }, $report->getShares()->toArray());
+
+            $shareMessage = $this->get(ShareMessageGenerator::class)->getShareMessage(
+                $shares,
+                $report->getOwner(),
+                $this->getUser()
+            );
+
+            $reportsShareMessages[$report->getId()] = strlen($shareMessage) > 0 ? $shareMessage : null;
+        }
+
         return $this->render('NewAccountBundle:cart:cart.html.twig', [
             'cartItems' => $cartItems,
             'reportForm' => $reportForm->createView(),
             'sendReportForm' => $sendReportForm->createView(),
             'reports' => $reports,
+            'reportsShareMessages' => $reportsShareMessages,
             'isStagedReport' => true,
         ]);
     }

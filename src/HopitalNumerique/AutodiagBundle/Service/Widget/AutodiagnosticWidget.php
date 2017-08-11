@@ -2,14 +2,14 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
 use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
+use HopitalNumerique\UserBundle\Service\ShareMessageGenerator;
 use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareTrait;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareInterface;
@@ -43,6 +43,11 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
     protected $currentDomainService;
 
     /**
+     * @var ShareMessageGenerator
+     */
+    protected $shareMessageGenerator;
+
+    /**
      * AutodiagnosticWidget constructor.
      *
      * @param \Twig_Environment     $twig
@@ -51,7 +56,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
      * @param SynthesisRepository   $synthesisRepository
      * @param RouterInterface       $router
      * @param BaseUrlProvider       $baseUrlProvider
-     * @param CurrentDomaine $currentDomainService
+     * @param CurrentDomaine        $currentDomainService
+     * @param ShareMessageGenerator $shareMessageGenerator
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -60,7 +66,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         SynthesisRepository $synthesisRepository,
         RouterInterface $router,
         BaseUrlProvider $baseUrlProvider,
-        CurrentDomaine $currentDomainService
+        CurrentDomaine $currentDomainService,
+        ShareMessageGenerator $shareMessageGenerator
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
@@ -68,6 +75,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         $this->router = $router;
         $this->baseUrlProvider = $baseUrlProvider;
         $this->currentDomainService = $currentDomainService;
+        $this->shareMessageGenerator = $shareMessageGenerator;
     }
 
     /**
@@ -90,18 +98,12 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $baseUrl = $this->baseUrlProvider->getBaseUrl($autodiag->getDomaines()->toArray(), $this->domains);
 
             $isOwner = $synthesis->getUser()->getId() === $user->getId();
-            $sharedTitle = "";
 
-            if (!$isOwner) {
-                $transUser = $synthesis->getUser()->getFirstname() . " " . $synthesis->getUser()->getLastname();
-                $sharedTitle = $this->translator->trans('guided_search.shared_by', ['%user%' => $transUser], 'widget');
-            } elseif ($synthesis->getShares()->count() > 0) {
-                $transUsers = implode(', ', array_map(function ($user) {
-                    /** @var User $user */
-                    return $user->getFirstName() . " " . $user->getLastName();
-                }, $synthesis->getShares()->toArray()));
-                $sharedTitle = $this->translator->trans('guided_search.shared_with', ['%users%' => $transUsers], 'widget');
-            }
+            $shareMessage = $this->shareMessageGenerator->getShareMessage(
+                $this->synthesisRepository->getSynthesisShares($synthesis),
+                $synthesis->getUser(),
+                $user
+            );
 
             if (!isset($data[$autodiag->getId()])) {
                 $data[$autodiag->getId()] = [
@@ -169,8 +171,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'validationUrl' => $validationUrl,
                 'shareUrl' => $shareUrl,
                 'deleteUrl' => $deleteUrl,
-                'sharedTitle' => $sharedTitle,
-                'isShared' => $synthesis->getShares()->count() > 0,
+                'sharedMessage' => strlen($shareMessage) > 0 ? $shareMessage : null,
                 'isOwner' => $isOwner,
             ];
         }
