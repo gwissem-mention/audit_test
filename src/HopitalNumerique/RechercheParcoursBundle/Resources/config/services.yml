@@ -244,6 +244,7 @@ services:
             - '@router'
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
             - '@form.factory'
+            - '@hopitalnumerique\userbundle\service\sharemessagegenerator'
         public: false
 
 
@@ -259,4 +260,4 @@ services:
     HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler:
         class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler
         arguments:
-            - '@HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress'
+            - '@hopitalnumerique\rechercheparcoursbundle\service\guidedsearchstepprogress'

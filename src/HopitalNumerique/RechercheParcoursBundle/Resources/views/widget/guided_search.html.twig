@@ -16,8 +16,8 @@
             {% for item in data %}
                 <tr>
                     <td>
-                        {% if item.sharedWith is defined and item.sharedWith is not null %}
-                            <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ item.sharedWith }}"></i>
+                        {% if item.shareMessage is not null %}
+                            <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ item.shareMessage }}"></i>
                         {% endif %}
                         {{ item.information|join(' - ')|raw }}
                     </td>

@@ -4,10 +4,10 @@ namespace HopitalNumerique\RechercheParcoursBundle\Service\Widget;
 
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\Form\FormFactory;
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
+use HopitalNumerique\UserBundle\Service\ShareMessageGenerator;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\DomainAwareTrait;
@@ -39,6 +39,8 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
      */
     protected $formFactory;
 
+    protected $shareMessageGenerator;
+
     /**
      * GuidedSearchWidget constructor.
      *
@@ -48,6 +50,7 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
      * @param RouterInterface        $router
      * @param GuidedSearchRepository $guidedSearchRepository
      * @param FormFactory            $formFactory
+     * @param ShareMessageGenerator  $shareMessageGenerator
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -55,13 +58,15 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
         TranslatorInterface $translator,
         RouterInterface $router,
         GuidedSearchRepository $guidedSearchRepository,
-        FormFactory $formFactory
+        FormFactory $formFactory,
+        ShareMessageGenerator $shareMessageGenerator
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->router = $router;
         $this->guidedSearchRepository = $guidedSearchRepository;
         $this->formFactory = $formFactory;
+        $this->shareMessageGenerator = $shareMessageGenerator;
     }
 
     /**
@@ -83,26 +88,12 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
         /** @var GuidedSearch $guidedSearch */
         foreach ($guidedSearches as $guidedSearch) {
             $guidedSearchReference = $guidedSearch->getGuidedSearchReference();
-            $sharedWith = null;
 
-            if ($guidedSearch->getShares()->count() > 0) {
-                $userList = array_filter(array_map(
-                    function ($share) {
-                        /** @var User $share */
-                        if ($this->tokenStorage->getToken()->getUser()->getId() !== $share->getId()) {
-                            return $share->getFirstname() . " " . $share->getLastname();
-                        }
-
-                        return null;
-                    },
-                    $guidedSearch->getShares()->toArray()
-                ));
-
-                $sharedWith = count($userList) > 0
-                    ? $this->translator->trans('guided_search.shared_with', ['%users%' => implode(", ", $userList)], 'widget')
-                    : null
-                ;
-            }
+            $shareMessage = $this->shareMessageGenerator->getShareMessage(
+                $guidedSearch->getShares(),
+                $guidedSearch->getOwner(),
+                $this->tokenStorage->getToken()->getUser()
+            );
 
             $continueLink = $this->router->generate('hopital_numerique_guided_search_continue_guided_search', [
                 'guidedSearchReference'      => $guidedSearchReference->getId(),
@@ -124,7 +115,7 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
                         : $this->translator->trans('guided_search.status.private', [], 'widget')
                     ,
                 ],
-                'sharedWith' => $sharedWith,
+                'shareMessage' => strlen($shareMessage) > 0 ? $shareMessage : null,
                 'actions' => [
                     'continue' => $continueLink,
                     'send' => $this->router->generate('hopital_numerique_guided_search_send', [
