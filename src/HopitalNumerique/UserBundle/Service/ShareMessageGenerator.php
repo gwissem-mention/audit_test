@@ -41,7 +41,7 @@ class ShareMessageGenerator
         $message = "";
 
         foreach ($shares as $share) {
-            if ($share->getId() !== $owner->getId()) {
+            if ($share->getId() !== $owner->getId() && $share->getId() !== $owner->getId()) {
                 $sharedWith[] = $share;
             }
 
