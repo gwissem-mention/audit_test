@@ -34,7 +34,8 @@ class CartController extends Controller
 
         $reports = $this->get('hopitalnumerique_cart.repository.report')->findAllForUser($this->getUser());
 
-        $reportsShareMessages = [];
+        $reportShareMessages = [];
+        $reportStatuses = [];
 
         /** @var Report $report */
         foreach ($reports as $report) {
@@ -48,7 +49,17 @@ class CartController extends Controller
                 $this->getUser()
             );
 
-            $reportsShareMessages[$report->getId()] = strlen($shareMessage) > 0 ? $shareMessage : null;
+            $reportShareMessages[$report->getId()] = strlen($shareMessage) > 0 ? $shareMessage : null;
+
+            $reportDownload = $report->getDownloadByUser($this->getUser());
+
+            if (null === $reportDownload) {
+                $reportStatuses[$report->getId()] = Report::STATUS_NEW;
+            } elseif ($report->getUpdatedAt() > $reportDownload->getDownloadDate()) {
+                $reportStatuses[$report->getId()] = Report::STATUS_UPDATED;
+            } else {
+                $reportStatuses[$report->getId()] = null;
+            }
         }
 
         return $this->render('NewAccountBundle:cart:cart.html.twig', [
@@ -56,7 +67,8 @@ class CartController extends Controller
             'reportForm' => $reportForm->createView(),
             'sendReportForm' => $sendReportForm->createView(),
             'reports' => $reports,
-            'reportsShareMessages' => $reportsShareMessages,
+            'reportShareMessages' => $reportShareMessages,
+            'reportStatuses' => $reportStatuses,
             'isStagedReport' => true,
         ]);
     }

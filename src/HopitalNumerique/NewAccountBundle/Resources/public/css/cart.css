@@ -53,3 +53,17 @@ table.dataTable thead .cart-items-all::after {
 #my-account .new-report .form-wrapper {
     margin: 0 15px;
 }
+
+#my-account i.maj::after {
+    content: "(MÀJ)";
+    color: #d60030;
+    font-style: normal;
+    font-size: 12px;
+}
+
+#my-account i.new::after {
+    content: "(NOUVEAU)";
+    color: #d60030;
+    font-style: normal;
+    font-size: 12px;
+}
