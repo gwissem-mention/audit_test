@@ -112,7 +112,8 @@ var ReportEdit;
                 'form_action': Routing.generate('hopital_numerique_cart_report_factory_edit', {'reportFactory': reportFactory.id}),
                 'report_name': '',
                 'report_id': false,
-                'report_columns': reportFactory.columns
+                'report_columns': reportFactory.columns,
+                'report_is_shared': reportFactory.isShared
             };
 
             if (reportFactory.report !== null) {
