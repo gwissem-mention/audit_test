@@ -44,3 +44,9 @@ services:
              - '@doctrine'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.terminate', method: persistLogs }
+
+    kernel.listener.notFoundHttpException:
+        class: HopitalNumerique\CoreBundle\EventListener\NotFoundHttpExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -10 }
+        arguments: [ '@controller_resolver', '@request_stack', '@http_kernel' ]
