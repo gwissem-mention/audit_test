@@ -164,10 +164,43 @@ $(document).ready(function() {
     //Toggle notif mise à jour
     $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
         if (active) {
-            $('#hopitalnumerique_objet_objet_modified').val(1);
+            $('.update-reason-container').removeClass('hide');
+            $('#hopitalnumerique_objet_objet_reason').val();
+            $('#hopitalnumerique_objet_objet_modified').val('1');
         } else {
+            $('.update-reason-container').addClass('hide');
+            $('#hopitalnumerique_objet_objet_reason').val('');
             $('#hopitalnumerique_objet_objet_modified').val(0);
         }
+    });
+
+    var $releaseDatefield = $('#hopitalnumerique_objet_objet_releaseDate');
+    var $relevanceCheckbox = $('#release-date-relevance');
+
+    if ($releaseDatefield.val() === "") {
+        $releaseDatefield.attr('disabled', 'disabled');
+        $releaseDatefield.val('jj/mm/aaaa');
+        $relevanceCheckbox.get(0).checked = true;
+    }
+
+    $relevanceCheckbox.change(function() {
+        if($(this).is(":checked")) {
+            $releaseDatefield.attr('disabled', 'disabled');
+            $releaseDatefield.val('jj/mm/aaaa');
+        } else {
+            $releaseDatefield.removeAttr('disabled');
+
+            // the default release date is the current date
+            var date = new Date();
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+            var month = (1 + date.getMonth()).toString();
+            month = month.length > 1 ? month : '0' + month;
+            var year = date.getFullYear();
+
+            $releaseDatefield.val(year + '-' + month + '-' + day);
+        }
+        $('#release-date-relevance').val($(this).is(':checked'));
     });
 
     //Toogle d'ajout seulement

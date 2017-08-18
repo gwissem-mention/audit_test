@@ -287,3 +287,14 @@ services:
             - '@hopitalnumerique_domaine.service.base_url_provider'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         public: false
+
+    HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository:
+        class: HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\ObjectUpdate'

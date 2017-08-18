@@ -2,24 +2,26 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
-use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
-use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
-use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Forum;
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
 
 /**
  * Class PublicationController
@@ -120,6 +122,7 @@ class PublicationController extends Controller
 
             $referencesToImplode = [];
 
+            /** @var Reference $reference */
             foreach ($domaineReference as $reference) {
                 $displayedDomains = $reference->getReference()->getDomainesDisplayId()->toArray();
                 if (in_array($domaine->getId(), $displayedDomains)) {
@@ -695,5 +698,19 @@ class PublicationController extends Controller
         );
 
         return $this->redirectToRoute('nodevo_mail_recommandation_popin', ['url' => $currentDomaineUrl . $objectUrl]);
+    }
+
+    /**
+     * @param Objet $object
+     *
+     * @return Response
+     */
+    public function objectUpdatesPopinAction(Objet $object)
+    {
+        $updates = $this->get(ObjectUpdateRepository::class)->findBy(['object' => $object], ['updatedAt' => 'DESC']);
+
+        return $this->render('@HopitalNumeriquePublication/Publication/object_updates.html.twig', [
+            'updates' => $updates,
+        ]);
     }
 }

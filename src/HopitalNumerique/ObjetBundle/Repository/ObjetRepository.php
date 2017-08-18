@@ -867,4 +867,19 @@ class ObjetRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult()
         ;
     }
+
+    /**
+     * @deprecated
+     * @todo: Should be removed after "dateParution to releaseDate" migration.
+     *
+     * @return Objet[]
+     */
+    public function findByDateParutionNotNull()
+    {
+        return $this->createQueryBuilder('object')
+            ->where('object.dateParution IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

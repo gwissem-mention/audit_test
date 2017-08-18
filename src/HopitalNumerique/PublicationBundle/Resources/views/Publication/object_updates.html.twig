@@ -1,0 +1,22 @@
+<h1>Historique des mises à jour</h1>
+
+{% if updates|length > 0 %}
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th width="100px">Date</th>
+            <th width="200px">Motif</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for update in updates %}
+            <tr>
+                <td>{{ update.updatedAt|date('d/m/Y') }}</td>
+                <td>{{ update.reason }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    Aucune mise à jour n'a été répertoriée pour cet objet.
+{% endif %}
