@@ -7,7 +7,24 @@
             <div>
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
-                {{ form_widget(form) }}
+                    {{ form_row(form.file) }}
+                    <div class="form-group">
+                            {{ form_label(form.notify_update) }}
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="toggle toggle-success" style="margin: 6px auto 0;"></div>
+                                    <div class="hide">{{ form_widget(form.notify_update) }}</div>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ form_widget(form.update_reason) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_errors(form.notify_update) }}
+                        </div>
+                    </div>
                 {{ form_end(form) }}
             </div>
             <div class="repport">
@@ -30,5 +47,15 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+            if (active) {
+                console.log('test 1');
+            } else {
+                console.log('test 2');
+            }
+        });
+    </script>
 
 {% endblock %}
