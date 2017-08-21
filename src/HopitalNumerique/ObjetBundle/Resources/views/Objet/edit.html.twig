@@ -1,6 +1,6 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
-{% block title %}{{parent()}} - Publication{% endblock %}
+{% block title %}{{ parent() }} - Publication{% endblock %}
 
 {% block h1Title %}
     {% if objet.id %}
@@ -11,19 +11,19 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {{parent()}}
+    {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
-    {{parent()}}
+    {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
         "@nestable_js"
         "@json_js"
@@ -31,7 +31,7 @@
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueobjet/js/script.js'
     %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
@@ -42,6 +42,7 @@
         {% else %}
             <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0 , 'filtre':"publication" }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% endif %}
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_show', { 'id': objet.id }) }}" title="{{ 'object.card'|trans }}"><i class="fa fa-clipboard"></i></a>
         <a class="btn btn-default btn-report fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank"><i class="fa fa-search"></i></a>
         {% if objet.etat.id != constant('HopitalNumerique\\ReferenceBundle\\Entity\\Reference::STATUT_INACTIF_ID') %}
             <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
@@ -78,443 +79,462 @@
                 {% form_theme form 'HopitalNumeriqueObjetBundle::formObjet.html.twig' %}
 
                 {{ form_start(form) }}
-                    {{ form_javascript(form) }}
+                {{ form_javascript(form) }}
 
-                    <div class="tab-content">
-                        <div class="tab-pane {% if not infra %}active{% endif %}" id="objet">
-                            <div class="col-md-4">
-                                {{ form_row(form.titre) }}
-                                {{ form_row(form.alias) }}
+                <div class="tab-content">
+                    <div class="tab-pane {% if not infra %}active{% endif %}" id="objet">
+                        <div class="col-md-4">
+                            {{ form_row(form.titre) }}
+                            {{ form_row(form.alias) }}
 
-                                <div class="form-group">
-                                    {{ form_label(form.domaines) }}
-                                    <div class="col-md-9">
-                                        {{ form_widget(form.domaines, {'attr': {'class': 'select2'}}) }}
-                                        {{ form_errors(form.domaines) }}
+                            <div class="form-group">
+                                {{ form_label(form.domaines) }}
+                                <div class="col-md-9">
+                                    {{ form_widget(form.domaines, {'attr': {'class': 'select2'}}) }}
+                                    {{ form_errors(form.domaines) }}
+                                </div>
+                            </div>
+
+                            {{ form_row(form.etat) }}
+                            {{ form.cibleDiffusion is defined ? form_row(form.cibleDiffusion) : '' }}
+                            {{ form_row(form.roles) }}
+                            {{ form.source is defined ? form_row(form.source) : '' }}
+                            <div class="form-group">
+                                {{ form_label(form.types) }}
+                                <div class="col-md-9">
+                                    {{ form_widget(form.types) }}
+                                </div>
+                                <div class="col-md-9 col-md-offset-3">
+                                    <div class="help-block">
+                                        {{ form_errors(form.types) }}
                                     </div>
                                 </div>
+                            </div>
 
-                                {{ form_row(form.etat) }}
-                                {{ form.cibleDiffusion is defined ? form_row(form.cibleDiffusion) : '' }}
-                                {{ form_row(form.roles) }}
-                                {{ form.source is defined ? form_row(form.source) : '' }}
-                                <div class="form-group">
-                                    {{ form_label(form.types) }}
-                                    <div class="col-md-9">
-                                        {{ form_widget(form.types) }}
+                            <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
+                                {{ form_label(form.file) }}
+                                <div class="col-md-9">
+                                    {% if objet.getAbsolutePath(1) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                    <div class="inputUpload" style="display:{{ visibility }}">
+                                        {{ form_widget(form.file) }}
                                     </div>
-                                    <div class="col-md-9 col-md-offset-3">
+
+                                    {% if objet.getAbsolutePath(1) is not null %}
+                                        <a class="uploadedFile pull-left" href="/{{ objet.getWebPath(1) }}" target="_blank">{{ objet.path }}</a>
+                                        <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path"><i class="fa fa-trash-o"></i></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="help-block">
-                                            {{ form_errors(form.types) }}
+                                            {{ form_errors(form.file) }}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
-                                    {{ form_label(form.file) }}
-                                    <div class="col-md-9">
-                                        {% if objet.getAbsolutePath(1) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
-                                        <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.file) }}
-                                        </div>
-
-                                        {% if objet.getAbsolutePath(1) is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(1)}}" target="_blank">{{objet.path}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path" ><i class="fa fa-trash-o"></i></div>
-                                        {% endif %}
+                            <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
+                                {{ form_label(form.file2) }}
+                                <div class="col-md-9">
+                                    {% if objet.getAbsolutePath(2) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                    <div class="inputUpload" style="display:{{ visibility }}">
+                                        {{ form_widget(form.file2) }}
                                     </div>
+
+                                    {% if objet.getAbsolutePath(2) is not null %}
+                                        <a class="uploadedFile pull-left" href="/{{ objet.getWebPath(2) }}" target="_blank">{{ objet.path2 }}</a>
+                                        <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path2"><i class="fa fa-trash-o"></i></div>
+                                    {% endif %}
                                 </div>
+                            </div>
 
-                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="help-block">
-                                                {{ form_errors(form.file) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
-                                    {{ form_label(form.file2) }}
-                                    <div class="col-md-9">
-                                        {% if objet.getAbsolutePath(2) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
-                                        <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.file2) }}
-                                        </div>
-
-                                        {% if objet.getAbsolutePath(2) is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(2)}}" target="_blank">{{objet.path2}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path2" ><i class="fa fa-trash-o"></i></div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="help-block">
-                                                {{ form_errors(form.file2) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="vignetteBlock form-group {% if not objet.isArticle() %}hide{% endif %}">
-                                    {{ form_label(form.vignette) }}
-                                    <div class="col-md-9">
-                                        <div class="input-group" >
-                                            {{ form_widget(form.vignette) }}
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette', no_host: true});">Parcourir</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9 col-md-offset-3">
+                            <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="help-block">
-                                            {{ form_errors(form.vignette) }}
+                                            {{ form_errors(form.file2) }}
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="clearfix"></div>
+                            <div class="vignetteBlock form-group {% if not objet.isArticle() %}hide{% endif %}">
+                                {{ form_label(form.vignette) }}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {{ form_widget(form.vignette) }}
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette', no_host: true});">Parcourir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-md-offset-3">
+                                    <div class="help-block">
+                                        {{ form_errors(form.vignette) }}
+                                    </div>
                                 </div>
 
-                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
-                                    {{ form_label(form.ambassadeurs) }}
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                {{ form_label(form.ambassadeurs) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.ambassadeurs) }}
+                                </div>
+                                <div class="col-md-5 col-md-offset-7">
+                                    <div class="help-block">
+                                        {{ form_errors(form.ambassadeurs) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group {% if objet.isArticle() == false %}hide{% endif %}">
+                                {{ form_label(form.alaune) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.alaune) }}
+                                </div>
+                            </div>
+
+                            {%- if form.communautePratiqueGroupe is defined -%}
+                                <div class="form-group">
+                                    {{ form_label(form.communautePratiqueGroupe) }}
                                     <div class="col-md-5">
-                                        {{ form_widget(form.ambassadeurs) }}
+                                        {{ form_widget(form.communautePratiqueGroupe) }}
                                     </div>
                                     <div class="col-md-5 col-md-offset-7">
                                         <div class="help-block">
-                                            {{ form_errors(form.ambassadeurs) }}
+                                            {{ form_errors(form.communautePratiqueGroupe) }}
                                         </div>
                                     </div>
                                 </div>
+                            {%- endif -%}
 
-                                <div class="form-group {% if objet.isArticle() == false %}hide{% endif %}">
-                                    {{ form_label(form.alaune) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.alaune) }}
+                            <div class="form-group">
+                                {{ form_label(form.publicationPlusConsulte) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.publicationPlusConsulte) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ form_label(form.btnSociaux) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.btnSociaux) }}
+                                </div>
+                                <div class="col-md-5 col-md-offset-7">
+                                    <div class="help-block">
+                                        {{ form_errors(form.btnSociaux) }}
                                     </div>
                                 </div>
+                            </div>
 
-                                {%- if form.communautePratiqueGroupe is defined -%}
-                                    <div class="form-group">
-                                        {{ form_label(form.communautePratiqueGroupe) }}
-                                        <div class="col-md-5">
-                                            {{ form_widget(form.communautePratiqueGroupe) }}
-                                        </div>
-                                        <div class="col-md-5 col-md-offset-7">
-                                            <div class="help-block">
-                                                {{ form_errors(form.communautePratiqueGroupe) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {%- endif -%}
-
-                                <div class="form-group">
-                                    {{ form_label(form.publicationPlusConsulte) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.publicationPlusConsulte) }}
+                            <div class="form-group">
+                                {{ form_label(form.associatedProductions) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.associatedProductions) }}
+                                </div>
+                                <div class="col-md-5 col-md-offset-7">
+                                    <div class="help-block">
+                                        {{ form_errors(form.associatedProductions) }}
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    {{ form_label(form.btnSociaux) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.btnSociaux) }}
+                            <div class="form-group">
+                                {{ form_label(form.commentaires) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.commentaires) }}
+                                </div>
+                                <div class="col-md-5 col-md-offset-7">
+                                    <div class="help-block">
+                                        {{ form_errors(form.commentaires) }}
                                     </div>
-                                    <div class="col-md-5 col-md-offset-7">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ form_label(form.notes) }}
+                                <div class="col-md-5">
+                                    {{ form_widget(form.notes) }}
+                                </div>
+                                <div class="col-md-5 col-md-offset-7">
+                                    <div class="help-block">
+                                        {{ form_errors(form.notes) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    {{ form_label(form.releaseDate) }}
+                                    <div class="col-md-3">
+                                        {{ form_widget(form.releaseDate) }}
+                                    </div>
+                                    <label for="release-date-relevance" class="col-md-3 text-right">
+                                        {{ 'object.not_relevant'|trans }}
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input id="release-date-relevance" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-md-offset-7">
                                         <div class="help-block">
-                                            {{ form_errors(form.btnSociaux) }}
+                                            {{ form_errors(form.releaseDate) }}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    {{ form_label(form.associatedProductions) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.associatedProductions) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.associatedProductions) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    {{ form_label(form.commentaires) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.commentaires) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.commentaires) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    {{ form_label(form.notes) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.notes) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.notes) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    {{ form_label(form.dateParution) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.dateParution) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.dateParution) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
+                            <div class="form-group">
+                                <div class="row">
                                     {{ form_label(form.dateCreation) }}
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         {{ form_widget(form.dateCreation) }}
                                     </div>
-                                    <div class="col-md-5 col-md-offset-7">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-md-offset-7">
                                         <div class="help-block">
                                             {{ form_errors(form.dateCreation) }}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
+                            <div class="form-group">
+                                <div class="row">
                                     {{ form_label(form.dateModification) }}
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         {{ form_widget(form.dateModification) }}
                                     </div>
-                                    <div class="col-md-5 col-md-offset-7">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-md-offset-7">
                                         <div class="help-block">
                                             {{ form_errors(form.dateModification) }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
-                                    <label class="col-md-11" >Notifier la mise à jour ?</label>
-                                    <div class="col-md-1">
-                                        <div class="pull-right toggle toggle-success"></div>
-                                    </div>
-                                    <div class="col-md-10 hide">
-                                        {{ form_widget(form.modified) }}
-                                    </div>
-                                </div>
-                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
-                                    <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
-                                    <div class="col-md-10">
-                                        {%- if objet.id is not null -%}
-                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':1, 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
-                                        {%- endif -%}
-                                        <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <label for="hopitalnumerique_objet_objet_resume">{% if objet.isArticle() %}Texte de l'article{% else %}Résumé{% endif %} <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
-                                    </div>
-                                    <div class="col-md-12">
-                                        {{ form_widget(form.resume) }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="help-block">
-                                            {{ form_errors(form.resume) }}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
+                                <label class="col-md-6">{{ 'object.notify_update'|trans }} {% if objet.dateModification is not null %}<em>{{ 'object.last_update_notification'|trans({'%date%': objet.dateModification|date('d/m/Y')}) }}</em>{% endif %}</label>
+                                <div class="col-md-6">
+                                    <div class="row" style="height: 34px;">
+                                        <div class="col-md-10 text-right">
+                                            <div class="update-reason-container hide">
+                                                {{ form_widget(form.reason) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="pull-right toggle toggle-success"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group blocSynthese {% if objet.isArticle() %}hide{% endif %}">
-                                    <div class="col-md-12">
-                                        <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
+                                {{ form_widget(form.modified) }}
+                            </div>
+                            <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
+                                <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
+                                <div class="col-md-10">
+                                    {%- if objet.id is not null -%}
+                                        <a href="{{ path('hopitalnumerique_reference_referencement_popin', { 'entityType':1, 'entityId':objet.id }) }}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                    {%- endif -%}
+                                    <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="hopitalnumerique_objet_objet_resume">{% if objet.isArticle() %}Texte de l'article{% else %}Résumé{% endif %}<span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_widget(form.resume) }}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="help-block">
+                                        {{ form_errors(form.resume) }}
                                     </div>
-                                    <div class="col-md-12">
-                                        {{ form_widget(form.synthese) }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="help-block">
-                                            {{ form_errors(form.synthese) }}
-                                        </div>
+                                </div>
+                            </div>
+                            <div class="form-group blocSynthese {% if objet.isArticle() %}hide{% endif %}">
+                                <div class="col-md-12">
+                                    <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_widget(form.synthese) }}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="help-block">
+                                        {{ form_errors(form.synthese) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        {% if objet.id %}
-                            <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
-                                <div class="btn btn-primary addContenu manualAction" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
-                                <a class="btn btn-success reloadContenu manualAction" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
-                                <a class="btn btn-warning uploadSommaire manualAction fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
-
-                                {% spaceless %}
-                                    <a
-                                        class="btn btn-danger deleteAllInfradocs{{ contenus|length == 0 ? ' hidden' }}"
-                                        title="Supprimer tous les infras-document"
-                                        href="{{path('hopitalnumerique_objet_contenu_delete_all', {'object': objet.id})}}"
-                                    >
-                                        <i class="fa fa-trash-o"></i>
-                                    </a>
-                                {% endspaceless %}
-
-                                {% include '@HopitalNumeriquePublication/back/converter/upload_button.html.twig' %}
-
-                                <fieldset class="summary">
-
-                                    <legend>Sommaire</legend>
-
-                                    <p class="designForBlank" style="{{ contenus|length >= 1 ? ' display:none' }}">
-                                        Importez un document ou cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.
-                                    </p>
-                                    <div class="dd" id="sommaire">
-                                        <ol class="dd-list">
-                                            {% import _self as mySelf %}
-                                            {% for contenu in contenus %}
-                                                {{ mySelf.buildTree(contenu) }}
-                                            {% endfor %}
-                                        </ol>
-                                    </div>
-                                </fieldset>
-
-                                <div id="edition-infradox">
-                                    <div class="results">
-                                    </div>
-                                </div>
-
-                                <input type="hidden" class="infradoc" value="0" />
-
-                            </div>
-
-                            <div class="tab-pane" id="productions">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
-
-                                        {# Liste des prod maitrisées #}
-                                        <fieldset>
-                                            <legend>Productions liées</legend>
-
-                                            <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier une production.</p>
-                                            <div class="dd" id="productions-nestable">
-                                                <ol class="dd-list">
-                                                    {% import _self as mySelf %}
-                                                    {% for production in productions %}
-                                                        {{ mySelf.buildProductionListe(production, objet.id) }}
-                                                    {% endfor %}
-                                                </ol>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-
-                                {% if relatedObjects|length > 0 %}
-                                    <div class="row resource-row">
-                                        <div class="col-md-12">
-                                            <fieldset>
-                                                <legend>Cette production est également liée depuis</legend>
-                                                {% for relatedObject in relatedObjects %}
-                                                    <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
-                                                {% endfor %}
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                <div class="row resource-row">
-                                    <div class="col-md-12">
-                                        <a href="{{path('hopitalnumerique_objet_board_addLink', {'id':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un board lié"><i class="fa fa-plus"></i></a>
-
-                                        <fieldset>
-                                            <legend>Board liés</legend>
-
-                                            <p class="designForBlank" style="{% if relatedBoards|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un board.</p>
-                                            <div class="dd" id="boards-nestable">
-                                                <ol class="dd-list">
-                                                    {% import _self as mySelf %}
-                                                    {% for relatedBoard in relatedBoards %}
-                                                        {{ mySelf.buildBoardList(relatedBoard) }}
-                                                    {% endfor %}
-                                                </ol>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-
-                                <div class="row resource-row">
-                                    <div class="col-md-12">
-                                        <a href="{{path('hopitalnumerique_objet_related_risks_list', {'object':objet.id})}}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un risque lié"><i class="fa fa-plus"></i></a>
-
-                                        <fieldset>
-                                            <legend>Risques liés</legend>
-
-                                            <p class="designForBlank" style="{% if relatedRisks|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un risque.</p>
-                                            <div class="dd" id="risks-nestable" data-reorder-uri="{{ path('hopitalnumerique_objet_related_risks_reorder', {'object': objet.id}) }}">
-                                                <ol class="dd-list">
-                                                    {% for relatedRisk in relatedRisks %}
-                                                        <li class="dd-item dd3-item" data-id="{{ relatedRisk.risk.id }}">
-                                                            <div class="dd-handle dd3-handle"></div>
-                                                            <div class="dd3-content">
-                                                                {{ relatedRisk.risk }}
-                                                            </div>
-                                                            <div class="dd3-actions">
-                                                                <a href="#" class="pull-right dd3-trash" onclick="deleteWithConfirm('{{ path('hopitalnumerique_objet_related_risks_unlink', { 'object':relatedRisk.object.id, 'risk': relatedRisk.risk.id }) }}', false)">
-                                                                    <i class="fa fa-trash-o"></i>
-                                                                </a>
-                                                            </div>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ol>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-
-                            </div>
-                        {% endif %}
                     </div>
+
+                    {% if objet.id %}
+                        <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
+                            <div class="btn btn-primary addContenu manualAction" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
+                            <a class="btn btn-success reloadContenu manualAction" title="Recharger le sommaire" href="{{ path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1}) }}"><i class="fa fa-refresh"></i></a>
+                            <a class="btn btn-warning uploadSommaire manualAction fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{ path('hopitalnumerique_objet_contenu_upload') }}"><i class="fa fa-upload"></i></a>
+
+                            {% spaceless %}
+                                <a class="btn btn-danger deleteAllInfradocs{{ contenus|length == 0 ? ' hidden' }}" title="Supprimer tous les infras-document" href="{{ path('hopitalnumerique_objet_contenu_delete_all', {'object': objet.id}) }}"><i class="fa fa-trash-o"></i></a>
+                            {% endspaceless %}
+
+                            {% include '@HopitalNumeriquePublication/back/converter/upload_button.html.twig' %}
+
+                            <fieldset class="summary">
+
+                                <legend>Sommaire</legend>
+
+                                <p class="designForBlank" style="{{ contenus|length >= 1 ? ' display:none' }}">
+                                    Importez un document ou cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.
+                                </p>
+                                <div class="dd" id="sommaire">
+                                    <ol class="dd-list">
+                                        {% import _self as mySelf %}
+                                        {% for contenu in contenus %}
+                                            {{ mySelf.buildTree(contenu) }}
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </fieldset>
+
+                            <div id="edition-infradox">
+                                <div class="results">
+                                </div>
+                            </div>
+
+                            <input type="hidden" class="infradoc" value="0"/>
+
+                        </div>
+
+                        <div class="tab-pane" id="productions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="{{ path('hopitalnumerique_objet_objet_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
+
+                                    {# Liste des prod maitrisées #}
+                                    <fieldset>
+                                        <legend>Productions liées</legend>
+
+                                        <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez surle bouton '+' pour lier une production.</p>
+                                        <div class="dd" id="productions-nestable">
+                                            <ol class="dd-list">
+                                                {% import _self as mySelf %}
+                                                {% for production in productions %}
+                                                    {{ mySelf.buildProductionListe(production, objet.id) }}
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            {% if relatedObjects|length > 0 %}
+                                <div class="row resource-row">
+                                    <div class="col-md-12">
+                                        <fieldset>
+                                            <legend>Cette production est également liée depuis</legend>
+                                            {% for relatedObject in relatedObjects %}
+                                                <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
+                                            {% endfor %}
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row resource-row">
+                                <div class="col-md-12">
+                                    <a href="{{ path('hopitalnumerique_objet_board_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un board lié"><i class="fa fa-plus"></i></a>
+
+                                    <fieldset>
+                                        <legend>Board liés</legend>
+
+                                        <p class="designForBlank" style="{% if relatedBoards|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier un board.</p>
+                                        <div class="dd" id="boards-nestable">
+                                            <ol class="dd-list">
+                                                {% import _self as mySelf %}
+                                                {% for relatedBoard in relatedBoards %}
+                                                    {{ mySelf.buildBoardList(relatedBoard) }}
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            <div class="row resource-row">
+                                <div class="col-md-12">
+                                    <a href="{{ path('hopitalnumerique_objet_related_risks_list', {'object':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter un risque lié"><i class="fa fa-plus"></i></a>
+
+                                    <fieldset>
+                                        <legend>Risques liés</legend>
+
+                                        <p class="designForBlank" style="{% if relatedRisks|length >= 1 %}display:none{% endif %}">Cliquez surle bouton '+' pour lier un risque.</p>
+                                        <div class="dd" id="risks-nestable" data-reorder-uri="{{ path('hopitalnumerique_objet_related_risks_reorder', {'object': objet.id}) }}">
+                                            <ol class="dd-list">
+                                                {% for relatedRisk in relatedRisks %}
+                                                    <li class="dd-item dd3-item" data-id="{{ relatedRisk.risk.id }}">
+                                                        <div class="dd-handle dd3-handle"></div>
+                                                        <div class="dd3-content">
+                                                            {{ relatedRisk.risk }}
+                                                        </div>
+                                                        <div class="dd3-actions">
+                                                            <a href="#" class="pull-right dd3-trash" onclick="deleteWithConfirm('{{ path('hopitalnumerique_objet_related_risks_unlink', { 'object':relatedRisk.object.id, 'risk': relatedRisk.risk.id }) }}', false)">
+                                                                <i class="fa fa-trash-o"></i>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endif %}
+                </div>
                 {{ form_end(form) }}
             </div>
 
             {% if objet.id %}
-                <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
-                <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
-                <input type="hidden" id="reorder-prods-url" value="{{path('hopitalnumerique_objet_objet_reorder', {'id':objet.id})}}" />
-                <input type="hidden" id="reorder-boards-url" value="{{path('hopitalnumerique_objet_board_reorder', {'object':objet.id})}}" />
-                <input type="hidden" id="objet-id" value="{{objet.id}}" />
-                <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
+                <input type="hidden" id="add-contenu-url" value="{{ path('hopitalnumerique_objet_contenu_add', {'id':objet.id}) }}"/>
+                <input type="hidden" id="reorder-objet-url" value="{{ path('hopitalnumerique_objet_contenu_reorder') }}"/>
+                <input type="hidden" id="reorder-prods-url" value="{{ path('hopitalnumerique_objet_objet_reorder', {'id':objet.id}) }}"/>
+                <input type="hidden" id="reorder-boards-url" value="{{ path('hopitalnumerique_objet_board_reorder', {'object':objet.id}) }}"/>
+                <input type="hidden" id="objet-id" value="{{ objet.id }}"/>
+                <input type="hidden" id="parse-upload-url" value="{{ path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id}) }}"/>
             {% endif %}
-            <input type="hidden" id="toRef" value="{{toRef}}" />
-            <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
-            <input type="hidden" id="getOutils" value="{{path('hopitalnumerique_autodiag_get_outils')}}" />
-            <input type="hidden" id="getQuestionnaires" value="{{path('hopitalnumerique_questionnaire_get_questionnaires')}}" />
-            <input type="hidden" id="getRechercheAidee" value="{{path('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_get_recherche_aidee')}}" />
-            <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
-            <input type="hidden" id="objet-addobjet-url" value="{{path('hopitalnumerique_objet_objet_add')}}" />
-            <input type="hidden" id="objet-addarticle-url" value="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" />
+            <input type="hidden" id="toRef" value="{{ toRef }}"/>
+            <input type="hidden" id="getObjets" value="{{ path('hopitalnumerique_objet_objet_getObjets') }}"/>
+            <input type="hidden" id="getOutils" value="{{ path('hopitalnumerique_autodiag_get_outils') }}"/>
+            <input type="hidden" id="getQuestionnaires" value="{{ path('hopitalnumerique_questionnaire_get_questionnaires') }}"/>
+            <input type="hidden" id="getRechercheAidee" value="{{ path('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_get_recherche_aidee') }}"/>
+            <input type="hidden" id="objet-file-url" value="{{ path('hopitalnumerique_objet_objet_isFileExist') }}"/>
+            <input type="hidden" id="objet-addobjet-url" value="{{ path('hopitalnumerique_objet_objet_add') }}"/>
+            <input type="hidden" id="objet-addarticle-url" value="{{ path('hopitalnumerique_objet_objet_add', {'type':2}) }}"/>
         </div>
     </div>
 {% endblock %}
 
 {% macro buildTree(contenu) %}
-    <li class="dd-item dd3-item" data-id="{{contenu.id}}" id="contenu-{{contenu.id}}" >
+    <li class="dd-item dd3-item" data-id="{{ contenu.id }}" id="contenu-{{ contenu.id }}">
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a id="{{ 'tree-item-' ~ contenu.id }}" data-order="{{ contenu.order }}" data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(50)}}</a>
-            <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Survoler pour afficher les scores</span></p>
+            <a id="{{ 'tree-item-' ~ contenu.id }}" data-order="{{ contenu.order }}" data-url="{{ path('hopitalnumerique_objet_contenu_form', {'id': contenu.id}) }}" href="javascript:selectChapitre({{ contenu.id }}, '{{ path('hopitalnumerique_objet_contenu_form', {'id':contenu.id}) }}')" title="{{ contenu.titre }}">{{ contenu.order ~ ' ' ~ contenu.titre|truncate(50) }}</a>
+            <p class="text-muted pull-right">{{ contenu.nbVue }} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Survoler pour afficher les scores</span></p>
         </div>
         <div class="dd3-actions">
-            <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':2, 'entityId':contenu.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <div onclick="deleteContenu( {{ contenu.id }}, '{{ path('hopitalnumerique_objet_contenu_delete', {'id': contenu.id}) }}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <a href="{{ path('hopitalnumerique_reference_referencement_popin', { 'entityType': 2, 'entityId': contenu.id }) }}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
 
         {% if contenu.childs %}
@@ -529,10 +549,10 @@
 {% endmacro %}
 
 {% macro buildProductionListe(production, objetId) %}
-    <li class="dd-item dd3-item" data-id="{{production.brut}}" id="prod-{{production.id}}" >
+    <li class="dd-item dd3-item" data-id="{{ production.brut }}" id="prod-{{ production.id }}">
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            {{production.titre}}
+            {{ production.titre }}
         </div>
         <div class="dd3-actions">
             <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_deleteLink', { 'pointDur':objetId, 'id': production.id, 'obj': production.isObjet }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
@@ -541,10 +561,10 @@
 {% endmacro %}
 
 {% macro buildBoardList(relatedBoard) %}
-    <li class="dd-item dd3-item" data-id="{{ relatedBoard.board.id }}" id="board-{{ relatedBoard.board.id }}" >
+    <li class="dd-item dd3-item" data-id="{{ relatedBoard.board.id }}" id="board-{{ relatedBoard.board.id }}">
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            {{relatedBoard.board.name}}
+            {{ relatedBoard.board.name }}
         </div>
         <div class="dd3-actions">
             <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_board_deleteLink', { 'object':relatedBoard.object.id, 'board': relatedBoard.board.id }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>

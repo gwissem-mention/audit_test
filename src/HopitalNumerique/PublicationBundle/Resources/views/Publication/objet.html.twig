@@ -257,12 +257,12 @@
             <div class="download-prod-bloc col-md-6 hidden-pdf">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(1) is not null %}
-                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}"> <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(2) is not null %}
-                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '2'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '2'})}}"> <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>
@@ -312,10 +312,13 @@
         {% endif %}
 
         {% if contenu is defined %}
-            {% if contenu.objet.dateParution or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
+            {% if contenu.objet.releaseDate or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
-                    {% if contenu.objet.dateParution %}
-                        Date de parution : {{contenu.objet.dateParution}}<br/>
+                    {% if contenu.objet.releaseDate %}
+                        {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
+                    {% endif %}
+                    {% if contenu.objet.dateModification %}
+                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': contenu.objet.id}) }}" style="cursor: pointer;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': contenu.objet.dateModification|date('d/m/Y')}) }}</a><br/>
                     {% endif %}
                     {% if contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument %}
                         Source du document : {{contenu.objet.fichierModifiable.sourceDocument}}
@@ -323,10 +326,13 @@
                 </div>
             {% endif %}
         {% else %}
-            {% if objet.dateParution or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
+            {% if objet.releaseDate or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
-                    {% if objet.dateParution %}
-                        Date de parution : {{objet.dateParution}}<br/>
+                    {% if objet.releaseDate %}
+                        {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
+                    {% endif %}
+                    {% if objet.dateModification %}
+                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': objet.id}) }}" style="cursor: pointer; color: #333;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': objet.dateModification|date('d/m/Y')}) }}</a><br/>
                     {% endif %}
                     {% if objet.fichierModifiable and objet.fichierModifiable.sourceDocument %}
                         Source du document : {{objet.fichierModifiable.sourceDocument}}
@@ -383,24 +389,20 @@
                     <div class="item" data-pos="{{count}}" >
                         {% if key != 'forum' %}
                             <h4>
-                                {% if item['objet'] is not null %}
-                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
-                                    {% else %}
-                                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
-                                        {% endif %}
-                                        {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
-                                            <style type="text/css">
-                                                #autresResultats .top .results p{height: 70px;}
-                                            </style>
-                                            {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
-                                            <i class="fa fa-share fa-flip-vertical"></i><span style="font-size:13px;" class="gris"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</span>
-                                        {% else %}
-                                            <style type="text/css">
-                                                #autresResultats .top .results p{height: 85px;}
-                                            </style>
-                                            {{item['titre']}}
-                                        {% endif %}
-                                    </a>
+                                <a href="{% if item['objet'] is not null %}{{ path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']}) }}{% else %}{{ path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']}) }}{% endif %}">
+                                {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
+                                    <style type="text/css">
+                                        #autresResultats .top .results p { height: 70px; }
+                                    </style>
+                                    {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
+                                    <i class="fa fa-share fa-flip-vertical"></i><span style="font-size:13px;" class="gris"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</span>
+                                {% else %}
+                                    <style type="text/css">
+                                        #autresResultats .top .results p{ height: 85px; }
+                                    </style>
+                                    {{item['titre']}}
+                                {% endif %}
+                                </a>
                             </h4>
 
                             <p>{{ item['resume']|trim }}</p>

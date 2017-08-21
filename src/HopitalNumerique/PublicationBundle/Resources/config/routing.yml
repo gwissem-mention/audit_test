@@ -21,6 +21,12 @@ hopital_numerique_publication_publication_object_recommendation:
     requirements:
         object: \d+
 
+hopital_numerique_publication_popin_object_updates:
+    path: /publication/updates/{object}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:objectUpdatesPopin" }
+    requirements:
+        object: \d+
+
 hopital_numerique_publication_publication_pdf:
     path: '/publication/{entityType}/{entityId}/pdf'
     defaults: { _controller: 'HopitalNumeriquePublicationBundle:Publication:pdf' }

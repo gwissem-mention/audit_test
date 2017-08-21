@@ -73,6 +73,7 @@ ad:
             file: Fichier
             notify_update: Notifier la mise à jour sur le frontoffice
             notified_update: La mise à jour a été notifiée sur le frontoffice
+            update_reason: Raison de la mise à jour
         history:
             last_modified: %date% à %time% par %username%
         edit:

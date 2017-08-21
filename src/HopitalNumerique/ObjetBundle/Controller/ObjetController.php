@@ -2,17 +2,21 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use HopitalNumerique\ObjetBundle\Entity\Consultation;
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
-use HopitalNumerique\ObjetBundle\Model\Report;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpFoundation\Request;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Model\Report;
+use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Consultation;
+use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
+use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler;
+use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateCommand;
 
 /**
  * Objet controller.
@@ -78,6 +82,7 @@ class ObjetController extends Controller
      */
     public function cancelWithFiltreAction($id, $message, $filtre)
     {
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy([
             'id' => $id,
         ]);
@@ -86,7 +91,7 @@ class ObjetController extends Controller
 
         // si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
         if (!is_null($message)) {
-            $this->get('session')->getFlashBag()->add('info', 'Objet dévérouillé.');
+            $this->addFlash('info', 'Objet dévérouillé.');
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet_filtre', [
@@ -104,13 +109,14 @@ class ObjetController extends Controller
      */
     public function cancelAction($id, $message)
     {
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
         //si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
         if (!is_null($message)) {
-            $this->get('session')->getFlashBag()->add('info', 'Objet dévérouillé.');
+            $this->addFlash('info', 'Objet dévérouillé.');
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
@@ -125,8 +131,7 @@ class ObjetController extends Controller
      */
     public function addAction($type)
     {
-        /** @var Objet $objet */
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
+        $objet = new Objet();
 
         if ($type == 2) {
             $objet->setArticle(true);
@@ -160,7 +165,7 @@ class ObjetController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         if (is_null($objet)) {
-            $this->get('session')->getFlashBag()->add('info', 'L\'objet n\'existe pas.');
+            $this->addFlash('info', 'L\'objet n\'existe pas.');
 
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
@@ -169,7 +174,7 @@ class ObjetController extends Controller
 
         // l'objet est locked, on redirige vers la home page
         if ($objet->getLock() && $objet->getLockedBy() && $objet->getLockedBy() != $user) {
-            $this->get('session')->getFlashBag()->add(
+            $this->addFlash(
                 'warning',
                 'Cet objet est en cours d\'édition par '
                 . $objet->getLockedBy()->getEmail()
@@ -204,8 +209,10 @@ class ObjetController extends Controller
                 ->findBy(['object' => $objet->getId()], ['position' => 'ASC'])
             ,
             'relatedObjects' => $relatedObjects,
-            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
-                                                         ->getEntityDomainesCommunsWithUser($objet, $user),
+            'domainesCommunsWithUser' => $this
+                ->get('hopitalnumerique_core.dependency_injection.entity')
+                ->getEntityDomainesCommunsWithUser($objet, $user)
+            ,
             'relatedRisks' => $objet->getRelatedRisks(),
         ];
 
@@ -228,17 +235,17 @@ class ObjetController extends Controller
     {
         /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
-        $outils = $this->get('autodiag.repository.autodiag')->findBy(['id' => $objet->getAutodiags()]);
 
         //get History
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
         $logs = $repo->getLogEntries($objet);
+        $updates = $this->get(ObjectUpdateRepository::class)->findBy(['object' => $objet]);
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', [
             'objet' => $objet,
-            'outils' => $outils,
             'logs' => $logs,
+            'updates' => $updates,
         ]);
     }
 
@@ -264,7 +271,7 @@ class ObjetController extends Controller
         //Suppression de l'entitée
         $this->get('hopitalnumerique_objet.manager.objet')->delete($objet);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        $this->addFlash('info', 'Suppression effectuée avec succès.');
 
         return new Response(
             '{"success":true, "url" : "' . $this->generateUrl(
@@ -298,9 +305,9 @@ class ObjetController extends Controller
         try {
             //Suppression de l'etablissement
             $this->get('hopitalnumerique_objet.manager.objet')->delete($objets);
-            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+            $this->addFlash('info', 'Suppression effectuée avec succès.');
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
+            $this->addFlash(
                 'danger',
                 'Suppression impossible, l\'objet est actuellement lié et ne peut pas être supprimé.'
             );
@@ -449,9 +456,11 @@ class ObjetController extends Controller
      */
     public function feedAction(Request $request)
     {
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
+        /** @var Domaine $domaine */
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
             $request->getSession()->get('domaineId', 1)
         );
+
         $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS($domaine);
 
         $feed = $this->get('eko_feed.feed.manager')->get('objet');
@@ -486,7 +495,7 @@ class ObjetController extends Controller
             $formTypes = $form->get('types')->getData();
 
             if (is_null($formTypes)) {
-                $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.');
+                $this->addFlash('danger', 'Veuillez sélectionner un type d\'objet.');
 
                 return $this->render($view, [
                     'form' => $form->createView(),
@@ -515,7 +524,7 @@ class ObjetController extends Controller
 
                 //Test if alias already exist
                 if ($this->get('hopitalnumerique_objet.manager.objet')->testAliasExist($objet, $new)) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.');
+                    $this->addFlash('danger', 'Cet Alias existe déjà.');
 
                     return $this->render($view, [
                         'form' => $form->createView(),
@@ -541,6 +550,14 @@ class ObjetController extends Controller
                 //Met à jour la date de modification
                 $notify = $form->get('modified')->getData();
                 if ($notify === '1') {
+                    $addObjectUpdateCommand = new AddObjectUpdateCommand(
+                        $objet,
+                        $this->getUser(),
+                        $form->get('reason')->getData()
+                    );
+
+                    $this->get(AddObjectUpdateHandler::class)->handle($addObjectUpdateCommand);
+
                     $objet->setDateModification(new \DateTime());
 
                     //Récupération des consultations
@@ -593,11 +610,11 @@ class ObjetController extends Controller
 
                 $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($objet);
 
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                // On envoie une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 if ($do == 'save-auto') {
-                    $this->get('session')->getFlashBag()->add('info', 'Objet sauvegardé automatiquement.');
+                    $this->addFlash('info', 'Objet sauvegardé automatiquement.');
                 } else {
-                    $this->get('session')->getFlashBag()->add(
+                    $this->addFlash(
                         ($new ? 'success' : 'info'),
                         'Objet ' . ($new ? 'ajouté.' : 'mis à jour.')
                     );
@@ -672,7 +689,7 @@ class ObjetController extends Controller
      */
     public function exportReportAction($primaryKeys, $allPrimaryKeys)
     {
-        $kernelCharset = $this->container->getParameter('kernel.charset');
+        $kernelCharset = $this->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_objet.service.report_export')->export(
             $primaryKeys,

@@ -247,18 +247,17 @@ class ObjetType extends AbstractType
                 'attr' => ['class' => 'checkbox'],
             ])
             ->add('dateCreation', 'genemu_jquerydate', [
-                'required' => true,
                 'label' => 'Date de création',
                 'widget' => 'single_text',
                 'label_attr' => [
-                    'class' => 'col-md-7 control-label',
+                    'class' => 'col-md-3 control-label',
                 ],
             ])
-            ->add('dateParution', TextType::class, [
-                'required' => false,
-                'label' => 'Début de parution',
+            ->add('releaseDate', 'genemu_jquerydate', [
+                'label' => 'Date de parution',
+                'widget' => 'single_text',
                 'label_attr' => [
-                    'class' => 'col-md-7 control-label',
+                    'class' => 'col-md-3 control-label',
                 ],
             ])
             ->add('dateModification', DateType::class, [
@@ -267,7 +266,7 @@ class ObjetType extends AbstractType
                 'label' => 'Date de dernière modification notifiée',
                 'attr' => ['readonly' => 'readonly'],
                 'label_attr' => [
-                    'class' => 'col-md-7 control-label',
+                    'class' => 'col-md-3 control-label',
                 ],
             ])
             ->add('domaines', EntityType::class, [
@@ -283,6 +282,13 @@ class ObjetType extends AbstractType
             ])
             ->add('modified', HiddenType::class, [
                 'mapped' => false,
+            ])
+            ->add('reason', TextType::class, [
+               'mapped' => false,
+               'attr' => [
+                   'placeholder' => 'Raison de la mise à jour',
+                   'class' => 'validate[required]',
+               ],
             ])
             ->add('article', HiddenType::class)
         ;

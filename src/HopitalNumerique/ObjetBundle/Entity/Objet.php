@@ -157,12 +157,22 @@ class Objet implements RoutedItemInterface
     private $dateCreation;
 
     /**
+     * @deprecated use releaseDate instead.
+     *
      * @var \String
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_debut_parution", type="string", length=255, nullable=true, options = {"comment" = "Date de parution de l objet"})
      */
     private $dateParution;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="obj_release_date", type="datetime", nullable=true)
+     */
+    private $releaseDate;
 
     /**
      * @var \DateTime
@@ -401,6 +411,13 @@ class Objet implements RoutedItemInterface
     protected $relatedRisks;
 
     /**
+     * @var ObjectUpdate[]
+     *
+     * @ORM\OneToMany(targetEntity="ObjectUpdate", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $updates;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -428,6 +445,7 @@ class Objet implements RoutedItemInterface
         $this->domaines = new ArrayCollection();
         $this->relatedBoards = new ArrayCollection();
         $this->relatedRisks = new ArrayCollection();
+        $this->updates = new ArrayCollection();
     }
 
     /**
@@ -871,38 +889,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return array $autodiags
-     */
-    public function getAutodiags()
-    {
-        return $this->autodiags;
-    }
-
-    /**
-     * @param array $autodiags
-     *
-     * @return Objet
-     */
-    public function setAutodiags(array $autodiags)
-    {
-        $this->autodiags = $autodiags;
-
-        return $this;
-    }
-
-    /**
-     * @param int $autodiag
-     *
-     * @return Objet
-     */
-    public function addAutodiag($autodiag)
-    {
-        $this->autodiags[] = $autodiag;
-
-        return $this;
-    }
-
-    /**
      * @return array $referencement
      */
     public function getReferencement()
@@ -1308,6 +1294,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * @deprecated use setReleaseDate instead.
+     *
      * @param string $dateParution
      *
      * @return Objet
@@ -1320,11 +1308,33 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * @deprecated use getReleaseDate instead.
+     *
      * @return \String
      */
     public function getDateParution()
     {
         return $this->dateParution;
+    }
+
+    /**
+     * @param \DateTime $releaseDate
+     *
+     * @return Objet
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
     }
 
     /**
@@ -1954,6 +1964,26 @@ class Objet implements RoutedItemInterface
         }
 
         $this->relatedRisks->add(new RelatedRisk($this, $risk, $position));
+
+        return $this;
+    }
+
+    /**
+     * @return ObjectUpdate[]
+     */
+    public function getUpdates()
+    {
+        return $this->updates;
+    }
+
+    /**
+     * @param ObjectUpdate $update
+     *
+     * @return Objet
+     */
+    public function addUpdate(ObjectUpdate $update)
+    {
+        $this->updates->add($update);
 
         return $this;
     }
