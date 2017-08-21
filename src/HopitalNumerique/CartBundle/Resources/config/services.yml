@@ -130,3 +130,9 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    HopitalNumerique\CartBundle\Repository\ReportDownloadRepository:
+        class: HopitalNumerique\CartBundle\Repository\ReportDownloadRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\ReportDownload'

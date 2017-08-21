@@ -21,8 +21,8 @@
             {% for report in reports %}
                 <tr class="report-list-line" data-report-id="{{ report.id }}">
                     <td class="report-list-line-title">
-                        {% if reportsShareMessages[report.id] is not null %}
-                            <span class="share-tooltip" title="{{ reportsShareMessages[report.id] }}">
+                        {% if reportShareMessages[report.id] is not null %}
+                            <span class="share-tooltip" title="{{ reportShareMessages[report.id] }}">
                                 <i class="fa fa-share"></i>
                             </span>
                         {% endif %}
@@ -36,6 +36,10 @@
                         <a href="{{ path('hopital_numerique_cart_report_item_get', {'report': report.id}) }}" class="report-details">
                             {{ report.name }}
                         </a>
+
+                        {% if reportStatuses[report.id] is not null %}
+                            <i class="{{ reportStatuses[report.id] }}"></i>
+                        {% endif %}
                     </td>
                     <td data-order="{{ report.createdAt.timestamp }}">{{ report.createdAt|date('d/m/Y') }}</td>
                     <td data-order="{{ report.updatedAt.timestamp }}">{{ report.updatedAt|date('d/m/Y') }}</td>

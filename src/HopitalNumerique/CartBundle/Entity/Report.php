@@ -14,6 +14,9 @@ use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
  */
 class Report implements \JsonSerializable
 {
+    const STATUS_NEW = 'new';
+    const STATUS_UPDATED = 'maj';
+
     /**
      * @var int
      *
@@ -90,6 +93,13 @@ class Report implements \JsonSerializable
     protected $sharedBy;
 
     /**
+     * @var ReportDownload[]
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CartBundle\Entity\ReportDownload", mappedBy="report", cascade={"remove", "persist"})
+     */
+    protected $downloads;
+
+    /**
      * Report constructor.
      *
      * @param User $owner
@@ -101,6 +111,7 @@ class Report implements \JsonSerializable
         $this->updatedAt = new \DateTime();
         $this->items = new ArrayCollection();
         $this->shares = new ArrayCollection();
+        $this->downloads = new ArrayCollection();
     }
 
     /**
@@ -270,9 +281,47 @@ class Report implements \JsonSerializable
     }
 
     /**
+     * @return ReportDownload[]
+     */
+    public function getDownloads()
+    {
+        return $this->downloads;
+    }
+
+    /**
+     * @param ReportDownload $download
+     *
+     * @return Report
+     */
+    public function addDownload(ReportDownload $download)
+    {
+        if (!$this->downloads->contains($download)) {
+            $this->downloads->add($download);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return ReportDownload|null
+     */
+    public function getDownloadByUser(User $user)
+    {
+        foreach ($this->downloads as $download) {
+            if ($download->getUser()->getId() === $user->getId()) {
+                return $download;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return array
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'id' => $this->getId(),

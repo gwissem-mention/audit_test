@@ -3,23 +3,29 @@
 namespace HopitalNumerique\CartBundle\Controller\Front;
 
 use Doctrine\ORM\NoResultException;
-use HopitalNumerique\CartBundle\Domain\Command\DuplicateReportCommand;
-use HopitalNumerique\CartBundle\Domain\Command\RemoveSharingReportCommand;
-use HopitalNumerique\CartBundle\Domain\Command\SendReportCommand;
-use HopitalNumerique\CartBundle\Domain\Command\ShareReportCommand;
-use HopitalNumerique\CartBundle\Entity\ReportSharing;
-use HopitalNumerique\CartBundle\Exception\ReportAlreadySharedToUserException;
-use HopitalNumerique\CartBundle\Form\SendReportType;
-use HopitalNumerique\CartBundle\Security\ReportVoter;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CartBundle\Entity\Report;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use HopitalNumerique\CartBundle\Domain\Command\RemoveReportCommand;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use HopitalNumerique\CartBundle\Form\SendReportType;
+use HopitalNumerique\CartBundle\Security\ReportVoter;
+use HopitalNumerique\CartBundle\Entity\ReportSharing;
+use HopitalNumerique\CartBundle\Entity\ReportDownload;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CartBundle\Domain\Command\SendReportCommand;
+use HopitalNumerique\CartBundle\Domain\Command\ShareReportCommand;
+use HopitalNumerique\CartBundle\Domain\Command\RemoveReportCommand;
+use HopitalNumerique\CartBundle\Repository\ReportDownloadRepository;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use HopitalNumerique\CartBundle\Domain\Command\DuplicateReportCommand;
+use HopitalNumerique\CartBundle\Domain\Command\RemoveSharingReportCommand;
+use HopitalNumerique\CartBundle\Exception\ReportAlreadySharedToUserException;
 
+/**
+ * Class ReportController
+ */
 class ReportController extends Controller
 {
     /**
@@ -33,6 +39,17 @@ class ReportController extends Controller
             throw new AccessDeniedHttpException();
         }
 
+        /** @var ReportDownload|null $reportDownload */
+        $reportDownload = $this->get(ReportDownloadRepository::class)->findOneByReportAndUser($report, $this->getUser());
+
+        if (null === $reportDownload) {
+            $report->addDownload(new ReportDownload($report, $this->getUser()));
+        } else {
+            $reportDownload->updateDownloadDate();
+        }
+
+        $this->get('doctrine.orm.entity_manager')->flush();
+
         $response = new BinaryFileResponse($this->get('hopitalnumerique_cart.report_generator')->getReportFile($report));
 
         return $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, sprintf('%s.pdf', $report->getSlug()));
@@ -42,7 +59,7 @@ class ReportController extends Controller
      * @param Request $request
      * @param Report $report
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function sendReportAction(Request $request, Report $report)
     {
@@ -69,7 +86,7 @@ class ReportController extends Controller
     /**
      * @param Report $report
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function removeAction(Report $report)
     {
@@ -87,7 +104,7 @@ class ReportController extends Controller
      * @param Request $request
      * @param Report $report
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function duplicateAction(Request $request, Report $report)
     {
@@ -106,9 +123,10 @@ class ReportController extends Controller
 
     /**
      * @param Request $request
-     * @param Report $report
+     * @param Report  $report
+     * @param string  $type
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function shareAction(Request $request, Report $report, $type = ShareReportCommand::TYPE_COPY)
     {
@@ -131,6 +149,11 @@ class ReportController extends Controller
         return $this->redirectToRoute('account_cart');
     }
 
+    /**
+     * @param Report $report
+     *
+     * @return JsonResponse
+     */
     public function sharesDataAction(Report $report)
     {
         $shares = [];
@@ -159,7 +182,7 @@ class ReportController extends Controller
     /**
      * @param ReportSharing $reportSharing
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function removeSharingAction(ReportSharing $reportSharing)
     {
