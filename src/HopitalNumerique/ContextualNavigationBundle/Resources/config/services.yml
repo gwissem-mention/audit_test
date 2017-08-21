@@ -6,3 +6,15 @@ services:
             - '@hopitalnumerique_core.dependency_injection.entity'
         tags:
             - { name: twig.extension }
+
+    HopitalNumerique\ContextualNavigationBundle\Service\LostInformationRetriever:
+        class: HopitalNumerique\ContextualNavigationBundle\Service\LostInformationRetriever
+        arguments:
+            - '@hopitalnumerique_core.dependency_injection.entity'
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@hopitalnumerique_forum.repository.topic'
+            - '@hopitalnumerique_domaine.repository.domaine'
+            - '@autodiag.repository.autodiag'
+            - '@hopitalnumerique_reference.repository.reference'
+            - '@hopitalnumerique_user.repository.user'
+            - '%resource_domain_id%'
