@@ -59,7 +59,6 @@
                                 {{ '{{ else }}' }}
                                     {% set reportIsShared = false %}
                                 {{ '{{/report_is_shared}}' }}
-                                {{ dump(reportIsShared) }}
                                 {{ '{{#report_id}}' }}
                                 <input type="submit" name="{{ reportForm.submit.vars.full_name }}" class="btn btn-success" value="{{ 'form.fields.update.label'|trans|e }}" {% if reportIsShared == true %}onclick="apprise('Le rapport que vous vous apprêtez à modifier est partagé')"{% endif %}>
                                 <input type="submit" name="{{ reportForm.abort.vars.full_name }}" class="btn btn-danger abort" value="{{ 'form.fields.abort.label'|trans|e }}">

@@ -146,6 +146,7 @@
 
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
+    #publication #date-source a {color:black;}
 
 /* Liste ambassadeurs */
     #ambassadeurs{position: fixed; right:0; top:0; height: 100%; max-width: 33%}
