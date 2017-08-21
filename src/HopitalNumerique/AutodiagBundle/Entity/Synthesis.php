@@ -454,7 +454,7 @@ class Synthesis
     }
 
     /**
-     * @param mixed $createdFrom
+     * @param Synthesis $createdFrom
      *
      * @return Synthesis
      */

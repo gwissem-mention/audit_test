@@ -2,23 +2,29 @@
 
 namespace HopitalNumerique\CartBundle\Controller\Front;
 
-use HopitalNumerique\CartBundle\Domain\Command\GenerateReportCommand;
-use HopitalNumerique\CartBundle\Domain\Command\RemoveReportFactoryCommand;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\CartBundle\Form\ReportType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use HopitalNumerique\CartBundle\Security\ReportVoter;
 use HopitalNumerique\CartBundle\Entity\ReportFactory;
 use HopitalNumerique\CartBundle\Enum\ReportColumnsEnum;
-use HopitalNumerique\CartBundle\Form\ReportType;
-use HopitalNumerique\CartBundle\Security\ReportVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use HopitalNumerique\CartBundle\Domain\Command\GenerateReportCommand;
+use HopitalNumerique\CartBundle\Domain\Command\RemoveReportFactoryCommand;
 
+/**
+ * Class ReportFactoryController
+ */
 class ReportFactoryController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request       $request
      * @param ReportFactory $reportFactory
+     *
+     * @return RedirectResponse
      */
     public function editAction(Request $request, ReportFactory $reportFactory)
     {
@@ -51,6 +57,7 @@ class ReportFactoryController extends Controller
     public function getPendingReportFactoryAction()
     {
         $reportFactory = $this->get('hopitalnumerique_cart.repository.report_factory')->getStagingFactoryForUser($this->getUser());
+
         if (is_null($reportFactory)) {
             $reportFactory = new ReportFactory($this->getUser());
             $this->getDoctrine()->getManager()->persist($reportFactory);
@@ -90,6 +97,7 @@ class ReportFactoryController extends Controller
 
         $result['factoryItems'] = $this->get('hopitalnumerique_cart.builder.item')->buildForReportFactory($reportFactory);
         $result['columns'] = ReportColumnsEnum::getReportColumns($report);
+        $result['isShared'] = $report->getShares()->count() > 0;
 
         return new JsonResponse($result);
     }
