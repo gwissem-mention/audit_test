@@ -310,9 +310,8 @@
                 </div>
             </div>
         {% endif %}
-
         {% if contenu is defined %}
-            {% if contenu.objet.releaseDate or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
+            {% if contenu.objet.releaseDate or contenu.objet.dateModification or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
                     {% if contenu.objet.releaseDate %}
                         {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
@@ -326,7 +325,7 @@
                 </div>
             {% endif %}
         {% else %}
-            {% if objet.releaseDate or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
+            {% if objet.releaseDate or objet.dateModification or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
                     {% if objet.releaseDate %}
                         {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
