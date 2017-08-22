@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use Gedmo\Loggable\Entity\LogEntry;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -240,7 +241,12 @@ class ObjetController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
         $logs = $repo->getLogEntries($objet);
-        $updates = $this->get(ObjectUpdateRepository::class)->findBy(['object' => $objet]);
+
+        usort($logs, function (LogEntry $log1, LogEntry $log2) {
+            return $log1->getLoggedAt() < $log2->getLoggedAt();
+        });
+
+        $updates = $this->get(ObjectUpdateRepository::class)->findBy(['object' => $objet], ['updatedAt' => 'DESC']);
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', [
             'objet' => $objet,
