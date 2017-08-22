@@ -11,11 +11,12 @@ services:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours.class%
         arguments: ["@doctrine.orm.entity_manager"]
+
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class%
         arguments: ["@doctrine.orm.entity_manager"]
-    #RechercheParcours Détails
+
     hopitalnumerique_recherche_parcours.manager.matrise_user:
         class: %hopitalnumerique_recherche_parcours.manager.matrise_user.class%
         arguments: ["@doctrine.orm.entity_manager"]
@@ -34,6 +35,11 @@ services:
         arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", '@hopitalnumerique_core.dependency_injection.entity', "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }
+
+    hopitalnumerique_rechercheparcours.form.rechercheparcourshistory:
+        class: 'HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionHistory'
+        tags:
+            - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion_history }
 
     hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie:
         class: 'HopitalNumerique\RechercheParcoursBundle\DependencyInjection\ParcoursGuideLie'
@@ -110,6 +116,12 @@ services:
             arguments:
                 - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails'
 
+    hopitalnumerique_rechercheparcours.repository.recherche_parcours_history:
+                class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursHistoryRepository
+                factory: ["@doctrine.orm.entity_manager", "getRepository"]
+                arguments:
+                    - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory'
+
     hopitalnumerique_rechercheparcours.repository.recherche_parcours:
             class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursRepository
             factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -141,6 +153,17 @@ services:
             - '@session'
             - '@security.token_storage'
             - '@security.authorization_checker'
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.guided_search_history_writer:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryWriter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_history'
+
+    hopitalnumerique_rechercheparcours.guided_search_history_reader:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryReader
+        arguments:
             - '@doctrine.orm.entity_manager'
 
     hopitalnumerique_rechercheparcours.guided_search_step_retriever:

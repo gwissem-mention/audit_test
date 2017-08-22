@@ -82,6 +82,34 @@
 
                     {{ form_rest(form) }}
                 {{ form_end(form) }}
+
+                <p>
+                    <h2>{{ "edit.historique.title"|trans }}</h2>
+                    <div>
+                        {% if updates %}
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th width="100px">Date</th>
+                                    <th width="130px">Utilisateur</th>
+                                    <th width="50px">Notification</th>
+                                    <th width="200px">Motif</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for update in updates %}
+                                    <tr>
+                                        <td>{{ update.dateTime|date('d/m/Y H:i') }}</td>
+                                        <td>{{ update.username }}</td>
+                                        <td>{{ update.notify ? "edit.historique.yes"|trans : "edit.historique.no"|trans }}</td>
+                                        <td>{{ update.reason }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                </p>
             </div>
         </div>
     </div>

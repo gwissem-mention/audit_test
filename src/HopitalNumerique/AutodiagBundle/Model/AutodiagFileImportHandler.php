@@ -152,6 +152,20 @@ class AutodiagFileImportHandler
     }
 
     /**
+     * @param Autodiag $autodiag
+     * @param integer  $notify
+     * @param string   $reason
+     */
+    public function handleNotification(AutoDiag $autodiag, $notify, $reason)
+    {
+        // Save history
+        $user = $this->tokenStorage->getToken()->getUser();
+        $notification = History::createGeneralNotification($autodiag, $user, $notify, $reason);
+        $this->manager->persist($notification);
+        $this->manager->flush();
+    }
+
+    /**
      * @param AutodiagFileImport $model
      * @param DataImporter       $algorithmImporter
      */
@@ -168,7 +182,7 @@ class AutodiagFileImportHandler
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createAlgorithmImport($autodiag, $user, $model->getNotifyUpdate());
+            $history = History::createAlgorithmImport($autodiag, $user, $model->getNotifyUpdate(), $model->getUpdateReason());
             $this->manager->persist($history);
         }
 

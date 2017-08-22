@@ -4,6 +4,10 @@ list:
         production: Productions
         hot_point: Points durs
 
+notifications:
+    save:
+        message: La notification a été prise en compte
+
 title: Parcours guidé
 
 entry_point:
@@ -14,6 +18,10 @@ entry_point:
 edit:
     form:
         title: Informations
+    historique:
+        title: Historique
+        yes: Oui
+        no: Non
 
 step:
     objects:

@@ -29,6 +29,23 @@
 {% endblock %}
 
 {% block toolbarButton %}
+
+    <div class="notification-wrapper">
+        {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+        {{ form_start(form, {"attr": {"novalidate": "novalidate"}}) }}
+
+        <label>Notifier une mise à jour ? {% if lastNotification is not null %}<em>{{ 'object.last_update_notification'|trans({'%date%': lastNotification|date('d/m/Y')}) }}</em>{% endif %}</label>
+        <div class="update-reason-container hide">
+            {{ form_widget(form.reason) }}
+            {{ form_widget(form.go) }}
+        </div>
+        <div class="pull-right toggle toggle-success"></div>
+        {{ form_widget(form.notify_update) }}
+
+        {{ form_row(form._token) }}
+        {{ form_end(form) }}
+    </div>
+
     <a class="btn btn-default" href="{{ path('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion')}}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
 {% endblock %}
 
