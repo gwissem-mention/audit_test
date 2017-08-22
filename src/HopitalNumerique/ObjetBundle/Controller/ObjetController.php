@@ -560,48 +560,49 @@ class ObjetController extends Controller
 
                     $objet->setDateModification(new \DateTime());
 
-                    //Récupération des consultations
-                    $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getConultationsByObjet(
-                        $objet
-                    );
-
-                    $mails = [];
-
-                    if (count($objet->getDomaines()) != 1) {
-                        if (in_array(1, $objet->getDomainesId())) {
-                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')
-                                ->findOneBy(['id' => 1])
-                                ->getUrl()
-                            ;
-                        }
-                    } else {
-                        $domaineUrl = $objet->getDomaines()[0]->getUrl();
-                    }
-
-                    /** @var Consultation $consultation */
-                    foreach ($consultations as $consultation) {
-                        $user = $consultation->getUser();
-
-                        if (!$user || !$user->getNotficationRequete()) {
-                            continue;
-                        }
-
-                        $options = [
-                            'titrepublication' => $objet->getTitre(),
-                            'lienpublication' => '<a href="' . $domaineUrl . $this->generateUrl(
-                                'hopital_numerique_publication_publication_objet',
-                                [
-                                    'id' => $objet->getId(),
-                                    'alias' => $objet->getAlias(),
-                                ]
-                            ) . '" >Lien vers la publication</a>',
-                        ];
-                        $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options);
-                    }
-
-                    foreach ($mails as $mail) {
-                        $this->get('mailer')->send($mail);
-                    }
+                    // @NPI 08/17 : Cette partie va être remplacée par les évolutions du lot BC05.
+                    ////Récupération des consultations
+                    //$consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getConultationsByObjet(
+                    //    $objet
+                    //);
+                    //
+                    //$mails = [];
+                    //
+                    //if (count($objet->getDomaines()) != 1) {
+                    //    if (in_array(1, $objet->getDomainesId())) {
+                    //        $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')
+                    //            ->findOneBy(['id' => 1])
+                    //            ->getUrl()
+                    //        ;
+                    //    }
+                    //} else {
+                    //    $domaineUrl = $objet->getDomaines()[0]->getUrl();
+                    //}
+                    //
+                    ///** @var Consultation $consultation */
+                    //foreach ($consultations as $consultation) {
+                    //    $user = $consultation->getUser();
+                    //
+                    //    if (!$user || !$user->getNotficationRequete()) {
+                    //        continue;
+                    //    }
+                    //
+                    //    $options = [
+                    //        'titrepublication' => $objet->getTitre(),
+                    //        'lienpublication' => '<a href="' . $domaineUrl . $this->generateUrl(
+                    //            'hopital_numerique_publication_publication_objet',
+                    //            [
+                    //                'id' => $objet->getId(),
+                    //                'alias' => $objet->getAlias(),
+                    //            ]
+                    //        ) . '" >Lien vers la publication</a>',
+                    //    ];
+                    //    $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options);
+                    //}
+                    //
+                    //foreach ($mails as $mail) {
+                    //    $this->get('mailer')->send($mail);
+                    //}
                 }
 
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)

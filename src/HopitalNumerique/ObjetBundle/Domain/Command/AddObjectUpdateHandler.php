@@ -33,6 +33,7 @@ class AddObjectUpdateHandler
         $objectUpdate = new ObjectUpdate();
 
         $objectUpdate->setObject($command->object);
+        $objectUpdate->setContenu($command->contenu);
         $objectUpdate->setUser($command->user);
         $objectUpdate->setReason($command->reason);
 

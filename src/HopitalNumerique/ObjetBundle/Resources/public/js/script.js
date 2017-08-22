@@ -159,20 +159,23 @@ $(document).ready(function() {
     //recharge le sommaire (et donc la page) on affiche un loader
     $('.reloadContenu').on('click',function(){
         var loader = $('body').nodevoLoader().start();
-    })
+    });
 
     //Toggle notif mise à jour
-    $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
-        if (active) {
-            $('.update-reason-container').removeClass('hide');
-            $('#hopitalnumerique_objet_objet_reason').val();
-            $('#hopitalnumerique_objet_objet_modified').val('1');
-        } else {
-            $('.update-reason-container').addClass('hide');
-            $('#hopitalnumerique_objet_objet_reason').val('');
-            $('#hopitalnumerique_objet_objet_modified').val(0);
-        }
+    $(document).on( "manageToggles", function() {
+        $('.toggle').toggles({on: false, text: {on: 'OUI', off: 'NON'}}).on('toggle', function (e, active) {
+            if (active) {
+                $('.update-reason-container').removeClass('hide');
+                $('#hopitalnumerique_objet_objet_reason').val();
+                $('#hopitalnumerique_objet_objet_modified').val('1');
+            } else {
+                $('.update-reason-container').addClass('hide');
+                $('#hopitalnumerique_objet_objet_reason').val('');
+                $('#hopitalnumerique_objet_objet_modified').val(0);
+            }
+        });
     });
+    $(document).trigger('manageToggles');
 
     var $releaseDatefield = $('#hopitalnumerique_objet_objet_releaseDate');
     var $relevanceCheckbox = $('#release-date-relevance');
@@ -256,6 +259,8 @@ function selectChapitre( id, url )
             $('#edition-infradox .infradoc').val( id );
             loader.finished();
             $('.select2').select2();
+            $(document).trigger('manageToggles');
+            $('form[name="hopitalnumerique_objet_contenu"]').validationEngine();
             fillRelatedProductionsList(url);
         }
     });
@@ -298,44 +303,51 @@ function saveAutomatique()
 //Enregistre le contenu de la fancybox
 function saveContenu()
 {
-    idContenu = $('#contenu-id').val();
-    treeItem = "#tree-item-" + idContenu;
-    itemOrder = $(treeItem).data('order');
-    var loader = $('#edition-infradox').nodevoLoader().start();
+    if ($('form[name="hopitalnumerique_objet_contenu"]').validationEngine('validate')) {
+        idContenu = $('#contenu-id').val();
+        treeItem = "#tree-item-" + idContenu;
+        itemOrder = $(treeItem).data('order');
+        var loader = $('#edition-infradox').nodevoLoader().start();
 
-    $.ajax({
-        url  : $('#save-contenu-url').val(),
-        data : {
-            id       : idContenu,
-            titre    : $('#hopitalnumerique_objet_contenu_titre').val(),
-            alias    : $('#hopitalnumerique_objet_contenu_alias').val(),
-            notify   : $('#hopitalnumerique_objet_contenu_modified').val(),
-            contenu  : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
-            types    : $('#hopitalnumerique_objet_contenu_types').val(),
-            objets   : $('#hopitalnumerique_objet_contenu_objets').val(),
-            domaines : $('#hopitalnumerique_objet_contenu_domaines').val()
-        },
-        type     : 'POST',
-        dataType : 'json',
-        success  : function( data ){
-            if( data.success ){
-                selectChapitre( idContenu, $('#contenu-' + idContenu + ' > .dd3-content a').data('url'));
-                $('#contenu-' + idContenu + ' > .dd3-content a').html(itemOrder + ' ' + data.titre);
-                console.log(data.contenu);
-            }else{
-                if(data.alias)
-                    $('.errorAlias .help-block p').html('L\'alias doit être unique.');
-                else
-                    $('.errorAlias .help-block p').html('');
+        $.ajax({
+            url: $('#save-contenu-url').val(),
+            data: {
+                id: idContenu,
+                titre: $('#hopitalnumerique_objet_contenu_titre').val(),
+                alias: $('#hopitalnumerique_objet_contenu_alias').val(),
+                notify: $('#hopitalnumerique_objet_contenu_modified').val(),
+                reason: $('#hopitalnumerique_objet_contenu_reason').val(),
+                contenu: tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
+                types: $('#hopitalnumerique_objet_contenu_types').val(),
+                objets: $('#hopitalnumerique_objet_contenu_objets').val(),
+                domaines: $('#hopitalnumerique_objet_contenu_domaines').val()
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    selectChapitre(idContenu, $('#contenu-' + idContenu + ' > .dd3-content a').data('url'));
+                    $('#contenu-' + idContenu + ' > .dd3-content a').html(itemOrder + ' ' + data.titre);
+                } else {
+                    if (data.alias)
+                        $('.errorAlias .help-block p').html('L\'alias doit être unique.');
+                    else
+                        $('.errorAlias .help-block p').html('');
 
-                if(data.titre)
-                    $('.errorTitre .help-block p').html('Le titre ne peut être vide.');
-                else
-                    $('.errorTitre .help-block p').html('');
+                    if (data.titre)
+                        $('.errorTitre .help-block p').html('Le titre ne peut être vide.');
+                    else
+                        $('.errorTitre .help-block p').html('');
+
+                    if (data.reason)
+                        $('.errorReason .help-block p').html('La raison de la mise à jour ne peut être vide.');
+                    else
+                        $('.errorReason .help-block p').html('');
+                }
+                loader.finished();
             }
-            loader.finished();
-        }
-    });
+        });
+    }
 }
 
 //Supprime le contenu en cours de visualisation

@@ -93,6 +93,13 @@ class ContenuType extends AbstractType
             ->add('modified', HiddenType::class, [
                 'mapped' => false,
             ])
+            ->add('reason', TextType::class, [
+                'mapped' => false,
+                'attr' => [
+                    'placeholder' => 'Raison de la mise à jour',
+                    'class' => 'validate[required]',
+                ],
+            ])
             ->add('objets', ChoiceType::class, $objetsOptions)
             ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',

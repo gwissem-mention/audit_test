@@ -311,13 +311,13 @@
             </div>
         {% endif %}
         {% if contenu is defined %}
-            {% if contenu.objet.releaseDate or contenu.objet.dateModification or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
+            {% if contenu.dateCreation or contenu.dateModification or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
-                    {% if contenu.objet.releaseDate %}
-                        {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
+                    {% if contenu.dateCreation %}
+                        {{ 'object.release_date'|trans({'%date%': contenu.dateCreation|date('d/m/Y')}) }}<br/>
                     {% endif %}
-                    {% if contenu.objet.dateModification %}
-                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': contenu.objet.id}) }}" style="cursor: pointer;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': contenu.objet.dateModification|date('d/m/Y')}) }}</a><br/>
+                    {% if contenu.dateModification %}
+                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': contenu.objet.id}) }}" style="cursor: pointer;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': contenu.dateModification|date('d/m/Y')}) }}</a><br/>
                     {% endif %}
                     {% if contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument %}
                         Source du document : {{contenu.objet.fichierModifiable.sourceDocument}}

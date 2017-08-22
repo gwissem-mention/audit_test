@@ -30,6 +30,15 @@ class ObjectUpdate
      */
     protected $object;
 
+
+    /**
+     * @var Contenu
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Contenu", cascade={"persist"})
+     * @ORM\JoinColumn(referencedColumnName="con_id")
+     */
+    protected $contenu;
+
     /**
      * @var User
      *
@@ -76,6 +85,26 @@ class ObjectUpdate
     public function setObject($object)
     {
         $this->object = $object;
+
+        return $this;
+    }
+
+    /**
+     * @return Contenu
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+
+    /**
+     * @param Contenu $contenu
+     *
+     * @return ObjectUpdate
+     */
+    public function setContenu($contenu)
+    {
+        $this->contenu = $contenu;
 
         return $this;
     }

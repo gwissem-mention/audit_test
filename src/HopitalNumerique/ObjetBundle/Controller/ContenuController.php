@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler;
+use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateCommand;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\HttpFoundation\Response;
@@ -272,6 +274,7 @@ class ContenuController extends Controller
             $alias = $request->request->get('alias');
             $content = $request->request->get('contenu');
             $notify = $request->request->get('notify');
+            $reason = $request->request->get('reason');
 
             $types = $this->get('request')->request->get('types');
             if ('' != $types) {
@@ -319,7 +322,13 @@ class ContenuController extends Controller
 
             //error si le titre est vide
             if ($titre == '') {
-                return new Response('{"success":false,"titre":true,"alias":false}', 200);
+                return new Response('{"success":false,"reason":false,"titre":true,"alias":false}', 200);
+            }
+
+            // Erreur si notification cochée mais aucune description saisie
+            //error si le titre est vide
+            if ('1' === $notify && '' === trim($reason)) {
+                return new Response('{"success":false,"titre":true,"alias":false,"reason":false}', 200);
             }
 
             //set Form datas
@@ -327,6 +336,15 @@ class ContenuController extends Controller
             $contenu->setContenu($content);
 
             if ($notify === '1') {
+                $addObjectUpdateCommand = new AddObjectUpdateCommand(
+                    $contenu->getObjet(),
+                    $this->getUser(),
+                    $reason,
+                    $contenu
+                );
+
+                $this->get(AddObjectUpdateHandler::class)->handle($addObjectUpdateCommand);
+
                 $contenu->setDateModification(new \DateTime());
             }
 
@@ -336,7 +354,7 @@ class ContenuController extends Controller
 
             //check if alias exist in this object
             if ($this->get('hopitalnumerique_objet.manager.contenu')->countAlias($contenu, $alias) >= 1) {
-                return new Response('{"success":false,"titre":false,"alias":true}', 200);
+                return new Response('{"success":false,"reason":false,"titre":false,"alias":true}', 200);
             }
 
             //save
