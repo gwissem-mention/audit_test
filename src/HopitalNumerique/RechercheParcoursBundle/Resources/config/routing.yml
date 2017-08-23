@@ -34,6 +34,14 @@ hopital_numerique_recherche_parcours_save:
     requirements:
         rechercheParcours: '\d+'
 
+hopital_numerique_recherche_parcours_savenotification:
+    pattern: '/admin/recherche-par-parcours/saveNotification/{rechercheParcoursGestion}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:saveNotification', _format: json }
+    methods: 'POST'
+    condition: "request.isXmlHttpRequest()"
+    requirements:
+        rechercheParcoursGestion: '\d+'
+
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index:
     pattern:  /admin/recherche-par-parcours/{id}/details

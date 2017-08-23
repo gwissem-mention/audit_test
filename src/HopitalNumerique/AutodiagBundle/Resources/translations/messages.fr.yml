@@ -79,6 +79,9 @@ ad:
         edit:
             generique: Informations génériques
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
+            history: Historique
+            yes: Oui
+            no: Non
         path:
             fill: 1. Remplir le questionnaire
             results: 2. Voir mon résultat

@@ -3,8 +3,8 @@
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Autodiag;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,13 +24,14 @@ class FileImportType extends AbstractType
             ->add('file', FileType::class, [
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('notify_update', CheckboxType::class, [
-                'required' => false,
+            ->add('notify_update', HiddenType::class, [
+                'mapped' => false,
             ])
-            ->add('update_reason', TextType::class, [
+            ->add('reason', TextType::class, [
+                'mapped' => false,
                 'attr' => [
-                    'class' => 'validate[required]',
                     'placeholder' => 'ad.autodiag.import.update_reason',
+                    'class' => 'validate[required]',
                 ],
             ])
         ;
