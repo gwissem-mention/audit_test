@@ -130,8 +130,7 @@ class AutodiagController extends Controller
                     $importHandler->handleSurveyImport(
                         $import,
                         $this->get('autodiag.import.chapter'),
-                        $this->get('autodiag.import.question'),
-                        $form->getData()->getNotifyUpdate()
+                        $this->get('autodiag.import.question')
                     );
 
                     $this->get('autodiag.score_calculator')->defetAutodiagScore($autodiag);
