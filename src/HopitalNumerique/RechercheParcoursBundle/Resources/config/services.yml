@@ -159,12 +159,12 @@ services:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryWriter
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_history'
 
     hopitalnumerique_rechercheparcours.guided_search_history_reader:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryReader
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_history'
 
     hopitalnumerique_rechercheparcours.guided_search_step_retriever:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepRetriever
