@@ -5,7 +5,6 @@ namespace HopitalNumerique\RechercheParcoursBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory;
-use HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursHistoryRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 
 class GuidedSearchHistoryWriter
@@ -16,20 +15,13 @@ class GuidedSearchHistoryWriter
     protected $entityManager;
 
     /**
-     * @var RechercheParcoursHistoryRepository $historyRepository
-     */
-    protected $historyRepository;
-
-    /**
      * GuidedSearchRetriever constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param RechercheParcoursHistoryRepository $historyRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, RechercheParcoursHistoryRepository $historyRepository)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->historyRepository = $historyRepository;
     }
 
     /**
@@ -49,10 +41,5 @@ class GuidedSearchHistoryWriter
         $history->setReason($reason);
         $this->entityManager->persist($history);
         $this->entityManager->flush();
-    }
-
-    public function lastNotification(RechercheParcoursGestion $parcoursGestion)
-    {
-        return $this->historyRepository->getNewest($parcoursGestion);
     }
 }
