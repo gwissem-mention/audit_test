@@ -498,6 +498,8 @@ class UserController extends Controller
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
+        ini_set('memory_limit', '2048M');
+
         //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
