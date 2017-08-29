@@ -5,7 +5,9 @@ namespace HopitalNumerique\RechercheParcoursBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory;
+use HopitalNumerique\RechercheParcoursBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\RechercheParcoursBundle\Event\GuidedSearchUpdatedEvent;
 
 class GuidedSearchHistoryWriter
 {
@@ -41,5 +43,13 @@ class GuidedSearchHistoryWriter
         $history->setReason($reason);
         $this->entityManager->persist($history);
         $this->entityManager->flush();
+
+        if ('1' === $notify) {
+            /**
+             * Fire 'GUIDED_SEARCH_UPDATED' event
+             */
+            $event = new GuidedSearchUpdatedEvent($parcoursGestion, $reason);
+            $this->get('event_dispatcher')->dispatch(Events::GUIDED_SEARCH_UPDATED, $event);
+        }
     }
 }

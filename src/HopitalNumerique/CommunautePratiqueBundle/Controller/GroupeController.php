@@ -162,13 +162,14 @@ class GroupeController extends Controller
      */
     public function validInscriptionAction(Groupe $groupe)
     {
+        /** @var User $user */
         $user = $this->getUser();
 
         if (null !== $user && !$user->hasCommunautePratiqueGroupe($groupe)) {
             if (count($this->get('hopitalnumerique_questionnaire.manager.reponse')
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0
             ) {
-                $user->addCommunautePratiqueGroupe($groupe);
+                $inscription = $user->addCommunautePratiqueGroupe($groupe);
                 $this->get('hopitalnumerique_user.manager.user')->save($user);
                 $this->addFlash('success', 'Votre inscription sera activée prochainement par un animateur.');
                 // Envoi du mail d'alert pour les animateurs

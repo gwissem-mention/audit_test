@@ -4,6 +4,8 @@ namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
+use HopitalNumerique\RechercheParcoursBundle\Event\GuidedSearchUpdatedEvent;
+use HopitalNumerique\RechercheParcoursBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,10 +56,14 @@ class RechercheParcoursController extends Controller
      */
     public function saveNotificationAction(Request $request, RechercheParcoursGestion $rechercheParcoursGestion)
     {
-        $service = $this->get('hopitalnumerique_rechercheparcours.guided_search_history_writer');
         $notify = $request->get('update_notify');
         $reason = $request->get('reason');
-        $service->create($rechercheParcoursGestion, $this->getUser(), $notify, $reason);
+        $this->get('hopitalnumerique_rechercheparcours.guided_search_history_writer')->create(
+            $rechercheParcoursGestion,
+            $this->getUser(),
+            $notify,
+            $reason
+        );
 
         $message = $this->get('translator')->trans('notifications.save.message', [], 'guided_search');
 

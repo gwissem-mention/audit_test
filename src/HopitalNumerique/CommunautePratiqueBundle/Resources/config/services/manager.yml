@@ -4,6 +4,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@nodevo_mail.manager.mail'
+            - '@event_dispatcher'
 
     hopitalnumerique_communautepratique.manager.document:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\DocumentManager"
@@ -15,7 +16,9 @@ services:
 
     hopitalnumerique_communautepratique.manager.groupe:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager"
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     hopitalnumerique_communautepratique.manager.groupe.inscription:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeInscriptionManager"

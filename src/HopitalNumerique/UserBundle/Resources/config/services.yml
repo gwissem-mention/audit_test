@@ -49,6 +49,7 @@ services:
             - "@hopitalnumerique_domaine.manager.domaine"
             - '@hopitalnumerique_paiement.manager.remboursement'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@event_dispatcher'
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%

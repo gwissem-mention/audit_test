@@ -55,6 +55,12 @@ services:
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche'
 
+    HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription'
+
     hopitalnumerique_communautepratique.widgets.cdp_widget:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Widget\DashboardWidget
         tags:

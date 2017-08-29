@@ -13,4 +13,14 @@ final class Events
      * The event listener receives an Numerique\ObjetBundle\Entity\Objet instance.
      */
     const OBJET_DOWNLOAD_SUCCESS = 'objet_download_success';
+
+    /**
+     * This event occurs when a publication or a publication part is updated.
+     */
+    const PUBLICATION_NOTIFIED = 'publication_notified';
+
+    /**
+     * This event occurs when a publication or a publication part is commented.
+     */
+    const PUBLICATION_COMMENTED = 'publication_commented';
 }

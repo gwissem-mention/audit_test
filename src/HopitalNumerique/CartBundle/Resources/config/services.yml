@@ -54,6 +54,7 @@ services:
             - '@hopitalnumerique_cart.repository.cart_item'
             - '@doctrine.orm.entity_manager'
             - '@hopitalnumerique_cart.report_generator'
+            - '@event_dispatcher'
 
     hopitalnumerique_cart.remove_report_factory_command_handler:
         class: HopitalNumerique\CartBundle\Domain\Command\RemoveReportFactoryCommandHandler

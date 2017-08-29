@@ -2487,17 +2487,18 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
-     * Add communautePratiqueGroupe.
+     * Adds a practice community group to user and returns the new 'Inscription' object.
      *
-     * @param Groupe $communautePratiqueGroupe
+     * @param Groupe $group
      *
-     * @return User
+     * @return Inscription
      */
-    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe)
+    public function addCommunautePratiqueGroupe(Groupe $group)
     {
-        $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
+        $register = new Inscription($group, $this);
+        $this->addCommunautePratiqueGroupeInscription($register);
 
-        return $this;
+        return $register;
     }
 
     /**

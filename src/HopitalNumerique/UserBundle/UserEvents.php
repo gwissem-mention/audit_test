@@ -51,4 +51,9 @@ final class UserEvents
      * @var string
      */
     const TOKEN_DELETED = 'user.token_deleted';
+
+    /**
+     * The USER_ROLE_UPDATED occurs when a user is created or when the role of a user is modified.
+     */
+    const USER_ROLE_UPDATED = 'user.role_updated';
 }
