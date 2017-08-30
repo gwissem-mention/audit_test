@@ -1,0 +1,11 @@
+notification_config:
+    publication:
+        section_title: RESSOURCES
+        publication_notified:
+            description: Mise à jour d'une publication
+            title: Titre de la publication
+            detail: Contenu de la mise à jour
+        publication_commented:
+            description: Nouveau commentaire sur une publication
+            title: Nom de la ressource
+            detail: Début du commentaire

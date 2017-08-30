@@ -31,4 +31,22 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * Returns practice community groups of given user.
+     *
+     * @param User $user
+     *
+     * @return Groupe[]
+     */
+    public function getUserGroups(User $user)
+    {
+        $query = $this->createQueryBuilder('inscription');
+        $query
+            ->andWhere('inscription.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $query->getQuery()->getResult();
+    }
 }

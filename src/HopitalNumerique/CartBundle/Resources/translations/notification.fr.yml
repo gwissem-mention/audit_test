@@ -1,0 +1,19 @@
+notification_config:
+    report:
+        section_title: RAPPORTS
+        report_updated:
+            description: Modification d'un rapport partagé par ou avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a modifié le rapport
+        report_shared_for_me:
+            description: Partage d'un nouveau rapport avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé son rapport avec moi
+        report_shared_for_other:
+            description: Partage d'un rapport avec d'autres utilisateurs
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé le rapport, nom de l'utilisateur avec qui il a été partagé
+        report_copied_for_me:
+            description: Copie d'un nouveau rapport pour moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a copié son rapport pour moi

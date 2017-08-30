@@ -1,0 +1,11 @@
+notification_config:
+    forum:
+        section_title: FORUM
+        forum_post_created:
+            description: Nouveau message dans une discussion
+            title: Nom du fil + début du message
+            detail: -
+        forum_topic_created:
+            description: Nouvelle discussion
+            title: Nom du thème + nom du fil + début du premier message
+            detail: -

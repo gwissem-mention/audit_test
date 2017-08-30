@@ -1,0 +1,7 @@
+notification_config:
+    anap_suggestion:
+        section_title: SUGGESTIONS DE L'ANAP
+        coming_training_sessions:
+            description: Prochaines sessions de montée en compétence dans les 3 mois à venir
+            title: Nom du module + date de la session
+            detail: Description de la session + nom du formateur

@@ -230,16 +230,16 @@ services:
             - { name: form.type }
 
     hopitalnumerique_user.repository.user:
-            class: HopitalNumerique\UserBundle\Repository\UserRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\UserBundle\Entity\User'
+        class: HopitalNumerique\UserBundle\Repository\UserRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\User'
 
     hopitalnumerique_user.repository.token:
-            class: HopitalNumerique\UserBundle\Repository\TokenRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\UserBundle\Entity\Token'
+        class: HopitalNumerique\UserBundle\Repository\TokenRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\Token'
 
     hopitalnumerique_user.repository.contractualisation:
         class: HopitalNumerique\UserBundle\Repository\ContractualisationRepository
@@ -248,11 +248,11 @@ services:
             - 'HopitalNumerique\UserBundle\Entity\Contractualisation'
 
     hopitalnumerique_user.token.token_storage:
-            class: HopitalNumerique\UserBundle\Service\TokenStorage
-            arguments:
-                - '@hopitalnumerique_user.repository.token'
-                - '@doctrine.orm.entity_manager'
-                - '@event_dispatcher'
+        class: HopitalNumerique\UserBundle\Service\TokenStorage
+        arguments:
+            - '@hopitalnumerique_user.repository.token'
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
     hopitalnumerique_user.update_user_parameters.command_handler:
         class: HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler
@@ -283,3 +283,17 @@ services:
         class: HopitalNumerique\UserBundle\Service\ShareMessageGenerator
         arguments:
             - '@translator'
+
+    HopitalNumerique\UserBundle\Service\Notification\UserRoleUpdatedNotificationProvider:
+        class: HopitalNumerique\UserBundle\Service\Notification\UserRoleUpdatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+        tags:
+            - { name: notification.notification_aggregator, key: user_role_updated }
+
+    HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener:
+        class: HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: user.role_updated }

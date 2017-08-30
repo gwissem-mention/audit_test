@@ -1,0 +1,3 @@
+services:
+    notification.aggregator:
+        class: HopitalNumerique\NotificationBundle\Service\Notification

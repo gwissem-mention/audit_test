@@ -1,0 +1,7 @@
+notification_config:
+    resource_user:
+        section_title: PERSONNES RESSOURCES
+        user_role_updated:
+            description: Nouvelle personne ressource dans ma région
+            title: Prénom + nom de la personne
+            detail: -

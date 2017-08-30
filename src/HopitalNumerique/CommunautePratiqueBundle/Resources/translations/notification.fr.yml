@@ -1,0 +1,27 @@
+notification_config:
+    practice_community:
+        section_title: COMMUNAUTE DE PRATIQUE
+        practice_community_group_comment_created:
+            description: Nouveau commentaire dans un de mes groupes
+            title: Nom du groupe + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_form_comment_created:
+            description: Nouveau commentaire sur une fiche d'un de mes groupes
+            title: Nom du groupe + nom de la fiche + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_group_document_created:
+            description: Nouveau document dans un de mes groupes
+            title: Nom du groupe + nom du fichier + auteur
+            detail: -
+        practice_community_group_user_joined:
+            description: Nouvelle personne dans un de mes groupes
+            title: Nom du groupe + nom de la personne
+            detail: -
+        practice_community_group_created:
+            description: Nouveau groupe dans la communauté
+            title: Nom du groupe
+            detail: Description du groupe + date de démarrage
+        practice_community_user_joined:
+            description: Nouvelles personnes dans la commuauté
+            title: Nom de la personne + nom du/des groupe/s de la personne
+            detail: -

@@ -8,6 +8,7 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory;
 use HopitalNumerique\RechercheParcoursBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Event\GuidedSearchUpdatedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class GuidedSearchHistoryWriter
 {
@@ -17,13 +18,19 @@ class GuidedSearchHistoryWriter
     protected $entityManager;
 
     /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * GuidedSearchRetriever constructor.
      *
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -49,7 +56,7 @@ class GuidedSearchHistoryWriter
              * Fire 'GUIDED_SEARCH_UPDATED' event
              */
             $event = new GuidedSearchUpdatedEvent($parcoursGestion, $reason);
-            $this->get('event_dispatcher')->dispatch(Events::GUIDED_SEARCH_UPDATED, $event);
+            $this->eventDispatcher->dispatch(Events::GUIDED_SEARCH_UPDATED, $event);
         }
     }
 }

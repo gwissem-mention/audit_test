@@ -2,9 +2,11 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
@@ -81,5 +83,50 @@ class GuidedSearchRepository extends EntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Updates guided search update date.
+     *
+     * @param GuidedSearch $guidedSearch
+     *
+     * @return GuidedSearchRepository
+     */
+    public function touch(GuidedSearch $guidedSearch)
+    {
+        $guidedSearch->setUpdatedAt();
+        $this->_em->persist($guidedSearch);
+        $this->_em->flush($guidedSearch);
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the latest updated date among all guided searches found for a user and a 'parcoursGestion'.
+     *
+     * @param User                     $user
+     * @param RechercheParcoursGestion $parcoursGestion
+     *
+     * @return string|null Latest date
+     */
+    public function getUserLatestUpdateDate(User $user, RechercheParcoursGestion $parcoursGestion)
+    {
+        return $this->createQueryBuilder('guidedSearch')
+            ->select('MAX(guidedSearch.updatedAt)')
+            ->innerJoin(
+                RechercheParcours::class,
+                'rech_parcours',
+                Join::WITH,
+                'rech_parcours.id = guidedSearch.guidedSearchReference'
+            )
+            ->innerJoin(
+                RechercheParcoursGestion::class,
+                'rech_parcours_gest',
+                Join::WITH,
+                'rech_parcours.recherchesParcoursGestion = rech_parcours_gest.id AND rech_parcours_gest.id = :parcGest'
+            )
+            ->where('guidedSearch.owner = :user')
+            ->setParameters(['user' => $user, 'parcGest' => $parcoursGestion])
+            ->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 }

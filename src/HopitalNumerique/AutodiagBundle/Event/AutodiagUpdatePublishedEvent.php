@@ -6,9 +6,9 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AutodiagUpdatedEvent.
+ * Class AutodiagUpdatePublishedEvent.
  */
-class AutodiagUpdatedEvent extends Event
+class AutodiagUpdatePublishedEvent extends Event
 {
 
     /**
@@ -22,7 +22,7 @@ class AutodiagUpdatedEvent extends Event
     protected $reason;
 
     /**
-     * AutodiagUpdatedEvent constructor.
+     * AutodiagUpdatePublishedEvent constructor.
      *
      * @param Autodiag $autodiag
      * @param string   $reason
