@@ -3,6 +3,7 @@
 namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\ObjetBundle\Entity\Note;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -1403,5 +1404,38 @@ class MailManager extends BaseManager
         $email = $this->sendMail($objet, $expediteur, $destinataire, $message);
 
         $this->mailer->send($email);
+    }
+
+    /**
+     * @param Note $note
+     */
+    public function sendNoteCommentaire(Note $note)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_NOTED_COMMENT);
+        $options = [
+            'urlDocument' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                'id' => $note->getObjet()->getId(),
+            ], RouterInterface::ABSOLUTE_URL),
+            'note' => $note->getNote(),
+            'comment' => $note->getComment(),
+            'nomUtilisateur' => $note->getUser()->getLastname(),
+            'prenomUtilisateur' => $note->getUser()->getFirstname(),
+            'subjectdomain' => $this->getDomaineSubjet(),
+        ];
+
+        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
+        $from = [$expediteurMail => $expediteurName];
+
+        $mailsToSend = $this->sendMail(
+            $mail->getObjet(),
+            $from,
+            $this->getMailDomaine(),
+            $content
+        );
+
+        $this->mailer->send($mailsToSend);
     }
 }
