@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Form\NoteCommentaireType;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,23 +18,31 @@ class NoteController extends Controller
      * Ajout d'une note en AJAX ou modification d'une existante.
      *
      * @param Request $request
+     * 
+     * @return Response
      */
     public function addAction(Request $request)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new Response(null, 403);
+        }
         $entityId = $request->request->getInt('objetId');
         $noteValeur = $request->request->getInt('note');
+        $commentValue = $request->request->get('comment');
 
         if ('1' === $request->request->get('isContenu')) {
             $this->container->get('hopitalnumerique_objet.doctrine.note_saver')->saveNoteForContenu(
                 $noteValeur,
                 $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId),
-                $this->getUser()
+                $this->getUser(),
+                $commentValue
             );
         } else { // Objet
             $this->container->get('hopitalnumerique_objet.doctrine.note_saver')->saveNoteForObjet(
                 $noteValeur,
                 $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId),
-                $this->getUser()
+                $this->getUser(),
+                $commentValue
             );
         }
 
@@ -44,6 +53,8 @@ class NoteController extends Controller
      * Calcul de la note moyenne en AJAX d'un objet.
      *
      * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function calculNoteMoyenneAction(Request $request)
     {
@@ -83,6 +94,8 @@ class NoteController extends Controller
      * Suppression de la note de l'utilisateur courant pour un objet donné (click sur reset note).
      *
      * @param Request $request
+     *
+     * @return Response
      */
     public function deleteNoteAction(Request $request)
     {
