@@ -214,7 +214,7 @@
                             <div id="bloc-notation-moyenne-objet" class="hidden-pdf">
                                 <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                                 <div class="bloc-star">
-                                    <div class="" id="note-moyenne-etoile"></div>
+                                    <div class="" id="note-moyenne-etoile" data-rateit-readonly="{{ is_granted('IS_AUTHENTICATED_FULLY') ? 'false' : 'true' }}" data-url="{{ path('hopital_numerique_publication_note_add_comment') }}" data-title="{{ 'popin.comment.title'|trans }}" data-error="{{ 'popin.comment.error'|trans }}" ></div>
                                 </div>
                                 <div id="info-note-moyenne"></div>
                             </div>

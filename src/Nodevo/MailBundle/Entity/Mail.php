@@ -40,6 +40,9 @@ class Mail
     /** @var int Share email ID */
     const SHARE_SEARCH_EMAIL = 76;
 
+    /** @var int Mail ID of notation */
+    const MAIL_NOTED_COMMENT = 77;
+
     /**
      * @var int
      *

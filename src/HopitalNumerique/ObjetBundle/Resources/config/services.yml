@@ -144,7 +144,7 @@ services:
 
     hopitalnumerique_objet.doctrine.note_saver:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
-        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']
+        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note', '@event_dispatcher']
 
     hopitalnumerique_objet.repository.commentaire:
         class: HopitalNumerique\ObjetBundle\Repository\CommentaireRepository
@@ -298,3 +298,10 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\ObjectUpdate'
+
+    HopitalNumerique\ObjetBundle\EventListener\NotedSubscriber:
+        class: HopitalNumerique\ObjetBundle\EventListener\NotedSubscriber
+        arguments:
+            - '@nodevo_mail.manager.mail'
+        tags:
+            - { name: kernel.event_subscriber }
