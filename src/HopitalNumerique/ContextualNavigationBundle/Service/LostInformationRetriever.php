@@ -99,6 +99,7 @@ class LostInformationRetriever
         if (null !== $entityType && null !== $entityId) {
             $entity = $this->entityService->getEntityByTypeAndId($entityType, $entityId);
             $entityTitle = $this->entityService->getTitleByEntity($entity);
+            $entityUrl = $this->entityService->getFrontUrlByEntity($entity);
         }
 
         /** @var Domaine $resourceDomain */
@@ -139,6 +140,7 @@ class LostInformationRetriever
                 'random_publication' => $randomPublication,
             ],
             'entityTitle' => isset($entityTitle) ? $entityTitle : null,
+            'entityUrl' => isset($entityUrl) ? $entityUrl : null,
             'resourceDomain' => $resourceDomain,
             'randomAutodiag' => $randomAutodiag,
             'references' => $references,
