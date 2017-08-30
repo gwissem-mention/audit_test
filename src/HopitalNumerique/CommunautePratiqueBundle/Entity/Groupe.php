@@ -557,17 +557,18 @@ class Groupe
     }
 
     /**
-     * Add users.
+     * Adds a user to practice community group and returns new 'Inscription' object.
      *
-     * @param User $users
+     * @param User $user
      *
-     * @return Groupe
+     * @return Inscription
      */
-    public function addUser(User $users)
+    public function addUser(User $user)
     {
-        $this->addInscription(new Inscription($this, $users));
+        $register = new Inscription($this, $user);
+        $this->addInscription($register);
 
-        return $this;
+        return $register;
     }
 
     /**

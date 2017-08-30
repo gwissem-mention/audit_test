@@ -4,6 +4,8 @@ namespace HopitalNumerique\CartBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\CartBundle\Event\ReportEvent;
+use HopitalNumerique\CartBundle\Events;
 use HopitalNumerique\CartBundle\Repository\ReportItemRepository;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ReportGenerator;
 
@@ -77,6 +79,14 @@ class GenerateReportCommandHandler
         $this->entityManager->flush();
 
         $this->generateReport($report);
+
+        if ($report) {
+            /**
+             * Fire 'REPORT_UPDATED' event
+             */
+            $event = new ReportEvent($report);
+            $this->get('event_dispatcher')->dispatch(Events::REPORT_UPDATED, $event);
+        }
     }
 
     /**

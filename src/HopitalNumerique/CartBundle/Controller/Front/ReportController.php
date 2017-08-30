@@ -139,11 +139,17 @@ class ReportController extends Controller
 
         try {
             $this->get('hopitalnumerique_cart.share_report_command_handler')->handle($command);
-            $this->addFlash('success', $this->get('translator')->trans(sprintf('notification.shareReport.%s.success', $command->type), [], 'cart'));
+            $message = sprintf('notification.shareReport.%s.success', $command->type);
+            $this->addFlash('success', $this->get('translator')->trans($message, [], 'cart'));
+
+            $userService = $this->get('hopitalnumerique_user.repository.user');
+            $targetUser = $userService->findUserByEmail($command->targetEmail);
         } catch (NoResultException $e) {
-            $this->addFlash('danger', $this->get('translator')->trans('notification.shareReport.userNotFounded', [], 'cart'));
+            $message = 'notification.shareReport.userNotFounded';
+            $this->addFlash('danger', $this->get('translator')->trans($message, [], 'cart'));
         } catch (ReportAlreadySharedToUserException $e) {
-            $this->addFlash('danger', $this->get('translator')->trans('notification.shareReport.alreadyShared', [], 'cart'));
+            $message = 'notification.shareReport.alreadyShared';
+            $this->addFlash('danger', $this->get('translator')->trans($message, [], 'cart'));
         }
 
         return $this->redirectToRoute('account_cart');

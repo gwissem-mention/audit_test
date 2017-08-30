@@ -2,7 +2,12 @@
 
 namespace HopitalNumerique\ObjetBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\ObjetBundle\Entity\Commentaire;
+use HopitalNumerique\ObjetBundle\Events;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use HopitalNumerique\ObjetBundle\Event\PublicationCommentedEvent;
 
 /**
  * Manager de l'entité Commentaire.
@@ -10,6 +15,23 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class CommentaireManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ObjetBundle\Entity\Commentaire';
+
+    /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
+     * CommentaireManager constructor.
+     *
+     * @param EntityManager $em
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
+    {
+        parent::__construct($em);
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau.
@@ -82,5 +104,20 @@ class CommentaireManager extends BaseManager
 
         //save
         $this->em->flush();
+    }
+
+    /**
+     * @param $entity
+     */
+    public function save($entity)
+    {
+        /** @var Commentaire $entity */
+        parent::save($entity);
+
+        /**
+         * Fire 'PUBLICATION_COMMENTED' event
+         */
+        $event = new PublicationCommentedEvent($entity);
+        $this->get('event_dispatcher')->dispatch(Events::PUBLICATION_COMMENTED, $event);
     }
 }

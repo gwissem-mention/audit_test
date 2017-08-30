@@ -3,7 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle;
 
 /**
- * Contain all events throwns in the autodiag bundle.
+ * Contains all events thrown in the autodiag bundle.
  */
 final class Events
 {
@@ -26,4 +26,9 @@ final class Events
     const SYNTHESIS_VALIDATED = 'synthesis.validated';
 
     const SYNTHESIS_SHARED = 'synthesis.shared';
+
+    /**
+     * This event occurs when an autodiag is updated with notification request.
+     */
+    const AUTODIAG_UPDATE_PUBLISHED = 'autodiag_update_published';
 }

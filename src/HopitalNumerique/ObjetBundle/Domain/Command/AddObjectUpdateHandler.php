@@ -4,6 +4,8 @@ namespace HopitalNumerique\ObjetBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ObjetBundle\Entity\ObjectUpdate;
+use HopitalNumerique\ObjetBundle\Events;
+use HopitalNumerique\ObjetBundle\Event\PublicationNotifiedEvent;
 
 /**
  * Class AddObjectUpdateCommand.
@@ -40,5 +42,11 @@ class AddObjectUpdateHandler
         $command->object->addUpdate($objectUpdate);
 
         $this->entityManager->flush($command->object);
+
+        /**
+         * Fire 'PUBLICATION_NOTIFIED' event
+         */
+        $event = new PublicationNotifiedEvent($command->object, $command->contenu, $command->reason);
+        $this->get('event_dispatcher')->dispatch(Events::PUBLICATION_NOTIFIED, $event);
     }
 }

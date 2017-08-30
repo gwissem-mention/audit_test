@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Controller\Front;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
@@ -37,14 +38,22 @@ class GuidedSearchRiskController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('hopitalnumerique_rechercheparcours.handler.add_private_risk_command')->handle($addPrivateRiskCommand);
+            $this->get('hopitalnumerique_rechercheparcours.handler.add_private_risk_command')->handle(
+                $addPrivateRiskCommand
+            );
 
-            $this->addFlash('success', $this->get('translator')->trans('step.risks.add.notifications.success', [], 'guided_search'));
+            $message = $this->get('translator')->trans('step.risks.add.notifications.success', [], 'guided_search');
+            $this->addFlash('success', $message);
+
+            $this->get('hopitalnumerique_rechercheparcours.repository.guided_search')->touch(
+                $guidedSearchStep->getGuidedSearch()
+            );
         } else {
             $this->addFlash('danger', $form->getErrors(true)->current()->getMessage());
         }
 
-        return $this->redirect($this->get('hopitalnumerique_rechercheparcours.helper.step_url_generator')->generate($guidedSearchStep));
+        $stepUrlGeneratorService = $this->get('hopitalnumerique_rechercheparcours.helper.step_url_generator');
+        return $this->redirect($stepUrlGeneratorService->generate($guidedSearchStep));
     }
 
     /**
@@ -109,13 +118,20 @@ class GuidedSearchRiskController extends Controller
         ;
 
         /** @var RiskAnalysis|null $riskAnalysis */
-        $riskAnalysis = $this->get('hopitalnumerique_rechercheparcours.repository.risk_analysis')->getOrCreate($step, $risk, $this->getUser());
+        $riskAnalysis = $this->get('hopitalnumerique_rechercheparcours.repository.risk_analysis')->getOrCreate(
+            $step,
+            $risk,
+            $this->getUser()
+        );
 
         $form = $this->createForm(EditRiskAnalysisType::class, $riskAnalysis);
         $form->submit($request->request->all());
 
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $guidedSearchService = $this->get('hopitalnumerique_rechercheparcours.repository.guided_search');
+            $guidedSearchService->touch($guidedSearch);
 
             return new JsonResponse(null, 200);
         }
