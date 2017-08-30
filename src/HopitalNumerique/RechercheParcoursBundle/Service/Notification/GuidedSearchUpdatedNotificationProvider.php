@@ -2,12 +2,12 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Notification;
 
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use \Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository;
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -70,41 +70,30 @@ class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstra
             $parcoursGestion->getId(),
             $parcoursGestion->getNom(),
             $reason,
-            ['parcoursGestion' => $parcoursGestion]
+            ['parcoursGestionId' => $parcoursGestion->getId()]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if all of user matching guided searches have edit dateTime older than notification dateTime.
+     * Returns users concerned by notification, in this case users whose last entry update for autodiag was before
+     * notification date.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        /**
-         * @var User $user
-         */
-        $lastViewDate = $this->guidedSearchRepository->getUserLatestUpdateDate(
-            $user,
-            $notification->getData('parcoursGestion')
+        return $this->guidedSearchRepository->getUpdatersBeforeQueryBuilder(
+            $notification->getData('parcoursGestionId'),
+            $notification->getCreatedAt()
         );
-
-        if (null === $lastViewDate) {
-            return false;
-        } else {
-            return new \DateTime($lastViewDate) < $notification->getDateTime();
-        }
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

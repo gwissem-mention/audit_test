@@ -2,12 +2,10 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
-use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -15,30 +13,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificationProviderAbstract
 {
+    /**
+    * Default frequency of this notification provider.
+    */
+    const DEFAULT_FREQUENCY = NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_WEEKLY;
+
+    /**
+     * Notification code.
+     */
     const NOTIFICATION_CODE = 'practice_community_user_joined';
-
-    /**
-     * @var GroupeInscriptionRepository $groupRegisterRepo
-     */
-    protected $groupRegisterRepo;
-
-    /**
-     * CommunityUserJoinedNotificationProvider constructor.
-     *
-     * @param EventDispatcherInterface    $eventDispatcher
-     * @param TokenStorageInterface       $tokenStorage
-     * @param PublicationExtension        $publicationExtension
-     * @param GroupeInscriptionRepository $groupRegisterRepo
-     */
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        TokenStorageInterface $tokenStorage,
-        PublicationExtension $publicationExtension,
-        GroupeInscriptionRepository $groupRegisterRepo
-    ) {
-        $this->groupRegisterRepo = $groupRegisterRepo;
-        parent::__construct($eventDispatcher, $tokenStorage, $publicationExtension);
-    }
 
     /**
      * @return string
@@ -55,16 +38,13 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
      */
     public function fire(User $user)
     {
-        $title = $user->getPrenomNom();
+        $title = $user->getPrenomNom() . ' - ';
 
-        $tabGroups = [];
-        foreach ($this->groupRegisterRepo->getUserGroups($user) as $group) {
-            $tabGroups[] = $group->getTitre();
+        foreach ($this->groupeInscriptionRepository->getUserGroups($user) as $group) {
+            $title .= $group->getTitre() . ' / ';
         }
 
-        if (count($tabGroups)) {
-            $title .= ' - ' . implode(' / ', $tabGroups);
-        }
+        $title = substr($title, 0, -3);
 
         $this->processNotification(
             $user->getId(),
@@ -73,24 +53,22 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
+     * Returns users concerned by notification, in this case all practice community members.
+     * notification date.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return true;
+        return $this->groupeInscriptionRepository->getCommunityMembersQueryBuilder();
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

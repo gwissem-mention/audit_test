@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CartBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CartBundle\Entity\Report;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,29 +36,31 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
             $report->getId(),
             $report->getName(),
             $userFrom->getPrenomNom().' '.$userTo->getPrenomNom(),
-            ['report' => $report]
+            [
+                'reportOwnerId' => $report->getOwner()->getId(),
+                'reportId' => $report->getId(),
+                'userFromId' => $userFrom->getId(),
+                'userToId' => $userTo->getId(),
+            ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if given user is report owner.
+     * Returns users concerned by notification (report owner in this case).
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return $notification->getData('report')->getOwner()->getId() === $user->getId();
+        return $this->userRepository->getOneUserQueryBuilder($notification->getData('reportOwnerId'));
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

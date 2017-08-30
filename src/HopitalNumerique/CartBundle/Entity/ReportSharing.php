@@ -7,7 +7,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * @ORM\Table(name="hn_cart_report_sharing")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\CartBundle\Repository\ReportSharingRepository")
  */
 class ReportSharing
 {

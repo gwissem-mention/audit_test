@@ -3,8 +3,8 @@
 namespace HopitalNumerique\ForumBundle\Service\Notification;
 
 use CCDNForum\ForumBundle\Entity\Post;
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\NotificationBundle\NotificationBundle;
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -33,35 +33,32 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
             $post->getId(),
             $post->getTopic()->getTitle() . ' - ' . $this->processText(
                 $post->getBody(),
-                NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH
+                self::getLimitNotifyTitleLength()
             ),
             $this->processText(
                 $post->getBody(),
-                NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH
+                self::getLimitNotifyDetailLength()
             ),
-            ['post' => $post]
+            ['topicId' => $post->getTopic()->getId()]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
+     * Returns users concerned by notification, in this case users who subscribed to topic.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return true;
+        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('topicId'));
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

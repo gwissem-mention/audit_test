@@ -7,6 +7,7 @@ use CCDNForum\ForumBundle\Entity\Subscription as BaseSubscription;
 /**
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ForumBundle\Repository\SubscriptionRepository")
  */
 class Subscription extends BaseSubscription
 {

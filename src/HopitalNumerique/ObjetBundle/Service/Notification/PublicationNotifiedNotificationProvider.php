@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Service\Notification;
 
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,50 +33,33 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
     {
         if (!$infradoc) {
             $uid = $object->getId();
+            $title = $object->getTitre();
         } else {
             $uid = [$object->getId(), $infradoc];
+            $title = $infradoc->getTitre();
         }
 
+        if (strlen($title) > self::getLimitNotifyTitleLength()) {
+            $title = substr($title, 0, self::getLimitNotifyTitleLength()) . '...';
+        }
+        
         $this->processNotification(
             $uid,
-            $object->getTitre(),
+            $title,
             $reason,
             [
-                'object' => $object,
-                'infradoc' => $infradoc
+                'idPublication' => $object->getId(),
+                'idInfradoc' => $infradoc ? $infradoc->getId() : null,
+                'titrePublication' => $infradoc ? $infradoc->getTitre() : $object->getTitre(),
+                'miseAJour' => $infradoc ? $infradoc->getContenu() : $object->getResume()
             ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if publication user last view dateTime is older than notification dateTime.
-     *
-     * @param UserInterface $user
-     * @param Notification $notification
-     *
-     * @return bool
-     */
-    public function canNotify(UserInterface $user, Notification $notification)
-    {
-        $lastViewDate = $this->consultationRepository->getUserLatestViewDate(
-            $user,
-            $notification->getData('object'),
-            $notification->getData('infradoc')
-        );
-
-        if (null === $lastViewDate) {
-            return false;
-        } else {
-            return new \DateTime($lastViewDate) < $notification->getDateTime();
-        }
-    }
-
-    /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

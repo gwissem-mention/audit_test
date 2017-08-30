@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * Below is an example on how to read providers :
  *
-    $sections = $this->get('notification.aggregator')->getStructuredProviders();
+    $sections = $this->get('HopitalNumerique\NotificationBundle\Service\Notifications')->getStructuredProviders();
     foreach ($sections as $sectionCode => $providers) {
         $sectionTitle = current($providers)->getConfigLabels()->getSectionLabel();
         echo 'SECTION ' . $sectionTitle . ' (<b>'.$sectionCode.'</b>)<br>';
@@ -27,35 +27,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class NotificationBundle extends Bundle
 {
-    /**
-     * Used to define text size limit for notification titles.
-     */
-    const LIMIT_NOTIFY_TITLE_LENGTH = 30;
-
-    /**
-     * Used to define text size limit for notification descriptions.
-     */
-    const LIMIT_NOTIFY_DESC_LENGTH = 300;
-
-    /**
-     * Notification frequency mode 'daily' (send notifications once per day).
-     */
-    const NOTIFICATION_FREQUENCY_DAILY = 'daily';
-
-    /**
-     * Notification frequency mode 'daily' (send notifications once per week).
-     */
-    const NOTIFICATION_FREQUENCY_WEEKLY = 'weekly';
-
-    /**
-     * Notification frequency mode 'daily' (send notifications immediately).
-     */
-    const NOTIFICATION_FREQUENCY_STRAIGHT = 'straight';
-
-    /**
-     * Notification frequency mode 'daily' (do not send notification).
-     */
-    const NOTIFICATION_FREQUENCY_OFF = 'off';
 
     public function build(ContainerBuilder $container)
     {

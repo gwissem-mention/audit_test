@@ -2,9 +2,9 @@
 
 namespace HopitalNumerique\NotificationBundle\Service;
 
-use HopitalNumerique\NotificationBundle\Model\Notification as NotificationModel;
+use Doctrine\ORM\QueryBuilder;
+use \HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Model\NotificationConfigLabels;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -28,20 +28,18 @@ interface NotificationProviderInterface
     public function getConfigLabels();
 
     /**
-     * Checks if a notification should be stacked for user.
+     * Returns users who are concerned by notification.
      *
-     * @param UserInterface     $user
-     * @param NotificationModel $notification
+     * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder|null
      */
-    public function canNotify(UserInterface $user, NotificationModel $notification);
+    public function getSubscribers(Notification $notification);
 
     /**
      * Sends notification.
      *
-     * @param UserInterface     $user
-     * @param NotificationModel $notification
+     * @param Notification  $notification
      */
-    public function notify(UserInterface $user, NotificationModel $notification);
+    public function notify(Notification $notification);
 }

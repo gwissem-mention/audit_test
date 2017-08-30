@@ -3,8 +3,8 @@
 namespace HopitalNumerique\ForumBundle\Service\Notification;
 
 use CCDNForum\ForumBundle\Entity\Topic;
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\NotificationBundle\NotificationBundle;
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -33,38 +33,34 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
             $topic->getId(),
             $topic->getBoard()->getName() . ' - ' . $topic->getTitle() . ' - ' . $this->processText(
                 $topic->getFirstPost()->getBody(),
-                NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH
+                static::getLimitNotifyTitleLength()
             ),
             $this->processText(
                 $topic->getFirstPost()->getBody(),
-                NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH
+                static::getLimitNotifyDetailLength()
             ),
             [
-                'topic' => $topic,
-                'firstPostId' => $topic->getFirstPost()->getId(),
+                'boardId' => $topic->getBoard()->getId(),
             ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
+     * Returns users concerned by notification, in this case users who subscribed to board.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return true;
+        return $this->subscriptionRepository->getBoardSubscribersQueryBuilder($notification->getData('boardId'));
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

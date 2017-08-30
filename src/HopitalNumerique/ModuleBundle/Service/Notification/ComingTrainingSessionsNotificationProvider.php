@@ -2,11 +2,18 @@
 
 namespace HopitalNumerique\ModuleBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ModuleBundle\Entity\Session;
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\NotificationBundle\NotificationBundle;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Nodevo\AclBundle\Entity\Acl;
+use Nodevo\AclBundle\Entity\Ressource;
+use Nodevo\AclBundle\Manager\AclManager;
+use Nodevo\AclBundle\Manager\RessourceManager;
 use Nodevo\RoleBundle\Entity\Role;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -17,6 +24,34 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     const NOTIFICATION_CODE = 'coming_training_sessions';
 
     const SECTION_CODE = 'anap_suggestion';
+
+    /**
+     * @var UserRepository $userRepository
+     */
+    protected $userRepository;
+
+    /**
+     * @var AclManager $aclManager
+     */
+    protected $aclManager;
+
+    /**
+     * @var RessourceManager $resourceManager
+     */
+    protected $resourceManager;
+
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        TokenStorageInterface $tokenStorage,
+        UserRepository $userRepository,
+        AclManager $aclManager,
+        RessourceManager $resourceManager
+    ) {
+        parent::__construct($eventDispatcher, $tokenStorage);
+        $this->userRepository = $userRepository;
+        $this->aclManager = $aclManager;
+        $this->resourceManager = $resourceManager;
+    }
 
     /**
      * @return string
@@ -44,55 +79,68 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
         $now = new \DateTime();
 
         $moduleTitle = $session->getModuleTitre();
-        if (strlen($moduleTitle) > NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH) {
-            $moduleTitle = substr($moduleTitle, 0, NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH) . '...';
+        if (strlen($moduleTitle) > self::getLimitNotifyTitleLength()) {
+            $moduleTitle = substr($moduleTitle, 0, self::getLimitNotifyTitleLength()) . '...';
         }
 
         $sessionTitle = $session->getDescription();
-        if (strlen($sessionTitle) > NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH) {
-            $sessionTitle = substr($sessionTitle, 0, NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH) . '...';
+        if (strlen($sessionTitle) > self::getLimitNotifyDetailLength()) {
+            $sessionTitle = substr($sessionTitle, 0, self::getLimitNotifyDetailLength()) . '...';
+        }
+
+        /**
+         * @var Role $sessionRole
+         */
+        $roleIds = [];
+        foreach ($session->getRestrictionAcces() as $sessionRole) {
+            $roleIds[] = $sessionRole->getRole();
         }
 
         $this->processNotification(
             $now->format('YmdHis'),
             $moduleTitle . ' ' . $session->getDateSessionString(),
             $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
-            ['session' => $session]
+            ['roleIds' => $roleIds]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if user role is authorized for training session.
+     * Returns users concerned by notification, in this case users whose role is authorized for training session.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        $userRole = $user->getRoles()[0];
+        //Get the resource that matches training sessions url.
+        /** @var Ressource $resource */
+        $resource = $this->resourceManager->getRessourceMatchingUrl('/module/');
 
-        /**
-         * @var Role $sessionRole
-         */
-        $granted = false;
-        foreach ($notification->getData('session')->getRestrictionAcces() as $sessionRole) {
-            if ($userRole === $sessionRole->getRole()) {
-                $granted = true;
-                break;
+        //Filter training sessions allowed role (keep only those allowed to use training session resource).
+        /** @var Acl[][] $acl */
+        $grantedRoles = [];
+        $acl = $this->aclManager->getAclByRessourceByRole();
+        foreach ($acl as $roleId => $roleAcl) {
+            foreach ($roleAcl as $resourceId => $resourceAcl) {
+                if (in_array($resourceAcl->getRole()->getRole(), $notification->getData('roleIds'))) {
+                    if ($resource->getId() === $resourceId) {
+                        if ($resourceAcl->getRead()) {
+                            $grantedRoles[] = $resourceAcl->getRole()->getRole();
+                        }
+                    }
+                }
             }
         }
 
-        return $granted;
+        //Finally get query builder of active users with those roles.
+        return $this->userRepository->getUsersByRolesQueryBuilder($grantedRoles);
     }
 
-    /**
-     * @param UserInterface $user
+    /**=
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

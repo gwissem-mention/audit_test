@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Html2Text\Html2Text;
@@ -21,19 +24,27 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     protected $publicationExtension;
 
     /**
+     * @var GroupeInscriptionRepository $groupeInscriptionRepository
+     */
+    protected $groupeInscriptionRepository;
+
+    /**
      * PracticeCommunityNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param TokenStorageInterface $tokenStorage
      * @param PublicationExtension $publicationExtension
+     * @param GroupeInscriptionRepository $groupeInscriptionRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
-        PublicationExtension $publicationExtension
+        PublicationExtension $publicationExtension,
+        GroupeInscriptionRepository $groupeInscriptionRepository
     ) {
-        $this->publicationExtension = $publicationExtension;
         parent::__construct($eventDispatcher, $tokenStorage);
+        $this->publicationExtension = $publicationExtension;
+        $this->groupeInscriptionRepository = $groupeInscriptionRepository;
     }
 
     /**
@@ -61,5 +72,18 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 
         //Truncate and return
         return mb_strimwidth($cleanText, 0, $limit, '...');
+    }
+
+    /**
+     * Returns users concerned by notification, in this case users who are active members of group.
+     * notification date.
+     *
+     * @param Notification $notification
+     *
+     * @return QueryBuilder
+     */
+    public function getSubscribers(Notification $notification)
+    {
+        return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
     }
 }

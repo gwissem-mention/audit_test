@@ -1,3 +1,49 @@
 services:
-    notification.aggregator:
-        class: HopitalNumerique\NotificationBundle\Service\Notification
+    HopitalNumerique\NotificationBundle\Service\Notifications:
+        class: HopitalNumerique\NotificationBundle\Service\Notifications
+
+    HopitalNumerique\NotificationBundle\EventListener\NotificationFiredListener:
+        class: HopitalNumerique\NotificationBundle\EventListener\NotificationFiredListener
+        arguments:
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+            - '@security.token_storage'
+            - '@logger'
+            - '@hopitalnumerique\notificationbundle\domain\command\processnotificationhandler'
+        tags:
+            - { name: kernel.event_subscriber, event: FIRE_NOTIFICATION }
+
+    HopitalNumerique\NotificationBundle\Domain\Command\ProcessNotificationHandler:
+        class: HopitalNumerique\NotificationBundle\Domain\Command\ProcessNotificationHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique\notificationbundle\service\notificationsubscribtionfinder'
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+            - '@hopitalnumerique_user.repository.user'
+            - '@hopitalnumerique\notificationbundle\service\notificationscheduledatecalculator'
+
+    HopitalNumerique\NotificationBundle\Domain\Command\UpdateNotificationSettingsHandler:
+        class: HopitalNumerique\NotificationBundle\Domain\Command\UpdateNotificationSettingsHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    HopitalNumerique\NotificationBundle\Repository\SettingsRepository:
+        class: HopitalNumerique\NotificationBundle\Repository\SettingsRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\NotificationBundle\Entity\Settings'
+
+    HopitalNumerique\NotificationBundle\Repository\NotificationRepository:
+        class: HopitalNumerique\NotificationBundle\Repository\NotificationRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\NotificationBundle\Entity\Notification'
+
+    HopitalNumerique\NotificationBundle\Service\NotificationSubscribtionFinder:
+        class: HopitalNumerique\NotificationBundle\Service\NotificationSubscriptionFinder
+        arguments:
+            - '@hopitalnumerique\notificationbundle\repository\settingsrepository'
+            - '@hopitalnumerique_user.repository.user'
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+
+    HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator:
+        class: HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
@@ -48,5 +49,39 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
         ;
 
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Returns query builder of group members.
+     *
+     * @param integer $groupId
+     *
+     * @return QueryBuilder
+     */
+    public function getUsersInGroupQueryBuilder($groupId)
+    {
+        return $this->createQueryBuilder('groupe_inscription')
+            ->select('user.id')
+            ->join('groupe_inscription.user', 'user')
+            ->where('groupe_inscription.groupe = :groupId')
+            ->andWhere('groupe_inscription.actif = :activeState')
+            ->setParameters([
+                'activeState' => 1,
+                'groupId' => (int)$groupId,
+            ]);
+    }
+
+    /**
+     * Returns query builder of practice community members.
+     *
+     * @return QueryBuilder
+     */
+    public function getCommunityMembersQueryBuilder()
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('user.id')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->where('user.inscritCommunautePratique = :isRegistered')
+            ->setParameter('isRegistered', 1);
     }
 }

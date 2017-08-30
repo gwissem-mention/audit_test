@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\NotificationBundle\Event;
 
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -68,38 +69,33 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
             [$autodiag->getId()],
             $autodiag->getTitle(),
             $reason,
-            ['autodiag' => $autodiag]
+            [
+                'autodiagId' => $autodiag->getId(),
+                'autodiagTitle' => $autodiag->getTitle()
+            ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if publication user last view dateTime is older than notification dateTime.
+     * Returns users concerned by notification, in this case users whose last entry update for autodiag was before
+     * notification date.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        $lastSaveDate = $this->autodiagEntryRepository->getLastUserEntryUpdate(
-            $user,
-            $notification->getData('autodiag')
+        return $this->autodiagEntryRepository->getUpdatersBeforeQueryBuilder(
+            $notification->getData('autodiagId'),
+            $notification->getCreatedAt()
         );
-
-        if (null === $lastSaveDate) {
-            return false;
-        } else {
-            return new \DateTime($lastSaveDate) < $notification->getDateTime();
-        }
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

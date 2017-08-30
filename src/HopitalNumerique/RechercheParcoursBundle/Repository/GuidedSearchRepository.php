@@ -5,6 +5,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -102,17 +103,17 @@ class GuidedSearchRepository extends EntityRepository
     }
 
     /**
-     * Retrieves the latest updated date among all guided searches found for a user and a 'parcoursGestion'.
+     * Retrieves the users whose last guided search ($parcoursGestionId) update was before $maxUpdateDate.
      *
-     * @param User                     $user
-     * @param RechercheParcoursGestion $parcoursGestion
+     * @param integer   $parcoursGestionId
+     * @param \DateTime $maxUpdateDate
      *
-     * @return string|null Latest date
+     * @return QueryBuilder Users
      */
-    public function getUserLatestUpdateDate(User $user, RechercheParcoursGestion $parcoursGestion)
+    public function getUpdatersBeforeQueryBuilder($parcoursGestionId, \DateTime $maxUpdateDate)
     {
         return $this->createQueryBuilder('guidedSearch')
-            ->select('MAX(guidedSearch.updatedAt)')
+            ->select('user.id')
             ->innerJoin(
                 RechercheParcours::class,
                 'rech_parcours',
@@ -125,8 +126,13 @@ class GuidedSearchRepository extends EntityRepository
                 Join::WITH,
                 'rech_parcours.recherchesParcoursGestion = rech_parcours_gest.id AND rech_parcours_gest.id = :parcGest'
             )
-            ->where('guidedSearch.owner = :user')
-            ->setParameters(['user' => $user, 'parcGest' => $parcoursGestion])
-            ->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+            ->innerJoin('guidedSearch.owner', 'user')
+            ->groupBy('user.id')
+            ->having('MAX(guidedSearch.updatedAt) < :maxUpdateDate')
+            ->setParameters([
+                'parcGest' => (int)$parcoursGestionId,
+                'maxUpdateDate' => $maxUpdateDate
+            ])
+        ;
     }
 }

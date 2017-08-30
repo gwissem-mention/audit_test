@@ -3,10 +3,12 @@
 namespace HopitalNumerique\NotificationBundle\Service;
 
 /**
- * Class Notification.
+ * Class Notifications.
  */
-class Notification
+class Notifications
 {
+    const NOTIFICATION_ALLOWED_FREQUENCIES = ['daily', 'weekly', 'straight', 'off'];
+
     /**
      * @var NotificationProviderAbstract[] $providers
      */
@@ -23,6 +25,15 @@ class Notification
         if (array_key_exists($code, $this->providers)) {
             throw new \Exception(sprintf("Provider already supplied for key '%s'", $code));
         }
+
+        if (!in_array($provider::getDefaultFrequency(), self::NOTIFICATION_ALLOWED_FREQUENCIES)) {
+            throw new \Exception(sprintf(
+                "Provider '%s' default frequency is invalid, one of ['%s'] expected",
+                implode("', '", self::NOTIFICATION_ALLOWED_FREQUENCIES),
+                $code
+            ));
+        }
+
         $this->providers[$code] = $provider;
     }
 
@@ -51,7 +62,7 @@ class Notification
     /**
      * Returns providers organized by section.
      *
-     * @return NotificationProviderAbstract[]
+     * @return NotificationProviderAbstract[][]
      */
     public function getStructuredProviders()
     {

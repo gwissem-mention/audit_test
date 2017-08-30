@@ -2,8 +2,12 @@
 
 namespace HopitalNumerique\ObjetBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
+use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
+use Html2Text\Html2Text;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -20,6 +24,11 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
     protected $consultationRepository;
 
     /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
      * PublicationNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -29,10 +38,12 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
-        ConsultationRepository $consultationRepository
+        ConsultationRepository $consultationRepository,
+        SubscriptionRepository $subscriptionRepository
     ) {
         parent::__construct($eventDispatcher, $tokenStorage);
         $this->consultationRepository = $consultationRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
 
     /**
@@ -41,5 +52,39 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
     public static function getSectionCode()
     {
         return self::SECTION_CODE;
+    }
+
+    /**
+     * Returns users concerned by notification, in this case users who have subscribed to the object / the infradoc.
+     *
+     * @param Notification $notification
+     *
+     * @return QueryBuilder
+     */
+    public function getSubscribers(Notification $notification)
+    {
+        return $this->subscriptionRepository->getSubscribersQueryBuilder(
+            $notification->getCreatedAt(),
+            $notification->getData('idPublication'),
+            $notification->getData('idInfradoc')
+        );
+    }
+
+    /**
+     * Removes HTML from text and limit length.
+     *
+     * @param $htmlText string   Text to be processed.
+     * @param $limit    int|bool Max text length (see NotificationProvider static method getLimitNotify...)
+     *
+     * @return string
+     */
+    protected function processText($htmlText, $limit = false)
+    {
+        //Remove HTML code
+        $htmlToPdf = new Html2Text($htmlText, ['do_links' => 'none', 'width' => 0]);
+        $cleanText = $htmlToPdf->getText();
+
+        //Truncate and return
+        return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
     }
 }
