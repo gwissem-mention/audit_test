@@ -1,0 +1,7 @@
+notification_config:
+    autodiag:
+        section_title: AUTODIAGNOSTICS
+        autodiag_update_published:
+            description: Mise à jour d'un autodiagnostic
+            title: Titre de l'autodiag
+            detail: Contenu de la mise à jour

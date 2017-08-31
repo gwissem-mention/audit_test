@@ -2,8 +2,11 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\ObjetBundle\Entity\Consultation;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -33,6 +36,38 @@ class ConsultationRepository extends EntityRepository
                             'domaineId' => $domaineId,
                         ])
                     ->orderBy('clt.dateLastConsulted', 'DESC');
+    }
+
+    /**
+     * Returns latest view date of a publication/publication part for a user.
+     *
+     * @param User         $user
+     * @param Objet|null   $object
+     * @param Contenu|null $infradoc
+     *
+     * @return string|null Latest date
+     */
+    public function getUserLatestViewDate(User $user, Objet $object = null, Contenu $infradoc = null)
+    {
+        $query = $this->_em->createQueryBuilder()
+            ->select('MAX(clt.dateLastConsulted)')
+            ->from('\HopitalNumerique\ObjetBundle\Entity\Consultation', 'clt')
+            ->andWhere('clt.user = :user')
+            ->setParameter('user', $user);
+
+        if ($object) {
+            $query->andWhere('clt.objet = :objet')
+                ->setParameter('objet', $object);
+        }
+
+        if ($infradoc) {
+            $query->andWhere('clt.contenu = :contenu')
+                ->setParameter('contenu', $infradoc);
+        }
+
+        return $query
+            ->orderBy('clt.dateLastConsulted', 'DESC')
+            ->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 
     public function getUsersConcerneByObjet($idObjet, $domaineIds)

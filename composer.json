@@ -65,9 +65,10 @@
         "egeloen/google-map-bundle"                    : "2.2.*",
         "symfony/var-dumper"                           : "3.0.*",
         "egeloen/ckeditor-bundle"                      : "^4.0",
-        "box/spout": "^2.6",
-        "dmishh/settings-bundle": "2.0.*@dev",
-        "friendsofsymfony/elastica-bundle": "^4.0"
+        "box/spout"                                    : "^2.6",
+        "dmishh/settings-bundle"                       : "2.0.*@dev",
+        "friendsofsymfony/elastica-bundle"             : "^4.0",
+        "html2text/html2text"                          : "^4.1"
     },
     "scripts": {
         "post-install-cmd": [

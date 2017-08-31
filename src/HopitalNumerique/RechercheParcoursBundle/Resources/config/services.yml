@@ -105,46 +105,46 @@ services:
             - '@hopitalnumerique_reference.repository.reference'
 
     hopitalnumerique_rechercheparcours.repository.recherche_parcours_gestion:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion'
 
     hopitalnumerique_rechercheparcours.repository.recherche_parcours_details:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursDetailsRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursDetailsRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails'
 
     hopitalnumerique_rechercheparcours.repository.recherche_parcours_history:
-                class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursHistoryRepository
-                factory: ["@doctrine.orm.entity_manager", "getRepository"]
-                arguments:
-                    - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursHistoryRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory'
 
     hopitalnumerique_rechercheparcours.repository.recherche_parcours:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours'
 
     hopitalnumerique_rechercheparcours.repository.guided_search:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch'
 
     hopitalnumerique_rechercheparcours.repository.guided_search_step:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchStepRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchStepRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep'
 
     hopitalnumerique_rechercheparcours.repository.risk_analysis:
-            class: HopitalNumerique\RechercheParcoursBundle\Repository\RiskAnalysisRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis'
+        class: HopitalNumerique\RechercheParcoursBundle\Repository\RiskAnalysisRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis'
 
     hopitalnumerique_rechercheparcours.guided_search_retriever:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchRetriever
@@ -155,12 +155,13 @@ services:
             - '@security.authorization_checker'
             - '@doctrine.orm.entity_manager'
 
-    hopitalnumerique_rechercheparcours.guided_search_history_writer:
+    HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryWriter:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryWriter
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
-    hopitalnumerique_rechercheparcours.guided_search_history_reader:
+    HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryReader:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryReader
         arguments:
             - '@doctrine.orm.entity_manager'
@@ -284,3 +285,18 @@ services:
         class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler
         arguments:
             - '@hopitalnumerique\rechercheparcoursbundle\service\guidedsearchstepprogress'
+
+    HopitalNumerique\RechercheParcoursBundle\Service\Notification\GuidedSearchUpdatedNotificationProvider:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Notification\GuidedSearchUpdatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+        tags:
+            - { name: notification.notification_aggregator, key: guided_search_updated }
+
+    HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener:
+        class: HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: guided_search_updated }

@@ -35,6 +35,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@hopitalnumerique_cart.repository.report_item'
             - '@hopitalnumerique_cart.report_generator'
+            - '@event_dispatcher'
 
     hopitalnumerique_cart.duplicate_report_command_handler:
         class: HopitalNumerique\CartBundle\Domain\Command\DuplicateReportCommandHandler
@@ -137,3 +138,59 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CartBundle\Entity\ReportDownload'
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+        tags:
+            - { name: notification.notification_aggregator, key: report_updated }
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportSharedForMeNotificationProvider:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportSharedForMeNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+        tags:
+            - { name: notification.notification_aggregator, key: report_shared_for_me }
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportSharedForOtherNotificationProvider:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportSharedForOtherNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+        tags:
+            - { name: notification.notification_aggregator, key: report_shared_for_other }
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportCopiedForMeNotificationProvider:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportCopiedForMeNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+        tags:
+            - { name: notification.notification_aggregator, key: report_copied_for_me }
+
+    HopitalNumerique\CartBundle\EventListener\ReportUpdatedListener:
+        class: HopitalNumerique\CartBundle\EventListener\ReportUpdatedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: report_updated }
+
+    HopitalNumerique\CartBundle\EventListener\ReportSharedForMeListener:
+        class: HopitalNumerique\CartBundle\EventListener\ReportSharedForMeListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: report_shared }
+
+    HopitalNumerique\CartBundle\EventListener\ReportSharedForOtherListener:
+        class: HopitalNumerique\CartBundle\EventListener\ReportSharedForOtherListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: report_shared }
+
+    HopitalNumerique\CartBundle\EventListener\ReportCopiedListener:
+        class: HopitalNumerique\CartBundle\EventListener\ReportCopiedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: report_copied }

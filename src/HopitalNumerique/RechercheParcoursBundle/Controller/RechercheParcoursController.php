@@ -25,7 +25,7 @@ class RechercheParcoursController extends Controller
         ]);
 
         $serviceParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours');
-        $serviceHistory = $this->get('hopitalnumerique_rechercheparcours.guided_search_history_reader');
+        $serviceHistory = $this->get('hopitalnumerique\rechercheparcoursbundle\service\guidedsearchhistoryreader');
 
         $recherchesParcours = $serviceParcours->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion], ['order' => 'ASC']);
 
@@ -58,7 +58,7 @@ class RechercheParcoursController extends Controller
     {
         $notify = $request->get('update_notify');
         $reason = $request->get('reason');
-        $this->get('hopitalnumerique_rechercheparcours.guided_search_history_writer')->create(
+        $this->get('hopitalnumerique\rechercheparcoursbundle\service\guidedsearchhistorywriter')->create(
             $rechercheParcoursGestion,
             $this->getUser(),
             $notify,

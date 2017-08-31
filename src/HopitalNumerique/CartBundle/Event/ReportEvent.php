@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CartBundle\Event;
 
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -16,13 +17,20 @@ class ReportEvent extends Event
     protected $report;
 
     /**
+     * @var Report $user;
+     */
+    protected $user;
+
+    /**
      * ReportUpdatedEvent constructor.
      *
      * @param Report $report
+     * @param User   $user
      */
-    public function __construct(Report $report)
+    public function __construct(Report $report, User $user)
     {
         $this->report = $report;
+        $this->user = $user;
     }
 
     /**
@@ -31,5 +39,13 @@ class ReportEvent extends Event
     public function getReport()
     {
         return $this->report;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

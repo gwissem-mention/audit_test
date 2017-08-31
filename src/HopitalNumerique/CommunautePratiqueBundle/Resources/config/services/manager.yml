@@ -8,7 +8,9 @@ services:
 
     hopitalnumerique_communautepratique.manager.document:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\DocumentManager"
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - '@event_dispatcher'
 
     hopitalnumerique_communautepratique.manager.fiche:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\FicheManager"

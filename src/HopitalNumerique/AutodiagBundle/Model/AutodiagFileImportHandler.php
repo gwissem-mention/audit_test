@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use HopitalNumerique\AutodiagBundle\Event\AutodiagUpdatedEvent;
+use HopitalNumerique\AutodiagBundle\Event\AutodiagUpdatePublishedEvent;
 use HopitalNumerique\AutodiagBundle\Events;
 
 class AutodiagFileImportHandler
@@ -293,7 +293,7 @@ class AutodiagFileImportHandler
     {
         $autodiag->setPublicUpdatedDate($date);
 
-        $event = new AutodiagUpdatedEvent($autodiag, $reason);
+        $event = new AutodiagUpdatePublishedEvent($autodiag, $reason);
         $this->eventDispatcher->dispatch(Events::AUTODIAG_UPDATE_PUBLISHED, $event);
     }
 }

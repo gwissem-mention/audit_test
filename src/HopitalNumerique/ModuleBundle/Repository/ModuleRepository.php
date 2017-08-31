@@ -4,6 +4,8 @@ namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\ModuleBundle\Entity\Module;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * ModuleRepository.
@@ -86,5 +88,27 @@ class ModuleRepository extends EntityRepository
             ->orderBy('mod.titre');
 
         return $qb;
+    }
+
+    /**
+     * Returns modules from ids.
+     *
+     * @param array $modulesId List of module ids
+     *
+     * @return Module[]
+     */
+    public function getModules(array $modulesId)
+    {
+        return $this->_em->createQueryBuilder('module')
+            ->select('module')
+            ->from('HopitalNumeriqueModuleBundle:Module', 'module')
+            ->leftJoin('module.statut', 'refEtat')
+            ->where('refEtat.id = :activeState')
+            ->andWhere('module.id IN (:moduleIds)')
+            ->setParameters([
+                'activeState' => Reference::STATUT_ACTIF_ID,
+                'moduleIds' => $modulesId,
+            ])
+            ->getQuery()->getResult();
     }
 }

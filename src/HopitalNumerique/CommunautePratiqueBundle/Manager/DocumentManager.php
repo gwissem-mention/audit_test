@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,6 +19,18 @@ class DocumentManager extends \Nodevo\ToolsBundle\Manager\Manager
      * @var EventDispatcherInterface $eventDispatcher
      */
     protected $eventDispatcher;
+
+    /**
+     * DocumentManager constructor.
+     *
+     * @param EntityManager            $em
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+        parent::__construct($em);
+    }
 
     /**
      * {@inheritdoc}

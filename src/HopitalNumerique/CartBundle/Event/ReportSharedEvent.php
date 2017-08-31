@@ -11,42 +11,28 @@ use HopitalNumerique\UserBundle\Entity\User;
 class ReportSharedEvent extends ReportEvent
 {
     /**
-     * @var User $userFrom
+     * @var User $targetUser
      */
-    protected $userFrom;
-
-    /**
-     * @var User $userTo
-     */
-    protected $userTo;
+    protected $targetUser;
 
     /**
      * ReportUpdatedEvent constructor.
      *
      * @param Report $report
-     * @param User   $userFrom
-     * @param User   $userTo
+     * @param User   $user
+     * @param User   $targetUser
      */
-    public function __construct(Report $report, User $userFrom, User $userTo)
+    public function __construct(Report $report, User $user, User $targetUser)
     {
-        parent::__construct($report);
-        $this->userFrom = $userFrom;
-        $this->userTo = $userTo;
+        parent::__construct($report, $user);
+        $this->targetUser = $targetUser;
     }
 
     /**
      * @return User
      */
-    public function getUserFrom()
+    public function getTargetUser()
     {
-        return $this->userFrom;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUserTo()
-    {
-        return $this->userTo;
+        return $this->targetUser;
     }
 }

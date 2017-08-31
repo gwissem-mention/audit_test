@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ObjetBundle\Entity\ObjectUpdate;
 use HopitalNumerique\ObjetBundle\Events;
 use HopitalNumerique\ObjetBundle\Event\PublicationNotifiedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class AddObjectUpdateCommand.
@@ -18,13 +19,19 @@ class AddObjectUpdateHandler
     protected $entityManager;
 
     /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * AddObjectUpdateHandler constructor.
      *
      * @param EntityManager $entityManager
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -47,6 +54,6 @@ class AddObjectUpdateHandler
          * Fire 'PUBLICATION_NOTIFIED' event
          */
         $event = new PublicationNotifiedEvent($command->object, $command->contenu, $command->reason);
-        $this->get('event_dispatcher')->dispatch(Events::PUBLICATION_NOTIFIED, $event);
+        $this->eventDispatcher->dispatch(Events::PUBLICATION_NOTIFIED, $event);
     }
 }

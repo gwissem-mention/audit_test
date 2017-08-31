@@ -117,3 +117,45 @@ services:
             - '@form.factory'
             - '@ccdn_forum_forum.form.type.post_update'
             - '@ccdn_forum_forum.model.post'
+
+    HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider:
+        class: HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@ccdn_component_bb_code.component.twig_extension.parse_bb'
+        tags:
+            - { name: notification.notification_aggregator, key: forum_post_created }
+
+    HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider:
+        class: HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@ccdn_component_bb_code.component.twig_extension.parse_bb'
+        tags:
+            - { name: notification.notification_aggregator, key: forum_topic_created }
+
+    HopitalNumerique\ForumBundle\EventListener\PostCreatedListener:
+        class: HopitalNumerique\ForumBundle\EventListener\PostCreatedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: hopitalnumerique.user.post.create.success }
+
+    HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener:
+        class: HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener
+        arguments: [ "@notification.aggregator" ]
+        tags:
+            - { name: kernel.event_subscriber, event: ccdn_forum.user.topic.create.complete }
+
+
+
+
+
+
+
+
+
+
+
+

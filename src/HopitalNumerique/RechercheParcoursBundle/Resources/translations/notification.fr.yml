@@ -1,0 +1,7 @@
+notification_config:
+    guided_search:
+      section_title: PARCOURS GUIDE
+      guided_search_updated:
+          description: Mise à jour d'un parcours guidé
+          title: Nom du parcours guidé
+          detail: Contenu de la mise à jour
