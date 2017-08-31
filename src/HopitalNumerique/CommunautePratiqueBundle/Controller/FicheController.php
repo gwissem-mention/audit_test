@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv;
 
 /**
  * Contrôleur concernant les fiches.
@@ -167,5 +170,20 @@ class FicheController extends Controller
         $this->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
 
         return new JsonResponse(['success' => true]);
+    }
+
+    /**
+     * @param Fiche $fiche
+     *
+     * @return StreamedResponse
+     *
+     * @Security("is_granted('ROLE_ADMINISTRATEUR_1') or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') ")
+     */
+    public function exportCsvAction(Fiche $fiche)
+    {
+        $export = $this->container->get(Csv::class);
+        $comments = $fiche->getCommentaires();
+
+        return $export->generateResponse($comments, 'fiche_' . $fiche->getQuestionPosee());
     }
 }
