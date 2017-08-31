@@ -95,6 +95,9 @@
     font-size: 16px;
     padding: 8px 0;
 }
+#recherche-par-parcours-details.guided-search-synthesis table.synthesis {
+    text-align: center;
+}
 
 #pointsdurs .slider-range-min{width: 90%; margin: 0 auto;}
 #pointsdurs .nonConcerne {width: 300px; margin-top: 5px;}
