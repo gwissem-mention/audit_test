@@ -131,13 +131,19 @@ $(document).ready(function() {
         calculMoyenne();
 
         //Initialisation du vote
+        $('#note-moyenne-etoile')
+            .rateit({
+                step: 0.5,
+                max: 5,
+                ispreset: true,
+                readonly: $('#bloc-notation-objet').length === 0,
+                resetable: false
+            })
+        ;
         $('#note-etoile').rateit({ max: 5, step: 1 });
 
-        //Mise à jour des
-        $("#note-etoile").bind('rated', function (event, value) {
-            $('#note-valeur').val(value);
-            $('#note-valeur-show').text(value);
-            sauvegardeNote();
+        $("#note-moyenne-etoile, #note-etoile").bind('rated', function (event, value) {
+            tryRate(value);
         });
         $("#note-etoile").bind('reset', function () {
             $('#note-valeur').val(0);
@@ -162,18 +168,6 @@ $(document).ready(function() {
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
     });
 
-    $('#note-moyenne-etoile')
-        .rateit({
-            step: 0.5,
-            max: 5,
-            ispreset: true,
-            readonly: $('#bloc-notation-objet').length === 0
-        })
-        .rateit('resetable', false)
-    ;
-    $("#note-moyenne-etoile").bind('rated', function (event, value) {
-        tryRate(value);
-    });
 
 });
 
@@ -268,6 +262,7 @@ function tryRate(rate) {
                         });
                         document.querySelector('button[name="note_commentaire[cancel]"]').addEventListener('click', function (ev) {
                             $.fancybox.close(true);
+                            calculMoyenne();
                         })
                     }
                 });
