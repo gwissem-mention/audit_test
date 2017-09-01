@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
@@ -237,5 +240,20 @@ class GroupeController extends Controller
                     ->findEnCoursByUser($domaine, $user),
             ]
         );
+    }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return StreamedResponse
+     *
+     * @Security("is_granted('ROLE_ADMINISTRATEUR_1') or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') ")
+     */
+    public function exportCsvAction(Groupe $group)
+    {
+        $export = $this->container->get(Csv::class);
+        $comments = $group->getCommentaires();
+
+        return $export->generateResponse($comments, 'groupe_'.$group->getTitre());
     }
 }
