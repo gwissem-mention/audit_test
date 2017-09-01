@@ -61,6 +61,7 @@ account:
     cdp:
         join: Rejoindre la communauté
         access: Accéder à la communauté
+        leave: Quitter la communauté
         missingInformation: Certaines informations de votre profil sont nécessaires pour rejoindre la communauté
 
 cart:

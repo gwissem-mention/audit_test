@@ -56,6 +56,12 @@ $(function() {
         var target = $(this).attr('href');
         $('a[href="'+ target +'"]').tab('show');
     });
+
+    document.getElementById('leave-communaute-pratique').addEventListener('click', function (ev) {
+        CommunautePratique.desinscrit(function () {
+            window.location.reload();
+        });
+    })
 });
 
 function initSelect2($select) {

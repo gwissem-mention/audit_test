@@ -32,43 +32,6 @@
 <hr>
 
 <div class="row spacer">
-    <div class="col-md-12">
-        <div class="form_vertical_row">
-            <div class="form-group">
-                <div class="col-md-12">
-                    <label class="control-label">{{ 'account.cdp.join'|trans }}</label>
-                </div>
-                {{ 'Module_moncompte_competences_joindre_cdp'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
-            </div>
-        </div>
-        {% if missingInformation|length > 0 %}
-            <p><a href="#" class="btn btn-primary disabled">{{ 'account.cdp.access'|trans }}</a></p>
-            <p class="spacer">
-                <label>{{ 'account.cdp.missingInformation'|trans }}</label>
-            </p>
-            {% for tabName, tabInformation in missingInformation %}
-                {% if tabInformation|length > 0 %}
-                    <p><a href="#tab{{ loop.index }}" data-toggle-custom>{{ tabName }}</a></p>
-                    <ul>
-                        {% for information in tabInformation %}
-                            <li>{{ information }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <p>
-                <a href="{{ path('hopitalnumerique_communautepratique_inscription') }}" class="btn btn-success">
-                    {{ 'account.cdp.access'|trans }}
-                </a>
-            </p>
-        {% endif %}
-    </div>
-</div>
-
-<hr>
-
-<div class="row spacer">
     {% if domaineCurrent.id == 1 %}
 
         <div class="col-md-12">
@@ -132,5 +95,43 @@
         <div class="col-md-12">
             <button class="btn btn-success add-hobby" type="button">{{ 'account.user.hobby.add'|trans }}</button>
         </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="row spacer">
+    <div class="col-md-12">
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label">{{ 'account.cdp.join'|trans }}</label>
+                </div>
+                {{ 'Module_moncompte_competences_joindre_cdp'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+            </div>
+        </div>
+        {% if missingInformation|length > 0 %}
+            <p><a href="#" class="btn btn-primary disabled">{{ 'account.cdp.access'|trans }}</a></p>
+            <p class="spacer">
+                <label>{{ 'account.cdp.missingInformation'|trans }}</label>
+            </p>
+            {% for tabName, tabInformation in missingInformation %}
+                {% if tabInformation|length > 0 %}
+                    <p><a href="#tab{{ loop.index }}" data-toggle-custom>{{ tabName }}</a></p>
+                    <ul>
+                        {% for information in tabInformation %}
+                            <li>{{ information }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>
+                <a href="{{ path('hopitalnumerique_communautepratique_inscription') }}" class="btn btn-success">
+                    {{ 'account.cdp.join'|trans }}
+                </a>
+                <a id="leave-communaute-pratique" class="btn btn-danger">{{ 'account.cdp.leave'|trans }}</a>
+            </p>
+        {% endif %}
     </div>
 </div>
