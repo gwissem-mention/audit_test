@@ -2684,4 +2684,19 @@ class User extends BaseUser
 
         return $lastDateContractualisation;
     }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return bool
+     */
+    public function isGroupAnimator(Groupe $group)
+    {
+        foreach ($group->getAnimateurs() as $groupUsers) {
+            if ($groupUsers == $this) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

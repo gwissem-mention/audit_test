@@ -3,6 +3,8 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment;
 
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 
@@ -24,6 +26,16 @@ class Csv
         $response = new StreamedResponse(function () use ($comments) {
             $handle = fopen('php://output', 'r+');
             /** @var Commentaire $comment */
+            fputcsv(
+                $handle,
+                [
+                    'nom',
+                    'dateCreation',
+                    'dateModification',
+                    'message',
+                ],
+                ';'
+            );
             foreach ($comments as $comment) {
                 fputcsv(
                     $handle,
@@ -44,5 +56,21 @@ class Csv
         );
 
         return $response;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function canExportCsv(User $user, Groupe $group)
+    {
+        if ($user->isGroupAnimator($group)
+            || $user->hasRoleAdminHn()
+            || $user->hasRoleAdmin()
+            || $user->hasRoleAdminDomaine()) {
+            return true;
+        }
+        return false;
     }
 }
