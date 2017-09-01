@@ -120,6 +120,7 @@ class GroupeController extends Controller
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
             'groupe' => $groupe,
+            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe)
         ]);
     }
 
@@ -245,15 +246,17 @@ class GroupeController extends Controller
     /**
      * @param Groupe $group
      *
-     * @return StreamedResponse
-     *
-     * @Security("is_granted('ROLE_ADMINISTRATEUR_1') or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') ")
+     * @return StreamedResponse|Response
      */
     public function exportCsvAction(Groupe $group)
     {
         $export = $this->container->get(Csv::class);
-        $comments = $group->getCommentaires();
+        if ($export->canExportCsv($this->getUser(), $group)) {
+            $comments = $group->getCommentaires();
 
-        return $export->generateResponse($comments, 'groupe_'.$group->getTitre());
+            return $export->generateResponse($comments, 'groupe_'.$group->getTitre());
+        }
+
+        return new Response(null, 403);
     }
 }
