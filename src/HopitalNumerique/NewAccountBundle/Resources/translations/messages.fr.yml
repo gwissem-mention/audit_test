@@ -4,17 +4,17 @@ account:
     dashboard:
         title: Tableau de bord
     profile:
-        title: Mon profil
+        title: Mes informations
         completion: Complétion du profil
         personal_information: Données personnelles
         contact_information: Coordonnées
-        profile: Mon profil
-        structure: Ma structure
-        skills: Mes compétences
+        profile: Profil
+        structure: Structure
+        skills: Compétences
         picture:
             delete: Supprimer la photo
     service:
-        title: Mes services
+        title: Services
         quick_access: Accès directs
         domain_list:
             label: Sélectionnez un domaine
@@ -41,9 +41,9 @@ account:
         cellPhoneNumber: Téléphone portable
         otherContact: Autres contacts
         profileType: Profil
-        jobType: Rôle
-        jobLabel: Libellé rôle
-        file: Photo du profil (maximum 200ko)
+        jobType: Fonction
+        jobLabel: Libellé
+        file: Photo de profil (maximum 200ko)
         region: Région
         county: Département
         organizationType: Type de structure

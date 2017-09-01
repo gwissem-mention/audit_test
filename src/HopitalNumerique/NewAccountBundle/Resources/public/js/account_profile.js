@@ -8,6 +8,10 @@ $(function() {
         $('.profile-tab-nav').first().tab('show');
     }
 
+    $('.profile-tab-nav').on('shown.bs.tab', function(event){
+        location.hash = event.target.getAttribute('href');
+    });
+
     var tabErrorHandler = new TabErrorHandler();
 
     $('#save-my-account').on('click', function () {

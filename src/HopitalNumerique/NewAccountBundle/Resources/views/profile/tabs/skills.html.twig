@@ -1,7 +1,21 @@
 <div class="row">
     <div class="col-md-12">
-        {{ 'Module_moncompte_competences_presentation'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
-        {{ form_row(form.presentation, { 'attr': {'class': 'completion' }}) }}
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    {{ form_label(form.presentation) }}
+                </div>
+                {{ 'Module_moncompte_competences_presentation'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+            </div>
+            <div class="col-md-12">
+                {{ form_widget(form.presentation, { 'attr': {'class': 'completion' }}) }}
+            </div>
+            <div class="col-md-12">
+                <div class="help-block">
+                    {{ form_errors(form.presentation) }}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -9,7 +23,8 @@
     <div class="col-md-12">
         <p>
             <label style="vertical-align: bottom">{{ 'account.user.knowledge'|trans }}</label>
-            <a href="{{ path('hopitalnumerique_reference_referencement_popin_user') }}" class="open-popin-referencement fancybox.ajax"><i class="fa fa-cog" style="font-size: 30px;"></i></a>
+            <a href="{{ path('hopitalnumerique_reference_referencement_popin_user') }}"
+               class="open-popin-referencement fancybox.ajax"><i class="fa fa-cog" style="font-size: 30px;"></i></a>
         </p>
     </div>
 </div>
@@ -18,12 +33,12 @@
 
 <div class="row spacer">
     <div class="col-md-12">
-        {{ 'Module_moncompte_competences_joindre_cdp'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
         <div class="form_vertical_row">
             <div class="form-group">
                 <div class="col-md-12">
                     <label class="control-label">{{ 'account.cdp.join'|trans }}</label>
                 </div>
+                {{ 'Module_moncompte_competences_joindre_cdp'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
             </div>
         </div>
         {% if missingInformation|length > 0 %}
@@ -54,18 +69,26 @@
 <hr>
 
 <div class="row spacer">
-    <div class="col-md-12">
-        {{ 'Module_moncompte_competences'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
-    </div>
-</div>
+    {% if domaineCurrent.id == 1 %}
 
-{% if domaineCurrent.id == 1 %}
-    <div class="row">
         <div class="col-md-12">
-            {{ form_row(form.computerSkills, { 'attr': {'class': 'select2' }}) }}
+            <div class="form_vertical_row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        {{ form_label(form.computerSkills) }}
+                    </div>
+                    {{ 'Module_moncompte_competences'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+                </div>
+                <div class="col-md-12">
+                    {{ form_widget(form.computerSkills, { 'attr': {'class': 'select2' }}) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.computerSkills) }}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-12">
             <p>
                 <a onclick="Contact_Popup.display({ '{{ domaineCurrent.adresseMailContact }}':'ANAP' }, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}', 'Mon compte, ajout de logiciel');">
@@ -73,15 +96,13 @@
                 </a>
             </p>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
+</div>
 
 <hr>
 
 <div class="row">
     <div class="col-md-12">
-        {{ 'Module_moncompte_competences_hobbies'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
-
         <div class="form_vertical_row">
             <div class="form-group">
                 <div class="col-md-12">
@@ -89,9 +110,11 @@
                         {{ 'account.user.hobbies'|trans }}
                     </label>
                 </div>
+                {{ 'Module_moncompte_competences_hobbies'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
             </div>
         </div>
-        <ul class="row list-unstyled" id="reference_hobbies_form" data-prototype="{{ form_widget(form.hobbies.vars.prototype.label, {'attr': {'class': 'validate[required] hobby-input'}})|e }}">
+        <ul class="row list-unstyled" id="reference_hobbies_form"
+            data-prototype="{{ form_widget(form.hobbies.vars.prototype.label, {'attr': {'class': 'validate[required] hobby-input'}})|e }}">
             {% for hobby in form.hobbies %}
                 <li class="col-md-12">
                     <div class="hobby-item">
@@ -106,6 +129,8 @@
                 </li>
             {% endfor %}
         </ul>
-        <div class="col-md-12"><button class="btn btn-success add-hobby" type="button">{{ 'account.user.hobby.add'|trans }}</button></div>
+        <div class="col-md-12">
+            <button class="btn btn-success add-hobby" type="button">{{ 'account.user.hobby.add'|trans }}</button>
+        </div>
     </div>
 </div>
