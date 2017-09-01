@@ -27,19 +27,15 @@
     {% endfor %}
 
     <div id="account-dashboard">
-        {% if hasStickedWidget %}
-            <ul class="list-unstyled sticked-brick" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
-                {% set k = 0 %}
-                {% for widget in widgets if widget.sticked %}
-                    {{ block('brick') }}
-                    {% set k = k + 1 %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-
         <div class="gridster">
             <ul class="list-unstyled" data-reorder-uri="{{ path('account_dashboard_reorder') }}">
                 {% set k = 0 %}
+                {% if hasStickedWidget %}
+                    {% for widget in widgets if widget.sticked %}
+                        {{ block('brick') }}
+                        {% set k = k + 1 %}
+                    {% endfor %}
+                {% endif %}
                 {% for widget in widgets if not widget.sticked %}
                     {{ block('brick') }}
                     {% set k = k + 1 %}
@@ -51,7 +47,7 @@
 {% endblock %}
 
 {% block brick %}
-    <li data-col="{{ k%2+1 }}" data-row="{{ ((k+2)/2)|round(0, 'floor') }}" data-sizex="{{ widget.isSticked ? 2 : 1 }}" data-sizey="1" data-id="{{ widget.name }}">
+    <li data-col="{{ k%2+1 }}" data-row="{{ ((k+2)/2)|round(0, 'floor') }}" data-sizex="1" data-sizey="1" data-id="{{ widget.name }}">
         <div class="panel panel-default dashboard-brick dashboard-brick-{{ widget.name }}">
             <div class="panel-heading custom-panel-heading">
                 <div class="options pull-right">
@@ -67,8 +63,11 @@
                 </div>
                 <div class="panel-title">
                     <i class="icon {{ widget.name }}"></i>
-
-                    {{ widget.title }}
+                    {% if  widget.name == 'profile' %}
+                        <a href="{{ path('account_profile') }}">{{ widget.title }}</a>
+                    {% else %}
+                        {{ widget.title }}
+                    {% endif %}
                 </div>
             </div>
             <div class="panel-body brick-container">
