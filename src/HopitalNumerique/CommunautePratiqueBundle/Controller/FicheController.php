@@ -43,6 +43,7 @@ class FicheController extends Controller
                 ->canCloseFiche($fiche),
             'canOpen' => $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
                 ->canOpenFiche($fiche),
+            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($this->getUser(), $fiche->getGroupe())
         ]);
     }
 
@@ -175,15 +176,17 @@ class FicheController extends Controller
     /**
      * @param Fiche $fiche
      *
-     * @return StreamedResponse
-     *
-     * @Security("is_granted('ROLE_ADMINISTRATEUR_1') or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') ")
+     * @return Response|StreamedResponse
      */
     public function exportCsvAction(Fiche $fiche)
     {
         $export = $this->container->get(Csv::class);
-        $comments = $fiche->getCommentaires();
+        if ($export->canExportCsv($this->getUser(), $fiche->getGroupe())) {
+            $comments = $fiche->getCommentaires();
 
-        return $export->generateResponse($comments, 'fiche_' . $fiche->getQuestionPosee());
+            return $export->generateResponse($comments, 'fiche_' . $fiche->getQuestionPosee());
+        }
+
+        return new Response(null, 403);
     }
 }

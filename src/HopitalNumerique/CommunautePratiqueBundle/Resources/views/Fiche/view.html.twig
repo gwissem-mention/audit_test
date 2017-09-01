@@ -98,10 +98,8 @@
 
                                 <div class="message">
                                     {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
-                                    {% if is_granted('ROLE_ADMINISTRATEUR_1')
-                                    or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')
-                                    or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') %}
-                                        <a href="{{ path('hopitalnumerique_communautepratique_fiche_export_comments', {'fiche': fiche.id}) }}" class="btn btn-info" id="export-csv">Exporter CSV</a>
+                                    {% if canExportCsv %}
+                                        <a href="{{ path('hopitalnumerique_communautepratique_fiche_export_comments', {'fiche': fiche.id}) }}" class="btn btn-info" id="export-csv">Exporter la discussion</a>
                                     {% endif %}
                                 </div>
                             </div>
