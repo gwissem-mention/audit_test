@@ -53,6 +53,7 @@ step:
             empty: NC
             rate: %rate% %
         actions:
+            view: Voir les ressources pour maîtriser ce risque
             comment: Ajouter un commentaire
             remove: Retirer de la liste
             analyse:
