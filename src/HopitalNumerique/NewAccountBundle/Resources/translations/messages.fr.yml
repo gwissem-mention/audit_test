@@ -17,8 +17,8 @@ account:
         title: Services
         quick_access: Accès directs
         domain_list:
-            label: Sélectionnez un domaine
-            all: Tous mes domaines
+            label: Filtrer
+            all: Tous
         no_data: Aucune donnée
     cart:
         title: Mon panier

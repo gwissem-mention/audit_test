@@ -30,8 +30,7 @@
     text-decoration: none;
     padding: 10px;
     min-height: 100%;
-
-    color: #777;
+    color: #000;
 }
 
 #my-account #services .quick-access ul li a:hover {
@@ -40,8 +39,9 @@
 }
 
 #my-account #services .quick-access ul li a .picto {
+    color: #777;
     display: block;
-    font-size: 60px;
+    font-size: 50px;
 }
 
 #my-account #services .domains-row {
@@ -91,3 +91,20 @@
 #my-account #services .icon.interventions::before {
     content: "\f0fe";
 }
+
+#my-account #services #autodiagnostic-widget table.account-table .parent-row td:nth-child(1) {
+    font-size: 14px;
+}
+
+#my-account #services .service-widget .panel-heading {
+    position: relative;
+}
+
+#my-account #services .service-widget .panel-heading .fa-arrow-up {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 35%;
+}
+
+

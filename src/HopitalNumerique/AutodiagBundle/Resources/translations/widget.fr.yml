@@ -17,5 +17,5 @@ autodiagnostic:
     synthesis:
         updated: L'autodiagnostic a été mis à jour depuis votre dernier enregistrement
         state:
-            valid: Validée
-            invalid: Non validée
+            valid: Validé
+            invalid: Non validé

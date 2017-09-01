@@ -1,7 +1,5 @@
 {% if widgets is not empty %}
     <div class="quick-access">
-        <h2>{{ 'account.service.quick_access'|trans }}</h2>
-
         <div class="widget-description">
             {{ 'Module_moncompte_services_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
@@ -25,6 +23,7 @@
                     <i class="icon {{ widget.name }}"></i>
                     {{ widget.title }}
                 </div>
+                <i class="fa fa-arrow-up" aria-hidden="true" onclick="$('html,body').animate({scrollTop:0},'slow');"></i>
             </div>
             <div class="panel-body">
                 {{ widget.content|raw }}
