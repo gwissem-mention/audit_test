@@ -14,8 +14,9 @@ div.homepage  {
 }
 
 /* HEADER */
-#header .nom {
+#header #cart {
     margin-right: 10px;
+    margin-left: 10px;
 }
 #logo-header {
     display: block;

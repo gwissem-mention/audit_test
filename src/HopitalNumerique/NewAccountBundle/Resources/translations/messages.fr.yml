@@ -66,16 +66,16 @@ account:
 
 cart:
     items:
-        title: Mes objets placés dans mon panier
+        title: Contenu de mon panier
         header:
-            object_type: Type de l'objet
-            object_title: Titre de l'objet
+            object_type: Type
+            object_title: Titre
         add:
-            label: Ajouter les objets sélectionnés au rapport
+            label: Ajouter ma sélection au rapport
         action:
             open:
-                title: Ouvrir l'objet
+                title: Ouvrir
             remove:
-                title: Supprimer l'objet
+                title: Retirer du panier
                 confirm: Retirer cet objet de mon panier  ?
     no_items: "- Aucun item dans le panier -"

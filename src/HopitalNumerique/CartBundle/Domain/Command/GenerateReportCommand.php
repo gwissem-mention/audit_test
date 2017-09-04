@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CartBundle\Domain\Command;
 
-use HopitalNumerique\CartBundle\Entity\ReportFactory;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\CartBundle\Entity\ReportFactory;
+use HopitalNumerique\CartBundle\Enum\ReportColumnsEnum;
 
 class GenerateReportCommand
 {
@@ -25,7 +26,7 @@ class GenerateReportCommand
     /**
      * @var array
      */
-    public $columns = [];
+    public $columns = [ReportColumnsEnum::RESUME_COLUMN];
 
     /**
      * EditReportFactoryCommand constructor.

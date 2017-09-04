@@ -67,7 +67,7 @@ class ReportFactoryController extends Controller
         $result = $reportFactory->jsonSerialize();
 
         $result['factoryItems'] = $this->get('hopitalnumerique_cart.builder.item')->buildPendingReport($this->getUser());
-        $result['columns'] = ReportColumnsEnum::getReportColumns();
+        $result['columns'] = ReportColumnsEnum::getReportDefaultColumns();
 
         return new JsonResponse($result);
     }
