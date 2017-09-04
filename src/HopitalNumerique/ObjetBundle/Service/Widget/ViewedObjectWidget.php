@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -167,6 +168,9 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('viewed_objects.title', [], 'widget');
 
-        return new Widget('viewed-objects', $title, $html);
+        $widget = new Widget('viewed-objects', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', count($data)));
+
+        return $widget;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Routing\RouterInterface;
@@ -139,6 +140,9 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('guided_search.title', [], 'widget');
 
-        return new Widget('guided-search', $title, $html);
+        $widget = new Widget('guided-search', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', count($data)));
+
+        return $widget;
     }
 }

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Service\Widget;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
@@ -149,6 +150,9 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('survey.title', [], 'widget');
 
-        return new Widget('survey', $title, $html);
+        $widget = new Widget('survey', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', count($data)));
+
+        return $widget;
     }
 }

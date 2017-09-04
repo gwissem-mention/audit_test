@@ -1,7 +1,5 @@
 {% if widgets is not empty %}
     <div class="quick-access">
-        <h2>{{ 'account.service.quick_access'|trans }}</h2>
-
         <div class="widget-description">
             {{ 'Module_moncompte_services_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
         </div>
@@ -11,6 +9,9 @@
                 <li>
                     <a href="#{{ widget.name ~ '-widget' }}">
                         <i class="picto icon {{ widget.name }}"></i>
+                        <span class="badge progress-bar-danger">
+                            {{ widget.hasExtension('count') ? widget.getExtension('count').content|raw }}
+                        </span>
                         {{ widget.title }}
                     </a>
                 </li>
@@ -25,6 +26,7 @@
                     <i class="icon {{ widget.name }}"></i>
                     {{ widget.title }}
                 </div>
+                <i class="fa fa-arrow-up" aria-hidden="true" onclick="$('html,body').animate({scrollTop:0},'slow');"></i>
             </div>
             <div class="panel-body">
                 {{ widget.content|raw }}
