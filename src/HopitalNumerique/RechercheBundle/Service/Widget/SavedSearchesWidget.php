@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -112,6 +113,9 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('saved_searches.title', [], 'widget');
 
-        return new Widget('saved-searches', $title, $html);
+        $widget = new Widget('saved-searches', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', count($data)));
+
+        return $widget;
     }
 }

@@ -78,13 +78,13 @@ class Widget
     }
 
     /**
-     * @param WidgetExtension $widgetExtension
+     * @param WidgetExtension $extension
      *
      * @return Widget
      */
-    public function addExtension(WidgetExtension $widgetExtension)
+    public function addExtension(WidgetExtension $extension)
     {
-        $this->extensions[] = $widgetExtension;
+        $this->extensions[$extension->getName()] = $extension;
 
         return $this;
     }
@@ -95,5 +95,33 @@ class Widget
     public function getExtensions()
     {
         return $this->extensions;
+    }
+
+    /**
+     * Gets extension by name
+     *
+     * @param $name
+     *
+     * @return WidgetExtension|null
+     * @throws \LogicException
+     */
+    public function getExtension($name)
+    {
+        if (!$this->hasExtension($name)) {
+            throw new \LogicException('Extension not found');
+        }
+
+        return $this->extensions[$name];
+    }
+
+    /**
+     * Checks if extension exist by name
+     *
+     * @param $name
+     * @return bool
+     */
+    public function hasExtension($name)
+    {
+        return array_key_exists($name, $this->extensions);
     }
 }

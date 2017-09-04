@@ -9,6 +9,9 @@
                 <li>
                     <a href="#{{ widget.name ~ '-widget' }}">
                         <i class="picto icon {{ widget.name }}"></i>
+                        <span class="badge progress-bar-danger">
+                            {{ widget.hasExtension('count') ? widget.getExtension('count').content|raw }}
+                        </span>
                         {{ widget.title }}
                     </a>
                 </li>

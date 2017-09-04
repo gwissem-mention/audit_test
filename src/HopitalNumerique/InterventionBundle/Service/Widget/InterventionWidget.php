@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\InterventionBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -304,6 +305,9 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('intervention.title', [], 'widget');
 
-        return new Widget('interventions', $title, $html);
+        $widget = new Widget('interventions', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', count($data)));
+
+        return $widget;
     }
 }
