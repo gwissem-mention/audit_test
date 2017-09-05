@@ -117,10 +117,13 @@
             {% endfor %}
         {% else %}
             <p>
-                <a href="{{ path('hopitalnumerique_communautepratique_inscription') }}" class="btn btn-success">
-                    {{ 'account.cdp.join'|trans }}
-                </a>
-                <a id="leave-communaute-pratique" class="btn btn-danger">{{ 'account.cdp.leave'|trans }}</a>
+                {% if user.isInscritCommunautePratique %}
+                    <a id="leave-communaute-pratique" class="btn btn-danger">{{ 'account.cdp.leave'|trans }}</a>
+                {% else %}
+                    <a href="{{ path('hopitalnumerique_communautepratique_inscription') }}" class="btn btn-success">
+                        {{ 'account.cdp.join'|trans }}
+                    </a>
+                {% endif %}
             </p>
         {% endif %}
     </div>
