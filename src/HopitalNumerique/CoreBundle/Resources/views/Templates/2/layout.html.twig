@@ -26,48 +26,76 @@
                 <a href="{{ domaineCurrent.urlTitre ? domaineCurrent.urlTitre : path('hopital_numerique_homepage') }}" class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">{{domaineCurrent.description}}</div>
             </div>
-
-            <div class="loggedUser pull-right">
-                <div class="connexion">
-                    {% if app.user == false %}
-                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>Se connecter</a>
-                    {% endif %}
-                </div>
-                {% if app.user %}
-                    {% if app.user.lastname or app.user.firstname %}
-                        <p>
-                            <i class="fa fa-user" ></i> {{ app.user.firstname|capitalize }}
-                            <span class="nom">{{ app.user.lastname|capitalize }}</span>
-                        </p>
-                    {% else %}
-                        <p>
-                            <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
-                        </p>
-                    {% endif %}
-                    <a href="{{ path('account_cart') }}" id="cart" class="btn btn-default fa fa-shopping-cart" title="{{ 'header.cart'|trans }}"></a>
-                    <div class="connexion">
-                        {% set previousAdmin = false  %}
-                        {% for role in app.security.getToken().getRoles() %}
-                            {% if role.getRole() == 'ROLE_PREVIOUS_ADMIN' %}
-                                {% set previousAdmin = true %}
-                            {% endif %}
-                        {% endfor %}
-                        {% if previousAdmin %}
-                            <a href="{{ path('hopital_numerique_homepage', {'_switch_user': '_exit'}) }}">Quitter cet utilisateur</a>
-                        {% else %}
-                            <a href="{{path('account_logout')}}">Déconnexion</a>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
-                {% endif %}
-            </div>
             <div id="logoHn" class="pull-right">
                 <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" target="_blank">
                     <img src="{{asset('bundles/hopitalnumeriquecore/img/mhn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
                 </a>
             </div>
-
+            <div class="loggedUser pull-right">
+                <div class="connexion">
+                    {% if app.user == false %}
+                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>{{ 'menu.account.login'|trans }}</a>
+                    {% endif %}
+                </div>
+                {% if app.user %}
+                    <p tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="bottom">
+                        {% if app.user.lastname or app.user.firstname %}
+                            <i class="fa fa-user" ></i> {{ app.user.firstname|capitalize }}
+                            <span class="nom">{{ app.user.lastname|capitalize }}</span>
+                        {% else %}
+                            <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
+                        {% endif %}
+                    </p>
+                    <ul class="account-menu">
+                        <li>
+                            <a href="{{ path('account_profile') }}">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <span>{{ 'menu.account.profile'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_service') }}">
+                                <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                <span>{{ 'menu.account.services'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_cart') }}">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                <span>{{ 'menu.account.cart'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_parameter') }}">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                                <span>{{ 'menu.account.parameters'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            {% set previousAdmin = false  %}
+                            {% for role in app.security.getToken().getRoles() %}
+                                {% if role.getRole() == 'ROLE_PREVIOUS_ADMIN' %}
+                                    {% set previousAdmin = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if previousAdmin %}
+                                <a href="{{ path('hopital_numerique_homepage', {'_switch_user': '_exit'}) }}">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    {{ 'menu.account.leave'|trans }}
+                                </a>
+                            {% else %}
+                                <a href="{{path('account_logout')}}">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    <span>{{ 'menu.account.logout'|trans }}</span>
+                                </a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    <a href="{{ path('account_cart') }}" id="cart"><i class="fa fa-shopping-cart">&nbsp;</i>{{ 'menu.account.cart'|trans }}</a>
+                {% else %}
+                    <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">{{ 'menu.account.create'|trans }}</a>
+                {% endif %}
+            </div>
             <div class="common-sprite common-sprite-header"></div>
             <div class="clearfix"></div>
         </div>

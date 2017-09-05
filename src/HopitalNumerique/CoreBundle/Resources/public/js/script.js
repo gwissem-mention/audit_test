@@ -1,4 +1,12 @@
 $(document).ready(function() {
+    $('[data-toggle="popover"]').popover({
+        html: true,
+        content: function() {
+            var menu = document.querySelector('ul.account-menu');
+            return menu.outerHTML;
+        }
+    });
+
     $('#mesrequetes.closed').click(function(){
         //on ouvre
         if ( $(this).hasClass('closed') ){
