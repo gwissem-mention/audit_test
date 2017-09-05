@@ -37,19 +37,21 @@ class Csv
                 ';'
             );
             foreach ($comments as $comment) {
+                $line = [
+                    $comment->getUser()->getNomPrenom(),
+                    $comment->getDateCreation()->format('Y-m-d'),
+                    $comment->getDateDerniereModification()->format('Y-m-d'),
+                    strip_tags($comment->getMessage()),
+                ];
                 fputcsv(
                     $handle,
-                    [
-                        $comment->getUser()->getNomPrenom(),
-                        $comment->getDateCreation()->format('Y-m-d'),
-                        $comment->getDateDerniereModification()->format('Y-m-d'),
-                        strip_tags($comment->getMessage()),
-                    ],
+                    array_map("utf8_decode", $line),
                     ';'
                 );
             }
         });
         $response->headers->set('Content-Type', 'application/force-download');
+        $response->headers->set('charset', 'ISO-8859-1');
         $response->headers->set(
             'Content-Disposition',
             'attachment; filename="'.'commentaires_' . str_replace(" ", "_", strtolower($title)) . '.csv' . '"'
