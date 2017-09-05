@@ -44,7 +44,7 @@
                             <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
                         </p>
                     {% endif %}
-                    <a href="{{ path('account_cart') }}" id="cart" class="btn btn-default fa fa-shopping-cart"></a>
+                    <a href="{{ path('account_cart') }}" id="cart" class="btn btn-default fa fa-shopping-cart" title="{{ 'header.cart'|trans }}"></a>
                     <div class="connexion">
                         {% set previousAdmin = false  %}
                         {% for role in app.security.getToken().getRoles() %}
