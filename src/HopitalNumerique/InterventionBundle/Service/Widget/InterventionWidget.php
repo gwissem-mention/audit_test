@@ -306,7 +306,7 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
         $title = $this->translator->trans('intervention.title', [], 'widget');
 
         $widget = new Widget('interventions', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($data)));
+        $widget->addExtension(new WidgetExtension('count', count($data['new']) + count($data['processed'])));
 
         return $widget;
     }
