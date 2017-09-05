@@ -68,6 +68,9 @@
     content: "\f002";
 }
 
+#account-dashboard .dashboard-brick .fa-trophy-o {
+    color: #777;
+}
 
 /** PROFILE BRICK **/
 #account-dashboard .dashboard-brick.dashboard-brick-profile .brick-container {
