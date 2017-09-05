@@ -83,6 +83,8 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
 
         $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
+        $count = 0;
+
         /** @var Reponse $response */
         foreach ($responses as $response) {
             $entry = $response->getOccurrence();
@@ -139,6 +141,10 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
             }
         }
 
+        foreach ($data as $survey) {
+            $count += empty($survey['responses']) ? 1 : count($survey['responses']);
+        }
+
         if (empty($data)) {
             return null;
         }
@@ -151,7 +157,7 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
         $title = $this->translator->trans('survey.title', [], 'widget');
 
         $widget = new Widget('survey', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($data)));
+        $widget->addExtension(new WidgetExtension('count', $count));
 
         return $widget;
     }
