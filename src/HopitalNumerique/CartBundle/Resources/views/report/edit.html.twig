@@ -34,7 +34,7 @@
                             {% set columnName = column.vars.value %}
                             <label for="{{ 'report-column-'~columnName }}" class="checkbox-inline">
                                 {{ '{{#report_columns.'~columnName~'}}' }}
-                                <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" checked="checked" value="{{ columnName }}">
+                                <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" checked value="{{ columnName }}">
                                 {{ '{{else}}' }}
                                 <input type="checkbox" id="{{ 'report-column-'~columnName }}" name="{{ column.vars.full_name }}" value="{{ columnName }}">
                                 {{ '{{/report_columns.'~columnName~'}}' }}

@@ -41,8 +41,9 @@ h3{font-size: 20px}
     #header #logoHn img{margin:0;}
     #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}*/
 
-    #header .nom {
+    #header #cart {
         margin-right: 10px;
+        margin-left: 10px;
     }
     #logo-header {
         display: block;
