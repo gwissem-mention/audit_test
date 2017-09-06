@@ -165,7 +165,10 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         $title = $this->translator->trans('viewed_objects.title', [], 'widget');
 
         $widget = new Widget('viewed-objects', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($data)));
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
 
         return $widget;
     }

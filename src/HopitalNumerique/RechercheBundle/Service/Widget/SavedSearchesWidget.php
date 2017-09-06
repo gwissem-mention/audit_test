@@ -110,7 +110,10 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
         ]);
 
         $widget = new Widget('saved-searches', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($data)));
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
 
         return $widget;
     }

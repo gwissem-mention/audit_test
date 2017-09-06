@@ -157,7 +157,10 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
         $title = $this->translator->trans('survey.title', [], 'widget');
 
         $widget = new Widget('survey', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', $count));
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => $count]
+        )));
 
         return $widget;
     }

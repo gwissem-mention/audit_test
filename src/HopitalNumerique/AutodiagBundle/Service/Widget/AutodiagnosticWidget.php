@@ -184,7 +184,10 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         $title = $this->translator->trans('autodiagnostic.title', [], 'widget');
 
         $widget = new Widget('autodiagnostic', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($syntheses)));
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($syntheses)]
+        )));
 
         return $widget;
     }

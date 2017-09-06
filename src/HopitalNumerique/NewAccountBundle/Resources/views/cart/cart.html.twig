@@ -40,6 +40,7 @@
         <div class="panel-heading custom-panel-heading">
             <div class="panel-title">
                 <i class="icon cart-items-icon"></i>
+                {% include '@NewAccount/widget/extension/badge_number_extension.html.twig' with {'number': cartItems|length} %}
                 {{ 'cart.items.title'|trans }}
             </div>
         </div>

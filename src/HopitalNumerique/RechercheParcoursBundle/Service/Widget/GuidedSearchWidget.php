@@ -137,7 +137,10 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
         $title = $this->translator->trans('guided_search.title', [], 'widget');
 
         $widget = new Widget('guided-search', $title, $html);
-        $widget->addExtension(new WidgetExtension('count', count($data)));
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
 
         return $widget;
     }
