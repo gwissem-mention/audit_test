@@ -62,9 +62,7 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
             $this->domains
         );
 
-        if (empty($searches)) {
-            return null;
-        }
+        $title = $this->translator->trans('saved_searches.title', [], 'widget');
 
         $data = [];
 
@@ -110,8 +108,6 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
         $html = $this->twig->render('HopitalNumeriqueRechercheBundle:widget:saved_searches.html.twig', [
             'data' => $data,
         ]);
-
-        $title = $this->translator->trans('saved_searches.title', [], 'widget');
 
         $widget = new Widget('saved-searches', $title, $html);
         $widget->addExtension(new WidgetExtension('count', count($data)));

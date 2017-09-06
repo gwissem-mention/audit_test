@@ -88,4 +88,6 @@
             return confirm('{{ 'autodiagnostic.delete.confirm'|trans }}');
         });
     </script>
+{% else %}
+    {{ 'autodiagnostic.not_found'|trans }}
 {% endif %}

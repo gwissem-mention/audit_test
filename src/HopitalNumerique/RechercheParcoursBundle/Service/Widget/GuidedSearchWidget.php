@@ -80,10 +80,6 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
             $this->domains
         );
 
-        if (empty($guidedSearches)) {
-            return null;
-        }
-
         $data = [];
 
         /** @var GuidedSearch $guidedSearch */

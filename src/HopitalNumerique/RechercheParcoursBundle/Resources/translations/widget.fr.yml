@@ -1,5 +1,6 @@
 guided_search:
     title: Mes parcours guidés
+    not_found: Aucun parcours guidé
     table:
         title: Parcours guidés
         actions: Actions

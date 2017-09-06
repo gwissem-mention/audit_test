@@ -154,10 +154,6 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
             ];
         }
 
-        if (empty($data)) {
-            return null;
-        }
-
         usort($data, function ($a, $b) {
             return $a['consultationDate'] < $b['consultationDate'];
         });

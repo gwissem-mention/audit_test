@@ -4,6 +4,7 @@ updated_object:
 
 viewed_objects:
     title: Mes publications vues
+    not_found: Aucune publication vue
     publications: Publications
     actions: Actions
     show_all: Afficher tout
