@@ -109,7 +109,7 @@ class RegistrationType extends AbstractType
                 'required' => false,
                 'expanded' => false,
                 'multiple' => true,
-                'label' => 'Type activité (pour les établissements sanitaires)',
+                'label' => 'Activité de la structure',
                 'empty_value' => ' - ',
             ])
             ->add('profileType', EntityType::class, [

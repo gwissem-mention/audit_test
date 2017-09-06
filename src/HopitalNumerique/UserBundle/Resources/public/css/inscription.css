@@ -126,3 +126,11 @@
 #registration .tou-label {
     margin-left: 25px;
 }
+
+#registration #accordion .panel-heading {
+    cursor: pointer;
+}
+
+#registration #accordion .collapse {
+    cursor: inherit;
+}

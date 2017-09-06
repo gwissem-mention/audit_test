@@ -34,7 +34,7 @@
         {{ form_start(form) }}
         <div class="panel panel-default">
             <div class="panel-heading custom-panel-heading">
-                Inscription
+                {{ 'register.panel.registration'|trans }}
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -71,7 +71,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading custom-panel-heading">
-                Votre structure
+                {{ 'register.panel.structure'|trans }}
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -87,11 +87,11 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading custom-panel-heading">
-                Votre structure n'est pas dans la liste précédente
+        <div class="panel panel-default" id="accordion">
+            <div class="panel-heading custom-panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapseOrganization">
+                {{ 'register.panel.structure_not_previous'|trans }}
             </div>
-            <div class="panel-body">
+            <div class="panel-body panel-collapse collapse" id="collapseOrganization">
                 <div class="row">
                     <div class="col-md-12">
                         {{ form_row(form.organizationType) }}
