@@ -1,2 +1,12 @@
 header:
     cart: Accéder au panier
+menu:
+    account:
+        profile: Mes informations
+        services: Services
+        cart: Mon panier
+        parameters: Mes paramètres
+        login: Se connecter
+        logout: Déconnexion
+        leave: Quitter cet utilisateur
+        create: Créer un compte
