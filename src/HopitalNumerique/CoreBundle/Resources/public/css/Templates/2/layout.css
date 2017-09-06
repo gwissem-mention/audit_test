@@ -120,7 +120,7 @@ h3{font-size: 20px}
         margin-right: 15px;
         font-size: 0.9em;
     }
-    #header .loggedUser a {
+    #header .loggedUser a:not(.btn-rose) {
         color: #d60030;
         text-decoration: none;
     }
