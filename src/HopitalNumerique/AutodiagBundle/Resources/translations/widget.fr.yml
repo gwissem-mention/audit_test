@@ -1,6 +1,6 @@
 autodiagnostic:
     title: Mes autodiagnostics
-²    not_found: Vous n'avez aucun autodiagnostic
+    not_found: Vous n'avez aucun autodiagnostic
     table:
         autodiag: Autodiagnostics
         actions: Actions
