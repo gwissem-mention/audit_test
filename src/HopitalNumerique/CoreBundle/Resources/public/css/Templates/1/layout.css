@@ -120,6 +120,13 @@ h3{font-size: 20px}
         margin-right: 15px;
         font-size: 0.9em;
     }
+    #header .loggedUser a {
+        color: #d60030;
+        text-decoration: none;
+    }
+    #header .loggedUser a:hover span {
+        text-decoration: underline;
+    }
     #header .loggedUser .fa {
         font-size: 1.5em;
     }
@@ -135,12 +142,21 @@ h3{font-size: 20px}
         padding: 0;
         margin: 0;
         list-style: none;
+        position: relative;
+        width: 160px;
     }
     #header .loggedUser .account-menu li {
         margin: 15px 0;
     }
     #header .loggedUser .account-menu li a {
         color: #777;
+    }
+    #header .loggedUser .account-menu li a:hover span {
+        text-decoration: underline;
+    }
+    #header .loggedUser .account-menu li a span {
+        position: absolute;
+        left: 30px;
     }
     #header .loggedUser .account-menu li .fa {
         margin-right: 10px;

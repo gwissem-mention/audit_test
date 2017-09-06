@@ -98,16 +98,17 @@
             <div class="loggedUser pull-right">
                 <div class="connexion">
                     {% if app.user == false %}
-                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>{{ 'menu.account.login'|trans }}</a>
+                        <a href="{{path('account_login')}}"><i class="fa fa-user" >&nbsp;</i><span>{{ 'menu.account.login'|trans }}</span></a>
                     {% endif %}
                 </div>
                 {% if app.user %}
                     <a href="{{ path('account_dashboard') }}" data-toggle="popover">
                         {% if app.user.lastname or app.user.firstname %}
-                            <i class="fa fa-user" ></i> {{ app.user.firstname|capitalize }}
-                            <span class="nom">{{ app.user.lastname|capitalize }}</span>
+                            <i class="fa fa-user" ></i>
+                            <span>{{ app.user.firstname|capitalize }} {{ app.user.lastname|capitalize }}</span>
                         {% else %}
-                            <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
+                            <i class="fa fa-user"></i>
+                            <span>{{ app.user.username|capitalize }}</span>
                         {% endif %}
                     </a>
                     <ul class="account-menu">
@@ -155,7 +156,7 @@
                             {% endif %}
                         </li>
                     </ul>
-                    <a href="{{ path('account_cart') }}" id="cart"><i class="fa fa-shopping-cart">&nbsp;</i>{{ 'menu.account.cart'|trans }}</a>
+                    <a href="{{ path('account_cart') }}" id="cart"><i class="fa fa-shopping-cart">&nbsp;</i><span>{{ 'menu.account.cart'|trans }}</span></a>
                 {% else %}
                     <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">{{ 'menu.account.create'|trans }}</a>
                 {% endif %}
