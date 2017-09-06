@@ -177,10 +177,6 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             ];
         }
 
-        if (empty($data)) {
-            return null;
-        }
-
         $html = $this->twig->render('HopitalNumeriqueAutodiagBundle:widget:autodiagnostics.html.twig', [
             'data' => $data,
         ]);
