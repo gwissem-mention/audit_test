@@ -104,14 +104,14 @@
                     {% endif %}
                 </div>
                 {% if app.user %}
-                    <p tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="bottom">
+                    <a href="{{ path('account_dashboard') }}" data-toggle="popover">
                         {% if app.user.lastname or app.user.firstname %}
                             <i class="fa fa-user" ></i> {{ app.user.firstname|capitalize }}
                             <span class="nom">{{ app.user.lastname|capitalize }}</span>
                         {% else %}
                             <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
                         {% endif %}
-                    </p>
+                    </a>
                     <ul class="account-menu">
                         <li>
                             <a href="{{ path('account_profile') }}">
