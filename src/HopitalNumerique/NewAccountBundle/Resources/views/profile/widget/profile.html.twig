@@ -16,7 +16,13 @@
         {% elseif user.organization and user.jobLabel %}
             {{ user.jobLabel }} - {{ user.organization.nom }}
         {% else %}
-            {{ 'specify_job'|trans }}
+            {% if user.jobLabel is null and user.organization is null and user.organizationLabel is null %}
+                {{ 'specify_both'|trans }}
+            {% elseif user.jobLabel is null %}
+                {{ 'specify_job'|trans }}
+            {% elseif user.organization is null or user.organizationLabel is null %}
+                {{ 'specify_organization'|trans }}
+            {% endif %}
         {% endif %}
 
         <div class="profile-completion">

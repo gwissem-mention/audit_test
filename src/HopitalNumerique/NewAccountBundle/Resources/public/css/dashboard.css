@@ -5,7 +5,7 @@
 #account-dashboard .gridster ul li .panel .panel-body {
     overflow: hidden;
     overflow-y: auto;
-    height: 200px;
+    height: 180px;
 }
 
 #account-dashboard .gridster ul li .panel .panel-body ol {
@@ -115,6 +115,10 @@
 #account-dashboard .dashboard-brick.dashboard-brick-profile .profile-completion a {
     margin-top: 10px;
     display: inline-block;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-user-activity li:nth-last-child(-n+2) {
+    display: inline;
 }
 
 #account-dashboard .dashboard-brick .tooltip-inner {
