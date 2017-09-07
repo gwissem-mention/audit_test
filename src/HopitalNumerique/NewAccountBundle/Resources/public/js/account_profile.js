@@ -3,13 +3,13 @@ $(function() {
     Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
 
     if (window.location.hash) {
-        $('[href='+window.location.hash+']').tab('show');
+        $('[data-target=' + window.location.hash.substring(1) + ']').tab('show');
     } else {
         $('.profile-tab-nav').first().tab('show');
     }
 
     $('.profile-tab-nav').on('shown.bs.tab', function(event){
-        location.hash = event.target.getAttribute('href');
+        location.hash = '#' + event.target.dataset.target;
     });
 
     var tabErrorHandler = new TabErrorHandler();
@@ -57,11 +57,13 @@ $(function() {
         $('a[href="'+ target +'"]').tab('show');
     });
 
-    document.getElementById('leave-communaute-pratique').addEventListener('click', function (ev) {
-        CommunautePratique.desinscrit(function () {
-            window.location.reload();
-        });
-    })
+    if (document.getElementById('leave-communaute-pratique')) {
+        document.getElementById('leave-communaute-pratique').addEventListener('click', function (ev) {
+            CommunautePratique.desinscrit(function () {
+                window.location.reload();
+            });
+        })
+    }
 });
 
 function initSelect2($select) {
