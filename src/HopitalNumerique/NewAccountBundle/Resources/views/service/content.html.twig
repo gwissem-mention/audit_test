@@ -9,9 +9,9 @@
                 <li>
                     <a href="#{{ widget.name ~ '-widget' }}">
                         <i class="picto icon {{ widget.name }}"></i>
-                        <span class="badge progress-bar-danger">
-                            {{ widget.hasExtension('count') ? widget.getExtension('count').content|raw }}
-                        </span>
+                        {% for extension in widget.extensions %}
+                            {{ extension.content|raw }}
+                        {% endfor %}
                         {{ widget.title }}
                     </a>
                 </li>
@@ -24,6 +24,9 @@
             <div class="panel-heading custom-panel-heading">
                 <div class="panel-title">
                     <i class="icon {{ widget.name }}"></i>
+                    {% for extension in widget.extensions %}
+                        {{ extension.content|raw }}
+                    {% endfor %}
                     {{ widget.title }}
                 </div>
                 <i class="fa fa-arrow-up" aria-hidden="true" onclick="$('html,body').animate({scrollTop:0},'slow');"></i>

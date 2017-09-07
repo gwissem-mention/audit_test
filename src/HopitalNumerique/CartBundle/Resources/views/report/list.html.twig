@@ -3,6 +3,7 @@
     <div class="panel-heading custom-panel-heading">
         <div class="panel-title">
             <i class="icon report-list-icon"></i>
+            {% include '@NewAccount/widget/extension/badge_number_extension.html.twig' with {'number': reports|length} %}
             {{ 'list.title'|trans }}
         </div>
     </div>
