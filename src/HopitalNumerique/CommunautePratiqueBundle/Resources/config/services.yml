@@ -7,18 +7,20 @@ imports:
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:
-        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire"
+        class: HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire
         arguments: ['@session', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_reference.manager.reference']
 
     hopitalnumerique_communautepratique.dependency_injection.commentaire:
-        class: 'HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Commentaire'
+        class: HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Commentaire
         arguments: ['@router', '@form.factory']
 
     hopitalnumerique_communautepratique.dependency_injection.inscription:
-        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription"
+        class: HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription
+        arguments:
+            - '@translator.default'
 
     hopitalnumerique_communautepratique.dependency_injection.security:
-        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Security"
+        class: HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Security
         arguments: ['@security.context']
 
     hopitalnumerique_communautepratique.pagerfanta.view:
@@ -41,11 +43,29 @@ services:
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire'
 
+    hopitalnumerique_communautepratique.repository.groupe:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'
+
     hopitalnumerique_communautepratique.repository.fiche:
         class: HopitalNumerique\CommunautePratiqueBundle\Repository\FicheRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche'
+
+    hopitalnumerique_communautepratique.widgets.cdp_widget:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Widget\DashboardWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setRepositories, ['@hopitalnumerique_user.repository.user', '@hopitalnumerique_communautepratique.repository.groupe']]
+        public: false
 
     hopitalnumerique_communautepratique.repository.group:
         class: HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository

@@ -1,0 +1,11 @@
+#my-account .icon.password-icon::before {
+    content: '\f084';
+}
+
+#my-account .icon.notifications-icon::before {
+    content: '\f11d';
+}
+
+#my-account .icon.unsubscribe-icon::before {
+    content: '\f08b';
+}

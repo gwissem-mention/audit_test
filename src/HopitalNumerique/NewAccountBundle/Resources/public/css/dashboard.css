@@ -1,0 +1,128 @@
+#account-dashboard .gridster ul {
+    margin-left: -10px;
+}
+
+#account-dashboard .gridster ul li .panel .panel-body {
+    overflow: hidden;
+    overflow-y: auto;
+    height: 180px;
+}
+
+#account-dashboard .gridster ul li .panel .panel-body ol {
+    padding: 0;
+}
+
+#account-dashboard .gridster ul li .panel .panel-body ol li {
+    list-style: none;
+}
+
+#account-dashboard .dashboard-brick ol {
+    margin-top: 3px;
+}
+
+#account-dashboard .dashboard-brick ol li:not(:last-child) {
+    padding-bottom: 4px;
+}
+
+#account-dashboard .dashboard-brick .yellow {
+    color: #FFD700;
+}
+
+#account-dashboard .dashboard-brick .icon.profile::before {
+    content: "\f007";
+}
+
+#account-dashboard .dashboard-brick .icon.intervention-request::before {
+    content: "\f0fe";
+}
+
+#account-dashboard .dashboard-brick .icon.cdp::before {
+    content: "\f075";
+}
+
+#account-dashboard .dashboard-brick .icon.most-viewed-object::before,
+#account-dashboard .dashboard-brick .icon.last-viewed-object::before,
+#account-dashboard .dashboard-brick .icon.object-suggestion::before
+{
+    content: "\f06e";
+}
+
+#account-dashboard .dashboard-brick .icon.object-updated::before {
+    content: "\f129";
+}
+
+#account-dashboard .dashboard-brick .icon.user-activity::before {
+    content: "\f080";
+}
+
+#account-dashboard .dashboard-brick .icon.sessions::before {
+    content: "\f086";
+}
+
+
+#account-dashboard .dashboard-brick .icon.forum::before {
+    content: "\f0c0";
+}
+
+#account-dashboard .dashboard-brick .icon.new-search-results::before {
+    content: "\f002";
+}
+
+#account-dashboard .dashboard-brick .fa-trophy-o {
+    color: #777;
+}
+
+/** PROFILE BRICK **/
+#account-dashboard .dashboard-brick.dashboard-brick-profile .brick-container {
+    display: flex;
+    align-items: center;
+    height: 180px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .avatar {
+    height: 120px;
+    width: 120px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .wrapper {
+    width: 100%;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content {
+    margin-left: 140px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion {
+    margin-top: 10px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion .completion-bar,
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion b {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion b {
+    margin-right: 10px;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .content .profile-completion .completion-bar {
+    max-width: 300px;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-profile .profile-completion a {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+#account-dashboard .dashboard-brick.dashboard-brick-user-activity li:nth-last-child(-n+2) {
+    display: inline;
+}
+
+#account-dashboard .dashboard-brick .tooltip-inner {
+    padding: 10px;
+    max-width: 500px;
+    font-weight: normal;
+}

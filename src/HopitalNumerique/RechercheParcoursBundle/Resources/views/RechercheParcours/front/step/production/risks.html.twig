@@ -1,0 +1,30 @@
+{% trans_default_domain 'guided_search' %}
+
+<div class="modal fade" id="risks-{{ section.type}}-{{ k }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ 'step.objects.related_risk'|transchoice(object.relatedRisks|length) }}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'step.risks.header.nature'|trans }}</th>
+                        <th>{{ 'step.risks.header.label'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for relatedRisk in object.relatedRisks %}
+                        <tr>
+                            <td>{{ relatedRisk.risk.nature.libelle }}</td>
+                            <td>{{ relatedRisk.risk.label }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

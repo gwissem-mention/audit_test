@@ -4,6 +4,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-model.js"
         '@HopitalNumeriqueAutodiagBundle/Resources/public/js/tinymce.js'
+        '@HopitalNumeriqueAutodiagBundle/Resources/public/js/edit.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -72,4 +73,9 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        var autodiag = new AutodiagEdit($('form[name="{{ form.vars.id }}"]'));
+    </script>
+
 {% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% trans_default_domain 'guided_search' %}
+
+{% block title %}{{parent()}} - {{ 'title'|trans }}{% endblock %}
+
+{% block metadesc %}{{ 'entry_point.metadesc'|trans }}{% endblock %}
+{% block metakeywords %}{{ 'entry_point.metakeywords'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="recherche-par-parcours">
+        <h3>{{ 'Module_guidedSearch_entryPoint_title'|nodevoTexteDynamique(domaineCurrent.id) }}</h3>
+        
+        <div class="description">
+            {{ 'Module_guidedSearch_entryPoint_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+        </div>
+        
+        <div class="bandeau">
+            <div class="row">
+                <div class="col-md-{{ app.user ? 12 : 8 }} bloc-gauche">
+                    <div class="row parcours">
+                        {# Bloc de présentation #}
+                        <div class="col-md-4 parcours-presentation">
+                            <div class="entete row">
+                                <div class="icone"></div>
+                                <div class="titre">{{ 'entry_point.highlight'|trans }}</div>
+                            </div>
+                            <div class="description">
+                                {{ 'Module_guidedSearch_entryPoint_highlight'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 parcours-liens">
+                            {% for step in steps %}
+                                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/partials/step.html.twig' with { 'step' : step } %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if app.user is null %}
+                    <div class="col-md-4">
+                        {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Connexion' } %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

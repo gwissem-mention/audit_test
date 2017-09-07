@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -127,7 +128,7 @@ class ExportController extends Controller
 
             $dispatcher->dispatch(
                 Events::OBJET_DOWNLOAD_SUCCESS,
-                new ObjetEvent($objet, ('anon.' !== $user) ? $user : null, $type)
+                new ObjetEvent($objet, ($user instanceof User) ? $user : null, $type)
             );
 
             if ($type == 1) {

@@ -1,0 +1,70 @@
+{% extends 'NewAccountBundle::layout.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-account-service.js"
+        "bundles/hopitalnumeriqueobjet/js/widget/ViewedObjectsWidget.js"
+        'bundles/hopitalnumeriquerecherche/js/Requete/PopinDetail.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+
+        <script>
+            $(function() {
+                $('.service-tooltip').tooltip();
+                $('#domains-select').on('change', function () {
+                    var container = $('#services .widgets-container');
+                    var loader = container.nodevoLoader().start();
+                    $.ajax({
+                        url: $(this).data('url'),
+                        data: {
+                            domain: $(this).val()
+                        },
+                        type: 'POST',
+                        success: function(content) {
+                            container.html(content);
+                            loader.finished();
+                        }
+                    })
+                });
+            });
+        </script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-service.css" filter="cssrewrite, ?yui_css"
+        'bundles/newaccount/css/service.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <div id="services">
+        <div class="row domains-row">
+            <div class="col-md-7">
+                {{ 'Module_moncompte_services_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+            </div>
+            <div class="col-md-5">
+                <div class="pull-right">
+                    <label for="domains-select">{{ 'account.service.domain_list.label'|trans }}</label>
+                    <select name="domains_select" id="domains-select" data-url="{{ path('account_service') }}">
+                        <option value="all">{{ 'account.service.domain_list.all'|trans }}</option>
+                        {% for domain in userDomains %}
+                            <option value="{{ domain.id }}" {{ domain.id == selectedDomain ? 'selected' : '' }}>{{ domain.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="widgets-container">
+            {{ include('NewAccountBundle:service:content.html.twig')}}
+        </div>
+    </div>
+
+    {% if page is defined %}
+        <div id="current-page" data-page="{{ page }}" class="hide"></div>
+    {% endif %}
+{% endblock %}

@@ -22,8 +22,8 @@ Hn_AccountBundle_InformationsManquantes.initEvents = function ()
     $('#nodevouser_user_informationsmanquantes_region').change(function () {
         Hn_AccountBundle_InformationsManquantes.loadDepartements();
     });
-    $('#nodevouser_user_informationsmanquantes_statutEtablissementSante, #nodevouser_user_informationsmanquantes_departement').change(function () {
-        Hn_AccountBundle_InformationsManquantes.loadEtablissementRattachementSantes();
+    $('#nodevouser_user_informationsmanquantes_organizationType, #nodevouser_user_informationsmanquantes_departement').change(function () {
+        Hn_AccountBundle_InformationsManquantes.loadOrganizations();
     });
 };
 
@@ -35,7 +35,7 @@ Hn_AccountBundle_InformationsManquantes.loadDepartements = function ()
     var departementId = $('#nodevouser_user_informationsmanquantes_departement').val();
 
     $.ajax({
-        url: Routing.generate('hopital_numerique_user_front_departements_informationsPersonelles'),
+        url: Routing.generate('hopital_numerique_user_counties'),
         data: {
             id: $('#nodevouser_user_informationsmanquantes_region').val(),
         },
@@ -43,7 +43,7 @@ Hn_AccountBundle_InformationsManquantes.loadDepartements = function ()
         success: function (data) {
             $('#nodevouser_user_informationsmanquantes_departement').html(data);
             $('#nodevouser_user_informationsmanquantes_departement').val(departementId);
-            Hn_AccountBundle_InformationsManquantes.loadEtablissementRattachementSantes();
+            Hn_AccountBundle_InformationsManquantes.loadOrganizations();
         }
     });
 };
@@ -51,19 +51,19 @@ Hn_AccountBundle_InformationsManquantes.loadDepartements = function ()
 /**
  * Charge les départements.
  */
-Hn_AccountBundle_InformationsManquantes.loadEtablissementRattachementSantes = function ()
+Hn_AccountBundle_InformationsManquantes.loadOrganizations = function ()
 {
     $.ajax({
         url: Routing.generate('hopital_numerique_user_front_etablissements_informationsPersonelles'),
         data: {
             idDepartement: $('#nodevouser_user_informationsmanquantes_departement').val(),
-            idTypeEtablissement: $('#nodevouser_user_informationsmanquantes_statutEtablissementSante').val()
+            idTypeEtablissement: $('#nodevouser_user_informationsmanquantes_organizationType').val()
         },
         type: 'POST',
         success: function (data) {
-            var value = $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante').val();
-            $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante').html( data );
-            $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante option[value="' + value + '"]').prop('selected', true);
+            var value = $('#nodevouser_user_informationsmanquantes_organization').val();
+            $('#nodevouser_user_informationsmanquantes_organization').html( data );
+            $('#nodevouser_user_informationsmanquantes_organization option[value="' + value + '"]').prop('selected', true);
         }
     });
 };

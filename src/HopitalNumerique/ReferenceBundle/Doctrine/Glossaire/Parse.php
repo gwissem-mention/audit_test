@@ -2,17 +2,19 @@
 
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
-use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
-use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
-use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
 
 /**
  * Enregistre le glossaire pour chaque publication.
@@ -25,27 +27,27 @@ class Parse
     private $entity;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager EntityHasGlossaireManager
+     * @var EntityHasGlossaireManager EntityHasGlossaireManager
      */
     private $entityHasGlossaireManager;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     * @var ReferenceManager ReferenceManager
      */
     private $referenceManager;
 
     /**
-     * @var \HopitalNumerique\DomaineBundle\Manager\DomaineManager DomaineManager
+     * @var DomaineManager DomaineManager
      */
     private $domaineManager;
 
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager ObjetManager
+     * @var ObjetManager ObjetManager
      */
     private $objetManager;
 
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ContenuManager ContenuManager
+     * @var ContenuManager ContenuManager
      */
     private $contenuManager;
 
@@ -55,12 +57,20 @@ class Parse
     private $currentDomain;
 
     /**
-     * @var array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Glossaire
+     * @var Reference[] Glossaire
      */
     private static $GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = null;
 
     /**
      * Constructeur.
+     *
+     * @param Entity                    $entity
+     * @param EntityHasGlossaireManager $entityHasGlossaireManager
+     * @param ReferenceManager          $referenceManager
+     * @param DomaineManager            $domaineManager
+     * @param ObjetManager              $objetManager
+     * @param ContenuManager            $contenuManager
+     * @param CurrentDomaine            $currentDomain
      */
     public function __construct(
         Entity $entity,
@@ -70,8 +80,7 @@ class Parse
         ObjetManager $objetManager,
         ContenuManager $contenuManager,
         CurrentDomaine $currentDomain
-    )
-    {
+    ) {
         $this->entity = $entity;
         $this->entityHasGlossaireManager = $entityHasGlossaireManager;
         $this->referenceManager = $referenceManager;
@@ -98,7 +107,15 @@ class Parse
             self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = [];
 
             foreach ($this->domaineManager->findAll() as $domaine) {
-                $glossaireReferences = $this->referenceManager->findByDomaines([$domaine], true, null, null, null, null, true);
+                $glossaireReferences = $this->referenceManager->findByDomaines(
+                    [$domaine],
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+                );
                 usort($glossaireReferences, [$this, 'sortGlossaireReferences']);
                 self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()] = $glossaireReferences;
             }
@@ -106,14 +123,39 @@ class Parse
     }
 
     /**
+     * @param Domaine $domain
+     *
+     * @return array
+     */
+    private function getReferencesByDomain(Domaine $domain)
+    {
+        if (is_null(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID)) {
+            $this->initGlossaire();
+        }
+
+        return self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domain->getId()];
+    }
+
+    /**
      * Tri les références de glossaire du mot le plus grand au plus petit.
+     *
+     * @param Reference $glossaireReference1
+     * @param Reference $glossaireReference2
+     *
+     * @return int
      */
     private function sortGlossaireReferences(Reference $glossaireReference1, Reference $glossaireReference2)
     {
         $glossaireReference1Length = strlen($glossaireReference1->getSigleForGlossaire());
         $glossaireReference2Length = strlen($glossaireReference2->getSigleForGlossaire());
 
-        return $glossaireReference1Length > $glossaireReference2Length ? -1 : ($glossaireReference1Length < $glossaireReference2Length ? 1 : 0);
+        return $glossaireReference1Length > $glossaireReference2Length
+            ? -1
+            : ($glossaireReference1Length < $glossaireReference2Length
+                ? 1
+                : 0
+            )
+        ;
     }
 
     /**
@@ -130,7 +172,7 @@ class Parse
     /**
      * Parse et sauvegarde le glossaire des objets.
      *
-     * @param array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objets
+     * @param Objet[] Objets
      */
     private function parseAndSaveObjets($objets)
     {
@@ -138,7 +180,10 @@ class Parse
         $domaine = $this->currentDomain->get();
 
         foreach ($objets as $objet) {
-            $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese()));
+            $foundSigles = $this->getFoundSiglesByText(
+                self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()],
+                strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese())
+            );
             $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_OBJET, $objet->getId(), $domaine, $foundSigles);
         }
     }
@@ -146,7 +191,7 @@ class Parse
     /**
      * Parse et sauvegarde le glossaire des contenus.
      *
-     * @param array<\HopitalNumerique\ObjetBundle\Entity\Contenu> Contenus
+     * @param Contenu[] Contenus
      */
     private function parseAndSaveContenus($contenus)
     {
@@ -154,7 +199,10 @@ class Parse
         $domaine = $this->currentDomain->get();
 
         foreach ($contenus as $contenu) {
-            $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($contenu->getContenu()));
+            $foundSigles = $this->getFoundSiglesByText(
+                self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()],
+                strip_tags($contenu->getContenu())
+            );
             $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_CONTENU, $contenu->getId(), $domaine, $foundSigles);
         }
     }
@@ -191,7 +239,6 @@ class Parse
             $foundSigles = [];
             /** @var Autodiag\Container\Chapter $chapter */
             foreach ($autodiag->getChapters() as $chapter) {
-
                 foreach ($fields['autodiag'] as $field) {
                     $foundSigles = array_merge($foundSigles, $this->getFoundedSigles($domaine, $autodiag, $field));
                 }
@@ -233,7 +280,9 @@ class Parse
     /**
      * Parse et enregistre le glossaire de l'entité.
      *
-     * @param objet $entity Entité
+     * @param $entity
+     *
+     * @throws \Exception
      */
     public function parseAndSaveEntity($entity)
     {
@@ -255,26 +304,47 @@ class Parse
     /**
      * Retourne la liste des sigles trouvés dans un texte.
      *
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $glossaireReferences Références du glossaire à rechercher
-     * @param string                                                    $text                Texte
+     * @param Domaine $domain
+     * @param string $text
+     *
+     * @return array
      */
-    private function getFoundSiglesByText(array $glossaireReferences, $text)
+    public function getFoundSiglesByDomainAndText(Domaine $domain, $text)
+    {
+        return $this->getFoundSiglesByText($this->getReferencesByDomain($domain), $text, true);
+    }
+
+    /**
+     * Retourne la liste des sigles trouvés dans un texte.
+     *
+     * @param Reference[] $glossaireReferences Références du glossaire à rechercher
+     * @param string      $text                Texte
+     *
+     * @return array
+     */
+    private function getFoundSiglesByText(array $glossaireReferences, $text, $provideEntity = false)
     {
         $foundSigles = [];
         /**
-         * Positions des sigles trouvés. Si on trouve un autre mot (plus petit) commençant au même endroit, on ne le prend pas.
+         * Positions des sigles trouvés.
+         * Si on trouve un autre mot (plus petit) commençant au même endroit, on ne le prend pas.
          *
-         * @todo Fonctionnement repris de l'ancien, l'idéal serait de ne pas prendre le mot s'il est compris dans un autre et non uniquement s'il commence au même endroit.
+         * @todo Fonctionnement repris de l'ancien, l'idéal serait de ne pas prendre le mot s'il
+         * est compris dans un autre et non uniquement s'il commence au même endroit.
          */
         $siglePositions = [];
 
         foreach ($glossaireReferences as $glossaireReference) {
-            $siglePattern = '|' . $glossaireReference->getSigleHtmlForGlossaire() . '|' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+            $siglePattern = '|'
+                . $glossaireReference->getSigleHtmlForGlossaire()
+                . '|'
+                . ($glossaireReference->isCasseSensible() ? '' : 'i')
+            ;
             preg_match_all($siglePattern, $text, $sigleMatches, PREG_OFFSET_CAPTURE);
 
             foreach ($sigleMatches[0] as $sigleMatch) {
                 if (!in_array($sigleMatch[1], $siglePositions)) {
-                    $foundSigles[] = $glossaireReference->getId();
+                    $foundSigles[] = $provideEntity ? $glossaireReference : $glossaireReference->getId();
                     $siglePositions[] = $sigleMatch[1];
                 }
             }
@@ -286,10 +356,10 @@ class Parse
     /**
      * Enregistre en base le glossaire si existant de l'entité.
      *
-     * @param int                                            $entityType Type d'entité
-     * @param int                                            $entityId   ID de l'entité
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
-     * @param array                                          $glossaire  Références trouvées
+     * @param int     $entityType Type d'entité
+     * @param int     $entityId   ID de l'entité
+     * @param Domaine $domaine    Domaine
+     * @param array   $glossaire  Références trouvées
      */
     private function saveEntityHasGlossaire($entityType, $entityId, Domaine $domaine, array $glossaire)
     {

@@ -45,7 +45,7 @@
                         <ul>
                             {% for share in synthesis.shares %}
                                 <li>
-                                    <span>{{ share.nom }} {{ share.prenom }}</span>
+                                    <span>{{ share.lastname }} {{ share.firstname }}</span>
                                     {% if is_granted('delete', synthesis) %}
                                         <a href="{{ path('hopitalnumerique_autodiag_share_delete', {
                                             "synthesis": synthesis.id,
@@ -113,4 +113,8 @@
         $('[data-toggle="tooltip"]').tooltip();
     </script>
 
+{% endblock %}
+
+{% block helpBlock %}
+    {{ contextualNavigationHelpBlock(synthesis.autodiag) }}
 {% endblock %}

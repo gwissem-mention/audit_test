@@ -68,7 +68,7 @@ class Etablissement
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
-     * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
+     * @Assert\NotBlank(message="La région ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
      *
      * @GRID\Column(field="region.libelle")
@@ -78,7 +78,7 @@ class Etablissement
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
-     * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
+     * @Assert\NotBlank(message="Le département ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
      *
      * @GRID\Column(field="departement.libelle")
@@ -129,7 +129,7 @@ class Etablissement
     // ^ -------- Utilisateur -------- ^
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="etablissementRattachementSante", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="organization", cascade={"persist"})
      */
     private $usersRattachement;
 
@@ -157,6 +157,9 @@ class Etablissement
         return $this->usersRattachement;
     }
 
+    /**
+     * @return string
+     */
     public function getUsersAffichage()
     {
         return sprintf('%s - %s', $this->nom, $this->finess);

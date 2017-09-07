@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        {% stylesheets output="compiled/hopitalnumerique_cart_report_pdf.css" filter="cssrewrite, ?yui_css"
+            "@bootstrap_css"
+            "@font_awesome_css"
+            "@fancybox_css"
+            "bundles/hopitalnumeriquecart/css/pdf.css"
+        %}
+            <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+        {% endstylesheets %}
+    </head>
+
+    <body class=footer>
+
+    <div class="container-fluid">
+        {{ include('@HopitalNumeriqueCore/partials/copyright.html.twig') }}
+    </div>
+
+    </body>
+</html>

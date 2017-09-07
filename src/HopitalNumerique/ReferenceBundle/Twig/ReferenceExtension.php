@@ -2,18 +2,35 @@
 
 namespace HopitalNumerique\ReferenceBundle\Twig;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository;
+
 class ReferenceExtension extends \Twig_Extension
 {
-    private $_managerRef;
+    /**
+     * References manager
+     *
+     * @var ReferenceManager
+     */
+    private $referenceManager;
+
+    /**
+     * References repository
+     *
+     * @var ReferenceRepository
+     */
+    private $referenceRepository;
 
     /**
      * Construit l'extension Twig en lui passant les 2 managers requis pour la checkAuthorization.
      *
-     * @param RefManager $managerRef Le manager des références
+     * @param ReferenceManager $referenceManager Le manager des références
+     * @param ReferenceRepository $referenceRepository Le repository des références
      */
-    public function __construct($managerRef)
+    public function __construct(ReferenceManager $referenceManager, ReferenceRepository $referenceRepository)
     {
-        $this->_managerRef = $managerRef;
+        $this->referenceManager = $referenceManager;
+        $this->referenceRepository = $referenceRepository;
     }
 
     /**
@@ -25,6 +42,7 @@ class ReferenceExtension extends \Twig_Extension
     {
         return [
             'reorder' => new \Twig_Filter_Method($this, 'reorder'),
+            'getReferenceText' => new \Twig_Filter_Method($this, 'getReferenceText'),
         ];
     }
 
@@ -37,7 +55,7 @@ class ReferenceExtension extends \Twig_Extension
      */
     public function reorder($options)
     {
-        return $this->_managerRef->reorder($options);
+        return $this->referenceManager->reorder($options);
     }
 
     /**
@@ -48,5 +66,19 @@ class ReferenceExtension extends \Twig_Extension
     public function getName()
     {
         return 'ref_extension';
+    }
+
+    /**
+     * Returns text related to reference id.
+     *
+     * @param  string $referenceId Id of reference.
+     *
+     * @return string Text of found reference or empty string.
+     */
+    public function getReferenceText($referenceId)
+    {
+        $ref = $this->referenceRepository->findOneBy(['id' => $referenceId]);
+
+        return $ref ? $ref->getLibelle() : '';
     }
 }

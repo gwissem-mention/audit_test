@@ -3,6 +3,8 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\ObjetBundle\Entity\Consultation;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * ConsultationRepository.
@@ -71,5 +73,22 @@ class ConsultationRepository extends EntityRepository
         }
 
         return $qb;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return integer
+     */
+    public function countViewsForUser(User $user)
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('COUNT(c)')
+            ->from(Consultation::class, 'c')
+            ->andWhere('c.user = :userId')->setParameter('userId', $user->getId())
+            ->andWhere('c.contenu IS NULL')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
     }
 }

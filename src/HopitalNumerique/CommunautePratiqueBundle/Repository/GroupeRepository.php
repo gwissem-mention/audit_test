@@ -98,6 +98,22 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @return integer
+     */
+    public function countActiveGroups()
+    {
+        return $this->createQueryBuilder('g')
+            ->select('COUNT(g)')
+            ->andWhere('g.actif = TRUE')
+            ->andWhere('g.dateDemarrage <= :today')
+            ->andWhere('g.dateFin >= :today')
+            ->setParameter('today', (new \DateTime())->setTime(0, 0, 0))
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
      * Retourne les groupes terminés.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
@@ -169,8 +185,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('aujourdhui', $aujourdhui)
             ->addOrderBy('groupe.dateDemarrage')
             ->addOrderBy('groupe.dateFin')
-            ->addOrderBy('groupeUser.nom')
-            ->addOrderBy('groupeUser.prenom')
+            ->addOrderBy('groupeUser.lastname')
+            ->addOrderBy('groupeUser.firstname')
         ;
 
         if (null !== $user) {
@@ -178,8 +194,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
                 ->setParameter('user', $user)
                 ->innerJoin('inscription.user', 'user')
-                ->addOrderBy('user.nom')
-                ->addOrderBy('user.prenom')
+                ->addOrderBy('user.lastname')
+                ->addOrderBy('user.firstname')
             ;
         }
         if (null !== $enVedette) {

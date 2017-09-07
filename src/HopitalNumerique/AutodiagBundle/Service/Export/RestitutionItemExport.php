@@ -80,7 +80,7 @@ class RestitutionItemExport
                 'Plan d\'action exporté le %s à %s par %s',
                 $now->format('d/m/Y'),
                 $now->format('H:i'),
-                $user->getPrenom() . ' ' . $user->getNom()
+                $user->getFirstname() . ' ' . $user->getLastname()
             ),
         ], $style);
 

@@ -1,0 +1,15 @@
+{% trans_default_domain 'widget' %}
+
+{% if interventions|length %}
+    <ol>
+        {% for intervention in interventions %}
+            <li>
+                <a href="{{path('hopital_numerique_intervention_demande_voir', {'id' : intervention.id})}}">
+                    {{ 'request.label'|trans({'%date%': intervention.dateCreation|date('d/m/Y'), '%state%': intervention.interventionEtat.libelle}) }}
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <b>{{ 'request.empty'|trans }}</b>
+{% endif %}

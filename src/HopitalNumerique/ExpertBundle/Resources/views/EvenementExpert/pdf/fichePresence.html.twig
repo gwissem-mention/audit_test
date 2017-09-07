@@ -64,17 +64,17 @@
                     {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {% if expert.expertConcerne.etablissementRattachementSante is not null %}
-                        {{ expert.expertConcerne.etablissementRattachementSante.nom }}
+                    {% if expert.expertConcerne.organization is not null %}
+                        {{ expert.expertConcerne.organization.nom }}
                     {% else %}
-                        {{ expert.expertConcerne.autreStructureRattachementSante }}
+                        {{ expert.expertConcerne.organizationLabel }}
                     {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ expert.expertConcerne.prenom }}
+                    {{ expert.expertConcerne.firstname }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ expert.expertConcerne.nom }}
+                    {{ expert.expertConcerne.lastname }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;">
                     

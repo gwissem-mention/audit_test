@@ -2,16 +2,27 @@
 
 namespace HopitalNumerique\RegistreBundle\Controller;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nodevo\ToolsBundle\Tools\Chaine as NodevoChaine;
 
+/**
+ * Class AmbassadeurController
+ */
 class AmbassadeurController extends Controller
 {
     /**
      * Index Action.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         //Domaine sélectionné
         $domaine = null;
@@ -23,19 +34,22 @@ class AmbassadeurController extends Controller
         $ambassadeurs = [];
 
         //Recupère l'utilisateur connecté
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if ($user === 'anon.') {
-            $this->get('session')->getFlashBag()->add('warning', 'Solliciter un ambassadeur nécessite d\'être identifié. Créez un compte ou identifiez-vous.');
+        if (!$user instanceof User) {
+            $this->addFlash(
+                'warning',
+                'Solliciter un ambassadeur nécessite d\'être identifié. Créez un compte ou identifiez-vous.'
+            );
         }
 
         //get User Role
         //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
-        $roles = 'anon.' === $user ? [] : $user->getRoles();
+        $roles = $user instanceof User ? $user->getRoles() : [];
         $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles) ? true : false;
 
         //On prépare la session
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
 
         //Chargement des domaines sauvegardés en session
         if (!is_null($session->get('registre-ambassadeur-domaine'))) {
@@ -48,9 +62,11 @@ class AmbassadeurController extends Controller
             //Decodage du JSOn pour avoir un tableau php
             $libellesRegion = json_decode($regionsJSON);
 
-            //Récupération de l'ensemble des régions car dans les sessions sont stockés les libellés, il nous faut les entités
+            // Récupération de l'ensemble des régions car dans les sessions sont stockés les libellés,
+            // il nous faut les entités
             $allRegions = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('REGION');
 
+            /** @var Reference $region */
             foreach ($allRegions as $region) {
                 //Récupère le nom de la région pour le minifier
                 $libelleRegion = new NodevoChaine($region->getLibelle());
@@ -60,19 +76,24 @@ class AmbassadeurController extends Controller
                     $regions[] = $region;
                 }
                 //Cas particulier de l'océan indien
-                if ('oceanindien' === $libelleRegion->minifie('') && (in_array('mayotte', $libellesRegion) || in_array('reunion', $libellesRegion))) {
+                if ('oceanindien' === $libelleRegion->minifie('')
+                    && (in_array('mayotte', $libellesRegion)
+                        || in_array(
+                            'reunion',
+                            $libellesRegion
+                        )
+                    )
+                ) {
                     $regions[] = $region;
                 }
             }
-        }
-        //Sinon on charge la région de l'utilisateur
-        else {
-            //Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y aura aucune région selectionné par défaut
-            if ('anon.' === $user || is_null($user->getRegion())) {
+        } else { //Sinon on charge la région de l'utilisateur
+            if (!$user instanceof User || is_null($user->getRegion())) {
+                // Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y
+                // aura aucune région selectionné par défaut
                 $regionsJSON = json_encode([]);
-            }
-            //sinon on récupère sa région courante
-            else {
+            } else {
+                //sinon on récupère sa région courante
                 //Récupère le nom de la région pour le minifier
                 $libelleRegion = new NodevoChaine($user->getRegion()->getLibelle());
 
@@ -92,13 +113,19 @@ class AmbassadeurController extends Controller
                 $ambassadeurs[$region->getId()] = [];
             }
 
-            $ambassadeurs[$region->getId()] = array_merge($ambassadeurs[$region->getId()], $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine($region, $domaine));
+            $ambassadeurs[$region->getId()] = array_merge(
+                $ambassadeurs[$region->getId()],
+                $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine($region, $domaine)
+            );
         }
 
         $session->set('registre-ambassadeur-region', $regionsJSON);
 
         //get liste des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findByCodeParent('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS', 221);
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findByCodeParent(
+            'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS',
+            221
+        );
 
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', [
                 'user' => [
@@ -117,29 +144,38 @@ class AmbassadeurController extends Controller
         ]);
     }
 
-    /*
+    /**
      * Met à jour la session de l'utilisateur avec les régions sélectionnées
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function editerSessionAction()
+    public function editerSessionAction(Request $request)
     {
         $domaine = intval($this->get('request')->request->get('domaine'));
 
         $regionJSON = $this->get('request')->request->get('regionJSON');
 
         //On prépare la session
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
 
         $session->set('registre-ambassadeur-region', $regionJSON);
 
         $session->set('registre-ambassadeur-domaine', $domaine);
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_registre_homepage') . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_registre_homepage') . '"}',
+            200
+        );
     }
 
     /**
      * Affiche la liste des objets maitrisés par l'ambasssadeur dans une popin.
      *
      * @param int $id ID de l'user
+     *
+     * @return Response
      */
     public function objetsAction($id)
     {
@@ -155,24 +191,31 @@ class AmbassadeurController extends Controller
      * Affiche la liste des domaines maitrisés par l'ambasssadeur dans une popin.
      *
      * @param int $id ID de l'user
+     *
+     * @return Response
      */
     public function domainesAction($id)
     {
         $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
-        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findByAmbassadeur($ambassadeur);
+        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findByAmbassadeur(
+            $ambassadeur
+        );
 
         $domainesWithParent = [];
 
+        /** @var ConnaissanceAmbassadeur $domaine */
         foreach ($connaissances as $domaine) {
-            if (!array_key_exists($domaine->getDomaine()->getParent()->getId(), $domainesWithParent)) {
-                $domainesWithParent[$domaine->getDomaine()->getParent()->getId()] = [];
+            if (!array_key_exists($domaine->getDomaine()->getFirstParent()->getId(), $domainesWithParent)) {
+                $domainesWithParent[$domaine->getDomaine()->getFirstParent()->getId()] = [];
             }
 
-            $domainesWithParent[$domaine->getDomaine()->getParent()->getId()][] = $domaine;
+            $domainesWithParent[$domaine->getDomaine()->getFirstParent()->getId()][] = $domaine;
         }
 
         foreach ($domainesWithParent as $keyParent => $domaineParent) {
             $maitriseUnElement = false;
+
+            /** @var ConnaissanceAmbassadeur $connaissance */
             foreach ($domaineParent as $connaissance) {
                 if (!is_null($connaissance->getConnaissance())) {
                     $maitriseUnElement = true;
@@ -194,24 +237,34 @@ class AmbassadeurController extends Controller
      * Affiche la liste des connaissances SI maitrisés par l'ambasssadeur dans une popin.
      *
      * @param int $id ID de l'user
+     *
+     * @return Response
      */
     public function connaissanceSIAction($id)
     {
         $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
-        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findByAmbassadeur($ambassadeur);
+        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findByAmbassadeur(
+            $ambassadeur
+        );
         $connaissancesOrderedForFront = [];
 
+        /** @var ConnaissanceAmbassadeur $connaissance */
         foreach ($connaissances as $connaissance) {
             if (!is_null($connaissance->getDomaine()->getFirstParent())) {
-                if (!array_key_exists($connaissance->getDomaine()->getFirstParent()->getId(), $connaissancesOrderedForFront)) {
+                if (!array_key_exists(
+                    $connaissance->getDomaine()->getFirstParent()->getId(),
+                    $connaissancesOrderedForFront
+                )) {
                     $connaissancesOrderedForFront[$connaissance->getDomaine()->getFirstParent()->getId()] = [
-                        'libelle' => $connaissance->getDomaine()->getFirstParent()->getLibelle(),
-                        'fils' => [],
+                        'libelle'  => $connaissance->getDomaine()->getFirstParent()->getLibelle(),
+                        'fils'     => [],
                         'filsVide' => false,
                     ];
                 }
 
-                $connaissancesOrderedForFront[$connaissance->getDomaine()->getFirstParent()->getId()]['fils'][] = $connaissance;
+                $connaissancesOrderedForFront[$connaissance->getDomaine()->getFirstParent()->getId()]['fils'][]
+                    = $connaissance
+                ;
             } else {
                 if (!array_key_exists($connaissance->getDomaine()->getId(), $connaissancesOrderedForFront)) {
                     $connaissancesOrderedForFront[$connaissance->getDomaine()->getId()] = [
@@ -243,8 +296,8 @@ class AmbassadeurController extends Controller
         ]);
     }
 
-    /*
-     *
+    /**
+     * @return Response
      */
     public function downloadAmbassadeursAction()
     {
@@ -252,18 +305,23 @@ class AmbassadeurController extends Controller
 
         $colonnes = [
             'id' => 'Id',
-            'nom' => 'Nom',
-            'prenom' => 'Prénom',
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
             'email' => 'Adresse e-mail',
             'domainesString' => 'Domaine',
             'connaissancesAmbassadeursString' => 'Connaissances',
-            'telephoneDirect' => 'Téléphone direct',
-            'telephonePortable' => 'Téléphone portable',
-            'etablissementRattachementSanteString' => 'Etablissemenent de rattachement',
+            'phoneNumber' => 'Téléphone direct',
+            'cellPhoneNumber' => 'Téléphone portable',
+            'organizationString' => 'Etablissemenent de rattachement',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv($colonnes, $ambassadeurs, 'liste-ambassadeurs.csv', $kernelCharset);
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv(
+            $colonnes,
+            $ambassadeurs,
+            'liste-ambassadeurs.csv',
+            $kernelCharset
+        );
     }
 }

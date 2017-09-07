@@ -1,0 +1,82 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% trans_default_domain 'lost' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-contextual-navigation-lost.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquecontextualnavigation/css/lost.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{{parent()}} - {{ 'title'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="contextual-navigation-lost">
+        <h1>{{ 'title'|trans }}</h1>
+
+        <p>
+            {{ 'previous_page'|trans({'%entityTitle%': '<b><a href="'~entityUrl~'">'~entityTitle~'</a></b>'})|raw }}
+        </p>
+
+        {{ 'Module_contextualNavigation_lostPage_description'|nodevoTexteDynamique(domaineCurrent.id)|glossaireParse|raw }}
+
+        <p>
+            {{ 'resources_list'|trans() }}
+        </p>
+
+        <ul>
+            {% for reference in references %}
+                <li>
+                    {{ reference.libelle }}
+                    {% if reference.enfants|length > 0 %}
+                        <ul>
+                            {% for child in reference.enfants %}
+                                <li>{{ child.libelle }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% include 'HopitalNumeriqueContextualNavigationBundle:lost:discover.html.twig' %}
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".glosstool").tooltip({
+                placement : 'top'
+            });
+        });
+    </script>
+{% endblock %}
+
+{% import _self as self %}
+{% macro lastObjects(list, items, type) %}
+    <div class="col-md-6">
+        {{ ('last.'~list)|trans }}
+        <ul>
+            {% for item in items[list] %}
+                <li>
+                    {% if type == 'object' %}
+                        <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': item.id}) }}">
+                            {{ item.titre }}
+                        </a>
+                    {% elseif type == 'topic' %}
+                        <a href="{{ path('ccdn_forum_user_topic_show', {'forumName': item.board.category.forum.name, 'topicId': item.id}) }}">
+                            {{ item.title }}
+                        </a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>
+                    <b>{{ 'last.empty'|trans }}</b>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}

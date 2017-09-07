@@ -1,0 +1,32 @@
+{% trans_default_domain 'helpBlock' %}
+
+{% set referencesLabel = [] %}
+{% set referencesId = [] %}
+{% for reference in references %}
+    {% set referencesLabel = referencesLabel|merge([reference.reference.libelle]) %}
+    {% set referencesId = referencesId|merge([reference.reference.id]) %}
+{% endfor %}
+
+{% set referencesLink = null %}
+{% if referencesId|length %}
+    {% set referencesLink = '<a href="'~path('hopital_numerique_recherche_homepage_requete_generator', {refs: referencesId|join(','), q: 'null', type: 'null'})~'">'~referencesLabel|join(', ')~'</a>' %}
+{% endif %}
+
+<div id="help-block" class="col-md-12">
+    <p>
+        {% if referencesLink %}
+            {{ 'help_block.description.full'|trans({'%types%': types ? ' ('~types~')' : null, '%resourceName%': '<b>'~entityTitle~'</b>', '%references%': referencesLink})|raw }}
+        {% else %}
+            {{ 'help_block.description.light'|trans({'%types%': types ? ' ('~types~')' : null, '%resourceName%': '<b>'~entityTitle~'</b>'})|raw }}
+        {% endif %}
+    </p>
+
+    <p>
+        <a
+            href="{{ path('hopital_numerique_contextual_navigation_lost', {entityType: entityType, entityId: entityId}) }}"
+            class="btn btn-link lost-btn"
+        >
+            {{ 'help_block.lost_btn.text'|trans }}
+        </a>
+    </p>
+</div>

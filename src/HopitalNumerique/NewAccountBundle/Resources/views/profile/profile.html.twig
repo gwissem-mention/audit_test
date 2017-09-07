@@ -1,0 +1,112 @@
+{% extends 'NewAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-moncompte.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
+        '@jquery_toggles_css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-account-profile.js"
+        'bundles/hopitalnumeriquecontact/js/Popup.js'
+        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
+        '@jquery_toggles_js'
+        'bundles/newaccount/js/account_profile.js'
+        'bundles/newaccount/js/TabError.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {"attr": {"id": "my-profile-form", "novalidate": "novalidate"}}) }}
+    <div class="row">
+        <div class="col-md-9" style="display: flex">
+            <div style="display: flex">
+                <strong>{{ 'account.profile.completion'|trans }} :</strong>
+            </div>
+            <div class="progress progress-striped" style="width: 300px; margin-left: 20px;">
+                <div class="progress-bar" style="width: 0;">0%</div>
+            </div>
+        </div>
+        <div class="col-md-3 submit-btn text-right">
+            <input type="submit" id="save-my-account" class="btn btn-success" value="{{ 'account.save'|trans }}">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading no-background">
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a data-target="#tab1" data-toggle="tab" class="profile-tab-nav nav-tab-1">
+                                {{ 'account.profile.personal_information'|trans }}
+                                <span class="tab-completion">(0%)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-target="#tab2" data-toggle="tab" class="profile-tab-nav nav-tab-2">
+                                {{ 'account.profile.contact_information'|trans }}
+                                <span class="tab-completion">(0%)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-target="#tab3" data-toggle="tab" class="profile-tab-nav nav-tab-3">
+                                {{ 'account.profile.profile'|trans }}
+                                <span class="tab-completion">(0%)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-target="#tab4" data-toggle="tab" class="profile-tab-nav nav-tab-4">
+                                {{ 'account.profile.structure'|trans }}
+                                <span class="tab-completion">(0%)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-target="#tab5" data-toggle="tab" class="profile-tab-nav nav-tab-5">
+                                {{ 'account.profile.skills'|trans }}
+                                <span class="tab-completion">(0%)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="profile-tab tab-pane fade in" id="tab1">
+                            {% include 'NewAccountBundle:profile/tabs:personal_information.html.twig' %}
+                        </div>
+                        <div class="profile-tab tab-pane fade" id="tab2">
+                            {% include 'NewAccountBundle:profile/tabs:contact_information.html.twig' %}
+                        </div>
+                        <div class="profile-tab tab-pane fade" id="tab3">
+                            {% include 'NewAccountBundle:profile/tabs:profile.html.twig' %}
+                        </div>
+                        <div class="profile-tab tab-pane fade" id="tab4">
+                            {% include 'NewAccountBundle:profile/tabs:structure.html.twig' %}
+                        </div>
+                        <div class="profile-tab tab-pane fade" id="tab5">
+                            {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_widget(form._token) }}
+
+    {{ form_end(form, {'render_rest': false}) }}
+
+    {% if page is defined %}
+        <div id="current-page" data-page="{{ page }}" class="hide"></div>
+    {% endif %}
+
+    <div id="tab-error-logo" class="hide"><i class="fa fa-exclamation-triangle" aria-hidden="true" title="{{ 'account.message.invalid_field'|trans }}"></i></div>
+{% endblock %}

@@ -62,6 +62,13 @@ services:
             - "@hopitalnumerique_etablissement.manager.etablissement"
         tags:
             - { name: form.type, alias: nodevo_user_user }
+
+    hopitalnumerique_user.form.type.registration:
+        class: HopitalNumerique\UserBundle\Form\Type\RegistrationType
+        arguments:
+            - "@hopitalnumerique_reference.manager.reference"
+        tags:
+            - { name: form.type, alias: nodevo_user_registration }
     #--Grid
     hopitalnumerique_user.grid.user:
         class: %hopitalnumerique_user.grid.user.class%
@@ -159,7 +166,6 @@ services:
     #--Manager
     hopitalnumerique_user.manager.login:
         class: %hopitalnumerique_user.manager.login.class%
-        arguments: ["@security.context"]
         tags:
             - { name: 'kernel.event_subscriber'}
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
@@ -210,6 +216,17 @@ services:
             - "@hopitalnumerique_objet.repository.commentaire"
             - "@hopitalnumerique_objet.repository.note"
             - "@ccdn_forum_forum.repository.post"
+            - "@nodevo_mail.repository.recommendation_mail_log"
+            - '@hopitalnumerique_user.repository.user'
+
+    hopitalnumerique_user.form.type.account:
+        class: HopitalNumerique\UserBundle\Form\Type\UserAccountType
+        arguments:
+            - "@hopitalnumerique_reference.manager.reference"
+            - "@hopitalnumerique_etablissement.manager.etablissement"
+            - "@security.token_storage"
+        tags:
+            - { name: form.type }
 
     hopitalnumerique_user.repository.user:
             class: HopitalNumerique\UserBundle\Repository\UserRepository
@@ -223,9 +240,45 @@ services:
             arguments:
                 - 'HopitalNumerique\UserBundle\Entity\Token'
 
+    hopitalnumerique_user.repository.contractualisation:
+        class: HopitalNumerique\UserBundle\Repository\ContractualisationRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\Contractualisation'
+
     hopitalnumerique_user.token.token_storage:
             class: HopitalNumerique\UserBundle\Service\TokenStorage
             arguments:
                 - '@hopitalnumerique_user.repository.token'
                 - '@doctrine.orm.entity_manager'
                 - '@event_dispatcher'
+
+    hopitalnumerique_user.update_user_parameters.command_handler:
+        class: HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler
+        arguments:
+            - '@security.token_storage'
+            - '@fos_user.user_manager.default'
+
+    hopitalnumerique_user.widgets.activity:
+        class: HopitalNumerique\UserBundle\Service\Widget\ActivityWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_user.service.active_member_calculator'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+        calls:
+            - method: setRepositories
+              arguments:
+                - '@hopitalnumerique_recherche.repository.requete'
+                - '@hopitalnumerique_objet.repository.consultation'
+                - '@autodiag.repository.autodiagentry'
+                - '@hopitalnumerique_user.repository.user'
+        public: false
+
+    HopitalNumerique\UserBundle\Service\ShareMessageGenerator:
+        class: HopitalNumerique\UserBundle\Service\ShareMessageGenerator
+        arguments:
+            - '@translator'

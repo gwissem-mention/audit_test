@@ -98,7 +98,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
     private function referenceProfile(User $ambassadeur)
     {
         $container = $this->getContainer();
-        $profileId = $ambassadeur->getProfilEtablissementSante()->getId();
+        $profileId = $ambassadeur->getProfileType()->getId();
         if (array_key_exists($profileId, $this->profile) && $this->profile[$profileId] instanceof Reference) {
             $profileReference = $container->get('hopitalnumerique_reference.manager.entity_has_reference')
                 ->findOneBy([
@@ -125,7 +125,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
     private function referenceEtablissement(User $ambassadeur)
     {
         $container = $this->getContainer();
-        $etablissement = $ambassadeur->getEtablissementRattachementSante();
+        $etablissement = $ambassadeur->getOrganization();
         if (!$etablissement instanceof Etablissement) {
             return null;
         }
@@ -137,17 +137,20 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
 
         $typeId = $type->getId();
 
-        if (array_key_exists($typeId, $this->typeEtablissement) && $this->typeEtablissement[$typeId] instanceof Reference) {
+        if (array_key_exists($typeId, $this->typeEtablissement)
+            && $this->typeEtablissement[$typeId] instanceof Reference
+        ) {
             $etablissementReference = $container->get('hopitalnumerique_reference.manager.entity_has_reference')
                 ->findOneBy([
                     'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
-                    'entityId' => $ambassadeur->getId(),
-                    'reference' => $this->typeEtablissement[$typeId],
-                ]);
+                    'entityId'   => $ambassadeur->getId(),
+                    'reference'  => $this->typeEtablissement[$typeId],
+                ])
+            ;
 
             if (null === $etablissementReference) {
                 $etablissementReference = $container->get('hopitalnumerique_reference.manager.entity_has_reference')
-                    ->createEmpty();
+                                                    ->createEmpty();
                 $etablissementReference->setEntityType(Entity::ENTITY_TYPE_AMBASSADEUR);
                 $etablissementReference->setEntityId($ambassadeur->getId());
                 $etablissementReference->setReference($this->typeEtablissement[$typeId]);
@@ -160,10 +163,15 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
         return null;
     }
 
+    /**
+     * @param User $ambassadeur
+     *
+     * @return array
+     */
     private function referenceActivity(User $ambassadeur)
     {
         $container = $this->getContainer();
-        $activities = $ambassadeur->getTypeActivite();
+        $activities = $ambassadeur->getActivities();
         $references = [];
 
         foreach ($activities as $activity) {
@@ -194,7 +202,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
     private function referenceRole(User $ambassadeur)
     {
         $container = $this->getContainer();
-        $role = $ambassadeur->getFonctionDansEtablissementSanteReferencement();
+        $role = $ambassadeur->getJobType();
         if (!$role instanceof Reference) {
             return null;
         }

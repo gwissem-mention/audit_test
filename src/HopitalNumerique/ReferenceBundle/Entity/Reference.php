@@ -22,16 +22,6 @@ class Reference
     use ImageTrait;
 
     /**
-     * @var int ID de Monsieur
-     */
-    const CIVILITE_MONSIEUR_ID = 8;
-
-    /**
-     * @var int ID de Madame
-     */
-    const CIVILITE_MADAME_ID = 9;
-
-    /**
      * @var int ID de la catégorie d'article de la communauté de partiques
      */
     const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 800;
@@ -76,6 +66,17 @@ class Reference
     const OCEAN_INDIEN_REGION_ID = 1010;
 
     const STATUT_SESSION_ACTIVE_ID = 403;
+    const STATUT_SESSION_ACCEPTED_ID = 407;
+
+    const WAITING_ID = 410;
+    const PARTICIPATED_ID = 411;
+    const TO_EVALUATE_ID = 28;
+    const EVALUATED_ID = 29;
+
+    /**
+     * @var int ID de Parcours guidé
+     */
+    const PARCOURS_GUIDE = 1997;
 
     /**
      * @var int
@@ -161,7 +162,7 @@ class Reference
     protected $enfants;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"}, inversedBy="references")
      * @ORM\JoinTable(name="hn_domaine_gestions_reference",
      *      joinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
@@ -500,7 +501,7 @@ class Reference
     /**
      * Get ID des parents.
      *
-     * @return Collection
+     * @return array
      */
     public function getParentIds()
     {
@@ -682,6 +683,8 @@ class Reference
 
     /**
      * set domaines.
+     *
+     * @param null|ArrayCollection $domaines
      *
      * @return Reference
      */
@@ -1080,6 +1083,9 @@ class Reference
         return $this->casseSensible;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         if ($this->codes->count() > 0) {
@@ -1150,7 +1156,13 @@ class Reference
      */
     public function getSigleForGlossaire()
     {
-        return null !== $this->sigle ? $this->sigle : (null !== $this->glossaireLibelle ? $this->glossaireLibelle : $this->libelle);
+        return null !== $this->sigle
+            ? $this->sigle
+            : (null !== $this->glossaireLibelle
+                ? $this->glossaireLibelle
+                : $this->libelle
+            )
+        ;
     }
 
     /**
@@ -1163,11 +1175,17 @@ class Reference
         return htmlentities($this->getSigleForGlossaire());
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getDomainesDisplay()
     {
         return $this->domainesDisplay;
     }
 
+    /**
+     * @param Domaine $domaine
+     */
     public function addDomainesDisplay(Domaine $domaine)
     {
         if (!$this->domainesDisplay->contains($domaine)) {
@@ -1175,6 +1193,9 @@ class Reference
         }
     }
 
+    /**
+     * @param Domaine $domaine
+     */
     public function removeDomainesDisplay(Domaine $domaine)
     {
         $this->domainesDisplay->remove($domaine);
@@ -1190,6 +1211,9 @@ class Reference
         });
     }
 
+    /**
+     * @return array
+     */
     public static function DOMRegionsIds()
     {
         return [

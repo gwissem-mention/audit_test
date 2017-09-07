@@ -285,6 +285,7 @@
 
 .chapter .chapter-label .not-concerned {
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .chapters .navigation {

@@ -1,0 +1,102 @@
+hopital_numerique_cart_add:
+    path:     /add/{objectType}/{objectId}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Cart:add }
+    methods:
+        - GET
+
+hopital_numerique_cart_remove:
+    path:     /remove/{objectType}/{objectId}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Cart:remove }
+
+# Report
+hopital_numerique_cart_report_download:
+    path:     /report/{report}/download
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:download }
+
+hopital_numerique_cart_report_remove:
+    path:     /report/{report}/remove
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:remove }
+
+hopital_numerique_cart_report_send:
+    path:     /report/{report}/send
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:sendReport }
+    methods:
+        - POST
+
+hopital_numerique_cart_report_duplicate:
+    path:     /report/{report}/duplicate
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:duplicate }
+    methods:
+        - POST
+
+hopital_numerique_cart_report_share:
+    path:     /report/{report}/share
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:share, type: 'share' }
+    methods:
+        - GET
+        - POST
+
+hopital_numerique_cart_report_copy:
+    path:     /report/{report}/copy
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:share, type: 'copy' }
+    methods:
+        - GET
+        - POST
+
+hopital_numerique_cart_report_get_shares:
+    path:     /report/{report}/shares-data
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:sharesData }
+    methods:
+        - GET
+
+hopital_numerique_cart_report_remove_sharing:
+    path:     /sharing/{reportSharing}/remove
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\Report:removeSharing }
+
+# ReportItem
+hopital_numerique_cart_report_item_get:
+    path:     /report/{report}/get-items
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportItem:getItems }
+    methods:
+        - GET
+
+hopital_numerique_cart_report_item_add_staging:
+    path:     /add-to-report
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportItem:addToReport }
+    methods:
+        - POST
+
+hopital_numerique_cart_report_item_add:
+    path:     /add-to-report/{report}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportItem:addToReport }
+    methods:
+        - POST
+
+hopital_numerique_cart_report_item_remove_item:
+    path:     /remove-item/{reportItem}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportItem:removeItem }
+
+hopital_numerique_cart_report_item_reorder:
+    path:     /reorder/{reportFactory}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportItem:reorder }
+    methods:
+        - POST
+
+# ReportFactory
+hopital_numerique_cart_report_factory_edit:
+    path:     /edit/{reportFactory}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportFactory:edit }
+    methods:
+        - POST
+
+hopital_numerique_cart_report_factory_get_pending:
+    path:     /report-factory/get-pending
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportFactory:getPendingReportFactory }
+    methods:
+        - GET
+
+hopital_numerique_cart_report_factory_get:
+    path:     /report-factory/{report}
+    defaults: { _controller: HopitalNumeriqueCartBundle:Front\ReportFactory:getReportFactoryForReport }
+    methods:
+        - GET

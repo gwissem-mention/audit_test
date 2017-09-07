@@ -1,0 +1,11 @@
+{% trans_default_domain 'widget' %}
+
+<ol>
+    <li>{{ 'activity.saved_searches'|transchoice(savedSearchesCount) }}</li>
+    <li>{{ 'activity.objects_readed'|transchoice(objectsReadedCount) }}</li>
+    <li>{{ 'activity.comments'|transchoice(commentsCount) }}</li>
+    <li>{{ 'activity.forum_post'|transchoice(forumPostCount) }}</li>
+    <li>{{ 'activity.content_shared'|transchoice(recommendationsLogCount) }}</li>
+    <li>{{ 'activity.autodiag'|transchoice(autodiagsCount) }}</li>,
+    <li>{{ 'activity.guided_tour'|transchoice(guidedSearchCount) }}</li>
+</ol>

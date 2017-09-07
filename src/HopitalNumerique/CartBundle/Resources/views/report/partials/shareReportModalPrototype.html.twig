@@ -1,0 +1,33 @@
+{% trans_default_domain 'cart' %}
+
+<script type="x-template" id="share-modal-prototype">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{ '{{reportTitle}}' }}</h4>
+    </div>
+    <div class="modal-body">
+
+        <fieldset class="duplicate">
+            <legend>{{ 'modal.report_duplicated.title'|trans }}</legend>
+
+            {{ 'Module_cart_report_share_duplicate'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
+            <form action="{{ '{{duplicateReportUri}}' }}" method="post">
+                <div class="form-group">
+                    <label for="">{{ 'modal.report_duplicated.name.label'|trans }}</label>
+                    <input type="text" class="form-control validate[required]" name="reportName">
+                </div>
+
+                <input type="submit" class="btn btn-success" value="{{ 'modal.report_duplicated.submit.label'|trans|e }}">
+            </form>
+        </fieldset>
+
+        <hr>
+
+        {{ include('@HopitalNumeriqueCart/report/partials/shareReportForm.html.twig', {'type': constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE')}) }}
+
+        <hr>
+
+        {{ include('@HopitalNumeriqueCart/report/partials/shareReportForm.html.twig', {'type': constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_COPY')}) }}
+    </div>
+</script>

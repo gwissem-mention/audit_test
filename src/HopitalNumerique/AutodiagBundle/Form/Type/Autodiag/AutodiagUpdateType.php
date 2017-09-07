@@ -2,10 +2,13 @@
 
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Autodiag;
 
+
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagType;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -26,6 +29,16 @@ class AutodiagUpdateType extends AbstractType
             ->add('autodiag', AutodiagType::class, [
                 'user' => $options['user'],
                 'edit' => $options['edit'],
+            ])
+            ->add('notify_update', HiddenType::class, [
+                'mapped' => false,
+            ])
+            ->add('reason', TextType::class, [
+                'mapped' => false,
+                'attr' => [
+                    'placeholder' => 'ad.autodiag.import.update_reason',
+                    'class' => 'validate[required]',
+                ],
             ])
             ->add('presets', CollectionType::class, [
                 'entry_type' => PresetType::class,

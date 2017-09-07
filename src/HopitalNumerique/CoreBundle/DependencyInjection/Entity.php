@@ -3,8 +3,10 @@
 namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
@@ -13,6 +15,7 @@ use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
+use HopitalNumerique\ForumBundle\Repository\BoardRepository;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
@@ -23,11 +26,14 @@ use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -128,6 +134,11 @@ class Entity
     private $forumTopicManager;
 
     /**
+     * @var BoardRepository $forumBoardRepository
+     */
+    protected $forumBoardRepository;
+
+    /**
      * @var DomaineManager DomaineManager
      */
     private $domaineManager;
@@ -163,6 +174,16 @@ class Entity
     private $suggestionRepository;
 
     /**
+     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     */
+    protected $entityHasReferenceRepository;
+
+    /**
+     * @var AutodiagRepository $autodiagRepository
+     */
+    protected $autodiagRepository;
+
+    /**
      * Constructeur.
      *
      * @param RouterInterface                 $router
@@ -184,6 +205,9 @@ class Entity
      * @param                                 $refComPratiqueId
      * @param                                 $refExpressionBesoinReponseId
      * @param                                 $refForumBoardId
+     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param BoardRepository $boardRepository
+     * @param AutodiagRepository $communautePratiqueGroupeManager
      */
     public function __construct(
         RouterInterface $router,
@@ -204,7 +228,10 @@ class Entity
         $refRechercheParcoursId,
         $refComPratiqueId,
         $refExpressionBesoinReponseId,
-        $refForumBoardId
+        $refForumBoardId,
+        $entityHasReferenceRepository,
+        BoardRepository $boardRepository,
+        AutodiagRepository $autodiagRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -225,6 +252,9 @@ class Entity
         $this->refComPratiqueId = $refComPratiqueId;
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
         $this->refForumBoardId = $refForumBoardId;
+        $this->entityHasReferenceRepository = $entityHasReferenceRepository;
+        $this->forumBoardRepository = $boardRepository;
+        $this->autodiagRepository = $autodiagRepository;
     }
 
     /**
@@ -341,6 +371,10 @@ class Entity
                 return $this->expressionBesoinReponseManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_SUGGESTION:
                 return $this->suggestionRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return $this->forumBoardRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_AUTODIAG:
+                return $this->autodiagRepository->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "' . $type . '" introuvable.');
@@ -383,6 +417,8 @@ class Entity
                     && null !== $entity->getBoard()->getCategory()->getForum()->getDomain()
                 ;
                 return $hasDomain ? [$entity->getBoard()->getCategory()->getForum()->getDomain()] : [];
+            case self::ENTITY_TYPE_FORUM_BOARD:
+                return [$entity->getCategory()->getForum()->getDomain()];
             case self::ENTITY_TYPE_CONTENU:
                 return $this->getDomainesByEntity($entity->getObjet());
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
@@ -546,6 +582,9 @@ class Entity
             case self::ENTITY_TYPE_FORUM_BOARD:
                 $title = $entity->getName();
                 break;
+            case self::ENTITY_TYPE_AUTODIAG:
+                $title = $entity->getTitle();
+                break;
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -694,6 +733,31 @@ class Entity
         return $description;
     }
 
+    /**
+     * @param $entity
+     * @param bool $onlyPrimary
+     *
+     * @return EntityHasReference[]
+     */
+    public function getReferencesByEntity($entity, $onlyPrimary = false)
+    {
+        $domains = $this->getDomainesByEntity($entity);
+
+        $references = $this->entityHasReferenceRepository->findByEntityTypeAndEntityIdAndDomaines(
+            $this->getEntityType($entity),
+            $this->getEntityId($entity),
+            $domains instanceof Collection ? $domains->toArray() : $domains
+        );
+
+        if ($onlyPrimary) {
+            $references = array_filter($references, function (EntityHasReference $reference) {
+                return $reference->isPrimary() === true;
+            });
+        }
+
+        return $references;
+    }
+
     //<-- URL
 
     /**
@@ -716,12 +780,18 @@ class Entity
                 return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
             case self::ENTITY_TYPE_AMBASSADEUR:
                 $parameters = json_encode([
-                    $entity->getEmail() => $entity->getPrenom() . ' ' . $entity->getNom(),
+                    $entity->getEmail() => $entity->getFirstname() . ' ' . $entity->getLastname(),
                 ]);
 
                 return 'javascript:Contact_Popup.display(' . $parameters . ', window.location.href);';
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
+                return $this->router->generate(
+                    'hopital_numerique_guided_search_show',
+                    [
+                        'guidedSearchReference' => $entityId,
+                        'guidedSearchReferenceAlias' => (new Chaine($entity->getReference()->getLibelle()))->minifie()
+                    ]
+                );
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
             case self::ENTITY_TYPE_SUGGESTION:

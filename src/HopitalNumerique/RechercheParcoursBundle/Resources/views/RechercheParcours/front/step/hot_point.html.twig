@@ -1,0 +1,41 @@
+{% trans_default_domain 'guided_search' %}
+
+<div class="productions">
+    <h2 class="count">
+        {{ 'step.objects.result_count'|transchoice(hotPointStep['items']|length, {'%name%': '<span class="name">'~ "list.publication_type.hot_point"|trans~' :</span>'})|raw }}
+    </h2>
+
+    {% for k, object in hotPointStep['items'] %}
+        <div class="result">
+            <h3 class="title">
+                <a href="{{ object.directLink }}" target="_blank">
+                    {{ object.title }}
+                </a>
+            </h3>
+            <div class="description">
+                {{ object.description[:400]|striptags|raw ~ '...' }}
+            </div>
+
+            <div class="related">
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_PRODUCTION')) and object.relatedProductions|length > 0 %}
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#prod-{{ section.type}}-{{ k }}">
+                        {{ 'step.objects.related_production'|transchoice(object.relatedProductions|length) }}
+                    </a>
+
+                    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/step/production/productions.html.twig') }}
+                {% endif %}
+
+                {% if guidedSearchConfig.hasPublicationType(constant('HopitalNumerique\\RechercheParcoursBundle\\Entity\\GuidedSearchConfigPublicationType::TYPE_RISK')) and object.relatedRisks|length > 0 %}
+                    <a href="#risks-{{ section.type}}-{{ k }}" class="btn btn-link" data-toggle="modal" data-target="#risks-{{ section.type}}-{{ k }}">
+                        {{ 'step.objects.related_risk'|transchoice(object.relatedRisks|length) }}
+                    </a>
+
+                    {{ include('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:front/step/production/risks.html.twig') }}
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+    {% endfor %}
+
+</div>

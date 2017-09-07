@@ -32,4 +32,16 @@ class HistoryReader
 
         return $this->manager->getRepository(History::class)->getHistoryByType($autodiag, $type);
     }
+
+    /**
+     * Retrieves autodiag history (all types)
+     *
+     * @param Autodiag $autodiag
+     *
+     * @return array
+     */
+    public function getHistoryByAutodiag(Autodiag $autodiag)
+    {
+        return $this->manager->getRepository(History::class)->getHistoryByAutodiag($autodiag);
+    }
 }

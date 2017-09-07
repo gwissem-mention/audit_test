@@ -2,7 +2,10 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type\User;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire;
@@ -14,17 +17,17 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 class RechercheType extends AbstractType
 {
     /**
-     * @var \Symfony\Component\Routing\RouterInterface Router
+     * @var RouterInterface Router
      */
     private $router;
 
     /**
-     * @var \HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire Service Annuaire
+     * @var Annuaire Service Annuaire
      */
     private $annuaireService;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     * @var ReferenceManager ReferenceManager
      */
     private $referenceManager;
 
@@ -43,73 +46,56 @@ class RechercheType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->setAction($this->router->generate('hopitalnumerique_communautepratique_user_list'));
         $builder
-            ->setAction($this->router->generate('hopitalnumerique_communautepratique_user_list'))->add(
-                'id',
-                'hidden',
-                [
-                    'attr' => [
-                        'placeholder' => 'Rechercher un id',
-                    ],
-                ]
-            )->add(
-                'nom',
-                'text',
-                [
-                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
-                    'attr' => [
-                        'placeholder' => 'Rechercher un nom, un prénom',
-                    ],
-                ]
-            )->add(
-                'profilEtablissementSante',
-                'entity',
-                [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property' => 'libelle',
-                    'choices' => $this->referenceManager->findEtablissementSanteProfils(),
-                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
-                    'multiple' => true,
-                ]
-            )->add(
-                'region',
-                'entity',
-                [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property' => 'libelle',
-                    'choices' => $this->referenceManager->findRegions(),
-                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
-                    'multiple' => true,
-                ]
-            )->add(
-                'statutEtablissementSante',
-                'entity',
-                [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property' => 'libelle',
-                    'choices' => $this->referenceManager->findEtablissementSanteTypes(),
-                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
-                    'multiple' => true,
-                ]
-            )->add(
-                'typeActivite',
-                'entity',
-                [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property' => 'libelle',
-                    'choices' => $this->referenceManager->findActiviteTypes(),
-                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
-                    'multiple' => true,
-                ]
-            );
+            ->add('id', HiddenType::class, [
+                'attr' => [
+                    'placeholder' => 'Rechercher un id',
+                ],
+            ])
+            ->add('nom', TextType::class, [
+                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
+                'attr' => [
+                    'placeholder' => 'Rechercher un nom, un prénom',
+                ],
+            ])
+            ->add('profileType', EntityType::class, [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'choices' => $this->referenceManager->findEtablissementSanteProfils(),
+                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
+                'multiple' => true,
+            ])
+            ->add('region', EntityType::class, [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'choices' => $this->referenceManager->findRegions(),
+                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
+                'multiple' => true,
+            ])
+            ->add('organizationType', EntityType::class, [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'choices' => $this->referenceManager->findEtablissementSanteTypes(),
+                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
+                'multiple' => true,
+            ])
+            ->add('activities', EntityType::class, [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'choices' => $this->referenceManager->findActiviteTypes(),
+                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
+                'multiple' => true,
+            ]);
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {

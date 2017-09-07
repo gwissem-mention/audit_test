@@ -1,0 +1,24 @@
+.new-report .item-line {
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.new-report .item-line .item-line-action {
+    font-size: 22px;
+}
+
+.new-report .item-line .item-line-action.draggable {
+    cursor: move;
+}
+
+.new-report .item-line .item-line-title {
+    flex-grow: 2;
+    margin: 0 10px;
+}
+
+.report-list .report-list-line .report-list-line-title a {
+    color: black;
+}

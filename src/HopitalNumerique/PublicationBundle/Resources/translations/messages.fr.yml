@@ -7,3 +7,12 @@ form:
             excluded: Exclure cette image
             found_in: Trouvé dans "%node%"
             name: Nom de l'image
+
+object:
+    card: Fiche de l'objet
+    not_relevant: Non pertinent
+    notify_update: Notifier la mise à jour ?
+    last_update_notification: Dernière notification de mise à jour le %date%
+    release_date: 'Date de parution : %date%'
+    update_details: Voir le détail des mises à jour
+    last_update: 'Dernière mise à jour : %date%'

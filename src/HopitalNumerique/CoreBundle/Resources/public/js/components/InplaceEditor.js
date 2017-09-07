@@ -6,7 +6,9 @@ var InplaceEditor = (function() {
     InplaceEditor = function(field, url, options) {
         this.field = field;
         this.url = url;
-        this.text = null;
+        this.text = field.text();
+        this.fieldLink  = field.data('field-link');
+        this.fieldLinkTarget  = field.data('field-link-target');
 
         this.options = $.extend({
             title: 'Edit',
@@ -44,6 +46,13 @@ var InplaceEditor = (function() {
             ;
 
             edit.click($.proxy(this.textToInput, this));
+
+            // If the field link data is defined, add a link around the field text.
+            if (this.fieldLink !== undefined) {
+                var textLink = $('<a/>').attr('href', this.fieldLink).attr('target', this.fieldLinkTarget);
+
+                this.field.html(textLink.html(this.text));
+            }
 
             this.field.append(edit);
 

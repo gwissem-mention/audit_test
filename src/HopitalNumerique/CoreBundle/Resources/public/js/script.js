@@ -1,4 +1,32 @@
 $(document).ready(function() {
+    $('[data-toggle="popover"]').popover({
+        html: true,
+        trigger: 'manual',
+        placement: 'bottom',
+        content: function() {
+            var menu = document.querySelector('ul.account-menu');
+            return menu.outerHTML;
+        },
+    }).on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(this).siblings(".popover").on("mouseleave", function (e) {
+            // e.fromElement and e.target.tagName hack to manage firing .popover "mouseleave" event when dropdown is open on Firefox and Chrome
+            if (typeof e.fromElement != 'undefined' && !e.fromElement.length) {
+                setTimeout(function () {
+                    $(_this).popover('hide');
+                }, 100);
+            }
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover('hide');
+            }
+        }, 100);
+    });
+
     $('#mesrequetes.closed').click(function(){
         //on ouvre
         if ( $(this).hasClass('closed') ){

@@ -1,0 +1,25 @@
+account_dashboard:
+    path:     /
+    defaults: { _controller: NewAccountBundle:Front\Dashboard:dashboard }
+
+account_dashboard_reorder:
+    path:     /dashboard/reorder
+    defaults: { _controller: NewAccountBundle:Front\Dashboard:reorder }
+    methods:
+        - POST
+
+account_profile:
+    path:     /mon-profil
+    defaults: { _controller: NewAccountBundle:Front\Profile:profile }
+
+account_service:
+    path:     /mes-services
+    defaults: { _controller: NewAccountBundle:Front\Service:service }
+
+account_cart:
+    path:     /mon-panier
+    defaults: { _controller: NewAccountBundle:Front\Cart:cart }
+
+account_parameter:
+    path:     /mes-parametres
+    defaults: { _controller: NewAccountBundle:Front\Parameter:parameter }

@@ -26,6 +26,9 @@ services:
         - '%ref_com_pratique_id%'
         - '%ref_expression_besoin_reponse_id%'
         - '%ref_forum_board_id%'
+        - '@hopitalnumerique_reference.repository.entity_has_reference'
+        - '@hopitalnumerique_forum.repository.board'
+        - '@autodiag.repository.autodiag'
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView
@@ -41,3 +44,9 @@ services:
              - '@doctrine'
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.terminate', method: persistLogs }
+
+    kernel.listener.notFoundHttpException:
+        class: HopitalNumerique\CoreBundle\EventListener\NotFoundHttpExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -10 }
+        arguments: [ '@controller_resolver', '@request_stack', '@http_kernel' ]

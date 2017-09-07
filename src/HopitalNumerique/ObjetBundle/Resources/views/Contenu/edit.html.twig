@@ -45,15 +45,24 @@
         
         {{ form_row(form.contenu) }}
 
+
         <div class="form-group">
-            <div class="row">
-                <label class="col-md-11" >Notifier la mise à jour ?</label>
-                <div class="col-md-1">
-                    <div class="pull-right toggle toggle-success"></div>
+            <label class="col-md-6">{{ 'object.notify_update'|trans }}</label>
+            <div class="col-md-6">
+                <div class="row" style="height: 34px;">
+                    <div class="col-md-10 text-right">
+                        <div class="update-reason-container hide">
+                            {{ form_widget(form.reason) }}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="pull-right toggle toggle-success"></div>
+                    </div>
                 </div>
-                <div class="col-md-10 hide">
-                    {{ form_widget(form.modified) }}
-                </div>
+            </div>
+            {{ form_widget(form.modified) }}
+            <div class="col-md-6 errorReason">
+                <div class="help-block"><p class="text-danger"></p></div>
             </div>
         </div>
 

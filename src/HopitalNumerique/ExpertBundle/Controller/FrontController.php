@@ -101,7 +101,7 @@ class FrontController extends Controller
         $images = [];
 
         foreach ($users as $user) {
-            $images[$user->getId()] = $user->getNom();
+            $images[$user->getId()] = $user->getLastname();
         }
 
         foreach ($users as $user) {

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +32,7 @@ class StatClicController extends Controller
 
         $statClic = $this->get('hopitalnumerique_recherche.manager.statClic')->createEmpty();
 
-        if (!is_null($user) && $user !== 'anon.') {
+        if (!is_null($user) && $user instanceof User) {
             $statClic->setUser($user);
         }
 

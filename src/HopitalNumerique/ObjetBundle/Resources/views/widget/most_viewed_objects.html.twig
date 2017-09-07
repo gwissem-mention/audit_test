@@ -1,0 +1,16 @@
+{% trans_default_domain 'widget' %}
+
+{% if objects|length %}
+    <ol>
+        {% for object in objects %}
+            <li>
+                <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': object.id}) }}">
+                    {{ object.titre }}
+                </a>
+                {{ 'most_viewed_object.views_count'|transchoice(object.consultations.first.viewsCount) }}
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <b>{{ 'most_viewed_object.empty'|trans }}</b>
+{% endif %}

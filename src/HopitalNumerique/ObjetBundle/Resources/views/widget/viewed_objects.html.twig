@@ -1,0 +1,56 @@
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="viewed-objects-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_publications'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table account-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'viewed_objects.publications'|trans }}</th>
+                <th width="140">{{ 'viewed_objects.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>
+                        {% if item.modificationDate > item.consultationDate %}
+                            <i class="fa fa-bullhorn service-tooltip" data-toggle="tooltip" title="{{ 'viewed_objects.update'|trans }}"></i>
+                        {% endif %}
+                        {{ item.consultationDate|date('d/m/y') }} -
+                        <a href="{{ item.showLink }}" title="{{ item.fullTitle }}"{{ not item.sameDomain ? " target='_blank'" }}>
+                            {{ item.shortTitle }}
+                        </a>
+                    </td>
+                    <td class="actions-column">
+                        <div class="btn-group">
+                            <a href="{{ item.showLink }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'viewed_objects.see'|trans }}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ item.recommendationLink }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'viewed_objects.send'|trans }}">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                            <a href="{{ path('hopital_numerique_requete_consultation_delete', { consultation: item.consultationId }) }}" class="btn btn-sm btn-danger delete-consultation-btn" title="{{ 'viewed_objects.delete'|trans }}">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="widget-btn">
+            <a class="pull-left more"><i class="fa fa-chevron-right"></i> {{ 'viewed_objects.show_all'|trans }}</a>
+            <a class="pull-left less"><i class="fa fa-chevron-left"></i> {{ 'viewed_objects.show_less'|trans }}</a>
+        </div>
+    </div>
+
+    <script>
+        new ViewedObjectsWidget($('#viewed-objects-widget'), {'deleteMessage': '{{ 'viewed_objects.delete_message.confirm'|trans }}'});
+    </script>
+{% else %}
+    {{ 'viewed_objects.not_found'|trans }}
+{% endif %}

@@ -3,6 +3,8 @@
 namespace HopitalNumerique\ForumBundle\Entity;
 
 use CCDNForum\ForumBundle\Entity\Category as BaseCategory;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -11,6 +13,19 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class Category extends BaseCategory
 {
+    /**
+     * @var Domaine[]
+     */
+    protected $domaines;
+
+    /**
+     * @return Domaine[]
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+
     /**
      * @param SecurityContextInterface $securityContext
      *
@@ -23,7 +38,7 @@ class Category extends BaseCategory
         }
 
         foreach ($this->readAuthorisedRoles as $role) {
-            if ('anon.' === $securityContext->getToken()->getUser()) {
+            if (!$securityContext->getToken()->getUser() instanceof User) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }

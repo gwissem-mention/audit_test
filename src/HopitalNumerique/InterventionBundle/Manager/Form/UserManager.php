@@ -1,13 +1,14 @@
 <?php
+
 /**
  * Manager pour le formulaire utilisateur propre aux demandes d'intervention.
  *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
-
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
-use Symfony\Component\Security\Core\SecurityContext;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Nodevo\AclBundle\Manager\AclManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -19,11 +20,11 @@ use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 class UserManager
 {
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User L'utilisateur connecté
+     * @var User L'utilisateur connecté
      */
     private $utilisateurConnecte;
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router Router de l'application
+     * @var Router Router de l'application
      */
     private $router;
     /**
@@ -31,48 +32,43 @@ class UserManager
      */
     private $userManager;
     /**
-     * @var \Nodevo\AclBundle\Manager\AclManager Le manager de l'entité Acl
+     * @var AclManager Le manager de l'entité Acl
      */
     private $aclManager;
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager Manager de Reference
+     * @var ReferenceManager Manager de Reference
      */
     private $referenceManager;
     /**
-     * @var \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager Manager de Etablissement
+     * @var EtablissementManager Manager de Etablissement
      */
     private $etablissementManager;
 
     /**
      * Constructeur du manager gérant les formulaires utilisateurs.
      *
-     * @param \Symfony\Component\Security\Core\SecurityContext                   $securityContext      SecurityContext de l'application
-     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router                     $router               Router de l'application
-     * @param \HopitalNumerique\UserBundle\Manager\UserManager                   $userManager          Le manager de l'entité User
-     * @param \Nodevo\AclBundle\Manager\AclManager                               $aclManager           Le manager de l'entité Acl
-     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager         $referenceManager     Manager de Reference
-     * @param \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager Manager de Etablissement
+     * @param TokenStorage                                     $tokenStorage
+     * @param Router                                           $router               Router de l'application
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager          Le manager de l'entité User
+     * @param AclManager                                       $aclManager           Le manager de l'entité Acl
+     * @param ReferenceManager                                 $referenceManager     Manager de Reference
+     * @param EtablissementManager                             $etablissementManager Manager de Etablissement
      */
-    public function __construct(SecurityContext $securityContext, Router $router, \HopitalNumerique\UserBundle\Manager\UserManager $userManager, AclManager $aclManager, ReferenceManager $referenceManager, EtablissementManager $etablissementManager)
-    {
+    public function __construct(
+        TokenStorage $tokenStorage,
+        Router $router,
+        \HopitalNumerique\UserBundle\Manager\UserManager $userManager,
+        AclManager $aclManager,
+        ReferenceManager $referenceManager,
+        EtablissementManager $etablissementManager
+    ) {
         $this->router = $router;
         $this->userManager = $userManager;
         $this->aclManager = $aclManager;
         $this->referenceManager = $referenceManager;
         $this->etablissementManager = $etablissementManager;
-
-        $securityContext = $securityContext;
-        $this->utilisateurConnecte = $securityContext->getToken()->getUser();
-    }
-
-    /**
-     * Retourne la liste des civilités pour les listes de formulaire.
-     *
-     * @return array Liste des civilités pour les listes de formulaire
-     */
-    public function getCivilitesChoices()
-    {
-        return $this->referenceManager->findByCode('CIVILITE');
+        $this->tokenStorage = $tokenStorage;
+        $this->utilisateurConnecte = $tokenStorage->getToken()->getUser();
     }
 
     /**
@@ -93,16 +89,6 @@ class UserManager
     public function getRegionsChoices()
     {
         return $this->referenceManager->findByCode('REGION');
-    }
-
-    /**
-     * Retourne la liste des départements pour les listes de formulaire.
-     *
-     * @return array Liste des départements pour les listes de formulaire
-     */
-    public function getDepartementsChoices()
-    {
-        return $this->referenceManager->findByCode('DEPARTEMENT');
     }
 
     /**
@@ -180,7 +166,11 @@ class UserManager
         $usersListeFormatee = [];
 
         foreach ($users as $user) {
-            $usersListeFormatee[] = ['id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom()];
+            $usersListeFormatee[] = [
+                'id'        => $user->getId(),
+                'nom'       => $user->getLastname(),
+                'firstname' => $user->getFirstname(),
+            ];
         }
 
         return json_encode($usersListeFormatee);
@@ -204,8 +194,8 @@ class UserManager
         foreach ($users as $user) {
             $usersListeFormatee[] = [
                 'id' => $user->getId(),
-                'nom' => $user->getNom(),
-                'prenom' => $user->getPrenom(),
+                'nom' => $user->getLastname(),
+                'firstname' => $user->getFirstname(),
                 'appellation' => $user->getAppellation(),
             ];
         }
@@ -228,8 +218,8 @@ class UserManager
         foreach ($users as $user) {
             $usersListeFormatee[] = [
                 'id' => $user->getId(),
-                'nom' => $user->getNom(),
-                'prenom' => $user->getPrenom(),
+                'nom' => $user->getLastname(),
+                'firstname' => $user->getFirstname(),
                 'appellation' => $user->getAppellation(),
             ];
         }
@@ -244,6 +234,9 @@ class UserManager
      */
     private function ajouteUtilisateurConnecteCommeDemandeur()
     {
-        return $this->utilisateurConnecte->hasRoleCmsi() || $this->aclManager->checkAuthorization($this->router->generate('hopital_numerique_intervention_admin_demande_nouveau'), $this->utilisateurConnecte);
+        return $this->utilisateurConnecte->hasRoleCmsi() || $this->aclManager->checkAuthorization(
+            $this->router->generate('hopital_numerique_intervention_admin_demande_nouveau'),
+            $this->utilisateurConnecte
+        );
     }
 }

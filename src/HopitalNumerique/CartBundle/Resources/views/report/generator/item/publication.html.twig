@@ -1,0 +1,93 @@
+{% trans_default_domain 'cart' %}
+
+{% import _self as macro %}
+
+<h2>
+    <small>{{ ('item.object_type.'~item.type)|trans }}</small>
+    {{ item.title }}
+
+    <span class="date">
+        {{ 'generator.publication.publicationDate'|trans }} {{ item.publicationDate|date('d/m/Y') }}
+        {% if item.lastUpdateDate %}
+            <br />{{ 'generator.publication.lastUpdateDate'|trans }} {{ item.lastUpdateDate|date('d/m/Y') }}
+        {% endif %}
+    </span>
+</h2>
+
+
+{% if item.source %}
+    {{ 'generator.publication.source'|trans }} {{ item.source }}
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns and item.shortResume %}
+    <fieldset>
+        <legend>{{ 'generator.publication.shortResume'|trans }}</legend>
+        <div class="truncate-height">
+            <p>
+                {{ item.resume|raw }}
+            </p><br />
+        </div>
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns and item.synthesis %}
+    <fieldset>
+        <legend>{{ 'generator.publication.synthesis'|trans }}</legend>
+        <p>
+            {{ item.synthesis|raw }}
+        </p><br />
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.contents|length > 0%}
+    <fieldset>
+        <legend>{{ 'generator.publication.summary'|trans }}</legend>
+        <ul>
+            {% for content in item.contents %}
+                {{ macro.buildTree(content) }}
+            {% endfor %}
+        </ul><br />
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns and item.resume %}
+    <fieldset>
+        <legend>{{ 'generator.publication.resume'|trans }}</legend>
+        <p>
+            {{ item.resume|raw }}
+        </p><br />
+    </fieldset>
+{% endif %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::COMMENT_COLUMN') in report.columns and item.comments|length > 0 %}
+    <fieldset class="comments">
+        <legend>{{ 'generator.publication.comments'|trans }}</legend>
+        {% for comment in item.comments %}
+            <div class="comment">
+                <span class="info">{{ comment.user.username }} - <small>{{ comment.dateCreation|date('d/m/Y') }}</small></span>
+                <div class="comment-content">
+                    {{ comment.texte|nl2br }}
+                </div>
+            </div>
+        {% endfor %}
+    </fieldset>
+{% endif %}
+
+{{ include('@HopitalNumeriqueCart/report/generator/item/partials/references.html.twig') }}
+
+
+{% macro buildTree(contenu, parentOrder) %}
+    <li>
+        {{ (parentOrder ? parentOrder~'.')~contenu.order~'.' }}
+        {{ contenu.titre }}
+
+        {% if contenu.childs %}
+            <ul>
+                {% import _self as mySelf %}
+                {% for child in contenu.childs %}
+                    {{ mySelf.buildTree(child, (parentOrder ? parentOrder~'.')~contenu.order) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}

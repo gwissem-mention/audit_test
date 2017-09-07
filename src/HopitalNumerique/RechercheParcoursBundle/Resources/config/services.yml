@@ -11,11 +11,12 @@ services:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours.class%
         arguments: ["@doctrine.orm.entity_manager"]
+
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class%
         arguments: ["@doctrine.orm.entity_manager"]
-    #RechercheParcours Détails
+
     hopitalnumerique_recherche_parcours.manager.matrise_user:
         class: %hopitalnumerique_recherche_parcours.manager.matrise_user.class%
         arguments: ["@doctrine.orm.entity_manager"]
@@ -35,6 +36,251 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }
 
+    hopitalnumerique_rechercheparcours.form.rechercheparcourshistory:
+        class: 'HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionHistory'
+        tags:
+            - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion_history }
+
     hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie:
         class: 'HopitalNumerique\RechercheParcoursBundle\DependencyInjection\ParcoursGuideLie'
         arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours']
+
+    hopitalnumerique_rechercheparcours.handler.edit_recherche_parcours_gestion_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\EditGuidedSearchConfigHandler
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_gestion'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_reference.repository.reference'
+
+    hopitalnumerique_rechercheparcours.handler.share_guided_search_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\ShareGuidedSearchHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_user.repository.user'
+
+    hopitalnumerique_rechercheparcours.handler.remove_guided_search_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\RemoveGuidedSearchHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.handler.send_guided_search_analyzes_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\GuidedSearch\SendAnalyzesHandler
+        arguments:
+            - '@nodevo_mail.manager.mail'
+            - '@hopitalnumerique_rechercheparcours.synthesis_export_xlsx'
+            - '@hopitalnumerique_rechercheparcours.synthesis_export_csv'
+
+    hopitalnumerique_rechercheparcours.handler.analyse_guided_search_step_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\AnalyseGuidedSearchStepHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.handler.exclude_risk_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\ExcludeRiskHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.handler.show_risk_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\IncludeRiskHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.handler.send_synthesis_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\Risk\SendSynthesisHandler
+        arguments:
+            - '@hopitalnumeriquerechercheparcours.export.pdf.risk_synthesis'
+            - '@nodevo_mail.manager.mail'
+            - '@mailer'
+
+    hopitalnumerique_rechercheparcours.handler.add_private_risk_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\AddPrivateRiskHandler
+        arguments:
+            - '@hopitalnumerique_objet.repository.risk'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+
+    hopitalnumerique_rechercheparcours.hydrator.edit_recherche_parcours_gestion_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\EditGuidedSearchConfigCommandFactory
+        arguments:
+            - '@hopitalnumerique_reference.repository.reference'
+
+    hopitalnumerique_rechercheparcours.repository.recherche_parcours_gestion:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion'
+
+    hopitalnumerique_rechercheparcours.repository.recherche_parcours_details:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursDetailsRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails'
+
+    hopitalnumerique_rechercheparcours.repository.recherche_parcours_history:
+                class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursHistoryRepository
+                factory: ["@doctrine.orm.entity_manager", "getRepository"]
+                arguments:
+                    - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursHistory'
+
+    hopitalnumerique_rechercheparcours.repository.recherche_parcours:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours'
+
+    hopitalnumerique_rechercheparcours.repository.guided_search:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch'
+
+    hopitalnumerique_rechercheparcours.repository.guided_search_step:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchStepRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep'
+
+    hopitalnumerique_rechercheparcours.repository.risk_analysis:
+            class: HopitalNumerique\RechercheParcoursBundle\Repository\RiskAnalysisRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis'
+
+    hopitalnumerique_rechercheparcours.guided_search_retriever:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchRetriever
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+            - '@session'
+            - '@security.token_storage'
+            - '@security.authorization_checker'
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.guided_search_history_writer:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryWriter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.guided_search_history_reader:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchHistoryReader
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_history'
+
+    hopitalnumerique_rechercheparcours.guided_search_step_retriever:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepRetriever
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search_step'
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_rechercheparcours.factory.step_risks:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\StepRisksFactory
+        arguments:
+            - '@hopitalnumerique_objet.repository.risk'
+            - '@security.token_storage'
+
+    hopitalnumerique_rechercheparcours.helper.step_url_generator:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepUrlGenerator
+        arguments:
+            - '@router'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_details'
+            - '@hopitalnumerique_reference.repository.reference'
+
+    hopitalnumerique_rechercheparcours.voter.guided_search:
+        class:  HopitalNumerique\RechercheParcoursBundle\Security\GuidedSearchVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    hopitalnumerique_rechercheparcours.event_subscriber.affect_guided_search:
+        class: HopitalNumerique\RechercheParcoursBundle\EventListener\AffectGuidedSearchSubscriber
+        arguments:
+            - '@session'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    hopitalnumerique_rechercheparcours.risk_export_csv:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\RiskCSVExport
+        arguments:
+            - '@translator'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+
+    hopitalnumerique_rechercheparcours.risk_export_xlsx:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\RiskExcelExport
+        arguments:
+            - '@translator'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+
+    hopitalnumerique_rechercheparcours.synthesis_export_csv:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\SynthesisCSVExport
+        arguments:
+            - '@translator'
+
+    hopitalnumerique_rechercheparcours.synthesis_export_xlsx:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\Export\SynthesisExcelExport
+        arguments:
+            - '@translator'
+
+    hopitalnumerique_rechercheparcours.factory.risk_synthesis:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\RiskSynthesisFactory
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.helper.step_url_generator'
+
+    hopitalnumerique_rechercheparcours.factory.send_synthesis_command:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\SendSynthesisCommandFactory
+        arguments:
+            - '@nodevo_mail.manager.mail'
+
+    hopitalnumeriquerechercheparcours.export.pdf.risk_synthesis:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\RiskSynthesisPDFExport
+        arguments:
+            - '@hopitalnumerique_rechercheparcours.factory.risk_synthesis'
+            - '@knp_snappy.pdf'
+            - '@twig'
+
+    hopitalnumeriquerechercheparcours.search.production:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Object\ProductionSearch
+        arguments:
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+
+    hopitalnumeriquerechercheparcours.search.hot_point:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Object\ProductionSearch
+        arguments:
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@router'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - true
+
+    hopitalnumerique_recherche.widget.guided_search:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\Widget\GuidedSearchWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 40 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search'
+            - '@form.factory'
+            - '@hopitalnumerique\userbundle\service\sharemessagegenerator'
+        public: false
+
+
+    HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress:
+        class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepProgress
+        arguments:
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_rechercheparcours.factory.step_risks'
+            - '@hopitalnumerique_rechercheparcours.repository.risk_analysis'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours_details'
+            - '@hopitalnumerique_rechercheparcours.repository.guided_search_step'
+
+    HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler:
+        class: HopitalNumerique\RechercheParcoursBundle\Domain\Command\FindFirstUncompletedStepHandler
+        arguments:
+            - '@hopitalnumerique\rechercheparcoursbundle\service\guidedsearchstepprogress'

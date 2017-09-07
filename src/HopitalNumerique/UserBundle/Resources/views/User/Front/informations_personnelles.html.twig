@@ -14,7 +14,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-edit.js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
-        'bundles/hopitalnumeriqueuser/js/User/inscription.js'
+        'bundles/hopitalnumeriqueuser/js/User/registration.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -44,22 +44,20 @@
                     <div class="background-violet"></div>
 
                     {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements_informationsPersonelles')}}" />
+                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_counties')}}" />
                     <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements_informationsPersonelles')}}" />
 
                     {# Formulaire : #}
                     <div class="clearfix"></div>
-                    {{ form_row(form.pseudonymeForum) }}
-                    {{ form_row(form.civilite) }}
-                    {{ form_row(form.titre) }}
-                    {{ form_row(form.nom) }}
-                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.pseudonym) }}
+                    {{ form_row(form.lastname) }}
+                    {{ form_row(form.firstname) }}
                     {{ form_row(form.email) }}
-                    {{ form_row(form.telephoneDirect) }}
-                    {{ form_row(form.telephonePortable) }}
-                    {{ form_row(form.contactAutre) }}
+                    {{ form_row(form.phoneNumber) }}
+                    {{ form_row(form.cellPhoneNumber) }}
+                    {{ form_row(form.otherContact) }}
 
-                    {{ form_row(form.profilEtablissementSante) }}
+                    {{ form_row(form.profileType) }}
 
                     <div class="form-group">
                         {{ form_label(form.file) }}
@@ -96,21 +94,21 @@
                     <div id="etablissement_sante">
 	                    <h4 class="violet">Vous êtes en fonction dans un établissement de santé</h4>
                         <h5>Votre structure</h5>
-	                    {{ form_row(form.etablissementRattachementSante) }}
+                        {{ form_row(form.organization) }}
                         <hr>
                         <h5>Votre structure n'est pas dans la liste précédente</h5>
-	                    {{ form_row(form.statutEtablissementSante) }}
-	                    {{ form_row(form.autreStructureRattachementSante) }}
+	                    {{ form_row(form.organizationType) }}
+	                    {{ form_row(form.organizationLabel) }}
                         {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
                             <div class="form-group">
                                 <label class="control-label col-md-4">Région</label>
                                 <div class="username col-md-7">{{ user.region.libelle }}</div>
                             </div>
                             <div class="clearfix"></div>
-                            {% if user.departement.libelle is defined %}
+                            {% if user.county.libelle is defined %}
                                 <div class="form-group">
                                     <label class="control-label col-md-4">Département</label>
-                                    <div class="username col-md-7">{{ user.departement.libelle }}</div>
+                                    <div class="username col-md-7">{{ user.county.libelle }}</div>
                                 </div>
                                 <div class="clearfix"></div>
                             {% endif %}
@@ -119,21 +117,15 @@
                             {%- if form.rattachementRegions is defined -%}
                                 {{ form_row(form.rattachementRegions) }}
                             {%- endif -%}
-                            {{ form_row(form.departement) }}
+                            {{ form_row(form.county) }}
                         {% endif %}
                         <hr>
                         <h5>Les activités de votre structure</h5>
-                        {{ form_row(form.typeActivite) }}
+                        {{ form_row(form.activities) }}
                         <hr>
                         <h5>Votre fonction</h5>
-                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-                        {{ form_row(form.fonctionDansEtablissementSante) }}
-                    </div>
-
-                    <div id="autre_etablissement_sante">
-	                    <h4 class="violet">Vous êtes dans une autre structure</h4>
-	                    {{ form_row(form.nomStructure) }}
-	                    {{ form_row(form.fonctionStructure) }}
+                        {{ form_row(form.jobType) }}
+                        {{ form_row(form.jobLabel) }}
                     </div>
 
 	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}

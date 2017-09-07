@@ -132,16 +132,6 @@ class ObjetManager extends BaseManager
         return $this->getRepository()->getObjets($domains)->getQuery()->getResult();
     }
 
-    /**
-     * Récupère les objets pour le dashboard Back.
-     *
-     * @return array
-     */
-    public function getObjetsForDashboard()
-    {
-        return $this->getRepository()->getObjetsForDashboard()->getQuery()->getResult();
-    }
-
     public function getObjetsForRSS(Domaine $domaine)
     {
         return $this->getRepository()->getObjetsForRSS($domaine)->getQuery()->getResult();

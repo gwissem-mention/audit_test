@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.lastname, {'attr': {'class': 'validate[required,maxSize[50]] completion'} }) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.firstname, {'attr': {'class': 'validate[required,maxSize[50]] completion'} }) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.email, {'attr': {'class': 'validate[required,custom[email]] completion'} }) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.pseudonym, {'attr': {'class': 'validate[maxSize[50]] completion'} }) }}
+    </div>
+</div>

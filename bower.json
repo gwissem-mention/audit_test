@@ -26,7 +26,7 @@
     "bootstrap-iconpicker": "*",
     "fontawesome": "~4.1",
     "nestable": "https://github.com/dbushell/Nestable.git",
-    "jquery-nicescroll": "*",
+    "jquery-nicescroll": "3.6.8",
     "enquire": "~2.1.0",
     "stepy": "https://github.com/wbotelhos/stepy.git",
     "highcharts.com": "4.0.0",
@@ -39,6 +39,8 @@
     "jquery-file-upload": "9.11.*",
     "blueimp-tmpl": "2.5.*",
     "jstree": "3.2.*",
-    "gauge.js": "^1.2.1"
+    "gauge.js": "^1.2.1",
+    "handlebars": "^4.0.8",
+    "datatables": "^1.10.15"
   }
 }

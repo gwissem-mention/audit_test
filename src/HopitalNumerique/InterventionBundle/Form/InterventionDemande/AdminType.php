@@ -112,7 +112,7 @@ class AdminType extends InterventionDemandeType
                 'label'        => 'Rattacher d\'autres établissements à ma demande, parmi',
                 'multiple'     => true,
                 'empty_value'  => '-',
-                'attr'         => ['class' => 'ajax-select2-list hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
+                'attr'         => ['class' => 'ajax-list-select2 hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
                 'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissements(),
             ])
             ->add('ambassadeur', EntityType::class, [

@@ -1,0 +1,41 @@
+{% trans_default_domain 'widget' %}
+
+<div class="wrapper">
+    <div class="pull-left avatar" style="background-image: url({{ asset(user.avatarWebPath|default('bundles/hopitalnumeriqueuser/img/default_user.png')) }}"></div>
+
+    <div class="content">
+        {% if user.firstname and user.lastname %}
+            {{ user.firstname }} {{ user.lastname }}
+        {% else %}
+            {{ 'specify_name'|trans }}
+        {% endif %}
+        <br />
+
+        {% if user.organizationLabel and user.jobLabel %}
+            {{ user.jobLabel }} - {{ user.organizationLabel }}
+        {% elseif user.organization and user.jobLabel %}
+            {{ user.jobLabel }} - {{ user.organization.nom }}
+        {% else %}
+            {% if user.jobLabel is null and user.organization is null and user.organizationLabel is null %}
+                {{ 'specify_both'|trans }}
+            {% elseif user.jobLabel is null %}
+                {{ 'specify_job'|trans }}
+            {% elseif user.organization is null or user.organizationLabel is null %}
+                {{ 'specify_organization'|trans }}
+            {% endif %}
+        {% endif %}
+
+        <div class="profile-completion">
+            <b>{{ 'profile_completion'|trans }}</b>
+            <div class="completion-bar progress progress-striped">
+                <div class="progress-bar progress-bar-{{ completion < 33 ? 'danger' : completion >= 66 ? 'success' : 'warning' }}" style="width: {{ completion }}%;">{{ completion }}%</div>
+            </div><br />
+
+            {% if completion == 100 %}
+                <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
+            {% else %}
+                <a href="{{ path('account_profile') }}##{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToCompleteLabel)|trans({}, 'messages')}) }}</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

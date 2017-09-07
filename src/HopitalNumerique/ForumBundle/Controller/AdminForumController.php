@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminForumResponseEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -28,7 +29,7 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
     public function listAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if ($this->getUser() === 'anon.' || !$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getUser() instanceof User || !$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');

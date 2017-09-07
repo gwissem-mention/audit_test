@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReportBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,7 +35,7 @@ class ReportController extends Controller
         //Récupération de l'entité en fonction du paramètre
         $report = $this->get('hopitalnumerique_report.manager.report')->findOneBy(['id' => $id]);
         $user = $report->getUser();
-        $etablissement = $user->getEtablissementRattachementSante();
+        $etablissement = $user->getOrganization();
 
         return $this->render('HopitalNumeriqueReportBundle:Report:show.html.twig', [
             'report' => $report,
@@ -69,9 +70,9 @@ class ReportController extends Controller
      */
     public function signalerAction($url)
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
-        if ('anon.' == $user) {
+        if (!$user instanceof User) {
             $this->get('session')->getFlashBag()->add('danger', 'Vous devez vous connecter pour avoir accès au signalement de bug.');
 
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));

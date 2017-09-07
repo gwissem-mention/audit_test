@@ -24,4 +24,22 @@ class HistoryRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @param Autodiag $autodiag
+     *
+     * @return array
+     */
+    public function getHistoryByAutodiag(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('history');
+        $qb
+            ->where('history.autodiag = :autodiag')
+            ->orderBy('history.dateTime', 'desc')
+            ->setParameters([
+                'autodiag' => $autodiag->getId(),
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
 }

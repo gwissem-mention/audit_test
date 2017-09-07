@@ -87,25 +87,25 @@ hopitalnumerique_autodiag_share_delete:
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:delete }
 
 hopitalnumerique_autodiag_account_index:
-    path:     compte-hn/autodiagnostic
+    path:     mon-compte/autodiagnostic
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
 
 hopitalnumerique_autodiag_account_index_domain:
-    path:     compte-hn/autodiagnostic/{domain}
+    path:     mon-compte/autodiagnostic/{domain}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
     requirements:
             domain: \d+
 
 hopitalnumerique_autodiag_account_generate_synthesis:
-    path:     compte-hn/autodiagnostic/generate-synthesis
+    path:     mon-compte/autodiagnostic/generate-synthesis
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:generateSynthesis }
 
 hopitalnumerique_autodiag_account_delete_synthesis:
-    path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}
+    path:     mon-compte/autodiagnostic/delete-synthesis/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}
 
 hopitalnumerique_autodiag_account_delete_synthesis_share:
-    path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}/{currentSynthesisId}
+    path:     mon-compte/autodiagnostic/delete-synthesis/{synthesis}/{currentSynthesisId}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}
 
 hopitalnumerique_autodiag_synthesis_compare_form:

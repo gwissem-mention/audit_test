@@ -1,0 +1,21 @@
+{% trans_default_domain 'cart' %}
+
+<script type="x-template" id="send-modal-prototype">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Envoyer le rapport : <b>{{ '{{reportTitle}}' }}</b></h4>
+    </div>
+    <div class="modal-body">
+        {{ form_start(sendReportForm) }}
+            <div class="row">
+                {{ form_row(sendReportForm.recipient, {'attr': {'class': 'validate[required,custom[email]]'}}) }}
+                {{ form_row(sendReportForm.sender, {'attr': {'class': 'validate[required,custom[email]]'}}) }}
+                {{ form_row(sendReportForm.subject, {'attr': {'class': 'validate[required]'}}) }}
+                {{ form_row(sendReportForm.content, {'attr': {'class': 'validate[required]'}}) }}
+            </div>
+
+            {{ form_widget(sendReportForm.submit, {'attr': {'class': 'btn btn-success'}}) }}
+
+        {{ form_end(sendReportForm) }}
+    </div>
+</script>

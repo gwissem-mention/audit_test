@@ -1,24 +1,28 @@
 hopitalnumerique_reference_referencement_popin:
-    pattern: '/referencement/popin/{entityType}/{entityId}/{redirect}'
+    path: '/referencement/popin/{entityType}/{entityId}/{redirect}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:popin', "redirect": true }
     methods: 'get'
 
+hopitalnumerique_reference_referencement_popin_user:
+    path: '/user-referencement'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:userPopin' }
+
 hopitalnumerique_reference_referencement_savechosenreferences:
-    pattern: '/referencement/popin/{entityType}/{entityId}/savechosenreferences'
+    path: '/referencement/popin/{entityType}/{entityId}/savechosenreferences'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:saveChosenReferences' }
     methods: 'post'
 
 hopitalnumerique_reference_referencement_cronsavenotes:
-    pattern: '/referencement/cron-save-notes/{token}'
+    path: '/referencement/cron-save-notes/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronSaveNotes' }
     methods: 'get'
 
 hopitalnumerique_reference_referencement_cronremoveinexistants:
-    pattern: '/referencement/cron-remove-inexistants/{token}'
+    path: '/referencement/cron-remove-inexistants/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronRemoveInexistants' }
     methods: 'get'
 
 hopitalnumerique_reference_referencement_migre:
-    pattern: '/admin/referencement/migre/{token}'
+    path: '/admin/referencement/migre/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:migre' }
     methods: 'get'

@@ -7,13 +7,13 @@
                     {% if forum.id == 4 %}
                         <i>Anonyme</i>
                     {% else %}
-                        {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
-                            {{- post.getCreatedBy.getPseudonymeForum() }} 
+                        {% if post.getCreatedBy.getPseudonym() is defined and post.getCreatedBy.getPseudonym() is not null %}
+                            {{- post.getCreatedBy.getPseudonym() }}
                         {% else %}
                             {{- post.getCreatedBy.getNomPrenom() }} 
                         {% endif %}
                     {% endif %}
-                    {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
+                    {% if post.getCreatedBy.organization is not null %}({{post.getCreatedBy.organization.nom}}){% else %}{% if post.getCreatedBy.organizationLabel|trim != '' %}({{post.getCreatedBy.organizationLabel}}){% endif %}{% endif %}
 
                      &#183; 
 

@@ -5,7 +5,6 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
 
-
 /**
  * Inscription.
  *
@@ -18,7 +17,7 @@ class Inscription
      * @var Groupe
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")
      */
     private $groupe;
@@ -27,7 +26,7 @@ class Inscription
      * @var User
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="groupeInscription")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")
      */
     private $user;
@@ -41,6 +40,12 @@ class Inscription
      */
     private $actif;
 
+    /**
+     * Inscription constructor.
+     *
+     * @param Groupe $groupe
+     * @param User   $user
+     */
     public function __construct(Groupe $groupe, User $user)
     {
         $this->groupe = $groupe;
@@ -60,6 +65,8 @@ class Inscription
 
     /**
      * Set groupe.
+     *
+     * @param Groupe $groupe
      *
      * @return Inscription
      */
@@ -83,6 +90,8 @@ class Inscription
     /**
      * Set user.
      *
+     * @param User $user
+     *
      * @return Inscription
      */
     public function setUser(User $user)
@@ -104,6 +113,8 @@ class Inscription
 
     /**
      * Set actif.
+     *
+     * @param $actif
      *
      * @return Inscription
      */

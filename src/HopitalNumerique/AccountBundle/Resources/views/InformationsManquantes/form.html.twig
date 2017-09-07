@@ -1,26 +1,25 @@
 {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
 {{ form_start(form) }}
 
-    {{ form.nom is defined ? form_row(form.nom) : '' }}
-    {{ form.prenom is defined ? form_row(form.prenom) : '' }}
-    {{ form.telephoneDirect is defined ? form_row(form.telephoneDirect) : '' }}
-    {{ form.region is defined ? form_row(form.region) : '' }}
-    {{ form.departement is defined ? form_row(form.departement) : '' }}
-    {{ form.profilEtablissementSante is defined ? form_row(form.profilEtablissementSante) : '' }}
+    {{ form.lastname is defined ? form_row(form.lastname) : '' }}
+    {{ form.firstname is defined ? form_row(form.firstname) : '' }}
+    {{ form.phoneNumber is defined ? form_row(form.phoneNumber) : '' }}
+    {{ form.profileType is defined ? form_row(form.profileType) : '' }}
+    {{ form.jobType is defined ? form_row(form.jobType) : '' }}
+    {{ form.jobLabel is defined ? form_row(form.jobLabel) : '' }}
 
-    {% if form.etablissementRattachementSante is defined or form.autreStructureRattachementSante is defined or form.typeActivite is defined or form.fonctionDansEtablissementSanteReferencement is defined %}
-        <h3>Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h3>
-        {{ form.statutEtablissementSante is defined ? form_row(form.statutEtablissementSante) : '' }}
-        {{ form.etablissementRattachementSante is defined ? form_row(form.etablissementRattachementSante) : '' }}
-        {{ form.autreStructureRattachementSante is defined ? form_row(form.autreStructureRattachementSante) : '' }}
-        {{ form.typeActivite is defined ? form_row(form.typeActivite) : '' }}
-        {{ form.fonctionDansEtablissementSanteReferencement is defined ? form_row(form.fonctionDansEtablissementSanteReferencement) : '' }}
+    {% if form.organization is defined or form.activities is defined %}
+        <h3>Votre structure</h3>
+        {{ form.organization is defined ? form_row(form.organization, {'attr': {'data-url': path('hopitalnumerique_etablissement_ajax_load'), 'class': 'ajax-list-select2 etablissement_sante'}}) : '' }}
+        {{ form.activities is defined ? form_row(form.activities) : '' }}
     {% endif %}
 
-    {% if form.nomStructure is defined or form.fonctionStructure is defined %}
-        <h3>Vous êtes dans une autre structure</h3>
-        {{ form.nomStructure is defined ? form_row(form.nomStructure) : '' }}
-        {{ form.fonctionStructure is defined ? form_row(form.fonctionStructure) : '' }}
+    {% if form.organizationType is defined or form.organizationLabel is defined or form.region is defined or form.county is defined %}
+        <h3>Votre structure n'est pas dans la liste précédente</h3>
+        {{ form.organizationType is defined ? form_row(form.organizationType) : '' }}
+        {{ form.organizationLabel is defined ? form_row(form.organizationLabel) : '' }}
+        {{ form.region is defined ? form_row(form.region, {'attr': {'data-county-url': path('hopital_numerique_user_counties')}}) : '' }}
+        {{ form.county is defined ? form_row(form.county) : '' }}
     {% endif %}
 
     {{ form_rest(form) }}
@@ -37,4 +36,6 @@
 
 <script type="text/javascript">
     Hn_AccountBundle_InformationsManquantes.init();
+    new AjaxList($('#nodevouser_user_informationsmanquantes_organization'));
+    new CountyList($('#nodevouser_user_informationsmanquantes_region'), $('#nodevouser_user_informationsmanquantes_county'))
 </script>

@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -51,7 +52,14 @@ class ContractualisationRepository extends EntityRepository
         return $qb;
     }
 
-    public function countExpiredContractForAmbassador()
+    /**
+     * Count expired contracts linked to Ambassador users, by domains
+     *
+     * @param Domaine[] $domains
+     *
+     * @return mixed
+     */
+    public function countExpiredContractForAmbassadorByDomains($domains)
     {
         $in45Days = new \DateTime();
         $in45Days->add(new \DateInterval('P45D'));
@@ -60,6 +68,17 @@ class ContractualisationRepository extends EntityRepository
         $qb
             ->select('count(distinct user.id)')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->join(
+                'user.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->leftJoin('user.contractualisations', 'con', Join::WITH, 'con.archiver = 0')
             ->andWhere(
                 $qb->expr()->orX(

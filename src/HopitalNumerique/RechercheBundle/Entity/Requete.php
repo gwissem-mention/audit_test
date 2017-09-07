@@ -3,12 +3,14 @@
 namespace HopitalNumerique\RechercheBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * Requete.
  *
  * @ORM\Table(name="hn_requete")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\RequeteRepository")
  */
 class Requete
 {
@@ -165,7 +167,7 @@ class Requete
     /**
      * Get dateDebut.
      *
-     * @return DateTime $dateDebut
+     * @return \DateTime $dateDebut
      */
     public function getDateDebut()
     {
@@ -175,7 +177,7 @@ class Requete
     /**
      * Set dateDebut.
      *
-     * @param DateTime $dateDebut
+     * @param \DateTime $dateDebut
      */
     public function setDateDebut($dateDebut)
     {
@@ -185,7 +187,7 @@ class Requete
     /**
      * Get dateFin.
      *
-     * @return DateTime $dateFin
+     * @return \DateTime $dateFin
      */
     public function getDateFin()
     {
@@ -195,7 +197,7 @@ class Requete
     /**
      * Set dateFin.
      *
-     * @param DateTime $dateFin
+     * @param \DateTime $dateFin
      */
     public function setDateFin($dateFin)
     {
@@ -229,7 +231,7 @@ class Requete
     /**
      * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User $user
+     * @return User $user
      */
     public function getUser()
     {
@@ -239,9 +241,9 @@ class Requete
     /**
      * Set user.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -287,7 +289,7 @@ class Requete
     /**
      * Get categPointDur.
      *
-     * @return string
+     * @return array
      */
     public function getCategPointDur()
     {
@@ -321,11 +323,11 @@ class Requete
     /**
      * Set domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      *
      * @return Requete
      */
-    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine = null)
+    public function setDomaine(Domaine $domaine = null)
     {
         $this->domaine = $domaine;
 
@@ -335,7 +337,7 @@ class Requete
     /**
      * Get domaine.
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
+     * @return Domaine
      */
     public function getDomaine()
     {

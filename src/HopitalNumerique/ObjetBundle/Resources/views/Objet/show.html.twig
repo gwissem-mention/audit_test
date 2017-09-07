@@ -86,10 +86,10 @@
                         {% endif %}
                         
 
-                        {% if objet.dateParution %}
+                        {% if objet.releaseDate %}
                             <p>
                                 <strong>Date de parution : </strong>
-                                {{ objet.dateParution }}
+                                {{ objet.releaseDate|date('d/m/Y') }}
                             </p>
                         {% endif %}
                         <p>
@@ -120,19 +120,29 @@
                             </div>
                         </p>
                         <p>
-                            <strong>Les outils d'autodiagnostics suivants sont susceptibles de remonter dans les résultats : </strong><br />
-                            <div class="well">
-                                <ul>
-                                    {% for outil in outils %}
-                                        <li>{{outil.title}}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </p>
-                        {% if logs %}
-                            <p>
-                                <strong>Historique : </strong><br />
-                                <div>
+                            <strong>Historique : </strong><br />
+                            <div>
+                                {% if updates %}
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th width="100px">Date</th>
+                                            <th width="130px">Utilisateur</th>
+                                            <th width="200px">Motif</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for update in updates %}
+                                            <tr>
+                                                <td>{{ update.updatedAt|date('d/m/Y H:i') }}</td>
+                                                <td>{{ update.user.username }}</td>
+                                                <td>{{ update.reason }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                                {% if logs %}
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -149,20 +159,20 @@
                                                 {% for key,data in log.data %}
                                                     <tr>
                                                         {% if loop.first %}
-                                                            <td rowspan="{{nbRows}}">{% if log.action == 'update' %}Mise à jour{% else %}Création{% endif %}</td>
-                                                            <td rowspan="{{nbRows}}">{{log.loggedAt|date('d/m/Y H:i')}}</td>
-                                                            <td rowspan="{{nbRows}}">{{log.username|title}}</td>
+                                                            <td rowspan="{{ nbRows }}">{% if log.action == 'update' %}Mise à jour{% else %}Création{% endif %}</td>
+                                                            <td rowspan="{{ nbRows }}">{{ log.loggedAt|date('d/m/Y H:i') }}</td>
+                                                            <td rowspan="{{ nbRows }}">{{ log.username }}</td>
                                                         {% endif %}
-                                                        <td>{{key}}</td>
-                                                        <td>{{data|formateHistoryValue}}</td>
+                                                        <td>{{ key }}</td>
+                                                        <td>{{ data|formateHistoryValue }}</td>
                                                     </tr>
                                                 {% endfor %}
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                </div>
-                            </p>
-                        {% endif %}
+                                {% endif %}
+                            </div>
+                        </p>
                     </div>
                 </div>
             </div>

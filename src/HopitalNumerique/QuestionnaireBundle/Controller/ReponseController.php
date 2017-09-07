@@ -2,12 +2,14 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReponseController extends Controller
@@ -85,6 +87,51 @@ class ReponseController extends Controller
             ) . '"}',
             200
         );
+    }
+
+    /**
+     * Deletes responses from current user
+     *
+     * @param Request         $request
+     * @param Questionnaire   $survey
+     * @param Occurrence|null $entry
+     *
+     * @return RedirectResponse
+     */
+    public function deleteAction(Request $request, Questionnaire $survey, Occurrence $entry = null)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if (null === $entry) {
+            $toDelete = $this->get('hopitalnumerique_questionnaire.repository.response')->findByUserAndSurvey(
+                $this->getUser(),
+                $survey
+            );
+        } else {
+            $toDelete = $this->get('hopitalnumerique_questionnaire.repository.response')->findByUserAndSurveyAndEntry(
+                $this->getUser(),
+                $survey,
+                $entry
+            );
+
+            $toDelete[] = $entry;
+        }
+
+        try {
+            foreach ($toDelete as $item) {
+                $em->remove($item);
+            }
+
+            $em->flush();
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', 'Une erreur s\'est produite lors de la suppression de vos réponses');
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
+        $this->addFlash('success', 'Vos réponses ont bien été supprimées');
+
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**

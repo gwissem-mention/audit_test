@@ -3,7 +3,12 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Note;
+use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
+
 
 /**
  * NoteRepository.
@@ -100,28 +105,6 @@ class NoteRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des notes étant assigné au domaine.
-     *
-     * @param int $idDomaine Identifiant du domaine à filtrer
-     *
-     * @return QueryBuilder
-     */
-    public function findNoteByDomaine($idDomaine)
-    {
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb->select('note')
-            ->from('HopitalNumeriqueObjetBundle:Note', 'note')
-            ->leftJoin('note.objet', 'objet')
-            ->leftJoin('objet.domaines', 'domaine')
-            ->where('domaine.id = :idDomaine')
-            ->setParameter('idDomaine', $idDomaine)
-        ;
-
-        return $qb;
-    }
-
-    /**
      * @return array
      */
     public function countGroupByUser()
@@ -136,11 +119,99 @@ class NoteRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult();
 
+        $notes = [];
         foreach ($results as $key => $result) {
-            $results[$result['idUser']] = intval($result['nbNote']);
-            unset($results[$key]);
+            $notes[$result['idUser']] = intval($result['nbNote']);
         }
 
-        return $results;
+        return $notes;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return integer
+     */
+    public function countForUser(User $user)
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('COUNT(n)')
+            ->from(Note::class, 'n')
+            ->andWhere('n.user = :userId')->setParameter('userId', $user->getId())
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * Count notes by domains
+     *
+     * @param $domains
+     * @return int
+     */
+    public function countByDomains($domains)
+    {
+        $qb = $this->createQueryBuilder('note');
+        $qb
+            ->select('COUNT(note.id)')
+            ->join('note.objet', 'objet')
+            ->join(
+                'objet.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Get percentage of noted objects with average notation above $threshold
+     *
+     * @param $domains
+     * @param float $threshold Minimum average notation
+     *
+     * @return float|int|null
+     */
+    public function computeAverageByDomains($domains, $threshold)
+    {
+        $qb = $this->createQueryBuilder('note');
+        $qb
+            ->select(
+                'objet.id',
+                'AVG(note.note) as average'
+            )
+            ->join('note.objet', 'objet')
+            ->join(
+                'objet.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+            ->groupBy('objet.id')
+        ;
+
+        $result = $qb->getQuery()->getResult();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $filtered = count(array_filter($result, function ($result) use ($threshold) {
+            return $result['average'] > $threshold;
+        }));
+
+        return $filtered * 100 / count($result);
     }
 }

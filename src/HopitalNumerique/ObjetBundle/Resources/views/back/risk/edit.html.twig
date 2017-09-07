@@ -1,0 +1,79 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% trans_default_domain 'risk' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-objet-risk-edit.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueobjet/css/risk.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{{ parent() }} - {{ 'edit.title'|trans }}{% endblock %}
+
+{% block h1Title %}
+    {{ 'edit.title'|trans }}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_risk_list') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('#do').val('save');$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+
+    <div class="risk-form">
+        {{ form_start(form) }}
+            {{ form_row(form.label) }}
+            {{ form_row(form.nature) }}
+            {{ form_row(form.domains, {'attr': {'class': 'select2'}}) }}
+            {{ form_row(form.archived) }}
+
+            {% if form.fusionTarget is defined %}
+                <fieldset>
+                    <legend>{{ 'edit.form.fusion.title'|trans }}</legend>
+                    <p>
+                        {{ 'edit.form.fusion.description'|trans|nl2br }}
+                    </p>
+
+                    {{ form_row(form.fusionTarget, {'attr': {'class': 'select2'}}) }}
+                    {{ form_row(form.confirmFusion) }}
+                </fieldset>
+            {% endif %}
+
+            {% if form.publish is defined %}
+                <fieldset>
+                    <legend>{{ 'edit.form.publish.title'|trans }}</legend>
+
+                    <div class="row">
+                        <div class="col-md-3 text-right">
+                            {{ 'edit.form.publish.createdBy'|trans }}
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                {% for owner in risk.owners %}
+                                    <li>
+                                        <a href="{{ path('hopital_numerique_user_edit', {'id': owner.id}) }}" target="_blank">
+                                            {{ owner.nomPrenom }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <b>{{ 'edit.form.publish.anonymous'|trans }}</b>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {{ form_row(form.publish) }}
+                </fieldset>
+            {% endif %}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+

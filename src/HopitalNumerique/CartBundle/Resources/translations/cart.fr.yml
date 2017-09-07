@@ -1,0 +1,176 @@
+addToCart:
+    title: Ajouter au panier
+
+modal:
+    report_details:
+        loading: Chargement en cours...
+        object_type_name: Type de l'objet
+        object_title: Titre de l'objet
+    report_duplicated:
+        title: Dupliquer mon rapport
+        name:
+            label: Nom du rapport
+        submit:
+            label: Dupliquer
+    report_share:
+        title: Partager mon rapport
+        email:
+            label: "Partager mon rapport avec :"
+            placeholder: exemple@mail.com
+        submit:
+            label: Partager
+        sharedWith: "Partagé avec :"
+        noShares: Personne
+    report_copy:
+        title: Copier mon rapport
+        email:
+            label: "Copier mon rapport pour :"
+            placeholder: exemple@mail.com
+        submit:
+            label: Copier
+        sharedWith: "Copié avec :"
+        noShares: Personne
+
+notification:
+    reportSended:
+        success: Votre rapport a bien été envoyé.
+        error: Une erreur s'est produite, veuillez vérifier les champs renseignés.
+    shareReport:
+        userNotFounded: Email non trouvé sur la plateforme.
+        alreadyShared: Ce raport est déjà partagé avec cet utilisateur
+        share:
+            success: Votre rapport a bien été partagé.
+        copy:
+            success: Votre rapport a bien été copié.
+    reportDuplicated: Votre rapport a bien été dupliqué.
+    reportRemoved: Le rapport à bien été supprimé.
+    reportAborted: Vos modifications ont bien été annulées.
+    reportGenerated: Votre rapport à bien été généré; retrouvez-le dans le tableau "Mes rapports".
+    addToCart:
+        success: L'élément à bien été ajouté au panier, retrouvez tous vos objets dans Mon compte > Mon panier
+        error: L'élément est déjà dans votre panier
+    removeFromCart:
+        success: L'objet a bien été retiré de votre panier
+        error: Impossible de retirer cet objet de votre panier
+
+item:
+    object_type:
+        forum_topic: Fil de forum
+        hot_point: Point dur
+        objet: Publication
+        publication: Publication
+        contenu: Contenu
+        autodiag_chapter: Chapitre d'autodiagnostic
+        cdp_group: Groupe de la communauté de pratique
+        person: Personne ressource
+        guided_search: Parcours guidé
+
+form:
+    fields:
+        name:
+            label: Nom du rapport
+        generate:
+            label: Générer le rapport
+        update:
+            label: Mettre à jour mon rapport
+        abort:
+            label: Annuler
+
+sendReportForm:
+    fields:
+        recipient:
+            label: Destinataire
+        sender:
+            label: Expéditeur
+        subject:
+            label: Objet
+        content:
+            label: Message
+        submit:
+            label: Envoyer
+
+list:
+    title: Mes rapports
+    empty: Aucun rapport pour le moment
+    header:
+        name: Nom du rapport
+        createdAt: Date de création
+        updatedAt: Date de dernière mise à jour
+        itemsCount: Nombre d'objets
+    copied_by: Copié par
+    shared_with: Partagé avec
+    shared_by: Partagé par %user%
+    actions:
+        edit:
+            title: Modifier le rapport
+        download:
+            title: Télécharger le rapport en PDF
+        send:
+            title: Envoyer le rapport
+        share:
+            title: Dupliquer / Partager / Copier mon rapport
+        remove:
+            title: Supprimer mon rapport
+            confirm: Confirmez-vous la suppression du rapport ?
+
+edit:
+    title: Paramétrer mon rapport
+    no_items: "- Aucune ressource dans le rapport - Utiliser le tableau précédent pour en ajouter -"
+
+columns:
+    resume: Résumé
+    synthesis: Synthèse
+    content: Contenu
+    comment: Commentaire
+    reference: Référencement
+    summary: Table des matières
+
+generator:
+    generationDate: "Raport généré le :"
+    references:
+        title: Référencement
+    forumTopic:
+        firstPostDate: "Premier post :"
+        lastPostDate: "Dernier post :"
+    publication:
+        publicationDate: "Date de création :"
+        lastUpdateDate: "Date de modification :"
+        source: "Source :"
+        shortResume: Résumé
+        resume: Contenu
+        synthesis: Synthèse
+        summary: Table des matières
+        comments: Commentaires
+    infradoc:
+        lastUpdateDate: "Date de modification :"
+        creationDate: "Date de création :"
+        short_resume: Résumé
+        resume: Contenu
+        subChapters: Table des matières
+        comments: Commentaires
+    autodiagChapter:
+        summary: Sous-chapitres
+        questions: Contenu
+        question:
+            title: Titre
+            choices: Choix
+    cdp_group:
+        beginningDate: "Date de début :"
+        endDate: "Date de fin :"
+        shortDescription: Résumé
+        description: Contenu
+        summary: Liste des fiches de problématique
+    person:
+        userInfos:
+            title: Informations utilisateur
+            phone: Téléphone
+            email: Adresse e-mail
+            county: Région
+            system: Établissement
+        biography: Biographie
+        skills: Connaissances métier
+        hobbies: Centres d'intérêt
+        computerSkills: Logiciels maitrisés
+    guided_search:
+        publication_date: "Date de mise en ligne :"
+        description: Description

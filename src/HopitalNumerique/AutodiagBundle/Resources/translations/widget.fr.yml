@@ -1,0 +1,22 @@
+autodiagnostic:
+    title: Mes autodiagnostics
+    not_found: Vous n'avez aucun autodiagnostic
+    table:
+        autodiag: Autodiagnostics
+        actions: Actions
+    action:
+        new: Commencer un nouvel autodiagnostic
+        show: Aller à l'autodiagnostic
+        send: Envoyer mon résultat
+        open: Rouvrir mon autodiagnostic
+        validate: Valider mon autodiagnostic
+        share: Partager ou comparer mon autodiagnostic
+        delete: Supprimer mon autodiagnostic
+        change_name: Modifier le nom de cet autodiagnostic
+    delete:
+        confirm: Supprimer cet autodiagnostic ?
+    synthesis:
+        updated: L'autodiagnostic a été mis à jour depuis votre dernier enregistrement
+        state:
+            valid: Validé
+            invalid: Non validé

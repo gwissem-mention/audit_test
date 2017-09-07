@@ -1,0 +1,37 @@
+<div class="known-structure">
+    <div class="row">
+        <div class="col-md-12">
+            {{ 'Module_moncompte_structure'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.organization, {'attr': {'data-url': path('hopitalnumerique_etablissement_ajax_load'), 'class': 'ajax-list-select2 completion'}}) }}
+        </div>
+    </div>
+    <div class="row activities-field">
+        <div class="col-md-12">
+            {{ form_row(form.activities, { 'attr': {'class': 'select2 completion', 'style': 'width: 100%' }}) }}
+        </div>
+    </div>
+</div>
+<div class="unknown-structure">
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.organizationType, {'attr': {'class': 'completion'} }) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.organizationLabel, {'attr': {'class': 'validate[maxSize[255]] completion'} }) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.region, {'attr': {'data-county-url': path('hopital_numerique_user_counties'), 'class': 'completion'}}) }}
+        </div>
+        <div class="col-md-6 county">
+            {{ form_row(form.county, {'attr': {'class': 'completion'} }) }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<a
+    href="{{ path('hopital_numerique_cart_add', {objectType: objectType, objectId: objectId}) }}"
+    class="btn btn-default {{ btnSize|default('btn-sm') }}{{ cssClass is defined and cssClass is not null ? ' '~cssClass }}"
+    title="{{ 'addToCart.title'|trans({}, 'cart') }}"
+>
+    <i class="fa fa-shopping-cart"></i>
+</a>

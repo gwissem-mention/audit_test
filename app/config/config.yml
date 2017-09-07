@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: assetic.yml }
     - { resource: forum.yml }
+    - { resource: services.yml }
     - { resource: elastica.yml }
 
 framework:
@@ -245,13 +246,20 @@ fos_js_routing:
         - hopitalnumerique_recherche_referencement_requete_removesession
         - hopitalnumerique_recherche_referencement_requete_savesession
         - hopitalnumerique_reference_referencement_savechosenreferences
-        - hopital_numerique_user_front_departements_informationsPersonelles
+        - hopital_numerique_user_counties
         - hopital_numerique_user_front_etablissements_informationsPersonelles
         - hopital_numerique_user_inscription
         - hopital_numerique_recherche_homepage_requete_generator
         - hopitalnumerique_autodiag_entry_attribute_save
         - hopitalnumerique_autodiag_entry_chapter_notconcerned
         - hopitalnumerique_reference_referencement_popin
+        - hopital_numerique_cart_report_item_remove_item
+        - hopital_numerique_cart_report_factory_edit
+        - hopital_numerique_cart_report_item_reorder
+        - hopital_numerique_cart_report_duplicate
+        - hopital_numerique_cart_report_share
+        - hopital_numerique_cart_report_copy
+        - hopital_numerique_cart_report_remove_sharing
         - hopital_numerique_publication_publication_objet
         - hopital_numerique_publication_publication_contenu
         - ccdn_forum_user_topic_show
@@ -297,3 +305,9 @@ ivory_ck_editor:
             styles: [ 'Styles','Format','Font','FontSize' ]
             colors: [ 'TextColor','BGColor' ]
             tools: [ 'Maximize', 'ShowBlocks','-','About' ]
+
+dmishh_settings:
+    serialization: json
+    settings:
+        account_dashboard_order:
+            type: array

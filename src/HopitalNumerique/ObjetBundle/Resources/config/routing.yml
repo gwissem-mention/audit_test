@@ -3,9 +3,17 @@ hopitalnumerique_objet_objet:
     path:  /objet
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
+hopitalnumerique_objet_back_risk:
+    prefix: /risques
+    resource: routing/back/risk.yml
+
+hopitalnumerique_objet_back_related_risk:
+    prefix: /related-risks/
+    resource: routing/back/related_risks.yml
+
 hopitalnumerique_objet_objet_filtre:
-    path:  /objet-avec-filtre/{filtre}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", filtre: null }
+    path:  /objet-avec-filtre/{filtre}/{domain}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", domain: null }
 
 hopitalnumerique_objet_objet_add:
     path:  /objet/add/{type}

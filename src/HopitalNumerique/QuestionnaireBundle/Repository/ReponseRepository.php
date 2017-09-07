@@ -2,10 +2,13 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * ReponseRepository.
@@ -23,10 +26,14 @@ class ReponseRepository extends EntityRepository
      * @param Occurrence|null $occurrence
      * @param null            $paramId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
-    public function reponsesByQuestionnaireByUser($idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null)
-    {
+    public function reponsesByQuestionnaireByUser(
+        $idQuestionnaire,
+        $idUser,
+        Occurrence $occurrence = null,
+        $paramId = null
+    ) {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
@@ -66,7 +73,7 @@ class ReponseRepository extends EntityRepository
      * @param $idQuestionnaire
      * @param null $paramId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function reponsesByQuestionnaire($idQuestionnaire, $paramId = null)
     {
@@ -99,10 +106,13 @@ class ReponseRepository extends EntityRepository
      * @param $idUser
      * @param Occurrence|null $occurrence
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
-    public function reponsesByQuestionnaireByUserByFileQuestion($idQuestionnaire, $idUser, Occurrence $occurrence = null)
-    {
+    public function reponsesByQuestionnaireByUserByFileQuestion(
+        $idQuestionnaire,
+        $idUser,
+        Occurrence $occurrence = null
+    ) {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
@@ -131,7 +141,7 @@ class ReponseRepository extends EntityRepository
      *
      * @param $idQuestionnaire
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getReponsesForQuestionnaireOrderByUser($idQuestionnaire)
     {
@@ -149,12 +159,9 @@ class ReponseRepository extends EntityRepository
     /**
      * Récupère les réponses pour l'utilisateur en fonction des questionnaires passés en param.
      *
-     * @param int $idExpert      Identifiant du questionnaire expert
-     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
-     *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
-    public function reponseExiste($idExpert, $idAmbassadeur)
+    public function reponseExiste()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse.id as repId, user.id as userId, questionnaire.id as questId')
@@ -162,12 +169,6 @@ class ReponseRepository extends EntityRepository
             ->leftJoin('reponse.question', 'question')
             ->leftJoin('reponse.user', 'user')
             ->leftJoin('question.questionnaire', 'questionnaire')
-            // ->where('questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
-            // ->setParameters(array(
-            //         'expertId'      => $idExpert,
-            //         'ambassadeurId' => $idAmbassadeur
-            //     )
-            // )
             ->groupBy('user.id, questionnaire.id')
         ;
 
@@ -177,22 +178,101 @@ class ReponseRepository extends EntityRepository
     /**
      * Affecte une occurrence à toutes les réponses d'un questionnaire répondu par un utilisateur.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
-     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          User
+     * @param Occurrence    $occurrence    Occurrence
+     * @param Questionnaire $questionnaire Questionnaire
+     * @param User          $user          User
      */
-    public function setOccurrenceByQuestionnaireAndUser(Occurrence $occurrence, Questionnaire $questionnaire, User $user)
-    {
+    public function setOccurrenceByQuestionnaireAndUser(
+        Occurrence $occurrence,
+        Questionnaire $questionnaire,
+        User $user
+    ) {
         $query = $this->createQueryBuilder('reponse');
 
         $query
             ->update()
             ->set('reponse.occurrence', $occurrence->getId())
-            ->where($query->expr()->in('reponse.question', $questionnaire->getQuestionIds()))// innerJoin() ne fonctionnant pas avec update() en Doctrine
+            ->where($query->expr()->in('reponse.question', $questionnaire->getQuestionIds()))
             ->andWhere('reponse.user = :user')
             ->setParameter('user', $user)
         ;
 
         $query->getQuery()->execute();
+    }
+
+    /**
+     * @param User $user
+     * @param Domaine[]|null $domains
+     *
+     * @return array
+     */
+    public function findByUserOrderedBySurveyNameAndResponseUpdate(User $user, $domains = null)
+    {
+        $qb = $this->createQueryBuilder('response')
+            ->addSelect('question', 'entry', 'survey')
+            ->join('response.user', 'user', Expr\Join::WITH, 'user.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->leftJoin('response.question', 'question')
+            ->leftJoin('question.questionnaire', 'survey')
+            ->leftJoin('response.occurrence', 'entry')
+        ;
+
+        if (null !== $domains) {
+            $qb->join('survey.domaines', 'domains', Expr\Join::WITH, 'domains IN (:domains)')
+                ->setParameter('domains', $domains)
+                ->addSelect('domains')
+            ;
+        }
+
+        return $qb->addOrderBy('survey.nom')
+            ->addOrderBy('response.dateUpdate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param User          $user
+     * @param Questionnaire $survey
+     *
+     * @return array
+     */
+    public function findByUserAndSurvey(User $user, Questionnaire $survey)
+    {
+        return $this->createQueryBuilder('response')
+            ->addSelect('question')
+            ->addSelect('survey')
+            ->join('response.user', 'user', Expr\Join::WITH, 'user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->join('response.question', 'question')
+            ->join('question.questionnaire', 'survey', Expr\Join::WITH, 'survey = :surveyId')
+            ->setParameter('surveyId', $survey->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param User          $user
+     * @param Questionnaire $survey
+     * @param Occurrence    $entry
+     *
+     * @return array
+     */
+    public function findByUserAndSurveyAndEntry(User $user, Questionnaire $survey, Occurrence $entry)
+    {
+        return $this->createQueryBuilder('response')
+            ->addSelect('question')
+            ->addSelect('survey')
+            ->join('response.user', 'user', Expr\Join::WITH, 'user = :userId')
+            ->setParameter('userId', $user->getId())
+            ->join('response.question', 'question')
+            ->join('question.questionnaire', 'survey', Expr\Join::WITH, 'survey = :surveyId')
+            ->setParameter('surveyId', $survey->getId())
+            ->join('response.occurrence', 'entry', Expr\Join::WITH, 'entry = :entryId')
+            ->setParameter('entryId', $entry->getId())
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

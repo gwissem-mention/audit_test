@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ExpertBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * ActiviteExpertRepository.
@@ -12,12 +13,16 @@ class ActiviteExpertRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return Query Builder
+     * @param null $condition
+     *
+     * @return QueryBuilder
      */
     public function getDatasForGrid($condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('actE.id,
+
+        $qb
+            ->select('actE.id,
                      actE.titre, 
                      actE.dateDebut, 
                      actE.dateFin, 
@@ -26,11 +31,11 @@ class ActiviteExpertRepository extends EntityRepository
                      etat.libelle as etatLibelle,
                      prestataire.libelle as prestataireLibelle,
                      unite.libelle as uniteLibelle,
-                     typeActivite.libelle as typeActiviteLibelle,
-                     exp.nom as expertNom, 
-                     exp.prenom as expertPrenom, 
-                     anap.nom as anapNom, 
-                     anap.prenom as anapPrenom'
+                     activities.libelle as typeActiviteLibelle,
+                     exp.lastname as expertNom, 
+                     exp.firstname as expertPrenom, 
+                     anap.lastname as anapNom, 
+                     anap.firstname as anapPrenom'
             )
             ->from('HopitalNumeriqueExpertBundle:ActiviteExpert', 'actE')
             ->leftJoin('actE.expertConcernes', 'exp')
@@ -38,11 +43,11 @@ class ActiviteExpertRepository extends EntityRepository
             ->leftJoin('actE.etat', 'etat')
             ->leftJoin('actE.prestataire', 'prestataire')
             ->leftJoin('actE.uniteOeuvreConcerne', 'unite')
-            ->leftJoin('actE.typeActivite', 'typeActivite')
+            ->leftJoin('actE.activities', 'activities')
             ->orderBy('actE.dateDebut', 'DESC')
             ->addOrderBy('actE.dateFin', 'ASC')
-            ->addOrderBy('exp.nom', 'ASC')
-            ->addOrderBy('anap.nom', 'ASC');
+            ->addOrderBy('exp.lastname', 'ASC')
+            ->addOrderBy('anap.lastname', 'ASC');
 
         return $qb;
     }
@@ -50,9 +55,9 @@ class ActiviteExpertRepository extends EntityRepository
     /**
      * Recupération des activités concernant l'expert.
      *
-     * @param int $expertId Identifiant de l'expert
+     * @param int $idExpert Identifiant de l'expert
      *
-     * @return [type]
+     * @return QueryBuilder
      */
     public function getActivitesForExpert($idExpert)
     {
@@ -70,9 +75,9 @@ class ActiviteExpertRepository extends EntityRepository
     /**
      * Recupération des activités concernant l'anapien.
      *
-     * @param int $expertId Identifiant de l'anapien
+     * @param int $idAnapien Identifiant de l'anapien
      *
-     * @return [type]
+     * @return QueryBuilder
      */
     public function getActivitesForAnapien($idAnapien)
     {

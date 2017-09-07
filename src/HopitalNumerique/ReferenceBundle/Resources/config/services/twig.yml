@@ -1,13 +1,19 @@
 services:
     hopitalnumerique.twig.ref_extension:
         class: 'HopitalNumerique\ReferenceBundle\Twig\ReferenceExtension'
-        arguments : ['@hopitalnumerique_reference.manager.reference']
+        arguments :
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_reference.repository.reference'
         tags:
             - { name: 'twig.extension' }
 
     hopitalnumerique.twig.extension.glossaire:
         class: 'HopitalNumerique\ReferenceBundle\Twig\GlossaireExtension'
-        arguments : ['@router', '@hopitalnumerique_reference.doctrine.glossaire.reader', '@hopitalnumerique_domaine.dependency_injection.current_domaine']
+        arguments:
+            - '@router'
+            - '@hopitalnumerique_reference.doctrine.glossaire.reader'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.doctrine.glossaire.parse'
         tags:
             - { name: 'twig.extension' }
 

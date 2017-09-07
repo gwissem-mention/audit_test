@@ -1,0 +1,37 @@
+{% if widgets is not empty %}
+    <div class="quick-access">
+        <ul>
+            {% for widget in widgets if widget is not null %}
+                <li>
+                    <a href="#{{ widget.name ~ '-widget' }}">
+                        <i class="picto icon {{ widget.name }}"></i>
+                        {% for extension in widget.extensions %}
+                            {{ extension.content|raw }}
+                        {% endfor %}
+                        {{ widget.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% for widget in widgets if widget is not null %}
+        <div id="{{ widget.name ~ '-widget' }}" class="panel panel-default service-widget">
+            <div class="panel-heading custom-panel-heading">
+                <div class="panel-title">
+                    <i class="icon {{ widget.name }}"></i>
+                    {% for extension in widget.extensions %}
+                        {{ extension.content|raw }}
+                    {% endfor %}
+                    {{ widget.title }}
+                </div>
+                <i class="fa fa-arrow-up" aria-hidden="true" onclick="$('html,body').animate({scrollTop:0},'slow');"></i>
+            </div>
+            <div class="panel-body">
+                {{ widget.content|raw }}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    {{ 'Module_moncompte_service_nodata'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+{% endif %}

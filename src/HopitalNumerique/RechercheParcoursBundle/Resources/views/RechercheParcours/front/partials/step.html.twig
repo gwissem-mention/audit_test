@@ -1,0 +1,14 @@
+<a href="{{ path("hopital_numerique_guided_search_show" , {'guidedSearchReference': step.id, 'guidedSearchReferenceAlias': step.reference.libelle|minifieMoi()}) }}">
+    <div class="col-md-12 row etape">
+        <div class="bloc-etape">
+            <p class="mode-normal">
+                {%- if step.reference.hasImage -%}
+                    <img src="{{ step.reference.imageUrl }}" height="22"> &nbsp;
+                {% endif -%}
+                {{ step.reference.libelle }}
+            </p>
+            <div class="icone"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</a>

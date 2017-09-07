@@ -18,7 +18,7 @@ $(window).load(function() {
  */
 CommunautePratique.init = function()
 {
-    $('.select2').select2();
+    $('select.select2').select2();
     $('form.toValidate').validationEngine();
     $('.fancybox').fancybox({
         autoSize: false,
@@ -54,10 +54,15 @@ CommunautePratique.inscrit = function()
 
 /**
  * Désinscrit l'utilisateur à la communauté de pratique.
+ * Can take a callback in parameter to modify the success behavior
  */
-CommunautePratique.desinscrit = function()
+CommunautePratique.desinscrit = function(callback)
 {
-     apprise(
+    callback = undefined === callback ? function (data) {
+        window.location = data.responseJSON.url;
+    } : callback;
+
+    apprise(
         'Souhaitez-vous quitter la communauté ? Attention tous vos documents et messages seront supprimés.',
         {
             'confirm'   : true,
@@ -72,10 +77,7 @@ CommunautePratique.desinscrit = function()
                     url: '/communaute-de-pratiques/desinscription',
                     type: 'POST',
                     dataType: 'json',
-                    complete: function( data )
-                    {
-                        window.location = data.responseJSON.url;
-                    }
+                    complete: callback
                 });
             }
         }

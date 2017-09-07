@@ -1,0 +1,110 @@
+#my-account #services .service-tooltip {
+    cursor: help;
+}
+
+#my-account #services .quick-access h2 {
+    font-size: 16px;
+    color: #6F3596;
+    font-weight: bold;
+}
+
+#my-account #services .quick-access ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0;
+    margin: 0 0 30px;
+}
+
+#my-account #services .quick-access ul li {
+    display: inline-block;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 100%;
+}
+
+#my-account #services .quick-access ul li a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    min-height: 100%;
+    color: #000;
+}
+
+#my-account #services .quick-access ul li a:hover {
+    background: #ddd;
+    color: #6F3596;
+}
+
+#my-account #services .quick-access ul li a .picto {
+    color: #777;
+    display: block;
+    font-size: 50px;
+}
+
+#my-account #services .domains-row {
+    margin-bottom: 15px;
+}
+
+#my-account #services .domains-row #domains-select {
+    margin-left: 15px;
+}
+
+#my-account #services .widget-description {
+    margin-bottom: 20px;
+}
+
+#my-account #services .actions-column {
+    text-align: right;
+}
+
+#my-account #services .icon.quick-access::before {
+    content: "\f0c9";
+}
+
+#my-account #services .icon.viewed-objects::before {
+    content: "\f06e";
+}
+
+#my-account #services .icon.saved-searches::before {
+    content: "\f002";
+}
+
+#my-account #services .icon.autodiagnostic::before {
+    content: "\f080";
+}
+
+#my-account #services .icon.guided-search::before {
+    content: "\f0a4";
+}
+
+#my-account #services .icon.survey::before {
+    content: "\f0ea";
+}
+
+#my-account #services .icon.sessions::before {
+    content: "\f086";
+}
+
+#my-account #services .icon.interventions::before {
+    content: "\f0fe";
+}
+
+#my-account #services #autodiagnostic-widget table.account-table .parent-row td:nth-child(1) {
+    font-size: 14px;
+}
+
+#my-account #services .service-widget .panel-heading {
+    position: relative;
+}
+
+#my-account #services .service-widget .panel-heading .fa-arrow-up {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 35%;
+}
+
+

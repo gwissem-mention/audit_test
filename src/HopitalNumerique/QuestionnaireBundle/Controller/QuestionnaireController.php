@@ -2,11 +2,15 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
@@ -33,21 +37,21 @@ class QuestionnaireController extends Controller
      *
      * @var array
      */
-    private $_routeRedirection = [];
+    private $routeRedirection = [];
 
     /**
      * Theme du formulaire utilisé.
      *
      * @var string
      */
-    private $_themeQuestionnaire;
+    private $themeQuestionnaire;
 
     /**
      * Envoie d'un mail de confirmation.
      *
      * @var bool
      */
-    private $_envoieDeMail;
+    private $envoieDeMail;
 
     /* Gestionnaire des questionnaires */
 
@@ -172,6 +176,7 @@ class QuestionnaireController extends Controller
             ['id' => $primaryKeys]
         );
 
+        /** @var Questionnaire $questionnaire */
         foreach ($questionnaires as $questionnaire) {
             if (count($questionnaire->getOutils()) > 0) {
                 $this->addFlash(
@@ -195,16 +200,19 @@ class QuestionnaireController extends Controller
     /**
      * Affichage du formulaire d'utilisateur.
      *
+     * @param Request           $request
      * @param HopiQuestionnaire $questionnaire
      * @param bool              $redirectReferer
      *
      * @return Response
-     *
      */
-    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire, $redirectReferer = false)
-    {
+    public function editFrontGestionnaireAction(
+        Request $request,
+        HopiQuestionnaire $questionnaire,
+        $redirectReferer = false
+    ) {
         if ((bool) $redirectReferer === true && !$this->get('session')->has(self::REDIRECT_REFERER_SESSION_KEY)) {
-            $referer = $this->getRequest()->headers->get('referer');
+            $referer = $request->headers->get('referer');
             $this->get('session')->set(self::REDIRECT_REFERER_SESSION_KEY, $referer);
         }
 
@@ -228,10 +236,9 @@ class QuestionnaireController extends Controller
             throw $this->createNotFoundException();
         }
 
-        //On récupère l'utilisateur qui est connecté
         $user = $this->getUser();
 
-        $this->_envoieDeMail = false;
+        $this->envoieDeMail = false;
 
         if (null !== $occurrence) {
             $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence';
@@ -279,23 +286,23 @@ class QuestionnaireController extends Controller
         Occurrence $occurrence = null,
         $optionRenderForm = []
     ) {
-        $readOnly            = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
-        $routeRedirection    = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect']
+        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect']
             : '';
-        $themeQuestionnaire  = array_key_exists('themeQuestionnaire', $optionRenderForm)
+        $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm)
             ? $optionRenderForm['themeQuestionnaire'] : 'default';
-        $this->_envoieDeMail = array_key_exists('envoieDeMail', $optionRenderForm) ? $optionRenderForm['envoieDeMail']
+        $this->envoieDeMail = array_key_exists('envoieDeMail', $optionRenderForm) ? $optionRenderForm['envoieDeMail']
             : true;
-        $showAllQuestions    = array_key_exists('showAllQuestions', $optionRenderForm)
+        $showAllQuestions   = array_key_exists('showAllQuestions', $optionRenderForm)
             ? $optionRenderForm['showAllQuestions'] : true;
 
         //Si le tableau n'est pas vide on le récupère
         if (!is_null($routeRedirection)) {
-            $this->_routeRedirection = $routeRedirection;
+            $this->routeRedirection = $routeRedirection;
         }
 
         //Récupération du thème de formulaire
-        $this->_themeQuestionnaire = $themeQuestionnaire;
+        $this->themeQuestionnaire = $themeQuestionnaire;
 
         $options = [
             'questionnaire'    => $questionnaire,
@@ -325,20 +332,20 @@ class QuestionnaireController extends Controller
      */
     public function editAction(HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = [])
     {
-        $readOnly = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
-        $routeRedirection = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect']
+        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect']
             : '';
         $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm)
             ? $optionRenderForm['themeQuestionnaire'] : 'default';
-        $session = array_key_exists('session', $optionRenderForm) ? $optionRenderForm['session'] : 0;
+        $session            = array_key_exists('session', $optionRenderForm) ? $optionRenderForm['session'] : 0;
 
         //Si le tableau n'est pas vide on le récupère
         if (!is_null($routeRedirection)) {
-            $this->_routeRedirection = $routeRedirection;
+            $this->routeRedirection = $routeRedirection;
         }
 
         //Récupération du thème de formulaire
-        $this->_themeQuestionnaire = $themeQuestionnaire;
+        $this->themeQuestionnaire = $themeQuestionnaire;
 
         return $this->renderForm(
             'nodevo_questionnaire_questionnaire',
@@ -408,6 +415,7 @@ class QuestionnaireController extends Controller
      */
     private function renderForm($formName, $options, $view)
     {
+        /** @var User $user */
         $user = $options['user'];
         $readOnly = $options['readOnly'];
         $questionnaire = $options['questionnaire'];
@@ -418,7 +426,7 @@ class QuestionnaireController extends Controller
             'idUser' => $user->getId(),
             'idQuestionnaire' => $questionnaire->getId(),
             'occurrence' => $occurrence,
-            'routeRedirection' => $this->_routeRedirection,
+            'routeRedirection' => $this->routeRedirection,
             'readOnly' => $readOnly,
             'idSession' => $idSession,
             'paramId' => $idSession === 0 ? null : $idSession,
@@ -479,6 +487,7 @@ class QuestionnaireController extends Controller
 
                 //Parcourt les questions de champ file
                 foreach ($questionFiles as $key => $questionFile) {
+                    $fileName = 'undefined';
                     //Récupère la réponse de la question courante
                     $criteria = Criteria::create()->where(Criteria::expr()->eq('question', $questionFile));
                     //Récupération d'un tableau comportant une seule réponse
@@ -689,6 +698,7 @@ class QuestionnaireController extends Controller
                         $sessionAArchiver = false;
                         if ($session->getDateSession() < new \DateTime()) {
                             $sessionAArchiver = true;
+                            /** @var Inscription $inscription */
                             foreach ($session->getInscriptions() as $inscription) {
                                 if (407 === $inscription->getEtatInscription()->getId()
                                     && 411 === $inscription->getEtatParticipation()->getId()
@@ -717,6 +727,7 @@ class QuestionnaireController extends Controller
                             $formations = $session->getModule()->getProductions();
 
                             //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
+                            /** @var Objet $formation */
                             foreach ($formations as $formation) {
                                 // Récupération des ambassadeurs pour vérifier si
                                 // l'utilisateur actuel ne maitrise pas déjà cette formation
@@ -765,7 +776,7 @@ class QuestionnaireController extends Controller
                     }
                 }
                 //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
-                if ($this->_envoieDeMail) {
+                if ($this->envoieDeMail) {
                     switch ($questionnaire->getNomMinifie()) {
                         case 'expert':
                             //Expert
@@ -784,7 +795,7 @@ class QuestionnaireController extends Controller
 
                             if (!is_null($adressesMails)) {
                                 $variablesTemplate = [
-                                    'candidat' => $user->getPrenom() . ' ' . $user->getNom(),
+                                    'candidat' => $user->getFirstname() . ' ' . $user->getLastname(),
                                     'questionnaire' => $candidature,
                                 ];
 
@@ -811,21 +822,21 @@ class QuestionnaireController extends Controller
                                                 ->getQuestionnaireFormateMail($reponses)
                             ;
 
-                            $etablissement = is_null($user->getEtablissementRattachementSante())
-                                ? $user->getAutreStructureRattachementSante()
-                                : $user->getEtablissementRattachementSante()->getNom()
+                            $etablissement = is_null($user->getOrganization())
+                                ? $user->getOrganizationLabel()
+                                : $user->getOrganization()->getNom()
                             ;
 
                             $candidat = '<ul>';
-                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom()) . '</li>';
-                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom()) . '</li>';
+                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getFirstname()) === '' ? '-' : $user->getFirstname()) . '</li>';
+                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getLastname()) == '' ? '-' : $user->getLastname()) . '</li>';
                             $candidat .= '<li><strong>Adresse e-mail</strong> : ' . (trim($user->getEmail()) === '' ? '-' : $user->getEmail()) . '</li>';
-                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getTelephoneDirect()) === '' ? '-' : $user->getTelephoneDirect()) . '</li>';
-                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getTelephonePortable()) === '' ? '-' : $user->getTelephonePortable()) . '</li>';
-                            $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle()) . '</li>';
+                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getPhoneNumber()) === '' ? '-' : $user->getPhoneNumber()) . '</li>';
+                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getCellPhoneNumber()) === '' ? '-' : $user->getCellPhoneNumber()) . '</li>';
+                            $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfileType()->getLibelle()) === '' ? '-' : $user->getProfileType()->getLibelle()) . '</li>';
                             $candidat .= '<li><strong>Structure de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement) . '</li>';
-                            $candidat .= '<li><strong>Nom de votre structure si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante()) . '</li>';
-                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante()) . '</li>';
+                            $candidat .= '<li><strong>Nom de votre structure si non disponible dans la liste précédente</strong> : ' . (trim($user->getOrganizationLabel()) === '' ? '-' : $user->getOrganizationLabel()) . '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getJobLabel()) === '' ? '-' : $user->getJobLabel()) . '</li>';
                             $candidat .= '</ul>';
 
                             $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion(
@@ -854,21 +865,21 @@ class QuestionnaireController extends Controller
                             ;
 
                             //Formate les données de l'utilisateur qui a répondu au questionnaire
-                            $etablissement = is_null($user->getEtablissementRattachementSante())
-                                ? $user->getAutreStructureRattachementSante()
-                                : $user->getEtablissementRattachementSante()->getNom()
+                            $etablissement = is_null($user->getOrganization())
+                                ? $user->getOrganizationLabel()
+                                : $user->getOrganization()->getNom()
                             ;
 
                             $candidat = '<ul>';
-                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom()) . '</li>';
-                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom()) . '</li>';
+                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getFirstname()) === '' ? '-' : $user->getFirstname()) . '</li>';
+                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getLastname()) == '' ? '-' : $user->getLastname()) . '</li>';
                             $candidat .= '<li><strong>Adresse e-mail</strong> : ' . (trim($user->getEmail()) === '' ? '-' : $user->getEmail()) . '</li>';
-                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getTelephoneDirect()) === '' ? '-' : $user->getTelephoneDirect()) . '</li>';
-                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getTelephonePortable()) === '' ? '-' : $user->getTelephonePortable()) . '</li>';
-                            $candidat .= '<li><strong>Profil</strong> : ' . (null === $user->getProfilEtablissementSante() || trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle()) . '</li>';
+                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getPhoneNumber()) === '' ? '-' : $user->getPhoneNumber()) . '</li>';
+                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getCellPhoneNumber()) === '' ? '-' : $user->getCellPhoneNumber()) . '</li>';
+                            $candidat .= '<li><strong>Profil</strong> : ' . (null === $user->getProfileType() || trim($user->getProfileType()->getLibelle()) === '' ? '-' : $user->getProfileType()->getLibelle()) . '</li>';
                             $candidat .= '<li><strong>Structure de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement) . '</li>';
-                            $candidat .= '<li><strong>Nom de votre structure si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante()) . '</li>';
-                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante()) . '</li>';
+                            $candidat .= '<li><strong>Nom de votre structure si non disponible dans la liste précédente</strong> : ' . (trim($user->getOrganizationLabel()) === '' ? '-' : $user->getOrganizationLabel()) . '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getJobLabel()) === '' ? '-' : $user->getJobLabel()) . '</li>';
                             $candidat .= '</ul>';
 
                             //Récupération de l'adresse ml du domaine
@@ -954,6 +965,7 @@ class QuestionnaireController extends Controller
                 );
             }
 
+            $erreur = '';
             foreach ($form->getErrors(true) as $error) {
                 $erreur = $error->getOrigin()->getConfig()->getOptions()['label'] . ' ' . $error->getMessage();
             }
@@ -967,7 +979,7 @@ class QuestionnaireController extends Controller
             'form' => $form->createView(),
             'questionnaire' => $questionnaire,
             'user' => $user,
-            'theme' => $this->_themeQuestionnaire,
+            'theme' => $this->themeQuestionnaire,
         ]);
     }
 

@@ -2,10 +2,13 @@
 
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Referencement controller.
@@ -66,6 +69,18 @@ class ReferencementController extends Controller
                     : null,
             ]
         );
+    }
+
+    /**
+     * @return Response
+     */
+    public function userPopinAction()
+    {
+        if (!$this->getUser() instanceof User) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return $this->popinAction(Entity::ENTITY_TYPE_AMBASSADEUR, $this->getUser()->getId());
     }
 
     /**

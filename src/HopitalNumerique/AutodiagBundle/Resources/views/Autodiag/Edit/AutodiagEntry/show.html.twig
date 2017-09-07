@@ -18,7 +18,7 @@
 
     <h2>
         {% if entry.user is not null %}
-            Réponse de {{ entry.user.prenom }} {{ entry.user.nom }}
+            Réponse de {{ entry.user.firstname }} {{ entry.user.lastname }}
         {% else %}
             Réponse anonyme
         {% endif %}

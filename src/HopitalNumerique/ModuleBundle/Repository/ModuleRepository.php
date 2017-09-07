@@ -24,7 +24,7 @@ class ModuleRepository extends EntityRepository
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom', 'form.nom as formateurNom, form.prenom as formateurPrenom')
+        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom', 'form.lastname as formateurNom, form.firstname as formateurPrenom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
             ->leftjoin('mod.formateur', 'form')
             ->leftJoin('mod.statut', 'refEtat')

@@ -48,21 +48,21 @@
             <tr>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">{{ loop.index }}</td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ inscription.user.prenom }}
+                    {{ inscription.user.firstname }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ inscription.user.nom }}
+                    {{ inscription.user.lastname }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {% if inscription.user.etablissementRattachementSante is not null %}
-                        {{ inscription.user.etablissementRattachementSante.nom }}
+                    {% if inscription.user.organization is not null %}
+                        {{ inscription.user.organization.nom }}
                     {% else %}
-                        {{ inscription.user.autreStructureRattachementSante }}
+                        {{ inscription.user.organizationLabel }}
                     {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {% if inscription.user.fonctionDansEtablissementSante is not null %}
-                        {{ inscription.user.fonctionDansEtablissementSante }}
+                    {% if inscription.user.jobLabel is not null %}
+                        {{ inscription.user.jobLabel }}
                     {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">
