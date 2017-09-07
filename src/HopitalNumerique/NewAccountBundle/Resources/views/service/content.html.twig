@@ -1,9 +1,5 @@
 {% if widgets is not empty %}
     <div class="quick-access">
-        <div class="widget-description">
-            {{ 'Module_moncompte_services_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
-        </div>
-
         <ul>
             {% for widget in widgets if widget is not null %}
                 <li>

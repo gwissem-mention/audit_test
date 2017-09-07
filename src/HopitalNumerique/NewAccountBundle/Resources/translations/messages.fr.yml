@@ -14,7 +14,7 @@ account:
         picture:
             delete: Supprimer la photo
     service:
-        title: Services
+        title: Mes services
         quick_access: Accès directs
         domain_list:
             label: Filtrer
