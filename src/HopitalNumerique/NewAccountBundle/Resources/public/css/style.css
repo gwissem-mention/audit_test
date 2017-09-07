@@ -169,3 +169,7 @@
 #my-account .password-information {
     margin: 20px 0 0 0;
 }
+
+#my-account .panel-heading .panel-title .badge {
+    margin-bottom: 2px;
+}

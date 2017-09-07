@@ -19,9 +19,9 @@ $(function() {
         tabErrorHandler.showFirstErrorTab();
     });
 
-    initSelect2($('.select2'));
+    initSelect2($('select.select2'));
 
-    new AjaxList($('.ajax-list-select2'));
+    new AjaxList($('select.ajax-list-select2'));
     new CountyList($('#user_account_region'), $('#user_account_county'));
     new HobbyCollection();
 
