@@ -18,7 +18,7 @@ $(window).load(function() {
  */
 CommunautePratique.init = function()
 {
-    $('.select2').select2();
+    $('select.select2').select2();
     $('form.toValidate').validationEngine();
     $('.fancybox').fancybox({
         autoSize: false,
