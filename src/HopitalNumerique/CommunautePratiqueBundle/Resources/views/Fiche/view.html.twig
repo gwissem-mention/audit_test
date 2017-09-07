@@ -98,8 +98,10 @@
 
                                 <div class="message">
                                     {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                                    {% if canExportCsv %}
+                                        <a href="{{ path('hopitalnumerique_communautepratique_fiche_export_comments', {'fiche': fiche.id}) }}" class="btn btn-info" id="export-csv">Exporter la discussion</a>
+                                    {% endif %}
                                 </div>
-
                             </div>
                             <div class="clearfix"></div>
                             {% if fiche.commentaires|length > 0 %}

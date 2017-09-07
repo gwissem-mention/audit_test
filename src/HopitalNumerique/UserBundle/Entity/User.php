@@ -2934,4 +2934,19 @@ class User extends BaseUser implements SettingsOwnerInterface
     {
         return $this->getId();
     }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return bool
+     */
+    public function isGroupAnimator(Groupe $group)
+    {
+        foreach ($group->getAnimateurs() as $groupUsers) {
+            if ($groupUsers == $this) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

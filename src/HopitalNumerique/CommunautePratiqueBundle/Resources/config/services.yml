@@ -72,3 +72,6 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv

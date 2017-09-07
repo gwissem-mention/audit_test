@@ -39,3 +39,10 @@ hopitalnumerique_communautepratique_fiche_open:
     methods: 'POST'
     requirements:
         fiche: '\d+'
+
+hopitalnumerique_communautepratique_fiche_export_comments:
+    path: /{fiche}/export
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:exportCsv' }
+    methods: GET
+    requirements:
+        fiche: \d+
