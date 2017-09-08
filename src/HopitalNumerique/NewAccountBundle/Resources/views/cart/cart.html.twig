@@ -1,0 +1,119 @@
+{% extends 'NewAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-cart.css" filter="cssrewrite, ?yui_css"
+        '@datatables_css'
+        'bundles/hopitalnumeriqueaccount/css/layout.css'
+        'bundles/newaccount/css/cart.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquecart/css/new_report.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-cart.js"
+        '@handlebars_js'
+        '@datatables_js'
+        'bundles/newaccount/js/cart.js'
+        'bundles/hopitalnumeriquecart/js/report_list.js'
+        'bundles/hopitalnumeriquecart/js/report_edit.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var reportEditComponent = new ReportEdit($('.new-report'));
+            new ReportList(reportEditComponent);
+            new NewAccountCart(reportEditComponent);
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="current-page" data-page="cart-page" class="hide"></div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading custom-panel-heading">
+            <div class="panel-title">
+                <i class="icon cart-items-icon"></i>
+                {% include '@NewAccount/widget/extension/badge_number_extension.html.twig' with {'number': cartItems|length} %}
+                {{ 'cart.items.title'|trans }}
+            </div>
+        </div>
+        <div class="panel-body cart">
+            {{ 'Module_cart_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
+            {% if cartItems|length > 0 %}
+                <table class="table cart-items account-table">
+                    <thead>
+                    <tr>
+                        <th class="text-center cart-items-all">
+                            <input type="checkbox" class="cart-item-checkall">
+                        </th>
+                        <th>{{ 'cart.items.header.object_type'|trans }}</th>
+                        <th>{{ 'cart.items.header.object_title'|trans }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in cartItems %}
+                        <tr class="item">
+                            <td class="text-center">
+                                <input type="checkbox" class="cart-item-checkbox" name="item[{{ item.objectType }}][]" value="{{ item.objectId }}">
+                            </td>
+                            <td>{{ ('item.object_type.'~item.objectTypeLabelSlug)|trans({}, 'cart') }}</td>
+                            <td>
+                                {% if item.route %}
+                                    {% set itemUrl = getItemUrl(item) %}
+                                    <a href="{{ itemUrl }}" title="{{ itemUrl }}">
+                                        {{ _self.setTitle(item.parentsTitle, item.title) }}
+                                    </a>
+                                {% else %}
+                                    {{ _self.setTitle(item.parentsTitle, item.title) }}
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    {% spaceless %}
+                                        <a
+                                            href="{{ path('hopital_numerique_cart_remove', {objectType: item.objectType, objectId: item.objectId}) }}"
+                                            class="btn btn-sm btn-danger item-remove"
+                                            data-confirm="{{ 'cart.items.action.remove.confirm'|trans|e }}"
+                                            title="{{ 'cart.items.action.remove.title'|trans|e }}"
+                                        >
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    {% endspaceless %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="text-left">
+                    <button data-uri="{{ path('hopital_numerique_cart_report_item_add_staging') }}" class="btn btn-success cart-add-to-report" disabled="disabled">{{ 'cart.items.add.label'|trans }}</button>
+                </div>
+            {% else %}
+                <p class="no-result">
+                    <strong>{{ 'cart.no_items'|trans }}</strong>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {{ include('HopitalNumeriqueCartBundle:report:edit.html.twig') }}
+    <hr>
+    {{ include('HopitalNumeriqueCartBundle:report:list.html.twig') }}
+{% endblock %}
+
+{% macro setTitle(parents, title) %}
+    {% if parents is not null %}
+        {{ parents|join(' > ') }} >
+    {% endif %}
+    {{ title }}
+{% endmacro setTitle %}

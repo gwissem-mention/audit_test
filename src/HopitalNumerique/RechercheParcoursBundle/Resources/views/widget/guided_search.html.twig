@@ -1,0 +1,92 @@
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="guided-search-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_parcours'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table account-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'guided_search.table.title'|trans }}</th>
+                <th width="160">{{ 'guided_search.table.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>
+                        {% if item.shareMessage is not null %}
+                            <i class="fa fa-share service-tooltip" data-toggle="tooltip" title="{{ item.shareMessage }}"></i>
+                        {% endif %}
+                        {{ item.information|join(' - ')|raw }}
+                    </td>
+                    <td class="actions-column">
+                        <div class="btn-group">
+                            <a href="{{ item.actions.continue }}" class="btn btn-sm btn-success" title="{{ 'guided_search.action.continue'|trans }}">
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                            <a href="{{ item.actions.send }}" class="btn btn-sm btn-primary fancybox fancybox.ajax" title="{{ 'guided_search.action.send'|trans }}">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                            {% if item.actions.share.stepId is not null %}
+                                <button class="btn btn-sm btn-primary" title="{{ 'step.share.btn.title'|trans({}, 'guided_search') }}" data-toggle="modal" data-target="#guided-search-share-modal-{{ item.actions.share.guidedSearch.id }}">
+                                    <i class="fa fa-exchange"></i>
+                                </button>
+                                <div id="guided-search-share-modal-{{ item.actions.share.guidedSearch.id }}" class="modal fade" tabindex="-1" role="dialog" style="text-align: left;">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            {{ form_start(item.actions.share.shareForm, {attr: {action: path('hopital_numerique_guided_search_step_share', {guidedSearchStep: item.actions.share.stepId, redirectPrevious: true})}}) }}
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ 'step.share.modal.title'|trans({'%parcours_guide%': item.information.name}, 'guided_search')|raw }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if item.actions.share.guidedSearch.shares|length %}
+                                                    {{ 'step.share.modal.already_shared.description'|trans({}, 'guided_search') }}
+                                                    <ul>
+                                                        {% if app.user.id != item.actions.share.guidedSearch.owner.id %}
+                                                            <li>{{ item.actions.share.guidedSearch.owner.prenomNom }}</li>
+                                                        {% endif %}
+
+                                                        {% for user in item.actions.share.guidedSearch.shares if app.user.id != user.id %}
+                                                            <li>{{ user.prenomNom }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+
+                                                    <hr>
+                                                {% endif %}
+
+                                                {{ form_row(item.actions.share.shareForm.email) }}
+                                                {{ form_row(item.actions.share.shareForm.initialData) }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">{{ 'step.share.modal.save.label'|trans({}, 'guided_search') }}</button>
+                                            </div>
+                                            {{ form_rest(item.actions.share.shareForm) }}
+                                            {{ form_end(item.actions.share.shareForm) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <a href="{{ item.actions.delete }}" class="btn btn-sm btn-danger delete-guided-search-btn" title="{{ 'guided_search.action.delete'|trans }}">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#guided-search-widget').find('.delete-guided-search-btn').on('click', function () {
+                return confirm('{{ 'guided_search.delete.confirm'|trans }}');
+            });
+        });
+    </script>
+{% else %}
+    {{ 'guided_search.not_found'|trans }}
+{% endif %}

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * RechercheParcoursDetails.
@@ -22,7 +23,7 @@ class RechercheParcoursDetails
     private $id;
 
     /**
-     * @var int
+     * @var RechercheParcours
      *
      * @ORM\ManyToOne(targetEntity="RechercheParcours", cascade={"persist"}, inversedBy="recherchesParcoursDetails")
      * @ORM\JoinColumn(name="rrp_id", referencedColumnName="rrp_id", onDelete="CASCADE")
@@ -30,7 +31,7 @@ class RechercheParcoursDetails
     protected $rechercheParcours;
 
     /**
-     * @var int
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")
@@ -76,11 +77,17 @@ class RechercheParcoursDetails
         return $this->id;
     }
 
+    /**
+     * @return RechercheParcours
+     */
     public function getRechercheParcours()
     {
         return $this->rechercheParcours;
     }
 
+    /**
+     * @param RechercheParcours $rechercheParcours
+     */
     public function setRechercheParcours(RechercheParcours $rechercheParcours)
     {
         $this->rechercheParcours = $rechercheParcours;
@@ -113,7 +120,7 @@ class RechercheParcoursDetails
     /**
      * Get reference.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @return Reference $reference
      */
     public function getReference()
     {
@@ -123,9 +130,9 @@ class RechercheParcoursDetails
     /**
      * Set reference.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @param Reference $reference
      */
-    public function setReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    public function setReference(Reference $reference)
     {
         $this->reference = $reference;
     }
@@ -144,6 +151,8 @@ class RechercheParcoursDetails
      * Set order.
      *
      * @param int $order
+     *
+     * @return RechercheParcoursDetails
      */
     public function setOrder($order)
     {

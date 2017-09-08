@@ -3,9 +3,6 @@
 .mobile .label{ font-size: 13px}
 .mobile .label-ambassadeur{background-color: #DE0D4D; margin-left:10px;}
 .mobile .label-requete{ background-color: #d60030; margin-left:10px; }
-.btnprint{position: absolute; top: -10px; right:45px;}
-.btnrss{position: absolute; top: -10px; right:0;}
-.btnBack{position: absolute; top: -10px; right:93px;}
 .tooltip hr{margin:5px;}
 .reseaux-sociaux{margin-bottom: 12px;}
 .reseaux-sociaux .tweet{margin-right: 10px;}
@@ -149,6 +146,7 @@
 
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
+    #publication #date-source a {color:#333;}
 
 /* Liste ambassadeurs */
     #ambassadeurs{position: fixed; right:0; top:0; height: 100%; max-width: 33%}

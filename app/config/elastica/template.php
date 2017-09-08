@@ -451,11 +451,11 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'name_analyzer',
                         ],
                         'firstname' => [
-                            'property_path' => 'prenom',
+                            'property_path' => 'firstname',
                             'analyzer' => 'name_analyzer',
                         ],
                         'lastname' => [
-                            'property_path' => 'nom',
+                            'property_path' => 'lastname',
                             'analyzer' => 'name_analyzer',
                         ],
                         'biography' => [
@@ -469,11 +469,11 @@ $container->loadFromExtension('fos_elastica', [
                             ],
                         ],
                         'phone' => [
-                            'property_path' => 'telephoneDirect',
+                            'property_path' => 'phoneNumber',
                             'analyzer' => 'phone_analyzer',
                         ],
                         'cellphone' => [
-                            'property_path' => 'telephonePortable',
+                            'property_path' => 'cellPhoneNumber',
                             'analyzer' => 'phone_analyzer',
                         ],
                         'email' => [

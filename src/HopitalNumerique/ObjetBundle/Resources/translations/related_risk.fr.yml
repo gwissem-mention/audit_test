@@ -1,0 +1,13 @@
+add:
+    title: Ajouter un risque lié
+    label: Liste des risques
+    close: Fermer
+    save: Enregistrer
+    empty: Aucune donnée trouvée
+
+
+notification:
+    link:
+        success: Risque(s) lié(s) à la publication.
+    unlink:
+        success: Le risque n'est plus lié à la publication.

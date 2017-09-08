@@ -17,7 +17,7 @@ class SuggestionRepository extends EntityRepository
                 "GROUP_CONCAT(domains.nom SEPARATOR ' - ') domainsName",
                 'state.libelle stateLabel',
                 'suggestion.stateChangeDate',
-                "CONCAT(CONCAT(stateChangeAuthor.prenom, ' '), stateChangeAuthor.nom) stateChangeAuthorName"
+                "CONCAT(CONCAT(stateChangeAuthor.firstname, ' '), stateChangeAuthor.lastname) stateChangeAuthorName"
             )
             ->leftJoin('suggestion.domains', 'domains')
             ->leftJoin('suggestion.state', 'state')

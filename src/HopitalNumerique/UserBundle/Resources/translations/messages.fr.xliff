@@ -2,48 +2,44 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="">
         <body>
-            <trans-unit id="user.autreStructureRattachementSante">
-                <source>user.autreStructureRattachementSante</source>
+            <trans-unit id="user.organizationLabel">
+                <source>user.organizationLabel</source>
                 <target>Nom de votre établissement</target>
             </trans-unit>
-            <trans-unit id="user.departement">
-                <source>user.departement</source>
+            <trans-unit id="user.county">
+                <source>user.county</source>
                 <target>Département</target>
             </trans-unit>
-            <trans-unit id="user.etablissementRattachementSante">
-                <source>user.etablissementRattachementSante</source>
+            <trans-unit id="user.organization">
+                <source>user.organization</source>
                 <target>Structure de rattachement</target>
             </trans-unit>
-            <trans-unit id="user.fonctionDansEtablissementSanteReferencement">
-                <source>user.fonctionDansEtablissementSanteReferencement</source>
-                <target>Fonction</target>
+            <trans-unit id="user.jobType">
+                <source>user.jobType</source>
+                <target>Rôle</target>
             </trans-unit>
-            <trans-unit id="user.fonctionStructure">
-                <source>user.fonctionStructure</source>
-                <target>Fonction dans la structure</target>
+            <trans-unit id="user.jobLabel">
+                <source>user.jobLabel</source>
+                <target>Libellé rôle</target>
             </trans-unit>
-            <trans-unit id="user.nomStructure">
-                <source>user.nomStructure</source>
-                <target>Nom de la structure</target>
-            </trans-unit>
-            <trans-unit id="user.profilEtablissementSante">
-                <source>user.profilEtablissementSante</source>
+            <trans-unit id="user.profileType">
+                <source>user.profileType</source>
                 <target>Profil</target>
             </trans-unit>
             <trans-unit id="user.region">
                 <source>user.region</source>
                 <target>Région</target>
             </trans-unit>
-            <trans-unit id="user.statutEtablissementSante">
-                <source>user.statutEtablissementSante</source>
+            <trans-unit id="user.organizationType">
+                <source>user.organizationType</source>
                 <target>Type de structure</target>
             </trans-unit>
-            <trans-unit id="user.telephoneDirect">
-                <source>user.telephoneDirect</source>
+            <trans-unit id="user.phoneNumber">
+                <source>user.phoneNumber</source>
                 <target>Téléphone direct</target>
             </trans-unit>
-            <trans-unit id="user.typeActivite">
-                <source>user.typeActivite</source>
+            <trans-unit id="user.activities">
+                <source>user.activities</source>
                 <target>Activité</target>
             </trans-unit>
         </body>

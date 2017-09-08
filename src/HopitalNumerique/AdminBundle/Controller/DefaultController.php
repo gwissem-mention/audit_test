@@ -2,9 +2,13 @@
 
 namespace HopitalNumerique\AdminBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardCommand;
 use HopitalNumerique\UserBundle\Entity\Contractualisation;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -15,119 +19,64 @@ use Nodevo\ToolsBundle\Tools\Chaine;
 class DefaultController extends Controller
 {
     /**
+     * @var Domaine[]
+     */
+    protected $domains;
+
+    /**
      * Index Action.
      */
     public function indexAction(Request $request)
     {
         //On récupère l'user connecté
         $user = $this->getUser();
-        $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
-            $request->getSession()->get('domaineId')
-        );
+
+        /* Gestion des domaines */
+        $userDomains = $this->getUser()->getDomaines()->toArray();
+
+        $selectedDomainId = $request->query->get('domaine');
+
+        if (null !== $selectedDomainId && 'all' !== $selectedDomainId) {
+            $this->domains = array_filter($userDomains, function ($domain) use ($selectedDomainId) {
+                return $domain->getId() === (int) $selectedDomainId;
+            });
+        } else {
+            $this->domains = $userDomains;
+        }
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
-        $userConf = $this->buildDashboardRows(json_decode($user->getDashboardBack(), true));
-        $anneeEnCours = intval(date('Y'));
+        $positions = $this
+            ->get('dmishh.settings.settings_manager')
+            ->get('account_dashboard_order', $this->get('security.token_storage')->getToken()->getUser())
+        ;
+        $positions = isset($positions['dashboard_back']) ? $positions['dashboard_back'] : null;
+
+        $userConf = $this->buildDashboardRows($positions);
 
         //Initialisation des blocs
-        $blocUser = $this->getBlockuser();
+        list($blocUser, $blocAmbassadeur, $blocExpert) = $this->getBlockuser();
         $blocObjets = $this->getBlockObjets();
         $blocForum = $this->getBlockForum();
-        $blocInterventions = ['total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0];
-        $blocSessions = [
-            'next' => [],
-            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours, $currentDomaine),
-            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1, $currentDomaine),
-            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
-            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
-            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
-        ];
-
-        //Bloc Interventions
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
-        foreach ($interventions as $intervention) {
-            $etat = $intervention->getInterventionEtat()->getId();
-
-            ++$blocInterventions['total'];
-
-            if ($etat == 14 || $etat == 17 || $etat == 18 || $etat == 19) {
-                ++$blocInterventions['demandees'];
-            } elseif ($etat == 15) {
-                ++$blocInterventions['attente'];
-            } elseif ($etat == 21) {
-                ++$blocInterventions['en-cours'];
-            } elseif ($etat == 16 || $etat == 20) {
-                ++$blocInterventions['refusees'];
-            } elseif ($etat == 309) {
-                ++$blocInterventions['annulees'];
-            }
-        }
-
-        //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
-        //Récupération des domaines de l'utilisateur courant
-        $domainesUser = $user->getDomainesId();
-
-        //Bloc Sessions
-        $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions($domainesUser);
-        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
-
-        foreach ($inscriptions as $inscription) {
-            if ($inscription->getSession()->getModule()->getStatut()->getId() == 3) {
-                if ($inscription->getSession()->getEtat()->getId() == 403) {
-                    //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
-                    //Récupération des domaines de l'inscription
-                    $domainesInscription = $inscription->getSession()->getModule()->getDomainesId();
-                    $domaineInsriptionInDomaineUser = false;
-                    foreach ($domainesInscription as $idDomaineInscription) {
-                        if (in_array($idDomaineInscription, $domainesUser)) {
-                            $domaineInsriptionInDomaineUser = true;
-                            break;
-                        }
-                    }
-
-                    if ($inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411
-                        && $inscription->getUser()->hasRoleAmbassadeur()
-                        && $inscription->getSession()->getModule()->getId() == 6
-                    ) {
-                        ++$blocUser['ambassadeursMAPF'];
-                    }
-                }
-            }
-        }
-
-        $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas();
-
-        //Contributions Forum Experts
-        $date = new \DateTime();
-        $date->modify('-7 day');
-
-        $boards = $this->get('ccdn_forum_forum.model.board')->findAllBoards();
-        foreach ($boards as $board) {
-            $topics = $board->getTopics();
-            foreach ($topics as $topic) {
-                $posts = $topic->getPosts();
-                foreach ($posts as $post) {
-                    $user = $post->getCreatedBy();
-
-                    if ($post->getCreatedDate() >= $date && $user->hasRoleExpert()) {
-                        ++$blocUser['contribution'];
-                    }
-                }
-            }
-        }
-
-        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($currentDomaine);
+        $blocInterventions = $this->getBlockIntervention();
+        $blocSessions = $this->getBlockSession();
+        $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas($this->domains);
+        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($this->domains);
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
-            'anneeEnCours' => $anneeEnCours,
+            'anneeEnCours' => date('Y'),
             'userConf' => $userConf,
             'blocUser' => $blocUser,
+            'blocAmbassadeur' => $blocAmbassadeur,
+            'blocExpert' => $blocExpert,
             'blocObjets' => $blocObjets,
             'blocForum' => $blocForum,
             'blocInterventions' => $blocInterventions,
             'blocSessions' => $blocSessions,
             'blocPaiements' => $blocPaiements,
             'blockCDP' => $blocCDP,
+            'userDomains' => $userDomains,
+            'selectedDomain' => $selectedDomainId,
+            'domainForFilters' => 1 === count($this->domains) ? current($this->domains)->getNom() : null,
         ]);
     }
 
@@ -136,22 +85,15 @@ class DefaultController extends Controller
      *
      * @param Request $request La requete
      *
-     * @return json
+     * @return JsonResponse
      */
     public function reorderAction(Request $request)
     {
-        $datas = $request->request->get('datas');
-        $dashboardBack = [];
-        foreach ($datas as $one) {
-            $dashboardBack[$one['id']] = ['row' => $one['row'], 'col' => $one['col']];
-        }
+        $command = new ReorderDashboardCommand('dashboard_back', $request->request->get('datas'), $this->getUser());
 
-        //On récupère l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        $user->setDashboardBack(json_encode($dashboardBack));
-        $this->getDoctrine()->getManager()->flush();
+        $this->get('new_account.dashboard.command_handler.reorder')->handle($command);
 
-        return new Response('{"success":true}', 200);
+        return new JsonResponse();
     }
 
     /**
@@ -161,44 +103,17 @@ class DefaultController extends Controller
      */
     private function getBlockForum()
     {
+        $postRepository = $this->get('hopitalnumerique_forum.repository.post');
+        $topicRepository = $this->get('hopitalnumerique_forum.repository.topic');
+
         $since1Month = new \DateTime();
         $since1Month->modify(' - 1 month');
 
-        $blocForum = [];
-        $forums = $this->get('ccdn_forum_forum.model.forum')->findAllForums();
-        foreach ($forums as $forum) {
-            $tool = new Chaine($forum->getName());
-            $forumDatas = ['titre' => 'Forum ' . $forum->getName(), 'topics' => 0, 'contributions' => 0, 'topics-sans-reponses' => 0];
-
-            $categories = $forum->getCategories();
-            foreach ($categories as $categorie) {
-                $boards = $categorie->getBoards();
-                foreach ($boards as $board) {
-                    $topics = $board->getTopics();
-                    foreach ($topics as $topic) {
-                        if ($topic->getCachedReplyCount() == 0) {
-                            ++$forumDatas['topics-sans-reponses'];
-                        }
-
-                        $lastPost = $topic->getLastPost();
-                        if (!is_null($lastPost) && $lastPost->getCreatedDate()->modify('+ 1 month') >= new \DateTime()) {
-                            ++$forumDatas['topics'];
-                        }
-
-                        $posts = $topic->getPosts();
-                        foreach ($posts as $post) {
-                            if ($post->getCreatedDate() >= $since1Month) {
-                                ++$forumDatas['contributions'];
-                            }
-                        }
-                    }
-                }
-            }
-
-            $blocForum['forum-' . $tool->minifie()] = $forumDatas;
-        }
-
-        return $blocForum;
+        return [
+            'topics' => $topicRepository->countActiveTopicsByDomains($this->domains, $since1Month),
+            'contributions' => $postRepository->countPostsByDomains($this->domains, $since1Month),
+            'topics-sans-reponses' => $topicRepository->countUnreplyedTopcisByDomains($this->domains),
+        ];
     }
 
     /**
@@ -208,6 +123,9 @@ class DefaultController extends Controller
      */
     private function getBlockObjets()
     {
+        $noteRepository = $this->get('hopitalnumerique_objet.repository.note');
+        $commentRepository = $this->get('hopitalnumerique_objet.repository.commentaire');
+
         $blocObjets = [
             'points-durs' => 0,
             'productions' => 0,
@@ -222,7 +140,7 @@ class DefaultController extends Controller
         ];
 
         //Bloc "Publication" + TOP + BOTTOM
-        $datas = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForDashboard();
+        $datas = $this->get('hopitalnumerique_objet.repository.objet')->getObjetsForDashboard($this->domains);
         $publications = [];
         foreach ($datas as $one) {
             if (!isset($publications[$one['id']])) {
@@ -237,16 +155,14 @@ class DefaultController extends Controller
 
         $interval = new \DateInterval('P1M');
         $today = new \DateTime('now');
-        $notes = $this->get('hopitalnumerique_objet.manager.note')->findNoteByDomaine(1);
-        $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findCommentaireByDomaine(1);
         foreach ($publications as $publication) {
             if ($publication['etat'] == 4) {
-                ++$blocObjets['publications-non-publiees'];
+                $blocObjets['publications-non-publiees']++;
             }
 
             //Points Durs
             if (in_array('184', $publication['types'])) {
-                ++$blocObjets['points-durs'];
+                $blocObjets['points-durs']++;
 
                 //Build Top 5
                 $blocObjets['top5-points-dur'][] = $publication;
@@ -257,7 +173,7 @@ class DefaultController extends Controller
                 }
                 //Productions
             } elseif (in_array('175', $publication['types'])) {
-                ++$blocObjets['productions'];
+                $blocObjets['productions']++;
 
                 //Build Top 5
                 $blocObjets['top5-productions'][] = $publication;
@@ -268,41 +184,12 @@ class DefaultController extends Controller
                 }
             }
         }
-        $publicationNoted = [];
-        $publicationNotedHighValue = [];
-        foreach ($notes as $note) {
-            if (!is_null($note->getObjet())) {
-                $publicationNotedHighValue[$note->getObjet()->getId()][] = $note->getNote();
 
-                if (!in_array($note->getObjet()->getId(), $publicationNoted)) {
-                    $publicationNoted[] = $note->getObjet()->getId();
-                }
-            }
-        }
 
-        //Calcul de la note moyenne des publication
-        foreach ($publicationNotedHighValue as $key => $arrayNote) {
-            $note = 0;
-            $nbNote = 0;
-            foreach ($arrayNote as $value) {
-                ++$nbNote;
-                $note += $value;
-            }
-
-            $note = round(($note / $nbNote), 1);
-
-            if ($note >= 3.5) {
-                $publicationNotedHighValue[$key] = $note;
-            } else {
-                unset($publicationNotedHighValue[$key]);
-            }
-        }
-
-        $pourcentage = count($publicationNoted) == 0 ? 0 : (count($publicationNotedHighValue) / count($publicationNoted));
-
-        $blocObjets['nb-notes'] = count($notes);
-        $blocObjets['nb-commentaires'] = count($commentaires);
-        $blocObjets['pourcent-note-publication'] = round($pourcentage * 100, 0);
+        // Pourcentage de publications ayant comme note moyenne + de 3.5
+        $blocObjets['nb-notes'] = $noteRepository->countByDomains($this->domains, 3.5);
+        $blocObjets['nb-commentaires'] = $commentRepository->countByDomains($this->domains);
+        $blocObjets['pourcent-note-publication'] = round($noteRepository->computeAverageByDomains($this->domains, 3.5));
         $blocObjets['top5-points-dur'] = $this->get5('top', $blocObjets['top5-points-dur']);
         $blocObjets['bottom5-points-dur'] = $this->get5('bottom', $blocObjets['bottom5-points-dur']);
         $blocObjets['top5-productions'] = $this->get5('top', $blocObjets['top5-productions']);
@@ -318,79 +205,178 @@ class DefaultController extends Controller
      */
     private function getBlockuser()
     {
+        $userRepository = $this->get('hopitalnumerique_user.repository.user');
+        $questionnaireManager = $this->get('hopitalnumerique_questionnaire.manager.questionnaire');
+        $refusCandidatureManager = $this->get('hopitalnumerique_user.manager.refus_candidature');
+        $inscriptionRepository = $this->get('hn.module.repository.inscription');
+        $postRepository = $this->get('hopitalnumerique_forum.repository.post');
+        $contractRepository = $this->get('hopitalnumerique_user.repository.contractualisation');
+
+        $domainNumeric = !empty(array_filter($this->domains, function (Domaine $domain) {
+            return $domain->getId() === Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID;
+        }));
+
+        $expertContributionDate = new \DateTime();
+        $expertContributionDate->modify('-7 day');
+
         $blocUser = [
-            'nb' => 0,
-            'actif' => 0,
-            'es' => 0,
-            'ambCandidats' => 0,
-            'ambassadeurs' => 0,
-            'ambassadeursMAPF' => 0,
-            'ambCandidatsRecues' => 0,
-            'conventions' => 0,
-            'expCandidats' => 0,
-            'experts' => 0,
-            'expCandidatsRecues' => 0,
-            'contribution' => 0,
+            'nb' => $userRepository->countUsersByDomains($this->domains),
+            'actif' => $userRepository->countActiveUsersByDomains(
+                $this->domains,
+                (new \DateTime())->modify('last year')
+            ),
+            'es' => $userRepository->countEsUsersByDomains($this->domains),
         ];
-        /** @var User[] $users */
-        $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByDomaine(1);
-        $blocUser['nb'] = count($users);
 
-        //Get Questionnaire Infos
-        $idExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert');
-        $idAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $blocExpert = $domainNumeric
+            ? [
+                'expCandidats' => 0,
+                'experts' => 0,
+                'expCandidatsRecues' => 0,
+                'contribution' => $postRepository->countExpertContributionByDomains($this->domains, $expertContributionDate),
+            ]
+            : null
+        ;
 
-        //Récupération des questionnaires et users
-        $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste($idExpert, $idAmbassadeur);
+        $blocAmbassadeur = $domainNumeric
+            ? [
+                'ambCandidats' => 0,
+                'ambassadeurs' => 0,
+                'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
+                'ambCandidatsRecues' => 0,
+                'conventions' => $contractRepository->countExpiredContractForAmbassadorByDomains($this->domains),
+            ]
+            : null
+        ;
 
-        //On récupère les candidatures refusées
-        $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
+        if ($domainNumeric) {
+            /** @var User[] $users */
+            $users = $this->get('hopitalnumerique_user.manager.user')->findByDomaines(new ArrayCollection($this->domains));
 
-        //get contractualisation stuff
-        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouvelerForAmbassador();
+            //Get Questionnaire Infos
+            $idExpert = $questionnaireManager->getQuestionnaireId('expert');
+            $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
 
-        foreach ($users as $user) {
-            //Ne pas prendre en compte les utilisateurs inactifs
-            if ($user->getEtat()->getId() !== 3) {
-                continue;
-            }
+            //Récupération des questionnaires et users
+            $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
 
-            // Si l'utilisateur s'est connecté il y a moins de 1 an
-            if ($user->getLastLogin() !== null && $user->getLastLogin()->diff(new \DateTime())->y < 1) {
-                ++$blocUser['actif'];
-            }
+            //On récupère les candidatures refusées
+            $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
 
-            if ($user->hasRoleDirecteur() || $user->hasRoleEs()) {
-                ++$blocUser['es'];
-            } elseif ($user->hasRoleAmbassadeur()) {
-                ++$blocUser['ambassadeurs'];
-            } elseif ($user->hasRoleExpert()) {
-                ++$blocUser['experts'];
-            }
+            foreach ($users as $user) {
+                // Ne pas prendre en compte les utilisateurs inactifs
+                if ($user->getEtat()->getId() !== 3) {
+                    continue;
+                }
 
-            //Récupération des questionnaires rempli par l'utilisateur courant
-            $questionnairesByUser = array_key_exists($user->getId(), $questionnaireByUser) ? $questionnaireByUser[$user->getId()] : [];
+                if ($domainNumeric && $user->hasRoleAmbassadeur()) {
+                    $blocAmbassadeur['ambassadeurs']++;
+                } elseif ($domainNumeric && $user->hasRoleExpert()) {
+                    $blocExpert['experts']++;
+                }
 
-            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$user->getAlreadyBeExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature)) {
-                ++$blocUser['expCandidats'];
-            }
+                //Récupération des questionnaires rempli par l'utilisateur courant
+                $questionnairesByUser = [];
+                if (array_key_exists($user->getId(), $questionnaireByUser)) {
+                    $questionnaireByUser = $questionnaireByUser[$user->getId()];
+                }
 
-            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$user->getAlreadyBeAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature)) {
-                ++$blocUser['ambCandidats'];
-            }
+                // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
+                // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+                if ($domainNumeric
+                    && in_array($idExpert, $questionnairesByUser)
+                    && !$user->hasRoleExpert()
+                    && !$user->getAlreadyBeExpert()
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idExpert,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocExpert['expCandidats']++;
+                }
 
-            if (in_array($idExpert, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature)) {
-                ++$blocUser['expCandidatsRecues'];
-            }
+                // Récupération d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est
+                // pas expert et que sa candidature n'a pas encore été refusé
+                if ($domainNumeric
+                    && in_array($idAmbassadeur, $questionnairesByUser)
+                    && !$user->hasRoleAmbassadeur()
+                    && !$user->getAlreadyBeAmbassadeur()
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idAmbassadeur,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocAmbassadeur['ambCandidats']++;
+                }
 
-            if (in_array($idAmbassadeur, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature)) {
-                ++$blocUser['ambCandidatsRecues'];
+                if ($domainNumeric
+                    && in_array($idExpert, $questionnairesByUser)
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idExpert,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocExpert['expCandidatsRecues']++;
+                }
+
+                if ($domainNumeric
+                    && in_array($idAmbassadeur, $questionnairesByUser)
+                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                        $user->getId(),
+                        $idAmbassadeur,
+                        $refusCandidature
+                    )
+                ) {
+                    $blocAmbassadeur['ambCandidatsRecues']++;
+                }
             }
         }
 
-        return $blocUser;
+        return [$blocUser, $blocAmbassadeur, $blocExpert];
+    }
+
+    public function getBlockIntervention()
+    {
+        $canShow = !empty(array_filter($this->domains, function (Domaine $domain) {
+            return $domain->getId() === Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID;
+        }));
+
+        if (!$canShow) {
+            return null;
+        }
+
+        $interventionRepository = $this->get('hopitalnumerique_intervention.repository.intervention_demande');
+        $stats = $interventionRepository->getStats();
+
+        return [
+            'total' => $stats['total'],
+            'demandees' => $stats['accepted'],
+            'attente' => $stats['waiting'],
+            'en-cours' => $stats['ambassadorsCount'],
+            'refusees' => $stats['refused'],
+            'annulees' => $stats['canceled'],
+        ];
+    }
+
+    public function getBlockSession()
+    {
+        $inscriptionRepository = $this->container->get('hn.module.repository.inscription');
+        $sessionRepository = $this->container->get('hn.module.repository.session');
+        $year = intval(date('Y'));
+
+        $blocSessions = [
+            'next' => $sessionRepository->getNextSessionsByDomains($this->domains),
+            'totalInscriptionsAnneeEnCours' => $inscriptionRepository->countInscriptionsByYear($year, $this->domains),
+            'totalInscriptionsAnneePrecedente' => $inscriptionRepository->countInscriptionsByYear($year - 1, $this->domains),
+            'totalParticipantsAnneeEnCours' => $inscriptionRepository->countUsersByYear($year, $this->domains),
+            'totalParticipantsAnneePrecedente' => $inscriptionRepository->countUsersByYear($year - 1, $this->domains),
+            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
+        ];
+
+        return $blocSessions;
     }
 
     /**
@@ -426,11 +412,11 @@ class DefaultController extends Controller
     /**
      * Construit le tableau du dashboard user.
      *
-     * @param array $dashboardBack Tableau de la config dashboard
+     * @param array $settings Tableau de la config dashboard
      *
      * @return array
      */
-    private function buildDashboardRows($dashboardBack)
+    private function buildDashboardRows($settings)
     {
         $datas = [];
         $datas['users'] = ['row' => 1, 'col' => 1];
@@ -446,24 +432,39 @@ class DefaultController extends Controller
         $datas['sessions'] = ['row' => 4, 'col' => 2];
         $datas['paiements'] = ['row' => 4, 'col' => 3];
         $datas['cdp'] = ['row' => 5, 'col' => 3];
+        $datas['forum'] = ['row' => 6, 'col' => 1];
 
-        //Forum blocs
-        $forums = $this->get('ccdn_forum_forum.model.forum')->findAllForums();
-        $row = 5;
-        $col = 1;
-        foreach ($forums as $forum) {
-            $tool = new Chaine($forum->getName());
-            $datas['forum-' . $tool->minifie()] = ['row' => $row, 'col' => $col];
+        if (!is_null($settings)) {
+            // Sort widgets
+            uksort($datas, function ($a, $b) use ($settings) {
+                if (!isset($settings[$a]['position']) || !isset($settings[$b]['position'])) {
+                    return 1;
+                }
 
-            ++$col;
-            if ($col == 4) {
-                ++$row;
-                $col = 1;
-            }
+                return $settings[$a]['position'] < $settings[$b]['position'] ? -1 : 1;
+            });
         }
 
-        if (!is_null($dashboardBack)) {
-            $datas = array_replace($datas, $dashboardBack);
+        // Set widget visibility and position
+        $i = 0;
+        $total = count($datas);
+        foreach ($datas as $key => &$data) {
+            $widgetSettings = (null !== $settings && isset($settings[$key])) ? $settings[$key] : null;
+
+            if (null !== $widgetSettings) {
+                $data['visible'] = isset($widgetSettings['visible']) ? $widgetSettings['visible'] : true;
+
+                if (isset($widgetSettings['position'])) {
+                    $position = $widgetSettings['position'];
+                    $data['col'] = 1 + (($position - 1 ) % 3);
+                    $data['row'] = (int) (1 + (floor(($position - 1 )/ 3)));
+                }
+            } else {
+                $data['visible'] = true;
+                $data['col'] = 1 + (($total - $i - 1) % 3);
+                $data['row'] = (int) (1 + (floor(($total - $i) / 3)));
+            }
+            $i++;
         }
 
         return $datas;

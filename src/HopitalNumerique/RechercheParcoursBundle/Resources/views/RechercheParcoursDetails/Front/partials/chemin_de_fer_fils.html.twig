@@ -1,15 +1,19 @@
 <div class="chemin-de-fer-childs">
-    {% for referenceChild in refChilds %}
+    {% for child in subReferences %}
+
+        {% set linkParameters = {
+            'guidedSearch': guidedSearch.id,
+            'guidedSearchReference': guidedSearchReference.id,
+            'guidedSearchReferenceAlias': guidedSearchReference.reference.libelle|minifieMoi,
+            'parentReference': parentReference.id,
+            'alias': parentReference.reference.libelle|minifieMoi,
+            'subReference': child.id,
+            'subAlias': child.libelle|minifieMoi
+        } %}
+
         <span class="bloc-etape-child">
-            <a class="bloc-etape-child {% if refChildSelected.id == referenceChild.id %}selected{% endif %}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {
-                'id':rechercheParcours.id, 
-                'alias':rechercheParcours.reference.libelle|minifieMoi(),
-                'idEtape':etapesSelected.id, 
-                'etape':etapesSelected.reference.libelle|minifieMoi(),
-                'idRefEtapeChild':referenceChild.id,
-                'libRefEtapeChild':referenceChild.libelle|minifieMoi()}) }}" 
-            >
-                {{referenceChild.libelle}}
+            <a class="bloc-etape-child{{ subReference and subReference.id == child.id ? ' selected' }}" href="{{ path('hopital_numerique_guided_search_step', linkParameters) }}">
+                {{child.libelle}}
             </a>
         </span>
     {% endfor %}

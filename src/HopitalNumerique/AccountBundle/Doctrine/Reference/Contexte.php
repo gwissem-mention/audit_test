@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AccountBundle\Doctrine\Reference;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -19,30 +20,39 @@ class Contexte
     const WANT_CREATE_USER_SESSION_LABEL = 'hn_wantcreateuserwithcontexte';
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
+     * @var SessionInterface Session
      */
     private $session;
 
     /**
-     * @var \HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser ConnectedUser
+     * @var ConnectedUser ConnectedUser
      */
     private $connectedUser;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     * @var ReferenceManager ReferenceManager
      */
     private $referenceManager;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     * @var UserManager UserManager
      */
     private $userManager;
 
     /**
      * Constructeur.
+     *
+     * @param SessionInterface $session
+     * @param ConnectedUser    $connectedUser
+     * @param ReferenceManager $referenceManager
+     * @param UserManager      $userManager
      */
-    public function __construct(SessionInterface $session, ConnectedUser $connectedUser, ReferenceManager $referenceManager, UserManager $userManager)
-    {
+    public function __construct(
+        SessionInterface $session,
+        ConnectedUser $connectedUser,
+        ReferenceManager $referenceManager,
+        UserManager $userManager
+    ) {
         $this->session = $session;
         $this->connectedUser = $connectedUser;
         $this->referenceManager = $referenceManager;
@@ -59,16 +69,19 @@ class Contexte
         $userContexteReferenceIds = [];
 
         if ($this->connectedUser->is()) {
-            if (null !== $this->connectedUser->get()->getFonctionDansEtablissementSanteReferencement()) {
-                $userContexteReferenceIds[] = $this->connectedUser->get()->getFonctionDansEtablissementSanteReferencement()->getId();
+            if (null !== $this->connectedUser->get()->getJobType()) {
+                $userContexteReferenceIds[] = $this->connectedUser->get()
+                    ->getJobType()
+                    ->getId()
+                ;
             }
-            if (null !== $this->connectedUser->get()->getProfilEtablissementSante()) {
-                $userContexteReferenceIds[] = $this->connectedUser->get()->getProfilEtablissementSante()->getId();
+            if (null !== $this->connectedUser->get()->getProfileType()) {
+                $userContexteReferenceIds[] = $this->connectedUser->get()->getProfileType()->getId();
             }
-            if (null !== $this->connectedUser->get()->getStatutEtablissementSante()) {
-                $userContexteReferenceIds[] = $this->connectedUser->get()->getStatutEtablissementSante()->getId();
+            if (null !== $this->connectedUser->get()->getOrganizationType()) {
+                $userContexteReferenceIds[] = $this->connectedUser->get()->getOrganizationType()->getId();
             }
-            foreach ($this->connectedUser->get()->getTypeActivite() as $activiteType) {
+            foreach ($this->connectedUser->get()->getActivities() as $activiteType) {
                 $userContexteReferenceIds[] = $activiteType->getId();
             }
         }
@@ -83,7 +96,7 @@ class Contexte
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
-    public function getFonctionDansEtablissementSanteReferencementByReferenceIds($referenceIds)
+    public function getJobTypeByReferenceIds($referenceIds)
     {
         return $this->getReferenceByCodeAndIds('CONTEXTE_FONCTION_INTERNAUTE', $referenceIds);
     }
@@ -107,7 +120,7 @@ class Contexte
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
-    public function getStatutEtablissementSanteByReferenceIds($referenceIds)
+    public function getOrganizationTypeByReferenceIds($referenceIds)
     {
         return $this->getReferenceByCodeAndIds('CONTEXTE_TYPE_ES', $referenceIds);
     }
@@ -115,9 +128,9 @@ class Contexte
     /**
      * Retourne les références des types d'activité si présente parmi les références.
      *
-     * @param array<integer> $referenceIds IDs des références
+     * @param array $referenceIds
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
+     * @return Reference[]
      */
     public function getActiviteTypesByReferenceIds($referenceIds)
     {
@@ -136,6 +149,7 @@ class Contexte
     {
         $possibleReferences = $this->referenceManager->findByCode($referenceCode);
 
+        /** @var Reference $possibleReference */
         foreach ($possibleReferences as $possibleReference) {
             if (in_array($possibleReference->getId(), $referenceIds)) {
                 return $possibleReference;
@@ -148,16 +162,17 @@ class Contexte
     /**
      * Retourne les références d'un code si présente parmi les références.
      *
-     * @param string         $referenceCode Code
-     * @param array<integer> $referenceIds  IDs des références
+     * @param string $referenceCode
+     * @param array  $referenceIds
      *
-     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     * @return Reference[]
      */
     private function getReferencesByCodeAndIds($referenceCode, $referenceIds)
     {
         $foundReferences = [];
         $possibleReferences = $this->referenceManager->findByCode($referenceCode);
 
+        /** @var Reference $possibleReference */
         foreach ($possibleReferences as $possibleReference) {
             if (in_array($possibleReference->getId(), $referenceIds)) {
                 $foundReferences[] = $possibleReference;
@@ -170,12 +185,13 @@ class Contexte
     /**
      * Retourne un nouvel utilisateur avec les champs de contexte pré-remplis.
      *
-     * @param array<integer> $referenceIds Contexte
+     * @param array $referenceIds
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User Nouvel utilisateur
+     * @return User
      */
     public function getNewUserWithContexte(array $referenceIds)
     {
+        /** @var User $user */
         $user = $this->userManager->createEmpty();
 
         $this->fillUserWithContexte($user, $referenceIds);
@@ -186,7 +202,7 @@ class Contexte
     /**
      * Sauvegarde le contexte d'un utilisateur.
      *
-     * @param array<integer> $referenceIds IDs des références
+     * @param array $referenceIds
      *
      * @return bool Si l'utilisateur a été modifié
      */
@@ -210,8 +226,8 @@ class Contexte
     /**
      * Modifie les champs de contexte de l'utilisateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user         User
-     * @param array<integer>                           $referenceIds Contexte
+     * @param User  $user
+     * @param array $referenceIds
      *
      * @return bool Si l'utilisateur a été modifié
      */
@@ -219,25 +235,43 @@ class Contexte
     {
         $userIsModified = false;
 
-        $fonctionDansEtablissementSanteReferencement = $this->getFonctionDansEtablissementSanteReferencementByReferenceIds($referenceIds);
+        $jobType = $this->getJobTypeByReferenceIds($referenceIds);
         $profilEtablissementSante = $this->getProfilEtablissementSanteByReferenceIds($referenceIds);
-        $statutEtablissementSante = $this->getStatutEtablissementSanteByReferenceIds($referenceIds);
+        $organizationType = $this->getOrganizationTypeByReferenceIds($referenceIds);
         $activiteTypes = $this->getActiviteTypesByReferenceIds($referenceIds);
 
-        if (null !== $fonctionDansEtablissementSanteReferencement && (null === $user->getFonctionDansEtablissementSanteReferencement() || !$user->getFonctionDansEtablissementSanteReferencement()->equals($fonctionDansEtablissementSanteReferencement))) {
-            $user->setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement);
+        if (null !== $jobType
+            && (null === $user->getJobType()
+                || !$user->getJobType()->equals(
+                    $jobType
+                ))
+        ) {
+            $user->setJobType($jobType);
             $userIsModified = true;
         }
-        if (null !== $profilEtablissementSante && (null === $user->getProfilEtablissementSante() || !$user->getProfilEtablissementSante()->equals($profilEtablissementSante))) {
-            $user->setProfilEtablissementSante($profilEtablissementSante);
+
+        if (null !== $profilEtablissementSante
+            && (null === $user->getProfileType()
+                || !$user->getProfileType()->equals(
+                    $profilEtablissementSante
+                ))
+        ) {
+            $user->setProfileType($profilEtablissementSante);
             $userIsModified = true;
         }
-        if (null !== $statutEtablissementSante && (null === $user->getStatutEtablissementSante() || !$user->getStatutEtablissementSante()->equals($statutEtablissementSante))) {
-            $user->setStatutEtablissementSante($statutEtablissementSante);
+
+        if (null !== $organizationType
+            && (null === $user->getOrganizationType()
+                || !$user->getOrganizationType()->equals(
+                    $organizationType
+                ))
+        ) {
+            $user->setOrganizationType($organizationType);
             $userIsModified = true;
         }
-        if (!$user->equalsTypeActivite($activiteTypes)) {
-            $user->setTypeActivites($activiteTypes);
+
+        if (!$user->equalsActivities($activiteTypes)) {
+            $user->setActivities($activiteTypes);
             $userIsModified = true;
         }
 

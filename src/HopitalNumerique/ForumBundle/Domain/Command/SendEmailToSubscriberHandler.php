@@ -58,8 +58,8 @@ class SendEmailToSubscriberHandler
                     'theme'           => $topic->getBoard()->getName(),
                     'fildiscusssion'  => $topic->getTitle(),
                     'lienversmessage' => 'lien',
-                    'pseudouser'      => !is_null($command->user->getPseudonymeForum())
-                        ? $command->user->getPseudonymeForum() : $command->user->getNomPrenom(),
+                    'pseudouser'      => !is_null($command->user->getPseudonym())
+                        ? $command->user->getPseudonym() : $command->user->getNomPrenom(),
                     'shortMessage'    => $command->post->getBody(),
                 ];
 

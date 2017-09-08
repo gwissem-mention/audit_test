@@ -16,10 +16,21 @@ class RechercheParcoursController extends Controller
      */
     public function indexAction(RechercheParcoursGestion $rechercheParcoursGestion)
     {
-        $recherchesParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion], ['order' => 'ASC']);
+        $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion_history', null, [
+            'action' => $this->generateUrl('hopital_numerique_recherche_parcours_savenotification', [
+                'rechercheParcoursGestion' => $rechercheParcoursGestion->getId()
+            ])
+        ]);
+
+        $serviceParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours');
+        $serviceHistory = $this->get('hopitalnumerique_rechercheparcours.guided_search_history_reader');
+
+        $recherchesParcours = $serviceParcours->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion], ['order' => 'ASC']);
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Back/index.html.twig', [
             'recherchesParcours' => $recherchesParcours,
+            'lastNotification' => $serviceHistory->lastNotification($rechercheParcoursGestion),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -31,6 +42,26 @@ class RechercheParcoursController extends Controller
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Back/edit.html.twig', [
             'rechercheParcours' => $rechercheParcours,
         ]);
+    }
+
+    /**
+     * Save a new notification for guided search
+     *
+     * @param Request $request
+     * @param RechercheParcoursGestion $rechercheParcoursGestion
+     *
+     * @return JsonResponse
+     */
+    public function saveNotificationAction(Request $request, RechercheParcoursGestion $rechercheParcoursGestion)
+    {
+        $service = $this->get('hopitalnumerique_rechercheparcours.guided_search_history_writer');
+        $notify = $request->get('update_notify');
+        $reason = $request->get('reason');
+        $service->create($rechercheParcoursGestion, $this->getUser(), $notify, $reason);
+
+        $message = $this->get('translator')->trans('notifications.save.message', [], 'guided_search');
+
+        return new JsonResponse(['message' => $message]);
     }
 
     /**
@@ -58,22 +89,5 @@ class RechercheParcoursController extends Controller
         $this->getDoctrine()->getManager()->flush();
 
         return new Response('{"success":true}', 200);
-    }
-
-    // ----------- FRONT --------------
-
-    /**
-     * Index du front Action.
-     */
-    public function indexFrontAction(Request $request, RechercheParcoursGestion $rechercheParcoursGestion)
-    {
-        $request->getSession()->set('urlToRedirect', $request->getUri());
-
-        //Tableau des étapes du projet
-        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion], ['order' => 'ASC']);
-
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/index.html.twig', [
-            'etapes' => $etapes,
-        ]);
     }
 }

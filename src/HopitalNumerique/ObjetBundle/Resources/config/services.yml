@@ -27,6 +27,18 @@ services:
         arguments:
             - 'HopitalNumeriqueObjetBundle:Objet'
 
+    hopitalnumerique_objet.repository.contenu:
+            class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueObjetBundle:Contenu'
+
+    hopitalnumerique_objet.repository.consultation:
+            class: HopitalNumerique\ObjetBundle\Repository\ConsultationRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueObjetBundle:Consultation'
+
     hopitalnumerique_objet.repository.related_board:
         class: HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -89,6 +101,10 @@ services:
         class: %hopitalnumerique_objet.grid.objet.class%
         arguments: ["@service_container"]
 
+    hopitalnumerique_objet.grid.risk:
+        class: HopitalNumerique\ObjetBundle\Grid\RiskGrid
+        arguments: ["@service_container"]
+
     #twig extensions
     hopitalnumerique_objet.twig.objet_extension:
         class: HopitalNumerique\ObjetBundle\Twig\ObjetExtension
@@ -142,6 +158,12 @@ services:
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Note'
 
+    hopitalnumerique_objet.repository.risk:
+        class: HopitalNumerique\ObjetBundle\Repository\RiskRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\Risk'
+
     hopitalnumerique_objet.link_board_to_object_handler:
         class: HopitalNumerique\ObjetBundle\Domain\Command\LinkBoardToObjectHandler
         arguments:
@@ -159,3 +181,120 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_objet.repository.related_board"
+
+    hopitalnumerique_objet.reorder_related_risks_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\ReorderRelatedRisksHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.add_related_risks_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\LinkRisksToObjectHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.repository.risk"
+
+    hopitalnumerique_objet.unlink_risk_to_object_handler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\UnlinkRiskToObjectHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.handler.edit_risk:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\EditRiskHandler
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.risk_fusion"
+
+    hopitalnumerique_objet.handler.delete_risk:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\DeleteRiskHandler
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@doctrine.orm.entity_manager"
+
+    hopitalnumerique_objet.form.edit_risk:
+        class: HopitalNumerique\ObjetBundle\Form\RiskType
+        arguments:
+            - "@hopitalnumerique_objet.repository.risk"
+            - "@security.token_storage"
+        tags:
+            - { name: form.type }
+
+    hopitalnumerique_objet.risk_fusion:
+        class: HopitalNumerique\ObjetBundle\Service\Risk\Fusion
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_rechercheparcours.repository.risk_analysis"
+
+    hopitalnumerique_objet.widgets.updated_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\ObjectUpdatedWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+
+    hopitalnumerique_objet.widgets.most_viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\MostViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+    hopitalnumerique_objet.widgets.last_viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\LastViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+
+    hopitalnumerique_objet.widgets.objects_suggestion:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\SuggestionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setObjectRepository, ['@hopitalnumerique_objet.repository.objet']]
+        public: false
+    hopitalnumerique_objet.widgets.viewed_objects:
+        class: HopitalNumerique\ObjetBundle\Service\Widget\ViewedObjectWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service, priority: 60 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_objet.repository.objet'
+            - '@hopitalnumerique_objet.repository.contenu'
+            - '@router'
+            - '@hopitalnumerique_domaine.service.base_url_provider'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+        public: false
+
+    HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository:
+        class: HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\ObjectUpdate'

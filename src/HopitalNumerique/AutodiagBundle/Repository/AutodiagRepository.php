@@ -9,12 +9,33 @@ use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * HistoryRepository.
  */
 class AutodiagRepository extends EntityRepository
 {
+    /**
+     * @param Domaine $domain
+     *
+     * @return Autodiag\|null
+     */
+    public function getRandomAutodiagForDomain(Domaine $domain)
+    {
+        return $this->createQueryBuilder('a ')
+            ->addSelect('RAND() as HIDDEN random')
+            ->join('a .domaines', 'd', Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+
+            ->addOrderBy('random')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
     public function getFullyLoaded($autodiagId)
     {
         $qb = $this->createQueryBuilder('ad');

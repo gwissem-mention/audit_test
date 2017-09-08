@@ -22,7 +22,7 @@
                         {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
                     </a>
                 {%- endif -%}
-    
+
                 {%- if canUnsubscribeFromTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
                     <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
                         {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
@@ -36,6 +36,8 @@
                 </a>
             {% endif %}
             <a class="btn btn-sm btn-default fancybox fancybox.ajax pull-right" style="margin: 2px 0 0 0" href="{{ path('nodevo_mail_recommandation_topic') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
+
+            {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'forum_topic', objectId: topic.id, cssClass: 'forum-btn pull-right'}) }}
 
             {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
                 <div class="btn-group">

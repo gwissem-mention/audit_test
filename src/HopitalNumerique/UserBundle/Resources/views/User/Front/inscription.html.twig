@@ -15,121 +15,133 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-user-inscription.js"
-        'bundles/hopitalnumeriqueuser/js/User/script.js'
-        'bundles/hopitalnumeriqueuser/js/User/inscription.js'
+    {% javascripts output="compiled/hopitalnumerique-user-user-registration.js"
+        'bundles/hopitalnumeriqueuser/js/User/registration.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
 {% block body %}
-    <div class="col-md-10 col-md-offset-1" id="inscription">
-
-        <div id="headerDesc">
-            <p>
-                Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par le Centre de ressources de l'ANAP. Merci de vérifier auprès de votre service de informatique que les adresses <strong>@anap.fr</strong> ne sont pas considérées comme du spam et qu'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.
-            </p>
+    <div id="registration">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header">
+                    <p>{{ 'register.mail_warning'|trans|raw }}</p>
+                </div>
+            </div>
         </div>
-        <div class="clearfix"></div>
-
-        <h3>Inscription</h3>
-
-        <div id="form_edit_user">
-            {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
-            {{ form_start(form) }}
-            {{ form_javascript(form) }}
-            <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-            <div class="background-violet"></div>
-
-            {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-            <input type="hidden" id="departement-url" value="{{ path('hopital_numerique_user_front_departements') }}"/>
-            <input type="hidden" id="etablissement-url" value="{{ path('hopital_numerique_user_front_etablissements') }}"/>
-
-            {# Formulaire : #}
-            {{ form_row(form.civilite) }}
-            {{ form_row(form.titre) }}
-            {{ form_row(form.nom) }}
-            {{ form_row(form.prenom) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.pseudonymeForum) }}
-            {{ form_row(form.plainPassword) }}
-            {{ form_row(form.telephoneDirect) }}
-            {{ form_row(form.telephonePortable) }}
-            {{ form_row(form.contactAutre) }}
-            {{ form_row(form.profilEtablissementSante) }}
-
-            <div class="hide">
-                {{ form_row(form.etat) }}
-                {{ form_row(form.inscritCommunautePratique) }}
+        {{ form_start(form) }}
+        <div class="panel panel-default">
+            <div class="panel-heading custom-panel-heading">
+                {{ 'register.panel.registration'|trans }}
             </div>
-
-            <div id="etablissement_sante">
-                <div class="panel panel-default">
-                    <div class="panel-heading open">Vous êtes en fonction dans un établissement de santé
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.lastname, {'attr': {'class': 'validate[required,maxSize[50]]'}}) }}
                     </div>
-                    <div class="panel-body">
-                        <strong class="panel-title">Votre structure</strong>
-                        {{ form_row(form.etablissementRattachementSante) }}
-                        <hr>
-                        <strong class="panel-title">Votre structure n'est pas dans la liste précédente</strong>
-                        {{ form_row(form.statutEtablissementSante) }}
-                        {{ form_row(form.autreStructureRattachementSante) }}
-                        {{ form_row(form.region) }}
-                        {{ form_row(form.departement) }}
-                        <hr>
-                        <strong class="panel-title">Les activités de votre structure</strong>
-                        {{ form_row(form.typeActivite) }}
-                        <hr>
-                        <strong class="panel-title">Votre fonction</strong>
-                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-                        {{ form_row(form.fonctionDansEtablissementSante) }}
+                    <div class="col-md-6">
+                        {{ form_row(form.firstname, {'attr': {'class': 'validate[required,maxSize[50]]'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.email, {'attr': {'class': 'validate[required,custom[email]]'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.profileType) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 password-information">
+                        <p>
+                            Le mot de passe doit comporter au moins 6 caractères et être composé d'au moins une lettre minuscule, d'une lettre majuscule et d'un chiffre.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.plainPassword.first, {'attr': {'class': 'validate[required,minSize[6]]'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.plainPassword.second, {'attr': {'class': 'validate[required,equals[nodevo_user_registration_plainPassword_first],minSize[6]]'}}) }}
                     </div>
                 </div>
             </div>
-
-            <div id="autre_etablissement_sante">
-                <div class="panel panel-default">
-                    <div class="panel-heading closed">Vous êtes dans une autre structure</div>
-                    <div class="panel-body" style="display:none;">
-                        {{ form_row(form.nomStructure) }}
-                        {{ form_row(form.fonctionStructure) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-1 col-md-offset-3 col-sm-1">
-                    {{ form_widget(form.termsAccepted) }}
-                </div>
-                <div class="col-md-8 col-sm-11">
-                    {{ form_label(form.termsAccepted) }}<br/>
-                    <a target="_blank" href="{{ path('hopital_numerique_publication_publication_article',{'id':twigOptions.conditionsGenerales.conditionsGenerales.id, 'alias':twigOptions.conditionsGenerales.conditionsGenerales.alias,'categorie':twigOptions.conditionsGenerales.categorie.libelle|lower}) }}">Lien vers les CGU.</a>
-                </div>
-                <div class="col-md-8 col-md-offset-4">
-                    <div class="help-block">
-                        {{ form_errors(form.termsAccepted) }}
-                    </div>
-                </div>
-            </div>
-            {# Permet de mettre à la ligne le submit #}
-            <div class="clearfix"></div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <input onclick="$('#do').val('inscription');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" type="button"/>
-                </div>
-            </div>
-            {{ form_end(form) }}
         </div>
 
-        <div id="footerDesc">
-            <p>
-                Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
-            </p>
-            <p>
-                Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
-            </p>
+        <div class="panel panel-default">
+            <div class="panel-heading custom-panel-heading">
+                {{ 'register.panel.structure'|trans }}
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(form.organization, { 'attr': {'data-url': path('hopitalnumerique_etablissement_ajax_load'), 'class': 'ajax-list-select2' }}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(form.activities, { 'attr': {'class': 'select2' }}) }}
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="panel panel-default" id="accordion">
+            <div class="panel-heading custom-panel-heading" data-toggle="collapse" data-parent="#accordion" href="#collapseOrganization">
+                {{ 'register.panel.structure_not_previous'|trans }}
+            </div>
+            <div class="panel-body panel-collapse collapse" id="collapseOrganization">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(form.organizationType) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_row(form.organizationLabel, {'attr': {'class': 'validate[maxSize[255]]'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.region, { 'attr': {'data-county-url': path('hopital_numerique_user_counties') }}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.county) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form_vertical_row">
+                            <div class="col-md-12">
+                                {{form_widget(form.termsAccepted, {'attr': {'class': 'tou-checkbox validate[required]'}}) }}
+                                <div class="tou-label">
+                                    {{form_label(form.termsAccepted)}}
+                                    <br />
+                                    <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':twigOptions.conditionsGenerales.conditionsGenerales.id, 'alias':twigOptions.conditionsGenerales.conditionsGenerales.alias,'categorie':twigOptions.conditionsGenerales.categorie.libelle|lower})}}">Lien vers les CGU.</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-success pull-right" value="INSCRIPTION">
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="hide">
+            {{ form_row(form.etat) }}
+            {{ form_row(form.inscritCommunautePratique) }}
+        </div>
+
+        {{ form_end(form) }}
+
         <div class="clearfix"></div>
     </div>
 {% endblock %}

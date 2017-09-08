@@ -1,0 +1,43 @@
+{% trans_default_domain 'cart' %}
+
+<fieldset class="{{ type }}">
+    <legend>{{ ('modal.report_'~type~'.title')|trans }}</legend>
+
+    {{ ('Module_cart_report_share_'~type)|nodevoTexteDynamique(domaineCurrent.id)|raw }}
+
+    <div class="row">
+        <div class="col-md-6">
+            <form action="{{ '{{'~type~'ReportUri}}' }}" method="post" novalidate>
+                <div class="form-group">
+                    <label for="">{{ ('modal.report_'~type~'.email.label')|trans }}</label>
+                    <input type="email" name="targetEmail" class="form-control validate[required, custom[email]]" placeholder="{{ ('modal.report_'~type~'.email.placeholder')|trans|e }}">
+                </div>
+
+                <input type="submit" class="btn btn-success" value="{{ ('modal.report_'~type~'.submit.label')|trans|e }}">
+            </form>
+        </div>
+        {% if constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') == type %}
+            <div class="col-md-6">
+                <b>{{ ('modal.report_'~type~'.sharedWith')|trans }}</b>
+                {{ '{{#if '~type~'Shares}}' }}
+                <ul>
+                    {{ '{{#'~type~'Shares}}' }}
+                        <li>
+                            {{ '{{target}}' }}
+                            {% if type == constant('HopitalNumerique\\CartBundle\\Domain\\Command\\ShareReportCommand::TYPE_SHARE') %}
+                                {{ '{{#if removeUri}}' }}
+                                    <a href="{{ '{{removeUri}}' }}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                {{ '{{/if}}' }}
+                            {% endif %}
+                        </li>
+                    {{ '{{/'~type~'Shares}}' }}
+                </ul>
+                {{ '{{else}}' }}
+                {{ ('modal.report_'~type~'.noShares')|trans }}
+                {{ '{{/if}}' }}
+            </div>
+        {% endif %}
+    </div>
+</fieldset>

@@ -2,23 +2,32 @@
 
 namespace HopitalNumerique\UserBundle\Form\Type;
 
-use HopitalNumerique\UserBundle\Entity\Contractualisation;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\UserBundle\Entity\Contractualisation;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\AbstractType;
+use Nodevo\ToolsBundle\Manager\Manager;
+use Doctrine\ORM\EntityRepository;
 
 class ContractualisationType extends AbstractType
 {
-    private $_constraints = [];
+    private $constraints = [];
 
+    /**
+     * ContractualisationType constructor.
+     *
+     * @param Manager $manager
+     * @param         $validator
+     */
     public function __construct($manager, $validator)
     {
-        $this->_constraints = $manager->getConstraints($validator);
+        $this->constraints = $manager->getConstraints($validator);
     }
 
     /**
@@ -33,32 +42,31 @@ class ContractualisationType extends AbstractType
             ->add('file', FileType::class, [
                 'required' => true,
                 'label' => 'Fichier objet',
-                'attr' => ['class' => $this->_constraints['file']['class']],
+                'attr' => ['class' => $this->constraints['file']['class']],
             ])
             ->add('path', HiddenType::class)
-            ->add('nomDocument', 'text', [
-                'max_length' => $this->_constraints['nomDocument']['maxlength'],
+            ->add('nomDocument', TextType::class, [
+                'max_length' => $this->constraints['nomDocument']['maxlength'],
                 'required' => true,
                 'label' => 'Nom du document',
-                'attr' => ['class' => $this->_constraints['nomDocument']['class']],
+                'attr' => ['class' => $this->constraints['nomDocument']['class']],
             ])
             ->add('typeDocument', EntityType::class, [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property' => 'libelle',
-                    'required' => true,
-                    'label' => 'Type de document',
-                    'empty_value' => ' - ',
-                    'attr' => ['class' => $this->_constraints['typeDocument']['class']],
-                    'query_builder' => function (EntityRepository $er) {
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'required' => true,
+                'label' => 'Type de document',
+                'empty_value' => ' - ',
+                'attr' => ['class' => $this->constraints['typeDocument']['class']],
+                'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                            ->leftJoin('ref.codes', 'codes')
+                        ->leftJoin('ref.codes', 'codes')
                             ->where('codes.label = :etat')
-                            ->setParameter('etat', 'DOCUMENT_CONTRACTUALISATION_TYPE')
-                            ->orderBy('ref.order', 'ASC')
-                        ;
-                    },
+                        ->setParameter('etat', 'DOCUMENT_CONTRACTUALISATION_TYPE')
+                        ->orderBy('ref.order', 'ASC')
+                    ;},
             ])
-            ->add('dateRenouvellement', 'genemu_jquerydate', [
+            ->add('dateRenouvellement', DateType::class, [
                 'required' => false,
                 'label' => 'Date de renouvellement',
                 'widget' => 'single_text',
@@ -66,7 +74,7 @@ class ContractualisationType extends AbstractType
             ->add('archiver', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Archiver le document ?',
-                'attr' => ['class' => 'checkbox'],//array('class' => $this->_constraints['archiver']['class'] )
+                'attr' => ['class' => 'checkbox'],
             ]);
     }
 

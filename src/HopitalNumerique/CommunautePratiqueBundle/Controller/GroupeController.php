@@ -69,7 +69,7 @@ class GroupeController extends Controller
             $cpArticle = $currentDomaine->getCommunautePratiqueArticle();
         }
 
-        if ('anon.' != $user) {
+        if ($user instanceof User) {
             $inscription = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
 
             if ($inscription->hasInformationManquante($user) || !$user->isInscritCommunautePratique()) {
@@ -180,7 +180,7 @@ class GroupeController extends Controller
 
                 /** @var User $animateur */
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
-                    $destinataires[$animateur->getNom()] = $animateur->getEmail();
+                    $destinataires[$animateur->getPrenomNom()] = $animateur->getEmail();
                 }
 
                 $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();

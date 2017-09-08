@@ -73,7 +73,7 @@ class UserManager extends BaseManager
         $idAmbassadeur = 2;
 
         //Récupération des questionnaires et users
-        $questionnaireByUser = $this->managerReponse->reponseExiste($idExpert, $idAmbassadeur);
+        $questionnaireByUser = $this->managerReponse->reponseExiste();
 
         $aujourdHui = new \DateTime('now');
         $contractLimitDate = $aujourdHui->add(new \DateInterval('P45D'));
@@ -442,17 +442,16 @@ class UserManager extends BaseManager
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param int                                             $nombreMembres Nombre de membres à retourner
-     * @param Reference                                       $civilite      (optionnel) Civilité
-     * @param array<\HopitalNumerique\UserBundle\Entity\User> $ignores       (optionnel) Liste d'utilisateurs à ignorer
+     * @param int         $nombreMembres
+     * @param User[]|null $ignores
      *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     * @return User[]
      */
-    public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
+    public function findCommunautePratiqueRandomMembres($nombreMembres, array $ignores = null)
     {
         $domaine = $this->currentDomaine->get();
 
-        return $this->getRepository()->findCommunautePratiqueRandomMembres($domaine, $nombreMembres, $civilite, $ignores);
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($domaine, $nombreMembres, $ignores);
     }
 
     /**

@@ -1,0 +1,78 @@
+{% trans_default_domain 'widget' %}
+{% if data is not empty %}
+    <div id="survey-widget">
+        <div class="widget-description">
+            {{ 'Module_moncompte_services_questionnaires'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+        </div>
+
+        <table class="widget-table account-table table default">
+            <thead>
+            <tr>
+                <th>{{ 'survey.table.title'|trans }}</th>
+                <th width="140">{{ 'survey.table.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+                <tr class="parent-row">
+                    <td>
+                        {% if item.responses is empty %}
+                            {{ item.survey.update|date('d/m/y') }}
+                            -
+                        {% endif %}
+                        {% if item.survey.actions.show is defined %}
+                            <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }}>{{ item.survey.name }}</a>
+                        {% else %}
+                            {{ item.survey.name }}
+                        {% endif %}
+                    </td>
+                    <td class="actions-column">
+                        <div class="btn-group">
+                            {% if item.survey.actions.show is defined %}
+                                <a href="{{ item.survey.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }} class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            {% endif %}
+                            {% if item.survey.actions.delete is defined %}
+                                <a href="{{ item.survey.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            {% endif %}
+                            {% if item.survey.actions.add is defined %}
+                                <a href="{{ item.survey.actions.add }}" class="btn btn-sm btn-success" title="{{ 'survey.action.add'|trans }}">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% for response in item.responses %}
+                    <tr>
+                        <td>
+                            {{ response.update|date('d/m/y') }}
+                            -
+                            <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }}>{{ response.name }}</a>
+                        </td>
+                        <td class="actions-column">
+                            <div class="btn-group">
+                                <a href="{{ response.actions.show }}" {{ not item.sameDomain ? "target='_blank'" }} class="btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ response.actions.delete }}" class="btn btn-sm btn-danger delete-survey-btn" title="{{ 'survey.action.delete'|trans }}">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $('#survey-widget').find('.delete-survey-btn').on('click', function () {
+            return confirm('{{ 'survey.delete.confirm'|trans }}');
+        });
+    </script>
+{% endif %}

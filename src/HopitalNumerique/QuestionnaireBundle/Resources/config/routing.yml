@@ -1,7 +1,7 @@
 #Questionnaire
 
 hopitalnumerique_questionnaire_list:
-    path:  /compte-hn/questionnaires
+    path:  /mon-compte/questionnaires
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:list"}
     methods: GET
 
@@ -35,7 +35,7 @@ hopitalnumerique_questionnaire_exportCSV_questionnaire:
         id: \d+
 #---Plugin pour les WYSIWYG
 hopitalnumerique_questionnaire_get_questionnaires:
-    path:  /admin//questionnaire/getQuestionnaires
+    path:  /admin/questionnaire/getQuestionnaires
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:getQuestionnaires" }
 #---Front-office
 hopitalnumerique_questionnaire_edit_front_gestionnaire:
@@ -61,7 +61,7 @@ hopitalnumerique_questionnaire_edit:
 
 # Front-office
 hopitalnumerique_questionnaire_edit_front:
-    path:  /compte-hn/questionnaire/edit/{user}/{questionnaire}/{occurrence}
+    path:  /mon-compte/questionnaire/edit/{user}/{questionnaire}/{occurrence}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1, occurrence: null }
     requirements:
         user: \d+
@@ -111,7 +111,7 @@ hopitalnumerique_questionnaire_question_reorder:
         _method: GET|POST
 #---Template file download
 hopitalnumerique_questionnaire_question_download_template:
-    path: /compte-hn/questionnaire/template/{question}
+    path: /mon-compte/questionnaire/template/{question}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:downloadTemplateFile" }
 
 #Réponse
@@ -127,6 +127,10 @@ hopitalnumerique_reponse_deleteAll:
     requirements:
         user: \d+
         questionnaire: \d+
+
+hopitalnumerique_reponse_delete:
+    path: /questionnaire/delete/{survey}/{entry}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:delete", entry: null }
 
 hopitalnumerique_reponse_deleteAllByQuestionnaire:
     path: /admin/questionnaire/reponse/deleteAllByQuestionnaire/{id}.{_format}

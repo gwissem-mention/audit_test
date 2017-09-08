@@ -39,7 +39,10 @@ class RechercheParcoursGestionGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
-        $this->addActionButton(new Action\EditButton('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit'));
+        $this->addActionButton(
+            (new Action\EditButton('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit'))
+            ->setRouteParametersMapping(['id' => 'rechercheParcoursGestion'])
+        );
         $this->addActionButton(new Action\FilsButton('hopital_numerique_recherche_parcours_homepage'));
     }
 

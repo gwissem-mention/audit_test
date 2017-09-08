@@ -35,21 +35,33 @@ class CommentaireRepository extends EntityRepository
      */
 
     /**
-     * @param Domaine $domaine
+     * @param Domaine[] $domains
      *
      * @return array
      */
-    public function getLatestCommentsCount(Domaine $domaine)
+    public function getLatestCommentsCount($domains)
     {
-        return $this->createQueryBuilder('c')
+        $qb = $this->createQueryBuilder('c');
+
+        return $qb
             ->select('COUNT(c.id)')
-            ->leftJoin('c.groupe', 'g')
-            ->leftJoin('g.domaine', 'd', Join::WITH, 'd.id = :domaine')
-            ->setParameter('domaine', $domaine)
+            ->join('c.groupe', 'g')
+            ->join(
+                'g.domaine',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->andWhere('c.dateCreation >= :date')
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P30D')))
 
-            ->getQuery()->getSingleScalarResult()
+            ->getQuery()
+            ->getSingleScalarResult()
         ;
     }
 }

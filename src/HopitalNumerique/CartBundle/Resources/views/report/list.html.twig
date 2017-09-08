@@ -1,0 +1,113 @@
+{% trans_default_domain 'cart' %}
+<div class="panel panel-default">
+    <div class="panel-heading custom-panel-heading">
+        <div class="panel-title">
+            <i class="icon report-list-icon"></i>
+            {% include '@NewAccount/widget/extension/badge_number_extension.html.twig' with {'number': reports|length} %}
+            {{ 'list.title'|trans }}
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table report-list account-table">
+            <thead>
+            <tr>
+                <th>{{ 'list.header.name'|trans }}</th>
+                <th>{{ 'list.header.createdAt'|trans }}</th>
+                <th>{{ 'list.header.updatedAt'|trans }}</th>
+                <th>{{ 'list.header.itemsCount'|trans }}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for report in reports %}
+                <tr class="report-list-line" data-report-id="{{ report.id }}">
+                    <td class="report-list-line-title">
+                        {% if reportShareMessages[report.id] is not null %}
+                            <span class="share-tooltip" title="{{ reportShareMessages[report.id] }}">
+                                <i class="fa fa-share"></i>
+                            </span>
+                        {% endif %}
+
+                        {% if report.sharedBy is not null and report.sharedBy.report is not null %}
+                            <span class="share-tooltip" title="{{ 'list.copied_by'|trans }} {{ report.sharedBy.report.owner.nomPrenom }}">
+                                <i class="fa fa-copy"></i>
+                            </span>
+                        {% endif %}
+
+                        <a href="{{ path('hopital_numerique_cart_report_item_get', {'report': report.id}) }}" class="report-details">
+                            {{ report.name }}
+                        </a>
+
+                        {% if reportStatuses[report.id] is not null %}
+                            <i class="{{ reportStatuses[report.id] }}"></i>
+                        {% endif %}
+                    </td>
+                    <td data-order="{{ report.createdAt.timestamp }}">{{ report.createdAt|date('d/m/Y') }}</td>
+                    <td data-order="{{ report.updatedAt.timestamp }}">{{ report.updatedAt|date('d/m/Y') }}</td>
+                    <td>{{ report.items|length }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            {% spaceless %}
+                                <a
+                                        href="{{ path('hopital_numerique_cart_report_factory_get', {'report': report.id}) }}"
+                                        data-add-do-report-uri="{{ path('hopital_numerique_cart_report_item_add', {'report': report.id}) }}"
+                                        class="btn btn-info btn-sm report-edit"
+                                        title="{{ 'list.actions.edit.title'|trans|e }}"
+                                >
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </a>
+                                <a
+                                        href="{{ path('hopital_numerique_cart_report_download', {'report': report.id}) }}"
+                                        class="btn btn-success btn-sm"
+                                        title="{{ 'list.actions.download.title'|trans|e }}"
+                                >
+                                    <i class="fa fa-download"></i>
+                                </a>
+                                <a
+                                        href="{{ path('hopital_numerique_cart_report_send', {'report': report.id}) }}"
+                                        class="btn btn-primary btn-sm report-send"
+                                        title="{{ 'list.actions.send.title'|trans|e }}"
+                                >
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                                <a
+                                        href="{{ path('hopital_numerique_cart_report_get_shares', {'report': report.id}) }}"
+                                        class="btn btn-warning btn-sm report-share"
+                                        title="{{ 'list.actions.share.title'|trans|e }}"
+                                >
+                                    <i class="fa fa-exchange"></i>
+                                </a>
+                                <a
+                                        href="{{ path('hopital_numerique_cart_report_remove', {'report': report.id}) }}"
+                                        class="btn btn-danger btn-sm report-remove"
+                                        data-confirm="{{ 'list.actions.remove.confirm'|trans }}"
+                                        title="{{ 'list.actions.remove.title'|trans|e }}"
+                                >
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            {% endspaceless %}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">
+                        {{ 'list.empty'|trans }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="report-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+{{ include('@HopitalNumeriqueCart/report/partials/shareReportModalPrototype.html.twig') }}
+{{ include('@HopitalNumeriqueCart/report/partials/sendReportModalPrototype.html.twig') }}
+
+{{ include('@HopitalNumeriqueCart/report/partials/detailsModalPrototype.html.twig') }}

@@ -2,16 +2,18 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Form;
 
-use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
-use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
-use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use HopitalNumerique\UserBundle\Manager\UserManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\EditGuidedSearchConfigCommand;
 
 class RechercheParcoursGestionType extends AbstractType
 {
@@ -43,10 +45,9 @@ class RechercheParcoursGestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $connectedUser = $this->_userManager->getUserConnected();
-        $isCreation = (null === $builder->getData()->getId());
 
         $builder
-            ->add('nom', TextType::class, [
+            ->add('name', TextType::class, [
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Nom',
@@ -63,25 +64,17 @@ class RechercheParcoursGestionType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 },
             ])
-            ->add('typePublication', 'genemu_jqueryselect2_entity', [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'required' => true,
-                'multiple' => true,
+            ->add('publicationsType', CollectionType::class, [
+                'type' => RechercheParcoursGestionPublicationTypeType::class,
+                'required' => false,
                 'label' => 'Type de publication à afficher',
-                'empty_value' => ' - ',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                        ->leftJoin('ref.parents', 'parent')
-                        ->leftJoin('ref.codes', 'codes')
-                        ->where('codes.label = :code')
-                        ->andWhere('parent.id IS NULL')
-                        ->setParameter('code', 'CATEGORIE_OBJET');
-                },
+            ])
+            ->add('broadcastDate', DateType::class, [
+                'widget' => 'single_text',
             ])
         ;
-        if (!$isCreation) {
-            $domaines = $this->entity->getEntityDomainesCommunsWithUser($builder->getData(), $connectedUser);
+        if ($builder->getData()->update) {
+            $domaines = $this->entity->getDomainesCommunsWithUser($builder->getData()->domaines, $connectedUser);
             $references = $this->referenceManager->findByDomaines($domaines, true, null, null, true);
 
             $builder
@@ -112,7 +105,7 @@ class RechercheParcoursGestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RechercheParcoursGestion::class,
+            'data_class' => EditGuidedSearchConfigCommand::class,
         ]);
     }
 

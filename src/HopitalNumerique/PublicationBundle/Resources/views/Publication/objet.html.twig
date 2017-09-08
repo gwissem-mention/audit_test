@@ -40,12 +40,19 @@
 
     <div id="publication">
         <div class="hidden-pdf">
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="text-right">
+                    {% if contenu is defined %}
+                        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id}) }}
+                    {% else %}
+                        {% if not objet.article %}
+                            {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'objet', objectId: objet.id}) }}
+                        {% endif %}
+                    {% endif %}
                     {% if showCog is defined and showCog == true %}
                         <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':(contenu is defined ? '2' :'1'), 'entityId':(contenu is defined ? contenu.id : objet.id), 'redirect': 'false' })}}" class="open-popin-referencement fancybox.ajax btn btn-sm btn-default" title="Référencer cette publication"><i class="fa fa-cog"></i></a>
                     {% endif %}
@@ -250,12 +257,12 @@
             <div class="download-prod-bloc col-md-6 hidden-pdf">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(1) is not null %}
-                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}"> <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(2) is not null %}
-                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '2'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '2'})}}"> <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>
@@ -303,12 +310,14 @@
                 </div>
             </div>
         {% endif %}
-
         {% if contenu is defined %}
-            {% if contenu.objet.dateParution or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
+            {% if contenu.dateCreation or contenu.dateModification or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
-                    {% if contenu.objet.dateParution %}
-                        Date de parution : {{contenu.objet.dateParution}}<br/>
+                    {% if contenu.dateCreation %}
+                        {{ 'object.release_date'|trans({'%date%': contenu.dateCreation|date('d/m/Y')}) }}<br/>
+                    {% endif %}
+                    {% if contenu.dateModification %}
+                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': contenu.objet.id}) }}" style="cursor: pointer;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': contenu.dateModification|date('d/m/Y')}) }}</a><br/>
                     {% endif %}
                     {% if contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument %}
                         Source du document : {{contenu.objet.fichierModifiable.sourceDocument}}
@@ -316,10 +325,13 @@
                 </div>
             {% endif %}
         {% else %}
-            {% if objet.dateParution or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
+            {% if objet.releaseDate or objet.dateModification or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
                 <div class="col-md-12" id="date-source">
-                    {% if objet.dateParution %}
-                        Date de parution : {{objet.dateParution}}<br/>
+                    {% if objet.releaseDate %}
+                        {{ 'object.release_date'|trans({'%date%': objet.releaseDate|date('d/m/Y')}) }}<br/>
+                    {% endif %}
+                    {% if objet.dateModification %}
+                        <a class="fancybox fancybox.ajax" href="{{ path('hopital_numerique_publication_popin_object_updates', {'object': objet.id}) }}" style="cursor: pointer; color: #333;" data-toggle="tooltip" title="{{ 'object.update_details'|trans }}">{{ 'object.last_update'|trans({'%date%': objet.dateModification|date('d/m/Y')}) }}</a><br/>
                     {% endif %}
                     {% if objet.fichierModifiable and objet.fichierModifiable.sourceDocument %}
                         Source du document : {{objet.fichierModifiable.sourceDocument}}
@@ -343,39 +355,6 @@
 
         <div class="clearfix"></div>
     </div>
-
-    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) and ambassadeurs|length > 0 %}
-        <div id="ambassadeurs" class="closed">
-            <div class="content" style="display:none">
-                <h3 class="violet">Les ambassadeurs</h3>
-                {% for ambassadeur in ambassadeurs %}
-                    <div class="ambassadeur">
-                        <p class="nom">{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</p>
-                        <p class="etab">
-                            {% if ambassadeur.etablissementRattachementSante %}
-                                {{ambassadeur.etablissementRattachementSante.nom}}
-                            {% else %}
-                                {{ambassadeur.autreStructureRattachementSante}}
-                            {% endif %}
-                        </p>
-                        <p class="fonction">
-                            {% if ambassadeur.fonctionDansEtablissementSante %}
-                                {{ambassadeur.fonctionDansEtablissementSante}}
-                            {% else %}
-                                {{ambassadeur.fonctionStructure}}
-                            {% endif %}
-                        </p>
-                        <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau_avec_objet',{'ambassadeur':ambassadeur.id, 'prod':objet.id})}}">Solliciter cet ambassadeur</a>
-                    </div>
-                {% else %}
-                    <div class="ambassadeur">
-                        - Aucun ambassadeur référencé sur cette production -
-                    </div>
-                {% endfor %}
-                <a href="{{ path('hopital_numerique_registre_homepage') }}" class="readmore"><i class="common-sprite common-sprite-arrow"></i>Accès à l'annuaire des ambassadeurs</a>
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% macro sousChapitres(contenu) %}
@@ -409,24 +388,20 @@
                     <div class="item" data-pos="{{count}}" >
                         {% if key != 'forum' %}
                             <h4>
-                                {% if item['objet'] is not null %}
-                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
-                                    {% else %}
-                                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
-                                        {% endif %}
-                                        {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
-                                            <style type="text/css">
-                                                #autresResultats .top .results p{height: 70px;}
-                                            </style>
-                                            {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
-                                            <i class="fa fa-share fa-flip-vertical"></i><span style="font-size:13px;" class="gris"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</span>
-                                        {% else %}
-                                            <style type="text/css">
-                                                #autresResultats .top .results p{height: 85px;}
-                                            </style>
-                                            {{item['titre']}}
-                                        {% endif %}
-                                    </a>
+                                <a href="{% if item['objet'] is not null %}{{ path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']}) }}{% else %}{{ path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']}) }}{% endif %}">
+                                {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
+                                    <style type="text/css">
+                                        #autresResultats .top .results p { height: 70px; }
+                                    </style>
+                                    {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
+                                    <i class="fa fa-share fa-flip-vertical"></i><span style="font-size:13px;" class="gris"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</span>
+                                {% else %}
+                                    <style type="text/css">
+                                        #autresResultats .top .results p{ height: 85px; }
+                                    </style>
+                                    {{item['titre']}}
+                                {% endif %}
+                                </a>
                             </h4>
 
                             <p>{{ item['resume']|trim }}</p>
@@ -465,3 +440,7 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% block helpBlock %}
+    {{ contextualNavigationHelpBlock(contenu is defined ? contenu : objet) }}
+{% endblock %}

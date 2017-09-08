@@ -66,7 +66,7 @@ HopitalNumeriqueInterventionBundle_InterventionEvaluation.relance = function(int
     {
         if (reponse)
         {
-            var evaluationEnvoiRelanceUrl = '/compte-hn/intervention/demande/' + interventionDemandeId + '/evaluation/relance';
+            var evaluationEnvoiRelanceUrl = '/mon-compte/intervention/demande/' + interventionDemandeId + '/evaluation/relance';
 
             $.ajax(evaluationEnvoiRelanceUrl, {
                 success:function() {

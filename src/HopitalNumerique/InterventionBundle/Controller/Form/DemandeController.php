@@ -8,13 +8,15 @@ use HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition\CmsiTyp
 use HopitalNumerique\InterventionBundle\Form\InterventionDemande\EtablissementType;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur des formulaires de demandes d'intervention.
  */
-class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\DemandeController
+class DemandeController extends Controller
 {
     /**
      * @var User Utilisateur connecté actuellement
@@ -29,9 +31,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
     /**
      * Action pour la création d'une nouvelle demande d'intervention.
      *
-     * @param User $ambassadeur L'ambassadeur de la demande d'intervention
+     * @param User       $ambassadeur L'ambassadeur de la demande d'intervention
+     * @param Objet|null $prod
      *
-     * @return Response La vue du formulaire de création d'une demande d'intervention
+     * @return RedirectResponse|Response La vue du formulaire de création d'une demande d'intervention
      */
     public function nouveauAction(User $ambassadeur, Objet $prod = null)
     {
@@ -49,15 +52,9 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
 
         if ($this->utilisateurConnecte->hasRoleCmsi()) {
-            $interventionDemandeFormulaire = $this->createForm(
-                \HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType::class,
-                $this->interventionDemande
-            );
+            $interventionDemandeFormulaire = $this->createForm(\HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType::class, $this->interventionDemande);
         } else {
-            $interventionDemandeFormulaire = $this->createForm(
-                EtablissementType::class,
-                $this->interventionDemande
-            );
+            $interventionDemandeFormulaire = $this->createForm(EtablissementType::class, $this->interventionDemande);
         }
 
         if ($this->gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)) {
@@ -79,7 +76,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      *
      * @param Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
      *
-     * @return bool VRAI ssi le formulaire est validé
+     * @return bool vrai ssi le formulaire est validé
      */
     private function gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)
     {
@@ -93,14 +90,14 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
                 $this->envoieCourrielsNouvelleDemande();
 
-                $this->get('session')->getFlashBag()->add(
+                $this->addFlash(
                     'success',
                     'La demande d\'intervention a été enregistrée et sera étudiée.'
                 );
 
                 return true;
             } else {
-                $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+                $this->addFlash('danger', 'Le formulaire n\'est pas valide.');
             }
         }
 
@@ -134,7 +131,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
                 ['region' => $this->utilisateurConnecte->getRegion(), 'enabled' => true]
             );
             if ($cmsi == null) {
-                $this->get('session')->getFlashBag()->add(
+                $this->addFlash(
                     'danger',
                     'Un CMSI pour la région de l\'ambassadeur choisi doit exister pour créer une demande d\'intervention.'
                 );
@@ -143,26 +140,14 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             }
 
             $this->interventionDemande->setReferent($this->utilisateurConnecte);
-
-            $this->interventionDemande->setInterventionInitiateur(
-                $this->get('hopitalnumerique_intervention.manager.intervention_initiateur')
-                     ->getInterventionInitiateurEtablissement()
-            );
-
-            $this->interventionDemande->setInterventionEtat(
-                $this->get('hopitalnumerique_intervention.manager.intervention_etat')
-                     ->getInterventionEtatDemandeInitiale()
-            );
+            $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurEtablissement()
+            );$this->interventionDemande->setInterventionEtat($this->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatDemandeInitiale());
         }
 
         $this->interventionDemande->setCmsi($cmsi);
 
-        if ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null) {
-            $this->interventionDemande->setDirecteur(
-                $this->get('hopitalnumerique_user.manager.user')->getDirecteur([
-                    'etablissementRattachementSante' => $this->interventionDemande->getReferent()
-                        ->getEtablissementRattachementSante(),
-                    'enabled' => true,
+        if ($this->interventionDemande->getReferent()->getOrganization() != null) {
+            $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(['organization' => $this->interventionDemande->getReferent()->getOrganization(), 'enabled' => true,
                 ])
             );
         }
@@ -178,39 +163,18 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
     private function envoieCourrielsNouvelleDemande()
     {
         if ($this->utilisateurConnecte->hasRoleCmsi()) {
-            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')
-                 ->envoiCourrielDemandeAcceptationAmbassadeur(
-                     $this->interventionDemande->getAmbassadeur(),
-                     $this->generateUrl(
-                         'hopital_numerique_intervention_demande_voir',
-                         ['id' => $this->interventionDemande->getId()],
-                         true
-                     )
-                 )
-            ;
-
-            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielAlerteReferent(
-                $this->interventionDemande->getReferent()
-            );
+            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationAmbassadeur($this->interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_demande_voir', ['id' => $this->interventionDemande->getId()], true
+            )
+                )
+            ;$this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielAlerteReferent($this->interventionDemande->getReferent());
         } else { // Établissement par défaut
-            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielCreation(
-                $this->utilisateurConnecte
-            );
-            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')
-                 ->envoiCourrielDemandeAcceptationCmsi(
-                     $this->interventionDemande->getCmsi(),
-                     $this->generateUrl(
-                         'hopital_numerique_intervention_demande_voir',
-                         ['id' => $this->interventionDemande->getId()],
-                         true
-                     )
-                 )
-            ;
+            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielCreation($this->utilisateurConnecte
+            );$this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationCmsi($this->interventionDemande->getCmsi(), $this->generateUrl('hopital_numerique_intervention_demande_voir', ['id' => $this->interventionDemande->getId()], true));
         }
 
         // Envoyer le courriel si le référent n'a pas d'ES
         if (null !== $this->interventionDemande->getReferent()
-            && null === $this->interventionDemande->getReferent()->getEtablissementRattachementSante()
+            && null === $this->interventionDemande->getReferent()->getOrganization()
         ) {
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')
                  ->envoiCourrielSollicitationSansEtablissement($this->interventionDemande->getReferent());
@@ -230,20 +194,14 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         $this->interventionDemande = $id;
         $interventionDemandeFormulaire = null;
 
-        if (($this->utilisateurConnecte->hasRoleCmsi()
-            && ($this->interventionDemande->getInterventionEtat()->getId()
-                == InterventionEtat::getInterventionEtatDemandeInitialeId()
-            || $this->interventionDemande->getInterventionEtat()->getId()
-                == InterventionEtat::getInterventionEtatAttenteCmsiId()))
-        ) {
-            $interventionDemandeFormulaire = $this->createForm(
-                CmsiType::class,
-                $this->interventionDemande
-            );
+        if (($this->utilisateurConnecte->hasRoleCmsi() && ($this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId() || $this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId()))
+        ) {    $interventionDemandeFormulaire = $this->createForm(CmsiType::class, $this->interventionDemande);
         }
 
         if ($interventionDemandeFormulaire == null
-            || !$this->get('hopitalnumerique_intervention.manager.intervention_demande')
+            || !$this->get(
+                'hopitalnumerique_intervention.manager.intervention_demande'
+            )
                 ->peutEditer($this->interventionDemande)
         ) {
             $this->get('session')->getFlashBag()->add(

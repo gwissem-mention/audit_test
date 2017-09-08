@@ -208,7 +208,7 @@ class Module
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
      *
-     * @GRID\Column(field="formateur.nom")
+     * @GRID\Column(field="formateur.lastname")
      */
     protected $formateur;
 

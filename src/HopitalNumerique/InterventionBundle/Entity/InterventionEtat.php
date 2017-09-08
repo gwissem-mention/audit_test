@@ -37,46 +37,62 @@ class InterventionEtat
      * @var int ID de l'état Demande initiale
      */
     private static $INTERVENTION_ETAT_DEMANDE_INITIALE = 14;
+    const INTERVENTION_ETAT_DEMANDE_INITIALE = 14;
     /**
      * @var int ID de l'état Mise en attente par le CMSI
      */
     private static $INTERVENTION_ETAT_ATTENTE_CMSI = 15;
+    const INTERVENTION_ETAT_ATTENTE_CMSI = 15;
     /**
      * @var int ID de l'état Refusé par le CMSI
      */
     private static $INTERVENTION_ETAT_REFUS_CMSI = 16;
+    const INTERVENTION_ETAT_REFUS_CMSI = 16;
     /**
      * @var int ID de l'état Accepté par le CMSI
      */
     private static $INTERVENTION_ETAT_ACCEPTATION_CMSI = 17;
+    const INTERVENTION_ETAT_ACCEPTATION_CMSI = 17;
     /**
      * @var int ID de l'état Accepté par le CMSI - 1ère relance ambassadeur
      */
     private static $INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_1 = 18;
+    const INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_1 = 18;
     /**
      * @var int ID de l'état Accepté par le CMSI - 2nde relance ambassadeur
      */
     private static $INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_2 = 19;
+    const INTERVENTION_ETAT_ACCEPTATION_CMSI_RELANCE_2 = 19;
     /**
      * @var int ID de l'état Refusé par l'ambassadeur
      */
     private static $INTERVENTION_ETAT_REFUS_AMBASSADEUR = 20;
+    const INTERVENTION_ETAT_REFUS_AMBASSADEUR = 20;
     /**
      * @var int ID de l'état Accepté par l'ambassadeur
      */
     private static $INTERVENTION_ETAT_ACCEPTATION_AMBASSADEUR = 21;
+    const INTERVENTION_ETAT_ACCEPTATION_AMBASSADEUR = 21;
     /**
      * @var int ID de l'état Terminée
      */
     private static $INTERVENTION_ETAT_TERMINE = 22;
+    const INTERVENTION_ETAT_TERMINE = 22;
     /**
      * @var int ID de l'état Clôturée
      */
     private static $INTERVENTION_ETAT_CLOTURE = 23;
+    const INTERVENTION_ETAT_CLOTURE = 23;
+
+    const INTERVENTION_ETAT_REFUSED = 26;
+
+    const INTERVENTION_ETAT_OPENED = 28;
+
     /**
      * @var int ID de l'état Demande annulée
      */
     private static $INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT = 309;
+    const INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT = 309;
 
     /**
      * Retourne l'ID de la référence correspondant à Demande initiale.

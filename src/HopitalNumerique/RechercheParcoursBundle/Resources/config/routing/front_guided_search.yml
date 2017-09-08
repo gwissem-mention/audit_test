@@ -1,0 +1,33 @@
+hopital_numerique_guided_search_show:
+    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:show }
+
+hopital_numerique_guided_search_show_guided_search:
+    path: /{guidedSearchReference}-{guidedSearchReferenceAlias}/guided-search/{guidedSearch}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:showGuidedSearch }
+
+hopital_numerique_guided_search_continue_guided_search:
+    path: /continue/{guidedSearchReference}-{guidedSearchReferenceAlias}/guided-search/{guidedSearch}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:continue }
+
+
+hopital_numerique_guided_search_step:
+    path: /{guidedSearch}/{guidedSearchReference}-{guidedSearchReferenceAlias}/{parentReference}-{alias}/{subReference}-{subAlias}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:step, subReference: null, subAlias: null }
+
+hopital_numerique_guided_search_step_analyse:
+    path: /analyse/{guidedSearchStep}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:analyse }
+
+hopital_numerique_guided_search_step_share:
+    path: /share/{guidedSearchStep}/{redirectPrevious}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:share, redirectPrevious: false }
+    methods: POST
+
+hopital_numerique_guided_search_delete:
+    path: /{guidedSearch}/delete
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:delete }
+
+hopital_numerique_guided_search_send:
+    path: /{guidedSearch}/send
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front\GuidedSearch:send }

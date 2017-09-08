@@ -1,0 +1,47 @@
+body {
+    font-size: 13px;
+}
+
+.header {
+    height: 125px;
+}
+
+.header h1 {
+    font-size: 16px;
+    color: #000;
+    font-weight: normal;
+}
+
+.header img {
+    max-width: 100%;
+}
+
+.header,
+.header img {
+    padding-top: 10px;
+}
+
+.header .text-right {
+    margin-bottom: 10px;
+    display: block;
+    text-align: right;
+}
+
+.footer {
+    padding-top: 30px;
+    height: 80px;
+    font-size: 11px;
+}
+
+h2, fieldset legend {
+    color: #6F3596;
+}
+
+table.table {
+    page-break-inside: avoid !important;
+}
+
+table.table thead th {
+    font-size: 0.85em;
+    vertical-align: top;
+}

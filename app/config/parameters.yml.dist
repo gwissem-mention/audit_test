@@ -76,3 +76,4 @@ parameters:
     search_engine_app_source_path: http://127.0.0.1:3000
     search_engine_aggregations: true
 
+    resource_domain_id: 17

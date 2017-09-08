@@ -2,6 +2,7 @@
 
 namespace Nodevo\AclBundle\Manager;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\AclBundle\Entity\Ressource;
 use Nodevo\RoleBundle\Entity\Role;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -173,7 +174,7 @@ class AclManager extends BaseManager
             $rolesByRole[$role->getRole()] = $role;
         }
 
-        if ($user === 'anon.') {
+        if (!$user instanceof User) {
             $roles = $this->getRolesOfUser(['ROLE_ANONYME_10'], $rolesByRole);
         } else {
             $roles = $this->getRolesOfUser($user->getRoles(), $rolesByRole);

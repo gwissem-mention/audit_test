@@ -1,0 +1,26 @@
+request:
+    title: Mes demandes d'interventions
+    empty: - Aucune demande en cours -
+    label: Le %date% : %state%
+    open: 'Nb interventions ouvertes non évaluées :'
+    accepted: 'Nb interventions acceptées par le CMSI :'
+    ambassadorsCount: 'Nb interventions acceptées par l''ambassadeur :'
+    initial: 'Nb interventions initiales :'
+intervention:
+    title: Mes interventions
+    table:
+        title:
+            new: Nouvelles demandes
+            processed: Demandes traitées
+        actions: Actions
+    action:
+        show: Afficher la demande d'intervention
+        evaluation: Voir l'évaluation
+        evaluate: Évaluer la demande
+        waiting: En attente d'évaluation
+        relaunch: Envoyer une relance
+        edit: Éditer la demande
+    relaunch:
+        confirm: Envoyer une relance pour cette intervention ?
+    ambassador: Ambassadeur
+    evaluation: Évaluation

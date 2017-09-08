@@ -1,0 +1,36 @@
+{% trans_default_domain 'cart' %}
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::REFERENCE_COLUMN') in report.columns and item.references|length > 0 %}
+
+    {% import _self as tool %}
+
+    <fieldset>
+        <legend>{{ 'generator.references.title'|trans }}</legend>
+
+        <ul>
+            {% for branch in item.references %}
+                {{ tool.referenceTree(branch) }}
+            {% endfor %}
+        </ul>
+    </fieldset>
+
+
+    {% macro referenceTree(branch) %}
+        {% import _self as tool %}
+        <li>
+            {% if branch.entityHasReference and branch.entityHasReference.primary %}
+                *
+            {% endif %}
+            {{ branch.reference.libelle }}
+
+            {% if branch.enfants|length %}
+                <ul>
+                    {% for child in branch.enfants %}
+                        {{ tool.referenceTree(child) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endmacro %}
+
+{% endif %}

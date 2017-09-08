@@ -2,29 +2,28 @@
 
 namespace HopitalNumerique\UserBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
-use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
-use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-//Asserts Stuff
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use APY\DataGridBundle\Grid\Mapping as GRID;
-use Gedmo\Mapping\Annotation as Gedmo;
-//Tools
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Gedmo\Mapping\Annotation as Gedmo;
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\Collection;
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
+use Dmishh\SettingsBundle\Entity\SettingsOwnerInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 
 /**
  * User.
@@ -40,8 +39,7 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *          column=@ORM\Column(
  *              name     = "usr_username",
  *              type     = "string",
- *              length   = 50,
- *              options  = {"comment" = "Nom utilisateur pour la connexion"}
+ *              length   = 50
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="usernameCanonical",
@@ -49,7 +47,6 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *              name     = "usr_username_canonical",
  *              type     = "string",
  *              length   = 50,
- *              options  = {"comment" = "Pseudonyme canonique"},
  *              unique   = true
  *          )
  *      ),
@@ -57,8 +54,7 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *          column=@ORM\Column(
  *              name     = "usr_email",
  *              type     = "string",
- *              length   = 50,
- *              options  = {"comment" = "Adresse électronique"}
+ *              length   = 50
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="emailCanonical",
@@ -66,15 +62,13 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *              name     = "usr_email_canonical",
  *              type     = "string",
  *              length   = 50,
- *              options  = {"comment" = "Adresse électronique canonique"},
  *              unique   = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="enabled",
  *          column=@ORM\Column(
  *              name     = "usr_enabled",
- *              type     = "boolean",
- *              options  = {"comment" = "L utilisateur est-il activé ?"}
+ *              type     = "boolean"
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="salt",
@@ -82,24 +76,21 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *              name     = "usr_salt",
  *              type     = "string",
  *              length   = 100,
- *              nullable = true,
- *              options  = {"comment" = "Grain de sel de chiffrement du mot de passe"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="password",
  *          column=@ORM\Column(
  *              name     = "usr_password",
  *              type     = "string",
- *              length   = 100,
- *              options  = {"comment" = "Mot de passe"}
+ *              length   = 100
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="lastLogin",
  *          column=@ORM\Column(
  *              name     = "usr_last_login",
  *              type     = "datetime",
- *              nullable = true,
- *              options  = {"comment" = "Date de la dernière connexion"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="confirmationToken",
@@ -107,61 +98,54 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  *              name     = "usr_confirmation_token",
  *              type     = "string",
  *              length   = 50,
- *              nullable = true,
- *              options  = {"comment" = "Jeton de confirmation du compte"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="passwordRequestedAt",
  *          column=@ORM\Column(
  *              name     = "usr_password_requested_at",
  *              type     = "datetime",
- *              nullable = true,
- *              options  = {"comment" = "Date de demande du nouveau mot de passe"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="locked",
  *          column=@ORM\Column(
  *              name     = "usr_locked",
  *              type     = "boolean",
- *              nullable = true,
- *              options  = {"comment" = "Verrouillage de l utilisateur ?"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="expired",
  *          column=@ORM\Column(
  *              name     = "usr_expired",
  *              type     = "boolean",
- *              nullable = true,
- *              options  = {"comment" = "L utilisateur est-il activé ?"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="expiresAt",
  *          column=@ORM\Column(
  *              name     = "usr_expires_at",
  *              type     = "datetime",
- *              nullable = true,
- *              options  = {"comment" = "Date d expiration de l utilisateur"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="credentialsExpired",
  *          column=@ORM\Column(
  *              name     = "usr_credentials_expired",
  *              type     = "boolean",
- *              nullable = true,
- *              options  = {"comment" = "Expiration du mot de passe ?"}
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="credentialsExpireAt",
  *          column=@ORM\Column(
  *              name     = "usr_credentials_expire_at",
  *              type     = "datetime",
- *              nullable = true,
- *              options  = {"comment" = "Date d expiration du mot de passe"}
+ *              nullable = true
  *          )
  *      )
  * })
  */
-class User extends BaseUser
+class User extends BaseUser implements SettingsOwnerInterface
 {
     /**
      * @var int ID de l'état Actif
@@ -187,7 +171,9 @@ class User extends BaseUser
     }
 
     /**
-     * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
+     * @var int
+     *
+     * @ORM\Column(name="usr_id", type="integer")
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -196,12 +182,13 @@ class User extends BaseUser
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="usr_date_inscription", type="datetime", options = {"comment" = "Date inscription"})
+     * @ORM\Column(name="usr_date_inscription", type="datetime")
      */
-    protected $dateInscription;
+    protected $registrationDate;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank(message="Le nom de compte ne peut pas être vide.")
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
@@ -222,6 +209,7 @@ class User extends BaseUser
 
     /**
      * @var string
+     *
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
      *      min = "1",
@@ -230,10 +218,10 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le pseudonyme."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]],custom[onlyLetterNumber]")
-     * @ORM\Column(name="usr_pseudonyme_forum", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
+     * @ORM\Column(name="usr_pseudonyme_forum", type="string", length=14, nullable=true)
      * @Gedmo\Versioned
      */
-    protected $pseudonymeForum;
+    protected $pseudonym;
 
     /**
      * @var string
@@ -253,38 +241,42 @@ class User extends BaseUser
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
      * @Assert\Length(
      *      max = "50",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
      * @Nodevo\Javascript(class="validate[required,maxSize[50]]")
-     * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
+     * @ORM\Column(name="usr_nom", type="string", length=50)
      * @Gedmo\Versioned
      */
-    protected $nom;
+    protected $lastname;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
      * @Assert\Length(
      *      max = "50",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le prénom."
      * )
      * @Nodevo\Javascript(class="validate[required,maxSize[50]]")
-     * @ORM\Column(name="usr_prenom", type="string", length=50, options = {"comment" = "Prénom de l utilisateur"})
+     * @ORM\Column(name="usr_prenom", type="string", length=50)
      * @Gedmo\Versioned
      */
-    protected $prenom;
+    protected $firstname;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})
+     * @ORM\Column(name="usr_nb_visite", type="integer")
      */
-    protected $nbVisites;
+    protected $visitCount;
 
     /**
+     * @var Reference
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      * @Gedmo\Versioned
@@ -294,6 +286,8 @@ class User extends BaseUser
     protected $region;
 
     /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_user_region",
      *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
@@ -303,13 +297,17 @@ class User extends BaseUser
     private $rattachementRegions;
 
     /**
+     * @var Reference
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
-    protected $departement;
+    protected $county;
 
     /**
+     * @var Reference
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="L'état ne peut pas être vide.")
@@ -317,22 +315,6 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $etat;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_titre", referencedColumnName="ref_id")
-     * @Gedmo\Versioned
-     */
-    protected $titre;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_civilite", referencedColumnName="ref_id")
-     * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required]")
-     * @Gedmo\Versioned
-     */
-    protected $civilite;
 
     /**
      * @var string
@@ -345,9 +327,9 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
      * @Gedmo\Versioned
-     * @ORM\Column(name="usr_telephone_direct", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
+     * @ORM\Column(name="usr_telephone_direct", type="string", length=14, nullable=true)
      */
-    protected $telephoneDirect;
+    protected $phoneNumber;
 
     /**
      * @var string
@@ -360,17 +342,17 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
      * @Gedmo\Versioned
-     * @ORM\Column(name="usr_telephone_portable", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
+     * @ORM\Column(name="usr_telephone_portable", type="string", length=14, nullable=true)
      */
-    protected $telephonePortable;
+    protected $cellPhoneNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="usr_contact_autre", type="text", nullable=true, options = {"comment" = "Autre moyen de contacter l utilsateur"})
+     * @ORM\Column(name="usr_contact_autre", type="text", nullable=true)
      * @Gedmo\Versioned
      */
-    protected $contactAutre;
+    protected $otherContact;
 
     /**
      * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeur", mappedBy="user", cascade={"persist", "remove" })
@@ -387,14 +369,16 @@ class User extends BaseUser
      * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
-    protected $statutEtablissementSante;
+    protected $organizationType;
 
     /**
+     * @var Etablissement
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
      * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
      * @Gedmo\Versioned
      */
-    protected $etablissementRattachementSante;
+    protected $organization;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -403,7 +387,7 @@ class User extends BaseUser
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
      * )
      */
-    protected $typeActivite;
+    protected $activities;
 
     /**
      * @var string
@@ -411,14 +395,15 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non
+     *      disponible dans la liste précédente.", maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans
+     *      le Nom de votre structure si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @Gedmo\Versioned
-     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre structure si non disponible dans la liste précédente santé de l utilisateur"})
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true)
      */
-    protected $autreStructureRattachementSante;
+    protected $organizationLabel;
 
     /**
      * @var string
@@ -426,29 +411,31 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "3",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non
+     *      disponible dans la liste précédente.", maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans
+     *      le Nom de votre structure si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
      * @Gedmo\Versioned
-     * @ORM\Column(name="usr_fonction_dans_etablissement", type="string", length=255, nullable=true, options = {"comment" = "Fonction dans l etablissement de santé de l utilisateur"})
+     * @ORM\Column(name="usr_fonction_dans_etablissement", type="string", length=255, nullable=true)
      */
-    protected $fonctionDansEtablissementSante;
+    protected $jobLabel;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_fonction_etablissement_sante", referencedColumnName="ref_id")
      */
-    protected $fonctionDansEtablissementSanteReferencement;
+    protected $jobType;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_profil_etablissement_sante", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
-    protected $profilEtablissementSante;
+    protected $profileType;
 
     /**
+     * @TODO: à supprimer après la migration de usr_nom_structure vers usr_autre_rattachement_sante
      * @var string
      *
      * @Assert\Length(
@@ -458,7 +445,7 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de la structure."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
-     * @ORM\Column(name="usr_nom_structure", type="string", length=255, nullable=true, options = {"comment" = "Nom de la structure de l utilisateur"})
+     * @ORM\Column(name="usr_nom_structure", type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      */
     protected $nomStructure;
@@ -473,12 +460,10 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la fonction de la structure."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
-     * @ORM\Column(name="usr_fonction_strucutre", type="string", length=255, nullable=true, options = {"comment" = "Fonction au sein de la structure"})
+     * @ORM\Column(name="usr_fonction_strucutre", type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      */
     protected $fonctionStructure;
-
-    // v -------- Onglet : Vous êtes dans une autre structure  -------- v
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="ambassadeurs")
@@ -493,20 +478,20 @@ class User extends BaseUser
     /**
      * @var bool
      *
-     * @ORM\Column(name="usr_lock", type="boolean", options = {"comment" = "L utilisateur est-il verrouillé ?"})
+     * @ORM\Column(name="usr_lock", type="boolean")
      */
     protected $lock;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"})
+     * @ORM\Column(name="usr_archiver", type="boolean")
      * @Gedmo\Versioned
      */
     protected $archiver;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist","remove"})
      */
     protected $reponses;
 
@@ -522,7 +507,6 @@ class User extends BaseUser
      */
     protected $refusCandidature;
 
-    // ------- Conditions générales d'utilisations -------
     /**
      * @Nodevo\Javascript(class="validate[required]")
      */
@@ -544,24 +528,23 @@ class User extends BaseUser
      */
     protected $remarque;
 
-    // ------- Ambassadeurs  -------
     /**
      * @Assert\File(
-     *     maxSize = "1000k",
+     *     maxSize = "200k",
      *     mimeTypes = {
      *         "image/gif",
      *         "image/jpeg",
      *         "image/png",
      *     },
-     *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
+     *     mimeTypesMessage = "Choisissez une image"
      * )
      */
-    public $file;
+    protected $file;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true)
      *
      * @Gedmo\Versioned
      */
@@ -574,50 +557,53 @@ class User extends BaseUser
      */
     protected $dateLastUpdate;
 
-    // ------- Dashboards
     /**
      * @var string
      *
-     * @ORM\Column(name="usr_dashboard_front", type="text", options = {"comment" = "Dashboard de l utilisateur"}, nullable=true)
+     * @ORM\Column(name="usr_dashboard_front", type="text", nullable=true)
      */
     protected $dashboardFront;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="usr_dashboard_back", type="text", options = {"comment" = "Dashboard admin de l utilisateur"}, nullable=true)
+     * @ORM\Column(name="usr_dashboard_back", type="text", nullable=true)
      */
     protected $dashboardBack;
 
-    // ------- Interventions -------
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="referent", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="referent",
+                                                                                                     cascade={"persist",
+                                                                                                     "remove" })
      */
     protected $interventionDemandesReferent;
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="ambassadeur", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="ambassadeur",
+                                                                                                     cascade={"persist",
+                                                                                                     "remove" })
      */
     protected $interventionDemandesAmbassadeur;
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="cmsi", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="cmsi",
+                                                                                                     cascade={"persist",
+                                                                                                     "remove" })
      */
     protected $interventionDemandesCmsi;
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="directeur", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="directeur",
+                                                                                                     cascade={"persist",
+                                                                                                     "remove" })
      */
     protected $interventionDemandesDirecteur;
 
     /**
-     * @ORM\Column(name="usr_last_ip_connection", type="text", options = {"comment" = "IP de la dernière connexion de l'utilisateur"}, nullable=true)
+     * @ORM\Column(name="usr_last_ip_connection", type="text", nullable=true)
      */
     protected $ipLastConnection;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
-     * @ORM\JoinTable(name="hn_domaine_gestions_user",
-     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
-     * )
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"}, inversedBy="users")
+     * @ORM\JoinTable(name="hn_domaine_gestions_user", joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")}, inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")})
      */
     protected $domaines;
 
@@ -632,23 +618,30 @@ class User extends BaseUser
     /**
      * @var bool
      *
-     * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean", options = {"comment" = "A deja ete ambassadeur ?"})
+     * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean")
      */
     protected $alreadyBeAmbassadeur;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="usr_already_be_expert", type="boolean", options = {"comment" = "A deja ete expert ?"})
+     * @ORM\Column(name="usr_already_be_expert", type="boolean")
      */
     protected $alreadyBeExpert;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="usr_notification_requete", type="boolean", options = {"comment" = "L utilisateur est notifie par mail des maj des publications ?"})
+     * @ORM\Column(name="usr_notification_requete", type="boolean")
      */
     protected $notficationRequete;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="usr_activity_newsletter_enabled", type="boolean", options={"default"=true})
+     */
+    protected $activityNewsletterEnabled = true;
 
     /* <-- Communauté de pratique */
 
@@ -656,7 +649,7 @@ class User extends BaseUser
      * @var bool
      *
      * @Assert\NotNull()
-     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
+     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false})
      */
     private $inscritCommunautePratique;
 
@@ -667,6 +660,7 @@ class User extends BaseUser
 
     /**
      * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription", mappedBy="user", cascade={"persist", "remove"})
      */
     private $groupeInscription;
@@ -698,6 +692,44 @@ class User extends BaseUser
     private $inscriptions;
 
     /**
+     * @var Reference[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_user_computer_skill",
+     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
+     */
+    private $computerSkills;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_presentation", type="text", nullable=true)
+     */
+    private $presentation;
+
+    /**
+     * @var Reference\Hobby[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Hobby", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_user_hobby",
+     *      joinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="hob_id", referencedColumnName="hob_id", onDelete="CASCADE")}
+     * )
+     *
+     * @Assert\Valid()
+     */
+    private $hobbies;
+
+    /**
+     * @var string
+     *
+     * @Assert\Regex(pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,})", message="Le mot de passe doit comporter au moins 6 caractères et être composé d'au moins une lettre minuscule, d'une lettre majuscule et d'un chiffre.")
+     */
+    protected $plainPassword;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -710,25 +742,33 @@ class User extends BaseUser
         $this->communautePratiqueDocuments = new ArrayCollection();
         $this->communautePratiqueFiches = new ArrayCollection();
         $this->username = '';
-        $this->pseudonymeForum = '';
+        $this->pseudonym = '';
         $this->enabled = 1;
-        $this->civilite = [];
         $this->lock = false;
         $this->archiver = false;
         $this->alreadyBeAmbassadeur = false;
         $this->alreadyBeExpert = false;
-        $this->nbVisites = 0;
+        $this->visitCount = 0;
         $this->notficationRequete = true;
         $this->inscritCommunautePratique = false;
         $this->previousAdmin = false;
-        $this->typeActivite = new ArrayCollection();
+        $this->activities = new ArrayCollection();
+        $this->computerSkills = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
     public function getConfirmationToken()
     {
         return $this->confirmationToken;
     }
 
+    /**
+     * @param string $confirmationToken
+     *
+     * @return $this
+     */
     public function setConfirmationToken($confirmationToken)
     {
         $this->confirmationToken = $confirmationToken;
@@ -736,6 +776,9 @@ class User extends BaseUser
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->id;
@@ -752,37 +795,37 @@ class User extends BaseUser
     }
 
     /**
-     * Set dateInscription.
+     * Set registrationDate.
      *
-     * @param \DateTime $dateInscription
+     * @param \DateTime $registrationDate
      *
      * @return User
      */
-    public function setDateInscription($dateInscription)
+    public function setRegistrationDate($registrationDate)
     {
-        $this->dateInscription = $dateInscription;
+        $this->registrationDate = $registrationDate;
 
         return $this;
     }
 
     /**
-     * Get dateInscription.
+     * Get registrationDate.
      *
      * @return \DateTime
      */
-    public function getDateInscription()
+    public function getRegistrationDate()
     {
-        return $this->dateInscription;
+        return $this->registrationDate;
     }
 
     /**
-     * Get dateInscription string.
+     * Get registrationDate string.
      *
      * @return string
      */
-    public function getDateInscriptionString()
+    public function getRegistrationDateString()
     {
-        return $this->dateInscription->format('d/m/Y');
+        return $this->registrationDate->format('d/m/Y');
     }
 
     /**
@@ -796,95 +839,113 @@ class User extends BaseUser
     }
 
     /**
-     * Get pseudonymeForum.
+     * Get pseudonym.
      *
-     * @return string $pseudonymeForum
+     * @return string $pseudonym
      */
-    public function getPseudonymeForum()
+    public function getPseudonym()
     {
-        return $this->pseudonymeForum;
+        return $this->pseudonym;
     }
 
     /**
-     * Set pseudonymeForum.
+     * Set pseudonym.
      *
-     * @param string $pseudonymeForum
+     * @param string $pseudonym
+     *
+     * @return User
      */
-    public function setPseudonymeForum($pseudonymeForum)
+    public function setPseudonym($pseudonym)
     {
-        $this->pseudonymeForum = $pseudonymeForum;
+        $this->pseudonym = $pseudonym;
+
+        return $this;
     }
 
     /**
-     * Get nom.
+     * Get lastname.
      *
-     * @return string $nom
+     * @return string $lastname
      */
-    public function getNom()
+    public function getLastname()
     {
-        return $this->nom;
+        return $this->lastname;
     }
 
     /**
-     * Set nom.
+     * Set lastname.
      *
-     * @param string $nom
+     * @param string $lastname
+     *
+     * @return User
      */
-    public function setNom($nom)
+    public function setLastname($lastname)
     {
-        $this->nom = $nom;
+        $this->lastname = $lastname;
+
+        return $this;
     }
 
     /**
-     * Get prenom.
+     * Get firstname.
      *
-     * @return string $prenom
+     * @return string $firstname
      */
-    public function getPrenom()
+    public function getFirstname()
     {
-        return $this->prenom;
+        return $this->firstname;
     }
 
     /**
-     * Set prenom.
+     * Set firstname.
      *
-     * @param string $prenom
+     * @param string $firstname
+     *
+     * @return User
      */
-    public function setPrenom($prenom)
+    public function setFirstname($firstname)
     {
-        $this->prenom = $prenom;
+        $this->firstname = $firstname;
+
+        return $this;
     }
 
     /**
      * Set email.
      *
      * @param string $email
+     *
+     * @return User
      */
     public function setEmail($email)
     {
         $this->email = $email;
 
         $this->setUsername($email);
+
+        return $this;
     }
 
     /**
-     * Get nbVisites.
+     * Get visitCount.
      *
-     * @return int $nbVisites
+     * @return int $visitCount
      */
-    public function getNbVisites()
+    public function getVisitCount()
     {
-        return $this->nbVisites;
+        return $this->visitCount;
     }
 
     /**
-     * Add nbVisites.
+     * Add visitCount.
      *
-     * @param int $nbVisites
+     * @return User
      */
-    public function addNbVisites()
+    public function addvisitCount()
     {
-        ++$this->nbVisites;
+        ++$this->visitCount;
+
+        return $this;
     }
 
     /**
@@ -901,16 +962,20 @@ class User extends BaseUser
      * Set region.
      *
      * @param Reference $region
+     *
+     * @return User
      */
     public function setRegion($region)
     {
-        if (null === $this->etablissementRattachementSante) {
+        if (null === $this->organization) {
             if ($region instanceof Reference) {
                 $this->region = $region;
             } else {
                 $this->region = null;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -939,10 +1004,14 @@ class User extends BaseUser
      * Remove rattachementRegions.
      *
      * @param Reference $rattachementRegions
+     *
+     * @return User
      */
     public function removeRattachementRegion(Reference $rattachementRegions)
     {
         $this->rattachementRegions->removeElement($rattachementRegions);
+
+        return $this;
     }
 
     /**
@@ -1044,7 +1113,7 @@ class User extends BaseUser
      *
      * @param Collection $domaines
      *
-     * @return Domaine
+     * @return User
      */
     public function setDomaines($domaines)
     {
@@ -1056,7 +1125,7 @@ class User extends BaseUser
     /**
      * Get domaines.
      *
-     * @return Collection
+     * @return Collection|Domaine[]
      */
     public function getDomaines()
     {
@@ -1084,27 +1153,27 @@ class User extends BaseUser
     /*-- Fin gestion domaine --*/
 
     /**
-     * Get département.
+     * Get county.
      *
-     * @return Domaine $departement
+     * @return Reference $county
      */
-    public function getDepartement()
+    public function getCounty()
     {
-        return $this->departement;
+        return $this->county;
     }
 
     /**
-     * Set département.
+     * Set county.
      *
-     * @param Reference $departement
+     * @param Reference $county
      */
-    public function setDepartement($departement)
+    public function setCounty($county)
     {
-        if (null === $this->etablissementRattachementSante) {
-            if ($departement instanceof Reference) {
-                $this->departement = $departement;
+        if (null === $this->organization) {
+            if ($county instanceof Reference) {
+                $this->county = $county;
             } else {
-                $this->departement = null;
+                $this->county = null;
             }
         }
     }
@@ -1123,6 +1192,8 @@ class User extends BaseUser
      * Set etat.
      *
      * @param Reference $etat
+     *
+     * @return User
      */
     public function setEtat($etat)
     {
@@ -1131,183 +1202,170 @@ class User extends BaseUser
         } else {
             $this->etat = null;
         }
-    }
-
-    /**
-     * Get titre.
-     *
-     * @return Reference $titre
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * Set titre.
-     *
-     * @param Reference $titre
-     */
-    public function setTitre($titre)
-    {
-        if ($titre instanceof Reference) {
-            $this->titre = $titre;
-        } else {
-            $this->titre = null;
-        }
-    }
-
-    /**
-     * Get civilite.
-     *
-     * @return Reference $civilite
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
-    }
-
-    /**
-     * Set civilite.
-     *
-     * @param Reference $civilite
-     */
-    public function setCivilite($civilite)
-    {
-        if ($civilite instanceof Reference) {
-            $this->civilite = $civilite;
-        } else {
-            $this->civilite = null;
-        }
-    }
-
-    /**
-     * Get telephoneDirect.
-     *
-     * @return string $telephoneDirect
-     */
-    public function getTelephoneDirect()
-    {
-        return $this->telephoneDirect;
-    }
-
-    /**
-     * Set telephoneDirect.
-     *
-     * @param string $telephoneDirect
-     */
-    public function setTelephoneDirect($telephoneDirect)
-    {
-        $this->telephoneDirect = $telephoneDirect;
-    }
-
-    /**
-     * Get telephonePortable.
-     *
-     * @return string $telephonePortable
-     */
-    public function getTelephonePortable()
-    {
-        return $this->telephonePortable;
-    }
-
-    /**
-     * Set telephonePortable.
-     *
-     * @param string $telephonePortable
-     */
-    public function setTelephonePortable($telephonePortable)
-    {
-        $this->telephonePortable = $telephonePortable;
-    }
-
-    /**
-     * Get contactAutre.
-     *
-     * @return string $contactAutre
-     */
-    public function getContactAutre()
-    {
-        return $this->contactAutre;
-    }
-
-    /**
-     * Set contactAutre.
-     *
-     * @param string $contactAutre
-     */
-    public function setContactAutre($contactAutre)
-    {
-        $this->contactAutre = $contactAutre;
-    }
-
-    /**
-     * Set typeActivite.
-     *
-     * @param array <\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes
-     *
-     * @return $this
-     */
-    public function setTypeActivites($activiteTypes)
-    {
-        $this->typeActivite = new ArrayCollection();
-
-        foreach ($activiteTypes as $activiteType) {
-            $this->addTypeActivite($activiteType);
-        }
 
         return $this;
     }
 
     /**
-     * Set typeActivite.
+     * Get phoneNumber.
      *
-     * @param Reference $typeActivite
+     * @return string $phoneNumber
      */
-    public function setTypeActivite($typeActivite = null)
+    public function getPhoneNumber()
     {
-        if ($typeActivite instanceof Reference) {
-            $this->typeActivite = $typeActivite;
-        } else {
-            $this->typeActivite = null;
-        }
+        return $this->phoneNumber;
     }
 
     /**
-     * Add typeActivite.
+     * Set phoneNumber.
      *
-     * @param Reference $typeActivite
+     * @param string $phoneNumber
      *
      * @return User
      */
-    public function addTypeActivite(Reference $typeActivite)
+    public function setPhoneNumber($phoneNumber)
     {
-        $this->typeActivite[] = $typeActivite;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
 
     /**
-     * Get typeActivite.
+     * Get cellPhoneNumber.
      *
-     * @return Reference $typeActivite
+     * @return string $cellPhoneNumber
      */
-    public function getTypeActivite()
+    public function getCellPhoneNumber()
     {
-        return $this->typeActivite;
+        return $this->cellPhoneNumber;
+    }
+
+    /**
+     * Set cellPhoneNumber.
+     *
+     * @param string $cellPhoneNumber
+     *
+     * @return User
+     */
+    public function setCellPhoneNumber($cellPhoneNumber)
+    {
+        $this->cellPhoneNumber = $cellPhoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get otherContact.
+     *
+     * @return string $otherContact
+     */
+    public function getOtherContact()
+    {
+        return $this->otherContact;
+    }
+
+    /**
+     * Set otherContact.
+     *
+     * @param string $otherContact
+     *
+     * @return User
+     */
+    public function setOtherContact($otherContact)
+    {
+        $this->otherContact = $otherContact;
+
+        return $this;
+    }
+
+    /**
+     * Set activities.
+     *
+     * @param Reference[] $activities
+     *
+     * @return User
+     */
+    public function setActivities($activities)
+    {
+        $this->activities = new ArrayCollection();
+
+        if (is_array($activities) || $activities instanceof ArrayCollection) {
+            foreach ($activities as $activity) {
+                $this->addActivity($activity);
+            }
+        } elseif ($activities instanceof Reference) {
+            $this->addActivity($activities);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add activities.
+     * @param Reference[] $activities
+     *
+     * @return User
+     */
+    public function addActivities($activities)
+    {
+        if (is_array($activities) || $activities instanceof ArrayCollection) {
+            foreach ($activities as $activity) {
+                $this->addActivity($activity);
+            }
+        } elseif ($activities instanceof Reference) {
+            $this->addActivity($activities);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add activity.
+     *
+     * @param Reference $activity
+     *
+     * @return $this
+     */
+    public function addActivity(Reference $activity)
+    {
+        $this->activities->add($activity);
+
+        return $this;
+    }
+
+    /**
+     * Get activities.
+     *
+     * @return ArrayCollection $activities
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    /**
+     * Get activities string
+     *
+     * @return string
+     */
+    public function getActivitiesString()
+    {
+        return implode(', ', array_map(function ($activity) {
+                return $activity->getLibelle();
+        }, $this->activities->toArray()));
     }
 
     /**
      * Retourne si l'utilisateur possède tel type d'activité.
      *
-     * @param Reference $activiteType Type d'activité
+     * @param Reference $activity
      *
      * @return bool Si possède
      */
-    public function hasTypeActivite(Reference $activiteType)
+    public function hasActivity(Reference $activity)
     {
-        foreach ($this->typeActivite as $existingActiviteType) {
-            if ($activiteType->equals($existingActiviteType)) {
+        foreach ($this->activities as $existingActiviteType) {
+            if ($activity->equals($existingActiviteType)) {
                 return true;
             }
         }
@@ -1322,11 +1380,11 @@ class User extends BaseUser
      *
      * @return bool Si possède
      */
-    public function equalsTypeActivite(array $activiteTypes)
+    public function equalsActivities(array $activiteTypes)
     {
-        if (count($this->typeActivite) === count($activiteTypes)) {
+        if (count($this->activities) === count($activiteTypes)) {
             foreach ($activiteTypes as $activiteType) {
-                if (!$this->hasTypeActivite($activiteType)) {
+                if (!$this->hasActivity($activiteType)) {
                     return false;
                 }
             }
@@ -1338,76 +1396,82 @@ class User extends BaseUser
     }
 
     /**
-     * Set statutEtablissementSante.
+     * Set organizationType.
      *
-     * @param Reference $statutEtablissementSante
+     * @param Reference $organizationType
+     *
+     * @return User
      */
-    public function setStatutEtablissementSante($statutEtablissementSante)
+    public function setOrganizationType($organizationType)
     {
-        if ($statutEtablissementSante instanceof Reference && null === $this->etablissementRattachementSante) {
-            $this->statutEtablissementSante = $statutEtablissementSante;
+        if ($organizationType instanceof Reference && null === $this->organization) {
+            $this->organizationType = $organizationType;
         } else {
-            $this->statutEtablissementSante = null;
+            $this->organizationType = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get organizationType.
+     *
+     * @return Reference $organizationType
+     */
+    public function getOrganizationType()
+    {
+        return $this->organizationType;
+    }
+
+    /**
+     * Get organization.
+     *
+     * @return Etablissement
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * Get OrganizationString.
+     *
+     * @return string|null
+     */
+    public function getOrganizationString()
+    {
+        if (is_object($this->organization)) {
+            return $this->organization->getNom();
+        }
+
+        return null;
+    }
+
+    /**
+     * Set organization.
+     *
+     * @param Etablissement|null $organization
+     */
+    public function setOrganization(Etablissement $organization = null)
+    {
+        $this->organization = $organization;
+
+        if (null !== $organization) {
+            $this->region = $organization->getRegion();
+            $this->county = $organization->getDepartement();
+            $this->organizationType = $organization->getTypeOrganisme();
+            $this->organizationLabel = null;
         }
     }
 
     /**
-     * Get statutEtablissementSante.
+     * Get organizationLabel.
      *
-     * @return Reference $statutEtablissementSante
+     * @return string $organizationLabel
      */
-    public function getStatutEtablissementSante()
+    public function getOrganizationLabel()
     {
-        return $this->statutEtablissementSante;
-    }
-
-    /**
-     * Get etablissementRattachementSante.
-     *
-     * @return string $etablissementRattachementSante
-     */
-    public function getEtablissementRattachementSante()
-    {
-        return $this->etablissementRattachementSante;
-    }
-
-    /**
-     * Get etablissementRattachementSanteString.
-     *
-     * @return string $etablissementRattachementSante
-     */
-    public function getEtablissementRattachementSanteString()
-    {
-        if (is_object($this->etablissementRattachementSante)) {
-            return $this->etablissementRattachementSante->getNom();
-        }
-    }
-
-    /**
-     * Set etablissementRattachementSante.
-     *
-     * @param Etablissement|null $etablissementRattachementSante
-     */
-    public function setEtablissementRattachementSante(Etablissement $etablissementRattachementSante = null)
-    {
-        $this->etablissementRattachementSante = $etablissementRattachementSante;
-
-        if (null !== $etablissementRattachementSante) {
-            $this->region = $etablissementRattachementSante->getRegion();
-            $this->departement = $etablissementRattachementSante->getDepartement();
-            $this->statutEtablissementSante = $etablissementRattachementSante->getTypeOrganisme();
-            $this->autreStructureRattachementSante = null;
-        }
-    }
-
-    /**
-     * Get autreStructureRattachementSante.
-     *
-     * @return string $autreStructureRattachementSante
-     */
-    public function getAutreStructureRattachementSante()
-    {
-        return $this->autreStructureRattachementSante;
+        return $this->organizationLabel;
     }
 
     /**
@@ -1418,93 +1482,85 @@ class User extends BaseUser
      */
     public function getNomEtablissement()
     {
-        if ($this->getEtablissementRattachementSanteString() != null) {
-            return $this->getEtablissementRattachementSanteString();
-        } elseif ($this->getAutreStructureRattachementSante() != null) {
-            return $this->getAutreStructureRattachementSante();
+        if ($this->getOrganizationString() != null) {
+            return $this->getOrganizationString();
+        } elseif ($this->getOrganizationLabel() != null) {
+            return $this->getOrganizationLabel();
         } else {
             return 'Aucune structure de rattachement';
         }
     }
 
     /**
-     * Set autreStructureRattachementSante.
+     * Set organizationLabel.
      *
-     * @param string $autreStructureRattachementSante
+     * @param string $organizationLabel
      */
-    public function setAutreStructureRattachementSante($autreStructureRattachementSante)
+    public function setOrganizationLabel($organizationLabel)
     {
-        if (null === $this->etablissementRattachementSante) {
-            $this->autreStructureRattachementSante = $autreStructureRattachementSante;
+        if (null === $this->organization) {
+            $this->organizationLabel = $organizationLabel;
         }
     }
 
     /**
-     * Get fonctionDansEtablissementSante.
+     * Get jobLabel.
      *
-     * @return string $fonctionDansEtablissementSante
+     * @return string $jobLabel
      */
-    public function getFonctionDansEtablissementSante()
+    public function getJobLabel()
     {
-        return $this->fonctionDansEtablissementSante;
+        return $this->jobLabel;
     }
 
     /**
-     * Set fonctionDansEtablissementSante.
+     * Set jobLabel.
      *
-     * @param string $fonctionDansEtablissementSante
+     * @param string $jobLabel
      */
-    public function setFonctionDansEtablissementSante($fonctionDansEtablissementSante)
+    public function setJobLabel($jobLabel)
     {
-        $this->fonctionDansEtablissementSante = $fonctionDansEtablissementSante;
+        $this->jobLabel = $jobLabel;
     }
 
     /**
-     * Set fonctionDansEtablissementSanteReferencement.
+     * Set jobType.
      *
-     * @param Reference $fonctionDansEtablissementSanteReferencement
+     * @param Reference $jobType
      */
-    public function setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement)
+    public function setJobType($jobType)
     {
-        if ($fonctionDansEtablissementSanteReferencement instanceof Reference) {
-            $this->fonctionDansEtablissementSanteReferencement = $fonctionDansEtablissementSanteReferencement;
-        } else {
-            $this->fonctionDansEtablissementSanteReferencement = null;
-        }
+        $this->jobType = $jobType instanceof Reference ? $jobType : null;
     }
 
     /**
-     * Get fonctionDansEtablissementSanteReferencement.
+     * Get jobType.
      *
-     * @return Reference $fonctionDansEtablissementSanteReferencement
+     * @return Reference $jobType
      */
-    public function getFonctionDansEtablissementSanteReferencement()
+    public function getJobType()
     {
-        return $this->fonctionDansEtablissementSanteReferencement;
+        return $this->jobType;
     }
 
     /**
-     * Set profilEtablissementSante.
+     * Set profileType.
      *
-     * @param Reference $profilEtablissementSante
+     * @param Reference $profileType
      */
-    public function setProfilEtablissementSante($profilEtablissementSante)
+    public function setProfileType($profileType)
     {
-        if ($profilEtablissementSante instanceof Reference) {
-            $this->profilEtablissementSante = $profilEtablissementSante;
-        } else {
-            $this->profilEtablissementSante = null;
-        }
+        $this->profileType = $profileType instanceof Reference ? $profileType : null;
     }
 
     /**
-     * Get profilEtablissementSante.
+     * Get profileType.
      *
-     * @return Reference $profilEtablissementSante
+     * @return Reference $profileType
      */
-    public function getProfilEtablissementSante()
+    public function getProfileType()
     {
-        return $this->profilEtablissementSante;
+        return $this->profileType;
     }
 
     /**
@@ -1530,6 +1586,8 @@ class User extends BaseUser
     /**
      * Get fonctionStructure.
      *
+     * @deprecated Use getJobLabel instead.
+     *
      * @return string $fonctionStructure
      */
     public function getFonctionStructure()
@@ -1539,6 +1597,8 @@ class User extends BaseUser
 
     /**
      * Set fonctionStructure.
+     *
+     * @deprecated Use setJobLabel instead.
      *
      * @param string $fonctionStructure
      */
@@ -1585,6 +1645,26 @@ class User extends BaseUser
     public function setNotficationRequete($notficationRequete)
     {
         $this->notficationRequete = $notficationRequete;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActivityNewsletterEnabled()
+    {
+        return $this->activityNewsletterEnabled;
+    }
+
+    /**
+     * @param bool $activityNewsletterEnabled
+     *
+     * @return User
+     */
+    public function setActivityNewsletterEnabled($activityNewsletterEnabled)
+    {
+        $this->activityNewsletterEnabled = $activityNewsletterEnabled;
+
+        return $this;
     }
 
     /**
@@ -1763,34 +1843,40 @@ class User extends BaseUser
 
     // v -------- Gestion questionnaire  -------- v
 
+    /**
+     * @return mixed
+     */
     public function getTermsAccepted()
     {
         return $this->termsAccepted;
     }
 
+    /**
+     * @param $termsAccepted
+     */
     public function setTermsAccepted($termsAccepted)
     {
         $this->termsAccepted = (bool) $termsAccepted;
     }
 
     /**
-     * Retourne le prénom puis le nom.
+     * Retourne le prénom puis le lastname.
      *
      * @return string
      */
     public function getPrenomNom()
     {
-        return ucfirst($this->prenom) . ' ' . ucfirst($this->nom);
+        return ucfirst($this->firstname) . ' ' . ucfirst($this->lastname);
     }
 
     /**
-     * Retourne le nom puis le prénom.
+     * Retourne le lastname puis le prénom.
      *
      * @return string
      */
     public function getNomPrenom()
     {
-        return ucfirst($this->nom) . ' ' . ucfirst($this->prenom);
+        return ucfirst($this->lastname) . ' ' . ucfirst($this->firstname);
     }
 
     /**
@@ -1803,16 +1889,25 @@ class User extends BaseUser
         return $this->hasRole(Role::$ROLE_ADMIN_LABEL);
     }
 
+    /**
+     * @return bool
+     */
     public function hasRoleAdminHn()
     {
         return $this->hasRole(Role::$ROLE_ADMIN_HN_LABEL);
     }
 
+    /**
+     * @return bool
+     */
     public function hasRoleAdminDomaine()
     {
         return $this->hasRole(Role::$ROLE_ADMIN_DOMAINE);
     }
 
+    /**
+     * @return bool
+     */
     public function hasRoleAdminAutodiag()
     {
         return $this->hasRole(Role::$ROLE_ADMIN_AUTODIAG);
@@ -1871,7 +1966,7 @@ class User extends BaseUser
     /**
      * Add ConnaissancesAmbassadeur.
      *
-     * @param ConnaissanceAmbassadeur $contractualisations
+     * @param ConnaissanceAmbassadeur $connaissanceAmbassadeur
      *
      * @return User
      */
@@ -1895,7 +1990,7 @@ class User extends BaseUser
     /**
      * Get connaissanceAmbassadeur.
      *
-     * @return Collection
+     * @return Collection|ConnaissanceAmbassadeur
      */
     public function getConnaissancesAmbassadeurs()
     {
@@ -1915,9 +2010,12 @@ class User extends BaseUser
             return $ambassadeurString;
         }
 
+        /** @var ConnaissanceAmbassadeur $ambassadeur */
         foreach ($this->connaissancesAmbassadeurs as $ambassadeur) {
             if ($ambassadeur->getDomaine()) {
-                $ambassadeurString .= ($ambassadeurString != '' ? ' | ' : ' ') . $ambassadeur->getDomaine()->getLibelle();
+                $ambassadeurString .=
+                    ($ambassadeurString != '' ? ' | ' : ' ') . $ambassadeur->getDomaine()->getLibelle()
+                ;
             }
         }
 
@@ -1935,28 +2033,29 @@ class User extends BaseUser
     }
 
     /**
-     * Retourne les prénom et nom de l'utilisateur avec sa civilité.
+     * Retourne les prénom et lastname de l'utilisateur.
      *
      * @return string Appelation de l'utilisateur
      */
     public function getAppellation()
     {
         // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
-        //Récupération du prénom
-        $prenom = strtolower($this->getPrenom());
-        //Découpage du prénom sur le tiret
+        // Récupération du prénom
+        $prenom = strtolower($this->getFirstname());
+        // Découpage du prénom sur le tiret
         $tempsPrenom = explode('-', $prenom);
-        //Unsset de la variable
+        // Unsset de la variable
         $prenom = '';
-        //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
+        // Pour chaque bout on met une MAJ sur la première lettre de chaque mot,
+        // s'il y en plusieurs c'est qu'il y avait un -
         foreach ($tempsPrenom as $key => $tempPrenom) {
             $prenom .= ('' !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
         }
 
-        // ----Mise en majuscule du nom
-        $nom = strtoupper($this->getNom());
+        // ----Mise en majuscule du lastname
+        $nom = strtoupper($this->getLastname());
 
-        return ($this->civilite != null ? $this->civilite->getLibelle() . ' ' : '') . $prenom . ' ' . $nom;
+        return $prenom . ' ' . $nom;
     }
 
     /**
@@ -1989,6 +2088,9 @@ class User extends BaseUser
         return $this->roles[0];
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
         $roles = parent::getRoles();
@@ -2083,7 +2185,7 @@ class User extends BaseUser
     /**
      * Set dateLastUpdate.
      *
-     * @param DateTime $dateLastUpdate
+     * @param \DateTime $dateLastUpdate
      *
      * @return User
      */
@@ -2142,14 +2244,15 @@ class User extends BaseUser
         return $this;
     }
 
+    /**
+     * @param $role
+     *
+     * @return bool
+     */
     public function isGranted($role)
     {
         return in_array($role, $this->getRoles());
     }
-
-    // ----------------------------------------
-    // --- Gestion de l'upload des fichiers ---
-    // ----------------------------------------
 
     /**
      * Set path.
@@ -2179,22 +2282,34 @@ class User extends BaseUser
         return $this->path;
     }
 
+    /**
+     * @return null|string
+     */
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
+    /**
+     * @return null|string
+     */
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
+    /**
+     * @return string
+     */
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
+    /**
+     * @return string
+     */
     public function getUploadDir()
     {
         return 'medias/Utilisateurs';
@@ -2274,8 +2389,6 @@ class User extends BaseUser
         return $this;
     }
 
-    /* <-- Communauté de pratique */
-
     /**
      * Get inscritCommunautePratique.
      *
@@ -2295,10 +2408,14 @@ class User extends BaseUser
      * Set inscritCommunautePratique.
      *
      * @param bool $inscritCommunautePratique
+     *
+     * @return $this
      */
     public function setInscritCommunautePratique($inscritCommunautePratique)
     {
         $this->inscritCommunautePratique = $inscritCommunautePratique;
+
+        return $this;
     }
 
     /**
@@ -2324,7 +2441,7 @@ class User extends BaseUser
      */
     public function addCommunautePratiqueAnimateurGroupeInscription(Inscription $groupeInscription)
     {
-        $groupeInscription->getgroupe->addAnimateur($this);
+        $groupeInscription->getGroupe()->addAnimateur($this);
         $this->communautePratiqueAnimateurGroupes[] = $groupeInscription->getGroupe();
 
         return $this;
@@ -2334,21 +2451,29 @@ class User extends BaseUser
      * Remove communautePratiqueGroupes.
      *
      * @param Groupe $communautePratiqueGroupes
+     *
+     * @return User
      */
     public function removeCommunautePratiqueAnimateurGroupe(Groupe $communautePratiqueGroupes)
     {
         $this->removeCommunautePratiqueAnimateurGroupeInscription(new Inscription($communautePratiqueGroupes, $this));
+
+        return $this;
     }
 
     /**
      * Remove groupeInscription.
      *
      * @param Inscription $groupeInscription
+     *
+     * @return User
      */
     public function removeCommunautePratiqueAnimateurGroupeInscription(Inscription $groupeInscription)
     {
         $this->communautePratiqueAnimateurGroupes->removeElement($groupeInscription->getGroupe());
         $groupeInscription->getGroupe()->removeAnimateur($this);
+
+        return $this;
     }
 
     /**
@@ -2392,9 +2517,10 @@ class User extends BaseUser
     /**
      * is Actif in groupe.
      *
-     * @param Inscription $groupeInscription
+     * @param Groupe $groupe
      *
-     * @return User
+     * @return bool
+     *
      */
     public function isActifInGroupe(Groupe $groupe)
     {
@@ -2406,7 +2532,7 @@ class User extends BaseUser
      *
      * @param Inscription $groupeInscription
      *
-     * @return User
+     * @return bool
      */
     public function isActifGroupeInscription(Inscription $groupeInscription)
     {
@@ -2461,6 +2587,7 @@ class User extends BaseUser
      */
     public function hasCommunautePratiqueGroupeInscription(Inscription $groupeInscription)
     {
+        /** @var Inscription $inscrit */
         foreach ($this->groupeInscription->getValues() as $inscrit) {
             if ($inscrit->getGroupe()->getId() == $groupeInscription->getGroupe()->getId()) {
                 return true;
@@ -2478,7 +2605,7 @@ class User extends BaseUser
     public function getCommunautePratiqueGroupes()
     {
         foreach ($this->getGroupeInscription() as $inscrit) {
-            $this->communautePratiqueGroupes[] = $inscrit->getGroupe();
+            $this->communautePratiqueGroupes[$inscrit->getGroupe()->getId()] = $inscrit->getGroupe();
         }
 
         return $this->communautePratiqueGroupes;
@@ -2596,8 +2723,6 @@ class User extends BaseUser
         return $this->communautePratiqueCommentaires;
     }
 
-    /* --> */
-
     /**
      * Equals.
      *
@@ -2610,8 +2735,6 @@ class User extends BaseUser
         return $this->id === $user->getId();
     }
 
-    /* <-- Avatar */
-
     /**
      * Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
      *
@@ -2623,14 +2746,8 @@ class User extends BaseUser
             return '/' . $this->getWebPath();
         }
 
-        if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId()) {
-            return '/bundles/hopitalnumeriqueuser/img/madame.png';
-        }
-
-        return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
+        return '/bundles/hopitalnumeriqueuser/img/default_user.png';
     }
-
-    /* --> */
 
     /**
      * On vérifie que la date de renouvellement de la dernière contractualisation n'est pas dépassée.
@@ -2664,6 +2781,9 @@ class User extends BaseUser
         return $archive === count($this->getContractualisations()) ? false : true;
     }
 
+    /**
+     * @return string
+     */
     public function getUpToDateToString()
     {
         return $this->isUpToDate() ? 'Oui' : 'Non';
@@ -2677,12 +2797,142 @@ class User extends BaseUser
     public function getDateLastContractualisation()
     {
         $lastDateContractualisation = null;
+
         /** @var Contractualisation $contractualisation */
         foreach ($this->contractualisations as $contractualisation) {
             $lastDateContractualisation = $contractualisation->getDateRenouvellement();
         }
 
         return $lastDateContractualisation;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComputerSkills()
+    {
+        return $this->computerSkills;
+    }
+
+    /**
+     * Get computer skills string.
+     *
+     * @return string
+     */
+    public function getComputerSkillsString()
+    {
+        return implode(', ', array_map(function ($skill) {
+            return $skill->getLibelle();
+        }, $this->computerSkills->toArray()));
+    }
+
+    /**
+     * @param Reference $skill
+     *
+     * @return User
+     */
+    public function addComputerSkills(Reference $skill)
+    {
+        $this->computerSkills->add($skill);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPresentation()
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param string $presentation
+     *
+     * @return User
+     */
+    public function setPresentation($presentation)
+    {
+        $this->presentation = $presentation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reference\Hobby[]
+     */
+    public function getHobbies()
+    {
+        return $this->hobbies;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHobbiesString()
+    {
+        return implode(', ', array_map(function ($hobby) {
+            return $hobby->getLabel();
+        }, $this->hobbies->toArray()));
+    }
+
+    /**
+     * @param Reference\Hobby $hobby
+     *
+     * @return User
+     */
+    public function addHobby(Reference\Hobby $hobby)
+    {
+        foreach ($this->hobbies as $userHobby) {
+            if ($userHobby->getLabel() === $hobby->getLabel()) {
+                return $this;
+            }
+        }
+
+        $this->hobbies->add($hobby);
+
+        return $this;
+    }
+
+    /**
+     * @param Reference\Hobby $hobby
+     *
+     * @return $this
+     */
+    public function removeHobby(Reference\Hobby $hobby)
+    {
+        $this->hobbies->removeElement($hobby);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $file
+     *
+     * @return User
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+        $this->setDateLastUpdate(new \DateTime());
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSettingIdentifier()
+    {
+        return $this->getId();
     }
 
     /**

@@ -66,6 +66,7 @@
         "symfony/var-dumper"                           : "3.0.*",
         "egeloen/ckeditor-bundle"                      : "^4.0",
         "box/spout": "^2.6",
+        "dmishh/settings-bundle": "2.0.*@dev",
         "friendsofsymfony/elastica-bundle": "^4.0"
     },
     "scripts": {

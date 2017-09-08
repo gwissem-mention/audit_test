@@ -21,3 +21,33 @@ services:
     hopitalnumerique_intervention.dependency_injection.intervention.forfait_transport:
         class: 'HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport'
         arguments: ['@ivory_google_map.distance_matrix', '@hopitalnumerique_intervention.manager.intervention.forfait_transport']
+
+    hopitalnumerique_intervention.widget.request:
+        class: HopitalNumerique\InterventionBundle\Service\Widget\RequestWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: dashboard }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+        calls:
+            - [setInterventionRequestRepository, ['@hopitalnumerique_intervention.repository.intervention_demande']]
+        public: false
+
+    hopitalnumerique_intervention.widget.intervention:
+        class: HopitalNumerique\InterventionBundle\Service\Widget\InterventionWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: service }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@translator'
+            - '@router'
+            - '@hn.intervention.repository.demande'
+        public: false
+
+    hopitalnumerique_intervention.repository.intervention_demande:
+        class: 'HopitalNumerique\InterventionBundle\Repository\InterventionDemandeRepository'
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'

@@ -22,6 +22,25 @@ use HopitalNumerique\UserBundle\Entity\User;
 class EntityHasReferenceRepository extends EntityRepository
 {
     /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return Reference[]
+     */
+    public function findByTypeAndId($entityType, $entityId)
+    {
+        return $this->_em->createQueryBuilder()
+            ->from(Reference::class, 'r')
+            ->select('r')
+            ->join(EntityHasReference::class, 'ehr', Expr\Join::WITH, 'ehr.reference = r.id')
+            ->andWhere('ehr.entityType = :entityType')->setParameter('entityType', $entityType)
+            ->andWhere('ehr.entityId = :entityId')->setParameter('entityId', $entityId)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * Retourne les EntityHasReference par type d'entité, ID d'entité et domaines.
      *
      * @param int                                                   $entityType Type d'entité

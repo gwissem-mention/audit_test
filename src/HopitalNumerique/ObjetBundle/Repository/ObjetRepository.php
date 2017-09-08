@@ -2,19 +2,57 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * ObjetRepository.
  */
 class ObjetRepository extends EntityRepository
 {
+
+    /**
+     * @param integer $objectId
+     *
+     * @return Objet
+     */
+    public function findByIdWithJoin($objectId)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.domaines', 'd')->addSelect('d')
+
+            ->andWhere('o.id = :objectId')->setParameter('objectId', $objectId)
+
+            ->setMaxResults(1)
+            ->getQuery()->getSingleResult()
+        ;
+    }
+
+    /**
+     * @param $ids
+     *
+     * @return array
+     */
+    public function findByIdsWithJoin($ids)
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.domaines', 'd')->addSelect('d')
+
+            ->andWhere('o.id IN (:objectIds)')->setParameter('objectIds', $ids)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
     /**
      * Returns the list of objects corresponding to ids.
      *
@@ -327,22 +365,36 @@ class ObjetRepository extends EntityRepository
 
     /**
      * Retourne l'ensemble des productions actives.
+     * @param Domaine[] $domains
+     * @return array
      */
-    public function getObjetsForDashboard()
+    public function getObjetsForDashboard($domains)
     {
+        if (empty($domains)) {
+            return null;
+        }
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types', 'refType')
             ->leftJoin('obj.etat', 'refEtat')
             ->leftJoin('refType.parents', 'parentType')
-            ->leftJoin('obj.domaines', 'domaine')
-            ->where('domaine.id = :idDomaine')
-            ->setParameter('idDomaine', 1)
+            ->join(
+                'obj.domaines',
+                'domaine',
+                Expr\Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
             ->groupBy('obj.id')
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -567,5 +619,267 @@ class ObjetRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $mandatoryReferencesId
+     * @param array $optionalReferencesId
+     * @param int $entityType
+     *
+     * @return Objet[]
+     */
+    public function getObjectForReferences($mandatoryReferencesId = [], $optionalReferencesId = [], $entityType = Entity::ENTITY_TYPE_OBJET)
+    {
+        $queryBuilder = $this->createQueryBuilder('o')
+            ->setParameter('entityType', $entityType)
+        ;
+
+        foreach ($mandatoryReferencesId as $k => $referenceId) {
+            $queryBuilder
+                ->join(
+                    EntityHasReference::class,
+                    sprintf('ehr%d', $k),
+                    Expr\Join::WITH,
+                    sprintf('ehr%d.entityId = o.id AND ehr%d.entityType = :entityType', $k, $k)
+                )
+                ->join(
+                    sprintf('ehr%d.reference', $k),
+                    sprintf('r%d', $k),
+                    Expr\Join::WITH,
+                    sprintf('r%d.id = :referenceId%d', $k, $k)
+                )
+                ->setParameter(sprintf('referenceId%d', $k), $referenceId)
+            ;
+        }
+
+        if (count($optionalReferencesId)) {
+            $queryBuilder
+                ->join(EntityHasReference::class, 'ehr', Expr\Join::WITH, 'ehr.entityId = o.id AND ehr.entityType = :entityType')
+                ->join('ehr.reference', 'r', Expr\Join::WITH, 'r.id IN (:referencesId)')
+                ->setParameter('referencesId', $optionalReferencesId)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getUpdatedObjectsSinceLastView(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND o.dateModification > c.dateLastConsulted')
+            ->setParameter('userId', $user->getId())
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getMostViewedObjectsForUser(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND c.contenu IS NULL')
+            ->addSelect('c')
+            ->setParameter('userId', $user->getId())
+
+            ->orderBy('c.viewsCount', 'DESC')
+
+            ->setMaxResults(5)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function getLastViewedObjects(User $user)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
+            ->setParameter('userId', $user->getId())
+
+            ->orderBy('c.dateLastConsulted', 'DESC')
+
+            ->setMaxResults(5)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param User           $user
+     * @param Domaine[]|null $domains
+     *
+     * @return array
+     */
+    public function getViewedObjects(User $user, $domains = null)
+    {
+        $qb = $this->createQueryBuilder('object')
+            ->addSelect('consultations')
+            ->join('object.consultations', 'consultations', Expr\Join::WITH, 'consultations.user = :userId')
+            ->setParameter('userId', $user->getId())
+        ;
+
+        if (null !== $domains) {
+            $qb->join('consultations.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
+        }
+
+        return $qb
+            ->orderBy('consultations.dateLastConsulted', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $count
+     *
+     * @return Objet[]
+     */
+    public function getLastObject(Domaine $domain, $count = 1)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+
+            ->addOrderBy('o.dateCreation', 'DESC')
+
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $count
+     *
+     * @return Objet[]
+     */
+    public function getBestRatedObject(Domaine $domain, $count = 1)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addSelect('AVG(n.note) as HIDDEN note, COUNT(n.id) as HIDDEN notes')
+            ->join('o.listeNotes', 'n')
+            ->groupBy('o')
+            ->addOrderBy('note', 'DESC')
+            ->addOrderBy('notes', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
+
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $count
+     *
+     * @return Objet[]
+     */
+    public function getMostViewedObject(Domaine $domain, $count = 1)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addOrderBy('o.nbVue', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
+
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $count
+     *
+     * @return Objet[]
+     */
+    public function getMostCommentedObject(Domaine $domain, $count = 1)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->andWhere('o.isArticle = FALSE')
+            ->addSelect('COUNT(c.id) as HIDDEN commentsCount')
+            ->join('o.listeCommentaires', 'c')
+            ->andWhere('c.contenu IS NULL')
+            ->groupBy('o.id')
+            ->addOrderBy('commentsCount', 'DESC')
+            ->addOrderBy('o.dateCreation', 'DESC')
+
+            ->setMaxResults($count)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return Objet
+     */
+    public function getRandomObject(Domaine $domain)
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.domaines', 'd', Expr\Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+            ->addSelect('RAND() as HIDDEN random')
+            ->andWhere('o.isArticle = FALSE')
+            ->addOrderBy('random')
+
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getProductionsCount()
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->andWhere('o.isArticle = FALSE')
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @deprecated
+     * @todo: Should be removed after "dateParution to releaseDate" migration.
+     *
+     * @return Objet[]
+     */
+    public function findByDateParutionNotNull()
+    {
+        return $this->createQueryBuilder('object')
+            ->where('object.dateParution IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

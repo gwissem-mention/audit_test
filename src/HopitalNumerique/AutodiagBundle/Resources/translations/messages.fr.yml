@@ -40,7 +40,7 @@ ad:
                 at_least_2: Vous devez choisir au moins deux réponses pour générer une synthèse
                 empty_name: Le nom de la synthèse doit être renseigné
         delete:
-            succes: L'autodiagnostic a bien été supprimée.
+            succes: L'autodiagnostic a bien été supprimé.
             error: Une erreur est survenue lors de la suppression de la synthèse
             forbidden: Vous n'avez pas la permission de supprimer cette synthèse
         share:
@@ -73,11 +73,15 @@ ad:
             file: Fichier
             notify_update: Notifier la mise à jour sur le frontoffice
             notified_update: La mise à jour a été notifiée sur le frontoffice
+            update_reason: Raison de la mise à jour
         history:
             last_modified: %date% à %time% par %username%
         edit:
             generique: Informations génériques
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
+            history: Historique
+            yes: Oui
+            no: Non
         path:
             fill: 1. Remplir le questionnaire
             results: 2. Voir mon résultat

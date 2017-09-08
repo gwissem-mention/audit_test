@@ -1,0 +1,81 @@
+account:
+    title: Mon compte
+    meta_description: Connectez-vous à votre compte '%domainName%' pour accéder aux outils proposés par l'ANAP
+    dashboard:
+        title: Tableau de bord
+    profile:
+        title: Mes informations
+        completion: Complétion du profil
+        personal_information: Données personnelles
+        contact_information: Coordonnées
+        profile: Profil
+        structure: Structure
+        skills: Compétences
+        picture:
+            delete: Supprimer la photo
+    service:
+        title: Mes services
+        quick_access: Accès directs
+        domain_list:
+            label: Filtrer
+            all: Tous
+        no_data: Aucune donnée
+    cart:
+        title: Mon panier
+    parameters:
+        title: Mes paramètres
+        password: Mot de passe
+        notifications: Notifications
+        unsubscribe: Me désinscrire
+    save: Enregistrer
+    message:
+        save:
+            success: Vos informations ont bien été enregistrées.
+        invalid_field: Champ(s) invalide(s)
+    user:
+        lastname: Nom
+        firstname: Prénom
+        email: Adresse e-mail
+        pseudonym: Pseudonyme pour le forum
+        phoneNumber: Téléphone fixe
+        cellPhoneNumber: Téléphone portable
+        otherContact: Autres contacts
+        profileType: Profil
+        jobType: Fonction
+        jobLabel: Libellé
+        file: Photo de profil (maximum 200ko)
+        region: Région
+        county: Département
+        organizationType: Type de structure
+        organization: Structure
+        organizationLabel: Nom de votre structure si non disponible dans la liste précédente
+        activities: Activités
+        computerSkills: Les applications que je connais
+        computerSkills: Les applications que je connais
+        missingComputerSkills: Une des applications n'est pas dans la liste ?
+        presentation: Je me présente
+        knowledge: Mes connaissances
+        hobbies: Mes centres d'intérêt
+        hobby:
+            add: Ajouter un centre d'intérêt
+    cdp:
+        join: Rejoindre la communauté
+        access: Rejoindre la communauté
+        leave: Quitter la communauté
+        missingInformation: Certaines informations de votre profil sont nécessaires pour rejoindre la communauté
+
+cart:
+    items:
+        title: Contenu de mon panier
+        header:
+            object_type: Type
+            object_title: Titre
+        add:
+            label: Ajouter ma sélection au rapport
+        action:
+            open:
+                title: Ouvrir
+            remove:
+                title: Retirer du panier
+                confirm: Retirer cet objet de mon panier  ?
+    no_items: "- Aucun item dans le panier -"

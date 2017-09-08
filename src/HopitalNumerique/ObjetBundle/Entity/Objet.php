@@ -11,7 +11,6 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-//Asserts Stuff
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -158,12 +157,22 @@ class Objet implements RoutedItemInterface
     private $dateCreation;
 
     /**
+     * @deprecated use releaseDate instead.
+     *
      * @var \String
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_debut_parution", type="string", length=255, nullable=true, options = {"comment" = "Date de parution de l objet"})
      */
     private $dateParution;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="obj_release_date", type="datetime", nullable=true)
+     */
+    private $releaseDate;
 
     /**
      * @var \DateTime
@@ -236,7 +245,7 @@ class Objet implements RoutedItemInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet à été vue"})
+     * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet a été vue"})
      */
     protected $nbVue;
 
@@ -355,13 +364,13 @@ class Objet implements RoutedItemInterface
     /**
      * @var FichierModifiable
      *
-     * @ORM\OneToOne(targetEntity="FichierModifiable", inversedBy="objet")
+     * @ORM\OneToOne(targetEntity="FichierModifiable", mappedBy="objet")
      * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
      */
     protected $fichierModifiable;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"}, inversedBy="objets")
      * @ORM\JoinTable(name="hn_domaine_gestions_objet",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
@@ -394,6 +403,21 @@ class Objet implements RoutedItemInterface
     protected $relatedBoards;
 
     /**
+     * @var ArrayCollection|RelatedRisk
+     *
+     * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    protected $relatedRisks;
+
+    /**
+     * @var ObjectUpdate[]
+     *
+     * @ORM\OneToMany(targetEntity="ObjectUpdate", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $updates;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -420,6 +444,8 @@ class Objet implements RoutedItemInterface
         $this->maitriseUsers = [];
         $this->domaines = new ArrayCollection();
         $this->relatedBoards = new ArrayCollection();
+        $this->relatedRisks = new ArrayCollection();
+        $this->updates = new ArrayCollection();
     }
 
     /**
@@ -863,38 +889,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return array $autodiags
-     */
-    public function getAutodiags()
-    {
-        return $this->autodiags;
-    }
-
-    /**
-     * @param array $autodiags
-     *
-     * @return Objet
-     */
-    public function setAutodiags(array $autodiags)
-    {
-        $this->autodiags = $autodiags;
-
-        return $this;
-    }
-
-    /**
-     * @param int $autodiag
-     *
-     * @return Objet
-     */
-    public function addAutodiag($autodiag)
-    {
-        $this->autodiags[] = $autodiag;
-
-        return $this;
-    }
-
-    /**
      * @return array $referencement
      */
     public function getReferencement()
@@ -948,8 +942,6 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param $ambassadeurs
-     *
-     * @internal param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
      */
     public function removeAmbassadeurs($ambassadeurs)
     {
@@ -971,7 +963,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|User[]
      */
     public function getAmbassadeurs()
     {
@@ -979,7 +971,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|MaitriseUser[]
      */
     public function getMaitriseUsers()
     {
@@ -1220,12 +1212,18 @@ class Objet implements RoutedItemInterface
         return substr($result, strrpos($result, '.') + 1);
     }
 
+    /**
+     * @return string
+     */
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
+    /**
+     * @return string
+     */
     public function getUploadDir()
     {
         return 'medias/Objets/Fichiers';
@@ -1296,6 +1294,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * @deprecated use setReleaseDate instead.
+     *
      * @param string $dateParution
      *
      * @return Objet
@@ -1308,11 +1308,33 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * @deprecated use getReleaseDate instead.
+     *
      * @return \String
      */
     public function getDateParution()
     {
         return $this->dateParution;
+    }
+
+    /**
+     * @param \DateTime $releaseDate
+     *
+     * @return Objet
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
     }
 
     /**
@@ -1667,26 +1689,41 @@ class Objet implements RoutedItemInterface
 
     // vvvv     Flux RSS      vvvv
 
+    /**
+     * @return string
+     */
     public function getFeedItemTitle()
     {
         return $this->titre;
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemDescription()
     {
         return ''; //$this->resume;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getFeedItemPubDate()
     {
         return is_null($this->dateModification) ? $this->dateCreation : $this->dateModification;
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemRouteName()
     {
         return 'hopital_numerique_publication_publication_objet';
     }
 
+    /**
+     * @return array
+     */
     public function getFeedItemRouteParameters()
     {
         return [
@@ -1695,6 +1732,9 @@ class Objet implements RoutedItemInterface
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getFeedItemUrlAnchor()
     {
         return '';
@@ -1885,6 +1925,65 @@ class Objet implements RoutedItemInterface
     public function removeRelatedBoard(RelatedBoard $relatedBoard)
     {
         $this->relatedBoards->removeElement($relatedBoard);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|RelatedRisk[]
+     */
+    public function getRelatedRisks()
+    {
+        return $this->relatedRisks;
+    }
+
+    /**
+     * @param RelatedRisk $relatedRisk
+     *
+     * @return Objet
+     */
+    public function removeRelatedRisk(RelatedRisk $relatedRisk)
+    {
+        $this->relatedRisks->removeElement($relatedRisk);
+
+        return $this;
+    }
+
+    /**
+     * @param Risk $risk
+     * @param integer|null $position
+     *
+     * @return Objet
+     */
+    public function linkRisk(Risk $risk, $position = null)
+    {
+        foreach ($this->relatedRisks as $relatedRisk) {
+            if ($relatedRisk->getRisk()->getId() === $risk->getId()) {
+                return $this;
+            }
+        }
+
+        $this->relatedRisks->add(new RelatedRisk($this, $risk, $position));
+
+        return $this;
+    }
+
+    /**
+     * @return ObjectUpdate[]
+     */
+    public function getUpdates()
+    {
+        return $this->updates;
+    }
+
+    /**
+     * @param ObjectUpdate $update
+     *
+     * @return Objet
+     */
+    public function addUpdate(ObjectUpdate $update)
+    {
+        $this->updates->add($update);
 
         return $this;
     }

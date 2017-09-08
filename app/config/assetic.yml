@@ -17,6 +17,7 @@ assetic:
         - HopitalNumeriqueAdminBundle
         - HopitalNumeriqueExpertBundle
         - HopitalNumeriqueInterventionBundle
+        - HopitalNumeriqueCartBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle
         - HopitalNumeriqueEtablissementBundle
@@ -25,6 +26,7 @@ assetic:
         - HopitalNumeriqueObjetBundle
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
+        - NewAccountBundle
         - HopitalNumeriqueRechercheBundle
         - HopitalNumeriqueRechercheParcoursBundle
         - HopitalNumeriqueRegistreBundle
@@ -39,6 +41,7 @@ assetic:
         - HopitalNumeriqueCommunautePratiqueBundle
         - HopitalNumeriqueAideBundle
         - HopitalNumeriqueAutodiagBundle
+        - HopitalNumeriqueContextualNavigationBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:
@@ -66,6 +69,9 @@ assetic:
                 - 'bundles/hopitalnumeriquecore/js/script.js'
                 - 'bundles/hopitalnumeriquecore/js/recherche.js'
                 - 'bundles/hopitalnumeriquecore/js/components/InplaceEditor.js'
+                - 'bundles/hopitalnumeriquecore/js/components/AjaxList.js'
+                - 'bundles/hopitalnumeriquecore/js/components/CountyList.js'
+                - 'bundles/hopitalnumeriquecore/js/components/HobbyCollection.js'
                 - 'bundles/nodevoadmin/plugins/apprise/apprise.js'
                 - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
                 - '%kernel.root_dir%/Resources/lib/nodevo/Web.js'
@@ -98,6 +104,11 @@ assetic:
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery-ui-i18n.min.js"
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-fr.min.js"
             filters : [ ?yui_js ]
+        jquery_ui_slider_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/jquery.ui.slider.min.js"
+                - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery-ui-i18n.min.js"
+            filters : [ ?yui_js ]
         bootstrap_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap/dist/js/bootstrap.min.js"
@@ -120,9 +131,13 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/json-js/json2.js"
             filters : [ ?yui_js ]
+        handlebars_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/handlebars/handlebars.js"
+            filters : [ ?yui_js ]
         bootstrap_iconpicker_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"
+                - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js"
             filters : [ ?yui_js ]
         bootstrap_multiselect_js:
             inputs:
@@ -164,7 +179,7 @@ assetic:
             filters : [ ?yui_js ]
         jquery_stepy_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/stepy/lib/jquery.stepy.js"
+                - "%kernel.root_dir%/Resources/components/stepy/js/jquery.stepy.js"
             filters : [ ?yui_js ]
         jquery_qtip2_js:
             inputs:
@@ -230,7 +245,7 @@ assetic:
             filters: [ cssembed, ?yui_css ]
         bootstrap_iconpicker_css:
             inputs:
-                - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"
+                - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css"
             filters: [ cssembed, ?yui_css ]
         bootstrap_multiselect_css:
             inputs:
@@ -258,3 +273,12 @@ assetic:
         gauge:
             inputs:
                 - "%kernel.root_dir%/Resources/components/gauge.js/dist/gauge.min.js"
+
+        datatables_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/datatables/media/js/jquery.dataTables.js"
+                - "%kernel.root_dir%/Resources/components/datatables/media/js/dataTables.bootstrap.js"
+
+        datatables_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/datatables/media/css/dataTables.bootstrap.css"

@@ -11,8 +11,8 @@ $(document).ready(function() {
     if(null !== $('#hopital_numerique_contact_contact_departement').val())
         idDepartement = $('#hopital_numerique_contact_contact_departement').val();
     //Récupération de l'id de l'entreprise si il on est en édition
-    if(null !== $('#hopital_numerique_contact_contact_statutEtablissementSante').val())
-        idEntreprise = $('#hopital_numerique_contact_contact_statutEtablissementSante').val();
+    if(null !== $('#hopital_numerique_contact_contact_organizationType').val())
+        idEntreprise = $('#hopital_numerique_contact_contact_organizationType').val();
 
     // --- Département
     

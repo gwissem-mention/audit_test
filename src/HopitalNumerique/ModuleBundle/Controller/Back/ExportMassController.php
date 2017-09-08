@@ -32,8 +32,8 @@ class ExportMassController extends Controller
 
         $colonnes = [
                             'id' => 'id',
-                            'user.nom' => 'Nom',
-                            'user.prenom' => 'Prénom',
+                            'user.lastname' => 'Nom',
+                            'user.firstname' => 'Prénom',
                             'user.username' => 'Identifiant (login)',
                             'user.email' => 'Adresse e-mail',
                             'session.moduleTitre' => 'Titre du module',
@@ -69,8 +69,8 @@ class ExportMassController extends Controller
 
         $colonnes = [
                             'id' => 'id',
-                            'user.nom' => 'Nom',
-                            'user.prenom' => 'Prénom',
+                            'user.lastname' => 'Nom',
+                            'user.firstname' => 'Prénom',
                             'user.username' => 'Identifiant (login)',
                             'user.email' => 'Adresse e-mail',
                             'session.moduleTitre' => 'Titre du module',

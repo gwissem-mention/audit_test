@@ -23,3 +23,32 @@
 .toggle .toggle-on, .toggle .toggle-off{color:#1DA4C5;}
 .toggle .toggle-on.active, .toggle .toggle-off.active{color:#FFFFFF;}
 .question select{padding: 2px 0; height: 28px;}
+
+/* Backoffice, zone de notification */
+.notification-wrapper {
+    float: left;
+    margin-top: 6px;
+    margin-right: 15px;
+}
+
+.notification-wrapper > form > * {
+    float:left;
+    margin-left:5px;
+}
+
+.notification-wrapper .update-reason-container {
+    position: relative;
+    top: -5px;
+}
+
+.notification-wrapper .update-reason-container > * {
+    float:left;
+}
+
+.notification-wrapper .update-reason-container input {
+    width:350px;
+}
+
+.notification-wrapper .update-reason-container button {
+    height:34px;
+}

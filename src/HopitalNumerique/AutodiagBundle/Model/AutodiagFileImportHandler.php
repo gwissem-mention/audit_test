@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\History;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
@@ -68,7 +69,7 @@ class AutodiagFileImportHandler
      * @param DataImporter       $chapterImporter
      * @param DataImporter       $questionImporter
      */
-    public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter, $isNotified)
+    public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter)
     {
         $autodiag = $model->getAutodiag();
         if (null !== $model->getFile()) {
@@ -89,7 +90,7 @@ class AutodiagFileImportHandler
             if (!$chapterProgress->hasErrors() && !$questionProgress->hasErrors()) {
                 // Save history
                 $user = $this->tokenStorage->getToken()->getUser();
-                $history = History::createSurveyImport($this->manager->find('HopitalNumeriqueAutodiagBundle:Autodiag', $autodiag->getId()), $user, $isNotified);
+                $history = History::createSurveyImport($autodiag, $user, $model->getNotifyUpdate(), $model->getUpdateReason());
                 $this->manager->persist($history);
             }
         }
@@ -152,6 +153,20 @@ class AutodiagFileImportHandler
     }
 
     /**
+     * @param Autodiag $autodiag
+     * @param integer  $notify
+     * @param string   $reason
+     */
+    public function handleNotification(Autodiag $autodiag, $notify, $reason)
+    {
+        // Save history
+        $user = $this->tokenStorage->getToken()->getUser();
+        $notification = History::createGeneralNotification($autodiag, $user, $notify, $reason);
+        $this->manager->persist($notification);
+        $this->manager->flush();
+    }
+
+    /**
      * @param AutodiagFileImport $model
      * @param DataImporter       $algorithmImporter
      */
@@ -168,7 +183,7 @@ class AutodiagFileImportHandler
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createAlgorithmImport($autodiag, $user, $model->getNotifyUpdate());
+            $history = History::createAlgorithmImport($autodiag, $user, $model->getNotifyUpdate(), $model->getUpdateReason());
             $this->manager->persist($history);
         }
 
@@ -194,7 +209,7 @@ class AutodiagFileImportHandler
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createRestitutionImport($autodiag, $user, $model->getNotifyUpdate());
+            $history = History::createRestitutionImport($autodiag, $user, $model->getNotifyUpdate(), $model->getUpdateReason());
             $this->manager->persist($history);
         }
 

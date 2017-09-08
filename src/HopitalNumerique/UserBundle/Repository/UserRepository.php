@@ -5,21 +5,34 @@ namespace HopitalNumerique\UserBundle\Repository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Nodevo\RoleBundle\Entity\Role;
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
+use Nodevo\RoleBundle\Entity\Role;
 use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 
 /**
  * UserRepository.
  */
 class UserRepository extends EntityRepository
 {
+    /**
+     * @param string $userEmail
+     *
+     * @return User|null
+     */
+    public function findUserByEmail($userEmail)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :userEmail')->setParameter('userEmail', $userEmail)
+            ->getQuery()->getOneOrNullResult()
+        ;
+    }
+
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
@@ -37,21 +50,22 @@ class UserRepository extends EntityRepository
 
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
-                        user.dateInscription,
+                        user.registrationDate,
                         user.username,
                         CONCAT(CONCAT(\'<a href="/?_switch_user=\', user.username), \'" target="_blank" class="btn btn-magenta fa fa-user" title="Simuler"></a>\') AS usernameSimulated,
-                        user.pseudonymeForum,
+                        user.pseudonym,
                         user.email,
-                        user.nom,
-                        user.prenom,
+                        user.lastname,
+                        user.firstname,
                         user.alreadyBeAmbassadeur,
                         user.alreadyBeExpert,
+                        user.activityNewsletterEnabled,
                         refRegion.libelle as region,
                         user.roles,
                         refEtat.libelle as etat,
                         user.lock,
                         min(contractualisation.dateRenouvellement) as contra,
-                        user.nbVisites,
+                        user.visitCount,
                         GROUP_CONCAT(DISTINCT user_domaines.nom SEPARATOR \' - \') as domaines
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
@@ -60,7 +74,7 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.contractualisations', 'contractualisation', Join::WITH, 'contractualisation.archiver = 0')
             ->join('user.domaines', 'user_domaines', Join::WITH, 'user_domaines.id IN (:domaines_ids)')
             ->groupBy('user.id')
-            ->orderBy('user.dateInscription', 'DESC')
+            ->orderBy('user.registrationDate', 'DESC')
             ->addOrderBy('user.username')
         ->setParameters([
             'domaines_ids' => $domainesId,
@@ -85,10 +99,10 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
                      user.username,
-                     user.nom,
-                     user.prenom,
+                     user.lastname,
+                     user.firstname,
                      refRegion.libelle as region,
-                     user.autreStructureRattachementSante,
+                     user.organizationLabel,
                      user.archiver,
                      GROUP_CONCAT(domains.nom SEPARATOR \', \') as domainName
 
@@ -97,7 +111,7 @@ class UserRepository extends EntityRepository
             ->join('user.domaines', 'domains', Join::WITH, 'domains.id IN (:domainIds)')
             ->setParameter('domainIds', $domainIds)
             ->leftJoin('user.region', 'refRegion')
-            ->where('user.autreStructureRattachementSante IS NOT NULL')
+            ->where('user.organizationLabel IS NOT NULL')
             ->groupBy('user.id')
             ->orderBy('user.username')
         ;
@@ -117,17 +131,17 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
                      user.username,
-                     user.nom,
-                     user.prenom,
+                     user.lastname,
+                     user.firstname,
                      refRegion.libelle as region,
-                     user.autreStructureRattachementSante,
+                     user.organizationLabel,
                      user.archiver,
                      GROUP_CONCAT(domaines.nom SEPARATOR \', \') as domainName
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.region', 'refRegion')
             ->leftJoin('user.domaines', 'domaines')
-            ->andWhere('user.autreStructureRattachementSante IS NOT NULL', 'user.id IN (:ids)')
+            ->andWhere('user.organizationLabel IS NOT NULL', 'user.id IN (:ids)')
             ->groupBy('user.id')
             ->orderBy('user.username')
             ->setParameter('ids', $ids);
@@ -147,11 +161,11 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->andWhere('user.roles LIKE :role', 'user.etablissementRattachementSante IS NOT NULL')
-            ->andWhere('user.etablissementRattachementSante = :etablissementRattachementSante', 'user.id != :id')
+            ->andWhere('user.roles LIKE :role', 'user.organization IS NOT NULL')
+            ->andWhere('user.organization = :organization', 'user.id != :id')
             ->setParameter('id', $user->getId())
             ->setParameter('role', '%ROLE_ES_DIRECTION_GENERALE_5%')
-            ->setParameter('etablissementRattachementSante', $user->getEtablissementRattachementSante());
+            ->setParameter('organization', $user->getOrganization());
 
         return $qb;
     }
@@ -175,7 +189,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->andWhere($qb->expr()->orX('user.region = :region', 'rattachementRegion.id = :region'))
             ->setParameter('region', $region)
-            ->orderBy('user.nom', 'ASC')
+            ->orderBy('user.lastname', 'ASC')
         ;
 
         if (!is_null($domaine) && $domaine != 0) {
@@ -255,8 +269,8 @@ class UserRepository extends EntityRepository
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
             ->setParameter('role', '%' . $role . '%')
-            ->orderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom', 'DESC');
+            ->orderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'DESC');
 
         return $qb;
     }
@@ -264,7 +278,7 @@ class UserRepository extends EntityRepository
     /**
      * Retourne la liste des utilisateurs possédant les roles demandés.
      *
-     * @param array $roles Le rôle demandé
+     * @param $roles
      *
      * @return QueryBuilder
      */
@@ -280,8 +294,8 @@ class UserRepository extends EntityRepository
                     ->setParameter('role' . $key, '%' . $role . '%');
         }
 
-        $qb->orderBy('user.nom', 'ASC')
-                ->addOrderBy('user.prenom', 'DESC');
+        $qb->orderBy('user.lastname', 'ASC')
+                ->addOrderBy('user.firstname', 'DESC');
 
         return $qb;
     }
@@ -497,16 +511,16 @@ class UserRepository extends EntityRepository
         }
 
         $requete
-            ->addOrderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'ASC')
         ;
 
         return $requete->getQuery()->getResult();
     }
 
     /**
-     * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateurs
-     * ainsi que le public pour l'utilisateur dans des formType.
+     * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB
+     * et non d'une liste d'utilisateur ainsi que le public pour l'utilisateur dans des formType.
      *
      * @author gmelchilsen <gmelchilsen@nodevo.com>
      *
@@ -554,8 +568,8 @@ class UserRepository extends EntityRepository
         }
 
         $qb
-            ->addOrderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'ASC')
         ;
 
         return $qb;
@@ -564,7 +578,7 @@ class UserRepository extends EntityRepository
     /**
      * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre.
      *
-     * @param int $idQuestionnaire Identifiant du questionnaire
+     * @param int $idQuestionnaire
      *
      * @return QueryBuilder
      */
@@ -578,8 +592,8 @@ class UserRepository extends EntityRepository
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
             ->setParameter('idQuestionnaire', $idQuestionnaire)
             ->groupBy('user')
-            ->orderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom');
+            ->orderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname');
 
         return $qb;
     }
@@ -599,6 +613,30 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @return User[]
+     */
+    public function getUsersId()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+
+            ->getQuery()->getScalarResult()
+        ;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisitsCountGroupedByUser()
+    {
+        return $this->createQueryBuilder('user', 'user.id')
+            ->select('user.id, user.visitCount')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * Récupère le nombre d'établissements connectés.
      *
      * @param Domaine $domaine
@@ -608,9 +646,9 @@ class UserRepository extends EntityRepository
     public function getNbEtablissements(Domaine $domaine = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('COUNT(distinct(user.etablissementRattachementSante))')
+        $qb->select('COUNT(distinct(user.organization))')
            ->from('HopitalNumeriqueUserBundle:User', 'user')
-           ->where('user.etablissementRattachementSante IS NOT NULL')
+           ->where('user.organization IS NOT NULL')
         ;
 
         if (null !== $domaine) {
@@ -632,28 +670,36 @@ class UserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
-    {
+    public function getCommunautePratiqueMembresQueryBuilder(
+        Groupe $groupe = null,
+        Domaine $domaine = null,
+        $membreId = null
+    ) {
         $query = $this->createQueryBuilder('user');
 
         $query
-            ->select('user, esProfil, region, esStatut, typeActivite')
-            ->leftJoin('user.profilEtablissementSante', 'esProfil')
+            ->select('user, profileType, region, esStatut, activities')
+            ->leftJoin('user.profileType', 'profileType')
             ->leftJoin('user.region', 'region')
-            ->leftJoin('user.statutEtablissementSante', 'esStatut')
-            ->leftJoin('user.typeActivite', 'typeActivite')
+            ->leftJoin('user.organizationType', 'esStatut')
+            ->leftJoin('user.activities', 'activities')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')
             ->setParameter('etat', User::ETAT_ACTIF_ID)
-            ->addOrderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'ASC')
             ->addOrderBy('user.id', 'ASC')
         ;
 
         if (null !== $groupe) {
             $query
-                ->innerJoin('user.groupeInscription', 'groupeInscription', Join::WITH, 'groupeInscription.groupe = :groupe')
+                ->innerJoin(
+                    'user.groupeInscription',
+                    'groupeInscription',
+                    Join::WITH,
+                    'groupeInscription.groupe = :groupe'
+                )
                 ->setParameter('groupe', $groupe)
             ;
         }
@@ -687,7 +733,12 @@ class UserRepository extends EntityRepository
         $query = $this->createQueryBuilder('groupeUser');
 
         $query
-            ->innerJoin('groupeUser.groupeInscription', 'groupeUserGroupe', Join::WITH, 'groupeUserGroupe.groupe = :groupeUserGroupe')
+            ->innerJoin(
+                'groupeUser.groupeInscription',
+                'groupeUserGroupe',
+                Join::WITH,
+                'groupeUserGroupe.groupe = :groupeUserGroupe'
+            )
             ->setParameter('groupeUserGroupe', $groupe)
         ;
 
@@ -707,7 +758,10 @@ class UserRepository extends EntityRepository
 
         $groupeUsers = $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult();
 
-        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER['SERVER_NAME'])->getQuery()->getOneOrNullResult();
+        /** @var Domaine $domaine */
+        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')
+            ->getDomaineFromHttpHost($_SERVER['SERVER_NAME'])->getQuery()->getOneOrNullResult()
+        ;
 
         $query
             ->leftJoin('user.groupeInscription', 'groupeInscription')
@@ -718,8 +772,8 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.domaines', 'domaine')
             ->andWhere('domaine.url = :domaine')
             ->setParameter(':domaine', ($domaine) ? $domaine->getUrl() : null)
-            ->addOrderBy('user.nom', 'ASC')
-            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'ASC')
             ->addOrderBy('user.id', 'ASC')
         ;
 
@@ -736,14 +790,13 @@ class UserRepository extends EntityRepository
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param Domaine        $domaine
-     * @param int            $nombreMembres Nombre de membres à retourner
-     * @param Reference|null $civilite
-     * @param array|null     $ignores       Liste d'utilisateurs à ignorer
+     * @param Domaine    $domaine
+     * @param int        $nombreMembres
+     * @param array|null $ignores
      *
      * @return User[]
      */
-    public function findCommunautePratiqueRandomMembres(Domaine $domaine, $nombreMembres, Reference $civilite = null, array $ignores = null)
+    public function findCommunautePratiqueRandomMembres(Domaine $domaine, $nombreMembres, array $ignores = null)
     {
         $query = $this->createQueryBuilder('user');
 
@@ -759,13 +812,6 @@ class UserRepository extends EntityRepository
             ->orderBy('rand')
         ;
 
-        if (null !== $civilite) {
-            $query
-                ->andWhere('user.civilite = :civilite')
-                ->setParameter('civilite', $civilite)
-            ;
-        }
-
         if (null !== $ignores) {
             $query
                 ->andWhere($query->expr()->notIn('user', ':ignores'))
@@ -778,6 +824,8 @@ class UserRepository extends EntityRepository
 
     /**
      * Retourne de nombre de membres de la communauté de pratique.
+     *
+     * @param Domaine $domaine
      *
      * @return int Total
      */
@@ -799,36 +847,179 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param Domaine $domain
+     * @param Domaine[] $domains
      *
      * @return integer
      */
-    public function countCDPUsers(Domaine $domain)
+    public function countCDPUsers($domains)
     {
-        return $this->createQueryBuilder('u')
-            ->select('COUNT(DISTINCT u.id)')
-            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
-            ->setParameter('domaine', $domain->getId())
-            ->andWhere('u.inscritCommunautePratique = TRUE')
+        if (empty($domains)) {
+            return null;
+        }
+
+        $qb = $this->createQueryBuilder('user');
+
+        return $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->join(
+                'user.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @return integer
+     */
+    public function countAddCDPUsers()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('COUNT(DISTINCT user.id)')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     *
+     * @return integer
+     */
+    public function countUsersInCDP($domains)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        $qb = $this->_em->createQueryBuilder();
+
+        return $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->from(Inscription::class, 'inscription')
+            ->join('inscription.user', 'user')
+
+            ->join(
+                'user.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
 
             ->getQuery()->getSingleScalarResult()
         ;
     }
 
     /**
-     * @param Domaine $domain
+     * Count users in givent domains
      *
+     * @param Domaine[] $domains
+     *
+     * @return int
+     */
+    public function countUsersByDomains($domains)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count users by domains who logged in since $since
+     *
+     * @param Domaine[] $domains
+     * @param $since
+     *
+     * @return int
+     */
+    public function countActiveUsersByDomains($domains, $since)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+        $qb
+            ->join('user.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_ACTIF_ID))
+            ->andWhere('user.lastLogin IS NOT NULL')
+            ->andWhere('user.lastLogin > :since')
+            ->setParameter('since', $since)
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Count ES users by domains
+     *
+     * @param Domaine[] $domains
+     *
+     * @return int
+     */
+    public function countEsUsersByDomains($domains)
+    {
+        $qb = $this->createCountByDomainsQueryBuilder($domains);
+        $qb
+            ->join('user.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_ACTIF_ID))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('user.roles', $qb->expr()->literal(sprintf('%%%s%%', Role::$ROLE_DIRECTEUR_LABEL))),
+                    $qb->expr()->like('user.roles', $qb->expr()->literal(sprintf('%%%s%%', Role::$ROLE_ES_LABEL)))
+                )
+            )
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Create base query builder for user count by domains queries
+     *
+     * @param Domaine[] $domains
+     *
+     * @return QueryBuilder
+     */
+    private function createCountByDomainsQueryBuilder($domains)
+    {
+        $qb = $this->createQueryBuilder('user');
+        $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->join(
+                'user.domaines',
+                'domaine',
+                Join::WITH,
+                $qb->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+        ;
+
+        return $qb;
+    }
+
+    /**
      * @return integer
      */
-    public function countUsersInCDP(Domaine $domain)
+    public function countAllUsers()
     {
-        return $this->_em->createQueryBuilder()
-            ->select('COUNT(DISTINCT i.user)')
-            ->from(Inscription::class, 'i')
-            ->join('i.user', 'u')
-            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
-            ->setParameter('domaine', $domain->getId())
-
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
             ->getQuery()->getSingleScalarResult()
         ;
     }

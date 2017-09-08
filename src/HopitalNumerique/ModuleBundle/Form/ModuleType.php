@@ -167,7 +167,7 @@ class ModuleType extends AbstractType
                             ->where('domaine.id IN (:domainesIds)')
                                 ->setParameter('domainesIds', $connectedUser->getDomainesId())
                             ->andWhere('user.enabled = ' . 1)
-                            ->orderBy('user.nom', 'ASC');
+                            ->orderBy('user.lastname', 'ASC');
                     },
             ])
             ->add('textMailRappel', TextareaType::class, [

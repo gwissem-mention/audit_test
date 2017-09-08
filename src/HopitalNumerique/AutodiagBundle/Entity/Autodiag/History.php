@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -17,6 +18,7 @@ class History
     const HISTORY_ENTRY_SURVEY = 'survey';
     const HISTORY_ENTRY_ALGORITHM = 'algorithm';
     const HISTORY_ENTRY_RESTITUTION = 'resitution';
+    const HISTORY_ENTRY_GENERAL = 'general';
 
     /**
      * @var int
@@ -70,42 +72,60 @@ class History
     private $notify;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $updateReason;
+
+    /**
      * History constructor.
      *
      * @param Autodiag $autodiag
      * @param User     $user
      */
-    private function __construct(Autodiag $autodiag, User $user, $notify)
+    private function __construct(Autodiag $autodiag, User $user, $notify, $updateReason = '')
     {
         $this->autodiag = $autodiag;
-        $this->username = $user->getPrenom() . ' ' . $user->getNom();
+        $this->username = $user->getFirstname() . ' ' . $user->getLastname();
         $this->dateTime = new \DateTime();
         $this->notify = $notify;
+        $this->updateReason = $updateReason;
     }
 
-    public static function createSurveyImport(Autodiag $autodiag, User $user, $notify)
+    public static function createSurveyImport(Autodiag $autodiag, User $user, $notify, $updateReason = '')
     {
-        $history = new self($autodiag, $user, $notify);
+        $history = new self($autodiag, $user, $notify, $updateReason);
         $history->setType(self::HISTORY_ENTRY_SURVEY);
 
         return $history;
     }
 
-    public static function createAlgorithmImport(Autodiag $autodiag, User $user, $notify)
+    public static function createAlgorithmImport(Autodiag $autodiag, User $user, $notify, $updateReason = '')
     {
-        $history = new self($autodiag, $user, $notify);
+        $history = new self($autodiag, $user, $notify, $updateReason);
         $history->setType(self::HISTORY_ENTRY_ALGORITHM);
 
         return $history;
     }
 
-    public static function createRestitutionImport(Autodiag $autodiag, User $user, $notify)
+    public static function createRestitutionImport(Autodiag $autodiag, User $user, $notify, $updateReason = '')
     {
-        $history = new self($autodiag, $user, $notify);
+        $history = new self($autodiag, $user, $notify, $updateReason);
         $history->setType(self::HISTORY_ENTRY_RESTITUTION);
 
         return $history;
     }
+
+    public static function createGeneralNotification(Autodiag $autodiag, User $user, $notify, $updateReason = '')
+    {
+        $history = new self($autodiag, $user, $notify, $updateReason);
+        $history->setType(self::HISTORY_ENTRY_GENERAL);
+
+        return $history;
+    }
+
+
 
     /**
      * Get model.
@@ -152,7 +172,7 @@ class History
      *
      * @param int $type
      *
-     * @return $this
+     * @return History
      */
     public function setType($type)
     {
@@ -172,13 +192,33 @@ class History
     /**
      * @param $notify
      *
-     * @return $this
+     * @return History
      */
     public function setNotify($notify)
     {
         $this->notify = $notify;
 
         return $this;
+    }
+
+    /**
+     * @param $updateReason
+     *
+     * @return History
+     */
+    public function setReason($updateReason)
+    {
+        $this->updateReason = $updateReason;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReason()
+    {
+        return $this->updateReason;
     }
 
     public static function getTypeList()

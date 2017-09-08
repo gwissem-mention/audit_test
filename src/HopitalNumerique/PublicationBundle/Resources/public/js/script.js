@@ -1,9 +1,9 @@
 $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+
     $('.deleteUploadedFile').on('click',function(){
-        // $(this).hide();
         $('.uploadedFile').hide();
         $('.inputUpload').show();
-        // $('#' + $(this).data('path') ) .val('');
     });
 
     $('#suggestion_file').on('change', function() {

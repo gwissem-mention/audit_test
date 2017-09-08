@@ -15,6 +15,9 @@
     {% javascripts output="compiled/hopitalnumerique-user-user-edit.js"
         "@jquery_maskedinput_js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
+        'bundles/hopitalnumeriquecore/js/components/AjaxList.js'
+        'bundles/hopitalnumeriquecore/js/components/CountyList.js'
+        'bundles/hopitalnumeriquecore/js/components/HobbyCollection.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -33,6 +36,9 @@
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if twigOptions.isAllowedToSwitch is defined and twigOptions.isAllowedToSwitch %}
+        <a href="/?_switch_user={{ user.username }}" title="Simuler l'utilisateur" class="btn btn-default"><i class="fa fa-user"></i></a>
+    {% endif %}
     {% if user.id and not user.lock %}
         <div onclick='deleteWithConfirm("{{path('hopital_numerique_user_delete', {'id':user.id})}}" );' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
     {% endif %}
@@ -87,45 +93,62 @@
 
             <div class="panel-body">
 
-                {%- if user.hasRoleAmbassadeur -%}
-                    <div class="row">
-                        <div class="col-md-12 text-right">
-                            <span class="text-muted"><strong>Note référencement :</strong> : {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(user, domaineCommunWithUser) }}{% endfor %}</span>
-                            &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':4, 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
-                        </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <span class="text-muted"><strong>Note référencement :</strong> : {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(user, domaineCommunWithUser) }}{% endfor %}</span>
+                        &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':4, 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
                     </div>
-                {%- endif -%}
+                </div>
 
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_errors(form) }}
 
                     {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_departements')}}" />
+                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_counties')}}" />
                     <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_etablissements')}}" />
                     
                     {# Formulaire : #}
-                    {{ form_row(form.civilite) }}
-                    {{ form_row(form.titre) }}
-                    {{ form_row(form.nom) }}
-                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.lastname) }}
+                    {{ form_row(form.firstname) }}
                     {{ form_row(form.email) }}
-                    {{ form_row(form.pseudonymeForum) }}
+                    {{ form_row(form.pseudonym) }}
                     {{ form_row(form.plainPassword) }}
-                    {{ form_row(form.telephoneDirect) }}
-                    {{ form_row(form.telephonePortable) }}
-                    {{ form_row(form.contactAutre) }}
+                    {{ form_row(form.phoneNumber) }}
+                    {{ form_row(form.cellPhoneNumber) }}
+                    {{ form_row(form.otherContact) }}
+                    {{ form_row(form.profileType) }}
+                    {{ form_row(form.jobType) }}
+                    {{ form_row(form.jobLabel) }}
+                    {{ form_row(form.presentation) }}
+                    {{ form_row(form.computerSkills, {'attr': {'class': 'select2'}}) }}
 
-                    {{ form_row(form.region) }}
-                    {%- if form.rattachementRegions is defined -%}
-                        {{ form_row(form.rattachementRegions) }}
-                    {%- endif -%}
-                    {{ form_row(form.departement) }} 
-                    {{ form_row(form.profilEtablissementSante) }}
+                    <div class="form-group">
+                        {{ form_label(form.hobbies) }}
+                        <div class="col-md-6">
+                            <ul class="row list-unstyled" id="reference_hobbies_form" data-prototype="{{ form_widget(form.hobbies.vars.prototype.label)|e }}">
+                                {% for hobby in form.hobbies %}
+                                    <li class="col-md-12">
+                                        <div class="hobby-item">
+                                            {% if hobby.label.vars.errors|length > 0 %}
+                                                {{ form_widget(hobby.label) }}
+                                                {{ form_errors(hobby.label) }}
+                                            {% else %}
+                                                <div class="hide">{{ form_widget(hobby) }}</div>
+                                                {{ hobby.vars.data.label }}
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="col-md-12"><button class="btn btn-sm btn-success add-hobby" type="button">{{ 'account.user.hobby.add'|trans }}</button></div>
+                        </div>
+                        {{ form_errors(form.hobbies) }}
+                    </div>
 
                     {% if not (is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') and (app.user.id == user.id)) %}
                         {{ form_row(form.roles) }}
-                        {{ form_row(form.domaines) }}
+                        {{ form_row(form.domaines, {'attr': {'class': 'select2'}}) }}
                     {% endif %}
 
                     {% if user.id != 1 %}
@@ -172,16 +195,12 @@
                             {# Zone établissement de santé #}
                             <div class="panel panel-default gray" id="etablissement_sante">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="" id="etablissement_sante_collapse">
-                                    <div class="panel-heading panel-default"><h4>Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h4></div>
+                                    <div class="panel-heading panel-default"><h4>Votre structure</h4></div>
                                 </a>
                                 <div id="collapseOne" class="in" style="height: auto;">
                                     <div class="panel-body">
-                                        {{ form_row(form.statutEtablissementSante) }}
-                                        {{ form_row(form.etablissementRattachementSante) }}
-                                        {{ form_row(form.autreStructureRattachementSante) }}
-                                        {{ form_row(form.typeActivite) }}
-                                        {{ form_row(form.fonctionDansEtablissementSanteReferencement) }}
-                                        {{ form_row(form.fonctionDansEtablissementSante) }}
+                                        {{ form_row(form.organization, {'attr': {'data-url': path('hopitalnumerique_etablissement_ajax_load'), 'class': 'ajax-list-select2'}}) }}
+                                        {{ form_row(form.activities) }}
                                     </div>
                                 </div>
                             </div>
@@ -189,18 +208,23 @@
                             {# Zone autre qu'un établissement de santé #}
                             <div class="panel panel-default gray" id="autre_etablissement_sante">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" id="autre_etablissement_sante_collapse">
-                                    <div class="panel-heading"><h4>Vous êtes dans une autre structure</h4></div>
+                                    <div class="panel-heading"><h4>Voter structure n'est pas présente dans la liste précédente</h4></div>
                                 </a>
                                 <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body">
-                                        {{ form_row(form.nomStructure) }}
-                                        {{ form_row(form.fonctionStructure) }}
+                                        {{ form_row(form.organizationType) }}
+                                        {{ form_row(form.organizationLabel) }}
+                                        {{ form_row(form.region, {'attr': {'data-county-url': path('hopital_numerique_user_counties')}}) }}
+                                        {%- if form.rattachementRegions is defined -%}
+                                            {{ form_row(form.rattachementRegions) }}
+                                        {%- endif -%}
+                                        {{ form_row(form.county) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {{ form_end(form) }}
+                {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>
     </div>

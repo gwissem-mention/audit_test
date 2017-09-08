@@ -103,8 +103,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
                         <span class="hidden-xs">
-                            {% if app.user.nom or app.user.prenom %}
-                                {{ app.user.prenom|capitalize ~ ' ' ~ app.user.nom|capitalize }}
+                            {% if app.user.lastname or app.user.firstname %}
+                                {{ app.user.firstname|capitalize ~ ' ' ~ app.user.lastname|capitalize }}
                             {% else %}
                                 {{ app.user.username|capitalize }}
                             {% endif %}
@@ -118,8 +118,8 @@
                                 <div class="pull-left"><img class="userimg" src="{{asset('bundles/nodevoadmin/img/logo-small.png')}}" alt="{{ app.user.username|capitalize }}"/></div>
                                 <div class="pull-right">
                                     <h5>
-                                        {% if app.user.prenom %}
-                                            Bonjour {{ app.user.prenom|capitalize }} !
+                                        {% if app.user.firstname %}
+                                            Bonjour {{ app.user.firstname|capitalize }} !
                                         {% else %}
                                             Bonjour {{ app.user.username|capitalize }} !
                                         {% endif %}
@@ -166,10 +166,15 @@
                         {%- set KnpMenu = knp_menu_get('menu-admin', [], {'breadcrumb' : 'yes'}) %}
                         {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::breadcrumbs.html.twig', 'currentAsLink':'0'}) }}
 
-                        <h1>{% block h1Title %}{% endblock %}</h1>
-                        <div class="options">
-                            <div class="btn-toolbar">
-                                {% block toolbarButton %}{% endblock %}
+                        <div id="main-title">
+                            <h1>{% block h1Title %}{% endblock %}</h1>
+
+                            {% block title_description %}{% endblock %}
+
+                            <div class="options">
+                                <div class="btn-toolbar">
+                                    {% block toolbarButton %}{% endblock %}
+                                </div>
                             </div>
                         </div>
                     </div>

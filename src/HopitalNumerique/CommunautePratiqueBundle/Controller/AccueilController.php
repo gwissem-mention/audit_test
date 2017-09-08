@@ -99,29 +99,13 @@ class AccueilController extends Controller
     /**
      * Retourne 12 membres au hasard pour le tableau de bord.
      *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
+     * @return User[] Membres
      */
     private function getMembresAuHasard()
     {
-        $messieursAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
-            ->findCommunautePratiqueRandomMembres(
-                6,
-                $this->container->get('hopitalnumerique_reference.manager.reference')
-                    ->findOneById(Reference::CIVILITE_MONSIEUR_ID)
-            )
+        $membresAuHasard = $this->get('hopitalnumerique_user.manager.user')
+            ->findCommunautePratiqueRandomMembres(12)
         ;
-        $mesdamesAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
-            ->findCommunautePratiqueRandomMembres(
-                6,
-                $this->container->get('hopitalnumerique_reference.manager.reference')
-                    ->findOneById(Reference::CIVILITE_MADAME_ID)
-            )
-        ;
-
-        $membresAuHasard = array_merge(
-            $messieursAuHasard,
-            $mesdamesAuHasard
-        );
 
         shuffle($membresAuHasard);
 

@@ -2,9 +2,13 @@
 
 namespace HopitalNumerique\ModuleBundle\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Session;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -72,21 +76,30 @@ class SessionRepository extends EntityRepository
     /**
      * Retourne la liste des sessions du formateur.
      *
-     * @param User $user L'utilisateur concerné
+     * @param      $user
      * @param bool $withDate
      * @param bool $limit
      *
-     * @return QueryBuilder
+     * @return array
      */
     public function getSessionsForFormateur($user, $withDate = false, $limit = false)
     {
         $qb = $this->_em->createQueryBuilder()
-                        ->select('ses')
-                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-                        ->leftJoin('ses.etat', 'refEtat')
-                        ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
-                        ->setParameter('user', $user)
-                        ->orderBy('ses.dateSession', 'DESC');
+            ->select('ses')
+            ->addSelect('refEtat', 'formateur', 'module', 'inscriptions', 'user')
+            ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+            ->leftJoin('ses.etat', 'refEtat')
+            ->leftJoin('ses.formateur', 'formateur')
+            ->leftJoin('ses.module', 'module')
+            ->leftJoin('ses.inscriptions', 'inscriptions')
+            ->leftJoin('inscriptions.user', 'user')
+            ->andWhere('formateur = :user', 'refEtat.id = :activeSessionId')
+            ->setParameters([
+                'user' => $user,
+                'activeSessionId' => Reference::STATUT_SESSION_ACTIVE_ID
+            ])
+            ->orderBy('ses.dateSession', 'DESC')
+        ;
 
         if ($withDate !== false) {
             if ($withDate == 'beforeToday') {
@@ -102,7 +115,7 @@ class SessionRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -159,33 +172,54 @@ class SessionRepository extends EntityRepository
     }
 
     /**
-     * Retourne les sessions des 15 prochains jours.
+     * Retourne les $limit prochaines sessions.
      *
-     * @param $domainesUser
+     * @param Domaine[] $domains
+     * @param int $limit
      *
-     * @return QueryBuilder
+     * @return ArrayCollection|Session[]
      */
-    public function getNextSessions($domainesUser)
+    public function getNextSessionsByDomains($domains, $limit = 5)
     {
         $today = new \DateTime();
 
-        return $this->_em->createQueryBuilder()
-                        ->select('ses.id, ses.dateSession, count(ins) as inscriptions, mod.titre')
-                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-                        ->leftJoin('ses.inscriptions', 'ins', 'WITH', 'ins.etatInscription = :etatInscription')
-                        ->leftJoin('ses.module', 'mod')
-                        ->leftJoin('mod.domaines', 'domaine')
-                            ->where('domaine.id IN (:idDomaines)')
-                        ->andWhere('ses.dateSession > :today', 'ses.etat = :idActif')
-                        ->setParameters([
-                            'idActif' => 403,
-                            'etatInscription' => 407,
-                            'idDomaines' => $domainesUser,
-                        ])
-                        ->setParameter('today', $today, Type::DATETIME)
-                        ->setMaxResults(5)
-                        ->groupBy('ses.id')
-                        ->orderBy('ses.dateSession', 'ASC');
+        $queryBuilder = $this->createQueryBuilder('session');
+        $queryBuilder
+            ->select(
+                'session.id',
+                'session.dateSession',
+                'count(inscription) as inscriptions',
+                'module.titre'
+            )
+            ->leftJoin(
+                'session.inscriptions',
+                'inscription',
+                Join::WITH,
+                $queryBuilder->expr()->eq('inscription.etatInscription', Reference::STATUT_SESSION_ACCEPTED_ID)
+            )
+            ->join('session.module', 'module')
+            ->join(
+                'module.domaines',
+                'domaine',
+                Join::WITH,
+                $queryBuilder->expr()->in(
+                    'domaine',
+                    array_map(function (Domaine $domain) {
+                        return $domain->getId();
+                    }, $domains)
+                )
+            )
+            ->andWhere('session.dateSession > :today', 'session.etat = :idActif')
+            ->groupBy('session.id')
+            ->orderBy('session.dateSession', 'ASC')
+            ->setMaxResults($limit)
+            ->setParameters([
+                'idActif' => Reference::STATUT_SESSION_ACTIVE_ID,
+                'today' => $today
+            ])
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

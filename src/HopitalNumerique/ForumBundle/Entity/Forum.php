@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Entity;
 
 use CCDNForum\ForumBundle\Entity\Forum as BaseForum;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -37,7 +38,7 @@ class Forum extends BaseForum
         }
 
         foreach ($this->readAuthorisedRoles as $role) {
-            if ('anon.' === $securityContext->getToken()->getUser()) {
+            if (!$securityContext->getToken()->getUser() instanceof User) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }

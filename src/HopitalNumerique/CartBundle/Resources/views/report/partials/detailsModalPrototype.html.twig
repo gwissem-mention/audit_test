@@ -1,0 +1,33 @@
+{% trans_default_domain 'cart' %}
+
+<script type="x-template" id="details-modal-prototype">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{ '{{reportTitle}}' }}</h4>
+    </div>
+    <div class="modal-body">
+
+        {{ '{{#if reportItems.length}}' }}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{{ 'modal.report_details.object_type_name'|trans }}</th>
+                <th>{{ 'modal.report_details.object_title'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% verbatim %}
+                {{#reportItems}}
+                <tr class="line">
+                    <td class="bold">{{this.objectTypeName}}</td>
+                    <td>{{this.title}}</td>
+                </tr>
+                {{/reportItems}}
+                </tbody>
+            {% endverbatim %}
+        </table>
+        {{ '{{else}}' }}
+        {{ 'modal.report_details.loading'|trans }}
+        {{ '{{/if}}' }}
+    </div>
+</script>

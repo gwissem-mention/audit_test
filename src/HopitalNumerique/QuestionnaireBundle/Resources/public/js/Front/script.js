@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 (function() {
     $(function() {
-        var $select = $('.ajax-select2-list');
+        var $select = $('.ajax-list-select2');
         $select.select2({
             ajax: {
                 url: $select.data('url'),

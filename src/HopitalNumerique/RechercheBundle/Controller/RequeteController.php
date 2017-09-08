@@ -2,122 +2,71 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use HopitalNumerique\RechercheBundle\Entity\Requete;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Class RequeteController
+ */
 class RequeteController extends Controller
 {
     /**
-     * Affichage de la liste des requêtes de l'utilisateur connecté.
-     *
      * @param Request $request
-     * @param $indexVue
+     * @param Requete $search
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function indexAction(Request $request, $indexVue)
+    public function deleteAction(Request $request, Requete $search)
     {
-        //get connected user
-        $user = $this->getUser();
-        $domaineId = $request->getSession()->get('domaineId');
-
-        //get requetes
-        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy([
-            'user' => $user,
-            'domaine' => $domaineId,
-        ])
-        ;
-        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')
-            ->getLastsConsultations($user, $domaineId)
-        ;
-
-        if ($indexVue) {
-            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', [
-                'requetes' => $requetes,
-                'consultations' => $consultations,
-            ]);
-        } else {
-            return $this->render('HopitalNumeriqueRechercheBundle:Requete:mesrequetes.html.twig', [
-                'requetes' => $requetes,
-            ]);
+        if ($this->getUser()->getId() !== $search->getUser()->getId()) {
+            throw new AccessDeniedException();
         }
+
+        try {
+            $this->get('doctrine.orm.entity_manager')->remove($search);
+
+            $this->get('doctrine.orm.entity_manager')->flush();
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $this->get('translator')->trans('saved_searches.delete.error', [], 'widget'));
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
+        $this->addFlash('success', $this->get('translator')->trans('saved_searches.delete.success', [], 'widget'));
+
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
-     * Delete d'une requete (AJAX).
+     * @param Request   $request
+     * @param Requete   $search
      *
-     * @param int $id ID de la requete à supprimer
-     *
-     * @return Response
+     * @return JsonResponse
      */
-    public function deleteAction($id)
+    public function changeNameAction(Request $request, Requete $search)
     {
-        $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy(['id' => $id]);
-
-        //get connected user
-        $user = $this->getUser();
-
-        //Suppression de l'entitée
-        $this->get('hopitalnumerique_recherche.manager.requete')->delete($requete);
-
-        //si on a supprimé la dernière requete par défaut, on met en défaut une autre requete
-        if ($requete->isDefault()) {
-            $newRequete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy(['user' => $user]);
-            if ($newRequete) {
-                $newRequete->setDefault(true);
-                $this->get('hopitalnumerique_recherche.manager.requete')->save($newRequete);
-            }
+        if ($this->getUser()->getId() !== $search->getUser()->getId()) {
+            throw new AccessDeniedException();
         }
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        $form = $this->createForm(RequeteType::class, $search, [
+            'csrf_protection' => false,
+        ]);
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
-    }
+        $form->submit([
+            'nom' => $request->request->get('text'),
+        ]);
 
-    /**
-     * Edition du nom d'une requete (AJAX).
-     *
-     * @param int $id ID de la requete à mettre à jour
-     *
-     * @return Response
-     */
-    public function editAction($id)
-    {
-        $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy(['id' => $id]);
-        $nom = $this->get('request')->request->get('nom');
-        $requete->setNom($nom);
-
-        //Suppression de l'entitée
-        $this->get('hopitalnumerique_recherche.manager.requete')->save($requete);
-
-        $this->get('session')->getFlashBag()->add('info', 'Recherche mise à jour avec succès.');
-
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
-    }
-
-    /**
-     * Toggle Default d'une requete (AJAX).
-     *
-     * @param int $id ID de la requete à toggle
-     *
-     * @return Response
-     */
-    public function toggleAction($id)
-    {
-        //get connected user
-        $user = $this->getUser();
-
-        //get requetes
-        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy(['user' => $user]);
-        foreach ($requetes as $requete) {
-            $isDefault = ($requete->getId() == $id);
-            $requete->setDefault($isDefault);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get('doctrine.orm.entity_manager')->flush($search);
         }
-        $this->get('hopitalnumerique_recherche.manager.requete')->save($requetes);
 
-        $this->get('session')->getFlashBag()->add('info', 'Recherche par défaut modifiée avec succès.');
-
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopital_numerique_requete_homepage') . '"}', 200);
+        return new JsonResponse();
     }
 }

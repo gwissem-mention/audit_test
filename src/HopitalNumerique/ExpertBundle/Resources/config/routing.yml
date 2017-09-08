@@ -4,7 +4,7 @@ hopital_numerique_expert_admin:
 
 hopital_numerique_expert_front:
     resource: "@HopitalNumeriqueExpertBundle/Resources/config/routing/front.yml"
-    prefix:   /compte-hn
+    prefix:   /mon-compte
 
 hopitalnumerique_expert_front_expert:
     pattern:  /les-experts

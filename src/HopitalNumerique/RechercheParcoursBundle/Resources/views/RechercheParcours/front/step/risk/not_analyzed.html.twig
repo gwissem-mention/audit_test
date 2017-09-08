@@ -1,0 +1,61 @@
+{% trans_default_domain 'guided_search' %}
+
+<table class="table" id="guided-search-step-risks">
+    <thead>
+    <tr>
+        <th>{{ 'step.risks.header.nature'|trans }}</th>
+        <th>{{ 'step.risks.header.label'|trans }}</th>
+        <th class="range-selector">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_probability'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.probability'|trans }}
+            </span>
+        </th>
+        <th class="range-selector">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_impact'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.impact'|trans }}
+            </span>
+        </th>
+        <th class="criticality">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_criticality'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.criticality'|trans }}
+            </span>
+        </th>
+        <th class="actions"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for risk in riskStep.risks %}
+        <tr class="risk-analysis" data-analysis-uri="{{ path('hopital_numerique_guided_search_step_risk_analysis', {'guidedSearch': guidedSearch.id, 'risk': risk.riskId, 'stepPath': stepPath}) }}">
+            <td>
+                {% if risk.natureCode %}
+                    <span data-toggle="tooltip" title="{{ risk.natureLabel }}">
+                        {{ risk.natureCode }}
+                    </span>
+                {% else %}
+                    {{ risk.natureLabel }}
+                {% endif %}
+            </td>
+            <td>{{ risk.label }}</td>
+            <td>
+                {{ macro.riskSelect(risk.riskId, risk.probability, 'probability') }}
+            </td>
+            <td>
+                {{ macro.riskSelect(risk.riskId, risk.impact, 'impact') }}
+            </td>
+            <td class="criticality" data-value="{{ risk.impact * risk.probability }}">
+                {{ risk.impact * risk.probability }}
+            </td>
+            <td class="text-center">
+                <a
+                    href="{{ path('hopital_numerique_guided_search_step_risk_remove', {risk: risk.riskId, guidedSearchStep: guidedSearchStep.id}) }}"
+                    class="btn btn-danger btn-sm"
+                    data-toggle="tooltip"
+                    title="{{ 'step.risks.actions.remove'|trans }}"
+                >
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

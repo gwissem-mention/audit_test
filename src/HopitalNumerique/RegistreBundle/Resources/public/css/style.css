@@ -37,7 +37,7 @@
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content p.titre{font-size: 16px; margin:0;}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content ul{margin:0 0 15px;}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content a.link{font-size: 12px;margin-bottom: 15px; }
-#registre-ambassadeur .annuaire_ambassadeur .fiche .content a.btn{color:#ffffff;font-size: 14px; font-weight: bold; width: 205px; display: block;}
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content a.solicit{color:#ffffff;font-size: 14px; font-weight: bold; width: 205px; display: block;}
 #registre-ambassadeur .annuaire_ambassadeur .aucune-fiche .content {margin-bottom:20px;}
 
 .fancybox-popin {width:auto;}

@@ -16,7 +16,7 @@
         <div class="panel-body" >
         
             {% if interventionDemande.estDemandeRegroupee %}
-                <h3>Cette demande à été regroupée</h3>
+                <h3>Cette demande a été regroupée</h3>
                 {% for interventionRegroupementDemandePrincipale in interventionDemande.interventionRegroupementsDemandesPrincipales %}
                     <div class="row">
                         <div class="col-md-6">
@@ -24,10 +24,10 @@
                                 <div class="col-md-4"><strong>Établissement référent</strong></div>
                                 <div class="col-md-8">
                                     <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupementDemandePrincipale.interventionDemandePrincipale.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                    {% if interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante is not null %}
-                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante.appellation }}
+                                    {% if interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.organization is not null %}
+                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.organization.appellation }}
                                     {% else %}
-                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.autreStructureRattachementSante }}
+                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.organizationLabel }}
                                     {% endif %}
                                 </div>
                             </div></div>
@@ -41,10 +41,10 @@
                                             {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id != interventionDemande.id %}
                                                 <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
                                             {% endif %}
-                                            {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
-                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                            {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.organization is not null %}
+                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.organization.appellation }}
                                             {% else %}
-                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.organizationLabel }}
                                             {% endif %}
                                         </p>
                                     {% endfor %}
@@ -69,9 +69,9 @@
                         <div class="col-md-4"><strong>Demandeur</strong></div>
                         <div class="col-md-8">
                             {{ interventionDemande.referent.appellation }}
-                            {% if interventionDemande.referent.etablissementRattachementSante is not null %}
+                            {% if interventionDemande.referent.organization is not null %}
                                 <br>
-                                {{ interventionDemande.referent.etablissementRattachementSante.appellation }}
+                                {{ interventionDemande.referent.organization.appellation }}
                             {% endif %}
                             {% if interventionDemande.referent.region is not null %}
                                 <br>{{ interventionDemande.referent.region.libelle }}
@@ -151,10 +151,10 @@
                             {% for interventionRegroupement in interventionDemande.interventionRegroupementsDemandesRegroupees %}
                                 <div>
                                     <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                    {% if interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
-                                         {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                    {% if interventionRegroupement.interventionDemandeRegroupee.referent.organization is not null %}
+                                         {{ interventionRegroupement.interventionDemandeRegroupee.referent.organization.appellation }}
                                     {% else %}
-                                        {{ interventionRegroupement.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                        {{ interventionRegroupement.interventionDemandeRegroupee.referent.organizationLabel }}
                                     {% endif %}
                                 </div>
                             {% endfor %}

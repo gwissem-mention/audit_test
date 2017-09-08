@@ -35,7 +35,7 @@ class ReferenceCode
     /**
      * @var Reference
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"}, inversedBy="codes")
      * @ORM\JoinColumn(name="reference", referencedColumnName="ref_id", onDelete="cascade")
      */
     private $reference;

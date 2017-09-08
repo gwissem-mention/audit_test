@@ -1,0 +1,189 @@
+{% trans_default_domain 'guided_search' %}
+
+{% import _self as analyzed %}
+
+{% set hasInitialSkills = false %}
+{% for risk in riskStep.risks if risk.initialSkillsRate %}
+    {% set hasInitialSkills = true %}
+{% endfor %}
+
+<div class="pull-right exports">
+    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'csv'}) }}" class="btn btn-success">
+        {{ 'step.risks.actions.export.csv.label'|trans }}
+    </a>
+
+    <a href="{{ path('hopital_numerique_guided_search_step_risk_export', {guidedSearchStep: guidedSearchStep.id, type: 'xlsx'}) }}" class="btn btn-success">
+        {{ 'step.risks.actions.export.xls.label'|trans }}
+    </a>
+</div>
+
+<table class="table" id="guided-search-step-risks">
+    <thead>
+    <tr>
+        <th>{{ 'step.risks.header.nature'|trans }}</th>
+        <th>{{ 'step.risks.header.label'|trans }}</th>
+        <th class="range-selector">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_probability'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.probability'|trans }}
+            </span>
+        </th>
+        <th class="range-selector">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_impact'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.impact'|trans }}
+            </span>
+        </th>
+        <th class="criticality">
+            <span data-toggle="tooltip" title="{{ 'Module_guidedSearch_risk_criticality'|nodevoTexteDynamique(domaineCurrent.id)|e }}">
+                {{ 'step.risks.header.criticality'|trans }}
+            </span>
+        </th>
+
+        {% if hasInitialSkills %}
+            <th>{{ 'step.risks.header.initialSkills'|trans }}</th>
+        {% endif %}
+        <th>{{ 'step.risks.header.currentSkills'|trans }}</th>
+        <th class="actions"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for risk in riskStep.risks %}
+        <tr class="risk-analysis" data-analysis-uri="{{ path('hopital_numerique_guided_search_step_risk_analysis', {'guidedSearch': guidedSearch.id, 'risk': risk.riskId, 'stepPath': stepPath}) }}">
+            <td class="nature">
+                {% if risk.natureCode %}
+                    <span data-toggle="tooltip" title="{{ risk.natureLabel }}">
+                        {{ risk.natureCode }}
+                    </span>
+                {% else %}
+                    {{ risk.natureLabel }}
+                {% endif %}
+            </td>
+            <td class="risk">
+                {% if risk.label|length > 30 %}
+                    <span data-toggle="tooltip" title="{{ risk.label }}">
+                        {{ risk.label|truncate(30) }}
+                    </span>
+                {% else %}
+                    {{ risk.label }}
+                {% endif %}
+            </td>
+            <td>
+                {{ macro.riskSelect(risk.riskId, risk.probability, 'probability') }}
+            </td>
+            <td>
+                {{ macro.riskSelect(risk.riskId, risk.impact, 'impact') }}
+            </td>
+            <td
+                class="criticality"
+                data-value="{{ risk.impact * risk.probability }}"
+                data-toggle="tooltip"
+                title="{{ risk.comment }}"
+            >
+                {{ risk.impact * risk.probability }}
+            </td>
+            <td>
+                {{ analyzed.skillsRate('initial', risk.initialSkillsRate) }}
+            </td>
+            {% if hasInitialSkills %}
+                <td>
+                    {{ analyzed.skillsRate('current', risk.currentSkillsRate) }}
+                </td>
+            {% endif %}
+            <td class="text-center">
+                <div class="btn-group">
+                    {% if risk.relatedRisks|length > 0 %}
+                        <a
+                            href="#"
+                            class="btn btn-success btn-sm excluded-objects-btn"
+                            data-toggle="tooltip"
+                            title="{{ 'step.risks.actions.view'|trans }}"
+                        >
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    {% endif %}
+
+                    <a
+                        href="#"
+                        class="btn btn-primary btn-sm comment-btn"
+                        data-toggle="tooltip"
+                        title="{{ 'step.risks.actions.comment'|trans }}"
+                    >
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a
+                        href="{{ path('hopital_numerique_guided_search_step_risk_remove', {risk: risk.riskId, guidedSearchStep: guidedSearchStep.id}) }}"
+                        class="btn btn-danger btn-sm"
+                        data-toggle="tooltip"
+                        title="{{ 'step.risks.actions.remove'|trans }}"
+                    >
+                        <i class="fa fa-trash-o"></i>
+                    </a>
+                </div>
+
+
+
+                <div class="excluded-objects-modal-content hide">
+
+                    <p>{{ 'step.risks.excluded_objects.description'|trans }}</p>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{{ 'step.risks.excluded_objects.header.title'|trans }}</th>
+                            <th>{{ 'step.risks.excluded_objects.header.exclude'|trans }}</th>
+                        </tr>
+                        </thead>
+                        {% for objectRelated in risk.relatedRisksByDomain(domaineCurrent) %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': objectRelated.object.id}) }}" target="_blank">
+                                        {{ objectRelated.object.typeLabels|join(', ') }} -
+                                        {{ objectRelated.object.titre }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="{{ "object-"~risk.riskId~"-"~objectRelated.object.id }}" class="object-excluded" name="excludedObjects[]" value="{{ objectRelated.object.id }}"{{ risk.excludedObjects.contains(objectRelated.object) ? " checked='checked'" }} />
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <input type="hidden" name="comment" class="comment" value="{{ risk.comment }}">
+                <div class="comment-modal-content hide">
+                    <textarea class="comment-modal" cols="60" rows="10">{{ risk.comment }}</textarea>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+<div class="modal risk-analysis-modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="save btn btn-success">{{ 'step.risks.modal.save.label'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% macro skillsRate(type, value) %}
+    <span class="skillsRateLabel pull-right">
+        {% if value is not empty %}
+            {{ 'step.risks.skills_rate.rate'|trans({'%rate%': value}) }}
+        {% else %}
+            {{ 'step.risks.skills_rate.empty'|trans }}
+        {% endif %}
+    </span>
+
+    <span class="skillsRate"></span>
+    <input type="hidden" name="{{ type }}SkillsRate" class="skillsRateValue" value="{{ value }}">
+{% endmacro %}

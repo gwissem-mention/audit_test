@@ -22,16 +22,6 @@ class ContractualisationManager extends BaseManager
     }
 
     /**
-     * Récupère le nombre d'ambassadeur dont la contractualisation est à renouveler.
-     *
-     * @return array
-     */
-    public function getContractualisationsARenouvelerForAmbassador()
-    {
-        return $this->getRepository()->countExpiredContractForAmbassador();
-    }
-
-    /**
      * Override : Récupère les contractualisations pour un utilisateur donné.
      *
      * @return array

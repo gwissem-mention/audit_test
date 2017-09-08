@@ -291,18 +291,22 @@ $(".panel-footer").prev().css("border-radius","0");
 // -------------------------------
 // Delete with apprise confirmation
 // -------------------------------
-function deleteWithConfirm(path)
+function deleteWithConfirm(path, ajax)
 {
     apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-        if(r) { 
-            $.ajax({
-                url      : path,
-                type     : 'POST',
-                dataType : 'json',
-                success : function( data ){
-                    window.location = data.url;
-                }
-            });
+        if(r) {
+            if (ajax === undefined || ajax === true) {
+                $.ajax({
+                    url      : path,
+                    type     : 'POST',
+                    dataType : 'json',
+                    success : function( data ){
+                        window.location = data.url;
+                    }
+                });
+            } else {
+                window.location = path;
+            }
         }
     });
 }

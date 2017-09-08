@@ -2,28 +2,16 @@
 
 namespace HopitalNumerique\UserBundle\Manager;
 
-use Symfony\Component\Security\Core\SecurityContext;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\UserEvent as UserEventFos;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginManager implements EventSubscriberInterface
 {
-    /** @var \Symfony\Component\Security\Core\SecurityContext */
-    private $securityContext;
-
     /**
-     * Constructor.
-     *
-     * @param SecurityContext $securityContext
-     */
-    public function __construct(SecurityContext $securityContext)
-    {
-        $this->securityContext = $securityContext;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return array
      */
     public static function getSubscribedEvents()
     {
@@ -34,37 +22,24 @@ class LoginManager implements EventSubscriberInterface
     }
 
     /**
-     * [onSecurityImplicitLogin description].
-     *
-     * @param FOS\UserBundle\Event\UserEvent $event [description]
-     *
-     * @return [type]
+     * @param UserEventFos $event
      */
     public function onSecurityImplicitLogin(UserEventFos $event)
     {
+        /** @var User $user */
         $user = $event->getUser();
 
-        //if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            // user has just logged in
-            $user->addNbVisites();
-        //}
+        $user->addVisitCount();
     }
 
     /**
-     * [onSecurityInteractivelogin description].
-     *
-     * @param \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event [description]
-     *
-     * @return [type]
+     * @param InteractiveLoginEvent $event
      */
-    public function onSecurityInteractivelogin(\Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event)
+    public function onSecurityInteractivelogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        //if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            // user has just logged in
-            $user->addNbVisites();
-        //}
+        $user->addVisitCount();
 
         $ip = $event->getRequest()->getClientIp();
         $user->setIpLastConnection($ip);

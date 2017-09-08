@@ -22,14 +22,14 @@
                 </p>
                 <p>
                     <strong>Téléphone direct : </strong>
-                    {% if user.telephoneDirect is not null %}
-                        {{ user.telephoneDirect }}
+                    {% if user.phoneNumber is not null %}
+                        {{ user.phoneNumber }}
                     {% endif %}                    
                 </p>
                 <p>
                     <strong>Téléphone portable : </strong>
-                    {% if user.telephonePortable is not null %}
-                        {{ user.telephonePortable }}
+                    {% if user.cellPhoneNumber is not null %}
+                        {{ user.cellPhoneNumber }}
                     {% endif %}
                 </p>
                 <p>
@@ -37,7 +37,7 @@
                     {% if etablissement is not null %}
                         {{ etablissement.nom }}
                     {% else %}
-                        {{ user.autreStructureRattachementSante }}
+                        {{ user.organizationLabel }}
                     {% endif %}                     
                 </p>
             </div>

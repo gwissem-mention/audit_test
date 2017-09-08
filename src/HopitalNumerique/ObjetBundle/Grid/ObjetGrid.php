@@ -43,10 +43,15 @@ class ObjetGrid extends Grid implements GridInterface
 
     /**
      * @param string $filtre
+     * @param string|null $domain
      */
-    public function setDefaultFiltreFromController($filtre)
+    public function setDefaultFiltreFromController($filtre, $domain = null)
     {
         $filtres = [];
+
+        if (null !== $domain) {
+            $filtres['domainesNom'] = $domain;
+        }
 
         switch ($filtre) {
             case 'point-dur':

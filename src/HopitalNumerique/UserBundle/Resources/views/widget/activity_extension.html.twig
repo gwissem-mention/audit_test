@@ -1,0 +1,31 @@
+{% trans_default_domain 'widget' %}
+
+<i class="fa fa-trophy {{ activityInfo.activeUser ? '' : 'fa-trophy-o' }} yellow memberActivityRatio"></i>
+
+<span class="hidden memberActivityRatio-tooltipContent">
+    {% if activityInfo.activeUser %}
+        <b>{{ 'activity.member_activity_ratio.top'|trans }}</b><br />
+    {% else %}
+        <b>{{ 'activity.member_activity_ratio.bottom'|trans }}</b><br />
+    {% endif %}
+
+    {% if activityInfo['visitCount'] != 0 %}
+        {{ 'activity.member_activity_ratio.criteria.visitsCount'|trans }} {{ activityInfo['visitCount'] }}<br />
+    {% endif %}
+
+    {% if activityInfo['nbPost'] != 0 %}
+        {{ 'activity.member_activity_ratio.criteria.forumPostsCount'|trans }} {{ activityInfo['nbPost'] }}<br />
+    {% endif %}
+
+    {% if activityInfo['nbComment'] != 0 %}
+        {{ 'activity.member_activity_ratio.criteria.commentsCount'|trans }} {{ activityInfo['nbComment'] }}<br />
+    {% endif %}
+
+    {% if activityInfo['nbNote'] != 0 %}
+        {{ 'activity.member_activity_ratio.criteria.notesCount'|trans }} {{ activityInfo['nbNote'] }}<br />
+    {% endif %}
+
+    {% if activityInfo['recommendationsCount'] != 0 %}
+        {{ 'activity.member_activity_ratio.criteria.recommendationsCount'|trans }} {{ activityInfo['recommendationsCount'] }}<br />
+    {% endif %}
+</span>

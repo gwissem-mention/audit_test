@@ -40,3 +40,16 @@ services:
         arguments: ['@router']
         tags:
             - { name: 'form.type' }
+
+    nodevo_mail.subscriber.mail_log:
+        class: Nodevo\MailBundle\EventListener\RecommendationMailSendedSubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    nodevo_mail.repository.recommendation_mail_log:
+        class: Nodevo\MailBundle\Repository\RecommendationMailLogRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'Nodevo\MailBundle\Entity\RecommendationMailLog'

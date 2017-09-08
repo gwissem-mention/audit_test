@@ -96,7 +96,7 @@ class SessionType extends AbstractType
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('user')
                             ->where('user.enabled = ' . 1)
-                            ->orderBy('user.nom', 'ASC');
+                            ->orderBy('user.lastname', 'ASC');
                     },
             ])
             ->add('restrictionAcces', 'genemu_jqueryselect2_entity', [

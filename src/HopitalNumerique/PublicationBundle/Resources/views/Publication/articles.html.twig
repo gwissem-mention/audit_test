@@ -69,6 +69,13 @@
             <div class="col-md-12">
                 <div class="btn btn-sm btn-default pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
                 <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss"><i class="fa fa-rss"></i></a>
+                {% if contenu is defined %}
+                    {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id, cssClass: 'pull-right'}) }}
+                {% else %}
+                    {% if not objet.article %}
+                        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'objet', objectId: objet.id, cssClass: 'pull-right'}) }}
+                    {% endif %}
+                {% endif %}
                 <h1 class="violet">{{objet.titre}}</h1>
             </div>
 
@@ -106,4 +113,8 @@
             <div class="clearfix"></div>
         </div>
     </div>
+{% endblock %}
+
+{% block helpBlock %}
+    {{ contextualNavigationHelpBlock(objet) }}
 {% endblock %}

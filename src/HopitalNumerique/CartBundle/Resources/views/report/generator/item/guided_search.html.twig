@@ -1,0 +1,45 @@
+{% trans_default_domain 'cart' %}
+
+{% import _self as macro %}
+
+<h2>
+    <small>{{ ('item.object_type.'~item.type)|trans }}</small>
+    {{ item.title }}
+
+    <span class="date">
+        {{ 'generator.guided_search.publication_date'|trans }} {{ item.publicationDate|date('d/m/Y') }}
+    </span>
+</h2>
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns and item.description %}
+    <fieldset>
+        <legend>{{ 'generator.guided_search.description'|trans }}</legend>
+        <p>
+            {{ item.description|nl2br }}
+        </p><br />
+    </fieldset>
+{% endif %}
+
+
+{% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.children|length > 0%}
+    <fieldset>
+        <legend>{{ 'generator.publication.summary'|trans }}</legend>
+        <ul>
+            {% for child in item.children %}
+                <li>
+                    {{ child.reference.libelle }}
+                    {% if child.showChildren and child.reference.enfants|length > 0 %}
+                        <ul>
+                            {% for childReference in child.reference.enfants %}
+                                <li>{{ childReference.libelle }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul><br />
+    </fieldset>
+{% endif %}
+
+
+{{ include('@HopitalNumeriqueCart/report/generator/item/partials/references.html.twig') }}

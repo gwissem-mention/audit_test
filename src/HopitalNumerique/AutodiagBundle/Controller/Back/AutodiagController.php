@@ -15,6 +15,7 @@ use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +72,7 @@ class AutodiagController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($domain->getAutodiag());
             $manager->flush();
@@ -81,6 +83,11 @@ class AutodiagController extends Controller
                     ->setPreset($domain->getAutodiag(), $preset->getPreset());
             }
 
+            $importHandler = $this->get('autodiag.import.handler');
+            $notify = $form->get('notify_update')->getData();
+            $reason = $form->get('reason')->getData();
+            $importHandler->handleNotification($autodiag, $notify, $reason);
+
             $this->addFlash('success', $this->get('translator')->trans('ad.back.saved'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit', [
@@ -88,9 +95,12 @@ class AutodiagController extends Controller
             ]);
         }
 
+        $updates = $this->get('autodiag.history.reader')->getHistoryByAutodiag($autodiag);
+
         return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/general.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
+            'updates' => $updates
         ]);
     }
 
@@ -111,25 +121,33 @@ class AutodiagController extends Controller
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $importHandler->handleSurveyImport(
-                    $import,
-                    $this->get('autodiag.import.chapter'),
-                    $this->get('autodiag.import.question'),
-                    $form->getData()->getNotifyUpdate()
-                );
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $import->setNotifyUpdate($form->get('notify_update')->getData());
+                $import->setUpdateReason($form->get('reason')->getData());
 
-                $this->get('autodiag.score_calculator')->defetAutodiagScore($autodiag);
+                try {
+                    $importHandler->handleSurveyImport(
+                        $import,
+                        $this->get('autodiag.import.chapter'),
+                        $this->get('autodiag.import.question')
+                    );
 
-                $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));
+                    $this->get('autodiag.score_calculator')->defetAutodiagScore($autodiag);
+
+                    $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));
+                }
+
+                return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
+                    'id' => $autodiag->getId(),
+                ]);
+            } else {
+                foreach ($form->getErrors() as $error) {
+                    $this->addFlash('danger', $error->getMessage());
+                }
             }
-
-            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
-                'id' => $autodiag->getId(),
-            ]);
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:survey.html.twig', [
@@ -156,13 +174,24 @@ class AutodiagController extends Controller
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
-            $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
-                'id' => $autodiag->getId(),
-            ]);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $import->setNotifyUpdate($form->get('notify_update')->getData());
+                $import->setUpdateReason($form->get('reason')->getData());
+
+                $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
+
+                $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+
+                return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
+                    'id' => $autodiag->getId(),
+                ]);
+            } else {
+                foreach ($form->getErrors() as $error) {
+                    $this->addFlash('danger', $error->getMessage());
+                }
+            }
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:algorithm.html.twig', [
@@ -188,14 +217,24 @@ class AutodiagController extends Controller
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
 
-            $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $import->setNotifyUpdate($form->get('notify_update')->getData());
+                $import->setUpdateReason($form->get('reason')->getData());
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
-                'id' => $autodiag->getId(),
-            ]);
+                $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
+
+                $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+
+                return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
+                    'id' => $autodiag->getId(),
+                ]);
+            } else {
+                foreach ($form->getErrors() as $error) {
+                    $this->addFlash('danger', $error->getMessage());
+                }
+            }
         }
 
         return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/resitution.html.twig', [
@@ -274,4 +313,5 @@ class AutodiagController extends Controller
             'texte' => $this->get('request')->request->get('texte'),
         ]);
     }
+
 }

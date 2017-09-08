@@ -1,0 +1,138 @@
+imports:
+    - { resource: services/report_generator.yml }
+    - { resource: services/item_factory.yml }
+
+services:
+    hopitalnumerique_cart.twig.extension:
+        class: HopitalNumerique\CartBundle\Twig\CartExtension
+        arguments:
+            - '@request_stack'
+            - '@security.token_storage'
+            - '@router'
+            - '@hopitalnumerique_domaine.repository.domaine'
+        tags:
+            - { name: twig.extension }
+
+    hopitalnumerique_cart.item_to_report_factory_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\AddCartItemsToReportFactoryCommandHandler
+        arguments:
+            - '@hopitalnumerique_cart.repository.report_factory'
+            - '@hopitalnumerique_cart.repository.report_item'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.factory.item'
+            - '@translator'
+            - '@hopitalnumerique_cart.repository.cart_item'
+
+    hopitalnumerique_cart.remove_item_from_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\RemoveItemFromReportCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.repository.report_factory_item'
+
+    hopitalnumerique_cart.generate_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\GenerateReportCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.repository.report_item'
+            - '@hopitalnumerique_cart.report_generator'
+
+    hopitalnumerique_cart.duplicate_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\DuplicateReportCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.report_generator'
+
+    hopitalnumerique_cart.remove_report_sharing_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\RemoveSharingReportCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_cart.share_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\ShareReportCommandHandler
+        arguments:
+            - '@hopitalnumerique_user.repository.user'
+            - '@hopitalnumerique_cart.repository.cart_item'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.report_generator'
+
+    hopitalnumerique_cart.remove_report_factory_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\RemoveReportFactoryCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_cart.reorder_report_factory_items_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\ReorderReportFactoryItemsCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_cart.remove_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\RemoveReportCommandHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_cart.repository.report_factory'
+            - '@hopitalnumerique_cart.report_generator'
+
+    hopitalnumerique_cart.send_report_command_handler:
+        class: HopitalNumerique\CartBundle\Domain\Command\SendReportCommandHandler
+        arguments:
+            - '@mailer'
+            - '@nodevo_mail.manager.mail'
+            - '@hopitalnumerique_cart.report_generator'
+
+    hopitalnumerique_cart.factory.report_factory:
+        class: HopitalNumerique\CartBundle\Service\ReportFactoryFactory
+
+    hopitalnumerique_cart.factory.send_report_command:
+        class: HopitalNumerique\CartBundle\Service\SendReportCommandFactory
+        arguments:
+            - '@nodevo_mail.manager.mail'
+
+    hopitalnumerique_cart.builder.item:
+        class: HopitalNumerique\CartBundle\Service\ItemBuilder
+        arguments:
+            - '@hopitalnumerique_cart.repository.cart_item'
+            - '@hopitalnumerique_cart.repository.report_item'
+            - '@hopitalnumerique_cart.repository.report_factory_item'
+            - '@hopitalnumerique_cart.factory.item'
+
+    hopitalnumerique_cart.repository.cart_item:
+        class: HopitalNumerique\CartBundle\Repository\CartItemRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\Item\CartItem'
+
+    hopitalnumerique_cart.repository.report_item:
+        class: HopitalNumerique\CartBundle\Repository\ReportItemRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\Item\ReportItem'
+
+    hopitalnumerique_cart.repository.report_factory_item:
+        class: HopitalNumerique\CartBundle\Repository\ReportFactoryItemRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\Item\ReportFactoryItem'
+
+    hopitalnumerique_cart.repository.report_factory:
+        class: HopitalNumerique\CartBundle\Repository\ReportFactoryRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\ReportFactory'
+
+    hopitalnumerique_cart.repository.report:
+        class: HopitalNumerique\CartBundle\Repository\ReportRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\Report'
+
+    hopitalnumerique_cart.voter.report:
+        class: HopitalNumerique\CartBundle\Security\ReportVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    HopitalNumerique\CartBundle\Repository\ReportDownloadRepository:
+        class: HopitalNumerique\CartBundle\Repository\ReportDownloadRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\ReportDownload'

@@ -1,0 +1,87 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% trans_default_domain 'guided_search' %}
+
+{% block title %}{{parent()}} - {{ 'title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-step.css" filter="cssrewrite, ?yui_css"
+        'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/risk.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/front/production.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-front-step.js"
+        '@jquery_ui_slider_js'
+        'bundles/hopitalnumeriquerechercheparcours/js/step.js'
+        'bundles/hopitalnumeriquerechercheparcours/js/risk.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="recherche-par-parcours-details">
+
+        {{ include('@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/toolbar.html.twig') }}
+
+        <h3>{{guidedSearchReference.reference.libelle}}</h3>
+
+        <div class="en-tete">
+            <div class="en-tete-scroll">
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer.html.twig' with { 'rechercheParcours' : guidedSearchReference, 'selectedStep' : parentReference.id } %}
+            </div>
+
+            {% if parentReference.showChildren %}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer_fils.html.twig' %}
+            {% endif %}
+
+            <div class="description">
+                <p>
+                    {{parentReference.description}}
+                </p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        {% if guidedSearchConfig.activePublicationsType|length > 1 %}
+
+            <ul class="nav nav-tabs type-tab" role="tablist">
+                {% for section in guidedSearchConfig.activePublicationsType %}
+                    <li role="presentation"{{ loop.first ? ' class="active"' }}>
+                        <a href="#{{ section.type }}" aria-controls="{{ section.type }}" role="tab" data-toggle="tab">
+                            {{ ('list.publication_type.'~section.type)|trans }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content publication-type-container">
+                {% for section in guidedSearchConfig.activePublicationsType %}
+                    <div role="tabpanel" class="tab-pane{{ loop.first ? ' active' }}" id="{{ section.type }}">
+                        {% include '@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/'~section.type~'.html.twig' ignore missing %}
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            {% for section in guidedSearchConfig.activePublicationsType %}
+                {% include '@HopitalNumeriqueRechercheParcours/RechercheParcours/front/step/'~section.type~'.html.twig' ignore missing %}
+            {% endfor %}
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+
+{% block helpBlock %}
+    {{ contextualNavigationHelpBlock(guidedSearchReference) }}
+{% endblock %}

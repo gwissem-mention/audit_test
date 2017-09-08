@@ -1,0 +1,23 @@
+hopital_numerique_guided_search_step_risk_add:
+    path: /risque/add/{guidedSearchStep}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearchRisk:addRisk }
+    methods: POST
+
+hopital_numerique_guided_search_step_risk_remove:
+    path: /{guidedSearchStep}/risque/{risk}/remove/
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearchRisk:remove }
+
+hopital_numerique_guided_search_step_risk_show:
+    path: /{guidedSearchStep}/risque/show/
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearchRisk:show }
+    methods: POST
+
+hopital_numerique_guided_search_step_risk_analysis:
+    path: /{guidedSearch}/risque/{risk}/save/{stepPath}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearchRisk:riskAnalysis }
+
+hopital_numerique_guided_search_step_risk_export:
+    path: /export/{guidedSearchStep}.{type}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:Front/GuidedSearchRisk:export }
+    requirements:
+        type: csv|xlsx

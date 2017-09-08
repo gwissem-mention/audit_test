@@ -9,8 +9,8 @@
                 {% if forum.id == 4 %}
                     <i>Anonyme</i>
                 {% else %}
-                    {% if post.getDeletedBy.getPseudonymeForum() is defined and post.getDeletedBy.getPseudonymeForum() is not null %}
-                        {{- post.getDeletedBy.getPseudonymeForum() -}}
+                    {% if post.getDeletedBy.getPseudonym() is defined and post.getDeletedBy.getPseudonym() is not null %}
+                        {{- post.getDeletedBy.getPseudonym() -}}
                     {% else %}
                         {{- post.getDeletedBy.getNomPrenom() -}}
                     {% endif %}

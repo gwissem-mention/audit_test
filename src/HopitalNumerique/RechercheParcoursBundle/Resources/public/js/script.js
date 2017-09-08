@@ -1,5 +1,6 @@
 var loader;
-    
+
+$.validationEngine.defaults.promptPosition = 'bottomLeft';
 $(document).ready(function() {
     
     //Création et gestion de l'arborescence des chapitres
@@ -26,8 +27,58 @@ $(document).ready(function() {
         initFancyBox();
     
     //bind de Validation Engine
-    if( $('form.toValidate').length > 0 )
+    if( $('form.toValidate').length > 0 ) {
         $('form.toValidate').validationEngine();
+    }
+
+    //Manage toggle for update notification request
+    $('.toggle').each(function(){
+        var formGroup = $(this).closest('.notification-wrapper');
+        var reasonWrap = formGroup.find('.update-reason-container');
+        var reasonInput = reasonWrap.find(':input');
+        var notifyValue = formGroup.find(':hidden[id$="notify_update"]');
+
+        notifyValue.val('0');
+        $(this).toggles({
+            on: false,
+            text: {
+                on: 'OUI',
+                off: 'NON'
+            }
+        }).on('toggle', function (e, active) {
+            if (active) {
+                reasonWrap.removeClass('hide');
+                notifyValue.val('1');
+            } else {
+                reasonWrap.addClass('hide');
+                reasonInput.val('');
+                notifyValue.val('0');
+            }
+        });
+    });
+
+    $('#hopitalnumerique_rechercheparcours_rechercheparcoursgestion_history_go').click(function(){
+        var form = $(this).closest('form');
+        form.validationEngine({
+            promptPosition:'bottomLeft',
+            scroll: false
+        });
+        if (form.validationEngine('validate')) {
+            $.ajax({
+                url: form.attr('action'),
+                data: {
+                    update_notify: form.find('input[id$="notify_update"]').val(),
+                    reason: form.find('input[id$="reason"]').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    form.find('label').text(data.message);
+                    form.find(':not(label)').remove();
+                }
+            });
+        }
+    })
 });
 
 // Initialise la fancybox

@@ -1,0 +1,45 @@
+list:
+    type:
+        value:
+            0: Public
+            1: Privé
+    archived:
+        value:
+            0: Non
+            1: Oui
+
+delete:
+    notifications:
+        success: Risque supprimé
+        error: Impossible de supprimer ce risque. D'autres ressources doivent dépendre de ce risque.
+
+edit:
+    title: Gestion des risques
+
+    notifications:
+        saved: Éléments de la fiche enregistrés.
+
+    form:
+        label:
+            label: Libellé
+        nature:
+            label: Nature
+        domains:
+            label: Domaines de diffusion
+        archived:
+            label: Archivé
+        fusionTarget:
+            label: Fusionner avec le risque suivant
+        confirmFusion:
+            label: Confirmez la fusion, puis cliquez sur le bouton "Enregistrer"
+        fusion:
+            title: Fusion de risques
+            description: |
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Distinctio exercitationem facere maiores modi molestias, saepe sunt ut voluptatibus?
+                A culpa cum cupiditate deleniti error minus nobis nulla sequi sunt veniam.
+        publish:
+            label: Rendre le risque public
+            title: Publier un risque privé
+            createdBy: "Ce risque a été proposé par :"
+            anonymous: Anonyme

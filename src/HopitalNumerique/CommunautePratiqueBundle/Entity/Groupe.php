@@ -2,14 +2,15 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Doctrine\Common\Collections\ArrayCollection;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use Symfony\Component\Validator\Constraints as Assert;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 /**
  * Entité Groupe.
@@ -135,7 +136,7 @@ class Groupe
     private $fiches;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueAnimateurGroupes")
      * @ORM\JoinTable(name="hn_communautepratique_groupe_animateur", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
@@ -144,12 +145,12 @@ class Groupe
     private $animateurs;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $users;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Inscription", mappedBy="groupe", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -510,7 +511,7 @@ class Groupe
     /**
      * Get fiches.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFiches()
     {
@@ -548,7 +549,7 @@ class Groupe
     /**
      * Get animateurs.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAnimateurs()
     {
@@ -572,7 +573,7 @@ class Groupe
     /**
      * Remove users.
      *
-     * @param User $users
+     * @param User $user
      */
     public function removeUser(User $user)
     {
@@ -587,7 +588,7 @@ class Groupe
     /**
      * Get users.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getUsers()
     {
@@ -602,7 +603,7 @@ class Groupe
     /**
      * Add inscription.
      *
-     * @param User $inscription
+     * @param Inscription $inscription
      *
      * @return Groupe
      */
@@ -616,7 +617,7 @@ class Groupe
     /**
      * Remove inscription.
      *
-     * @param User $inscription
+     * @param Inscription $inscription
      */
     public function removeInscription(Inscription $inscription)
     {
@@ -626,7 +627,7 @@ class Groupe
     /**
      * Get inscriptions.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getInscriptions()
     {
@@ -660,7 +661,7 @@ class Groupe
     /**
      * Get documents.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDocuments()
     {
@@ -694,7 +695,7 @@ class Groupe
     /**
      * Get publications.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getPublications()
     {
@@ -728,7 +729,7 @@ class Groupe
     /**
      * Get commentaires.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommentaires()
     {
@@ -932,7 +933,7 @@ class Groupe
      *
      * @param User $user Utilisateur
      *
-     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche> Fiches de l'utilisateur
+     * @return Fiche[] Fiches de l'utilisateur
      */
     public function getUserFiches(User $user)
     {
@@ -952,7 +953,7 @@ class Groupe
      *
      * @param User $user Utilisateur
      *
-     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Document> Documents de l'utilisateur
+     * @return Document[] Documents de l'utilisateur
      */
     public function getUserDocuments(User $user)
     {
@@ -976,8 +977,9 @@ class Groupe
     {
         $animateurs = [];
 
+        /** @var User $animateur */
         foreach ($this->animateurs as $animateur) {
-            $animateurs[$animateur->getEmail()] = trim($animateur->getPrenom() . ' ' . $animateur->getNom());
+            $animateurs[$animateur->getEmail()] = trim($animateur->getFirstname() . ' ' . $animateur->getLastname());
         }
 
         return str_replace('"', '\'', json_encode($animateurs));

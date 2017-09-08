@@ -20,13 +20,13 @@ class ExportController extends Controller
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
-        //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_etablissement.grid.etablissement')->getRawData();
             foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
         }
+
         $refs = $this->get('hopitalnumerique_etablissement.manager.etablissement')->getDatasForExport($primaryKeys);
 
         $colonnes = [
@@ -59,22 +59,22 @@ class ExportController extends Controller
      */
     public function exportCsvAutresAction($primaryKeys, $allPrimaryKeys)
     {
-        //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_user.grid.etablissement')->getRawData();
             foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
         }
+
         $refs = $this->get('hopitalnumerique_user.manager.user')->getEtablissementForExport($primaryKeys);
 
         $colonnes = [
             'id' => 'id',
             'username' => 'Nom d\'utilisateur',
-            'nom' => 'Nom',
-            'prenom' => 'Prénom',
+            'lastname' => 'Nom',
+            'firstname' => 'Prénom',
             'region' => 'Région',
-            'autreStructureRattachementSante' => 'Autre structure de rattachement santé',
+            'organizationLabel' => 'Autre structure de rattachement santé',
             'domainName' => 'Domaine(s)',
             'archiver' => 'Archivé ?',
         ];

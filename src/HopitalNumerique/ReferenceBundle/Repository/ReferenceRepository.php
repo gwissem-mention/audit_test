@@ -5,6 +5,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -226,6 +227,21 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine $domain
+     * @param Reference $reference
+     *
+     * @return array
+     */
+    public function getByDomainAndParent(Domaine $domain, Reference $reference)
+    {
+        return $this
+            ->getRefsByDomaineByParent($reference->getId(), $domain->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * Récupère les différents ref_code des références.
      *
      * @return QueryBuilder
@@ -271,9 +287,26 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function findByCode($code, $actif = null)
+    public function findByCode($code, $actif = null, $labelOrdered = false)
     {
-        return $this->findByCodeParent($code, null, $actif);
+        return $this->findByCodeParent($code, null, $actif, $labelOrdered);
+    }
+
+    /**
+     * @return Reference[]
+     */
+    public function getPublicationTypes()
+    {
+        return $this->createQueryBuilder('r', 'r.id')
+            ->join('r.codes', 'rc', Expr\Join::WITH, 'rc.label = :code')
+            ->setParameter('code', 'CATEGORIE_OBJET')
+            ->leftJoin('r.parents', 'rp')
+            ->andWhere('r.etat = :active')
+            ->setParameter('active', Reference::STATUT_ACTIF_ID)
+            ->andWhere('rp.id IS NULL')
+
+            ->getQuery()->getResult()
+        ;
     }
 
     /**
@@ -281,7 +314,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function findByCodeParent($code, $parent = null, $actif = null)
+    public function findByCodeParent($code, $parent = null, $actif = null, $labelOrdered = false)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -306,6 +339,10 @@ class ReferenceRepository extends EntityRepository
                 ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :parent')
                 ->setParameter('parent', $parent)
             ;
+        }
+
+        if ($labelOrdered) {
+            $qb->orderBy('ref.libelle');
         }
 
         return $qb->getQuery()->getResult();
@@ -434,5 +471,32 @@ class ReferenceRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Reference[]
+     */
+    public function getParentsByCode($code)
+    {
+        return $this->createQueryBuilder('r')
+            ->addSelect('COUNT(rpc.id) as HIDDEN codesCount')
+            ->join('r.codes', 'c', Expr\Join::WITH, 'c.label = :code')
+            ->leftJoin('r.enfants', 'rc')->addSelect('rc')
+
+            ->join('r.parents', 'rp')
+            ->leftJoin('rp.codes', 'rpc', Expr\Join::WITH, 'rpc.label = :code')
+
+            ->addGroupBy('r.id, rc.id')
+            ->having('codesCount = 0')
+
+            ->addOrderBy('r.libelle')
+            ->addOrderBy('rc.libelle')
+
+            ->setParameter('code', $code)
+
+            ->getQuery()->getResult()
+        ;
     }
 }

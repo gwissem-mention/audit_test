@@ -1,0 +1,52 @@
+{% trans_default_domain 'lost' %}
+<p class="spacer">
+    {{ 'discover.title'|trans() }}
+
+    {% set discoverLinks = [] %}
+
+    {% for key, obj in discoverFields %}
+        {% if obj %}
+            {% set translation = ('discover.'~key)|trans %}
+
+            {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopital_numerique_publication_publication_objet', {id: obj.id, alias: obj.alias})~'">
+                        '~translation~'
+                    </a>']) %}
+        {% endif %}
+
+    {% endfor %}
+
+    {% if randomAutodiag %}
+        {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopitalnumerique_autodiag_entry_add', {autodiag: randomAutodiag.id})~'">
+                    '~('discover.autodiagnostic'|trans)~'
+                </a>']) %}
+    {% endif %}
+
+    {% set discoverLinks = discoverLinks|merge(['<a href="'~resourceDomain.url~path('hopital_numerique_recherche_parcours_homepage_front', {id: 1})~'">
+                '~('discover.guided_search'|trans)~'
+            </a>']) %}
+
+    {{ discoverLinks|join(', ')|raw }}
+
+</p>
+
+<div class="spacer">
+    <div class="row">
+        {{ self.lastObjects('lastObjects', last, 'object') }}
+        {{ self.lastObjects('lastTopics', last, 'topic') }}
+    </div>
+    <div class="row">
+        {{ self.lastObjects('bestRatedObjects', last, 'object') }}
+        {{ self.lastObjects('mostCommentedObjects', last, 'object') }}
+    </div>
+    <div class="row">
+        {{ self.lastObjects('mostViewedObjects', last, 'object') }}
+    </div>
+</div>
+
+<p class="spacer">
+    {{ 'stats.title'|trans }}
+    <b>{{ 'stats.methods_tools'|transchoice(stats.methodsTools) }},
+    {{ 'stats.users'|transchoice(stats.users) }},
+    {{ 'stats.forum_topics'|transchoice(stats.forumTopics) }},
+    {{ 'stats.cdp_members'|transchoice(stats.cdpMembers) }}</b>
+</p>
