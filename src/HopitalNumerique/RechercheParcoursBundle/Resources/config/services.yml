@@ -293,10 +293,10 @@ services:
             - '@security.token_storage'
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
         tags:
-            - { name: notification.notification_aggregator, key: guided_search_updated }
+            - { name: notification.aggregator, key: guided_search_updated }
 
     HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener:
         class: HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: guided_search_updated }

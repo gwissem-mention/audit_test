@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -36,24 +37,22 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
+     * Returns users concerned by notification, in this case all practice community members.
+     * notification date.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return true;
+        return $this->groupeInscriptionRepository->getCommunityMembersQueryBuilder();
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

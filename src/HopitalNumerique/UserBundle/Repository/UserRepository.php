@@ -1023,4 +1023,86 @@ class UserRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult()
         ;
     }
+
+    /**
+     * Returns query builder with all active users query builder.
+     *
+     * @return QueryBuilder
+     */
+    public function getActiveUsersQueryBuilder()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.enabled = 1')
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', Reference::STATUT_ACTIF_ID)
+        ;
+    }
+
+    /**
+     * Returns query builder with a single user.
+     *
+     * @param $userId
+     *
+     * @return QueryBuilder
+     */
+    public function getOneUserQueryBuilder($userId)
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.id = :userId')
+            ->setParameter('userId', $userId)
+        ;
+    }
+
+    /**
+     * Returns query builder with active user ids by region.
+     *
+     * @param integer $regionId Region id.
+     *
+     * @return QueryBuilder
+     */
+    public function getUsersByRegionQueryBuilder($regionId)
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.region = :regionId')
+            ->andWhere('user.enabled = :enabledState')
+            ->setParameters([
+                'regionId' => (int)$regionId,
+                'enabledState' => 1,
+            ])
+        ;
+    }
+
+    /**
+     * Returns query builder with active user ids by role(s).
+     *
+     * @param array $roles List of role ids.
+     *
+     * @return QueryBuilder
+     */
+    public function getUsersByRolesQueryBuilder(array $roles)
+    {
+        $parameters = ['enabledState' => 1];
+        $where = 'user.enabled = :enabledState ';
+
+        if (count($roles)) {
+            $where .= 'AND (';
+            $i = 0;
+            foreach ($roles as $role) {
+                $where .= 'user.roles LIKE :role' . ++$i . ' OR ';
+                $parameters['role'.$i] = "%$role%";
+            }
+            $where = substr($where, 0, -4) . ')';
+        } else {
+            $where .= ' AND 1=0 ';
+        }
+
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where($where)
+            ->setParameters($parameters)
+        ;
+    }
 }

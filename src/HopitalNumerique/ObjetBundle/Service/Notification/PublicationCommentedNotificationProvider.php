@@ -2,8 +2,8 @@
 
 namespace HopitalNumerique\ObjetBundle\Service\Notification;
 
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\NotificationBundle\NotificationBundle;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationLimitTextLengthEnum;
 use HopitalNumerique\ObjetBundle\Entity\Commentaire;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -41,13 +41,13 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $title = $infradoc->getFullTitle();
         }
 
-        if (strlen($title) > NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH) {
-            $title = substr($title, 0, NotificationBundle::LIMIT_NOTIFY_TITLE_LENGTH) . '...';
+        if (strlen($title) > self::getLimitNotifyTitleLength()) {
+            $title = substr($title, 0, self::getLimitNotifyTitleLength()) . '...';
         }
 
         $detail = $comment->getContenu();
-        if (strlen($detail) > NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH) {
-            $detail = substr($detail, 0, NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH) . '...';
+        if (strlen($detail) > self::getLimitNotifyDetailLength()) {
+            $detail = substr($detail, 0, self::getLimitNotifyDetailLength()) . '...';
         }
 
         $this->processNotification(
@@ -55,41 +55,18 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $title,
             $detail,
             [
-                'object' => $object,
-                'infradoc' => $infradoc
+                'idPublication'    => $object->getId(),
+                'idInfradoc'       => $infradoc ? $infradoc->getId() : null,
+                'titrePublication' => $infradoc ? $infradoc->getTitre() : $object->getTitre(),
+                'commentaire'      => $this->processText($comment->getContenu())
             ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if publication user last view dateTime is older than notification dateTime.
-     *
-     * @param UserInterface $user
-     * @param Notification $notification
-     *
-     * @return bool
-     */
-    public function canNotify(UserInterface $user, Notification $notification)
-    {
-        $lastViewDate = $this->consultationRepository->getUserLatestViewDate(
-            $user,
-            $notification->getData('object'),
-            $notification->getData('infradoc')
-        );
-
-        if (null === $lastViewDate) {
-            return false;
-        } else {
-            return new \DateTime($lastViewDate) < $notification->getDateTime();
-        }
-    }
-
-    /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

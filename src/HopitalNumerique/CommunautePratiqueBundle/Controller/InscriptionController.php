@@ -61,8 +61,7 @@ class InscriptionController extends Controller
                 ->hasInformationManquante($user)
         ) {
             if (!$user->isInscritCommunautePratique()) {
-                $user->setInscritCommunautePratique(true);
-                $this->get('hopitalnumerique_user.manager.user')->save($user);
+                $this->get(EnrollUserHandler::class)->handle(new EnrollUserCommand($user));
                 $this->addFlash('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
 

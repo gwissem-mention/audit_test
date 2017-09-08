@@ -4,7 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -35,29 +35,16 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
                 $group->getId(),
                 $registration->getUser()->getId()
             ],
-            $group->getTitre() . ' - ' . $registration->getUser()->getPrenomNom()
+            $group->getTitre() . ' - ' . $registration->getUser()->getPrenomNom(),
+            null,
+            ['groupId' => $group->getId()]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
-     *
-     * @param UserInterface $user
-     * @param Notification $notification
-     *
-     * @return bool
-     */
-    public function canNotify(UserInterface $user, Notification $notification)
-    {
-        return true;
-    }
-
-    /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

@@ -118,6 +118,6 @@ class CommentaireManager extends BaseManager
          * Fire 'PUBLICATION_COMMENTED' event
          */
         $event = new PublicationCommentedEvent($entity);
-        $this->get('event_dispatcher')->dispatch(Events::PUBLICATION_COMMENTED, $event);
+        $this->eventDispatcher->dispatch(Events::PUBLICATION_COMMENTED, $event);
     }
 }

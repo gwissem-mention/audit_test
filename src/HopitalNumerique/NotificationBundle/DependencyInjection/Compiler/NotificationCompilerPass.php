@@ -16,13 +16,13 @@ class NotificationCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('notification.aggregator')) {
+        if (!$container->has('HopitalNumerique\NotificationBundle\Service\Notifications')) {
             return;
         }
 
-        $definition = $container->findDefinition('notification.aggregator');
+        $definition = $container->findDefinition('HopitalNumerique\NotificationBundle\Service\Notifications');
 
-        $taggedServices = $container->findTaggedServiceIds('notification.notification_aggregator');
+        $taggedServices = $container->findTaggedServiceIds('notification.aggregator');
 
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $tag) {

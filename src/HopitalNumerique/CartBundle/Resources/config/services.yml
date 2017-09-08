@@ -139,58 +139,65 @@ services:
         arguments:
             - 'HopitalNumerique\CartBundle\Entity\ReportDownload'
 
-    HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider:
-        class: HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider
+    HopitalNumerique\CartBundle\Repository\ReportSharingRepository:
+        class: HopitalNumerique\CartBundle\Repository\ReportSharingRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CartBundle\Entity\ReportSharing'
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract
+        abstract: true
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@hopitalnumerique\cartbundle\repository\reportsharingrepository'
+            - '@hopitalnumerique_user.repository.user'
+
+    HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider:
+        class: HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider
+        parent: HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract
         tags:
-            - { name: notification.notification_aggregator, key: report_updated }
+            - { name: notification.aggregator, key: report_updated }
 
     HopitalNumerique\CartBundle\Service\Notification\ReportSharedForMeNotificationProvider:
         class: HopitalNumerique\CartBundle\Service\Notification\ReportSharedForMeNotificationProvider
-        arguments:
-            - '@event_dispatcher'
-            - '@security.token_storage'
+        parent: HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract
         tags:
-            - { name: notification.notification_aggregator, key: report_shared_for_me }
+            - { name: notification.aggregator, key: report_shared_for_me }
 
     HopitalNumerique\CartBundle\Service\Notification\ReportSharedForOtherNotificationProvider:
         class: HopitalNumerique\CartBundle\Service\Notification\ReportSharedForOtherNotificationProvider
-        arguments:
-            - '@event_dispatcher'
-            - '@security.token_storage'
+        parent: HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract
         tags:
-            - { name: notification.notification_aggregator, key: report_shared_for_other }
+            - { name: notification.aggregator, key: report_shared_for_other }
 
     HopitalNumerique\CartBundle\Service\Notification\ReportCopiedForMeNotificationProvider:
         class: HopitalNumerique\CartBundle\Service\Notification\ReportCopiedForMeNotificationProvider
-        arguments:
-            - '@event_dispatcher'
-            - '@security.token_storage'
+        parent: HopitalNumerique\CartBundle\Service\Notification\ReportNotificationProviderAbstract
         tags:
-            - { name: notification.notification_aggregator, key: report_copied_for_me }
+            - { name: notification.aggregator, key: report_copied_for_me }
 
     HopitalNumerique\CartBundle\EventListener\ReportUpdatedListener:
         class: HopitalNumerique\CartBundle\EventListener\ReportUpdatedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: report_updated }
 
     HopitalNumerique\CartBundle\EventListener\ReportSharedForMeListener:
         class: HopitalNumerique\CartBundle\EventListener\ReportSharedForMeListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: report_shared }
 
     HopitalNumerique\CartBundle\EventListener\ReportSharedForOtherListener:
         class: HopitalNumerique\CartBundle\EventListener\ReportSharedForOtherListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: report_shared }
 
     HopitalNumerique\CartBundle\EventListener\ReportCopiedListener:
         class: HopitalNumerique\CartBundle\EventListener\ReportCopiedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: report_copied }

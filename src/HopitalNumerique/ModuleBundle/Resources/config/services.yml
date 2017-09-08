@@ -147,11 +147,14 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@hopitalnumerique_user.repository.user'
+            - '@nodevo_acl.manager.acl'
+            - '@nodevo_acl.manager.ressource'
         tags:
-            - { name: notification.notification_aggregator, key: coming_training_sessions }
+            - { name: notification.aggregator, key: coming_training_sessions }
 
     HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener:
         class: HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: coming_training_sessions }

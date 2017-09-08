@@ -2,9 +2,13 @@
 
 namespace HopitalNumerique\UserBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -12,9 +16,30 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
 {
+    /**
+     * @var UserRepository $userRepository
+     */
+    protected $userRepository;
+
     const NOTIFICATION_CODE = 'user_role_updated';
 
     const SECTION_CODE = 'resource_user';
+
+    /**
+     * UserRoleUpdatedNotificationProvider constructor.
+     *
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param TokenStorageInterface    $tokenStorage
+     * @param UserRepository           $userRepository
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        TokenStorageInterface $tokenStorage,
+        UserRepository $userRepository
+    ) {
+        parent::__construct($eventDispatcher, $tokenStorage);
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * @return string
@@ -39,28 +64,30 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function fire(User $user)
     {
-        $this->processNotification($user->getId(), $user->getPrenomNom());
+        $this->processNotification(
+            $user->getId(),
+            $user->getPrenomNom(),
+            null,
+            ['regionId' => $user->getRegion()->getId()]
+        );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
+     * Returns users concerned by notification, in this case users located in same region.
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return true;
+        return $this->userRepository->getUsersByRegionQueryBuilder($notification->getData('regionId'));
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

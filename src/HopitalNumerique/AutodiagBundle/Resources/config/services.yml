@@ -274,10 +274,10 @@ services:
             - '@security.token_storage'
             - '@autodiag.repository.autodiagentry'
         tags:
-            - { name: notification.notification_aggregator, key: autodiag_update_published }
+            - { name: notification.aggregator, key: autodiag_update_published }
 
     HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener:
         class: HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: autodiag_update_published }

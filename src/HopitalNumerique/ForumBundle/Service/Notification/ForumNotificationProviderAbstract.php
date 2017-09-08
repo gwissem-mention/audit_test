@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ForumBundle\Service\Notification;
 
 use CCDNComponent\BBCodeBundle\Component\TwigExtension\BBCodeExtension;
+use HopitalNumerique\ForumBundle\Repository\SubscriptionRepository;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Html2Text\Html2Text;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -21,19 +22,27 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
     protected $bbCodeExtension;
 
     /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
      * ForumNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TokenStorageInterface $tokenStorage
-     * @param BBCodeExtension $bbCodeExtension
+     * @param TokenStorageInterface    $tokenStorage
+     * @param BBCodeExtension          $bbCodeExtension
+     * @param SubscriptionRepository   $subscriptionRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
-        BBCodeExtension $bbCodeExtension
+        BBCodeExtension $bbCodeExtension,
+        SubscriptionRepository $subscriptionRepository
     ) {
-        $this->bbCodeExtension = $bbCodeExtension;
         parent::__construct($eventDispatcher, $tokenStorage);
+        $this->bbCodeExtension = $bbCodeExtension;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
 
     /**
@@ -47,12 +56,12 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
     /**
      * Removes HTML from text and limit length.
      *
-     * @param $bbText string Text to be processed.
-     * @param $limit  int    Max text length (see NotificationBundle constants)
+     * @param $bbText string   Text to be processed.
+     * @param $limit  int|bool Max text length (see NotificationProvider static method getLimitNotify...)
      *
      * @return string
      */
-    protected function processText($bbText, $limit)
+    protected function processText($bbText, $limit = false)
     {
         //Parse BB Code
         $htmlText = $this->bbCodeExtension->BBCodeParse($bbText);
@@ -62,6 +71,6 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
         $cleanText = $htmlToPdf->getText();
 
         //Truncate and return
-        return mb_strimwidth($cleanText, 0, $limit, '...');
+        return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
     }
 }

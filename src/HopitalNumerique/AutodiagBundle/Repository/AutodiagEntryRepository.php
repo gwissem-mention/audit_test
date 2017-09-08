@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -28,24 +29,23 @@ class AutodiagEntryRepository extends EntityRepository
     }
 
     /**
-     * Returns last entry modification date for given user and autodiag.
+     * Returns users whose last autodiag ($autodiagId) entry update was before $maxUpdateDate.
      *
-     * @param User     $user
-     * @param Autodiag $autodiag
+     * @param integer   $autodiagId
+     * @param \DateTime $maxUpdateDate
      *
-     * @return string|null
+     * @return QueryBuilder Users
      */
-    public function getLastUserEntryUpdate(User $user, Autodiag $autodiag)
+    public function getUpdatersBeforeQueryBuilder($autodiagId, \DateTime $maxUpdateDate)
     {
         return $this->createQueryBuilder('autodiag_entry')
-            ->select('MAX(autodiag_entry.updatedAt)')
+            ->select('user.id')
             ->innerJoin('autodiag_entry.values', 'entry_value')
             ->innerJoin('entry_value.attribute', 'attribute', Join::WITH, 'attribute.autodiag = :autodiag')
-            ->where('autodiag_entry.user = :user')
-            ->setParameters(['user' => $user, 'autodiag' => $autodiag])
-            ->getQuery()
-            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+            ->innerJoin('autodiag_entry.user', 'user')
+            ->groupBy('user.id')
+            ->having('MAX(autodiag_entry.updatedAt) < :maxUpdateDate')
+            ->setParameters(['autodiag' => (int)$autodiagId, 'maxUpdateDate' => $maxUpdateDate])
         ;
     }
-
 }

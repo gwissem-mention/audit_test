@@ -111,11 +111,15 @@ services:
     #--Manager
     hopitalnumerique_objet.manager.commentaire:
         class: %hopitalnumerique_objet.manager.commentaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
     #--Grid
     hopitalnumerique_objet.grid.commentaire:
         class: %hopitalnumerique_objet.grid.commentaire.class%
         arguments: ["@service_container"]
+
     #--Form
     hopitalnumerique_objet.form.commentaire:
         class: %hopitalnumerique_objet.form.commentaire.class%
@@ -146,6 +150,12 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Commentaire'
+
+    HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository:
+        class: HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\Subscription'
 
     hopitalnumerique_objet.repository.note:
         class: HopitalNumerique\ObjetBundle\Repository\NoteRepository
@@ -287,6 +297,7 @@ services:
         class: HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
     HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository:
         class: HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository
@@ -307,8 +318,9 @@ services:
             - '@event_dispatcher'
             - '@security.token_storage'
             - '@hopitalnumerique_objet.repository.consultation'
+            - '@hopitalnumerique\objetbundle\repository\subscriptionrepository'
         tags:
-            - { name: notification.notification_aggregator, key: publication_notified }
+            - { name: notification.aggregator, key: publication_notified }
 
     HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider:
         class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider
@@ -316,17 +328,18 @@ services:
             - '@event_dispatcher'
             - '@security.token_storage'
             - '@hopitalnumerique_objet.repository.consultation'
+            - '@hopitalnumerique\objetbundle\repository\subscriptionrepository'
         tags:
-            - { name: notification.notification_aggregator, key: publication_commented }
+            - { name: notification.aggregator, key: publication_commented }
 
     HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener:
         class: HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: publication_notified }
 
     HopitalNumerique\ObjetBundle\EventListener\PublicationCommentedListener:
         class: HopitalNumerique\ObjetBundle\EventListener\PublicationCommentedListener
-        arguments: [ "@notification.aggregator" ]
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: publication_commented }

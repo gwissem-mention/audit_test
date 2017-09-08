@@ -3,8 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
-use HopitalNumerique\NotificationBundle\Model\Notification;
-use HopitalNumerique\NotificationBundle\NotificationBundle;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -36,31 +35,16 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
                 $comment->getUser()->getPrenomNom(),
             $this->processComment(
                 $comment->getMessage(),
-                NotificationBundle::LIMIT_NOTIFY_DESC_LENGTH
+                self::getLimitNotifyDetailLength()
             ),
-            ['comment' => $comment]
+            ['groupId' => $comment->getFiche()->getGroupe()->getId()]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true in all cases.
-     *
-     * @param UserInterface $user
-     * @param Notification $notification
-     *
-     * @return bool
-     */
-    public function canNotify(UserInterface $user, Notification $notification)
-    {
-        return true;
-    }
-
-    /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

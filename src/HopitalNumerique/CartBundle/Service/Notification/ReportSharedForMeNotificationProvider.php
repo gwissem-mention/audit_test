@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CartBundle\Service\Notification;
 
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CartBundle\Entity\Report;
-use HopitalNumerique\NotificationBundle\Model\Notification;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -36,31 +37,29 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
             $report->getName(),
             $userFrom->getPrenomNom(),
             [
-                'userFrom' => $userFrom,
-                'userTo' => $userTo,
+                'reportId' => $report->getId(),
+                'userFromId' => $userFrom->getId(),
+                'userToId' => $userTo->getId(),
             ]
         );
     }
 
     /**
-     * Checks if a notification should be stacked for user.
-     * Will return true if report is shared for given user.
+     * Returns users concerned by notification (target user of sharing).
      *
-     * @param UserInterface $user
      * @param Notification $notification
      *
-     * @return bool
+     * @return QueryBuilder
      */
-    public function canNotify(UserInterface $user, Notification $notification)
+    public function getSubscribers(Notification $notification)
     {
-        return $notification->getData('userTo')->getId() === $user->getId();
+        return $this->userRepository->getOneUserQueryBuilder($notification->getData('userToId'));
     }
 
     /**
-     * @param UserInterface $user
      * @param Notification $notification
      */
-    public function notify(UserInterface $user, Notification $notification)
+    public function notify(Notification $notification)
     {
 
     }

@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\NotificationBundle\EventListener;
 
-use HopitalNumerique\NotificationBundle\Service\Notification;
+use HopitalNumerique\NotificationBundle\Service\Notifications;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -11,16 +11,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 abstract class NotificationListenerAbstract implements EventSubscriberInterface
 {
-    protected $notificationAggregator;
+    /**
+     * @var Notifications $notificationService
+     */
+    protected $notificationService;
 
     /**
      * NotificationListenerAbstract constructor.
      *
-     * @param Notification $notificationAggregator
+     * @param Notifications $notificationService
      */
-    public function __construct(Notification $notificationAggregator)
+    public function __construct(Notifications $notificationService)
     {
-        $this->notificationAggregator = $notificationAggregator;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -30,7 +33,7 @@ abstract class NotificationListenerAbstract implements EventSubscriberInterface
      */
     public function getProvider()
     {
-        return $this->notificationAggregator->getProvider($this->getProviderCode());
+        return $this->notificationService->getProvider($this->getProviderCode());
     }
 
     abstract protected function getProviderCode();

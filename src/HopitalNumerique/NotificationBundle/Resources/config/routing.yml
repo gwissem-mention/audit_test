@@ -1,3 +1,11 @@
-notification_homepage:
+notification_test_count_providers:
     path:     /notification/providers/count/
-    defaults: { _controller: NotificationBundle:Notification:count }
+    defaults: { _controller: NotificationBundle:Notification:testCountProviders }
+
+notification_test_save_setting:
+    path:     /notification/settings/save/test/
+    defaults: { _controller: NotificationBundle:Notification:testSaveUserSetting }
+
+notification_test_show_providers:
+    path:     /notification/providers/show/
+    defaults: { _controller: NotificationBundle:Notification:testShowProviders }
