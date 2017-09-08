@@ -217,7 +217,7 @@ class ReferenceType extends AbstractType
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property' => 'nom',
                 'required' => false,
-                'label' => 'Afficher un lien pour ces domaines :',
+                'label' => 'Afficher un lien vers ces domaines :',
                 'multiple' => true,
                 'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
