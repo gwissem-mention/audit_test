@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
@@ -117,6 +120,7 @@ class GroupeController extends Controller
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
             'groupe' => $groupe,
+            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe)
         ]);
     }
 
@@ -238,5 +242,22 @@ class GroupeController extends Controller
                     ->findEnCoursByUser($domaine, $user),
             ]
         );
+    }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return StreamedResponse|Response
+     */
+    public function exportCsvAction(Groupe $group)
+    {
+        $export = $this->container->get(Csv::class);
+        if ($export->canExportCsv($this->getUser(), $group)) {
+            $comments = $group->getCommentaires();
+
+            return $export->generateResponse($comments, 'groupe_'.$group->getTitre());
+        }
+
+        return new Response(null, 403);
     }
 }

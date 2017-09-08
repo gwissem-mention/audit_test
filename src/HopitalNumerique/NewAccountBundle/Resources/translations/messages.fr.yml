@@ -4,21 +4,21 @@ account:
     dashboard:
         title: Tableau de bord
     profile:
-        title: Mon profil
+        title: Mes informations
         completion: Complétion du profil
         personal_information: Données personnelles
         contact_information: Coordonnées
-        profile: Mon profil
-        structure: Ma structure
-        skills: Mes compétences
+        profile: Profil
+        structure: Structure
+        skills: Compétences
         picture:
             delete: Supprimer la photo
     service:
         title: Mes services
         quick_access: Accès directs
         domain_list:
-            label: Sélectionnez un domaine
-            all: Tous mes domaines
+            label: Filtrer
+            all: Tous
         no_data: Aucune donnée
     cart:
         title: Mon panier
@@ -41,9 +41,9 @@ account:
         cellPhoneNumber: Téléphone portable
         otherContact: Autres contacts
         profileType: Profil
-        jobType: Rôle
-        jobLabel: Libellé rôle
-        file: Photo du profil (maximum 200ko)
+        jobType: Fonction
+        jobLabel: Libellé
+        file: Photo de profil (maximum 200ko)
         region: Région
         county: Département
         organizationType: Type de structure
@@ -60,21 +60,22 @@ account:
             add: Ajouter un centre d'intérêt
     cdp:
         join: Rejoindre la communauté
-        access: Accéder à la communauté
+        access: Rejoindre la communauté
+        leave: Quitter la communauté
         missingInformation: Certaines informations de votre profil sont nécessaires pour rejoindre la communauté
 
 cart:
     items:
-        title: Mes objets placés dans mon panier
+        title: Contenu de mon panier
         header:
-            object_type: Type de l'objet
-            object_title: Titre de l'objet
+            object_type: Type
+            object_title: Titre
         add:
-            label: Ajouter les objets sélectionnés au rapport
+            label: Ajouter ma sélection au rapport
         action:
             open:
-                title: Ouvrir l'objet
+                title: Ouvrir
             remove:
-                title: Supprimer l'objet
+                title: Retirer du panier
                 confirm: Retirer cet objet de mon panier  ?
     no_items: "- Aucun item dans le panier -"

@@ -40,6 +40,7 @@
         <div class="panel-heading custom-panel-heading">
             <div class="panel-title">
                 <i class="icon cart-items-icon"></i>
+                {% include '@NewAccount/widget/extension/badge_number_extension.html.twig' with {'number': cartItems|length} %}
                 {{ 'cart.items.title'|trans }}
             </div>
         </div>
@@ -66,24 +67,23 @@
                             </td>
                             <td>{{ ('item.object_type.'~item.objectTypeLabelSlug)|trans({}, 'cart') }}</td>
                             <td>
-                                {% if item.parentsTitle is not null %}
-                                    {{ item.parentsTitle|join(' > ') }} >
+                                {% if item.route %}
+                                    {% set itemUrl = getItemUrl(item) %}
+                                    <a href="{{ itemUrl }}" title="{{ itemUrl }}">
+                                        {{ _self.setTitle(item.parentsTitle, item.title) }}
+                                    </a>
+                                {% else %}
+                                    {{ _self.setTitle(item.parentsTitle, item.title) }}
                                 {% endif %}
-                                {{ item.title }}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
-                                    {% if item.route %}
-                                        <a href="{{ getItemUrl(item) }}" class="btn btn-sm btn-success" title="{{ 'cart.items.action.open.title'|trans|e }}">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    {% endif %}
                                     {% spaceless %}
                                         <a
-                                                href="{{ path('hopital_numerique_cart_remove', {objectType: item.objectType, objectId: item.objectId}) }}"
-                                                class="btn btn-sm btn-danger item-remove"
-                                                data-confirm="{{ 'cart.items.action.remove.confirm'|trans|e }}"
-                                                title="{{ 'cart.items.action.remove.title'|trans|e }}"
+                                            href="{{ path('hopital_numerique_cart_remove', {objectType: item.objectType, objectId: item.objectId}) }}"
+                                            class="btn btn-sm btn-danger item-remove"
+                                            data-confirm="{{ 'cart.items.action.remove.confirm'|trans|e }}"
+                                            title="{{ 'cart.items.action.remove.title'|trans|e }}"
                                         >
                                             <i class="fa fa-trash-o"></i>
                                         </a>
@@ -95,7 +95,7 @@
                     </tbody>
                 </table>
 
-                <div class="text-right">
+                <div class="text-left">
                     <button data-uri="{{ path('hopital_numerique_cart_report_item_add_staging') }}" class="btn btn-success cart-add-to-report" disabled="disabled">{{ 'cart.items.add.label'|trans }}</button>
                 </div>
             {% else %}
@@ -109,5 +109,11 @@
     {{ include('HopitalNumeriqueCartBundle:report:edit.html.twig') }}
     <hr>
     {{ include('HopitalNumeriqueCartBundle:report:list.html.twig') }}
-
 {% endblock %}
+
+{% macro setTitle(parents, title) %}
+    {% if parents is not null %}
+        {{ parents|join(' > ') }} >
+    {% endif %}
+    {{ title }}
+{% endmacro setTitle %}

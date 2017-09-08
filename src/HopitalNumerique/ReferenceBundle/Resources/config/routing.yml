@@ -18,7 +18,7 @@ hopitalnumerique_reference_reference_edit:
 
 hopitalnumerique_reference_reference_get_tree:
     pattern:  /reference/tree/{reference}
-    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:getReferenceTree" }
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:getReferenceTree", reference: null }
 
 hopitalnumerique_reference_reference_show:
     pattern:  /reference/show/{id}

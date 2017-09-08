@@ -613,6 +613,8 @@ class UserController extends Controller
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
+        ini_set('memory_limit', '2048M');
+
         //get all selected Users
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
@@ -1278,7 +1280,7 @@ class UserController extends Controller
 
                 switch ($do) {
                     case 'inscription':
-                        $this->get('session')->getFlashBag()->add('success', 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par Centre de ressources de l\'ANAP. Merci de vérifier auprès de votre service de informatique que les adresses @anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.');
+                        $this->get('session')->getFlashBag()->add('success', strip_tags($this->get('translator')->trans('register.mail_warning')));
                         $urlParameter = $request->getSession()->get('urlToRedirect');
                         $request->getSession()->remove('urlToRedirect');
 

@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv;
 
 /**
  * Contrôleur concernant les fiches.
@@ -40,6 +43,7 @@ class FicheController extends Controller
                 ->canCloseFiche($fiche),
             'canOpen' => $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
                 ->canOpenFiche($fiche),
+            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($this->getUser(), $fiche->getGroupe())
         ]);
     }
 
@@ -167,5 +171,22 @@ class FicheController extends Controller
         $this->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
 
         return new JsonResponse(['success' => true]);
+    }
+
+    /**
+     * @param Fiche $fiche
+     *
+     * @return Response|StreamedResponse
+     */
+    public function exportCsvAction(Fiche $fiche)
+    {
+        $export = $this->container->get(Csv::class);
+        if ($export->canExportCsv($this->getUser(), $fiche->getGroupe())) {
+            $comments = $fiche->getCommentaires();
+
+            return $export->generateResponse($comments, 'fiche_' . $fiche->getQuestionPosee());
+        }
+
+        return new Response(null, 403);
     }
 }

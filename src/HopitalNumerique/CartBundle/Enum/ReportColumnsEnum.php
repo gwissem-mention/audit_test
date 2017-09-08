@@ -29,11 +29,23 @@ abstract class ReportColumnsEnum
     }
 
     /**
-     * @param Report|null $report
+     * Returns default columns for new reports
      *
      * @return array
      */
-    static function getReportColumns(Report $report = null)
+    static function getDefaultColumns()
+    {
+        return [
+            self::RESUME_COLUMN,
+        ];
+    }
+
+    /**
+     * @param Report $report
+     *
+     * @return array
+     */
+    static function getReportColumns(Report $report)
     {
         $columns = [];
 
@@ -42,5 +54,17 @@ abstract class ReportColumnsEnum
         }
 
         return $columns;
+    }
+
+    /**
+     * Returns default columns for new reports
+     *
+     * @return array
+     */
+    static function getReportDefaultColumns()
+    {
+        return array_map(function ($column) {
+            return in_array($column, self::getDefaultColumns());
+        }, self::getColumns());
     }
 }

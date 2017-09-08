@@ -127,9 +127,7 @@ var RiskAnalysis;
             }
 
             if ($line.find('.comment').val().length) {
-                $btn.addClass('btn-success').removeClass('btn-default');
-            } else {
-                $btn.removeClass('btn-success').addClass('btn-default');
+                $line.find('.criticality').attr('data-original-title', $line.find('.comment').val());
             }
         },
 

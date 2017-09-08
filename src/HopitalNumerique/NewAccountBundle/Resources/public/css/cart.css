@@ -36,7 +36,7 @@ table.dataTable thead .cart-items-all::after {
 }
 
 #my-account .cart-add-to-report {
-    margin-right: 15px;
+    margin-left: 15px;
 }
 
 #my-account .cart .no-result,

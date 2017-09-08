@@ -131,7 +131,7 @@
             <div class="loggedUser pull-right">
                 <div class="connexion">
                     {% if app.user == false %}
-                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>Se connecter</a>
+                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>{{ 'menu.account.login'|trans }}</a>
                     {% endif %}
                 </div>
                 {% if app.user %}

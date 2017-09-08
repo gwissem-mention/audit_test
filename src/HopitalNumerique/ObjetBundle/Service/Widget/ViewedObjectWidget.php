@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -153,10 +154,6 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
             ];
         }
 
-        if (empty($data)) {
-            return null;
-        }
-
         usort($data, function ($a, $b) {
             return $a['consultationDate'] < $b['consultationDate'];
         });
@@ -167,6 +164,12 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('viewed_objects.title', [], 'widget');
 
-        return new Widget('viewed-objects', $title, $html);
+        $widget = new Widget('viewed-objects', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
+
+        return $widget;
     }
 }

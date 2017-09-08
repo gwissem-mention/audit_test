@@ -18,6 +18,7 @@
         '@jquery_toggles_js'
         'bundles/newaccount/js/account_profile.js'
         'bundles/newaccount/js/TabError.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -45,31 +46,31 @@
                 <div class="panel-heading no-background">
                     <ul class="nav nav-tabs">
                         <li>
-                            <a href="#tab1" data-toggle="tab" class="profile-tab-nav nav-tab-1">
+                            <a data-target="#tab1" data-toggle="tab" class="profile-tab-nav nav-tab-1">
                                 {{ 'account.profile.personal_information'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab2" data-toggle="tab" class="profile-tab-nav nav-tab-2">
+                            <a data-target="#tab2" data-toggle="tab" class="profile-tab-nav nav-tab-2">
                                 {{ 'account.profile.contact_information'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab3" data-toggle="tab" class="profile-tab-nav nav-tab-3">
+                            <a data-target="#tab3" data-toggle="tab" class="profile-tab-nav nav-tab-3">
                                 {{ 'account.profile.profile'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab4" data-toggle="tab" class="profile-tab-nav nav-tab-4">
+                            <a data-target="#tab4" data-toggle="tab" class="profile-tab-nav nav-tab-4">
                                 {{ 'account.profile.structure'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab5" data-toggle="tab" class="profile-tab-nav nav-tab-5">
+                            <a data-target="#tab5" data-toggle="tab" class="profile-tab-nav nav-tab-5">
                                 {{ 'account.profile.skills'|trans }}
                                 <span class="tab-completion">(0%)</span>
                             </a>

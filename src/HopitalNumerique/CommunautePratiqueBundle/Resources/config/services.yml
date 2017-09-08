@@ -159,3 +159,6 @@ services:
         arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.enroll_user }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv

@@ -119,7 +119,6 @@ class ProfileCompletionCalculator
                 'fields' => [
                     'phoneNumber',
                     'cellPhoneNumber',
-                    'otherContact',
                 ],
             ],
             'profile' => [

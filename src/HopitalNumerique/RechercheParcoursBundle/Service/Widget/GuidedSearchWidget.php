@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Routing\RouterInterface;
@@ -79,10 +80,6 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
             $this->domains
         );
 
-        if (empty($guidedSearches)) {
-            return null;
-        }
-
         $data = [];
 
         /** @var GuidedSearch $guidedSearch */
@@ -139,6 +136,12 @@ class GuidedSearchWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('guided_search.title', [], 'widget');
 
-        return new Widget('guided-search', $title, $html);
+        $widget = new Widget('guided-search', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
+
+        return $widget;
     }
 }

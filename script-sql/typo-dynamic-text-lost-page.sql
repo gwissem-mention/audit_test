@@ -1,1 +1,0 @@
-UPDATE `core_textedynamique_code` SET `txt_texte` = '<p>Le centre de ressources de l\'ANAP offre différents services: recherche, parcours guidé, forum de discussion, communauté de pratique, autodiagnostic.</p>' WHERE `core_textedynamique_code`.`txt_code` = 'Module_contextualNavigation_lostPage_description';

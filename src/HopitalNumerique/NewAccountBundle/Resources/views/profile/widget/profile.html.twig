@@ -16,7 +16,13 @@
         {% elseif user.organization and user.jobLabel %}
             {{ user.jobLabel }} - {{ user.organization.nom }}
         {% else %}
-            {{ 'specify_job'|trans }}
+            {% if user.jobLabel is null and user.organization is null and user.organizationLabel is null %}
+                {{ 'specify_both'|trans }}
+            {% elseif user.jobLabel is null %}
+                {{ 'specify_job'|trans }}
+            {% elseif user.organization is null or user.organizationLabel is null %}
+                {{ 'specify_organization'|trans }}
+            {% endif %}
         {% endif %}
 
         <div class="profile-completion">
@@ -28,7 +34,7 @@
             {% if completion == 100 %}
                 <a href="{{ path('account_profile') }}">{{ 'profile_link.complete.text'|trans }}</a>
             {% else %}
-                <a href="{{ path('account_profile') }}#{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToCompleteLabel)|trans({}, 'messages')}) }}</a>
+                <a href="{{ path('account_profile') }}##{{ firstTabToComplete }}">{{ 'profile_link.to_complete.text'|trans({'%profileTab%': ('account.profile.' ~ firstTabToCompleteLabel)|trans({}, 'messages')}) }}</a>
             {% endif %}
         </div>
     </div>

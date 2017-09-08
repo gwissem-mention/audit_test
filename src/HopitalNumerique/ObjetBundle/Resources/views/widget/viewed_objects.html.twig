@@ -51,4 +51,6 @@
     <script>
         new ViewedObjectsWidget($('#viewed-objects-widget'), {'deleteMessage': '{{ 'viewed_objects.delete_message.confirm'|trans }}'});
     </script>
+{% else %}
+    {{ 'viewed_objects.not_found'|trans }}
 {% endif %}

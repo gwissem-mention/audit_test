@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Service\Widget;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
@@ -82,6 +83,8 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
 
         $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
+        $count = 0;
+
         /** @var Reponse $response */
         foreach ($responses as $response) {
             $entry = $response->getOccurrence();
@@ -138,6 +141,10 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
             }
         }
 
+        foreach ($data as $survey) {
+            $count += empty($survey['responses']) ? 1 : count($survey['responses']);
+        }
+
         if (empty($data)) {
             return null;
         }
@@ -149,6 +156,12 @@ class SurveyWidget extends WidgetAbstract implements DomainAwareInterface
 
         $title = $this->translator->trans('survey.title', [], 'widget');
 
-        return new Widget('survey', $title, $html);
+        $widget = new Widget('survey', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => $count]
+        )));
+
+        return $widget;
     }
 }

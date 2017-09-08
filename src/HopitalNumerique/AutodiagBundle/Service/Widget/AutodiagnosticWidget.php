@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -176,16 +177,18 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             ];
         }
 
-        if (empty($data)) {
-            return null;
-        }
-
         $html = $this->twig->render('HopitalNumeriqueAutodiagBundle:widget:autodiagnostics.html.twig', [
             'data' => $data,
         ]);
 
         $title = $this->translator->trans('autodiagnostic.title', [], 'widget');
 
-        return new Widget('autodiagnostic', $title, $html);
+        $widget = new Widget('autodiagnostic', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($syntheses)]
+        )));
+
+        return $widget;
     }
 }

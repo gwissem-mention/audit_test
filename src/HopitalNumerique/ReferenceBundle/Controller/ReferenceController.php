@@ -395,14 +395,16 @@ class ReferenceController extends Controller
      *
      * @return JsonResponse
      */
-    public function getReferenceTreeAction(Reference $reference)
+    public function getReferenceTreeAction(Reference $reference = null)
     {
         $referenceTreeOptions = [];
-        if ($reference->getLock() != true) {
+        $forbidden = null !== $reference ? [$reference->getId()] : [];
+
+        if (null === $reference || !$reference->getLock()) {
             $referenceTreeOptions = $this->get('hopitalnumerique_reference.dependency_injection.reference.tree')
                 ->getOptions(
                     $this->getUser()->getDomaines(),
-                    [$reference->getId()]
+                    $forbidden
                 )
             ;
         }

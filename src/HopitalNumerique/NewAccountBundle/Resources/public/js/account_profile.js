@@ -3,10 +3,14 @@ $(function() {
     Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
 
     if (window.location.hash) {
-        $('[href='+window.location.hash+']').tab('show');
+        $('[data-target=' + window.location.hash.substring(1) + ']').tab('show');
     } else {
         $('.profile-tab-nav').first().tab('show');
     }
+
+    $('.profile-tab-nav').on('shown.bs.tab', function(event){
+        location.hash = '#' + event.target.dataset.target;
+    });
 
     var tabErrorHandler = new TabErrorHandler();
 
@@ -15,9 +19,9 @@ $(function() {
         tabErrorHandler.showFirstErrorTab();
     });
 
-    initSelect2($('.select2'));
+    initSelect2($('select.select2'));
 
-    new AjaxList($('.ajax-list-select2'));
+    new AjaxList($('select.ajax-list-select2'));
     new CountyList($('#user_account_region'), $('#user_account_county'));
     new HobbyCollection();
 
@@ -52,6 +56,14 @@ $(function() {
         var target = $(this).attr('href');
         $('a[href="'+ target +'"]').tab('show');
     });
+
+    if (document.getElementById('leave-communaute-pratique')) {
+        document.getElementById('leave-communaute-pratique').addEventListener('click', function (ev) {
+            CommunautePratique.desinscrit(function () {
+                window.location.reload();
+            });
+        })
+    }
 });
 
 function initSelect2($select) {

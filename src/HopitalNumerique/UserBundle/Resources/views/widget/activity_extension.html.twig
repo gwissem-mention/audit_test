@@ -1,6 +1,6 @@
 {% trans_default_domain 'widget' %}
 
-<i class="fa fa-star{{ activityInfo.activeUser ? '' : '-o' }} yellow memberActivityRatio"></i>
+<i class="fa fa-trophy {{ activityInfo.activeUser ? '' : 'fa-trophy-o' }} yellow memberActivityRatio"></i>
 
 <span class="hidden memberActivityRatio-tooltipContent">
     {% if activityInfo.activeUser %}

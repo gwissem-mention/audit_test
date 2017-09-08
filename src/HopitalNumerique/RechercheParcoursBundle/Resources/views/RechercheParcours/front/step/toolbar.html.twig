@@ -1,13 +1,13 @@
 {% trans_default_domain 'guided_search' %}
 <div class="pull-right toolbar guided-search-toolbar">
-    {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'guided_search', objectId: guidedSearchReference.id, btnSize: ' '}) }}
     <a
-        class="btn btn-default"
-        href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': guidedSearchReference.recherchesParcoursGestion.id}) }}"
-        title="{{ 'step.back.btn.title'|trans({'%parcours_guide%': labelReferenceId|getReferenceText('')}) }}"
+            class="btn btn-default"
+            href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': guidedSearchReference.recherchesParcoursGestion.id}) }}"
+            title="{{ 'step.back.btn.title'|trans({'%parcours_guide%': labelReferenceId|getReferenceText('')}) }}"
     >
         <i class="fa fa-arrow-circle-left"></i>
     </a>
+    {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'guided_search', objectId: guidedSearchReference.id, btnSize: ' '}) }}
 
     {% if app.user %}
         <button

@@ -4,6 +4,7 @@ new_search_results:
 
 saved_searches:
     title: Mes recherches enregistrées
+    not_found: Aucune recherche enregistrée
     table:
         title: Recherches
         actions: Actions

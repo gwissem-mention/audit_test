@@ -18,7 +18,7 @@
         <h1>{{ 'title'|trans }}</h1>
 
         <p>
-            {{ 'previous_page'|trans({'%entityTitle%': '<b>'~entityTitle~'</b>'})|raw }}
+            {{ 'previous_page'|trans({'%entityTitle%': '<b><a href="'~entityUrl~'">'~entityTitle~'</a></b>'})|raw }}
         </p>
 
         {{ 'Module_contextualNavigation_lostPage_description'|nodevoTexteDynamique(domaineCurrent.id)|glossaireParse|raw }}

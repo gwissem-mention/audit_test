@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Service\Widget;
 
+use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -61,9 +62,7 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
             $this->domains
         );
 
-        if (empty($searches)) {
-            return null;
-        }
+        $title = $this->translator->trans('saved_searches.title', [], 'widget');
 
         $data = [];
 
@@ -110,8 +109,12 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
             'data' => $data,
         ]);
 
-        $title = $this->translator->trans('saved_searches.title', [], 'widget');
+        $widget = new Widget('saved-searches', $title, $html);
+        $widget->addExtension(new WidgetExtension('count', $this->twig->render(
+            '@NewAccount/widget/extension/badge_number_extension.html.twig',
+            ['number' => count($data)]
+        )));
 
-        return new Widget('saved-searches', $title, $html);
+        return $widget;
     }
 }
