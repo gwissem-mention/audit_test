@@ -31,10 +31,22 @@ class DefaultController extends Controller
         //On récupère l'user connecté
         $user = $this->getUser();
 
-        /* Gestion des domaines */
+        /**
+         * Gestion des domaines
+         * @var Domaine[] $userDomains
+         */
         $userDomains = $this->getUser()->getDomaines()->toArray();
 
         $selectedDomainId = $request->query->get('domaine');
+
+        //If selected domain id not supplied and current user has only one domain, select it by default.
+        if (null === $selectedDomainId && 1 === count($userDomains)) {
+            $selectedDomainId = $userDomains[0]->getId();
+        }
+
+        if ($selectedDomainId  === 'all') {
+            $selectedDomainId = null;
+        }
 
         if (null !== $selectedDomainId && 'all' !== $selectedDomainId) {
             $this->domains = array_filter($userDomains, function ($domain) use ($selectedDomainId) {
