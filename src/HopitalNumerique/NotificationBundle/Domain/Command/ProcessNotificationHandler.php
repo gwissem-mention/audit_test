@@ -3,10 +3,6 @@
 namespace HopitalNumerique\NotificationBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use HopitalNumerique\NotificationBundle\Entity\Notification;
-use HopitalNumerique\NotificationBundle\Entity\Settings;
-use HopitalNumerique\NotificationBundle\Enum\NotificationDayEnum;
-use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\NotificationBundle\Service\Notifications;
 use HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator;
 use HopitalNumerique\NotificationBundle\Service\NotificationSubscriptionFinder;

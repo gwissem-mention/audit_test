@@ -26,6 +26,15 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    HopitalNumerique\NotificationBundle\Domain\Command\SendNotificationHandler:
+        class: HopitalNumerique\NotificationBundle\Domain\Command\SendNotificationHandler
+        arguments:
+            - '@hopitalnumerique\notificationbundle\repository\notificationrepository'
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+            - '@event_dispatcher'
+            - '@hopitalnumerique\notificationbundle\service\notificationsubscribtionfinder'
+            - '@doctrine.orm.entity_manager'
+
     HopitalNumerique\NotificationBundle\Repository\SettingsRepository:
         class: HopitalNumerique\NotificationBundle\Repository\SettingsRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -47,3 +56,9 @@ services:
 
     HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator:
         class: HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator
+
+    HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener:
+        class: HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener
+        tags:
+            - { name: doctrine.event_subscriber }
+
