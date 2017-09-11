@@ -11,7 +11,7 @@
         <div class="form-inline">
             <div class="form-group">
                 <select class="form-control" name="domains_select" id="domains-select">
-                    <option value="all" data-url="{{ path('hopital_numerique_admin_homepage') }}">{{ 'account.service.domain_list.all'|trans }}</option>
+                    <option value="all" data-url="{{ path('hopital_numerique_admin_homepage', {"domaine": 'all'}) }}">{{ 'account.service.domain_list.all'|trans }}</option>
                     {% for domain in userDomains %}
                         <option value="{{ domain.id }}" {{ domain.id == selectedDomain ? 'selected' : '' }}  data-url="{{ path('hopital_numerique_admin_homepage', {"domaine": domain.id}) }}">{{ domain.nom }}</option>
                     {% endfor %}
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div id="populate-block" class="form-inline text-right">
-            <label class="control-label" for="block-select">Ajouter un widget</label>
+            <label class="control-label" for="block-select">Ajouter un bloc</label>
             <div class="form-group">
                 <select class="form-control" name="block_select" id="block-select"></select>
             </div>
@@ -58,14 +58,34 @@
 
 {% block body %}
     <div class="tdb">
-        {% if 1 in app.user.getDomainesId() %}
+        <div class="gridster-data hidden">
+            <ul class="list-unstyled">
+                <li data-visible="{{ userConf['users']['visible'] }}" data-row="{{userConf['users']['row']}}" data-col="{{userConf['users']['col']}}" data-sizex="1" data-sizey="1" data-id="users" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Utilisateurs</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
 
-            <div class="gridster-data hidden">
-                <ul class="list-unstyled">
-                    <li data-visible="{{ userConf['users']['visible'] }}" data-row="{{userConf['users']['row']}}" data-col="{{userConf['users']['col']}}" data-sizex="1" data-sizey="1" data-id="users" >
+                        <div class="panel-body">
+                            <ol>
+                                <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique', 'domain': domainForFilters})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
+                                <li><strong>{{blocUser['actif']}}</strong> comptes actifs (12 derniers mois)</li>
+                                <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
+                                <li><strong>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                {% if blocAmbassadeur is not null %}
+                    <li data-visible="{{ userConf['ambassadeurs']['visible'] }}" data-row="{{userConf['ambassadeurs']['row']}}" data-col="{{userConf['ambassadeurs']['col']}}" data-sizex="1" data-sizey="1" data-id="ambassadeurs" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Utilisateurs</span></h3>
+                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Ambassadeurs</span></h3>
                                 <div class="options">
                                     <i class="hide-block fa fa-minus"></i>
                                     <i class="drag-handler fa fa-arrows"></i>
@@ -74,66 +94,22 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique', 'domain': domainForFilters})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
-                                    <li><strong>{{blocUser['actif']}}</strong> comptes actifs (12 derniers mois)</li>
-                                    <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
-                                    <li><strong>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
+                                    <li><strong>{{blocAmbassadeur['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
+                                    <li><strong>{{blocAmbassadeur['ambCandidatsRecues']}}</strong> candidatures reçues</li>
+                                    <li><strong>{{blocAmbassadeur['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
                                 </ol>
                             </div>
                         </div>
                     </li>
+                {% endif %}
 
-                    {% if blocAmbassadeur is not null %}
-                        <li data-visible="{{ userConf['ambassadeurs']['visible'] }}" data-row="{{userConf['ambassadeurs']['row']}}" data-col="{{userConf['ambassadeurs']['col']}}" data-sizex="1" data-sizey="1" data-id="ambassadeurs" >
-                            <div class="panel panel-midnightblue">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Ambassadeurs</span></h3>
-                                    <div class="options">
-                                        <i class="hide-block fa fa-minus"></i>
-                                        <i class="drag-handler fa fa-arrows"></i>
-                                    </div>
-                                </div>
-
-                                <div class="panel-body">
-                                    <ol>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
-                                        <li><strong>{{blocAmbassadeur['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
-                                        <li><strong>{{blocAmbassadeur['ambCandidatsRecues']}}</strong> candidatures reçues</li>
-                                        <li><strong>{{blocAmbassadeur['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    {% if blocExpert is not null %}
-                        <li data-visible="{{ userConf['experts']['visible']}}" data-row="{{userConf['experts']['row']}}" data-col="{{userConf['experts']['col']}}" data-sizex="1" data-sizey="1" data-id="experts" >
-                            <div class="panel panel-midnightblue">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Experts</span></h3>
-                                    <div class="options">
-                                        <i class="hide-block fa fa-minus"></i>
-                                        <i class="drag-handler fa fa-arrows"></i>
-                                    </div>
-                                </div>
-
-                                <div class="panel-body">
-                                    <ol>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
-                                        <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
-                                        <li><strong>{{blocExpert['expCandidatsRecues']}}</strong> candidatures reçues</li>
-                                        <li><strong>{{blocExpert['contribution']}}</strong> contributions au forum depuis 7 jours</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    <li data-visible="{{ userConf['publications']['visible'] }}" data-row="{{userConf['publications']['row']}}" data-col="{{userConf['publications']['col']}}" data-sizex="1" data-sizey="1" data-id="publications" >
+                {% if blocExpert is not null %}
+                    <li data-visible="{{ userConf['experts']['visible']}}" data-row="{{userConf['experts']['row']}}" data-col="{{userConf['experts']['col']}}" data-sizex="1" data-sizey="1" data-id="experts" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-picture-o"></i><span class="title">Publications</span></h3>
+                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Experts</span></h3>
                                 <div class="options">
                                     <i class="hide-block fa fa-minus"></i>
                                     <i class="drag-handler fa fa-arrows"></i>
@@ -142,20 +118,131 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'point-dur', 'domain': domainForFilters})}}"><strong>{{blocObjets['points-durs']}}</strong> points durs</a></li>
-                                    <li><strong>{{blocObjets['productions']}}</strong> productions</li>
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'non-publie', 'domain': domainForFilters})}}"><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</a></li>
-                                    <li><strong>{{blocObjets['nb-notes']}}</strong> notes</span>, <strong>{{blocObjets['nb-commentaires']}}</strong> commentaires</li>
-                                    <li><strong>{{blocObjets['pourcent-note-publication']}}</strong>% des notes > 3,5/5</li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
+                                    <li><strong>{{blocExpert['expCandidatsRecues']}}</strong> candidatures reçues</li>
+                                    <li><strong>{{blocExpert['contribution']}}</strong> contributions au forum depuis 7 jours</li>
                                 </ol>
                             </div>
                         </div>
                     </li>
+                {% endif %}
 
-                    <li data-visible="{{ userConf['top5-points-dur']['visible'] }}" data-row="{{userConf['top5-points-dur']['row']}}" data-col="{{userConf['top5-points-dur']['col']}}" data-sizex="1" data-sizey="1" data-id="top5-points-dur" >
+                <li data-visible="{{ userConf['publications']['visible'] }}" data-row="{{userConf['publications']['row']}}" data-col="{{userConf['publications']['col']}}" data-sizex="1" data-sizey="1" data-id="publications" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-picture-o"></i><span class="title">Publications</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'point-dur', 'domain': domainForFilters})}}"><strong>{{blocObjets['points-durs']}}</strong> points durs</a></li>
+                                <li><strong>{{blocObjets['productions']}}</strong> productions</li>
+                                <li><a href="{{path('hopitalnumerique_objet_objet_filtre', {'filtre' : 'non-publie', 'domain': domainForFilters})}}"><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</a></li>
+                                <li><strong>{{blocObjets['nb-notes']}}</strong> notes</span>, <strong>{{blocObjets['nb-commentaires']}}</strong> commentaires</li>
+                                <li><strong>{{blocObjets['pourcent-note-publication']}}</strong>% des notes > 3,5/5</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li data-visible="{{ userConf['top5-points-dur']['visible'] }}" data-row="{{userConf['top5-points-dur']['row']}}" data-col="{{userConf['top5-points-dur']['col']}}" data-sizex="1" data-sizey="1" data-id="top5-points-dur" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 points durs</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for pointDur in blocObjets['top5-points-dur'] %}
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
+                                {% else %}
+                                    <li>Aucun point dur</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li data-visible="{{ userConf['bottom5-points-dur']['visible'] }}" data-row="{{userConf['bottom5-points-dur']['row']}}" data-col="{{userConf['bottom5-points-dur']['col']}}" data-sizex="1" data-sizey="1" data-id="bottom5-points-dur" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-down"></i><span class="title">Bottom 5 points durs</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for pointDur in blocObjets['bottom5-points-dur'] %}
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
+                                {% else %}
+                                    <li>Aucun point dur</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li data-visible="{{ userConf['top5-productions']['visible'] }}" data-row="{{userConf['top5-productions']['row']}}" data-col="{{userConf['top5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="top5-productions" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 productions</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for production in blocObjets['top5-productions'] %}
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
+                                {% else %}
+                                    <li>Aucune production</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li data-visible="{{ userConf['bottom5-productions']['visible'] }}" data-row="{{userConf['bottom5-productions']['row']}}" data-col="{{userConf['bottom5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="bottom5-productions" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-down"></i><span class="title">Bottom 5 productions</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for production in blocObjets['bottom5-productions'] %}
+                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
+                                {% else %}
+                                    <li>Aucune production</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                {% if blocInterventions is not null %}
+                    <li data-visible="{{ userConf['interventions']['visible'] }}" data-row="{{userConf['interventions']['row']}}" data-col="{{userConf['interventions']['col']}}" data-sizex="1" data-sizey="1" data-id="interventions" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 points durs</span></h3>
+                                <h3 class="panel-title"><i class="fa fa-list-alt"></i><span class="title">Interventions</span></h3>
                                 <div class="options">
                                     <i class="hide-block fa fa-minus"></i>
                                     <i class="drag-handler fa fa-arrows"></i>
@@ -164,20 +251,67 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    {% for pointDur in blocObjets['top5-points-dur'] %}
-                                        <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
-                                    {% else %}
-                                        <li>Aucun point dur</li>
-                                    {% endfor %}
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste')}}"><strong>{{blocInterventions['total']}}</strong> demandes d'interventions</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-demandees"})}}"><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-attente"})}}"><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-cours"})}}"><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</a></li>
+                                    <li><strong>{{blocInterventions['refusees'] + blocInterventions['annulees']}}</strong> interventions refusées ou annulées</li>
                                 </ol>
                             </div>
                         </div>
                     </li>
+                {% endif %}
 
-                    <li data-visible="{{ userConf['bottom5-points-dur']['visible'] }}" data-row="{{userConf['bottom5-points-dur']['row']}}" data-col="{{userConf['bottom5-points-dur']['col']}}" data-sizex="1" data-sizey="1" data-id="bottom5-points-dur" >
+                <li data-visible="{{ userConf['inscriptions']['visible'] }}" data-row="{{userConf['inscriptions']['row']}}" data-col="{{userConf['inscriptions']['col']}}" data-sizex="1" data-sizey="1" data-id="inscriptions" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-adjust"></i><span class="title">Sessions</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                <li><strong>{{blocSessions['totalInscriptionsAnneePrecedente']}}</strong> inscriptions en {{ anneeEnCours - 1 }}</li>
+                                <li><strong>{{blocSessions['totalInscriptionsAnneeEnCours']}}</strong> inscriptions en {{ anneeEnCours }}</li>
+                                <li><strong>{{blocSessions['totalParticipantsAnneePrecedente']}}</strong> personnes inscrites en {{ anneeEnCours - 1 }}</li>
+                                <li><strong>{{blocSessions['totalParticipantsAnneeEnCours']}}</strong> personnes inscrites en {{ anneeEnCours }}</li>
+                                <li>{% if blocSessions['totalSessionsRisquees'] > 0 %}<a href="{{ path('hopitalnumerique_module_session_popinsessionsrisquees') }}" class="fancybox fancybox.ajax">{% endif %}<strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois{% if blocSessions['totalSessionsRisquees'] > 0 %}</a>{% endif %}</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <li data-visible="{{ userConf['sessions']['visible'] }}" data-row="{{userConf['sessions']['row']}}" data-col="{{userConf['sessions']['col']}}" data-sizex="1" data-sizey="1" data-id="sessions" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-adjust"></i><span class="title">Prochaines sessions</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for session in blocSessions['next'] %}
+                                    {% set sessionTitre =  session.dateSession|date('d/m/y') ~ ' - ' ~  session.inscriptions ~ ' inscrit(s)' ~ ' - ' ~ session.titre %}
+                                    <li><a href="{{path('hopitalnumerique_module_module_session_show', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(40) }}</a></li>
+                                {% else %}
+                                    <li>- Aucune session à venir -</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                {% if blocPaiements is not null %}
+                    <li data-visible="{{ userConf['paiements']['visible'] }}" data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-thumbs-o-down"></i><span class="title">Bottom 5 points durs</span></h3>
+                                <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">Paiements</span></h3>
                                 <div class="options">
                                     <i class="hide-block fa fa-minus"></i>
                                     <i class="drag-handler fa fa-arrows"></i>
@@ -186,213 +320,64 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    {% for pointDur in blocObjets['bottom5-points-dur'] %}
-                                        <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
-                                    {% else %}
-                                        <li>Aucun point dur</li>
-                                    {% endfor %}
+                                    <li><b>{{ blocPaiements['payedPreviousYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y')-1 }}</li>
+                                    <li><b>{{ blocPaiements['payedCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingPayment']|number_format(0, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
+                                    <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingBillCreation']|number_format(0, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
                                 </ol>
                             </div>
                         </div>
                     </li>
+                {% endif %}
 
-                    <li data-visible="{{ userConf['top5-productions']['visible'] }}" data-row="{{userConf['top5-productions']['row']}}" data-col="{{userConf['top5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="top5-productions" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 productions</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    {% for production in blocObjets['top5-productions'] %}
-                                        <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
-                                    {% else %}
-                                        <li>Aucune production</li>
-                                    {% endfor %}
-                                </ol>
+                <li data-visible="{{ userConf['cdp']['visible'] }}" data-row="{{userConf['cdp']['row']}}" data-col="{{userConf['cdp']['col']}}" data-sizex="1" data-sizey="1" data-id="cdp" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">CDP</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
                             </div>
                         </div>
-                    </li>
 
-                    <li data-visible="{{ userConf['bottom5-productions']['visible'] }}" data-row="{{userConf['bottom5-productions']['row']}}" data-col="{{userConf['bottom5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="bottom5-productions" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-thumbs-o-down"></i><span class="title">Bottom 5 productions</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
+                        <div class="panel-body">
+                            <ol>
+                                <li><b>{{ blockCDP['members']|number_format(0, ',', ' ') }}</b> membres dans la communauté</li>
+                                <li><b>{{ blockCDP['GTMembers']|number_format(0, ',', ' ') }}</b> membres dans les GT</li>
+                                <li><b>{{ blockCDP['pendingRecords']|number_format(0, ',', ' ') }}</b> fiches de problématiques en cours</li>
+                                <li><b>{{ blockCDP['comments']|number_format(0, ',', ' ') }}</b> commentaires ces 30 derniers jours</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
 
-                            <div class="panel-body">
-                                <ol>
-                                    {% for production in blocObjets['bottom5-productions'] %}
-                                        <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
-                                    {% else %}
-                                        <li>Aucune production</li>
-                                    {% endfor %}
-                                </ol>
+                <li data-visible="{{ userConf['forum']['visible'] }}" data-row="{{userConf[ 'forum' ]['row']}}" data-col="{{userConf[ 'forum' ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ 'forum' }}" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Forum</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
                             </div>
                         </div>
-                    </li>
 
-                    {% if blocInterventions is not null %}
-                        <li data-visible="{{ userConf['interventions']['visible'] }}" data-row="{{userConf['interventions']['row']}}" data-col="{{userConf['interventions']['col']}}" data-sizex="1" data-sizey="1" data-id="interventions" >
-                            <div class="panel panel-midnightblue">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-list-alt"></i><span class="title">Interventions</span></h3>
-                                    <div class="options">
-                                        <i class="hide-block fa fa-minus"></i>
-                                        <i class="drag-handler fa fa-arrows"></i>
-                                    </div>
-                                </div>
-
-                                <div class="panel-body">
-                                    <ol>
-                                        <li><a href="{{path('hopital_numerique_intervention_admin_liste')}}"><strong>{{blocInterventions['total']}}</strong> demandes d'interventions</a></li>
-                                        <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-demandees"})}}"><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</a></li>
-                                        <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-attente"})}}"><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</a></li>
-                                        <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-cours"})}}"><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</a></li>
-                                        <li><strong>{{blocInterventions['refusees'] + blocInterventions['annulees']}}</strong> interventions refusées ou annulées</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    <li data-visible="{{ userConf['inscriptions']['visible'] }}" data-row="{{userConf['inscriptions']['row']}}" data-col="{{userConf['inscriptions']['col']}}" data-sizex="1" data-sizey="1" data-id="inscriptions" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-adjust"></i><span class="title">Sessions</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    <li><strong>{{blocSessions['totalInscriptionsAnneePrecedente']}}</strong> inscriptions en {{ anneeEnCours - 1 }}</li>
-                                    <li><strong>{{blocSessions['totalInscriptionsAnneeEnCours']}}</strong> inscriptions en {{ anneeEnCours }}</li>
-                                    <li><strong>{{blocSessions['totalParticipantsAnneePrecedente']}}</strong> personnes inscrites en {{ anneeEnCours - 1 }}</li>
-                                    <li><strong>{{blocSessions['totalParticipantsAnneeEnCours']}}</strong> personnes inscrites en {{ anneeEnCours }}</li>
-                                    <li>{% if blocSessions['totalSessionsRisquees'] > 0 %}<a href="{{ path('hopitalnumerique_module_session_popinsessionsrisquees') }}" class="fancybox fancybox.ajax">{% endif %}<strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois{% if blocSessions['totalSessionsRisquees'] > 0 %}</a>{% endif %}</li>
-                                </ol>
-                            </div>
+                        <div class="panel-body">
+                            <ol>
+                                <li><strong>{{ blocForum['topics'] }}</strong> topics commentés depuis 1 mois</li>
+                                <li><strong>{{ blocForum['contributions'] }}</strong> contributions depuis 1 mois</li>
+                                <li><strong>{{ blocForum['topics-sans-reponses'] }}</strong> topics sans réponse</li>
+                            </ol>
                         </div>
-                    </li>
-
-                    <li data-visible="{{ userConf['sessions']['visible'] }}" data-row="{{userConf['sessions']['row']}}" data-col="{{userConf['sessions']['col']}}" data-sizex="1" data-sizey="1" data-id="sessions" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-adjust"></i><span class="title">Prochaines sessions</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    {% for session in blocSessions['next'] %}
-                                        {% set sessionTitre =  session.dateSession|date('d/m/y') ~ ' - ' ~  session.inscriptions ~ ' inscrit(s)' ~ ' - ' ~ session.titre %}
-                                        <li><a href="{{path('hopitalnumerique_module_module_session_show', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(40) }}</a></li>
-                                    {% else %}
-                                        <li>- Aucune session à venir -</li>
-                                    {% endfor %}
-                                </ol>
-                            </div>
-                        </div>
-                    </li>
-
-                    {% if blocPaiements is not null %}
-                        <li data-visible="{{ userConf['paiements']['visible'] }}" data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
-                            <div class="panel panel-midnightblue">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">Paiements</span></h3>
-                                    <div class="options">
-                                        <i class="hide-block fa fa-minus"></i>
-                                        <i class="drag-handler fa fa-arrows"></i>
-                                    </div>
-                                </div>
-
-                                <div class="panel-body">
-                                    <ol>
-                                        <li><b>{{ blocPaiements['payedPreviousYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y')-1 }}</li>
-                                        <li><b>{{ blocPaiements['payedCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y') }}</li>
-                                        <li><b>{{ blocPaiements['waitingPayment']|number_format(0, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
-                                        <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
-                                        <li><b>{{ blocPaiements['waitingBillCreation']|number_format(0, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-
-                    <li data-visible="{{ userConf['cdp']['visible'] }}" data-row="{{userConf['cdp']['row']}}" data-col="{{userConf['cdp']['col']}}" data-sizex="1" data-sizey="1" data-id="cdp" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">CDP</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    <li><b>{{ blockCDP['members']|number_format(0, ',', ' ') }}</b> membres dans la communauté</li>
-                                    <li><b>{{ blockCDP['GTMembers']|number_format(0, ',', ' ') }}</b> membres dans les GT</li>
-                                    <li><b>{{ blockCDP['pendingRecords']|number_format(0, ',', ' ') }}</b> fiches de problématiques en cours</li>
-                                    <li><b>{{ blockCDP['comments']|number_format(0, ',', ' ') }}</b> commentaires ces 30 derniers jours</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-visible="{{ userConf['forum']['visible'] }}" data-row="{{userConf[ 'forum' ]['row']}}" data-col="{{userConf[ 'forum' ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ 'forum' }}" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Forum</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    <li><strong>{{ blocForum['topics'] }}</strong> topics commentés depuis 1 mois</li>
-                                    <li><strong>{{ blocForum['contributions'] }}</strong> contributions depuis 1 mois</li>
-                                    <li><strong>{{ blocForum['topics-sans-reponses'] }}</strong> topics sans réponse</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
         <div class="gridster">
             <ul class="list-unstyled">
             </ul>
         </div>
-        {% else %}
-            <div class="col-sm-12">
-                <div class="panel panel-midnightblue">
-                    <div class="panel-heading">
-                        <h4>Administration</h4>
-                    </div>
-
-                    <div class="panel-body" >
-                        Veuillez sélectionner un élément du menu se trouvant sur la gauche.
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     </div>
 
     <input type="hidden" id="account-reorder-url" value="{{path('hopital_numerique_admin_homepage_reorder')}}" />
