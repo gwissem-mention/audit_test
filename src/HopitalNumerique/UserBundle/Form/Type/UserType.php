@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use HopitalNumerique\ReferenceBundle\Form\Type\HobbyType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -71,12 +72,12 @@ class UserType extends AbstractType
     /**
      * UserType constructor.
      *
-     * @param Manager              $manager
-     * @param                      $validator
-     * @param                      $managerRole
-     * @param                      $securityContext
-     * @param UserManager          $userManager
-     * @param ReferenceManager     $referenceManager
+     * @param Manager $manager
+     * @param $validator
+     * @param $managerRole
+     * @param $securityContext
+     * @param UserManager $userManager
+     * @param ReferenceManager $referenceManager
      * @param EtablissementManager $etablissementManager
      */
     public function __construct(
@@ -277,6 +278,14 @@ class UserType extends AbstractType
             ])
             ->add('inscritCommunautePratique', CheckboxType::class, [
                 'label' => 'Membre de la communauté de pratique',
+            ])
+            ->add('enabled', ChoiceType::class, [
+                'label' => 'Compte activé',
+                'choices' => [
+                    'yes' => false,
+                    'no' => false,
+                ],
+                'choices_as_values' => true
             ])
             ->add('etat', EntityType::class, [
                 'class' => Reference::class,

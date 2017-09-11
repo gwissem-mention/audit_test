@@ -53,13 +53,13 @@ services:
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
         arguments:
-            - "@hopitalnumerique_user.manager.user"
-            - "@validator"
-            - "@nodevo_role.manager.role"
-            - "@security.context"
-            - "@hopitalnumerique_user.manager.user"
-            - "@hopitalnumerique_reference.manager.reference"
-            - "@hopitalnumerique_etablissement.manager.etablissement"
+            - '@hopitalnumerique_user.manager.user'
+            - '@validator'
+            - '@nodevo_role.manager.role'
+            - '@security.context'
+            - '@hopitalnumerique_user.manager.user'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_etablissement.manager.etablissement'
         tags:
             - { name: form.type, alias: nodevo_user_user }
 

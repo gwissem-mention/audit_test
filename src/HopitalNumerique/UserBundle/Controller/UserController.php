@@ -629,6 +629,7 @@ class UserController extends Controller
             'username' => 'Identifiant (login)',
             'email' => 'Adresse e-mail',
             'pseudonym' => 'Pseudonyme pour le forum',
+            'enabledToString' => 'Compte activé',
             'etat.libelle' => 'Etat',
             'phoneNumber' => 'Téléphone Direct',
             'cellPhoneNumber' => 'Téléphone Portable',
