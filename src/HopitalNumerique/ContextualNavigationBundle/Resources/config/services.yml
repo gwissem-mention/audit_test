@@ -17,4 +17,4 @@ services:
             - '@autodiag.repository.autodiag'
             - '@hopitalnumerique_reference.repository.reference'
             - '@hopitalnumerique_user.repository.user'
-            - '%resource_domain_id%'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'

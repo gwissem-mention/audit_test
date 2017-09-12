@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ContextualNavigationBundle\Service;
 
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -59,14 +60,14 @@ class LostInformationRetriever
     /**
      * LostInformationRetriever constructor.
      *
-     * @param Entity              $entityService
-     * @param ObjetRepository     $objetRepository
-     * @param TopicRepository     $topicRepository
-     * @param DomaineRepository   $domaineRepository
-     * @param AutodiagRepository  $autodiagRepository
+     * @param Entity $entityService
+     * @param ObjetRepository $objetRepository
+     * @param TopicRepository $topicRepository
+     * @param DomaineRepository $domaineRepository
+     * @param AutodiagRepository $autodiagRepository
      * @param ReferenceRepository $referenceRepository
-     * @param UserRepository      $userRepository
-     * @param                     $resourceDomainId
+     * @param UserRepository $userRepository
+     * @param CurrentDomaine $currentDomaine
      */
     public function __construct(
         Entity $entityService,
@@ -76,7 +77,7 @@ class LostInformationRetriever
         AutodiagRepository $autodiagRepository,
         ReferenceRepository $referenceRepository,
         UserRepository $userRepository,
-        $resourceDomainId
+        CurrentDomaine $currentDomaine
     ) {
         $this->entityService = $entityService;
         $this->objectRepository = $objetRepository;
@@ -85,7 +86,7 @@ class LostInformationRetriever
         $this->autodiagRepository = $autodiagRepository;
         $this->referenceRepository = $referenceRepository;
         $this->userRepository = $userRepository;
-        $this->resourceDomainId = $resourceDomainId;
+        $this->resourceDomainId = $currentDomaine->get()->getId();
     }
 
     /**
