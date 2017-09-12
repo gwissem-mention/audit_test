@@ -2949,4 +2949,14 @@ class User extends BaseUser implements SettingsOwnerInterface
         }
         return false;
     }
+
+    /**
+     * For CSV export in BO
+     *
+     * @return string
+     */
+    public function getEnabledToString()
+    {
+        return $this->enabled ? 'Oui' : 'Non';
+    }
 }
