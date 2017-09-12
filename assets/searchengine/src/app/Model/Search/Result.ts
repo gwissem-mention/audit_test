@@ -14,6 +14,10 @@ abstract class Result {
 
     abstract getSource(): string;
 
+    getId(): number {
+        return this.id;
+    }
+
     getRawScore(): number {
         return this.score;
     }

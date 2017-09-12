@@ -10,13 +10,21 @@
     {% endif %}
     <a href="{{ url }}">
         {%- if pertinenceNiveau is defined -%}
-            <em class="pertinence-niveau-{{ pertinenceNiveau }}"></em>
+            <span class="pertinence-niveau-{{ pertinenceNiveau }}"></span>
         {%- endif %}
         {{ title|raw }}
         {%- if subtitle is not null -%}
-            <span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> {{ subtitle }}</span>
+            <br /><span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> {{ subtitle }}</span>
         {%- endif -%}
     </a>
+    {% if type is defined and id is defined %}
+        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {
+            objectType: type,
+            objectId: id,
+            btnSize: 'btn-xs',
+            cssClass: 'fancybox-ajax'
+        }) }}
+    {% endif %}
 </h3>
 {%- if description is not null and (hideTopicDescription is not defined or hideTopicDescription != true) -%}
     <p>{{ description }}</p>
