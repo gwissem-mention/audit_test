@@ -281,8 +281,9 @@ class UserType extends AbstractType
             ])
             ->add('enabled', ChoiceType::class, [
                 'label' => 'Compte activé',
+                'required' => true,
                 'choices' => [
-                    'yes' => false,
+                    'yes' => true,
                     'no' => false,
                 ],
                 'choices_as_values' => true
