@@ -46,6 +46,12 @@ class PublicationController extends Controller
             'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
         ];
 
+        $currentDomainId = $this->container
+            ->get('hopitalnumerique_domaine.dependency_injection.current_domaine')
+            ->get()
+            ->getId()
+        ;
+
         $showCog = false;
         if ($this->getUser() instanceof User
             && in_array(
@@ -122,11 +128,18 @@ class PublicationController extends Controller
 
             $referencesToImplode = [];
 
-            /** @var Reference $reference */
-            foreach ($domaineReference as $reference) {
-                $displayedDomains = $reference->getReference()->getDomainesDisplayId()->toArray();
-                if (in_array($domaine->getId(), $displayedDomains)) {
-                    $referencesToImplode[] = $reference->getReference()->getId();
+            foreach ($domaineReference as $hasReference) {
+                /** @var Reference $reference */
+                $reference = $hasReference->getReference();
+                $displayedDomains = $reference->getDomainesDisplayId()->toArray();
+
+                if (in_array($domaine->getId(), $displayedDomains)
+                    && in_array(
+                        $currentDomainId,
+                        $reference->getDomainesId()
+                    )
+                ) {
+                    $referencesToImplode[] = $reference->getId();
                 }
             }
 
