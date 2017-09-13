@@ -2,15 +2,15 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use Symfony\Component\Validator\Constraints as Assert;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 
 /**
  * Gabarit d'autodiag.
@@ -180,6 +180,13 @@ class Autodiag
      * @ORM\Column(type="integer", nullable=true)
      */
     private $computeBeginning;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $published;
 
     /**
      * Autodiag constructor.
@@ -624,5 +631,25 @@ class Autodiag
     public function stopComputing()
     {
         $this->computeBeginning = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param bool $published
+     *
+     * @return Autodiag
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
     }
 }

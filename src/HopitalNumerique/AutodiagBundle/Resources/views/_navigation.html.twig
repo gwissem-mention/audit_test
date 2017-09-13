@@ -9,7 +9,7 @@
 <div id="autodiag-path" data-step="{{ step }}">
     <ul>
         <li class="{{ step == "fill" ? 'active' : '' }}">
-            {% if entry is not defined or entry is null or synthesis.validatedAt is not null %}
+            {% if entry is not defined or entry is null or synthesis.validatedAt is not null or false == autodiag.isPublished %}
                 <span class="disabled">
                     {{ "ad.autodiag.path.fill"|trans }}
                 </span>
