@@ -3,13 +3,13 @@ $(function() {
     Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
 
     if (window.location.hash) {
-        $('[data-target=' + window.location.hash.substring(1) + ']').tab('show');
+        $('[data-target=#' + window.location.hash.substring(2) + ']').tab('show');
     } else {
         $('.profile-tab-nav').first().tab('show');
     }
 
     $('.profile-tab-nav').on('shown.bs.tab', function(event){
-        location.hash = '#' + event.target.dataset.target;
+        window.location.hash = '?' + event.target.dataset.target.substring(1);
     });
 
     var tabErrorHandler = new TabErrorHandler();

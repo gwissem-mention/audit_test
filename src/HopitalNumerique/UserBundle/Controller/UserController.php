@@ -1214,15 +1214,6 @@ class UserController extends Controller
                     }
                 }
 
-                //bind Référence Etat with Enable FosUserField
-                if (intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'))
-                    === $user->getEtat()->getId() && $this->isGranted('ROLE_USER')
-                ) {
-                    $user->setEnabled(1);
-                } else {
-                    $user->setEnabled(0);
-                }
-
                 $user->setDateLastUpdate(new \DateTime());
 
                 //Mise à jour / création de l'utilisateur
