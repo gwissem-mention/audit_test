@@ -72,7 +72,6 @@
         .recherche-referencement #results-points-durs { background-color: #f4f4f4;padding: 4px 15px; }
             .recherche-referencement #results-points-durs h3 { margin: 10px 0; }
                 .recherche-referencement #results-points-durs h3 a { font-size: 14px;padding: 4px 0; }
-                    .recherche-referencement #results-points-durs h3 a.btn { padding: 1px 5px; }
             .recherche-referencement #results-points-durs .category { display: none; }
             .recherche-referencement #results-points-durs p { display: none; }
         /* --> */

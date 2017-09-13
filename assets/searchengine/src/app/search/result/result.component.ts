@@ -5,6 +5,7 @@ import Result from "../../Model/Search/Result";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Text} from "../text.service";
 import Cart from "../cart.service";
+import {Config} from "../../app.config";
 
 @Component({
     selector: 'search-results',
@@ -73,6 +74,10 @@ export class ResultComponent implements OnInit {
             this.canShowLess = this.query.getCurrentPage() > 1;
             this.canShow = this.resultSet.total > 0;
         });
+    }
+
+    canShowCart(): boolean {
+        return this.cartService.canShow();
     }
 
     addToCart(result: Result) {

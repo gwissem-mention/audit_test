@@ -5,6 +5,7 @@ namespace HopitalNumerique\SearchBundle\Service;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class ConfigFactory
 {
@@ -23,6 +24,11 @@ class ConfigFactory
      */
     protected $referenceRepository;
 
+    /**
+     * @var TokenStorage
+     */
+    protected $tokenStorage;
+
     protected $aggregationParameter;
 
     /**
@@ -30,13 +36,20 @@ class ConfigFactory
      * @param IndexManager $indexManager
      * @param CurrentDomaine $domainStorage
      * @param ReferenceRepository $referenceRepository
+     * @param TokenStorage $tokenStorage
      * @param $aggregationParameter
      */
-    public function __construct(IndexManager $indexManager, CurrentDomaine $domainStorage, ReferenceRepository $referenceRepository, $aggregationParameter)
-    {
+    public function __construct(
+        IndexManager $indexManager,
+        CurrentDomaine $domainStorage,
+        ReferenceRepository $referenceRepository,
+        TokenStorage $tokenStorage,
+        $aggregationParameter
+    ) {
         $this->indexManager = $indexManager;
         $this->domainStorage = $domainStorage;
         $this->referenceRepository = $referenceRepository;
+        $this->tokenStorage = $tokenStorage;
         $this->aggregationParameter = $aggregationParameter;
     }
 
@@ -51,6 +64,9 @@ class ConfigFactory
             'index' => $this->indexManager->getIndexNameByDomaine($this->domainStorage->get()),
             'aggregation' => $this->aggregationParameter,
             'texts' => $this->getTexts(),
+            'options' => [
+                'showCart' => is_object($this->tokenStorage->getToken()->getUser())
+            ]
         ];
     }
 
