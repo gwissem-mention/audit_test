@@ -472,7 +472,7 @@ class DefaultController extends Controller
                     $data['row'] = (int) (1 + (floor(($position - 1 )/ 3)));
                 }
             } else {
-                $data['visible'] = true;
+                $data['visible'] = false;
                 $data['col'] = 1 + (($total - $i - 1) % 3);
                 $data['row'] = (int) (1 + (floor(($total - $i) / 3)));
             }
