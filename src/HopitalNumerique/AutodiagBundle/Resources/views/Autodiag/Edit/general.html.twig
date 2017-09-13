@@ -21,6 +21,7 @@
             {{ form_widget(form.notify_update) }}
         </div>
         <div>
+            {{ form_row(form.autodiag.published, {"attr": {"class": "checkbox"}}) }}
             {{ form_row(form.autodiag.title) }}
             {{ form_row(form.autodiag.domaines, {"attr": {"class": "select2"}}) }}
             {{ form_row(form.autodiag.questionnaire) }}
