@@ -20,6 +20,9 @@ class ExportController extends Controller
      */
     public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
+        ini_set('memory_limit','1024M');
+        ini_set('max_execution_time', 0);
+
         if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_etablissement.grid.etablissement')->getRawData();
             foreach ($rawDatas as $data) {
