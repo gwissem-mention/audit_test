@@ -38,7 +38,7 @@
                     <i class="fa fa-share fa-flip-vertical"></i>
                     <a [href]="sanitizeUrl(result.getLink())" class="title__text" *ngIf="result.getLink()" [innerHTML]="result.getTitle()"></a>
                     <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
-                    <div (click)="addToCart(result)" class="btn btn-default btn-xs title__addtocart">
+                    <div *ngIf="canShowCart()" (click)="addToCart(result)" class="title__addtocart">
                         <i class="fa fa-shopping-cart"></i>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                     </span>
                     <a [href]="sanitizeUrl(result.getLink())" *ngIf="result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></a>
                     <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
-                    <div (click)="addToCart(result)" class="btn btn-default btn-xs title__addtocart">
+                    <div *ngIf="canShowCart()" (click)="addToCart(result)" class="title__addtocart">
                         <i class="fa fa-shopping-cart"></i>
                     </div>
                 </div>

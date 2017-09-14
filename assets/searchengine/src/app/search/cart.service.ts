@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, RequestOptionsArgs, Headers} from '@angular/http';
 import Result from "../Model/Search/Result";
+import {Config} from "../app.config";
 
 declare let Routing: any;
 
@@ -9,7 +10,7 @@ export default class Cart {
 
     cartMessage: (cssClass: string, message: string) => void;
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private config: Config) {
         this.cartMessage = function (cssClass: string, message: string): void {
             $.fancybox({
                 content: $('<div class="alert alert-block nalert-'+cssClass+'">' + message + '</div>'),
@@ -18,6 +19,10 @@ export default class Cart {
                 width: 700
             });
         }
+    }
+
+    canShow(): boolean {
+        return this.config.get('options').showCart;
     }
 
     addToCart(result: Result): void {
