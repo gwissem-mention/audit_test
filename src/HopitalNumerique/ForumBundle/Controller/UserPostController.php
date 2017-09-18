@@ -55,7 +55,13 @@ class UserPostController extends UserPostControllerBase
         );
 
         return $this->redirectResponse(
-            $this->path('ccdn_forum_user_topic_show', ['topicId' => $post->getTopic()->getId()])
+            $this->path(
+                'ccdn_forum_user_topic_show',
+                [
+                    'forumName' => $post->getTopic()->getBoard()->getCategory()->getForum()->getName(),
+                    'topicId'   => $post->getTopic()->getId(),
+                ]
+            )
         );
     }
 
