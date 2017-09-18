@@ -2,12 +2,12 @@
 
 namespace HopitalNumerique\NotificationBundle\Repository;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Settings;
 use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * SettingsRepository.
@@ -95,5 +95,39 @@ class SettingsRepository extends EntityRepository
         }
 
         return $return;
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public function findAllByUser(User $user)
+    {
+        $query = $this->createQueryBuilder('s', 's.notificationCode')
+            ->where('s.userId = :user')
+            ->setParameter('user', $user->getId())
+            ->getQuery();
+        $settings = $query->getResult();
+        foreach ($settings as $setting) {
+            $setting->setWanted(true);
+        }
+
+        return $settings;
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public function findSchedulesByUser(User $user)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->select('s.scheduleDay, s.scheduleHour')
+            ->where('s.userId = :user')
+            ->groupBy('s.userId')
+            ->setParameter('user', $user->getId())
+            ->getQuery();
+
+        return $query->getSingleResult();
     }
 }

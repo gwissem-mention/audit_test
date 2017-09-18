@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\UserBundle\Domain\Command;
 
+use HopitalNumerique\NotificationBundle\Entity\Settings;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
@@ -25,6 +26,11 @@ class UpdateUserParametersCommand
     public $newPassword;
 
     /**
+     * @var Settings[]
+     */
+    public $notificationsSettings;
+
+    /**
      * @var boolean
      */
     public $publicationNotification;
@@ -35,13 +41,28 @@ class UpdateUserParametersCommand
     public $activityNewsletter;
 
     /**
-     * UserParametersCommand constructor.
-     *
-     * @param User $user
+     * @var int
      */
-    public function __construct(User $user)
+    public $scheduleDay;
+
+    /**
+     * @var int
+     */
+    public $scheduleHour;
+
+    /**
+     * UpdateUserParametersCommand constructor.
+     * @param User $user
+     * @param Settings[] $notificationsSettings
+     * @param array $schedules
+     */
+    public function __construct(User $user, array $notificationsSettings, array $schedules)
     {
         $this->publicationNotification = $user->getNotficationRequete();
         $this->activityNewsletter = $user->isActivityNewsletterEnabled();
+        $this->notificationsSettings = $notificationsSettings;
+        $this->scheduleDay = $schedules['scheduleDay'];
+        $this->scheduleHour = $schedules['scheduleHour'];
     }
+
 }

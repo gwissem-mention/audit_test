@@ -25,3 +25,9 @@ services:
         class: HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardHandler
         arguments:
             - '@dmishh.settings.settings_manager'
+
+    HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings:
+        class: HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings
+        arguments:
+            - '@hopitalnumerique\notificationbundle\repository\settingsrepository'
+            - '@hopitalnumerique\notificationbundle\service\notifications'
