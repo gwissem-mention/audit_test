@@ -17,9 +17,9 @@
             <br /><span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> {{ subtitle }}</span>
         {%- endif -%}
     </a>
-    {% if app.user and type is defined and id is defined %}
+    {% if cartItemType is defined and cartItemType is not null and app.user and id is defined %}
         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {
-            objectType: type,
+            objectType: cartItemType,
             objectId: id,
             flatStyle: true,
             cssClass: 'fancybox-ajax'

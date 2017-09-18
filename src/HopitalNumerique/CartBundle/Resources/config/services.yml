@@ -136,3 +136,6 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CartBundle\Entity\ReportDownload'
+
+    HopitalNumerique\CartBundle\Service\GetCartableType:
+        class: HopitalNumerique\CartBundle\Service\GetCartableType

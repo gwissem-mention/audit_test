@@ -76,8 +76,8 @@ export class ResultComponent implements OnInit {
         });
     }
 
-    canShowCart(): boolean {
-        return this.cartService.canShow();
+    canShowCart(result: Result): boolean {
+        return this.cartService.canShow(result);
     }
 
     addToCart(result: Result) {
