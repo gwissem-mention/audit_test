@@ -15,10 +15,13 @@
 
 {% block body %}
     <div id="tableau-de-bord">
-        <div class="col-md-12">
-            <h3 class="violet">Tableau de bord</h3>
-        </div>
-        
+
+        {% if displayTitle is not defined or displayTitle == true %}
+            <div class="col-md-12">
+                <h3 class="violet">Tableau de bord</h3>
+            </div>
+        {% endif %}
+
         {% set mainBlockClass = "col-md-9 col-sm-12" %}
 
         <div class="col-md-3 col-sm-12">
@@ -51,7 +54,7 @@
                 {% set mainBlockClass = "col-md-12 col-sm-12" %}
             {% endif %}
         </div>
-        
+
         <div class="content {{mainBlockClass}}">
             {% block header %}
                 <div class="header-account">
@@ -59,17 +62,17 @@
                     <div class="description">{% block headerDesc %}{% endblock %}</div>
                 </div>
             {% endblock %}
-            
+
             {% if block('barreActions') is not empty %}
                 <div class="actions">
                     {% block barreActions %}{% endblock %}
                 </div>
             {% endif %}
-                
+
             <div class="panel">
                 {% block content %}{% endblock %}
             </div>
-            
+
             {% block footerDesc %}{% endblock %}
 
             <div class="clearfix"></div>
