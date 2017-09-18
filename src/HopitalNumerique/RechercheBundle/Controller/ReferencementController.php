@@ -176,14 +176,21 @@ class ReferencementController extends Controller
         $entitiesByType = $request->request->get('entitiesByType');
 
         foreach ($entitiesByType as $entityType => $entitiesPropertiesById) {
+            $cartItemType = $this->get('hopitalnumerique\cartbundle\service\getcartabletype')
+                ->getCartableType($entityType);
+
             $entityIds = array_keys($entitiesPropertiesById);
 
-            $entities = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntitiesByTypeAndIds($entityType, $entityIds);
+            $entities = $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                ->getEntitiesByTypeAndIds($entityType, $entityIds);
             $dependencyInjectionEntity = $this->get('hopitalnumerique_core.dependency_injection.entity');
             foreach ($entities as $entity) {
-                $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
+                $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                    ->getEntityId($entity);
                 $entitiesByType[$entityType][$entityId]['viewHtml'] =
-                    $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
+                    $this->renderView(
+                        'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig',
+                        [
                             'id' => $dependencyInjectionEntity->getEntityId($entity),
                             'type' => $dependencyInjectionEntity->getEntityType($entity),
                             'category' => $dependencyInjectionEntity->getCategoryByEntity($entity),
@@ -194,6 +201,7 @@ class ReferencementController extends Controller
                             'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
                             'source' => $dependencyInjectionEntity->getSourceByEntity($entity),
                             'showCog' => $showCog,
+                            'cartItemType' => $cartItemType
                         ]
                     );
             }
