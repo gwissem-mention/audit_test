@@ -34,7 +34,7 @@ class DemandeController extends Controller
         $user = $this->getUser();
         if ($user instanceof User) {
             $this->interventionDemande->setEmail($user->getEmail());
-            $this->interventionDemande->setTelephone($user->getTelephoneDirect());
+            $this->interventionDemande->setTelephone($user->getPhoneNumber());
         }
 
         $this->interventionDemande->setInterventionInitiateur(

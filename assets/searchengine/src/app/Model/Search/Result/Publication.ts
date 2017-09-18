@@ -67,6 +67,10 @@ export default class Publication extends Result {
         return this.content;
     }
 
+    hasParent() : boolean {
+        return Boolean(this.parent);
+    }
+
     getLink(): string {
         if (this.parent) {
             return Routing.generate('hopital_numerique_publication_publication_contenu', {'id': this.parent.id, 'alias': this.parent.alias, 'idc': this.id, 'aliasc': this.alias});

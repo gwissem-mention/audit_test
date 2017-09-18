@@ -7,6 +7,7 @@ import {ResultComponent} from "./result/result.component";
 import {ScoreComponent} from "./result/score/score.component";
 import {AggregationComponent} from "./result/aggregation/aggregation.component";
 import {Text} from "./text.service";
+import Cart from "./cart.service";
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import {Text} from "./text.service";
     ],
     providers: [
         Text,
+        Cart,
     ],
     declarations: [
         SearchComponent,

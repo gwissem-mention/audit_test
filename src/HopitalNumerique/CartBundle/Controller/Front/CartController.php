@@ -4,6 +4,9 @@ namespace HopitalNumerique\CartBundle\Controller\Front;
 
 use HopitalNumerique\CartBundle\Entity\Item\CartItem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends Controller
@@ -13,7 +16,7 @@ class CartController extends Controller
      * @param $objectType
      * @param $objectId
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse|JsonResponse
      */
     public function addAction(Request $request, $objectType, $objectId)
     {
@@ -31,6 +34,13 @@ class CartController extends Controller
         $cartItemRepository = $this->get('hopitalnumerique_cart.repository.cart_item');
 
         if (!is_null($cartItemRepository->findByObjectAndOwner($objectType, $objectId, $this->getUser()))) {
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(
+                    ['message' => $this->get('translator')->trans('notification.addToCart.error', [], 'cart')],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
             $this->addFlash('danger', $this->get('translator')->trans('notification.addToCart.error', [], 'cart'));
 
             return $this->redirect($referer);
@@ -39,6 +49,13 @@ class CartController extends Controller
         $cartItem = new CartItem($objectType, $objectId, $this->getUser(), $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
         $this->getDoctrine()->getManager()->persist($cartItem);
         $this->getDoctrine()->getManager()->flush();
+
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse([
+                'message' => $this->get('translator')->trans('notification.addToCart.success', [], 'cart'),
+            ]);
+        }
+
         $this->addFlash('success', $this->get('translator')->trans('notification.addToCart.success', [], 'cart'));
 
         return $this->redirect($referer);
