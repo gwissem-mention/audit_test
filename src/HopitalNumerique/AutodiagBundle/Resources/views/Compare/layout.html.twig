@@ -36,9 +36,11 @@
                     </a>
                 </div>
                 <div class="links pull-left">
-                    <a class="btn btn-default" href="{{ path(routes.add, {"autodiag": compare.synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
-                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                    </a>
+                    {% if isPublished %}
+                        <a class="btn btn-default" href="{{ path(routes.add, {"autodiag": compare.synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
                 </div>
             {% endif %}
 

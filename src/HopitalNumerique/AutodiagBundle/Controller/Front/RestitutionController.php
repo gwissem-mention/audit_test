@@ -74,6 +74,7 @@ class RestitutionController extends Controller
             'restitution' => $restitution,
             'result' => $resultItems,
             'noLayout' => $noLayout,
+            'isPublished' => $autodiag->isPublished(),
         ]);
     }
 
