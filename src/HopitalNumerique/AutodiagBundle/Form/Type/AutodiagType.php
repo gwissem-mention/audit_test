@@ -3,12 +3,13 @@
 namespace HopitalNumerique\AutodiagBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 /**
  * ModelType.
@@ -51,6 +52,9 @@ class AutodiagType extends AbstractType
                         ->where('questionnaire.occurrenceMultiple = false');
                 },
                 'required' => false,
+            ])
+            ->add('published', CheckboxType::class, [
+                'label' => "Publié",
             ])
         ;
     }

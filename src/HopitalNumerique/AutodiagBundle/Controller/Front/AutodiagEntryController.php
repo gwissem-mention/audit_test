@@ -82,6 +82,13 @@ class AutodiagEntryController extends Controller
             );
         }
 
+        if (false === $autodiag->isPublished()) {
+            return $this->redirectToRoute(
+                'hopital_numerique_publication_publication_objet',
+                ['id' => $this->getParameter('publication_autodiag_unpublished_id')]
+            );
+        }
+
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
             ->getFullyLoaded($autodiag->getId());
 
