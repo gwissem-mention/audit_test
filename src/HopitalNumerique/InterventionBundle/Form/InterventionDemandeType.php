@@ -88,7 +88,7 @@ abstract class InterventionDemandeType extends AbstractType
             'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
             'choice_label' => 'appellation',
             'required'     => false,
-            'label'        => 'Rattacher d\'autres établissements à ma demande, parmi',
+            'label'        => 'Associer les structures suivantes à la demande :',
             'multiple'     => true,
             'empty_value'  => '-',
             'attr'         => ['class' => 'ajax-list-select2 hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
@@ -147,10 +147,6 @@ abstract class InterventionDemandeType extends AbstractType
                                . $this->_constraints['referent']['class'],
                 ],
             ])
-            ->add('autresEtablissements', TextareaType::class, [
-                'label' => 'Attacher d\'autres établissements à ma demande',
-                'required' => false,
-            ])
             ->add('objets', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getObjetsChoices(),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
@@ -161,7 +157,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets'],
             ])
             ->add('connaissances', 'genemu_jqueryselect2_entity', [
-                'label' => 'Ma sollicitation porte sur la/les connaissances(s) métier(s) suivante(s)',
+                'label' => 'Ma sollicitation concerne les fonctions suivantes',
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
@@ -170,11 +166,8 @@ abstract class InterventionDemandeType extends AbstractType
                     return $er->createQueryBuilder('ref')
                         ->leftJoin('ref.codes', 'codes')
                         ->where('codes.label = :code')
-                        ->leftJoin('ref.etat', 'etat', Expr\Join::WITH, 'etat.id = 3')
-                        ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :idParent')
                         ->setParameters([
-                            'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS',
-                            'idParent' => 221,
+                            'code' => 'FONCTION_SI',
                         ])
                         ->orderBy('ref.order', 'ASC')
                     ;

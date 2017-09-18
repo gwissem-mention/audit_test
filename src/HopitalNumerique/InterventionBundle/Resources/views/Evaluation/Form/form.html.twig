@@ -14,7 +14,7 @@
     <form id="form_intervention_evaluation" method="post" action="{{ path('hopital_numerique_intervention_evaluation_form', { interventionDemande:interventionDemande.id }) }}" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(form) }}>
     
         <div class="form-group">
-            <div class="col-md-4 control-label"><label>Ambassadeur</label></div>
+            <div class="col-md-4 control-label"><label>Professionnel sollicité</label></div>
             <div class="col-md-8">
                 <input class="form-control" type="text" value="{{ interventionDemande.ambassadeur.appellation }}" readonly="readonly">
             </div>
