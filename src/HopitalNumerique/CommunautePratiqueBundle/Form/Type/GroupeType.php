@@ -162,7 +162,6 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
         $resolver->setDefaults([
             'data_class' => Groupe::class,
             'label_format' => 'admin.group.edit.form.%name%.label',
-            'translation_domain' => 'messages',
         ]);
     }
 

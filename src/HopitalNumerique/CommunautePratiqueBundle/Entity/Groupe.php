@@ -178,6 +178,8 @@ class Groupe
     private $commentaires;
 
     /**
+     * @var Role[]
+     *
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_communautepratique_groupe_role",
      *      joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")},

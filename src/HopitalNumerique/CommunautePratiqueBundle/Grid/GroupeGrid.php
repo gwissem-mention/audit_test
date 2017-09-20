@@ -100,7 +100,7 @@ class GroupeGrid extends Grid
      */
     private function addDomaineColumn()
     {
-        $column = new TextColumn('domaines', 'Domaines');
+        $column = new TextColumn('domains', 'Domaines');
 
         $column
             ->setFilterable(true)
