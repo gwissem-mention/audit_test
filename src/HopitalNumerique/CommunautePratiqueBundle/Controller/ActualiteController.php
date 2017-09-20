@@ -16,6 +16,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ActualiteController extends Controller
 {
+    public function indexAction()
+    {
+        $userRepository = $this->get('hopitalnumerique_user.repository.user');
+
+        $domains = $this->getUser()->getDomaines();
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
+            'availableDomains' => $domains,
+            'cdpUserCount' => $userRepository->countCDPUsers($domains->toArray()),
+            'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains->toArray()),
+        ]);
+    }
+
     /**
      * Liste des actualités.
      *

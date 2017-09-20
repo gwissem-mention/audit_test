@@ -865,6 +865,28 @@ class UserRepository extends EntityRepository
     /**
      * @param Domaine[] $domains
      *
+     * @return integer|null
+     */
+    public function getCDPOrganizationsCount(array $domains)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('user')
+            ->select('COUNT(DISTINCT organization.id)')
+            ->join('user.organization','organization')
+            ->join('user.domaines', 'domaines', Join::WITH, 'domaines IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     *
      * @return integer
      */
     public function countCDPUsers($domains)

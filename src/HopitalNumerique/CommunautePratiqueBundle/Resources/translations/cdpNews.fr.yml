@@ -1,0 +1,29 @@
+news:
+    brick:
+        chat_room:
+            title: Espace de discussion
+            topic_count: "[0,1] %count% discussion dans l'espace |]1,Inf[ %count% discussions dans l'espace"
+            message_count: "[0,1] %count% message posté |]1,Inf[ %count% messages postés"
+        help_groups:
+            title: Groupes d'entre-aide
+            group_count: "[0,1] %count% groupe en cours |]1,Inf[ %count% groupes en cours"
+            contributor_count: "[0,1] %count% contributeur |]1,Inf[ %count% contributeurs"
+            message_count: "[0,1] %count% message posté |]1,Inf[ %count% messages postés"
+            file_count: "[0,1] %count% document ajouté |]1,Inf[ %count% documents ajoutés"
+        community:
+            title: Annuaire de la communauté
+            member_count: "[0,1] %count% membre |]1,Inf[ %count% membres"
+            organization_count: "[0,1] %count% structure |]1,Inf[ %count% structures différentes"
+        my_groups:
+            title: Mes groupes
+            list:
+                empty: Vous ne participez actuellement à aucun groupe
+                link:
+                    text: Groupe d'entre-aide
+                    title: Groupe d'entre-aide
+            not_logged: |
+                Vous n'êtes pas connecté.
+                Créez votre compte et connectez-vous pour voir toutes les actualités de la communauté
+            not_member: |
+                Vous n'avez psa encore rejoint la communauté.
+                Rejoignez la communauté pour entrer en relation avec tous les membres
