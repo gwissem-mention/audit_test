@@ -6,7 +6,7 @@
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_communautepratique_admin_groupe_list') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('#do').val('save');$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-    {% if groupe.domaine is not null %}
+    {% if groupe.domains.count > 0 %}
         <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
     {% endif %}
 {% endblock %}
@@ -34,17 +34,27 @@
             <div class="panel-body">
                 {% if groupe.id is not null -%}
                     <p class="text-right">
-                        <strong>Note référencement :</strong> {{ referencement_note(groupe, groupe.domaine) }}
-                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':6, 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary"><i class="fa fa-cog"></i></a>
+                        <strong>Note référencement :</strong>
+                        {% set notes = [] %}
+                        {% for userDomain in app.user.domaines %}
+                            {% if groupe.domains.contains(userDomain) %}
+                                {% set notes = notes|merge([userDomain.nom~" : "~referencement_note(groupe, userDomain)]) %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if notes|length > 0 %}
+                            {{ notes|join(', ') }}
+                        {% endif %}
+                        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':6, 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary"><i class="fa fa-cog"></i></a>
                     </p>
                 {%- endif -%}
 
                 {% form_theme groupeForm 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
                 {{ form_start(groupeForm, { attr:{ class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     
-                    {{ form_row(groupeForm.domaine) }}
+                    {{ form_row(groupeForm.domains, {'attr': {'class': 'select2'}}) }}
                     
-                    {% if groupe.domaine is not null %}
+                    {% if groupe.domains.count > 0 %}
                         {{ form_row(groupeForm.titre) }}
                         {{ form_row(groupeForm.descriptionCourte) }}
                         {{ form_row(groupeForm.descriptionHtml) }}

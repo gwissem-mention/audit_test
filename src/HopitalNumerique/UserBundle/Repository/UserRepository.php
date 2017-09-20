@@ -722,6 +722,22 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine[] $domains
+     *
+     * @return User[]
+     */
+    public function getCommunautePratiqueMembersInDomains($domains)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.domaines', 'domains', Join::WITH, 'domains.id IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * Retourne la QueryBuilder avec les membres d'un groupe de la communauté de pratique.
      *
      * @param Groupe $groupe Groupe des membres

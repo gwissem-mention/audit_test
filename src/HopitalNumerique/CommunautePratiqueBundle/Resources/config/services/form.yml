@@ -13,7 +13,10 @@ services:
 
     hopitalnumerique_communautepratique.form.type.groupe:
         class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\GroupeType'
-        arguments: ["@security.context", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+        arguments:
+            - '@security.context'
+            - '@hopitalnumerique_user.repository.user'
+            - '@HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository'
         tags:
             - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_groupe' }
 

@@ -2,6 +2,12 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -15,14 +21,14 @@ use HopitalNumerique\UserBundle\Entity\User;
 class GroupeType extends \Symfony\Component\Form\AbstractType
 {
     /**
-     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     * @var UserRepository $userRepository
      */
-    private $userManager;
+    private $userRepository;
 
     /**
-     * @var \HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager QuestionnaireManager
+     * @var QuestionnaireRepository $questionnaireRepository
      */
-    private $questionnaireManager;
+    protected $questionnaireRepository;
 
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
@@ -32,10 +38,10 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
     /**
      * Constructeur.
      */
-    public function __construct(SecurityContextInterface $securityContext, UserManager $userManager, QuestionnaireManager $questionnaireManager)
+    public function __construct(SecurityContextInterface $securityContext, UserRepository $userRepository, QuestionnaireRepository $questionnaireRepository)
     {
-        $this->userManager = $userManager;
-        $this->questionnaireManager = $questionnaireManager;
+        $this->userRepository = $userRepository;
+        $this->questionnaireRepository = $questionnaireRepository;
 
         $this->user = (null !== $securityContext->getToken() ? $securityContext->getToken()->getUser() : null);
         if (!($this->user instanceof User)) {
@@ -49,12 +55,18 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $isCreation = (null === $builder->getData()->getId());
-        $hasDomaine = (null !== $builder->getData()->getDomaine());
+        $hasDomaine = $builder->getData()->getDomains()->count() > 0;
 
         $builder
-            ->add('domaine', 'entity', [
-                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'choices' => $this->user->getDomaines(),
+            ->add('domains', EntityType::class, [
+                'class' => Domaine::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('domain')
+                        ->andWhere('domain.id IN (:userDomains)')
+                        ->setParameter('userDomains', $this->user->getDomaines())
+                    ;
+                },
+                'multiple' => true,
                 'disabled' => (!$isCreation),
             ])
         ;
@@ -108,7 +120,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 ])
                 ->add('questionnaire', 'entity', [
                     'class' => 'HopitalNumeriqueQuestionnaireBundle:Questionnaire',
-                    'choices' => $this->questionnaireManager->findByDomaine($builder->getData()->getDomaine()),
+                    'choices' => $this->questionnaireRepository->findByDomains($builder->getData()->getDomains()),
                     'required' => true,
                     'empty_value' => ' ',
                     'attr' => [
@@ -117,7 +129,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 ])
                 ->add('animateurs', 'genemu_jqueryselect2_entity', [
                     'class' => 'HopitalNumeriqueUserBundle:User',
-                    'choices' => $this->userManager->findCommunautePratiqueMembres($builder->getData()->getDomaine()),
+                    'choices' => $this->userRepository->getCommunautePratiqueMembersInDomains($builder->getData()->getDomains()),
                     'by_reference' => false,
                     'property' => 'prenomNom',
                     'multiple' => true,
@@ -141,7 +153,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe',
+            'data_class' => Groupe::class,
         ]);
     }
 

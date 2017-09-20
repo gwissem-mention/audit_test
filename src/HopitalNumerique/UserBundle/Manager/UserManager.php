@@ -404,18 +404,6 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne des membres de la communauté de pratique.
-     *
-     * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
-     *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
-     */
-    public function findCommunautePratiqueMembres(Domaine $domaine)
-    {
-        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult();
-    }
-
-    /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
      * @param Groupe $groupe (optionnel) Groupe des membres

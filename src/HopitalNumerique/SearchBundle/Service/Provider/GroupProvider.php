@@ -16,7 +16,7 @@ class GroupProvider extends AbstractProvider
     {
         $queryBuilder = $this->repository->createQueryBuilder('groups');
         $queryBuilder
-            ->join('groups.domaine', 'domaine', Join::WITH, 'domaine.slug = :domaineSlug')
+            ->join('groups.domains', 'domaine', Join::WITH, 'domaine.slug = :domaineSlug')
             ->setParameters([
                 'domaineSlug' => $this->domaineSlug,
             ])

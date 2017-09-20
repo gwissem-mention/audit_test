@@ -32,6 +32,12 @@ class GroupIndexable
      */
     public function isIndexable(Groupe $group)
     {
-        return $group->getDomaine()->getSlug() === $this->domaineSlug;
+        foreach ($group->getDomains() as $domain) {
+            if ($domain->getSlug() === $this->domaineSlug) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

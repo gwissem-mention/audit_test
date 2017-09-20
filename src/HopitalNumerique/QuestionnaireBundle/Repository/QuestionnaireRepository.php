@@ -133,6 +133,30 @@ class QuestionnaireRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine[] $domains
+     *
+     * @return Questionnaire[]
+     */
+    public function findByDomains($domains)
+    {
+        $queryBuilder = $this->createQueryBuilder('questionnaire');
+
+        foreach ($domains as $domain) {
+            $queryBuilder
+                ->join(
+                    'questionnaire.domaines',
+                    sprintf('domain%d', $domain->getId()),
+                    Expr\Join::WITH,
+                    sprintf('domain%d = :domain%d', $domain->getId(), $domain->getId())
+                )
+                ->setParameter(sprintf('domain%d', $domain->getId()), $domain)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine
      * avec les dates de création et de dernières modifications.
      *

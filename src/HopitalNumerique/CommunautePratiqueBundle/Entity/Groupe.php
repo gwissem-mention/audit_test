@@ -105,13 +105,17 @@ class Groupe
     private $actif;
 
     /**
-     * @var Domaine
+     * @var Domaine[]
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
-     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
+     * @ORM\JoinTable(
+     *     name="hn_communautepratique_groupe_domain",
+     *     joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", onDelete="CASCADE"))},
+     *     inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE"))}
+     * )
      * @Assert\NotNull()
      */
-    private $domaine;
+    protected $domains;
 
     /**
      * @var Questionnaire
@@ -184,6 +188,7 @@ class Groupe
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->domains = new ArrayCollection();
     }
 
     /**
@@ -413,15 +418,17 @@ class Groupe
     }
 
     /**
-     * Set domaine.
+     * Add domain
      *
-     * @param Domaine $domaine
+     * @param Domaine $domain
      *
      * @return Groupe
      */
-    public function setDomaine(Domaine $domaine)
+    public function addDomain(Domaine $domain)
     {
-        $this->domaine = $domaine;
+        if (!$this->domains->contains($domain)) {
+            $this->domains->add($domain);
+        }
 
         return $this;
     }
@@ -429,11 +436,11 @@ class Groupe
     /**
      * Get domaine.
      *
-     * @return Domaine
+     * @return Domaine[]
      */
-    public function getDomaine()
+    public function getDomains()
     {
-        return $this->domaine;
+        return $this->domains;
     }
 
     /**
