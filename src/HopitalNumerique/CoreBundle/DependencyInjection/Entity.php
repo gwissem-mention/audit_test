@@ -401,6 +401,11 @@ class Entity
 
             return $entity->getDomaines();
         }
+
+        if (method_exists($entity, 'getDomains')) {
+            return $entity->getDomains();
+        }
+
         if (method_exists($entity, 'getDomaine')) {
             if (null === $entity->getDomaine()) {
                 return [];
