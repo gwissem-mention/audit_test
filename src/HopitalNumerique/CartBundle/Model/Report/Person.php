@@ -84,7 +84,7 @@ class Person implements ItemInterface
      */
     public function getBiography()
     {
-        return html_entity_decode(strip_tags($this->person->getBiographie()), ENT_COMPAT|ENT_NOQUOTES, 'UTF-8');
+        return html_entity_decode(strip_tags($this->person->getPresentation()), ENT_COMPAT|ENT_NOQUOTES, 'UTF-8');
     }
 
     public function getModules()

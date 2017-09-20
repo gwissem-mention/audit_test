@@ -1048,7 +1048,6 @@ class UserController extends Controller
         if ($this->informationsPersonnelles) {
             $form->remove('plainPassword');
             $form->remove('remarque');
-            $form->remove('biographie');
             $form->remove('domaines');
             $form->remove('raisonDesinscription');
             $form->remove('roles');

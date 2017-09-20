@@ -459,7 +459,7 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'name_analyzer',
                         ],
                         'biography' => [
-                            'property_path' => 'biographie',
+                            'property_path' => 'presentation',
                             'analyzer' => 'content_analyzer',
                             'fields' => [
                                 'exact' => [

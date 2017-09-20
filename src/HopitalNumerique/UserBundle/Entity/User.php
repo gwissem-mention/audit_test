@@ -608,14 +608,6 @@ class User extends BaseUser implements SettingsOwnerInterface
     protected $domaines;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="usr_biographie", nullable=true, type="text")
-     * @Gedmo\Versioned
-     */
-    protected $biographie;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean")
@@ -2147,30 +2139,6 @@ class User extends BaseUser implements SettingsOwnerInterface
     public function setRemarque($remarque)
     {
         $this->remarque = $remarque;
-
-        return $this;
-    }
-
-    /**
-     * Get biographie.
-     *
-     * @return string $biographie
-     */
-    public function getBiographie()
-    {
-        return $this->biographie;
-    }
-
-    /**
-     * Set biographie.
-     *
-     * @param string $biographie
-     *
-     * @return User
-     */
-    public function setBiographie($biographie)
-    {
-        $this->biographie = $biographie;
 
         return $this;
     }
