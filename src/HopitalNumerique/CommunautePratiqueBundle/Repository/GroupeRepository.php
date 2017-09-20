@@ -28,7 +28,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->andWhere('groupe.domaine = :domaine')
+            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
             ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateDemarrage > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
@@ -70,7 +70,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->andWhere('groupe.domaine = :domaine')
+            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
             ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateDemarrage <= :aujourdhui')
             ->andWhere('groupe.dateFin >= :aujourdhui')
@@ -129,7 +129,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->andWhere('groupe.domaine = :domaine')
+            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
             ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateFin < :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
@@ -179,7 +179,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('groupeInscription')
             ->leftJoin('groupeInscription.user', 'groupeUser')
             ->addSelect('groupeUser')
-            ->andWhere('groupe.domaine = :domaine')
+            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
             ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateFin > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)

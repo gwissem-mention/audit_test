@@ -295,7 +295,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeCommunautePratiqueGroupe'),
                     $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId'),
-                    $qb->expr()->eq('communautePratiqueGroupe.domaine', ':domaine')
+                    $qb->expr()->eq('communautePratiqueGroupe.domains', ':domaine')
                 )
             )
             ->setParameter('entityTypeCommunautePratiqueGroupe', Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE)
