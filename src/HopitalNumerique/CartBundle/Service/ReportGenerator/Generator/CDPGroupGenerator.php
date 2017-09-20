@@ -49,7 +49,7 @@ class CDPGroupGenerator implements ItemGeneratorInterface
         $item = new CDPGroup(
             $group,
             $this->referencement->getReferencesTreeOnlyWithEntitiesHasReferences(
-                [$group->getDomaine()],
+                $group->getDomains(),
                 Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
                 $group->getId()
             )
