@@ -5,10 +5,11 @@
 {% block title_communaute_pratique %}Actualités{% endblock %}
 
 {% block communaute_pratique_actions %}
-    <select name="" id="">
-        {% for domain in availableDomains if domain.communautePratiqueGroupes.count > 0 %}
-            <option value="{{ domain.id }}">{{ domain.nom }}</option>
+    <select name="">
+        {% for domain in availableDomains %}
+            <option value="{{ domain.id }}"{{ selectedDomain is not null and selectedDomain.id == domain.id ? " selected"}}>{{ domain.nom }}</option>
         {% endfor %}
+        <option value="*"{{ selectedDomain is null ? " selected" }}>All</option>
     </select>
 
     {{ parent() }}
@@ -29,8 +30,8 @@
             <div class="well">
                 <h2>{{ 'news.brick.help_groups.title'|trans }}</h2>
                 <ul>
-                    <li>{{ 'news.brick.help_groups.group_count'|transchoice(0) }}</li>
-                    <li>{{ 'news.brick.help_groups.contributor_count'|transchoice(0) }}</li>
+                    <li>{{ 'news.brick.help_groups.group_count'|transchoice(runningGroupCount) }}</li>
+                    <li>{{ 'news.brick.help_groups.contributor_count'|transchoice(contributorsCount) }}</li>
                     <li>{{ 'news.brick.help_groups.message_count'|transchoice(0) }}</li>
                     <li>{{ 'news.brick.help_groups.file_count'|transchoice(0) }}</li>
                 </ul>
@@ -53,7 +54,13 @@
                     {{ 'news.brick.my_groups.not_member'|trans|nl2br }}
                 {% else %}
                     <h2>{{ 'news.brick.my_groups.title'|trans|nl2br }}</h2>
-                    {% for toto in [] %}
+
+                    {% if userRecentGroups|length > 0 %}
+                        <ul>
+                            {% for group in userRecentGroups %}
+                                <li>{{ group.titre }}</li>
+                            {% endfor %}
+                        </ul>
                     {% else %}
                         {{ 'news.brick.my_groups.list.empty'|trans }}
 
@@ -62,7 +69,8 @@
                         <a href="#" class="btn btn-primary btn-sm btn-block" title="{{ 'news.brick.my_groups.list.link.title'|trans|e }}">
                             {{ 'news.brick.my_groups.list.link.text'|trans }}
                         </a>
-                    {% endfor %}
+                    {% endif %}
+
                 {% endif %}
             </div>
         </div>

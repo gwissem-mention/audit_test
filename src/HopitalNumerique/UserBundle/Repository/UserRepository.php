@@ -918,6 +918,36 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine[] $domains
+     *
+     * @return null|integer
+     */
+    public function getCDPUsersInGroupCount(array $domains)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        $qb = $this->createQueryBuilder('user');
+
+        return $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->join('user.groupeInscription','group_registration', Join::WITH, 'group_registration.actif = TRUE')
+            ->join(
+                'user.domaines',
+                'domain',
+                Join::WITH,
+                'domain.id IN (:domains)'
+            )
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
      * @return integer
      */
     public function countAddCDPUsers()

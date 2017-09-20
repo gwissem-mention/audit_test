@@ -75,3 +75,10 @@ services:
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage
+        arguments:
+            - '@session'
+            - '@hopitalnumerique_domaine.repository.domaine'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'

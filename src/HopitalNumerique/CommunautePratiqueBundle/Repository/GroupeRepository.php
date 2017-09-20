@@ -98,19 +98,54 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param Domaine[] $domains
+     *
      * @return integer
      */
-    public function countActiveGroups()
+    public function countActiveGroups(array $domains = [])
     {
-        return $this->createQueryBuilder('g')
+        $queryBuilder = $this->createQueryBuilder('g')
             ->select('COUNT(g)')
             ->andWhere('g.actif = TRUE')
             ->andWhere('g.dateDemarrage <= :today')
             ->andWhere('g.dateFin >= :today')
             ->setParameter('today', (new \DateTime())->setTime(0, 0, 0))
-
-            ->getQuery()->getSingleScalarResult()
         ;
+
+        if (count($domains)) {
+            $queryBuilder
+                ->join('g.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    public function getUsersRecentGroups(User $user, $count = null, array $domains = [])
+    {
+        $queryBuilder = $this->createQueryBuilder('cdpGroup')
+            ->join('cdpGroup.inscriptions','inscription', Expr\Join::WITH, 'inscription.actif = TRUE')
+            ->join('inscription.user', 'user', Expr\Join::WITH, 'user.id = :user')
+            ->setParameter('user', $user)
+            ->andWhere('cdpGroup.actif = TRUE')
+            ->andWhere('cdpGroup.dateDemarrage <= :today')
+            ->andWhere('cdpGroup.dateFin >= :today')
+            ->setParameter('today', (new \DateTime())->setTime(0, 0, 0))
+        ;
+
+        if (count($domains)) {
+            $queryBuilder
+                ->join('cdpGroup.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
+        }
+
+        if (null !== $count) {
+            $queryBuilder->setMaxResults($count);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

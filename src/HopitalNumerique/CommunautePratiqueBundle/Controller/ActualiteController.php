@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,14 +20,23 @@ class ActualiteController extends Controller
 {
     public function indexAction()
     {
-        $userRepository = $this->get('hopitalnumerique_user.repository.user');
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
-        $domains = $this->getUser()->getDomaines();
+        $userRepository = $this->get('hopitalnumerique_user.repository.user');
+        $cdpGroupRepository = $this->get('hopitalnumerique_communautepratique.repository.group');
+
+        $domains = $this->getUser()->getDomaines()->filter(function (Domaine $domain) {
+            return $domain->getCommunautePratiqueGroupes()->count() > 0;
+        })->toArray();
 
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
-            'availableDomains' => $domains,
-            'cdpUserCount' => $userRepository->countCDPUsers($domains->toArray()),
-            'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains->toArray()),
+            'selectedDomain'       => $selectedDomain,
+            'availableDomains'     => $domains,
+            'runningGroupCount'    => $cdpGroupRepository->countActiveGroups($domains),
+            'cdpUserCount'         => $userRepository->countCDPUsers($domains),
+            'contributorsCount'    => $userRepository->getCDPUsersInGroupCount($domains),
+            'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains),
+            'userRecentGroups'     => $cdpGroupRepository->getUsersRecentGroups($this->getUser(), 4, $domains),
         ]);
     }
 
