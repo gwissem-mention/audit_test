@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Grid;
 
+use Nodevo\GridBundle\Grid\Column\ArrayColumn;
 use Nodevo\GridBundle\Grid\Grid;
 use HopitalNumerique\UserBundle\Entity\User;
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -99,7 +100,7 @@ class GroupeGrid extends Grid
      */
     private function addDomaineColumn()
     {
-        $column = new TextColumn('domaineNom', 'Domaine');
+        $column = new TextColumn('domaines', 'Domaines');
 
         $column
             ->setFilterable(true)

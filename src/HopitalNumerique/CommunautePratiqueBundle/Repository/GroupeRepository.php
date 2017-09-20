@@ -264,10 +264,9 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 'groupe.vedette AS vedette',
                 'groupe.actif AS actif',
 
-                'domaine.nom AS domaineNom'
+                'GROUP_CONCAT(domaine.nom SEPARATOR \', \') AS domaines'
             )
-            ->leftJoin('groupe.animateurs', 'animateur')
-            ->innerJoin('groupe.domaine', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine', ':domaines'))
+            ->innerJoin('groupe.domains', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine', ':domaines'))
             ->setParameter('domaines', $domaines->toArray())
             ->groupBy('id')
         ;
