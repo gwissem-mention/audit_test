@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -110,8 +111,8 @@ class Groupe
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
      * @ORM\JoinTable(
      *     name="hn_communautepratique_groupe_domain",
-     *     joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", onDelete="CASCADE"))},
-     *     inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE"))}
+     *     joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", onDelete="CASCADE")},
+     *     inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
      * )
      * @Assert\NotNull()
      */
@@ -177,6 +178,15 @@ class Groupe
     private $commentaires;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
+     * @ORM\JoinTable(name="hn_communautepratique_groupe_role",
+     *      joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
+     * )
+     */
+    protected $requiredRoles;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -189,6 +199,7 @@ class Groupe
         $this->commentaires = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->domains = new ArrayCollection();
+        $this->requiredRoles = new ArrayCollection();
     }
 
     /**
@@ -1007,5 +1018,27 @@ class Groupe
         }
 
         return str_replace('"', '\'', json_encode($animateurs));
+    }
+
+    /**
+     * @return Role[]|ArrayCollection
+     */
+    public function getRequiredRoles()
+    {
+        return $this->requiredRoles;
+    }
+
+    /**
+     * @param Role $role
+     *
+     * @return Groupe
+     */
+    public function addRequiredRole(Role $role)
+    {
+        if (!$this->requiredRoles->contains($role)) {
+            $this->requiredRoles->add($role);
+        }
+
+        return $this;
     }
 }

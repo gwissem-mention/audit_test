@@ -1,0 +1,6 @@
+admin:
+    group:
+        edit:
+            form:
+                requiredRoles:
+                    label: Rôles requis

@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -143,6 +144,12 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                     'required' => false,
                     'attr' => ['class' => 'checkbox'],
                 ])
+                ->add('requiredRoles', EntityType::class, [
+                    'class' => Role::class,
+                    'property' => 'name',
+                    'multiple' => true,
+                    'required' => false,
+                ])
             ;
         }
     }
@@ -154,6 +161,8 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Groupe::class,
+            'label_format' => 'admin.group.edit.form.%name%.label',
+            'translation_domain' => 'messages',
         ]);
     }
 
