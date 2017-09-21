@@ -2,12 +2,10 @@
 
 {% trans_default_domain 'cdpNews' %}
 
-{% import '@HopitalNumeriqueCommunautePratique/selected_domain_selector.html.twig' as selectedDomainSelector %}
-
 {% block title_communaute_pratique %}Actualités{% endblock %}
 
 {% block communaute_pratique_actions %}
-    {{ selectedDomainSelector.selector(availableDomains, selectedDomain) }}
+    {{ selectedDomainSelector() }}
     {{ parent() }}
 {% endblock %}
 

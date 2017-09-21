@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever;
 use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -23,25 +24,18 @@ class ActualiteController extends Controller
      */
     public function indexAction()
     {
-        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
-
         $userRepository = $this->get('hopitalnumerique_user.repository.user');
         $cdpGroupRepository = $this->get('hopitalnumerique_communautepratique.repository.group');
 
-        $availableDomains = $this->getUser()->getDomaines()->filter(function (Domaine $domain) {
-            return $domain->getCommunautePratiqueGroupes()->count() > 0;
-        })->toArray();
-
-        $domains = null === $selectedDomain ? $availableDomains : [$selectedDomain];
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
-            'selectedDomain'       => $selectedDomain,
-            'availableDomains'     => $availableDomains,
             'runningGroupCount'    => $cdpGroupRepository->countActiveGroups($domains),
             'cdpUserCount'         => $userRepository->countCDPUsers($domains),
             'contributorsCount'    => $userRepository->getCDPUsersInGroupCount($domains),
             'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains),
-            'userRecentGroups'     => $cdpGroupRepository->getUsersRecentGroups($this->getUser(), 4, $domains),
+            'userRecentGroups'     => $this->getUser() ? $cdpGroupRepository->getUsersRecentGroups($this->getUser(), 4, $domains) : [],
         ]);
     }
 

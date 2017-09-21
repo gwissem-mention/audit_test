@@ -29,17 +29,28 @@ class SelectedDomainStorage
     protected $currentDomain;
 
     /**
+     * @var AvailableDomainsRetriever $domainAvailableRetriever
+     */
+    protected $domainAvailableRetriever;
+
+    /**
      * SelectedDomainStorage constructor.
      *
      * @param SessionInterface $session
      * @param DomaineRepository $domainRepository
      * @param CurrentDomaine $currentDomain
+     * @param AvailableDomainsRetriever $domainAvailableRetriever
      */
-    public function __construct(SessionInterface $session, DomaineRepository $domainRepository, CurrentDomaine $currentDomain)
-    {
+    public function __construct(
+        SessionInterface $session,
+        DomaineRepository $domainRepository,
+        CurrentDomaine $currentDomain,
+        AvailableDomainsRetriever $domainAvailableRetriever
+    ) {
         $this->session = $session;
         $this->domainRepository = $domainRepository;
         $this->currentDomain = $currentDomain;
+        $this->domainAvailableRetriever = $domainAvailableRetriever;
     }
 
     /**
@@ -49,13 +60,23 @@ class SelectedDomainStorage
      */
     public function getSelectedDomain()
     {
-        if (!$this->session->has(self::SESSION_KEY)) {
-            return $this->currentDomain->get();
+        if ($this->session->has(self::SESSION_KEY)) {
+
+            $domainId = $this->session->get(self::SESSION_KEY);
+
+            if ($domainId === self::ALL_DOMAINS_KEYWORD) {
+                return null;
+            } elseif (
+                ($domain = $this->domainRepository->find($domainId)) &&
+                in_array($domain, $this->domainAvailableRetriever->getAvailableDomains())
+            ) {
+                return $domain;
+            }
+
+            $this->eraseSelectedDomain();
         }
 
-        $domainId = $this->session->get(self::SESSION_KEY);
-
-        return  $domainId !== self::ALL_DOMAINS_KEYWORD ? $this->domainRepository->find($domainId) : null;
+        return $this->currentDomain->get();
     }
 
     /**

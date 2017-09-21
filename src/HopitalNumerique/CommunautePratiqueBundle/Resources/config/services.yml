@@ -82,3 +82,12 @@ services:
             - '@session'
             - '@hopitalnumerique_domaine.repository.domaine'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever
+        arguments:
+            - '@hopitalnumerique_domaine.repository.domaine'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@security.authorization_checker'
+            - '@security.token_storage'
