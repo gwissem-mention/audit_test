@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\PersistentCollection;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
@@ -122,6 +123,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param User $user
+     * @param integer|null $count
+     * @param Domaine[] $domains
+     *
+     * @return Groupe[]
+     */
     public function getUsersRecentGroups(User $user, $count = null, array $domains = [])
     {
         $queryBuilder = $this->createQueryBuilder('cdpGroup')

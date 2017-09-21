@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class SelectedDomainStorage
 {
     const SESSION_KEY = 'cdp_selected_domain';
+
+    const ALL_DOMAINS_KEYWORD = 'all';
+
     /**
      * @var SessionInterface $session
      */
@@ -50,7 +53,9 @@ class SelectedDomainStorage
             return $this->currentDomain->get();
         }
 
-        return $this->domainRepository->find($this->session->get(self::SESSION_KEY)) ?: null;
+        $domainId = $this->session->get(self::SESSION_KEY);
+
+        return  $domainId !== self::ALL_DOMAINS_KEYWORD ? $this->domainRepository->find($domainId) : null;
     }
 
     /**
@@ -61,7 +66,7 @@ class SelectedDomainStorage
     public function setSelectedDomain(Domaine $domain = null)
     {
         if (null === $domain) {
-            $this->session->set(self::SESSION_KEY, 'all');
+            $this->session->set(self::SESSION_KEY, self::ALL_DOMAINS_KEYWORD);
         } else {
             $this->session->set(self::SESSION_KEY, $domain->getId());
         }

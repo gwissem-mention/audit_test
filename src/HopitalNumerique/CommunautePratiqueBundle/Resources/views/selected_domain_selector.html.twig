@@ -1,0 +1,10 @@
+{% trans_default_domain 'selected_domain_selector' %}
+
+{% macro selector(availableDomains, selectedDomain) %}
+    <select id="cdpSelectedDomain" data-uri="{{ path('hopitalnumerique_communautepratique_selected_domain_set') }}">
+        {% for domain in availableDomains %}
+            <option value="{{ domain.id }}"{{ selectedDomain is not null and selectedDomain.id == domain.id ? " selected"}}>{{ domain.nom }}</option>
+        {% endfor %}
+        <option value="{{ constant('HopitalNumerique\\CommunautePratiqueBundle\\Service\\SelectedDomainStorage::ALL_DOMAINS_KEYWORD') }}"{{ selectedDomain is null ? " selected" }}>{{ 'selector.option.all'|trans }}</option>
+    </select>
+{% endmacro %}

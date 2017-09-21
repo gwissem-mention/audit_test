@@ -1,0 +1,4 @@
+hopitalnumerique_communautepratique_selected_domain_set:
+    path: /
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:SelectedDomain:select }
+    methods: POST

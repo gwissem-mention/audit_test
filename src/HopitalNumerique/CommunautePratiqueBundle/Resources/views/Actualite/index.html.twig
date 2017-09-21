@@ -2,16 +2,12 @@
 
 {% trans_default_domain 'cdpNews' %}
 
+{% import '@HopitalNumeriqueCommunautePratique/selected_domain_selector.html.twig' as selectedDomainSelector %}
+
 {% block title_communaute_pratique %}Actualités{% endblock %}
 
 {% block communaute_pratique_actions %}
-    <select name="">
-        {% for domain in availableDomains %}
-            <option value="{{ domain.id }}"{{ selectedDomain is not null and selectedDomain.id == domain.id ? " selected"}}>{{ domain.nom }}</option>
-        {% endfor %}
-        <option value="*"{{ selectedDomain is null ? " selected" }}>All</option>
-    </select>
-
+    {{ selectedDomainSelector.selector(availableDomains, selectedDomain) }}
     {{ parent() }}
 {% endblock %}
 

@@ -18,6 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ActualiteController extends Controller
 {
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
@@ -25,13 +28,15 @@ class ActualiteController extends Controller
         $userRepository = $this->get('hopitalnumerique_user.repository.user');
         $cdpGroupRepository = $this->get('hopitalnumerique_communautepratique.repository.group');
 
-        $domains = $this->getUser()->getDomaines()->filter(function (Domaine $domain) {
+        $availableDomains = $this->getUser()->getDomaines()->filter(function (Domaine $domain) {
             return $domain->getCommunautePratiqueGroupes()->count() > 0;
         })->toArray();
 
+        $domains = null === $selectedDomain ? $availableDomains : [$selectedDomain];
+
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
             'selectedDomain'       => $selectedDomain,
-            'availableDomains'     => $domains,
+            'availableDomains'     => $availableDomains,
             'runningGroupCount'    => $cdpGroupRepository->countActiveGroups($domains),
             'cdpUserCount'         => $userRepository->countCDPUsers($domains),
             'contributorsCount'    => $userRepository->getCDPUsersInGroupCount($domains),
