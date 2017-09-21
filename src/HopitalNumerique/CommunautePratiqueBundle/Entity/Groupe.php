@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
@@ -187,6 +188,13 @@ class Groupe
      * )
      */
     protected $requiredRoles;
+
+    /**
+     * @var Discussion|null
+     *
+     * @ORM\OneToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion")
+     */
+    protected $presentationDiscussion;
 
     /**
      * Constructor.
@@ -1040,6 +1048,26 @@ class Groupe
         if (!$this->requiredRoles->contains($role)) {
             $this->requiredRoles->add($role);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Discussion|null
+     */
+    public function getPresentationDiscussion()
+    {
+        return $this->presentationDiscussion;
+    }
+
+    /**
+     * @param Discussion|null $presentationDiscussion
+     *
+     * @return Groupe
+     */
+    public function setPresentationDiscussion(Discussion $presentationDiscussion = null)
+    {
+        $this->presentationDiscussion = $presentationDiscussion;
 
         return $this;
     }
