@@ -1,0 +1,37 @@
+$(function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (elem) {
+        $(elem).toggles({
+            on: elem.dataset.toggle,
+            text: {on: 'OUI', off: 'NON'}
+        })
+        .on('toggle', function (evt, active) {
+            if (evt.currentTarget.previousElementSibling.id === 'hopitalnumerique_new_account_user_parameters_notificationsSettings_practice_community_user_joined_wanted') {
+                evt.currentTarget.parentNode.querySelector('select').value = 'weekly';
+            }
+            evt.currentTarget.previousElementSibling.checked = active;
+            evt.currentTarget.previousElementSibling.classList.toggle('active');
+        })
+    ;
+    });
+    $('form.toValidate').validationEngine();
+    $('.slider-input:first').jRange({
+        from: 1,
+        to: 7,
+        step: 1,
+        scale: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
+        snap: true,
+        format: function (value) {
+            $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+            return $days[value - 1];
+        }
+    });
+    $('.slider-input:last').jRange({
+        from: 0,
+        to: 23,
+        step: 1,
+        snap: true,
+        format: function (value) {
+            return value + 'h00';
+        }
+    });
+});

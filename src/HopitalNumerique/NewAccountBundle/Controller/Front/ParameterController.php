@@ -2,12 +2,15 @@
 
 namespace HopitalNumerique\NewAccountBundle\Controller\Front;
 
+use HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Form\Type\UserParametersType;
 use HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommand;
+use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler;
 
 /**
  * Class ParameterController
@@ -21,13 +24,17 @@ class ParameterController extends Controller
      */
     public function parameterAction(Request $request)
     {
-        $userParametersCommand = new UpdateUserParametersCommand($this->getUser());
+        /**
+         * @var NotificationProviderAbstract[][] $sections
+         */
 
+        list($sections, $settings, $schedules) = $this->get(UserNotificationsSettings::class)->retrieveUserSettings($this->getUser());
+        $userParametersCommand = new UpdateUserParametersCommand($this->getUser(), $settings, $schedules);
         $form = $this->createForm(UserParametersType::class, $userParametersCommand);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('hopitalnumerique_user.update_user_parameters.command_handler')->handle($userParametersCommand);
+            $this->get(UpdateUserParametersCommandHandler::class)->handle($userParametersCommand);
             $this->addFlash('success', $this->get('translator')->trans('form.notification.success', [], 'user-parameters'));
 
             return $this->redirectToRoute('account_parameter');
@@ -35,6 +42,9 @@ class ParameterController extends Controller
 
         return $this->render('NewAccountBundle:parameter:parameter.html.twig', [
             'form' => $form->createView(),
+            'notifications' => [
+                'sections' => $sections
+            ],
             'page' => 'parameter-page',
         ]);
     }

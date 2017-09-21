@@ -254,11 +254,12 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@event_dispatcher'
 
-    hopitalnumerique_user.update_user_parameters.command_handler:
+    HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler:
         class: HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler
         arguments:
             - '@security.token_storage'
             - '@fos_user.user_manager.default'
+            - '@hopitalnumerique\notificationbundle\domain\command\updatenotificationsettingshandler'
 
     hopitalnumerique_user.widgets.activity:
         class: HopitalNumerique\UserBundle\Service\Widget\ActivityWidget

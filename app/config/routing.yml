@@ -1,7 +1,3 @@
-notification:
-    resource: "@NotificationBundle/Resources/config/routing.yml"
-    prefix:   /
-
 hopital_numerique_contextual_navigation:
     resource: "@HopitalNumeriqueContextualNavigationBundle/Resources/config/routing.yml"
     prefix:   /

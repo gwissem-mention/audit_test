@@ -61,9 +61,9 @@ class Settings
     /**
      * Notification detail level.
      *
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(type="smallint", options={"comment"="Notification level of details (0 is lowest detail)"})
+     * @ORM\Column(type="boolean", options={"comment"="Notification level of details (0 is lowest detail)"})
      * @Assert\NotBlank()
      */
     protected $detailLevel;
@@ -105,13 +105,22 @@ class Settings
     protected $updatedAt;
 
     /**
+     * @var bool
+     */
+    protected $wanted;
+
+    /**
      * Settings constructor.
      *
      * @param string $notificationCode
+     * @param bool $wanted
+     * @param integer $user
      */
-    public function __construct($notificationCode = null)
+    public function __construct($notificationCode = null, $wanted = false, $user = null)
     {
         $this->notificationCode = $notificationCode;
+        $this->wanted = $wanted;
+        $this->userId = $user;
     }
 
     /**
@@ -192,6 +201,10 @@ class Settings
      */
     public function setFrequency($notificationFrequency)
     {
+        $notificationFrequency = empty($notificationFrequency)
+            ? NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_OFF
+            : $notificationFrequency
+        ;
         if (!in_array($notificationFrequency, NotificationFrequencyEnum::getFrequencies())) {
             throw new InvalidFrequencyException(sprintf(
                 "frequency '%s' is not valid (one of %s expected)",
@@ -208,7 +221,7 @@ class Settings
     /**
      * Get notification level of detail.
      *
-     * @return integer
+     * @return bool
      */
     public function getDetailLevel()
     {
@@ -218,7 +231,7 @@ class Settings
     /**
      * Set notification level of detail.
      *
-     * @param integer $detailLevel
+     * @param boolean $detailLevel
      *
      * @return Settings
      */
@@ -327,6 +340,24 @@ class Settings
         }
         $this->scheduleHour = $scheduleHour;
 
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWanted()
+    {
+        return $this->wanted;
+    }
+
+    /**
+     * @param bool $wanted
+     * @return Settings
+     */
+    public function setWanted($wanted)
+    {
+        $this->wanted = $wanted;
         return $this;
     }
 }

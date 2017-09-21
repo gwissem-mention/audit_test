@@ -30,14 +30,13 @@ class UpdateNotificationSettingsHandler
      */
     public function handle(UpdateNotificationSettingsCommand $notificationSettingsCommand)
     {
-        $userSettings = new Settings($notificationSettingsCommand->notificationCode);
-        $userSettings->setUserId($notificationSettingsCommand->userId);
-        $userSettings->setFrequency($notificationSettingsCommand->frequency);
-        $userSettings->setDetailLevel($notificationSettingsCommand->detailLevel);
-        $userSettings->setScheduleDay($notificationSettingsCommand->scheduleDay);
-        $userSettings->setScheduleHour($notificationSettingsCommand->scheduleHour);
+        $notification = $notificationSettingsCommand->settings;
+        if ($notification->isWanted()) {
+            $this->entityManager->persist($notification);
+        } elseif (null !== $notification->getId()) {
+            $this->entityManager->remove($notification);
+        }
 
-        $this->entityManager->persist($userSettings);
         $this->entityManager->flush();
     }
 }

@@ -57,6 +57,13 @@ services:
     HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator:
         class: HopitalNumerique\NotificationBundle\Service\NotificationScheduleDateCalculator
 
+    HopitalNumerique\NotificationBundle\Form\SettingsType:
+        class: HopitalNumerique\NotificationBundle\Form\SettingsType
+        arguments:
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+        tags:
+            - { name: form.type }
+
     HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener:
         class: HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener
         tags:
