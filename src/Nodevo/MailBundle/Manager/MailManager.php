@@ -1213,7 +1213,7 @@ class MailManager extends BaseManager
         ]);
 
         foreach ($destinataires as $destinataire) {
-            $message->setFrom([$expediteur->getEmail() => $expediteur->getNom()]);
+            $message->setFrom([$expediteur->getEmail() => $expediteur->getPrenomNom()]);
             $message->setTo($destinataire);
             $this->mailer->send($message);
         }
