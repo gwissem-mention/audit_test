@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion;
 
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionDisplayQuery;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionListQuery;
 
@@ -18,42 +19,84 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getPublicDiscussionsForDomains(DiscussionListQuery $query)
     {
-        $querybuilder = $this->createQueryBuilder('discussion')
+        $queryBuilder = $this->createQueryBuilder('discussion')
+
+            ->select('discussion')
+            ->addSelect('message')
+            ->addSelect('messageUser')
+            ->addSelect('cdpGroup')
+
             ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
             ->setParameter('domains', $query->domains)
-            ->addSelect('domain')
             ->join('discussion.messages', 'message')
-            ->addSelect('message')
             ->join('message.user', 'messageUser')
-            ->addSelect('messageUser')
             ->leftJoin('discussion.groups', 'cdpGroup')
-            ->addSelect('cdpGroup')
         ;
 
         if (null !== $query->user) {
-            $querybuilder
+            $queryBuilder
                 ->leftJoin('discussion.readings', 'reading', Join::WITH, 'reading.user = :user')
+                ->leftJoin('reading.user', 'reader')
+                ->addSelect('reading', 'reader')
                 ->setParameter('user', $query->user)
             ;
         }
 
         if (!$query->displayAll) {
-            $querybuilder->orWhere('message.published = TRUE');
+            $queryBuilder->orWhere('message.published = TRUE');
         }
 
         if (count($query->displayAllForGroups)) {
-            $querybuilder
+            $queryBuilder
                 ->orWhere('cdpGroup IN (:displayAllForGroups)')
                 ->setParameter('displayAllForGroups', $query->displayAllForGroups)
             ;
         }
 
-        $querybuilder
+        $queryBuilder
             ->addOrderBy('message.createdAt', 'DESC')
+            ->addGroupBy('message.id')
         ;
 
-        return $querybuilder
+        return $queryBuilder
             ->getQuery()->getResult()
         ;
+    }
+
+    /**
+     * @param DiscussionDisplayQuery $query
+     *
+     * @return Discussion
+     */
+    public function getFirstPublicDiscussion(DiscussionDisplayQuery $query)
+    {
+        $queryBuilder = $this
+            ->createQueryBuilder('discussion')
+
+            ->andWhere('discussion = :discussion')
+            ->setParameter('discussion', $query->discussion)
+        ;
+
+        if (null !== $query->user) {
+            $queryBuilder
+                ->leftJoin('discussion.readings', 'reading', Join::WITH, 'reading.user = :user')
+                ->leftJoin('reading.user', 'reader')
+                ->addSelect('reading', 'reader')
+                ->setParameter('user', $query->user)
+            ;
+        }
+
+        if (!$query->displayAll) {
+            $queryBuilder->join('discussion.messages', 'message', Join::WITH, 'message.published = TRUE');
+        } else {
+            $queryBuilder->join('discussion.messages', 'message');
+        }
+
+        $queryBuilder
+            ->join('message.user', 'author')
+            ->addOrderBy('message.createdAt', 'ASC')
+        ;
+
+        return $queryBuilder->getQuery()->getSingleResult();
     }
 }

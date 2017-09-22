@@ -298,4 +298,39 @@ class Discussion
     {
         return $this->domains;
     }
+
+    /**
+     * @param User $user
+     *
+     * @return int
+     */
+    public function getNewMessageCount(User $user)
+    {
+        /** @var Read $read */
+        $read = $this->getReadings()->filter(function (Read $read) use ($user) {
+            return $read->getUser()->getId() === $user->getId();
+        })->first();
+
+        if (!$read) {
+            return 0;
+        }
+
+        return $this->getMessages()->filter(function (Message $message) use ($read) {
+            return $message->getCreatedAt() > $read->getLastMessageDate();
+        })->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasHelpfulMessage()
+    {
+        foreach ($this->getMessages() as $message) {
+            if ($message->isHelpful()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

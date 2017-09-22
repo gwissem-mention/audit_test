@@ -1,0 +1,48 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+
+<div class="discussions">
+    <div class="add">
+        <a href="" class="add-btn">
+            <i class="icon fa fa-plus-circle"></i>
+            {{ 'discussion.new_discussion.text'|trans }}
+        </a>
+    </div>
+    <div class="wrapper">
+        <div class="list">
+            {% for discussion in discussions %}
+                {% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
+                <a href="#" class="item{{ loop.index == 1 ? ' active'}}{{ isStaredItem ? ' stared' }}">
+
+                    {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
+                        <span class="icon new-message-badge" title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
+                        {{ discussion.newMessageCount(app.user) }}
+                    </span>
+                    {% endif %}
+
+                    {% if discussion.hasHelpfulMessage %}
+                        <i class="icon fa fa-star"></i>
+                    {% endif %}
+
+                    {% if discussion.recommended %}
+                        <i class="icon fa fa-thumbs-o-up"></i>
+                    {% endif %}
+
+                    <span class="title">
+                        {{ discussion.title }}
+                    </span>
+
+                    <span class="infos">
+                        {{ 'discussion.list.item.message_count'|transchoice(discussion.messages|length, {'%messageCount%': '<b>'~discussion.messages|length~'</b>'})|raw }} -
+                        {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|localizeddate('short', 'none')~'</b>', '%author%': '<b>'~discussion.messages.last.user.prenomNom~'</b>'})|raw }}<br />
+                        {{ 'discussion.list.item.created_at'|trans({'%date%': '<b>'~discussion.createdAt|localizeddate('short', 'none')~'</b>'})|raw }}<br />
+                    </span>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="discussion">
+            {{ include('HopitalNumeriqueCommunautePratiqueBundle:discussion:discussion.html.twig', {'scope': 'public', 'discussion': firstDiscussion}) }}
+        </div>
+    </div>
+</div>

@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6cd4330b493e19cd7c079206699e1bb8",
-    "content-hash": "e97a1fb0f928937c62a38d6d8170c584",
+    "content-hash": "776b39523f87438b456853720393a11f",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -2955,11 +2954,11 @@
             },
             "authors": [
                 {
-                    "name": "R??mi Leclerc",
+                    "name": "Rémi Leclerc",
                     "email": "rleclerc@nodevo.com"
                 }
             ],
-            "description": "Int??gration d'un gestionnaire de m??dia",
+            "description": "Intégration d'un gestionnaire de média",
             "homepage": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager",
             "keywords": [
                 "moxie",
@@ -3021,7 +3020,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pablo D??ez",
+                    "name": "Pablo Díez",
                     "email": "pablodip@gmail.com"
                 }
             ],
@@ -4458,16 +4457,16 @@
         },
         {
             "name": "twig/extensions",
-            "version": "v1.4.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig-extensions.git",
-                "reference": "531eaf4b9ab778b1d7cdd10d40fc6aa74729dfee"
+                "reference": "f0bb8431c8691f5a39f1017d9a5967a082bf01ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/531eaf4b9ab778b1d7cdd10d40fc6aa74729dfee",
-                "reference": "531eaf4b9ab778b1d7cdd10d40fc6aa74729dfee",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/f0bb8431c8691f5a39f1017d9a5967a082bf01ff",
+                "reference": "f0bb8431c8691f5a39f1017d9a5967a082bf01ff",
                 "shasum": ""
             },
             "require": {
@@ -4506,7 +4505,7 @@
                 "i18n",
                 "text"
             ],
-            "time": "2016-09-22T16:50:57+00:00"
+            "time": "2016-10-25T17:34:14+00:00"
         },
         {
             "name": "twig/twig",
@@ -4610,7 +4609,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pablo D??ez",
+                    "name": "Pablo Díez",
                     "email": "pablodip@gmail.com"
                 }
             ],
@@ -5119,7 +5118,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "a component that aids in manipulating and validating ?? Uniform Resource Identifiers (URIs)",
+            "description": "a component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
             "homepage": "https://github.com/zendframework/zend-uri",
             "keywords": [
                 "uri",

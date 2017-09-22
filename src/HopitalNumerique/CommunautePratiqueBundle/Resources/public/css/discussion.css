@@ -1,0 +1,192 @@
+.discussions .new-message-badge {
+    background: linear-gradient(to bottom, #d7504d, #c9312e);
+    color: #fff;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 0 7px 1px 7px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.discussions .add {
+    border: 1px solid #ddd;
+    border-bottom: 0;
+    background: #fff;
+    font-size: 15px;
+    padding: 15px 10px;
+}
+
+.discussions .add .add-btn {
+    color: #777;
+    font-weight: bold;
+}
+
+.discussions .add .add-btn .icon {
+    margin-right: 7px;
+    font-size: 20px;
+    position: relative;
+    top: 1px;
+    color: #ec0034;
+}
+
+.discussions .wrapper {
+    display: flex;
+}
+
+.discussions .wrapper .list {
+    width: 355px;
+}
+
+.discussions .wrapper .list .item {
+    display: block;
+    color: #343434;
+    background: #eee;
+    border-left: 3px solid #777;
+    border-top: 1px solid #ddd;
+    padding: 15px 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 3px 2px 0 #ddd;
+}
+
+.discussions .wrapper .list .item.active,
+.discussions .wrapper .list .item:hover {
+    background: #fff;
+}
+
+.discussions .wrapper .list .item.stared {
+    border-left-color: #ec0034;
+}
+
+.discussions .wrapper .list .item .icon {
+    color: #ec0034;
+    font-size: 15px;
+    position: relative;
+    top: 3px;
+    margin-right: 5px;
+    float: left;
+}
+
+
+.discussions .wrapper .list .item .icon.new-message-badge {
+    color: #fff;
+}
+
+.discussions .wrapper .list .item .title {
+    display: block;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+
+.discussions .wrapper .list .item .infos {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+}
+
+.discussions .wrapper .list .item .infos b {
+    color: #ec0034;
+    font-weight: normal;
+}
+
+.discussions .discussion {
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 100%;
+    min-height: 300px;
+}
+
+.discussions .discussion .discussion-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 25px;
+}
+
+.discussions .discussion .messages {
+    padding: 15px 25px;
+}
+
+.discussions .discussion .messages .title {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.discussions .discussion .messages .title .new-message {
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-left: 10px;
+    color: #8b8b8b;
+}
+
+.discussions .discussion .messages .title .new-message .new-message-badge {
+    margin-left: 6px;
+}
+
+.discussions .discussion .messages .message {
+    display: flex;
+    padding: 15px 0;
+}
+
+.discussions .discussion .messages .message .message-avatar {
+    width: 70px;
+    min-height: 70px;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.discussions .discussion .messages .message .message-avatar .avatar {
+    width: 60px;
+}
+
+.discussions .discussion .messages .message .message-content {
+    margin-left: 20px;
+    width: 100%;
+}
+
+.discussions .discussion .messages .message .message-infos {
+    margin-bottom: 7px;
+}
+
+.discussions .discussion .messages .message .message-infos .actions {
+    float: right;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a {
+    color: #777;
+    font-size: 20px;
+    margin-left: 10px;
+    opacity: 0.6;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a.helpful {
+    color: #FFD700;
+    opacity: 1;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a.helpful.active .inactive,
+.discussions .discussion .messages .message .message-infos .actions a.helpful:not(.active) .active {
+    display: none;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a.helpful.active:hover .inactive,
+.discussions .discussion .messages .message .message-infos .actions a.helpful:not(.active):hover .active {
+    display: inline;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a.helpful.active:hover .active,
+.discussions .discussion .messages .message .message-infos .actions a.helpful:not(.active):hover .inactive {
+    display: none;
+}
+
+.discussions .discussion .messages .message .message-infos .actions a:hover {
+    opacity: 1;
+}
+
+.discussions .discussion .messages .message .message-body {
+
+}

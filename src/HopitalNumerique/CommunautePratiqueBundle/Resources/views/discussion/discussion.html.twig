@@ -1,26 +1,45 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-<a href="#" class="btn btn-success">{{ 'discussion.new_discussion.text'|trans }}</a>
+<h2 class="discussion-title">{{ discussion.title }}</h2>
 
-<hr>
+<div class="messages">
+    <h3 class="title">
+        {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
+        {% if discussion.hasHelpfulMessage %}
+            <span class="new-message">
+                {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<u>'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</u>'})|raw }}
+                <span class="new-message-badge">{{ discussion.newMessageCount(app.user) }}</span>
+            </span>
+        {% endif %}
+    </h3>
 
-{% for discussion in discussions %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <big>#{{ discussion.id }}</big>
-                {{ discussion.title }}
-            </h3>
+    {% for message in discussion.messages %}
+        <div class="message">
+            <div class="message-avatar">
+                <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
+            </div>
+            <div class="message-content">
+                <div class="message-infos">
+                    <div class="actions">
+                        <a href="#" class="helpful{{ message.helpful ? ' active' }}">
+                            <i class="fa fa-star-o inactive"></i>
+                            <i class="fa fa-star active"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+
+                        <a href="#">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </div>
+                    {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|localizeddate('short', 'none')})|raw }}
+                </div>
+                <div class="message-body">
+                    {{ message.content|raw }}
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <b>MessageCount</b> {{ discussion.messages|length }}<br />
-            <b>LastMessage</b> {{ discussion.messages.first.createdAt|date }} by {{ discussion.messages.last.user.prenomNom }}<br />
-            <b>CreatedAt</b> {{ discussion.createdAt|date }}<br />
-            <b>Groups</b>
-            {% for group in discussion.groups %}
-                {{ group.titre }}
-            {% endfor %}
-            <br />
-        </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>
