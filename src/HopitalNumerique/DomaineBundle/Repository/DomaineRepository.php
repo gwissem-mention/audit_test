@@ -3,6 +3,8 @@
 namespace HopitalNumerique\DomaineBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * DomaineRepository.
@@ -73,5 +75,21 @@ class DomaineRepository extends EntityRepository
                 ->setParameter('idForum', $idForum);
 
         return $qb;
+    }
+
+    /**
+     * @param User $user
+     * 
+     * @return array
+     */
+    public function getCDPActiveDomainsForUser(User $user)
+    {
+        return $this->createQueryBuilder('domain')
+            ->join('domain.communautePratiqueGroupes', 'cdpGFroup')
+            ->join('domain.users', 'user', Join::WITH, 'user = :user')
+            ->setParameter('user', $user)
+
+            ->getQuery()->getResult()
+        ;
     }
 }

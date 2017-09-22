@@ -62,8 +62,6 @@ class AvailableDomainsRetriever
             return [$this->currentDomain->get()];
         }
 
-        return $this->tokenStorage->getToken()->getUser()->getDomaines()->filter(function (Domaine $domain) {
-            return $domain->getCommunautePratiqueGroupes()->count();
-        })->toArray();
+        return $this->domainRepository->getCDPActiveDomainsForUser($this->tokenStorage->getToken()->getUser());
     }
 }
