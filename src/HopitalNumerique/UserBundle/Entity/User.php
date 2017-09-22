@@ -1887,6 +1887,24 @@ class User extends BaseUser implements SettingsOwnerInterface
     /**
      * @return bool
      */
+    public function hasRoleCDPAdmin()
+    {
+        foreach ($this->getRoles() as $role) {
+            if (in_array($role, [
+                Role::$ROLE_ADMIN_LABEL,
+                Role::$ROLE_ADMIN_HN_LABEL,
+                Role::$ROLE_ADMIN_DOMAINE,
+            ])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasRoleAdminHn()
     {
         return $this->hasRole(Role::$ROLE_ADMIN_HN_LABEL);

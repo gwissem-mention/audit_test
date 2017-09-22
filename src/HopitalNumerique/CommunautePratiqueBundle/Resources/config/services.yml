@@ -4,6 +4,7 @@ imports:
     - { resource: "services/grid.yml" }
     - { resource: "services/twig.yml" }
     - { resource: "services/handlers.yml" }
+    - { resource: "services/repository.yml" }
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:

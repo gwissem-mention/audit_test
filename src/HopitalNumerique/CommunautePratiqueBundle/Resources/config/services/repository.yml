@@ -1,0 +1,5 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Discussion']

@@ -1,0 +1,5 @@
+discussion:
+    public:
+        title: Espace de discussion
+    new_discussion:
+        text: Créer une nouvelle discussion

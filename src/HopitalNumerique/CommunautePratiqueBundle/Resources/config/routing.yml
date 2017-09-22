@@ -38,6 +38,10 @@ hopitalnumerique_communautepratique_actualite:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/actualite.yml"
     prefix: "/communaute-de-pratiques/actualite"
 
+hopitalnumerique_communautepratique_discussion:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/discussion.yml"
+    prefix: "/communaute-de-pratiques/discussion"
+
 hopitalnumerique_communautepratique_tinymce:
     resource: '@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/tinymce.yml'
     prefix: '/communaute-de-pratiques/tinymce'

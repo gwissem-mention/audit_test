@@ -8,7 +8,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository")
  * @ORM\Table(name="hn_communautepratique_discussion")
  */
 class Discussion
@@ -50,6 +50,13 @@ class Discussion
      * @ORM\OneToMany(targetEntity="Discussion", mappedBy="parent")
      */
     protected $children;
+
+    /**
+     * @var Message[]
+     *
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="discussion")
+     */
+    protected $messages;
 
     /**
      * @var boolean
@@ -172,6 +179,22 @@ class Discussion
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @return Message[]
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @return Read[]
+     */
+    public function getReadings()
+    {
+        return $this->readings;
     }
 
     /**

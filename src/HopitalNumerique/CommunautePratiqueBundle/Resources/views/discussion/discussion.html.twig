@@ -1,0 +1,26 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+<a href="#" class="btn btn-success">{{ 'discussion.new_discussion.text'|trans }}</a>
+
+<hr>
+
+{% for discussion in discussions %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <big>#{{ discussion.id }}</big>
+                {{ discussion.title }}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <b>MessageCount</b> {{ discussion.messages|length }}<br />
+            <b>LastMessage</b> {{ discussion.messages.first.createdAt|date }} by {{ discussion.messages.last.user.prenomNom }}<br />
+            <b>CreatedAt</b> {{ discussion.createdAt|date }}<br />
+            <b>Groups</b>
+            {% for group in discussion.groups %}
+                {{ group.titre }}
+            {% endfor %}
+            <br />
+        </div>
+    </div>
+{% endfor %}
