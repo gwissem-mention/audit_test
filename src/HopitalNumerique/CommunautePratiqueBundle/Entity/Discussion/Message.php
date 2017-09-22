@@ -31,7 +31,7 @@ class Message
     /**
      * @var Discussion
      *
-     * @ORM\ManyToOne(targetEntity="Discussion")
+     * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="messages")
      */
     protected $discussion;
 
