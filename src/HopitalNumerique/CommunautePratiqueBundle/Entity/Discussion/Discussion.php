@@ -5,6 +5,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -95,6 +96,16 @@ class Discussion
     protected $readings;
 
     /**
+     * @var Domaine[]
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinTable(name="hn_communautepratique_discussion_domain",
+     *     inverseJoinColumns={ @ORM\JoinColumn(referencedColumnName="dom_id")}
+     * )
+     */
+    protected $domains;
+
+    /**
      * Discussion constructor.
      */
     public function __construct()
@@ -102,6 +113,7 @@ class Discussion
         $this->children = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->readings = new ArrayCollection();
+        $this->domains = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 
@@ -277,5 +289,13 @@ class Discussion
         }
 
         return $this;
+    }
+
+    /**
+     * @return Domaine[]|ArrayCollection
+     */
+    public function getDomains()
+    {
+        return $this->domains;
     }
 }

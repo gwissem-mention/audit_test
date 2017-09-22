@@ -22,7 +22,6 @@ class DiscussionController extends Controller
 
         $query = DiscussionListQuery::getPublicDiscussion($domains, [], $this->getUser());
 
-
         $discussions = $this->get(DiscussionRepository::class)->getPublicDiscussionsForDomains($query);
 
         return $this->render('@HopitalNumeriqueCommunautePratique/discussion/public.html.twig', [

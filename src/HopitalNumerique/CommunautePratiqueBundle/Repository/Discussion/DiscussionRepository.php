@@ -19,6 +19,9 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
     public function getPublicDiscussionsForDomains(DiscussionListQuery $query)
     {
         $querybuilder = $this->createQueryBuilder('discussion')
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
+            ->setParameter('domains', $query->domains)
+            ->addSelect('domain')
             ->join('discussion.messages', 'message')
             ->addSelect('message')
             ->join('message.user', 'messageUser')
