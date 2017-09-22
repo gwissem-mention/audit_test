@@ -79,7 +79,7 @@ class DomaineRepository extends EntityRepository
 
     /**
      * @param User $user
-     * 
+     *
      * @return array
      */
     public function getCDPActiveDomainsForUser(User $user)

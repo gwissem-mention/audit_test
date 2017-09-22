@@ -115,7 +115,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
         if (count($domains)) {
             $queryBuilder
-                ->join('g.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->join('g.domains', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
                 ->setParameter('domains', $domains)
             ;
         }
@@ -144,7 +144,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
         if (count($domains)) {
             $queryBuilder
-                ->join('cdpGroup.domaine', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+                ->join('cdpGroup.domains', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
                 ->setParameter('domains', $domains)
             ;
         }
