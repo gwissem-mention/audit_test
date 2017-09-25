@@ -1,4 +1,7 @@
 notification-config:
+    choose:
+        day: Je choisis le jour
+        hour: Je choisis l'heure
     information: Vous recevrez le
     also: Vous pouvez également recevoir
     report:
