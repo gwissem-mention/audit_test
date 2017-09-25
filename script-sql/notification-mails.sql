@@ -68,7 +68,7 @@ INSERT INTO `core_mail` (
   `mail_params`,
   `mail_notification_region_referent`
 ) VALUES (
-  76,
+  88,
   '[ANAP] - Mise à jour d\'un parcours guidé',
   'Mise à jour notifiée d\'un parcours guidé',
   '%mailContactDomaineCurrent',
@@ -88,9 +88,9 @@ INSERT INTO `core_mail` (
   `mail_params`,
   `mail_notification_region_referent`
 ) VALUES (
-  77,
-  '[ANAP] - Modification d’un rapport partagé',
-  'Modification d’un rapport partagé',
+  89,
+  '[ANAP] - Modification d\'un rapport partagé',
+  'Modification d\'un rapport partagé',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
   'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de modifier le rapport <a href=\"%urlMonPanier\">&quot;%nomRapport&quot;</a>.\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
@@ -109,7 +109,7 @@ INSERT INTO `core_mail` (
   `mail_notification_region_referent`
 ) VALUES (
   78,
-  '[ANAP] - Partage d’un nouveau rapport avec vous',
+  '[ANAP] - Partage d\'un nouveau rapport avec vous',
   'Partage d\'un nouveau rapport',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
@@ -129,8 +129,8 @@ INSERT INTO `core_mail` (
   `mail_notification_region_referent`
 ) VALUES (
   79,
-  '[ANAP] - Partage d’un rapport avec d’autres utilisateurs',
-  'Partage d’un rapport avec d’autres utilisateurs',
+  '[ANAP] - Partage d\'un rapport avec d\'autres utilisateurs',
+  'Partage d\'un rapport avec d\'autres utilisateurs',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
   'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de partager le rapport <a href=\"%urlMonPanier\">&quot;%nomRapport&quot;</a> avec %prenomUtilisateurDist2 %nomUtilisateurDist2.\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
@@ -149,8 +149,8 @@ INSERT INTO `core_mail` (
   `mail_notification_region_referent`
 ) VALUES (
   80,
-  '[ANAP] - Copie d’un nouveau rapport',
-  'Copie d’un nouveau rapport',
+  '[ANAP] - Copie d\'un nouveau rapport',
+  'Copie d\'un nouveau rapport',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
   'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de vous copier son rapport <a href=\"%urlMonPanier\">&quot;%nomRapport&quot;</a>.\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
