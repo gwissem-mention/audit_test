@@ -11,6 +11,7 @@ var Discussion;
         this.$container = $('.discussions');
         this.$list = this.$container.find('.list');
         this.$discussion = this.$container.find('.discussion');
+        this.$messages = this.$container.find('.message');
 
         this.init();
     };
@@ -31,7 +32,22 @@ var Discussion;
                     that.$list.find('a').removeClass('active');
                     $link.addClass('active');
                 })
-            })
+            });
+
+            that.$messages.find('.helpful').on('click', function (e) {
+                var $link = $(this);
+                e.preventDefault();
+
+                var loader = $link.nodevoLoader().start();
+
+                $.post($(this).attr('href'), function (response, status) {
+                    if (status === "success") {
+                        $link.toggleClass('active');
+                    }
+
+                    loader.finished();
+                });
+            });
 
         }
     }

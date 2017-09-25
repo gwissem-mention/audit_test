@@ -48,6 +48,13 @@
                         </a>
                     </div>
                     {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|localizeddate('short', 'none')})|raw }}
+
+                    {% if message.user.communautePratiqueAnimateurGroupes.count > 0 %}
+                        <span class="animator">
+                            <i class="fa fa-bullhorn"></i>
+                            {{ 'discussion.public.animator'|trans }}
+                        </span>
+                    {% endif %}
                 </div>
                 <div class="message-body">
                     {{ message.content|raw }}

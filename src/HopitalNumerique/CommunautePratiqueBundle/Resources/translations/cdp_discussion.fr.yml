@@ -1,6 +1,7 @@
 discussion:
     public:
         title: Espace de discussion
+        animator: Animateur de groupes
     list:
         item:
             message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"

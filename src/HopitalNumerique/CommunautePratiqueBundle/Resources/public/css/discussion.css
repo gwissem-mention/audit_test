@@ -157,6 +157,14 @@
     margin-bottom: 7px;
 }
 
+.discussions .discussion .messages .message .animator {
+    font-size: 11px;
+}
+
+.discussions .discussion .messages .message .animator .fa {
+    color: #ec0034;
+}
+
 .discussions .discussion .messages .message .message-infos .actions {
     float: right;
 }

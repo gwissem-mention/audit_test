@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
@@ -131,7 +132,7 @@ class DiscussionController extends Controller
     /**
      * @param Message $message
      *
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function toggleHelpfulMessageAction(Message $message)
     {
@@ -139,9 +140,7 @@ class DiscussionController extends Controller
 
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-            'discussion' => $message->getDiscussion()->getId(),
-        ]);
+        return new JsonResponse(null);
     }
 
     /**
