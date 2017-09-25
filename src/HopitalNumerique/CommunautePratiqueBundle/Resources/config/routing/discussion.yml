@@ -14,6 +14,12 @@ hopitalnumerique_communautepratique_discussions_create_discussion:
     methods:
         - POST
 
+hopitalnumerique_communautepratique_discussions_reply_discussion:
+    path: /{discussion}/reply
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply }
+    methods:
+        - POST
+
 hopitalnumerique_communautepratique_discussions_discussion:
     path: /{discussion}/lire
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:discussion }

@@ -27,12 +27,10 @@ class PostDiscussionMessageCommand
      *
      * @param Discussion $discussion
      * @param User $author
-     * @param $content
      */
-    public function __construct(Discussion $discussion, User $author, $content)
+    public function __construct(Discussion $discussion, User $author)
     {
         $this->discussion = $discussion;
         $this->author = $author;
-        $this->content = $content;
     }
 }

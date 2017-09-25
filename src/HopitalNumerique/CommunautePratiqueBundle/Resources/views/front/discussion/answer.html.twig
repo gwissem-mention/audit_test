@@ -1,0 +1,6 @@
+{% if form is not null %}
+    {{ form_start(form) }}
+        {{ form_widget(form.content) }}
+        <input type="submit" class="btn btn-success pull-right">
+    {{ form_end(form) }}
+{% endif %}

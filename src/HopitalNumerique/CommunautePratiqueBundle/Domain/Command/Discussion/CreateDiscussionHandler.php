@@ -46,7 +46,9 @@ class CreateDiscussionHandler
         $this->entityManager->persist($discussion);
         $this->entityManager->flush($discussion);
 
-        $this->postMessageHandler->handle(new PostDiscussionMessageCommand($discussion, $command->author, $command->content));
+        $messageCommand = new PostDiscussionMessageCommand($discussion, $command->author);
+        $messageCommand->content = $command->content;
+        $this->postMessageHandler->handle($messageCommand);
 
         return $discussion;
     }
