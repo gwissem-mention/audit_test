@@ -56,13 +56,15 @@ class UpdateUserParametersCommand
      * @param Settings[] $notificationsSettings
      * @param array $schedules
      */
-    public function __construct(User $user, array $notificationsSettings, array $schedules)
+    public function __construct(User $user, array $notificationsSettings, array $schedules = null)
     {
         $this->publicationNotification = $user->getNotficationRequete();
         $this->activityNewsletter = $user->isActivityNewsletterEnabled();
         $this->notificationsSettings = $notificationsSettings;
-        $this->scheduleDay = $schedules['scheduleDay'];
-        $this->scheduleHour = $schedules['scheduleHour'];
+        if (null !== $schedules) {
+            $this->scheduleDay = $schedules['scheduleDay'];
+            $this->scheduleHour = $schedules['scheduleHour'];
+        }
     }
 
 }
