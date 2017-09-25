@@ -74,35 +74,11 @@ class Read
     }
 
     /**
-     * @param User $user
-     *
-     * @return Read
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @return Discussion
      */
     public function getDiscussion()
     {
         return $this->discussion;
-    }
-
-    /**
-     * @param Discussion $discussion
-     *
-     * @return Read
-     */
-    public function setDiscussion(Discussion $discussion)
-    {
-        $this->discussion = $discussion;
-
-        return $this;
     }
 
     /**

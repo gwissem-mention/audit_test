@@ -8,7 +8,6 @@
     </script>
 {% endblock %}
 
-
 <div class="discussions">
     <div class="add">
         <a href="" class="add-btn">
@@ -24,8 +23,8 @@
 
                     {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
                         <span class="icon new-message-badge" title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
-                        {{ discussion.newMessageCount(app.user) }}
-                    </span>
+                            {{ discussion.newMessageCount(app.user) }}
+                        </span>
                     {% endif %}
 
                     {% if discussion.hasHelpfulMessage %}

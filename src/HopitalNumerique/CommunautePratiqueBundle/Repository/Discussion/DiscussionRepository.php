@@ -17,7 +17,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return Discussion[]
      */
-    public function getPublicDiscussionsForDomains(DiscussionListQuery $query)
+    public function queryForDiscussionList(DiscussionListQuery $query)
     {
         $queryBuilder = $this->createQueryBuilder('discussion')
 
@@ -68,7 +68,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return Discussion
      */
-    public function getFirstPublicDiscussion(DiscussionDisplayQuery $query)
+    public function queryForDiscussionDisplayQuery(DiscussionDisplayQuery $query)
     {
         $queryBuilder = $this
             ->createQueryBuilder('discussion')

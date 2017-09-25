@@ -6,6 +6,11 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
+/**
+ * Class DiscussionListQuery
+ *
+ * All info used to query discussions list, public/private message, domains...
+ */
 class DiscussionListQuery
 {
     /**
@@ -25,6 +30,9 @@ class DiscussionListQuery
      */
     public $displayAllForGroups = [];
 
+    /**
+     * @var bool $displayAll
+     */
     public $displayAll = false;
 
     /**
@@ -39,7 +47,7 @@ class DiscussionListQuery
      *
      * @return DiscussionListQuery
      */
-    public static function getPublicDiscussion(array $domains, array $groups = [], User $user = null)
+    public static function createPublicDiscussionQuery(array $domains, array $groups = [], User $user = null)
     {
         $query = new self();
         $query->domains = $domains;

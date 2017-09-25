@@ -3,9 +3,13 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion;
 
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 
+/**
+ * Class DiscussionDisplayQuery
+ *
+ * All info used to query discussions messages, public/private message, access...
+ */
 class DiscussionDisplayQuery
 {
     /**
@@ -18,6 +22,9 @@ class DiscussionDisplayQuery
      */
     public $user;
 
+    /**
+     * @var bool $displayAll
+     */
     public $displayAll = false;
 
     /**
@@ -25,7 +32,7 @@ class DiscussionDisplayQuery
      *
      * @return DiscussionDisplayQuery
      */
-    public static function getPublicDiscussion(Discussion $discussion, User $user = null)
+    public static function createPublicDiscussionQuery(Discussion $discussion, User $user = null)
     {
         $query = new self();
         $query->user = $user;

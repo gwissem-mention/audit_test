@@ -28,9 +28,9 @@ class DiscussionController extends Controller
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
-        $discussions = $discussionRepository->getPublicDiscussionsForDomains(DiscussionListQuery::getPublicDiscussion($domains, [], $this->getUser()));
+        $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, [], $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->getFirstPublicDiscussion(DiscussionDisplayQuery::getPublicDiscussion($discussion ?: current($discussions), $this->getUser()));
+        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $this->getUser()));
 
         return $this->render('@HopitalNumeriqueCommunautePratique/discussion/public.html.twig', [
             'discussions' => $discussions,
@@ -45,7 +45,7 @@ class DiscussionController extends Controller
      */
     public function discussionAction(Discussion $discussion)
     {
-        $discussion = $this->get(DiscussionRepository::class)->getFirstPublicDiscussion(DiscussionDisplayQuery::getPublicDiscussion($discussion, $this->getUser()));
+        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $this->getUser()));
 
         return $this->render('@HopitalNumeriqueCommunautePratique/discussion/discussion.html.twig', [
             'discussion' => $discussion,
