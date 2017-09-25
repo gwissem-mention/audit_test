@@ -28,7 +28,7 @@ discussion:
             delete:
                 confirm: Voulez-vous vraiment supprimer ce message ?
                 success: Message supprimé avec succés.
-        answer:
+        reply:
             form:
                 submit:
                     text: Envoyer

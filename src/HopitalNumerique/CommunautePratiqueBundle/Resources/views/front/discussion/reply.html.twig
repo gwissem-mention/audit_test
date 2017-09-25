@@ -1,0 +1,23 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% if app.user is not null and form is not null %}
+
+    <div class="message reply">
+        <div class="message-avatar">
+            <div class="avatar" style="background-image: url('{{ app.user.avatarWebPath }}')"></div>
+        </div>
+        <div class="message-content">
+            <div class="message-infos">
+                <b>{{ app.user.prenomNom }}</b>
+            </div>
+            <div class="message-body">
+                {{ form_start(form) }}
+                    {{ form_widget(form.content, {'attr': {'class': ''}}) }}
+                    <div class="text-right">
+                        <input type="submit" class="btn btn-success pull-right" value="{{ 'discussion.message.reply.form.submit.text'|trans|e }}">
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endif %}
