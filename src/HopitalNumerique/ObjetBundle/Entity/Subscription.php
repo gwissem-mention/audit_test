@@ -117,7 +117,7 @@ class Subscription
      *
      * @param Contenu $contenu
      */
-    public function setContenu(Contenu $contenu)
+    public function setContenu(Contenu $contenu = null)
     {
         $this->contenu = $contenu;
     }

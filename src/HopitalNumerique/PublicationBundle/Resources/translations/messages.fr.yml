@@ -16,3 +16,4 @@ object:
     release_date: 'Date de parution : %date%'
     update_details: Voir le détail des mises à jour
     last_update: 'Dernière mise à jour : %date%'
+subscribe: S'abonner

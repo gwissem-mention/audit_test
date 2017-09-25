@@ -168,6 +168,20 @@ $(document).ready(function() {
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
     });
 
+    Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (elem) {
+        $(elem).toggles({
+            on: elem.dataset.active === 'true',
+            drag: false
+        }).on('toggle', function (e, active) {
+            $.ajax({
+                url: this.dataset.path,
+                method: 'POST',
+                data: {
+                    'wanted': active
+                }
+            });
+        })
+    });
 
 });
 
