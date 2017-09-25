@@ -1,3 +1,9 @@
+/**
+ * CommunautePratique discussion list.
+ *
+ * Discussion messages via Ajax query
+ */
+
 var Discussion;
 
 (function() {

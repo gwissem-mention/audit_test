@@ -5,7 +5,7 @@
 <div class="messages">
     <h3 class="title">
         {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
-        {% if discussion.newMessageCount(app.user) %}
+        {% if app.user and discussion.newMessageCount(app.user) %}
             <span class="new-message">
                 {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<u>'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</u>'})|raw }}
                 <span class="new-message-badge">{{ discussion.newMessageCount(app.user) }}</span>
