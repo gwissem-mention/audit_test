@@ -128,6 +128,6 @@ class SettingsRepository extends EntityRepository
             ->setParameter('user', $user->getId())
             ->getQuery();
 
-        return $query->getSingleResult();
+        return $query->getOneOrNullResult();
     }
 }
