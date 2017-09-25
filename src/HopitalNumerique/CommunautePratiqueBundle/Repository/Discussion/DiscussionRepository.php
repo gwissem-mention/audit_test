@@ -56,6 +56,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder
             ->addOrderBy('message.createdAt', 'DESC')
             ->addGroupBy('message.id')
+            ->having('COUNT(message) > 0')
         ;
 
         return $queryBuilder
@@ -72,6 +73,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this
             ->createQueryBuilder('discussion')
+            ->addSelect('message')
 
             ->andWhere('discussion = :discussion')
             ->setParameter('discussion', $query->discussion)

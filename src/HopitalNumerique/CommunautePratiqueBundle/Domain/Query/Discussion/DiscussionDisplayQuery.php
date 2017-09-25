@@ -38,11 +38,14 @@ class DiscussionDisplayQuery
         $query->user = $user;
         $query->discussion = $discussion;
 
+        $query->resolveDisplayAllForGroups();
+
         return $query;
     }
 
     /**
-     *
+     * Display all messages for moderators, admins...
+     * Depend of group
      */
     protected function resolveDisplayAllForGroups()
     {

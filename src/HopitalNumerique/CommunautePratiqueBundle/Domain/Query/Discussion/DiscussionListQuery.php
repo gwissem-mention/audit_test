@@ -60,7 +60,8 @@ class DiscussionListQuery
     }
 
     /**
-     *
+     * Display all messages for moderators, admins...
+     * Depend of group
      */
     protected function resolveDisplayAllForGroups()
     {

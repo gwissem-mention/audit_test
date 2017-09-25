@@ -29,6 +29,11 @@ class CreateDiscussionHandler
         $this->postMessageHandler = $postMessageHandler;
     }
 
+    /**
+     * @param CreateDiscussionCommand $command
+     *
+     * @return Discussion
+     */
     public function handle(CreateDiscussionCommand $command)
     {
         $discussion = new Discussion($command->title, $command->author, $command->domains);

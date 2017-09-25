@@ -30,6 +30,9 @@ class PostDiscussionMessageHandler
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param PostDiscussionMessageCommand $command
+     */
     public function handle(PostDiscussionMessageCommand $command)
     {
         $message = new Message($command->discussion, $command->content, $command->author);
