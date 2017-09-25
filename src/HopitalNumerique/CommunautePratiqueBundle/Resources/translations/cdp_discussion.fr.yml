@@ -9,6 +9,13 @@ discussion:
             new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
     new_discussion:
         text: Créer une nouvelle discussion
+        form:
+            title:
+                label: Titre de la discussion
+            content:
+                label: Message
+            submit:
+                text: Publier
 
     message:
         title: "Message | Messages"

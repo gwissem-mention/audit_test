@@ -97,3 +97,15 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\DeleteMessageHandler
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\CreateDiscussionHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\CreateDiscussionHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler'
+
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler
+        arguments:
+            - '@event_dispatcher'
+            - '@doctrine.orm.entity_manager'

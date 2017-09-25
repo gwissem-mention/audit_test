@@ -65,9 +65,16 @@ class Message
 
     /**
      * Message constructor.
+     *
+     * @param Discussion $discussion
+     * @param $content
+     * @param User $author
      */
-    public function __construct()
+    public function __construct(Discussion $discussion, $content, User $author)
     {
+        $this->discussion = $discussion;
+        $this->content = $content;
+        $this->user = $author;
         $this->createdAt = new \DateTime();
     }
 

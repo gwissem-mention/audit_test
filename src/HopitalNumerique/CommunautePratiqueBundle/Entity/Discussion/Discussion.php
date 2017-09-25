@@ -108,13 +108,18 @@ class Discussion
 
     /**
      * Discussion constructor.
+     *
+     * @param $title
+     * @param User $author
      */
-    public function __construct()
+    public function __construct($title, User $author, array $domains)
     {
+        $this->title = $title;
+        $this->user = $author;
         $this->children = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->readings = new ArrayCollection();
-        $this->domains = new ArrayCollection();
+        $this->domains = $domains;
         $this->createdAt = new \DateTime();
     }
 

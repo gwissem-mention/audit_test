@@ -8,9 +8,30 @@
     </script>
 {% endblock %}
 
+<div id="new-discussion-modal" class="modal fade">
+    {{ form_start(newDiscussionForm) }}
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'discussion.new_discussion.text'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_row(newDiscussionForm.title) }}
+                {{ form_row(newDiscussionForm.content) }}
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success" value="{{ 'discussion.new_discussion.form.submit.text'|trans|e }}">
+            </div>
+        </div>
+    </div>
+    {{ form_end(newDiscussionForm) }}
+</div>
+
 <div class="discussions">
     <div class="add">
-        <a href="" class="add-btn">
+        <a href="#" class="add-btn" data-toggle="modal" data-target="#new-discussion-modal">
             <i class="icon fa fa-plus-circle"></i>
             {{ 'discussion.new_discussion.text'|trans }}
         </a>

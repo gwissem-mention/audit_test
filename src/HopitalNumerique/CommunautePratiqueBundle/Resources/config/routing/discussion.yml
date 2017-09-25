@@ -5,6 +5,14 @@ hopitalnumerique_communautepratique_discussions_public:
 hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
     path: /{discussion}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:public }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_create_discussion:
+    path: /create
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion }
+    methods:
+        - POST
 
 hopitalnumerique_communautepratique_discussions_discussion:
     path: /{discussion}/lire
