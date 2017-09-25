@@ -1,0 +1,8 @@
+services:
+    dfdsf:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\MessagePostedSubscriber
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_subscriber }

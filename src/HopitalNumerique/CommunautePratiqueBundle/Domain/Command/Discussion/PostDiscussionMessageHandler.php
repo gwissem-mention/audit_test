@@ -4,6 +4,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PostDiscussionMessageHandler
@@ -37,9 +39,10 @@ class PostDiscussionMessageHandler
     {
         $message = new Message($command->discussion, $command->content, $command->author);
 
-        // @TODO: check link
-
         $this->entityManager->persist($message);
+
+        $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
+
         $this->entityManager->flush($message);
     }
 }

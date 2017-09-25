@@ -5,6 +5,7 @@ imports:
     - { resource: "services/twig.yml" }
     - { resource: "services/handlers.yml" }
     - { resource: "services/repository.yml" }
+    - { resource: "services/event_subscriber.yml" }
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:
