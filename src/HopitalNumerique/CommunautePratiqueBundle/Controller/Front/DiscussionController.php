@@ -44,18 +44,17 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        return $this->render('@HopitalNumeriqueCommunautePratique/discussion/public.html.twig', [
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', [
             'discussions' => $discussions,
             'currentDiscussion' => $discussion,
             'newDiscussionForm' => isset($newDiscussionForm) ? $newDiscussionForm : null
         ]);
     }
 
-
     /**
      * @param Request $request
      *
-     * @return RedirectResponse
+     * @return Response|RedirectResponse
      */
     public function createDiscussionAction(Request $request)
     {
@@ -72,6 +71,10 @@ class DiscussionController extends Controller
                 'discussion' => $discussion->getId(),
             ]);
         }
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/create_discussion.html.twig', [
+            'newDiscussionForm' => $newDiscussionForm->createView(),
+        ]);
     }
 
     /**
@@ -83,7 +86,7 @@ class DiscussionController extends Controller
     {
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $this->getUser()));
 
-        return $this->render('@HopitalNumeriqueCommunautePratique/discussion/discussion.html.twig', [
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
             'discussion' => $discussion,
         ]);
     }

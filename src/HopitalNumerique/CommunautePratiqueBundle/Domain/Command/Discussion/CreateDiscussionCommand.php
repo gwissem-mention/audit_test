@@ -7,6 +7,9 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class CreateDiscussionCommand
+ */
 class CreateDiscussionCommand
 {
     /**
