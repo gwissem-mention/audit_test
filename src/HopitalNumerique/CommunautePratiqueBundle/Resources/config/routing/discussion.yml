@@ -1,3 +1,19 @@
-hopitalnumerique_communautepratique_discussion_public:
+hopitalnumerique_communautepratique_discussions_public:
     path: /
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Discussion:public }
+
+hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
+    path: /{discussion}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Discussion:public }
+
+hopitalnumerique_communautepratique_discussions_discussion:
+    path: /{discussion}/lire
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Discussion:discussion }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_helpful:
+    path: /message/{message}/helpful/toggle
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Discussion:toggleHelpfulMessage }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_delete:
+    path: /message/{message}/delete
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Discussion:deleteMessage }

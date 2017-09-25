@@ -180,6 +180,16 @@ class Message
     }
 
     /**
+     * @return Message
+     */
+    public function toggleHelpful()
+    {
+        $this->setHelpful(!$this->isHelpful());
+
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt()

@@ -5,13 +5,26 @@
 <div class="messages">
     <h3 class="title">
         {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
-        {% if discussion.hasHelpfulMessage %}
+        {% if discussion.newMessageCount(app.user) %}
             <span class="new-message">
                 {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<u>'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</u>'})|raw }}
                 <span class="new-message-badge">{{ discussion.newMessageCount(app.user) }}</span>
             </span>
         {% endif %}
     </h3>
+
+    <div class="actions">
+        <div class="actions-block">
+
+        </div>
+
+        <div class="actions-block">
+            <select>
+                <option></option>
+                <option>Ajouter au panier</option>
+            </select>
+        </div>
+    </div>
 
     {% for message in discussion.messages %}
         <div class="message">
@@ -21,7 +34,7 @@
             <div class="message-content">
                 <div class="message-infos">
                     <div class="actions">
-                        <a href="#" class="helpful{{ message.helpful ? ' active' }}">
+                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_helpful', {'message': message.id}) }}" class="helpful{{ message.helpful ? ' active' }}">
                             <i class="fa fa-star-o inactive"></i>
                             <i class="fa fa-star active"></i>
                         </a>
@@ -30,7 +43,7 @@
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
 
-                        <a href="#">
+                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id}) }}">
                             <i class="fa fa-trash-o"></i>
                         </a>
                     </div>

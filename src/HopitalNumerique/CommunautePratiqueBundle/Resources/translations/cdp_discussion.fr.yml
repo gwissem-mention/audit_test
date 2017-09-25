@@ -3,16 +3,16 @@ discussion:
         title: Espace de discussion
     list:
         item:
-            message_count: "]0,1] %messageCount% message|]1, Inf[ %messageCount% messages"
+            message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
             last_message: Dernier le %date% par %author%
             created_at: Discussion créée le %date%
-            new_message_count: "]0,1[ %count% nouveau message|]1, Inf[ %count% nouveaux messages"
+            new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
     new_discussion:
         text: Créer une nouvelle discussion
 
     message:
-        title: "{1} Message |]1,Inf[ Messages"
-        new_message_count: "{1} Un %highlight% a été posté de puis votre dernière visite |]1,Inf[ De %highlight% ont été postés de puis votre dernière visite"
-        new_message_highlight: "{1} nouveau message |]1,Inf[ nouveaux messages"
+        title: "Message | Messages"
+        new_message_count: "Un %highlight% a été posté de puis votre dernière visite | De %highlight% ont été postés de puis votre dernière visite"
+        new_message_highlight: "nouveau message | nouveaux messages"
         item:
             infos: Par %author% le %date%

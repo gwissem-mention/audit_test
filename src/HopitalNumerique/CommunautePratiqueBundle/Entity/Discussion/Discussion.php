@@ -42,6 +42,7 @@ class Discussion
      * @var Discussion
      *
      * @ORM\ManyToOne(targetEntity="Discussion", inversedBy="children")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     protected $parent;
 
@@ -55,7 +56,7 @@ class Discussion
     /**
      * @var Message[]
      *
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="discussion")
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="discussion", orphanRemoval=true)
      */
     protected $messages;
 
@@ -91,7 +92,7 @@ class Discussion
     /**
      * @var Read[]
      *
-     * @ORM\OneToMany(targetEntity="Read", mappedBy="discussion")
+     * @ORM\OneToMany(targetEntity="Read", mappedBy="discussion", orphanRemoval=true)
      */
     protected $readings;
 
@@ -194,7 +195,7 @@ class Discussion
     }
 
     /**
-     * @return Message[]
+     * @return Message[]|ArrayCollection
      */
     public function getMessages()
     {

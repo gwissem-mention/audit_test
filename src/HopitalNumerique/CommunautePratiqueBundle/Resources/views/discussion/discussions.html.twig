@@ -1,5 +1,13 @@
 {% trans_default_domain 'cdp_discussion' %}
 
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Discussion();
+        });
+    </script>
+{% endblock %}
+
 
 <div class="discussions">
     <div class="add">
@@ -12,7 +20,7 @@
         <div class="list">
             {% for discussion in discussions %}
                 {% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
-                <a href="#" class="item{{ loop.index == 1 ? ' active'}}{{ isStaredItem ? ' stared' }}">
+                <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id}) }}" class="item{{ discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}">
 
                     {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
                         <span class="icon new-message-badge" title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
@@ -42,7 +50,7 @@
         </div>
 
         <div class="discussion">
-            {{ include('HopitalNumeriqueCommunautePratiqueBundle:discussion:discussion.html.twig', {'scope': 'public', 'discussion': firstDiscussion}) }}
+            {{ include('HopitalNumeriqueCommunautePratiqueBundle:discussion:discussion.html.twig', {'scope': 'public', 'discussion': currentDiscussion}) }}
         </div>
     </div>
 </div>

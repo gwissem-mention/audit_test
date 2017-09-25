@@ -92,3 +92,8 @@ services:
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@security.authorization_checker'
             - '@security.token_storage'
+
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\DeleteMessageHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\DeleteMessageHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'

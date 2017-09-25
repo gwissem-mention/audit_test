@@ -21,7 +21,10 @@ ALTER TABLE hn_communautepratique_groupe ADD presentationDiscussion_id INT DEFAU
 ALTER TABLE hn_communautepratique_groupe ADD CONSTRAINT FK_A34AA845CFB42D94 FOREIGN KEY (presentationDiscussion_id) REFERENCES hn_communautepratique_discussion (id);
 CREATE UNIQUE INDEX UNIQ_A34AA845CFB42D94 ON hn_communautepratique_groupe (presentationDiscussion_id);
 
-/** Grou domains **/
+/** Group domains **/
 CREATE TABLE hn_communautepratique_discussion_domain (discussion_id INT NOT NULL, domaine_dom_id INT NOT NULL, INDEX IDX_589D12091ADED311 (discussion_id), INDEX IDX_589D120966608EA1 (domaine_dom_id), PRIMARY KEY(discussion_id, domaine_dom_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE hn_communautepratique_discussion_domain ADD CONSTRAINT FK_589D12091ADED311 FOREIGN KEY (discussion_id) REFERENCES hn_communautepratique_discussion (id) ON DELETE CASCADE;
 ALTER TABLE hn_communautepratique_discussion_domain ADD CONSTRAINT FK_589D120966608EA1 FOREIGN KEY (domaine_dom_id) REFERENCES hn_domaine (dom_id);
+
+ALTER TABLE hn_communautepratique_discussion DROP FOREIGN KEY FK_3C9AF352727ACA70;
+ALTER TABLE hn_communautepratique_discussion ADD CONSTRAINT FK_3C9AF352727ACA70 FOREIGN KEY (parent_id) REFERENCES hn_communautepratique_discussion (id) ON DELETE SET NULL;

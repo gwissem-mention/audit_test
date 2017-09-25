@@ -127,6 +127,11 @@
     margin-left: 6px;
 }
 
+.discussions .discussion .messages .actions {
+    display: flex;
+    justify-content: space-between;
+}
+
 .discussions .discussion .messages .message {
     display: flex;
     padding: 15px 0;
