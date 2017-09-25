@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
+namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
