@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Service\Widget;
 
 use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -51,16 +52,22 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
     protected $currentDomainService;
 
     /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
      * ViewedObjectWidget constructor.
      *
-     * @param \Twig_Environment     $twig
+     * @param \Twig_Environment $twig
      * @param TokenStorageInterface $tokenStorage
-     * @param TranslatorInterface   $translator
-     * @param ObjectRepository      $objectRepository
-     * @param ContenuRepository     $contentRepository
-     * @param RouterInterface       $router
-     * @param BaseUrlProvider       $baseUrlProvider
+     * @param TranslatorInterface $translator
+     * @param ObjectRepository $objectRepository
+     * @param ContenuRepository $contentRepository
+     * @param RouterInterface $router
+     * @param BaseUrlProvider $baseUrlProvider
      * @param CurrentDomaine $currentDomainService
+     * @param SubscriptionRepository $subscriptionRepository
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -70,7 +77,8 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         ContenuRepository $contentRepository,
         RouterInterface $router,
         BaseUrlProvider $baseUrlProvider,
-        CurrentDomaine $currentDomainService
+        CurrentDomaine $currentDomainService,
+        SubscriptionRepository $subscriptionRepository
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
         $this->objectRepository = $objectRepository;
@@ -78,6 +86,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         $this->router = $router;
         $this->baseUrlProvider = $baseUrlProvider;
         $this->currentDomainService = $currentDomainService;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
 
     /**
@@ -106,6 +115,12 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 $this->domains
             );
 
+            $subscribed = $this->subscriptionRepository->findOneBy([
+                'user' => $this->tokenStorage->getToken()->getUser(),
+                'objet' => $object,
+                'contenu' => null,
+            ]);
+
             $data[] = [
                 'shortTitle' => $object->getTitre(),
                 'fullTitle' => $object->getTitre(),
@@ -121,6 +136,11 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     ['object' => $object->getId()]
                 ),
                 'sameDomain' => $baseUrl === $currentDomainUrl,
+                'subscription' => [
+                    'objectId' => $object->getId(),
+                    'contentId' => null,
+                    'subscribed' => $subscribed ? $subscribed->getId() : null,
+                ],
             ];
         }
 
@@ -130,6 +150,13 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 [$content->getConsultations()->first()->getDomaine()],
                 $this->domains
             );
+
+            $subscribed = $this->subscriptionRepository->findOneBy([
+                'user' => $this->tokenStorage->getToken()->getUser(),
+                'contenu' => $content,
+                'objet' => $object,
+            ]);
+
 
             $data[] = [
                 'shortTitle' => $content->getShortTitle(),
@@ -151,6 +178,11 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     ['content' => $content->getId()]
                 ),
                 'sameDomain' => $baseUrl === $currentDomainUrl,
+                'subscription' => [
+                    'objectId' => $object->getId(),
+                    'contentId' => $content->getId(),
+                    'subscribed' => $subscribed ? $subscribed->getId() : null,
+                ],
             ];
         }
 

@@ -26,6 +26,23 @@
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">
+                            {% spaceless %}
+                                <a href="{{ path('hopitalnumerique_objet_subscribe', {
+                                        'object': item.subscription.objectId,
+                                        'content': item.subscription.contentId,
+                                    }) }}"
+                                   class="btn btn-sm btn-{% if item.subscription.subscribed is null %}success{% else %}danger{% endif %} subscribe-btn"
+                                   title="{{ 'viewed_objects.delete'|trans }}"
+                                   data-active="{{ 'viewed_objects.subscribe'|trans }}"
+                                   data-inactive="{{ 'viewed_objects.unsubscribe'|trans }}"
+                                >
+                                    {% if item.subscription.subscribed is null %}
+                                        {{ 'viewed_objects.subscribe'|trans }}
+                                    {% else %}
+                                        {{ 'viewed_objects.unsubscribe'|trans }}
+                                    {% endif %}
+                                </a>
+                            {% endspaceless %}
                             <a href="{{ item.showLink }}" {{ not item.sameDomain ? "target='_blank' " }}class="btn btn-sm btn-success" title="{{ 'viewed_objects.see'|trans }}">
                                 <i class="fa fa-eye"></i>
                             </a>
