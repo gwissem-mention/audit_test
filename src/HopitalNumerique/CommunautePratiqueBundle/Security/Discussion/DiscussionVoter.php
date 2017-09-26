@@ -7,10 +7,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 
+/**
+ * Class DiscussionVoter
+ */
 class DiscussionVoter extends Voter
 {
-    const CREATE = 'create';
-    const REPLY = 'reply';
+    const CREATE = 'cdp_discussion_create';
+    const REPLY = 'cdp_discussion_reply';
 
     /**
      * @param string $attribute
@@ -21,10 +24,6 @@ class DiscussionVoter extends Voter
     protected function supports($attribute, $subject)
     {
         if (!in_array($attribute, [self::CREATE, self::REPLY])) {
-            return false;
-        }
-
-        if (!$subject instanceof Discussion) {
             return false;
         }
 

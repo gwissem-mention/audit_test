@@ -7,6 +7,9 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 
+/**
+ * Class MessageVoter
+ */
 class MessageVoter extends Voter
 {
     const MARK_AS_HELPFUL = 'helpful';

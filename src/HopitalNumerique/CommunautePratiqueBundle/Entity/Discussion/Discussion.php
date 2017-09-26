@@ -106,11 +106,19 @@ class Discussion
      */
     protected $domains;
 
+
     /**
      * Discussion constructor.
+     *
+     * @param $title
+     * @param User $author
+     * @param array $domains
      */
-    public function __construct()
+    public function __construct($title, User $author, array $domains)
     {
+        $this->title = $title;
+        $this->user = $author;
+        $this->domains = $domains;
         $this->children = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->readings = new ArrayCollection();
@@ -297,18 +305,6 @@ class Discussion
     public function getDomains()
     {
         return $this->domains;
-    }
-
-    /**
-     * @param Domaine[] $domains
-     *
-     * @return Discussion
-     */
-    public function setDomains(array $domains)
-    {
-        $this->domains = $domains;
-
-        return $this;
     }
 
     /**

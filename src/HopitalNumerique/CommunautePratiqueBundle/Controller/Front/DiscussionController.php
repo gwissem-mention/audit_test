@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
@@ -43,7 +44,7 @@ class DiscussionController extends Controller
         $this->getDoctrine()->getManager()->clear();
         $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $this->getUser()));
 
-        if ($this->isGranted(DiscussionVoter::CREATE, new Discussion())) {
+        if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
             $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $newDiscussionCommand, [
                 'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion')
@@ -51,7 +52,7 @@ class DiscussionController extends Controller
             ;
         }
 
-        if ($this->isGranted(DiscussionVoter::REPLY, new Discussion())) {
+        if ($this->isGranted(DiscussionVoter::REPLY)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
                 'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
             ])->createView();
@@ -68,12 +69,12 @@ class DiscussionController extends Controller
     /**
      * @param Request $request
      *
+     * @Security("is_granted('cdp_discussion_create')")
+     *
      * @return Response|RedirectResponse
      */
     public function createDiscussionAction(Request $request)
     {
-        $this->denyAccessUnlessGranted(DiscussionVoter::CREATE);
-
         $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
 
         $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $command);
@@ -164,12 +165,12 @@ class DiscussionController extends Controller
     /**
      * @param Message $message
      *
+     * @Security("is_granted('mark_as_helpful', message)")
+     *
      * @return JsonResponse
      */
     public function toggleHelpfulMessageAction(Message $message)
     {
-        $this->denyAccessUnlessGranted(MessageVoter::MARK_AS_HELPFUL, $message);
-
         $message->toggleHelpful();
 
         $this->getDoctrine()->getManager()->flush();
@@ -180,12 +181,12 @@ class DiscussionController extends Controller
     /**
      * @param Message $message
      *
+     * @Security("is_granted('delete', message)")
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteMessageAction(Message $message)
     {
-        $this->denyAccessUnlessGranted(MessageVoter::DELETE, $message);
-
         $discussionId = $message->getDiscussion()->getId();
         $this->get(DeleteMessageHandler::class)->handle(new DeleteMessageCommand($message));
 

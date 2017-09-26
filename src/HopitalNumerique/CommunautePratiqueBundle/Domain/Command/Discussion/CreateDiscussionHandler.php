@@ -36,10 +36,7 @@ class CreateDiscussionHandler
      */
     public function handle(CreateDiscussionCommand $command)
     {
-        $discussion = new Discussion();
-        $discussion->setTitle($command->title);
-        $discussion->setUser($command->author);
-        $discussion->setDomains($command->domains);
+        $discussion = new Discussion($command->title, $command->author, $command->domains);
         if ($command->group) {
 
         } else {
