@@ -222,4 +222,17 @@ class DiscussionController extends Controller
             'discussion' => $discussionId,
         ]);
     }
+
+    /**
+     * @param Discussion $discussion
+     */
+    public function downloadDiscussionAction(Discussion $discussion)
+    {
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
+
+        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
+
+        die('@TODO');
+    }
 }

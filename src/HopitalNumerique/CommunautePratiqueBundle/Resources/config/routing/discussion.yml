@@ -8,6 +8,12 @@ hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
     requirements:
         discussion: \d+
 
+hopitalnumerique_communautepratique_discussions_download_discussion:
+    path: /{discussion}/download
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadDiscussion }
+    requirements:
+        discussion: \d+
+
 hopitalnumerique_communautepratique_discussions_create_discussion:
     path: /create
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion }
