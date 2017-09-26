@@ -85,7 +85,7 @@
                             </a>
                         {% endif %}
                     </div>
-                    {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|localizeddate('short', 'none')})|raw }}
+                    {{ 'discussion.message.item.infos'|trans({'%author%': '<b data-toggle="tooltip" data-html="true" title="'~include('@HopitalNumeriqueCommunautePratique/front/discussion/author_tooltip.html.twig', {'user': message.user})|e~'">'~message.user.prenomNom~'</b>', '%date%': message.createdAt|localizeddate('short', 'none')})|raw }}
 
                     {% if message.user.communautePratiqueAnimateurGroupes.count > 0 %}
                         <span class="animator">

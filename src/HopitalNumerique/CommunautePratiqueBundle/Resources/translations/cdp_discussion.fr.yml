@@ -58,3 +58,8 @@ discussion:
             form:
                 submit:
                     text: Envoyer
+    author_tooltip:
+        organization: "Etablissement :"
+        presentation: "Présentation :"
+        hobbies: "Centre d'intérêts :"
+        computer_skills: "Logiciels maitrisés :"
