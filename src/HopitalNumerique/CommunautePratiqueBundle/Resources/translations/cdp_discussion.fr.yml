@@ -20,7 +20,18 @@ discussion:
             submit:
                 text: Publier
         success: Nouvelle discussion crée avec succés.
-
+    discussion:
+        actions:
+            up:
+                label: Recommandée pour la communauté
+            download:
+                label: Télécharger la discussion
+            group_copy:
+                label: Copier dans un groupe
+            cart:
+                label: Ajouter au panier
+            subscribtion:
+                label: S'abonner
     message:
         title: "Message | Messages"
         new_message_count: "Un %highlight% a été posté de puis votre dernière visite | De %highlight% ont été postés de puis votre dernière visite"

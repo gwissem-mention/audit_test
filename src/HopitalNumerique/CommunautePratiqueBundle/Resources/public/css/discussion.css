@@ -60,7 +60,7 @@
 
 .discussions .wrapper .list .item .icon {
     color: #ec0034;
-    font-size: 15px;
+    font-size: 17px;
     position: relative;
     top: 3px;
     margin-right: 5px;
@@ -70,6 +70,7 @@
 
 .discussions .wrapper .list .item .icon.new-message-badge {
     color: #fff;
+    font-size: 11px;
 }
 
 .discussions .wrapper .list .item .title {

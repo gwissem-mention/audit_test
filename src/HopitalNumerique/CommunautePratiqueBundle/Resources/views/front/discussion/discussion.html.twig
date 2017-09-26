@@ -33,7 +33,11 @@
         <div class="actions-block">
             <select>
                 <option></option>
-                <option>Ajouter au panier</option>
+                <option value="" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
+                <option value="">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                <option value="" data-action="async">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
+                <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
+                <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id}) }}" data-action="async">{{ 'discussion.discussion.actions.up.label'|trans }}</option>
             </select>
         </div>
     </div>

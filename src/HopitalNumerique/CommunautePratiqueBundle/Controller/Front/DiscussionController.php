@@ -179,6 +179,20 @@ class DiscussionController extends Controller
     }
 
     /**
+     * @param Discussion $discussion
+     *
+     * @return JsonResponse
+     */
+    public function toggleRecommendationAction(Discussion $discussion)
+    {
+        $discussion->setRecommended(!$discussion->isRecommended());
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return new JsonResponse(null);
+    }
+
+    /**
      * @param Message $message
      *
      * @Security("is_granted('delete', message)")

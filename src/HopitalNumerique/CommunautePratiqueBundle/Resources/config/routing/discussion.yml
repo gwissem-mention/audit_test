@@ -35,6 +35,10 @@ hopitalnumerique_communautepratique_discussions_discussion_message_helpful:
     path: /message/{message}/helpful/toggle
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:toggleHelpfulMessage }
 
+hopitalnumerique_communautepratique_discussions_discussion_recommendation:
+    path: /{discussion}/recommendation/toggle
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:toggleRecommendation }
+
 hopitalnumerique_communautepratique_discussions_discussion_message_delete:
     path: /message/{message}/delete
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:deleteMessage }
