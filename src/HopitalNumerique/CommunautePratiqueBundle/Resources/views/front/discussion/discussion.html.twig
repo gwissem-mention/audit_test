@@ -19,7 +19,7 @@
         {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
         {% if app.user and discussion.newMessageCount(app.user) %}
             <span class="new-message">
-                {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<u>'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</u>'})|raw }}
+                {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<a href="#new-message">'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</a>'})|raw }}
                 <span class="new-message-badge">{{ discussion.newMessageCount(app.user) }}</span>
             </span>
         {% endif %}
@@ -46,8 +46,15 @@
         </div>
     </div>
 
+    {% set newMessage = false %}
     {% for message in discussion.messages %}
-        <div class="message">
+        {% set isNewMessageId = false%}
+        {% if app.user and newMessage == false and discussion.isNewMessage(app.user, message) %}
+            {% set newMessage = true %}
+            {% set isNewMessageId = true %}
+        {% endif %}
+
+        <div class="message"{{ isNewMessageId ? ' id="new-message"' }}>
             <div class="message-avatar">
                 <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
             </div>

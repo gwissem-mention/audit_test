@@ -329,6 +329,26 @@ class Discussion
     }
 
     /**
+     * @param User $user
+     * @param Message $message
+     *
+     * @return bool
+     */
+    public function isNewMessage(User $user, Message $message)
+    {
+        /** @var Read $read */
+        $read = $this->getReadings()->filter(function (Read $read) use ($user) {
+            return $read->getUser()->getId() === $user->getId();
+        })->first();
+
+        if (!$read) {
+            return false;
+        }
+
+        return $read->getLastMessageDate() < $message->getCreatedAt();
+    }
+
+    /**
      * @return bool
      */
     public function hasHelpfulMessage()

@@ -129,6 +129,15 @@
     margin-bottom: 15px;
 }
 
+.discussions .discussion .messages .title a {
+    color: #777;
+    text-decoration: underline;
+}
+
+.discussions .discussion .messages .title a:hover {
+    color: #333;
+}
+
 .discussions .discussion .messages .title .new-message {
     font-weight: normal;
     font-size: 0.9em;
