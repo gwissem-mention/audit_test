@@ -42,7 +42,7 @@
                         {% endif %}
 
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), message) %}
-                            <a href="#">
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_edit_reply_discussion', {'discussion': discussion.id, 'message': message.id}) }}">
                                 <i class="fa fa-pencil-square-o"></i>
                             </a>
                         {% endif %}
@@ -70,6 +70,6 @@
     {% endfor %}
 
     {% if answerDiscussionForm is not null %}
-        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply.html.twig', {'form': answerDiscussionForm}) }}
+        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply_form.html.twig', {'form': answerDiscussionForm}) }}
     {% endif %}
 </div>

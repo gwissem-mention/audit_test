@@ -30,6 +30,10 @@ discussion:
                 confirm: Voulez-vous vraiment supprimer ce message ?
                 success: Message supprimé avec succés.
         reply:
+            add:
+                title: Répondre à une discussion
+            edit:
+                title: Modifier une réponse
             form:
                 submit:
                     text: Envoyer

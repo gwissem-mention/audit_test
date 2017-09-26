@@ -37,9 +37,13 @@ class PostDiscussionMessageHandler
      */
     public function handle(PostDiscussionMessageCommand $command)
     {
-        $message = new Message($command->discussion, $command->content, $command->author);
-
-        $this->entityManager->persist($message);
+        if (null !== $command->message) {
+            $message = $command->message;
+            $message->setContent($command->content);
+        } else {
+            $message = new Message($command->discussion, $command->content, $command->author);
+            $this->entityManager->persist($message);
+        }
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
 

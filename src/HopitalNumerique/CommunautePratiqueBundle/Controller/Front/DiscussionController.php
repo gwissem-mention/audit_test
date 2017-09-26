@@ -98,14 +98,20 @@ class DiscussionController extends Controller
     /**
      * @param Request $request
      * @param Discussion $discussion
+     * @param Message|null $message
      *
-     * @return RedirectResponse
+     * @return RedirectResponse|Response
      */
-    public function replyAction(Request $request, Discussion $discussion)
+    public function replyAction(Request $request, Discussion $discussion, Message $message = null)
     {
-        $this->denyAccessUnlessGranted(DiscussionVoter::REPLY, $discussion);
+        if (null !== $message) {
+            $this->denyAccessUnlessGranted(MessageVoter::EDIT, $message);
+            $command = new PostDiscussionMessageCommand($discussion, $this->getUser(), $message);
+        } else {
+            $this->denyAccessUnlessGranted(DiscussionVoter::REPLY, $discussion);
+            $command = new PostDiscussionMessageCommand($discussion, $this->getUser());
+        }
 
-        $command = new PostDiscussionMessageCommand($discussion, $this->getUser());
         $form = $this->createForm(DiscussionMessageType::class, $command);
 
         $form->handleRequest($request);
@@ -117,6 +123,18 @@ class DiscussionController extends Controller
                 'discussion' => $discussion->getId(),
             ]);
         }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/reply_form.html.twig', [
+                'form' => $form->createView(),
+                'message' => $message,
+            ]);
+        }
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/reply.html.twig', [
+            'form' => $form->createView(),
+            'message' => $message,
+        ]);
     }
 
     /**
