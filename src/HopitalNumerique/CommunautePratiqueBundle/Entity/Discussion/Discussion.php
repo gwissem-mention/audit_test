@@ -108,18 +108,12 @@ class Discussion
 
     /**
      * Discussion constructor.
-     *
-     * @param $title
-     * @param User $author
      */
-    public function __construct($title, User $author, array $domains)
+    public function __construct()
     {
-        $this->title = $title;
-        $this->user = $author;
         $this->children = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->readings = new ArrayCollection();
-        $this->domains = $domains;
         $this->createdAt = new \DateTime();
     }
 
@@ -303,6 +297,18 @@ class Discussion
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     *
+     * @return Discussion
+     */
+    public function setDomains(array $domains)
+    {
+        $this->domains = $domains;
+
+        return $this;
     }
 
     /**

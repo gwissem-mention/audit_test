@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter;
 use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,12 +43,15 @@ class DiscussionController extends Controller
         $this->getDoctrine()->getManager()->clear();
         $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $this->getUser()));
 
-        if ($this->getUser()) {
+        if ($this->isGranted(DiscussionVoter::CREATE, new Discussion())) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
             $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $newDiscussionCommand, [
                 'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion')
-            ])->createView();
+            ])->createView()
+            ;
+        }
 
+        if ($this->isGranted(DiscussionVoter::REPLY, new Discussion())) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
                 'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
             ])->createView();
@@ -68,6 +72,8 @@ class DiscussionController extends Controller
      */
     public function createDiscussionAction(Request $request)
     {
+        $this->denyAccessUnlessGranted(DiscussionVoter::CREATE);
+
         $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
 
         $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $command);
@@ -97,6 +103,8 @@ class DiscussionController extends Controller
      */
     public function replyAction(Request $request, Discussion $discussion)
     {
+        $this->denyAccessUnlessGranted(DiscussionVoter::REPLY, $discussion);
+
         $command = new PostDiscussionMessageCommand($discussion, $this->getUser());
         $form = $this->createForm(DiscussionMessageType::class, $command);
 
@@ -123,13 +131,15 @@ class DiscussionController extends Controller
 
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
 
-        $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
-            'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
-        ])->createView();
+        if ($this->isGranted(DiscussionVoter::REPLY, $discussion)) {
+            $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
+                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
+            ])->createView();
+        }
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
             'discussion' => $discussion,
-            'answerDiscussionForm' => $answerDiscussionForm,
+            'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
         ]);
     }
 
@@ -156,6 +166,8 @@ class DiscussionController extends Controller
      */
     public function deleteMessageAction(Message $message)
     {
+        $this->denyAccessUnlessGranted(MessageVoter::DELETE, $message);
+
         $discussionId = $message->getDiscussion()->getId();
         $this->get(DeleteMessageHandler::class)->handle(new DeleteMessageCommand($message));
 

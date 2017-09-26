@@ -69,5 +69,7 @@
         </div>
     {% endfor %}
 
-    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply.html.twig', {'form': answerDiscussionForm}) }}
+    {% if answerDiscussionForm is not null %}
+        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply.html.twig', {'form': answerDiscussionForm}) }}
+    {% endif %}
 </div>

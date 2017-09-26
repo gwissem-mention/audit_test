@@ -4,3 +4,9 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter
+        tags:
+            - { name: security.voter }
+        public: false

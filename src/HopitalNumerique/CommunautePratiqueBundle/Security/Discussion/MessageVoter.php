@@ -58,6 +58,12 @@ class MessageVoter extends Voter
         return false;
     }
 
+    /**
+     * @param Message $message
+     * @param User $user
+     *
+     * @return bool
+     */
     public function canMarkAsHelpful(Message $message, User $user)
     {
         if ($user->hasRoleCDPAdmin()) {
@@ -75,6 +81,12 @@ class MessageVoter extends Voter
         return false;
     }
 
+    /**
+     * @param Message $message
+     * @param User $user
+     *
+     * @return bool
+     */
     public function canEdit(Message $message, User $user)
     {
         if ($user->hasRoleCDPAdmin()) {

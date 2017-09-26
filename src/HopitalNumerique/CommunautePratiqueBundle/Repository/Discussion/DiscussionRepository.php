@@ -78,8 +78,8 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('cdpGroup')
             ->addSelect('animators')
 
-            ->join('discussion.groups', 'cdpGroup')
-            ->join('cdpGroup.animateurs', 'animators')
+            ->leftJoin('discussion.groups', 'cdpGroup')
+            ->leftJoin('cdpGroup.animateurs', 'animators')
             ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
             ->setParameter('domains', $query->domains)
 
