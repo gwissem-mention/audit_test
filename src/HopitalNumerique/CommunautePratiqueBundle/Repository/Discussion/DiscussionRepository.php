@@ -75,6 +75,9 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('discussion')
             ->addSelect('message')
 
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
+            ->setParameter('domains', $query->domains)
+
             ->andWhere('discussion = :discussion')
             ->setParameter('discussion', $query->discussion)
         ;
@@ -99,6 +102,6 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->addOrderBy('message.createdAt', 'ASC')
         ;
 
-        return $queryBuilder->getQuery()->getSingleResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

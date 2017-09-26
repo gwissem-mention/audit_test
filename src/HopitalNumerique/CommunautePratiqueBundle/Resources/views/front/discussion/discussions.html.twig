@@ -74,7 +74,9 @@
         </div>
 
         <div class="discussion">
-            {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussion.html.twig', {'scope': 'public', 'discussion': currentDiscussion}) }}
+            {% if currentDiscussion is not null %}
+                {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussion.html.twig', {'scope': 'public', 'discussion': currentDiscussion}) }}
+            {% endif %}
         </div>
     </div>
 </div>

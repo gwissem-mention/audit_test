@@ -39,7 +39,7 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, [], $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $this->getUser()));
+        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $this->getUser()));
 
         if ($this->getUser()) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
@@ -117,7 +117,10 @@ class DiscussionController extends Controller
      */
     public function discussionAction(Discussion $discussion)
     {
-        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $this->getUser()));
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
+
+        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
 
         $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
             'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
