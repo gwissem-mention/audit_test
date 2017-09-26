@@ -46,12 +46,17 @@
         </div>
     </div>
 
-    {% set newMessage = false %}
+    {% set firstNewMessage = false %}
     {% for message in discussion.messages %}
-        {% set isNewMessageId = false%}
-        {% if app.user and newMessage == false and discussion.isNewMessage(app.user, message) %}
-            {% set newMessage = true %}
-            {% set isNewMessageId = true %}
+        {% set isNewMessageId = false %}
+        {% set isNewMessage = false %}
+        {% if app.user and discussion.isNewMessage(app.user, message) %}
+            {% if firstNewMessage == false%}
+                {% set firstNewMessage = true %}
+                {% set isNewMessageId = true %}
+            {% endif %}
+
+            {% set isNewMessage = true %}
         {% endif %}
 
         <div class="message"{{ isNewMessageId ? ' id="new-message"' }}>
@@ -87,6 +92,10 @@
                             <i class="fa fa-bullhorn"></i>
                             {{ 'discussion.public.animator'|trans }}
                         </span>
+                    {% endif %}
+
+                    {% if isNewMessage %}
+                        <span class="is-new">{{ 'discussion.message.item.is_new'|trans }}</span>
                     {% endif %}
                 </div>
                 <div class="message-body">

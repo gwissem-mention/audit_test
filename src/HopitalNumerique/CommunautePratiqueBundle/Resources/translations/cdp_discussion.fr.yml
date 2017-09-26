@@ -45,6 +45,7 @@ discussion:
         new_message_highlight: "nouveau message | nouveaux messages"
         item:
             infos: Par %author% le %date%
+            is_new: NEW
         actions:
             delete:
                 confirm: Voulez-vous vraiment supprimer ce message ?
