@@ -31,10 +31,14 @@ var Discussion;
                     that.$discussion.html(response);
                     that.$list.find('a').removeClass('active');
                     $link.addClass('active');
+                    that.messageEvents();
                 })
             });
 
-            that.$messages.find('.helpful').on('click', function (e) {
+        },
+
+        messageEvents: function() {
+            $('.discussion .message').find('.helpful').on('click', function (e) {
                 var $link = $(this);
                 e.preventDefault();
 
@@ -48,7 +52,6 @@ var Discussion;
                     loader.finished();
                 });
             });
-
         }
     }
 })();
