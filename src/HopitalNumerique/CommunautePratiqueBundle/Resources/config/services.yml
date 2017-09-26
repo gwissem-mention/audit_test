@@ -6,6 +6,7 @@ imports:
     - { resource: "services/handlers.yml" }
     - { resource: "services/repository.yml" }
     - { resource: "services/event_subscriber.yml" }
+    - { resource: "services/voter.yml" }
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:

@@ -1,0 +1,6 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter
+        tags:
+            - { name: security.voter }
+        public: false

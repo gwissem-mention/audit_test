@@ -82,7 +82,7 @@ class Discussion
     protected $createdAt;
 
     /**
-     * @var Groupe
+     * @var Groupe[]
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe")
      * @ORM\JoinTable(name="hn_communautepratique_discussion_group", inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="group_id")})
@@ -276,7 +276,7 @@ class Discussion
     }
 
     /**
-     * @return Groupe
+     * @return Groupe[]
      */
     public function getGroups()
     {

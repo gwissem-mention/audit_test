@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -139,6 +140,8 @@ class DiscussionController extends Controller
      */
     public function toggleHelpfulMessageAction(Message $message)
     {
+        $this->denyAccessUnlessGranted(MessageVoter::MARK_AS_HELPFUL, $message);
+
         $message->toggleHelpful();
 
         $this->getDoctrine()->getManager()->flush();

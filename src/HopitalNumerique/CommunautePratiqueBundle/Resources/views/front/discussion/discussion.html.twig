@@ -34,18 +34,24 @@
             <div class="message-content">
                 <div class="message-infos">
                     <div class="actions">
-                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_helpful', {'message': message.id}) }}" class="helpful{{ message.helpful ? ' active' }}">
-                            <i class="fa fa-star-o inactive"></i>
-                            <i class="fa fa-star active"></i>
-                        </a>
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::MARK_AS_HELPFUL'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_helpful', {'message': message.id}) }}" class="helpful{{ message.helpful ? ' active' }}">
+                                <i class="fa fa-star-o inactive"></i>
+                                <i class="fa fa-star active"></i>
+                            </a>
+                        {% endif %}
 
-                        <a href="#">
-                            <i class="fa fa-pencil-square-o"></i>
-                        </a>
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), message) %}
+                            <a href="#">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        {% endif %}
 
-                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id}) }}" onclick="return confirm('{{ 'discussion.message.actions.delete.confirm'|trans|e }}');">
-                            <i class="fa fa-trash-o"></i>
-                        </a>
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::DELETE'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id}) }}" onclick="return confirm('{{ 'discussion.message.actions.delete.confirm'|trans|e }}');">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        {% endif %}
                     </div>
                     {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|localizeddate('short', 'none')})|raw }}
 

@@ -74,7 +74,12 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder = $this
             ->createQueryBuilder('discussion')
             ->addSelect('message')
+            ->addSelect('author')
+            ->addSelect('cdpGroup')
+            ->addSelect('animators')
 
+            ->join('discussion.groups', 'cdpGroup')
+            ->join('cdpGroup.animateurs', 'animators')
             ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
             ->setParameter('domains', $query->domains)
 
