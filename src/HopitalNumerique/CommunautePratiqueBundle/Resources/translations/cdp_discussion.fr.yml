@@ -23,7 +23,13 @@ discussion:
     discussion:
         actions:
             up:
-                label: Recommandée pour la communauté
+                label:
+                    up: Recommander pour la communauté
+                    down: Ne plus recommander pour la communauté
+                success:
+                    up: La discussion est désormais recommandée.
+                    down: La discussion n'est plus recommandée.
+
             download:
                 label: Télécharger la discussion
             group_copy:

@@ -14,6 +14,7 @@ class DiscussionVoter extends Voter
 {
     const CREATE = 'cdp_discussion_create';
     const REPLY = 'cdp_discussion_reply';
+    const MARK_AS_RECOMMENDED = 'mark_as_recommended';
 
     /**
      * @param string $attribute
@@ -46,6 +47,8 @@ class DiscussionVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::MARK_AS_RECOMMENDED:
+                return $this->markAsRecommended($user, $subject);
             case self::CREATE:
             case self::REPLY:
                 return $this->canCreate($user);
@@ -54,6 +57,26 @@ class DiscussionVoter extends Voter
         return false;
     }
 
+    /**
+     * @param User $user
+     * @param Discussion $discussion
+     *
+     * @return bool
+     */
+    public function markAsRecommended(User $user, Discussion $discussion)
+    {
+        if ($user->hasRoleCDPAdmin()) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
     public function canCreate(User $user)
     {
         if ($user->hasRoleCDPAdmin()) {

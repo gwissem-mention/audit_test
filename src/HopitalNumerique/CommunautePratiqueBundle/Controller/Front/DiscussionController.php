@@ -181,15 +181,27 @@ class DiscussionController extends Controller
     /**
      * @param Discussion $discussion
      *
-     * @return JsonResponse
+     * @return Response
      */
     public function toggleRecommendationAction(Discussion $discussion)
     {
+        $this->denyAccessUnlessGranted(DiscussionVoter::MARK_AS_RECOMMENDED, $discussion);
+
         $discussion->setRecommended(!$discussion->isRecommended());
 
         $this->getDoctrine()->getManager()->flush();
 
-        return new JsonResponse(null);
+        $direction = $discussion->isRecommended() ? 'up' : 'down';
+
+        $this->addFlash('success', $this->get('translator')->trans(
+            sprintf('discussion.discussion.actions.up.success.%s', $direction),
+            [],
+            'cdp_discussion'
+        ));
+
+        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+            'discussion' => $discussion->getId(),
+        ]);
     }
 
     /**

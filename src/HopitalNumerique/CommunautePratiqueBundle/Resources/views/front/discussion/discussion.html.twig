@@ -31,13 +31,17 @@
         </div>
 
         <div class="actions-block">
-            <select>
+            <select class="discussion-actions">
                 <option></option>
                 <option value="" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
                 <option value="">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
-                <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id}) }}" data-action="async">{{ 'discussion.discussion.actions.up.label'|trans }}</option>
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id}) }}" data-action="goto">
+                        {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'up' : 'down'))|trans }}
+                    </option>
+                {% endif %}
             </select>
         </div>
     </div>
