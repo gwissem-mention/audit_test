@@ -99,11 +99,23 @@
 }
 
 .discussions .discussion .discussion-title {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 25px;
+}
+
+.discussions .discussion .discussion-title h2 {
     font-size: 15px;
     font-weight: bold;
     margin: 0;
-    border-bottom: 1px solid #ddd;
-    padding: 15px 25px;
+}
+
+.discussions .discussion .discussion-title .group {
+    font-size: 10px;
+    margin-top: 3px;
+}
+
+.discussions .discussion .discussion-title .group b {
+    color: #ec0034;
 }
 
 .discussions .discussion .messages {

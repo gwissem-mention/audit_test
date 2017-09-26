@@ -1,6 +1,18 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-<h2 class="discussion-title">{{ discussion.title }}</h2>
+<div class="discussion-title">
+    <h2>{{ discussion.title }}</h2>
+
+    {% if discussion.groups|length %}
+        <div class="group">
+            {% set groupsLabel = [] %}
+            {% for group in discussion.groups %}
+                {% set groupsLabel = groupsLabel|merge(['<b>'~group.titre~'</b>']) %}
+            {% endfor %}
+            {{ 'discussion.public.discussion.from_group'|transchoice(groupsLabel|length, {'%groups%': groupsLabel|join(', ')})|raw }}
+        </div>
+    {% endif %}
+</div>
 
 <div class="messages">
     <h3 class="title">

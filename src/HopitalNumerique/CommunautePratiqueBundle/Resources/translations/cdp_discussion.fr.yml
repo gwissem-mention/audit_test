@@ -2,6 +2,8 @@ discussion:
     public:
         title: Espace de discussion
         animator: Animateur de groupes
+        discussion:
+            from_group: "Discussion issue du groupe %groups% | Discussion issue des groupes %groups%"
     list:
         item:
             message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
