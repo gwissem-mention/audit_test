@@ -44,14 +44,15 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 
         if (!$query->displayAll) {
             $queryBuilder->orWhere('message.published = TRUE');
+
+            if (count($query->displayAllForGroups)) {
+                $queryBuilder
+                    ->orWhere('cdpGroup IN (:displayAllForGroups)')
+                    ->setParameter('displayAllForGroups', $query->displayAllForGroups)
+                ;
+            }
         }
 
-        if (count($query->displayAllForGroups)) {
-            $queryBuilder
-                ->orWhere('cdpGroup IN (:displayAllForGroups)')
-                ->setParameter('displayAllForGroups', $query->displayAllForGroups)
-            ;
-        }
 
         $queryBuilder
             ->addOrderBy('message.createdAt', 'DESC')
@@ -78,6 +79,8 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('cdpGroup')
             ->addSelect('animators')
 
+            ->join('discussion.messages', 'message')
+            ->join('message.user', 'author')
             ->leftJoin('discussion.groups', 'cdpGroup')
             ->leftJoin('cdpGroup.animateurs', 'animators')
             ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
@@ -97,13 +100,10 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (!$query->displayAll) {
-            $queryBuilder->join('discussion.messages', 'message', Join::WITH, 'message.published = TRUE');
-        } else {
-            $queryBuilder->join('discussion.messages', 'message');
+            $queryBuilder->andWhere('message.published = TRUE');
         }
 
         $queryBuilder
-            ->join('message.user', 'author')
             ->addOrderBy('message.createdAt', 'ASC')
         ;
 
