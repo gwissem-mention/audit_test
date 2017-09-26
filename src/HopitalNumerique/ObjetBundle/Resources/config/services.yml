@@ -318,7 +318,7 @@ services:
             - '@event_dispatcher'
             - '@security.token_storage'
             - '@hopitalnumerique_objet.repository.consultation'
-            - '@hopitalnumerique\objetbundle\repository\subscriptionrepository'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         tags:
             - { name: notification.aggregator, key: publication_notified }
 
@@ -328,7 +328,7 @@ services:
             - '@event_dispatcher'
             - '@security.token_storage'
             - '@hopitalnumerique_objet.repository.consultation'
-            - '@hopitalnumerique\objetbundle\repository\subscriptionrepository'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         tags:
             - { name: notification.aggregator, key: publication_commented }
 
@@ -343,3 +343,15 @@ services:
         arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: publication_commented }
+
+    HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+
+    HopitalNumerique\ObjetBundle\Domain\Command\UnsubscribeToObjectHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\UnsubscribeToObjectHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'

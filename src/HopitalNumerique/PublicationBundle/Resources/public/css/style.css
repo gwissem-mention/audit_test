@@ -143,6 +143,7 @@
     #publication #productions-associes .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions-associes .wrapper-results .results .fa-refresh{ color:#3da20b; }
     #publication #productions-associes ul li {font-size: 13px;}
+    #publication .toggle {display: inline-block;vertical-align: middle;margin-right: 15px}
 
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
