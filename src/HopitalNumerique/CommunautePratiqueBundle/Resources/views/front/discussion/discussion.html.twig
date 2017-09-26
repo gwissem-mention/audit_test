@@ -34,7 +34,7 @@
             <select class="discussion-actions">
                 <option></option>
                 <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
-                <option value="">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
@@ -92,4 +92,13 @@
     {% if answerDiscussionForm is not null %}
         {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply_form.html.twig', {'form': answerDiscussionForm}) }}
     {% endif %}
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="action-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
 </div>

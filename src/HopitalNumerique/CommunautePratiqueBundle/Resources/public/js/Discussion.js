@@ -50,6 +50,13 @@ var Discussion;
                     case 'goto':
                         location.href = value;
                         break;
+                    case 'modal':
+                        var loader = $(this).parents('.actions-block').nodevoLoader().start();
+                        $.get(value, function (response) {
+                            $('#action-modal').modal().find('.modal-content').html(response);
+                            loader.finished();
+                        });
+                        break;
                 }
             });
 

@@ -2,8 +2,11 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter;
 use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -234,5 +237,48 @@ class DiscussionController extends Controller
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
 
         die('@TODO');
+    }
+
+    /**
+     * @param Request $request
+     * @param Discussion $discussion
+     *
+     * @Security("is_granted('copy_to_group', discussion)")
+     *
+     * @return RedirectResponse|Response
+     */
+    public function copyToGroupAction(Request $request, Discussion $discussion)
+    {
+        $groupRepository = $this->get('hopitalnumerique_communautepratique.repository.groupe');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->hasRoleCDPAdmin()) {
+            $groupsAvailable = array_filter($groupRepository->findAll(), function (Groupe $group) use ($discussion) {
+                return !$discussion->getGroups()->contains($group);
+            });
+        } else {
+            $groupsAvailable = $user->getCommunautePratiqueAnimateurGroupes()->filter(function (Groupe $group) use ($discussion) {
+                return !$discussion->getGroups()->contains($group);
+            });
+        }
+
+        if ($groupId = $request->request->get('group', null)) {
+            if ($group = $groupRepository->find($groupId)) {
+                $discussion->addGroup($group);
+                $this->getDoctrine()->getManager()->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.group_copy.success', [], 'cdp_discussion'));
+
+                return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+                    'discussion' => $discussion->getId(),
+                ]);
+            }
+        }
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/copy.html.twig', [
+            'groups' => $groupsAvailable,
+            'discussion' => $discussion,
+        ]);
     }
 }

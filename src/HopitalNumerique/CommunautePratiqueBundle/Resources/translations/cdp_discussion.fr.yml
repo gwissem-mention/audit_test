@@ -19,7 +19,7 @@ discussion:
                 label: Message
             submit:
                 text: Publier
-        success: Nouvelle discussion crée avec succés.
+        success: Nouvelle discussion créée avec succés.
     discussion:
         actions:
             up:
@@ -34,6 +34,7 @@ discussion:
                 label: Télécharger la discussion
             group_copy:
                 label: Copier dans un groupe
+                success: Discussion copiée dans le groupe.
             cart:
                 label: Ajouter au panier
             subscribtion:

@@ -15,6 +15,7 @@ class DiscussionVoter extends Voter
     const CREATE = 'cdp_discussion_create';
     const REPLY = 'cdp_discussion_reply';
     const MARK_AS_RECOMMENDED = 'mark_as_recommended';
+    const COPY_TO_GROUP = 'copy_to_group';
 
     /**
      * @param string $attribute
@@ -24,7 +25,7 @@ class DiscussionVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::CREATE, self::REPLY])) {
+        if (!in_array($attribute, [self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
             return false;
         }
 
@@ -48,7 +49,8 @@ class DiscussionVoter extends Voter
 
         switch ($attribute) {
             case self::MARK_AS_RECOMMENDED:
-                return $this->markAsRecommended($user, $subject);
+            case self::COPY_TO_GROUP:
+                return $this->canManage($user, $subject);
             case self::CREATE:
             case self::REPLY:
                 return $this->canCreate($user);
@@ -63,7 +65,7 @@ class DiscussionVoter extends Voter
      *
      * @return bool
      */
-    public function markAsRecommended(User $user, Discussion $discussion)
+    public function canManage(User $user, Discussion $discussion)
     {
         if ($user->hasRoleCDPAdmin()) {
             return true;
