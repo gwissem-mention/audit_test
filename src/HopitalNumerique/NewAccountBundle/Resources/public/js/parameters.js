@@ -13,6 +13,9 @@ $(function () {
         })
     ;
     });
+    $('#notifications-parameters .panel-body .content .description select').change(function (evt) {
+        evt.target.dataset.value = evt.target.value
+    });
     $('form.toValidate').validationEngine();
     $('.slider-input:first').jRange({
         from: 1,
@@ -29,6 +32,7 @@ $(function () {
         from: 0,
         to: 23,
         step: 1,
+        scale: ['00h00', '23h00'],
         snap: true,
         format: function (value) {
             return value + 'h00';

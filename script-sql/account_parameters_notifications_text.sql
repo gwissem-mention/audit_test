@@ -1,1 +1,36 @@
+INSERT INTO core_textedynamique_code (txt_code, txt_texte) VALUES ('Module_account_parameters_notifications_explanations', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fermentum luctus erat eget porta. Vestibulum luctus dictum molestie. Donec nec felis consectetur, sollicitudin magna sit amet, tempor metus.</p>');
 INSERT INTO core_textedynamique_code (txt_code, txt_texte) VALUES ('Module_account_parameters_notifications', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et nisi nibh. Aenean ultricies nisi nunc. Etiam sit amet maximus sem. Integer sit amet dictum tellus. Etiam sit amet neque velit. Donec varius, elit dignissim interdum dictum, massa elit venenatis libero, eget sagittis sapien risus nec turpis. Integer ultricies ornare massa sed ullamcorper</p>');
+
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 1);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 2);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 3);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 4);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 5);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 7);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 8);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 9);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 10);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 11);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 12);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 13);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 14);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 15);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 17);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (50, 18);
+
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 1);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 2);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 3);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 4);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 5);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 7);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 8);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 9);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 10);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 11);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 12);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 13);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 14);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 15);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 17);
+INSERT INTO core_textedynamique_code_domaine (txt_id, dom_id) VALUES (51, 18);

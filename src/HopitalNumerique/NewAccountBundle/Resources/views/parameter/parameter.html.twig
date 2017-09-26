@@ -83,38 +83,48 @@
         </div>
         {% trans_default_domain 'notifications' %}
         <div class="panel-body">
+            <div class="description">{{'Module_account_parameters_notifications_explanations'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</div>
             {% for key, section in notifications.sections %}
                 {% set trans_path = 'notification-config.' ~ key ~ '.' %}
                 <div class="row content">
-                    <strong>{{ (trans_path ~ 'section')|trans }}</strong>
-                    {% for notification_key, notification in section %}
-                        {% set hasDetail = (trans_path ~ notification_key ~ '.detail')|trans != '-' %}
-                        <div class="col-md-4">
-                            {{ form_widget(form.notificationsSettings[notification_key].wanted, { 'attr': {
-                                'class': (form.notificationsSettings[notification_key].wanted.vars.checked ? 'active')
-                            } }) }}
-                            <div class="pull-left toggle toggle-success" data-toggle="{{ form.notificationsSettings[notification_key].wanted.vars.checked }}"></div>
-                            <span>{{ (trans_path ~ notification_key ~ '.description')|trans }}</span>
-                            <div class="description">
-                                {{ form_widget(form.notificationsSettings[notification_key].frequency, {'attr': {
-                                    'class' : 'validate[required]'
-                                }}) }}
-                                {{ 'notification-config.information'|trans }}
-                                <b>{{ (trans_path ~ notification_key ~ '.title')|trans }}</b>
-                                <div style="{% if hasDetail == false %}display: none;{% endif %}">
-                                    {{ 'notification-config.also'|trans }}:<br>
-                                    <b>{{ (trans_path ~ notification_key ~ '.detail')|trans }}</b>
-                                    {{ form_widget(form.notificationsSettings[notification_key].detailLevel) }}
+                    <div class="col-md-12">
+                        <strong>{{ (trans_path ~ 'section')|trans }}</strong>
+                        {% for notification_key, notification in section %}
+                            {% set hasDetail = (trans_path ~ notification_key ~ '.detail')|trans != '-' %}
+                            <div class="col-md-4">
+                                {{ form_widget(form.notificationsSettings[notification_key].wanted, { 'attr': {
+                                    'class': (form.notificationsSettings[notification_key].wanted.vars.checked ? 'active') ~ ' hidden'
+                                } }) }}
+                                <div class="toggle toggle-success" data-toggle="{{ form.notificationsSettings[notification_key].wanted.vars.checked }}"></div>
+                                <b>{{ (trans_path ~ notification_key ~ '.description')|trans }}</b>
+                                <div class="description">
+                                    {{ form_widget(form.notificationsSettings[notification_key].frequency, {'attr': {
+                                        'class' : 'validate[required]'
+                                    }}) }}
+                                    {{ 'notification-config.information'|trans }}
+                                    <b>{{ (trans_path ~ notification_key ~ '.title')|trans }}</b>
+                                    <div style="{% if hasDetail == false %}display: none;{% endif %}">
+                                        {{ 'notification-config.also'|trans }}:<br>
+                                        <b>{{ (trans_path ~ notification_key ~ '.detail')|trans }}</b>
+                                        {{ form_widget(form.notificationsSettings[notification_key].detailLevel) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
             <div class="description">{{'Module_account_parameters_notifications'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</div>
-            {{ form_row(form.scheduleDay, {'attr': {'class' : 'slider-input'}}) }}
-            {{ form_row(form.scheduleHour, {'attr': {'class' : 'slider-input'}}) }}
-            {{ form_row(form.activityNewsletter) }}
+            <div class="col-md-12 schedules">
+                <span>{{ 'notification-config.choose.day'|trans }} :</span>
+                {{ form_row(form.scheduleDay, {'attr': {'class' : 'slider-input'}}) }}
+                <span>{{ 'notification-config.choose.hour'|trans }} :</span>
+                {{ form_row(form.scheduleHour, {'attr': {'class' : 'slider-input'}}) }}
+            </div>
+            <div class="col-md-12 authorize">
+                {{ form_widget(form.activityNewsletter) }}
+                {{ form_label(form.activityNewsletter) }}
+            </div>
         </div>
         {% trans_default_domain 'messages' %}
     </fieldset>
