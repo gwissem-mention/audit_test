@@ -5,14 +5,18 @@ namespace HopitalNumerique\ObjetBundle\Service\Notification;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 
 /**
  * Class PublicationNotifiedNotificationProvider.
  */
 class PublicationNotifiedNotificationProvider extends PublicationNotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'publication_notified';
+
+    const NOTIFICATION_MAIL = 29;
 
     /**
      * @return string
@@ -47,12 +51,12 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
             $uid,
             $title,
             $reason,
-            [
-                'idPublication' => $object->getId(),
-                'idInfradoc' => $infradoc ? $infradoc->getId() : null,
-                'titrePublication' => $infradoc ? $infradoc->getTitre() : $object->getTitre(),
-                'miseAJour' => $infradoc ? $infradoc->getContenu() : $object->getResume()
-            ]
+            array_merge(
+                parent::generateOptions($object, $infradoc),
+                [
+                    'miseAJour' => $infradoc ? $infradoc->getContenu() : $object->getResume(),
+                ]
+            )
         );
     }
 
@@ -61,6 +65,6 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendPublicationNotifiedNotification($notification->getUser(), $notification->getData());
     }
 }

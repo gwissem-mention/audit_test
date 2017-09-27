@@ -3,6 +3,7 @@
 namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Note;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -1283,30 +1284,87 @@ class MailManager extends BaseManager
      */
     public function sendAlertePublicationCommentaireMail(Objet $objet, $url)
     {
-        $courriel = $this->findOneById(Mail::MAIL_ALERTE_PUBLICATION_COMMENTAIRE);
+        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_COMMENTED);
 
-        /** @var Domaine $domaine */
-        foreach ($objet->getDomaines() as $domaine) {
-            /** @var Mail $courriel */
-            $currentCourriel = clone $courriel;
-
-            $destinataire = $domaine->getAdresseMailContact();
+        /** @var Domaine $domain */
+        foreach ($objet->getDomaines() as $domain) {
+            /** @var Mail $mail */
+            $currentMail = clone $mail;
 
             $content = $this->replaceContent(
-                $currentCourriel->getBody(),
+                $currentMail->getBody(),
                 null,
                 [
-                    'nomPublication' => $objet->getTitre(),
-                    'urlPublication' => $domaine->getUrl() . $url,
+                    'titrePublication' => $objet->getTitre(),
+                    'urlPublication' => $domain->getUrl() . $url,
+                    'commentaire' => $objet->getListeCommentaires()->last()->getTexte(),
+                    'prenomUtilisateur' => '',
                 ]
             );
 
-            $currentCourriel->setBody($content);
-            $message = $this->generationMail(null, $currentCourriel);
-            $message->setTo($destinataire);
+            $currentMail->setBody($content);
+            $mailToSend = $this->generationMail(null, $currentMail);
+            $mailToSend->setTo($domain->getAdresseMailContact());
 
-            $this->mailer->send($message);
+            $this->mailer->send($mailToSend);
         }
+    }
+
+    /**
+     * @param Notification $notification
+     * @param $mailId
+     */
+    public function sendPublicationCommentNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_COMMENTED);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'urlPublication' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                        'id' => $options['idPublication'],
+                    ], RouterInterface::ABSOLUTE_URL),
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param array $options
+     */
+    public function sendPublicationNotifiedNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_NOTIFIED);
+
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'urlPublication' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                        'id' => $options['idPublication'],
+                    ], RouterInterface::ABSOLUTE_URL),
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
     }
 
     /**
