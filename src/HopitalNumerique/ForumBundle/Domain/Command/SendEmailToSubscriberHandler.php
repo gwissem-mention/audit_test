@@ -61,15 +61,13 @@ class SendEmailToSubscriberHandler
                     'pseudouser'      => !is_null($command->user->getPseudonym())
                         ? $command->user->getPseudonym() : $command->user->getNomPrenom(),
                     'shortMessage'    => $command->post->getBody(),
+                    'id' => $topic->getId()
                 ];
 
-                $mail = $this->mailManager->sendNouveauMessageForumMail(
+                $this->mailManager->sendForumPostCreatedNotification(
                     $subscription->getOwnedBy(),
-                    $options,
-                    $topic->getId()
+                    $options
                 );
-
-                $this->mailer->send($mail);
             }
         }
 

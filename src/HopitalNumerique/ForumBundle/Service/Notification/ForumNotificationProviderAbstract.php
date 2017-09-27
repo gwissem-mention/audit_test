@@ -3,6 +3,8 @@
 namespace HopitalNumerique\ForumBundle\Service\Notification;
 
 use CCDNComponent\BBCodeBundle\Component\TwigExtension\BBCodeExtension;
+use HopitalNumerique\ForumBundle\Entity\Post;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ForumBundle\Repository\SubscriptionRepository;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Html2Text\Html2Text;
@@ -72,5 +74,26 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
 
         //Truncate and return
         return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
+    }
+
+    /**
+     * Commons options of all providers
+     *
+     * @param Topic $topic
+     * @param Post $post
+     * @param $id
+     *
+     * @return array
+     */
+    public function generateOptions(Topic $topic, Post $post, $id)
+    {
+        return [
+            'id' => $id,
+            'pseudoAuteur' => $post->getCreatedBy()->getFirstname(),
+            'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
+            'categorie' => $topic->getBoard()->getCategory()->getName(),
+            'theme' => $topic->getBoard()->getName(),
+            'message' => $post->getBody()
+        ];
     }
 }

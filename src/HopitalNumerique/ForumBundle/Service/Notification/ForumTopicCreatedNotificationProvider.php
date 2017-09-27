@@ -5,6 +5,7 @@ namespace HopitalNumerique\ForumBundle\Service\Notification;
 use CCDNForum\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use Nodevo\MailBundle\DependencyInjection\MailManagerAwareTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -12,6 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'forum_topic_created';
 
     /**
@@ -39,9 +42,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
                 $topic->getFirstPost()->getBody(),
                 static::getLimitNotifyDetailLength()
             ),
-            [
-                'boardId' => $topic->getBoard()->getId(),
-            ]
+            parent::generateOptions($topic, $topic->getFirstPost(), $topic->getId())
         );
     }
 
@@ -54,7 +55,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->subscriptionRepository->getBoardSubscribersQueryBuilder($notification->getData('boardId'));
+        return $this->subscriptionRepository->getBoardSubscribersQueryBuilder($notification->getData('id'));
     }
 
     /**
@@ -62,6 +63,6 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendForumPostCreatedNotification($notification->getUser(), $notification->getData());
     }
 }

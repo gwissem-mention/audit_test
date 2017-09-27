@@ -5,13 +5,15 @@ namespace HopitalNumerique\ForumBundle\Service\Notification;
 use CCDNForum\ForumBundle\Entity\Post;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Nodevo\MailBundle\DependencyInjection\MailManagerAwareTrait;
 
 /**
  * Class ForumPostCreatedNotificationProvider.
  */
 class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'forum_post_created';
 
     /**
@@ -29,9 +31,10 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function fire(Post $post)
     {
+        $topic = $post->getTopic();
         $this->processNotification(
             $post->getId(),
-            $post->getTopic()->getTitle() . ' - ' . $this->processText(
+            $topic->getTitle() . ' - ' . $this->processText(
                 $post->getBody(),
                 self::getLimitNotifyTitleLength()
             ),
@@ -39,7 +42,12 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
                 $post->getBody(),
                 self::getLimitNotifyDetailLength()
             ),
-            ['topicId' => $post->getTopic()->getId()]
+            array_merge(
+                parent::generateOptions($topic, $post, $topic->getId()),
+                [
+                    'fildiscusssion' => $topic->getTitle()
+                ]
+            )
         );
     }
 
@@ -52,7 +60,7 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('topicId'));
+        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('id'));
     }
 
     /**
@@ -60,6 +68,6 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendForumPostCreatedNotification($notification->getUser(), $notification->getData());
     }
 }
