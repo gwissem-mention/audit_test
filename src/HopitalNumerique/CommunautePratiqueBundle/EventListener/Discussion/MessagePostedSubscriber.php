@@ -8,6 +8,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEven
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MessagePostedSubscriber implements EventSubscriberInterface
 {
@@ -22,15 +23,25 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     protected $entityManager;
 
     /**
+     * @var AuthorizationCheckerInterface $authorizationChecker
+     */
+    protected $authorizationChecker;
+
+    /**
      * MessagePostedSubscriber constructor.
      *
      * @param ReadRepository $readRepository
      * @param EntityManagerInterface $entityManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(ReadRepository $readRepository, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        ReadRepository $readRepository,
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authorizationChecker
+    ) {
         $this->readRepository = $readRepository;
         $this->entityManager = $entityManager;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -40,11 +51,15 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     {
         return [
             Events::DISCUSSION_MESSAGE_POSTED => [
+                ['moderateMessage', 0],
                 ['readDiscussion', 0],
             ],
         ];
     }
 
+    /**
+     * @param MessagePostedEvent $event
+     */
     public function readDiscussion(MessagePostedEvent $event)
     {
         $message = $event->getMessage();
@@ -59,5 +74,29 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         }
 
         $this->entityManager->flush($read);
+    }
+
+    /**
+     * @param MessagePostedEvent $event
+     */
+    public function moderateMessage(MessagePostedEvent $event)
+    {
+        $message = $event->getMessage();
+        $discussion = $message->getDiscussion();
+
+        if (null === $discussion->getMessages() || $discussion->getMessages()->count() === 1) {
+            return;
+        }
+
+        if ($this->authorizationChecker->isGranted('validate', $message)) {
+            return;
+        }
+
+        $pattern = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
+
+        preg_match_all($pattern, $message->getContent(), $matches);
+        if (count($matches[0]) > 0 || strstr($message->getContent(), '[URL') || strstr($message->getContent(), '[LINK')) {
+            $message->setPublished(false);
+        }
     }
 }
