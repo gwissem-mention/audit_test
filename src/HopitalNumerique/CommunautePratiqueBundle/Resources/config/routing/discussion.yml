@@ -20,6 +20,12 @@ hopitalnumerique_communautepratique_discussions_copy_discussion:
     requirements:
         discussion: \d+
 
+hopitalnumerique_communautepratique_discussions_discussion_read_message:
+    path: /reading-message
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:read }
+    methods:
+        - POST
+
 hopitalnumerique_communautepratique_discussions_create_discussion:
     path: /create
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion }

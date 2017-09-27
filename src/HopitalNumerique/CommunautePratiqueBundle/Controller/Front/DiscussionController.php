@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -298,5 +300,25 @@ class DiscussionController extends Controller
             'groups' => $groupsAvailable,
             'discussion' => $discussion,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function readAction(Request $request)
+    {
+        if (null !== ($messageId = $request->request->get('messageId'))) {
+            try {
+                $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->getUser(), $messageId));
+            } catch (\Exception $e) {
+                return new JsonResponse(null, 418);
+            }
+
+            return new JsonResponse();
+        }
+
+        return new JsonResponse(null, 418);
     }
 }

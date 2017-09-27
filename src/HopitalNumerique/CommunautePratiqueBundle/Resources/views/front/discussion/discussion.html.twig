@@ -14,7 +14,7 @@
     {% endif %}
 </div>
 
-<div class="messages">
+<div class="messages" data-read-message-uri="{{ path('hopitalnumerique_communautepratique_discussions_discussion_read_message') }}">
     <h3 class="title">
         {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
         {% if app.user and discussion.newMessageCount(app.user) %}
@@ -63,7 +63,7 @@
             {% set isNewMessage = true %}
         {% endif %}
 
-        <div class="message"{{ isNewMessageId ? ' id="new-message"' }}>
+        <div class="message{{ isNewMessage ? ' new' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
             <div class="message-avatar">
                 <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
             </div>

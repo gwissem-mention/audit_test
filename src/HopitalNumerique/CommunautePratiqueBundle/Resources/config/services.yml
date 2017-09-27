@@ -112,6 +112,13 @@ services:
             - '@event_dispatcher'
             - '@doctrine.orm.entity_manager'
 
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
+            - '@doctrine.orm.entity_manager'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport
         arguments:

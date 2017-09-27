@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository")
  * @ORM\Table(name="hn_communautepratique_discussion_message")
  */
 class Message

@@ -115,6 +115,33 @@ var Discussion;
                     loader.finished();
                 });
             });
+
+            var scrollTimer;
+            $(window).on('scroll', function (e) {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(function () {
+                    var windowBottom = $(this).scrollTop()+$(window).height();
+
+                    var messages = [];
+                    $('.discussions .discussion .messages .message.new').each(function (k, e) {
+                        if (($(e).offset().top + $(e).height()) < windowBottom) {
+                            messages.push(e);
+                        }
+                    });
+
+                    if (messages.length) {
+                        messages.slice(-1).forEach(function (e) {
+                            var messageId = $(e).data('message-id');
+
+                            $.post(
+                                $('.discussions .discussion .messages').data('read-message-uri'),
+                                {'messageId': messageId}
+                            );
+                        });
+                    }
+
+                }, 1000);
+            });
         }
     }
 })();

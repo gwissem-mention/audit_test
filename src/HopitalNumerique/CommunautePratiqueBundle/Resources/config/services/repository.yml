@@ -8,3 +8,8 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Read']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message']
