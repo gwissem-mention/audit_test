@@ -3,15 +3,15 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use HopitalNumerique\UserBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
@@ -106,11 +106,37 @@ class DiscussionController extends Controller
      * @param Request $request
      * @param Discussion $discussion
      *
+<<<<<<< HEAD
      * @ParamConverter("message", class="HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message", options={"id" = "message"})
+=======
+     * @return RedirectResponse|Response
+     */
+    public function replyAction(Request $request, Discussion $discussion)
+    {
+        return $this->reply($request, $discussion);
+    }
+
+    /**
+     * @param Request $request
+     * @param Discussion $discussion
+     * @param Message $message
      *
      * @return RedirectResponse|Response
      */
-    public function replyAction(Request $request, Discussion $discussion, Message $message = null)
+    public function editReplyAction(Request $request, Discussion $discussion, Message $message = null)
+    {
+        return $this->reply($request, $discussion, $message);
+    }
+
+    /**
+     * @param Request $request
+     * @param Discussion $discussion
+     * @param Message|null $message
+>>>>>>> Add WYSIWYG // Wordaround Sf behavior
+     *
+     * @return RedirectResponse|Response
+     */
+    protected function reply(Request $request, Discussion $discussion, Message $message = null)
     {
         if (null !== $message) {
             $this->denyAccessUnlessGranted(MessageVoter::EDIT, $message);
