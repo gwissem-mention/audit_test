@@ -31,11 +31,13 @@ class SubscriptionController extends Controller
         if (true === $request->request->getBoolean('wanted')) {
             $command = new SubscribeToObjectCommand($this->getUser(), $object, $content);
             $this->get(SubscribeToObjectHandler::class)->handle($command);
-        } else {
-            $command = new UnsubscribeToObjectCommand($this->getUser(), $object, $content);
-            $this->get(UnsubscribeToObjectHandler::class)->handle($command);
+
+            return new JsonResponse('subscribe');
         }
 
-        return new JsonResponse();
+        $command = new UnsubscribeToObjectCommand($this->getUser(), $object, $content);
+        $this->get(UnsubscribeToObjectHandler::class)->handle($command);
+
+        return new JsonResponse('unsubscribe');
     }
 }

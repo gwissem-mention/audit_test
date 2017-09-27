@@ -8,6 +8,7 @@ var ViewedObjectsWidget = (function() {
         this.widgetButtons = widget.find('.widget-btn');
         this.widgetTable = widget.find('.widget-table');
         this.deleteButton = widget.find('.delete-consultation-btn');
+        this.subscribeButton = widget.find('.subscribe-btn');
 
         this.rows = $('tbody tr', this.widgetTable);
 
@@ -34,6 +35,7 @@ var ViewedObjectsWidget = (function() {
 
         bindEvents: function () {
             this.confirmDelete();
+            this.subscribe();
             $('.more', this.widgetButtons).click($.proxy(this.showMore, this));
             $('.less', this.widgetButtons).click($.proxy(this.showLess, this));
         },
@@ -55,6 +57,25 @@ var ViewedObjectsWidget = (function() {
             this.deleteButton.on('click', function () {
                 return confirm(self.options.deleteMessage);
             });
+        },
+
+        subscribe: function () {
+            this.subscribeButton.on('click', function (evt) {
+                evt.preventDefault();
+                var self = this;
+                $.ajax({
+                    url: this.href,
+                    method: 'POST',
+                    data: {
+                        'wanted': this.classList.contains('btn-success')
+                    },
+                    success: function (data) {
+                        self.classList.toggle('btn-success');
+                        self.classList.toggle('btn-danger');
+                        self.innerHTML = ('unsubscribe' === data) ? self.dataset.active : self.dataset.inactive;
+                    }
+                });
+            })
         }
     };
 

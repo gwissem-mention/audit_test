@@ -291,6 +291,7 @@ services:
             - '@router'
             - '@hopitalnumerique_domaine.service.base_url_provider'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         public: false
 
     HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler:
