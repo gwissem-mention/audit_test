@@ -43,7 +43,7 @@
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id}) }}" data-action="goto">
-                        {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'up' : 'down'))|trans }}
+                        {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'down' : 'up'))|trans }}
                     </option>
                 {% endif %}
             </select>
