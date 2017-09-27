@@ -103,7 +103,24 @@
                     {% endif %}
                 </div>
                 <div class="message-body">
-                    {{ message.content|raw }}
+                    {% if not message.published %}
+
+                        <div class="label label-danger center-block">{{ 'discussion.message.actions.publish.text'|trans }}</div>
+                        <div class="bg-danger">
+                            <div class="bb_wrapper">
+                                    {{ message.content|raw }}
+                            </div>
+                        </div>
+
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::VALIDATE'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id}) }}" class="btn btn-primary pull-right">
+                                <i class="fa fa-check"></i>
+                                {{ 'discussion.message.actions.publish.btn'|trans }}
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {{ message.content|raw }}
+                    {% endif %}
                 </div>
             </div>
         </div>

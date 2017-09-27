@@ -48,6 +48,9 @@ discussion:
             infos: Par %author% le %date%
             is_new: NEW
         actions:
+            publish:
+                text: Ce message est en attente de modération par administrateur.
+                btn: Valider ce message
             delete:
                 confirm: Voulez-vous vraiment supprimer ce message ?
                 success: Message supprimé avec succés.

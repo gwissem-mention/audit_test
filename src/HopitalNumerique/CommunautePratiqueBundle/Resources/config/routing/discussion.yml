@@ -60,3 +60,7 @@ hopitalnumerique_communautepratique_discussions_discussion_recommendation:
 hopitalnumerique_communautepratique_discussions_discussion_message_delete:
     path: /message/{message}/delete
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:deleteMessage }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_validate:
+    path: /message/{message}/validate
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:validateMessage }

@@ -15,6 +15,7 @@ class MessageVoter extends Voter
     const MARK_AS_HELPFUL = 'helpful';
     const DELETE = 'delete';
     const EDIT = 'edit';
+    const VALIDATE = 'validate';
 
     /**
      * @param string $attribute
@@ -24,7 +25,7 @@ class MessageVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::MARK_AS_HELPFUL, self::DELETE, self::EDIT])) {
+        if (!in_array($attribute, [self::VALIDATE, self::MARK_AS_HELPFUL, self::DELETE, self::EDIT])) {
             return false;
         }
 
@@ -55,7 +56,8 @@ class MessageVoter extends Voter
             case self::DELETE:
                 return $this->canEdit($subject, $user);
             case self::MARK_AS_HELPFUL:
-                return $this->canMarkAsHelpful($subject, $user);
+            case self::VALIDATE:
+                return $this->extendedRights($subject, $user);
         }
 
         return false;
@@ -67,7 +69,7 @@ class MessageVoter extends Voter
      *
      * @return bool
      */
-    public function canMarkAsHelpful(Message $message, User $user)
+    public function extendedRights(Message $message, User $user)
     {
         if ($user->hasRoleCDPAdmin()) {
             return true;

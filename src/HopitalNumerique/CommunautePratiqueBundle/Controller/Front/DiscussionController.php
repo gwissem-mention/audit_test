@@ -233,6 +233,23 @@ class DiscussionController extends Controller
         ]);
     }
 
+    /**
+     * @param Message $message
+     *
+     * @Security("is_granted('validate', message)")
+     *
+     * @return RedirectResponse
+     */
+    public function validateMessageAction(Message $message)
+    {
+        $message->setPublished(true);
+
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+            'discussion' => $message->getDiscussion()->getId(),
+        ]);
+    }
 
     /**
      * @param Discussion $discussion
