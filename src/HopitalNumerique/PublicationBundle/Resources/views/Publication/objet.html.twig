@@ -47,7 +47,7 @@
             <div class="col-md-4">
                 <div class="text-right">
                     <span>{{ 'subscribe'|trans }}</span>
-                    {#{% spaceless %}#}
+                    {% spaceless %}
                         <div
                             class="toggle toggle-success"
                             data-path="{{ path('hopitalnumerique_objet_subscribe', {
@@ -56,7 +56,7 @@
                             }) }}"
                             data-active="{% if subscribed is not null %}true{% else %}false{% endif %}"
                         ></div>
-                    {#{% endspaceless %}#}
+                    {% endspaceless %}
                     {% if contenu is defined %}
                         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id}) }}
                     {% else %}
