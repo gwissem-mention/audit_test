@@ -275,6 +275,8 @@ services:
             - '@autodiag.repository.autodiagentry'
         tags:
             - { name: notification.aggregator, key: autodiag_update_published }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener:
         class: HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener

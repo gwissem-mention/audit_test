@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use Nodevo\MailBundle\DependencyInjection\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,6 +17,8 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
  */
 class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'autodiag_update_published';
 
     const SECTION_CODE = 'autodiag';
@@ -71,7 +74,8 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
             $reason,
             [
                 'autodiagId' => $autodiag->getId(),
-                'autodiagTitle' => $autodiag->getTitle()
+                'nomautodiag' => $autodiag->getTitle(),
+                'miseAJour' => $reason,
             ]
         );
     }
@@ -97,6 +101,6 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendAutodiagUpdateNotification($notification->getUser(), $notification->getData());
     }
 }

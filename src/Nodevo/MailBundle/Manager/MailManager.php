@@ -1306,6 +1306,35 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendAutodiagUpdateNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_AUTODIAG_UPDATE);
+
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'urlAutodiagnostics' => $this->_router->generate('hopitalnumerique_autodiag_entry_add', [
+                        'autodiag' => $options['autodiagId'],
+                    ], RouterInterface::ABSOLUTE_URL),
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
      * @param Objet $objet
      * @param $url
      */
