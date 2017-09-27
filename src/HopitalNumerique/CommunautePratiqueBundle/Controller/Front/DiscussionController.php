@@ -105,38 +105,13 @@ class DiscussionController extends Controller
     /**
      * @param Request $request
      * @param Discussion $discussion
-     *
-<<<<<<< HEAD
-     * @ParamConverter("message", class="HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message", options={"id" = "message"})
-=======
-     * @return RedirectResponse|Response
-     */
-    public function replyAction(Request $request, Discussion $discussion)
-    {
-        return $this->reply($request, $discussion);
-    }
-
-    /**
-     * @param Request $request
-     * @param Discussion $discussion
      * @param Message $message
      *
-     * @return RedirectResponse|Response
-     */
-    public function editReplyAction(Request $request, Discussion $discussion, Message $message = null)
-    {
-        return $this->reply($request, $discussion, $message);
-    }
-
-    /**
-     * @param Request $request
-     * @param Discussion $discussion
-     * @param Message|null $message
->>>>>>> Add WYSIWYG // Wordaround Sf behavior
+     * @ParamConverter("message", class="HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message", options={"id" = "message"})
      *
      * @return RedirectResponse|Response
      */
-    protected function reply(Request $request, Discussion $discussion, Message $message = null)
+    public function replyAction(Request $request, Discussion $discussion, Message $message = null)
     {
         if (null !== $message) {
             $this->denyAccessUnlessGranted(MessageVoter::EDIT, $message);

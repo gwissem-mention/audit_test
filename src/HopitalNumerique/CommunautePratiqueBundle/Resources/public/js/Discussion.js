@@ -12,6 +12,7 @@ var Discussion;
         this.$list = this.$container.find('.list');
         this.$discussion = this.$container.find('.discussion');
         this.$messages = this.$container.find('.message');
+        this.$lazyLoadBtn = this.$list.find('.load-more');
 
         this.init();
     };
@@ -21,8 +22,9 @@ var Discussion;
             var that = this;
 
             that.discussionEvents();
+            that.initLazyLoad();
 
-            that.$list.find('a').on('click', function (e) {
+            that.$list.find('a.item').on('click', function (e) {
                 var $link = $(this);
                 e.preventDefault();
 
@@ -39,6 +41,26 @@ var Discussion;
                 })
             });
 
+        },
+
+        initLazyLoad: function () {
+            var that = this;
+
+            that.lazyLoadBtnVisibility();
+
+            that.$lazyLoadBtn.on('click', function (e) {
+                e.preventDefault();
+
+                that.$list.find('.item.hidden').slice(0, that.$list.data('lazyload-step')).removeClass('hidden');
+
+                that.lazyLoadBtnVisibility();
+            });
+        },
+
+        lazyLoadBtnVisibility: function () {
+            if (this.$list.find('.item.hidden').length === 0) {
+                this.$lazyLoadBtn.addClass('hidden');
+            }
         },
 
         initEditor: function () {

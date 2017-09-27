@@ -10,6 +10,7 @@ discussion:
             last_message: Dernier le %date% par %author%
             created_at: Discussion créée le %date%
             new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
+        load_more: Voir plus
     new_discussion:
         text: Créer une nouvelle discussion
         form:
