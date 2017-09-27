@@ -7,13 +7,15 @@ use HopitalNumerique\NotificationBundle\Enum\NotificationLimitTextLengthEnum;
 use HopitalNumerique\ObjetBundle\Entity\Commentaire;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 
 /**
  * Class PublicationCommentedNotificationProvider.
  */
 class PublicationCommentedNotificationProvider extends PublicationNotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'publication_commented';
 
     /**
@@ -54,12 +56,12 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $uid,
             $title,
             $detail,
-            [
-                'idPublication'    => $object->getId(),
-                'idInfradoc'       => $infradoc ? $infradoc->getId() : null,
-                'titrePublication' => $infradoc ? $infradoc->getTitre() : $object->getTitre(),
-                'commentaire'      => $this->processText($comment->getContenu())
-            ]
+            array_merge(
+                parent::generateOptions($object, $infradoc),
+                [
+                    'commentaire'      => $this->processText($comment->getTexte())
+                ]
+            )
         );
     }
 
@@ -68,6 +70,6 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendPublicationCommentNotification($notification->getUser(), $notification->getData());
     }
 }

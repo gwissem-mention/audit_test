@@ -185,7 +185,6 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
         $notification->setTitle($title);
         $notification->setDetail($detail);
         $notification->setData($data);
-        $notification->setUser($this->getUser());
 
         //Sends with notification event.
         $notificationEvent = new NotificationEvent($notification);

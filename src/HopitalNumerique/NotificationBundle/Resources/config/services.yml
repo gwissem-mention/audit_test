@@ -68,4 +68,9 @@ services:
         class: HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener
         tags:
             - { name: doctrine.event_subscriber }
-
+    HopitalNumerique\NotificationBundle\EventListener\NotificationSendListener:
+        class: HopitalNumerique\NotificationBundle\EventListener\NotificationSendListener
+        arguments:
+            - '@HopitalNumerique\NotificationBundle\Service\Notifications'
+        tags:
+            - { name: kernel.event_subscriber }

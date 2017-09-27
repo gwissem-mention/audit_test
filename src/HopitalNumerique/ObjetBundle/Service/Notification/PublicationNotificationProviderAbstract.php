@@ -3,8 +3,11 @@
 namespace HopitalNumerique\ObjetBundle\Service\Notification;
 
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CartBundle\Model\Report\Infradoc;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use Html2Text\Html2Text;
@@ -86,5 +89,16 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
 
         //Truncate and return
         return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
+    }
+
+    public function generateOptions(Objet $object, Contenu $content)
+    {
+        return [
+            [
+                'idPublication'    => $object->getId(),
+                'idInfradoc'       => $content ? $content->getId() : null,
+                'titrePublication' => $content ? $content->getTitre() : $object->getTitre(),
+            ]
+        ];
     }
 }

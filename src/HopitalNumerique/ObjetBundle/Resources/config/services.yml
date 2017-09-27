@@ -321,6 +321,8 @@ services:
             - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         tags:
             - { name: notification.aggregator, key: publication_notified }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider:
         class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider
@@ -331,6 +333,8 @@ services:
             - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         tags:
             - { name: notification.aggregator, key: publication_commented }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener:
         class: HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener
