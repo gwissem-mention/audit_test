@@ -33,8 +33,12 @@
         <div class="actions-block">
             <select class="discussion-actions">
                 <option></option>
-                <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
-                <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
+                {% endif %}
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                {% endif %}
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}

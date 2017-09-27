@@ -2,11 +2,14 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use Gedmo\Sluggable\Transliterator;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter;
 use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -226,8 +229,13 @@ class DiscussionController extends Controller
         ]);
     }
 
+
     /**
      * @param Discussion $discussion
+     *
+     * @Security("is_granted('download', discussion)")
+     *
+     * @return Response
      */
     public function downloadDiscussionAction(Discussion $discussion)
     {
@@ -236,7 +244,16 @@ class DiscussionController extends Controller
 
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
 
-        die('@TODO');
+        $fileContent = $this->get(CSVExport::class)->export($discussion);
+
+        $response = new Response($fileContent);
+        $response->headers->set('Content-Type', 'application/force-download');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="'.'discussion_' . $discussion->getId() . '.csv' . '"'
+        );
+
+        return $response;
     }
 
     /**

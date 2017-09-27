@@ -16,6 +16,7 @@ class DiscussionVoter extends Voter
     const REPLY = 'cdp_discussion_reply';
     const MARK_AS_RECOMMENDED = 'mark_as_recommended';
     const COPY_TO_GROUP = 'copy_to_group';
+    const DOWNLOAD = 'download';
 
     /**
      * @param string $attribute
@@ -25,7 +26,7 @@ class DiscussionVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
+        if (!in_array($attribute, [self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
             return false;
         }
 
@@ -53,6 +54,7 @@ class DiscussionVoter extends Voter
                 return $this->canManage($user, $subject);
             case self::CREATE:
             case self::REPLY:
+            case self::DOWNLOAD:
                 return $this->canCreate($user);
         }
 

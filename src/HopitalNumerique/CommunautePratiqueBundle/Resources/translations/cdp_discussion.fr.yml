@@ -63,3 +63,8 @@ discussion:
         presentation: "Présentation :"
         hobbies: "Centre d'intérêts :"
         computer_skills: "Logiciels maitrisés :"
+    export:
+        header:
+            author: Auteur
+            creation_date: Date de création
+            message: Message
