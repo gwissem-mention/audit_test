@@ -41,7 +41,26 @@ var Discussion;
 
         },
 
+        initEditor: function () {
+            tinyMCE.init({
+                entity_encoding : 'raw',
+                selector     : '.discussions .discussion textarea.content',
+                theme        : "modern",
+                theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+                skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
+                plugins      : 'paste link',
+                height       : 120,
+                menubar      : false,
+                content_css  : '/bundles/nodevotools/css/wysiwyg.css',
+                toolbar1     : 'bold | underline | italic | link',
+                relative_urls: false,
+                statusbar    : false,
+                paste_as_text: true
+            });
+        },
+
         discussionEvents: function() {
+            this.initEditor();
 
             $('.discussion .actions .discussion-actions').on('change', function (e) {
                 var value = $(this).val();

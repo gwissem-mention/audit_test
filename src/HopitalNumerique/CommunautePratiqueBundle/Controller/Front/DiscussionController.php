@@ -2,24 +2,23 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
-use Gedmo\Sluggable\Transliterator;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository;
-use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter;
-use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
-use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport;
 use HopitalNumerique\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
+use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter;
 use HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport;
+use HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\CreateDiscussionType;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionMessageType;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
@@ -31,6 +30,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\CreateDi
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\CreateDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DiscussionController extends Controller
 {
@@ -105,7 +105,8 @@ class DiscussionController extends Controller
     /**
      * @param Request $request
      * @param Discussion $discussion
-     * @param Message|null $message
+     *
+     * @ParamConverter("message", class="HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message", options={"id" = "message"})
      *
      * @return RedirectResponse|Response
      */
@@ -244,13 +245,12 @@ class DiscussionController extends Controller
 
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
 
-        $fileContent = $this->get(CSVExport::class)->export($discussion);
+        $filePath = $this->get(CSVExport::class)->export($discussion);
 
-        $response = new Response($fileContent);
-        $response->headers->set('Content-Type', 'application/force-download');
-        $response->headers->set(
-            'Content-Disposition',
-            'attachment; filename="'.'discussion_' . $discussion->getId() . '.csv' . '"'
+        $response = new BinaryFileResponse($filePath);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('discussion_%d.csv', $discussion->getId())
         );
 
         return $response;

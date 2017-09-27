@@ -18,8 +18,8 @@
             </div>
             <div class="message-body">
                 {{ form_start(form) }}
-                    {{ form_widget(form.content, {'attr': {'class': ''}}) }}
-                    <div class="text-right">
+                    {{ form_widget(form.content, {'attr': {'class': 'validate[required] content'}}) }}
+                    <div class="save">
                         <input type="submit" class="btn btn-success pull-right" value="{{ 'discussion.message.reply.form.submit.text'|trans|e }}">
                     </div>
                 {{ form_end(form) }}

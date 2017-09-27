@@ -22,9 +22,14 @@ class CSVExport
         $this->translator = $translator;
     }
 
+    /**
+     * @param Discussion $discussion
+     *
+     * @return string
+     */
     public function export(Discussion $discussion)
     {
-        $file = tmpfile();
+        $file = fopen(tempnam(sys_get_temp_dir(),'hn'), 'w');
 
         fputcsv($file, $this->getHeader());
 
@@ -36,7 +41,7 @@ class CSVExport
             ]);
         }
 
-        return file_get_contents(stream_get_meta_data($file)['uri']);
+        return stream_get_meta_data($file)['uri'];
     }
 
     protected function getHeader()

@@ -234,9 +234,8 @@
 
 }
 
-.discussions .discussion .messages .message.reply textarea.form-control {
-    margin-bottom: 10px;
-    resize: vertical;
+.discussions .discussion .messages .message.reply .save {
+    margin-top: 10px;
 }
 
 .discussions.reply .discussion {

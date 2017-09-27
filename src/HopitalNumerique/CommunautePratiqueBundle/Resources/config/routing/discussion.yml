@@ -33,7 +33,7 @@ hopitalnumerique_communautepratique_discussions_reply_discussion:
         - POST
 
 hopitalnumerique_communautepratique_discussions_edit_reply_discussion:
-    path: /{discussion}/reply/{message}
+    path: /{discussion}/edit/{message}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply }
     methods:
         - POST
