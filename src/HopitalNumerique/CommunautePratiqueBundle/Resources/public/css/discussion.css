@@ -168,6 +168,10 @@
     padding: 15px 0;
 }
 
+.discussions .discussion .messages .message.message--helpful .message-content .message-body {
+    background: rgba(240, 232, 174, 0.5);
+}
+
 .discussions .discussion .messages .message .message-avatar {
     width: 70px;
     min-height: 70px;
@@ -180,12 +184,19 @@
 }
 
 .discussions .discussion .messages .message .message-content {
-    margin-left: 20px;
     width: 100%;
 }
 
 .discussions .discussion .messages .message .message-infos {
-    margin-bottom: 7px;
+    margin-bottom: 3px;
+    margin-left: 20px;
+}
+
+.discussions .discussion .messages .message .message-body {
+    margin-left: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 10px;
 }
 
 .discussions .discussion .messages .message .animator {

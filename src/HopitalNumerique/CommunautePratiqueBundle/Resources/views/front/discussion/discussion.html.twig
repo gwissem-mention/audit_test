@@ -63,7 +63,7 @@
             {% set isNewMessage = true %}
         {% endif %}
 
-        <div class="message{{ isNewMessage ? ' new' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
+        <div class="message{{ message.helpful ? ' message--helpful' }}{{ isNewMessage ? ' new' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
             <div class="message-avatar">
                 <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
             </div>
