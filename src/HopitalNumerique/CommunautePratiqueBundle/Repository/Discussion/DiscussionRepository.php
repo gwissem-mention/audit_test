@@ -38,6 +38,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
                 ->leftJoin('discussion.readings', 'reading', Join::WITH, 'reading.user = :user')
                 ->leftJoin('reading.user', 'reader')
                 ->addSelect('reading', 'reader')
+                ->orWhere('message.user = :user')
                 ->setParameter('user', $query->user)
             ;
         }
@@ -100,7 +101,14 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (!$query->displayAll) {
-            $queryBuilder->andWhere('message.published = TRUE');
+            if (null !== $query->user) {
+                $queryBuilder
+                    ->andWhere('message.published = TRUE OR message.user = :user')
+                    ->setParameter('user', $query->user)
+                ;
+            } else {
+                $queryBuilder->andWhere('message.published = TRUE');
+            }
         }
 
         $queryBuilder
