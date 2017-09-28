@@ -22,7 +22,6 @@
     padding: 12px 25px;
     height: 150px;
     overflow-x: auto;
-    z-index: 200;
 }
 
 .group .tabs .tab.active,
@@ -62,9 +61,6 @@
 
 .group .tab-container {
     background: #fff;
-    position: relative;
-    top: -1px;
-    z-index: 10;
     min-height: 100px;
 }
 
@@ -79,6 +75,7 @@
 .group .tab-container .tab-content {
     padding: 20px;
     border: 1px solid #e6e6e6;
+    border-top: 0;
 }
 
 .group .tab-container .tab-content h2 {
@@ -88,4 +85,8 @@
 
 .group .tab-container .tab-content .animators {
     margin-bottom: 10px;
+}
+
+.group .tab-container .discussions .add {
+    border-top: 0;
 }
