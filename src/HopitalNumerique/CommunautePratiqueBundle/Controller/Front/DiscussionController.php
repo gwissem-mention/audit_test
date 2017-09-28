@@ -52,7 +52,7 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $this->getUser()));
+        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $group, $this->getUser()));
 
         if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
@@ -62,7 +62,7 @@ class DiscussionController extends Controller
             ;
         }
 
-        if ($this->isGranted(DiscussionVoter::REPLY)) {
+        if ($this->isGranted(DiscussionVoter::REPLY) && $discussion) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
                 'action' => $this->generateUrl(
                     'hopitalnumerique_communautepratique_discussions_reply_discussion',
@@ -180,7 +180,7 @@ class DiscussionController extends Controller
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
-        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
+        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $group, $this->getUser()));
 
         if ($this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
@@ -302,17 +302,18 @@ class DiscussionController extends Controller
 
     /**
      * @param Discussion $discussion
+     * @param Groupe $group
      *
      * @Security("is_granted('download', discussion)")
      *
      * @return Response
      */
-    public function downloadDiscussionAction(Discussion $discussion)
+    public function downloadDiscussionAction(Discussion $discussion, Groupe $group = null)
     {
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
-        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $this->getUser()));
+        $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $group, $this->getUser()));
 
         $filePath = $this->get(CSVExport::class)->export($discussion);
 

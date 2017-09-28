@@ -124,6 +124,7 @@ services:
         arguments:
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport

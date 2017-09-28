@@ -123,6 +123,7 @@ class GroupeController extends Controller
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
             'discussionCounter' => [
                 'discussion' => $discussionActivityCounter->getNewDiscussionCount($groupe, $this->getUser()),
+                'message' => $discussionActivityCounter->getNewMessageCount($groupe, $this->getUser()),
             ],
             'discussion' => $discussion,
             'groupe' => $groupe,

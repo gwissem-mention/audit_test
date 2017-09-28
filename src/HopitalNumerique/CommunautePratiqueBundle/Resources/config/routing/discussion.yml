@@ -20,8 +20,8 @@ hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
         discussion: \d+
 
 hopitalnumerique_communautepratique_discussions_download_discussion:
-    path: /{discussion}/download
-    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadDiscussion }
+    path: /{discussion}/download/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadDiscussion, group: null }
     requirements:
         discussion: \d+
 

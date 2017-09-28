@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 
 /**
@@ -24,6 +25,11 @@ class DiscussionDisplayQuery
     public $user;
 
     /**
+     * @var Groupe $group
+     */
+    public $group;
+
+    /**
      * @var Domaine[] $domains
      */
     public $domains;
@@ -36,14 +42,16 @@ class DiscussionDisplayQuery
     /**
      * @param Discussion $discussion
      * @param Domaine[] $domains
+     * @param Groupe $group
      * @param User|null $user
      *
      * @return DiscussionDisplayQuery
      */
-    public static function createPublicDiscussionQuery(Discussion $discussion, array $domains, User $user = null)
+    public static function createPublicDiscussionQuery(Discussion $discussion, array $domains, Groupe $group = null, User $user = null)
     {
         $query = new self();
         $query->user = $user;
+        $query->group = $group;
         $query->domains = $domains;
         $query->discussion = $discussion;
 

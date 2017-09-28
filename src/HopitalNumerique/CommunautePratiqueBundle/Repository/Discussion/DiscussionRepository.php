@@ -67,7 +67,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-        if (count($orCondition)) {
+        if (count($orCondition) > 1) {
             $queryBuilder->andWhere(implode(' OR ', $orCondition));
         }
 
@@ -101,12 +101,22 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.user', 'author')
             ->leftJoin('discussion.groups', 'cdpGroup')
             ->leftJoin('cdpGroup.animateurs', 'animators')
-            ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
-            ->setParameter('domains', $query->domains)
 
             ->andWhere('discussion = :discussion')
             ->setParameter('discussion', $query->discussion)
         ;
+
+        if ($query->group) {
+            $queryBuilder
+                ->andWhere('cdpGroup.id = :group')
+                ->setParameter('group', $query->group)
+            ;
+        } else {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
+                ->setParameter('domains', $query->domains)
+            ;
+        }
 
         if (null !== $query->user) {
             $queryBuilder
@@ -135,6 +145,12 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @param Groupe $group
+     * @param User $user
+     *
+     * @return Discussion[]
+     */
     public function getDiscussionNotReaded(Groupe $group, User $user)
     {
         return $this->createQueryBuilder('discussion')

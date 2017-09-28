@@ -8,7 +8,7 @@ group:
             title: Échanges
             new_comments: "%countTxt% nouveau commentaire | %countTxt% nouveaux commentaires"
             new_documents: "%countTxt% nouveau document | %countTxt% nouveaux documents"
-            new_discussions: "%countTxt% nouvelle discussion | %countTxt% nouvellex discussions"
+            new_discussions: "%countTxt% nouvelle discussion | %countTxt% nouvelles discussions"
         members:
             title: Annuaire des membres
             members_count: "%countTxt% membre | %countTxt% membres"
