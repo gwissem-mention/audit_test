@@ -1,0 +1,53 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
+{% spaceless %}
+    {% set hidden = false %}
+    {% if loop.index > displayedItemsCount %}
+        {% set hidden = true %}
+        {% if currentDiscussionToShow == true %}
+            {% set displayedItemsCount = displayedItemsCount + lazyLoadStep %}
+            {% set hidden = false %}
+        {% endif %}
+    {% endif %}
+
+    {% if not currentDiscussion or currentDiscussion.id == discussion.id %}
+        {% set currentDiscussionToShow = false %}
+    {% endif %}
+
+    <a
+            href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
+            data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
+            class="item{{ hidden ? ' hidden' }}{{ currentDiscussion and discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}"
+    >
+        {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
+            <span class="icon new-message-badge" title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
+                {{ discussion.newMessageCount(app.user) }}
+            </span>
+        {% endif %}
+
+        {% if discussion.hasHelpfulMessage %}
+            <i class="icon fa fa-star"></i>
+        {% endif %}
+
+        {% if discussion.recommended %}
+            <i class="icon fa fa-thumbs-o-up"></i>
+        {% endif %}
+
+        <span class="title">
+            {{ discussion.title }}
+        </span>
+
+        <span class="infos">
+            {{ 'discussion.list.item.message_count'|transchoice(discussion.messages|length, {'%messageCount%': '<b>'~discussion.messages|length~'</b>'})|raw }} -
+            {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|localizeddate('short', 'none')~'</b>', '%author%': '<b>'~discussion.messages.last.user.prenomNom~'</b>'})|raw }}<br />
+            {{ 'discussion.list.item.created_at'|trans({'%date%': '<b>'~discussion.createdAt|localizeddate('short', 'none')~'</b>'})|raw }}<br />
+        </span>
+    </a>
+{% endspaceless %}
+
+{% for children in discussion.children if scope == 'group' and children.parent == discussion %}
+    <div class="push">
+        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion_title.html.twig', {'discussion': children}) }}
+    </div>
+{% endfor %}

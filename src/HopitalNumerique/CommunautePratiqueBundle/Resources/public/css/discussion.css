@@ -39,6 +39,10 @@
     width: 355px;
 }
 
+.discussions .wrapper .list .push {
+    margin-left: 10px;
+}
+
 .discussions .wrapper .list .item {
     display: block;
     color: #343434;
