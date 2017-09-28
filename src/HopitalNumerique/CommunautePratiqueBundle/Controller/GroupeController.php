@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,16 +59,12 @@ class GroupeController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function viewAction(Request $request, Groupe $groupe)
+    public function viewAction(Request $request, Groupe $groupe, Discussion $discussion = null)
     {
         /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        $cpArticle = null;
-        if ($currentDomaine) {
-            $cpArticle = $currentDomaine->getCommunautePratiqueArticle();
-        }
 
         if ($user instanceof User) {
             $inscription = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
@@ -77,6 +74,8 @@ class GroupeController extends Controller
                     'warning',
                     'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.'
                 );
+
+                $cpArticle = $currentDomaine ? $currentDomaine->getCommunautePratiqueArticle() : null;
 
                 if (null !== $cpArticle) {
                     return $this->redirect(
@@ -119,6 +118,7 @@ class GroupeController extends Controller
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
+            'discussion' => $discussion,
             'groupe' => $groupe,
             'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe)
         ]);

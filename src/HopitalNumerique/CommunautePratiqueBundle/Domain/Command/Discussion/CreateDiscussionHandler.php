@@ -38,7 +38,7 @@ class CreateDiscussionHandler
     {
         $discussion = new Discussion($command->title, $command->author, $command->domains);
         if ($command->group) {
-
+            $discussion->addGroup($command->group);
         } else {
             $discussion->setPublic(true);
         }

@@ -7,7 +7,8 @@
 var Discussion;
 
 (function() {
-    Discussion = function (){
+    Discussion = function (scope){
+        this.scope = scope;
         this.$container = $('.discussions');
         this.$list = this.$container.find('.list');
         this.$discussion = this.$container.find('.discussion');
@@ -136,6 +137,10 @@ var Discussion;
 
             var scrollTimer;
             $(window).on('scroll', function (e) {
+                if ($('.group .tabs a.tab.discussion.active').length === 0) {
+                    return;
+                }
+
                 clearTimeout(scrollTimer);
                 scrollTimer = setTimeout(function () {
                     var windowBottom = $(this).scrollTop()+$(window).height();

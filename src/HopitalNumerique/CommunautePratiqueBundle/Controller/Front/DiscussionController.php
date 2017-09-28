@@ -38,11 +38,12 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class DiscussionController extends Controller
 {
     /**
+     * @param Groupe $group
      * @param Discussion|null $discussion
      *
      * @return Response
      */
-    public function publicAction(Groupe $group = null, Discussion $discussion = null)
+    public function listAction(Groupe $group = null, Discussion $discussion = null)
     {
         $discussionRepository = $this->get(DiscussionRepository::class);
 
@@ -56,14 +57,20 @@ class DiscussionController extends Controller
         if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
             $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $newDiscussionCommand, [
-                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion')
+                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion', ['group' => $group ? $group->getId() : null])
             ])->createView()
             ;
         }
 
         if ($this->isGranted(DiscussionVoter::REPLY)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
-                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
+                'action' => $this->generateUrl(
+                    'hopitalnumerique_communautepratique_discussions_reply_discussion',
+                    [
+                        'discussion' => $discussion->getId(),
+                        'group' => $group ? $group->getId() : null,
+                    ]
+                )
             ])->createView();
         }
 
@@ -74,6 +81,8 @@ class DiscussionController extends Controller
         }
 
         $options= [
+            'group' => $group,
+            'scope' => null === $group ? 'public' : 'group',
             'discussions' => $discussions,
             'currentDiscussion' => $discussion,
             'newDiscussionForm' => isset($newDiscussionForm) ? $newDiscussionForm : null,
@@ -90,14 +99,15 @@ class DiscussionController extends Controller
 
     /**
      * @param Request $request
+     * @param Groupe $group
      *
      * @Security("is_granted('cdp_discussion_create')")
      *
      * @return Response|RedirectResponse
      */
-    public function createDiscussionAction(Request $request)
+    public function createDiscussionAction(Request $request, Groupe $group = null)
     {
-        $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
+        $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()], $group);
 
         $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $command);
 
@@ -108,9 +118,7 @@ class DiscussionController extends Controller
 
             $this->addFlash('success', $this->get('translator')->trans('discussion.new_discussion.success', [], 'cdp_discussion'));
 
-            return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-                'discussion' => $discussion->getId(),
-            ]);
+            return $this->redirectResponse($group, $discussion);
         }
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/create_discussion.html.twig', [
@@ -121,13 +129,14 @@ class DiscussionController extends Controller
     /**
      * @param Request $request
      * @param Discussion $discussion
+     * @param Groupe $group
      * @param Message $message
      *
      * @ParamConverter("message", class="HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message", options={"id" = "message"})
      *
      * @return RedirectResponse|Response
      */
-    public function replyAction(Request $request, Discussion $discussion, Message $message = null)
+    public function replyAction(Request $request, Discussion $discussion, Groupe $group = null, Message $message = null)
     {
         if (null !== $message) {
             $this->denyAccessUnlessGranted(MessageVoter::EDIT, $message);
@@ -144,9 +153,7 @@ class DiscussionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->get(PostDiscussionMessageHandler::class)->handle($command);
 
-            return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-                'discussion' => $discussion->getId(),
-            ]);
+            return $this->redirectResponse($group, $discussion);
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -164,10 +171,11 @@ class DiscussionController extends Controller
 
     /**
      * @param Discussion $discussion
+     * @param Groupe $group
      *
      * @return Response
      */
-    public function discussionAction(Discussion $discussion)
+    public function discussionAction(Discussion $discussion, Groupe $group = null)
     {
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
@@ -187,6 +195,8 @@ class DiscussionController extends Controller
         }
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
+            'group' => $group,
+            'scope' => null === $group ? 'public' : 'group',
             'discussion' => $discussion,
             'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
@@ -211,10 +221,11 @@ class DiscussionController extends Controller
 
     /**
      * @param Discussion $discussion
+     * @param Groupe $group
      *
      * @return Response
      */
-    public function toggleRecommendationAction(Discussion $discussion)
+    public function toggleRecommendationAction(Discussion $discussion, Groupe $group = null)
     {
         $this->denyAccessUnlessGranted(DiscussionVoter::MARK_AS_RECOMMENDED, $discussion);
 
@@ -230,9 +241,7 @@ class DiscussionController extends Controller
             'cdp_discussion'
         ));
 
-        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-            'discussion' => $discussion->getId(),
-        ]);
+        return $this->redirectResponse($group, $discussion);
     }
 
     /**
@@ -258,39 +267,37 @@ class DiscussionController extends Controller
 
     /**
      * @param Message $message
+     * @param Groupe $group
      *
      * @Security("is_granted('delete', message)")
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteMessageAction(Message $message)
+    public function deleteMessageAction(Message $message, Groupe $group = null)
     {
-        $discussionId = $message->getDiscussion()->getId();
+        $discussion = $message->getDiscussion();
         $this->get(DeleteMessageHandler::class)->handle(new DeleteMessageCommand($message));
 
         $this->addFlash('success', $this->get('translator')->trans('discussion.message.actions.delete.success', [], 'cdp_discussion'));
 
-        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-            'discussion' => $discussionId,
-        ]);
+        return $this->redirectResponse($group, $discussion);
     }
 
     /**
      * @param Message $message
+     * @param Groupe $group
      *
      * @Security("is_granted('validate', message)")
      *
      * @return RedirectResponse
      */
-    public function validateMessageAction(Message $message)
+    public function validateMessageAction(Message $message, Groupe $group = null)
     {
         $message->setPublished(true);
 
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-            'discussion' => $message->getDiscussion()->getId(),
-        ]);
+        return $this->redirectResponse($group, $message->getDiscussion());
     }
 
     /**
@@ -349,9 +356,7 @@ class DiscussionController extends Controller
 
                 $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.group_copy.success', [], 'cdp_discussion'));
 
-                return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
-                    'discussion' => $discussion->getId(),
-                ]);
+                return $this->redirectResponse($group, $discussion);
             }
         }
 
@@ -379,5 +384,25 @@ class DiscussionController extends Controller
         }
 
         return new JsonResponse(null, 418);
+    }
+
+    private function redirectResponse(Groupe $group = null, Discussion $discussion = null)
+    {
+        if (null !== $group && $discussion !== null) {
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_view_default_discussion', [
+                'groupe' => $group->getId(),
+                'discussion' => $discussion->getId(),
+            ]);
+        } elseif (null !== $group && null === $discussion) {
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_view', [
+                'groupe' => $group->getId(),
+            ]);
+        } elseif (null === $group && $discussion) {
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+                'discussion' => $discussion->getId(),
+            ]);
+        }
+
+        return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public');
     }
 }

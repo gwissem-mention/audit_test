@@ -3,7 +3,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            new Discussion();
+            new Discussion('{{ scope }}');
         });
     </script>
 {% endblock %}
@@ -31,7 +31,7 @@
     </div>
 {% endif %}
 
-<div class="discussions" data-base-url="{{ path('hopitalnumerique_communautepratique_discussions_public') }}">
+<div class="discussions" data-base-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public') : path('hopitalnumerique_communautepratique_groupe_view', {'groupe': group.id})~'#discussion' }}">
     {% if newDiscussionForm is not null %}
         <div class="add">
             <a href="#" class="add-btn" data-toggle="modal" data-target="#new-discussion-modal">
@@ -63,8 +63,8 @@
                     {% endif %}
 
                     <a
-                        href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id}) }}"
-                        data-url="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) }}"
+                        href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
+                        data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
                         class="item{{ hidden ? ' hidden' }}{{ discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}"
                     >
                         {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
@@ -101,7 +101,7 @@
 
         <div class="discussion">
             {% if currentDiscussion is not null %}
-                {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussion.html.twig', {'scope': 'public', 'discussion': currentDiscussion}) }}
+                {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussion.html.twig', {'discussion': currentDiscussion}) }}
             {% endif %}
         </div>
     </div>

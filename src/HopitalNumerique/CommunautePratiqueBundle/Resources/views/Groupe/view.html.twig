@@ -12,7 +12,10 @@
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            new Group();
+            var group = new Group();
+            {% if discussion is not null %}
+                group.preOpenDiscussionTab();
+            {% endif %}
         });
     </script>
 {% endblock %}
@@ -44,7 +47,7 @@
                 {{ groupe.descriptionCourte }}
             </a>
 
-            <a href="#discussion" class="tab">
+            <a href="#discussion" class="tab discussion">
                 <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
 
                 <ul>
@@ -81,9 +84,15 @@
                 {{ groupe.descriptionHtml|raw }}
             </div>
 
-            <div id="discussion">
-                {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:public', {'group': groupe})) }}
-            </div>
+
+            {% spaceless %}
+                <div
+                    id="discussion"
+                    data-init="false"
+                    data-content-uri="{{ discussion is not null ? path('hopitalnumerique_communautepratique_discussions_group_default_discussion', {'group': groupe.id, 'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_discussions_group', {'group': groupe.id}) }}"
+                >
+                </div>
+            {% endspaceless %}
 
             <div id="members" class="tab-content">
                 <h2>{{ 'group.tabs.members.title'|trans }}</h2>

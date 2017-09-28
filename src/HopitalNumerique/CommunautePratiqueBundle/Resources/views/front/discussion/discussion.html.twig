@@ -1,9 +1,13 @@
 {% trans_default_domain 'cdp_discussion' %}
 
+{% if group is not defined %}
+    {% set group = null %}
+{% endif %}
+
 <div class="discussion-title">
     <h2>{{ discussion.title }}</h2>
 
-    {% if discussion.groups|length %}
+    {% if discussion.groups|length and scope == 'public' %}
         <div class="group">
             {% set groupsLabel = [] %}
             {% for group in discussion.groups %}
@@ -46,7 +50,7 @@
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
-                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id}) }}" data-action="goto">
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">
                         {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'down' : 'up'))|trans }}
                     </option>
                 {% endif %}
@@ -82,13 +86,13 @@
                         {% endif %}
 
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), message) %}
-                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_edit_reply_discussion', {'discussion': discussion.id, 'message': message.id}) }}">
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_edit_reply_discussion', {'discussion': discussion.id, 'message': message.id, 'group': group ? group.id : null}) }}">
                                 <i class="fa fa-pencil-square-o"></i>
                             </a>
                         {% endif %}
 
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::DELETE'), message) %}
-                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id}) }}" onclick="return confirm('{{ 'discussion.message.actions.delete.confirm'|trans|e }}');">
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id, 'group': group ? group.id : null}) }}" onclick="return confirm('{{ 'discussion.message.actions.delete.confirm'|trans|e }}');">
                                 <i class="fa fa-trash-o"></i>
                             </a>
                         {% endif %}
@@ -117,7 +121,7 @@
                         </div>
 
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::VALIDATE'), message) %}
-                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id}) }}" class="btn btn-primary pull-right">
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id, 'group': group ? group.id : null}) }}" class="btn btn-primary pull-right">
                                 <i class="fa fa-check"></i>
                                 {{ 'discussion.message.actions.publish.btn'|trans }}
                             </a>

@@ -18,6 +18,8 @@
     margin-right: 10px;
     box-shadow: 3px 6px 18px 2px #ddd, -3px 6px 18px 2px #ddd;
     padding: 12px 25px;
+    height: 150px;
+    overflow-x: auto;
 }
 
 .group .tabs .tab.active,

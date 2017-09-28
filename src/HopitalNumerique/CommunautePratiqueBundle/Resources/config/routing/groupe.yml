@@ -10,6 +10,14 @@ hopitalnumerique_communautepratique_groupe_view:
     requirements:
         groupe: \d+
 
+hopitalnumerique_communautepratique_groupe_view_default_discussion:
+    path: /{groupe}/discussion/{discussion}
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view' }
+    methods: GET
+    requirements:
+        discussion: \d+
+        groupe: \d+
+
 hopitalnumerique_communautepratique_groupe_inscrit:
     path: /{groupe}/inscription
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit' }
