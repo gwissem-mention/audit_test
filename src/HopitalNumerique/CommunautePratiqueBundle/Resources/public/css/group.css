@@ -1,0 +1,74 @@
+.group {
+    margin-top: 20px;
+}
+
+.group .tabs {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.group .tabs .tab {
+    display: block;
+    color: #777;
+    width: 33%;
+    background: #eee;
+    border-top: 5px solid #fff;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: 3px 6px 18px 2px #ddd, -3px 6px 18px 2px #ddd;
+    padding: 12px 25px;
+}
+
+.group .tabs .tab.active,
+.group .tabs .tab:hover {
+    border-top-color: #ec0034;
+    background: #fff;
+}
+
+.group .tabs .tab .tab-title {
+    color: #ec0034;
+    display: block;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.group .tabs .tab ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.group .tabs .tab ul li {
+    padding-bottom: 5px;
+}
+
+.group .tabs .tab ul li b {
+    color: #ec0034;
+}
+
+.group .tab-container {
+    background: #fff;
+}
+
+.group .tab-container > div {
+    display: none;
+}
+
+.group .tab-container > div.active {
+    display: block;
+}
+
+.group .tab-container .tab-content {
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+}
+
+.group .tab-container .tab-content h2 {
+    margin: 0 0 10px;
+    color: #ec0034;
+}
+
+.group .tab-container .tab-content .animators {
+    margin-bottom: 10px;
+}

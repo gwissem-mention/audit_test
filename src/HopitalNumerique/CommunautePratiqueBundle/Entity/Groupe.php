@@ -614,6 +614,16 @@ class Groupe
     }
 
     /**
+     * @return int
+     */
+    public function getActiveRegistrationCount()
+    {
+        return $this->getInscriptions()->filter(function (Inscription $inscription) {
+            return $inscription->isActif();
+        })->count();
+    }
+
+    /**
      * Get users.
      *
      * @return Collection

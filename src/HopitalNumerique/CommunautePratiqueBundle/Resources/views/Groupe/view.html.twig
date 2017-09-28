@@ -1,15 +1,18 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
+{% trans_default_domain 'cdp_group' %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-groupe-user.js"
         'bundles/hopitalnumeriquecommunautepratique/js/TableauDeBord.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Group.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            CommunautePratique_Commentaire.initTinyMce({{ groupe.id }});
+            new Group();
         });
     </script>
 {% endblock %}
@@ -33,25 +36,65 @@
 
 {% block body_communaute_pratique %}
 
-    <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-tableau-de-bord">
-        <div class="groupe" data-groupe-id="{{ groupe.id }}" >
-            <div class="header">
-                <strong style="font-size:14px">Description du groupe</strong>
-                <a style="margin:-6px;" class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
+    <div class="group">
+        <div class="tabs">
+
+            <a href="#description" class="tab active">
+                <span class="tab-title">{{ 'group.tabs.description.title'|trans }}</span>
+                {{ groupe.descriptionCourte }}
+            </a>
+
+            <a href="#discussion" class="tab">
+                <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
+
+                <ul>
+                    <li>{{ 'group.tabs.discussion.new_comments'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
+                    <li>{{ 'group.tabs.discussion.new_documents'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
+                    <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
+                </ul>
+            </a>
+
+            <a href="#members" class="tab">
+                <span class="tab-title">{{ 'group.tabs.members.title'|trans }}</span>
+
+                <ul>
+                    <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.activeRegistrationCount, {'%countTxt%': '<b>'~groupe.activeRegistrationCount~'</b>'})|raw }}</li>
+                    <li>{{ 'group.tabs.members.animators_count'|transchoice(groupe.animateurs|length, {'%countTxt%': '<b>'~groupe.animateurs|length~'</b>'})|raw }}</li>
+                </ul>
+            </a>
+
+        </div>
+
+        <div class="tab-container">
+            <div id="description" class="tab-content active">
+                <h2>{{ 'group.tabs.description.long_title'|trans }}</h2>
+
+                {% if groupe.animateurs|length > 0 %}
+                    <div class="animators">
+                        <b>{{ 'group.tabs.description.animators'|transchoice(groupe.animateurs|length) }}</b>
+                        {% for animateur in groupe.animateurs %}
+                            {{ animateur.prenomNom }}{{ loop.last ? '' : ', ' }}
+                        {% endfor -%}
+                    </div>
+                {% endif %}
+
+                {{ groupe.descriptionHtml|raw }}
             </div>
-            <div class="body">
-            {%- if groupe.animateurs|length > 0 -%}
-                <p style="font-size:13px;">
-                    <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
-                    {% for animateur in groupe.animateurs %}
-                        {{ animateur.firstname }} {{ animateur.lastname }}{{ loop.last ? '' : ', ' }}
-                    {% endfor -%}
-                </p>
-            {%- endif -%}
-            {{ groupe.descriptionHtml|raw }}
+
+            <div id="discussion"></div>
+
+            <div id="members">
+                MEMBERS /
             </div>
         </div>
-     </div>
+    </div>
+
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+
     {%- if groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user)) -%}
         <div class="text-right">
             <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
