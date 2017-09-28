@@ -6,6 +6,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionDisplayQuery;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionListQuery;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Class DiscussionRepository
@@ -19,6 +21,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
      */
     public function queryForDiscussionList(DiscussionListQuery $query)
     {
+        $orCondition = [];
         $queryBuilder = $this->createQueryBuilder('discussion')
 
             ->select('discussion')
@@ -26,32 +29,46 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('messageUser')
             ->addSelect('cdpGroup')
 
-            ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
-            ->setParameter('domains', $query->domains)
             ->join('discussion.messages', 'message')
             ->join('message.user', 'messageUser')
-            ->leftJoin('discussion.groups', 'cdpGroup')
         ;
+
+        if ($query->group) {
+            $queryBuilder
+                ->join('discussion.groups', 'cdpGroup', Join::WITH, 'cdpGroup.id = :group')
+                ->setParameter('group', $query->group)
+            ;
+        } else {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain IN (:domains)')
+                ->setParameter('domains', $query->domains)
+                ->leftJoin('discussion.groups', 'cdpGroup')
+                ->andWhere('discussion.public = TRUE')
+            ;
+        }
 
         if (null !== $query->user) {
             $queryBuilder
                 ->leftJoin('discussion.readings', 'reading', Join::WITH, 'reading.user = :user')
                 ->leftJoin('reading.user', 'reader')
                 ->addSelect('reading', 'reader')
-                ->orWhere('message.user = :user')
                 ->setParameter('user', $query->user)
             ;
+
+            $orCondition[] = 'message.user = :user';
         }
 
         if (!$query->displayAll) {
-            $queryBuilder->orWhere('message.published = TRUE');
+            $orCondition[] = 'message.published = TRUE';
 
             if (count($query->displayAllForGroups)) {
-                $queryBuilder
-                    ->orWhere('cdpGroup IN (:displayAllForGroups)')
-                    ->setParameter('displayAllForGroups', $query->displayAllForGroups)
-                ;
+                $orCondition[] = 'cdpGroup IN (:displayAllForGroups)';
+                $queryBuilder->setParameter('displayAllForGroups', $query->displayAllForGroups);
             }
+        }
+
+        if (count($orCondition)) {
+            $queryBuilder->andWhere(implode(' OR ', $orCondition));
         }
 
 
@@ -116,5 +133,19 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function getDiscussionNotReaded(Groupe $group, User $user)
+    {
+        return $this->createQueryBuilder('discussion')
+            ->join('discussion.groups', 'cdp_group', Join::WITH, 'cdp_group.id = :group')
+            ->setParameter('group', $group)
+            ->leftJoin('discussion.readings', 'reading', Join::WITH, 'reading.user = :user')
+            ->setParameter('user', $user)
+
+            ->andWhere('reading.id IS NULL')
+
+            ->getQuery()->getResult()
+        ;
     }
 }

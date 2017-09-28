@@ -53,7 +53,7 @@
                 <ul>
                     <li>{{ 'group.tabs.discussion.new_comments'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
                     <li>{{ 'group.tabs.discussion.new_documents'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
-                    <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(1, {'%countTxt%': '<b>'~1~'</b>'})|raw }}</li>
+                    <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(discussionCounter.discussion, {'%countTxt%': '<b>'~discussionCounter.discussion~'</b>'})|raw }}</li>
                 </ul>
             </a>
 

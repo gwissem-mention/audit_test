@@ -36,9 +36,9 @@ class DiscussionListQuery
     public $displayAll = false;
 
     /**
-     * @var Groupe[] $groups
+     * @var Groupe $group
      */
-    public $groups = [];
+    public $group;
 
     /**
      * @param array $domains
@@ -47,12 +47,12 @@ class DiscussionListQuery
      *
      * @return DiscussionListQuery
      */
-    public static function createPublicDiscussionQuery(array $domains, array $groups = [], User $user = null)
+    public static function createPublicDiscussionQuery(array $domains, Groupe $group = null, User $user = null)
     {
         $query = new self();
         $query->domains = $domains;
         $query->user = $user;
-        $query->groups = $groups;
+        $query->group = $group;
 
         $query->resolveDisplayAllForGroups();
 

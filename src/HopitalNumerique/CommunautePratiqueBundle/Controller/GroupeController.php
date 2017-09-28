@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter;
 use HopitalNumerique\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,7 +118,12 @@ class GroupeController extends Controller
             );
         }
 
+        $discussionActivityCounter = $this->get(NewDiscussionActivityCounter::class);
+
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
+            'discussionCounter' => [
+                'discussion' => $discussionActivityCounter->getNewDiscussionCount($groupe, $this->getUser()),
+            ],
             'discussion' => $discussion,
             'groupe' => $groupe,
             'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe)

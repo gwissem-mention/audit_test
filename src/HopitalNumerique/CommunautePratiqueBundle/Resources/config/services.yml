@@ -119,6 +119,12 @@ services:
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
             - '@doctrine.orm.entity_manager'
 
+    HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport
         arguments:
