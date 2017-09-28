@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: row;
     overflow: hidden;
+    background: #fff;
 }
 
 .group .tabs .tab {
@@ -14,17 +15,20 @@
     width: 33%;
     background: #eee;
     border-top: 5px solid #fff;
+    border-bottom: 1px solid #e6e6e6;
     margin-left: 10px;
     margin-right: 10px;
     box-shadow: 3px 6px 18px 2px #ddd, -3px 6px 18px 2px #ddd;
     padding: 12px 25px;
     height: 150px;
     overflow-x: auto;
+    z-index: 200;
 }
 
 .group .tabs .tab.active,
 .group .tabs .tab:hover {
     border-top-color: #ec0034;
+    border-bottom-color: #fff;
     background: #fff;
 }
 
@@ -58,6 +62,9 @@
 
 .group .tab-container {
     background: #fff;
+    position: relative;
+    top: -1px;
+    z-index: 10;
 }
 
 .group .tab-container > div {
