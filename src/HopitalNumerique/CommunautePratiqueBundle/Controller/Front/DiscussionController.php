@@ -42,7 +42,7 @@ class DiscussionController extends Controller
      *
      * @return Response
      */
-    public function publicAction(Discussion $discussion = null)
+    public function publicAction(Groupe $group = null, Discussion $discussion = null)
     {
         $discussionRepository = $this->get(DiscussionRepository::class);
 
@@ -73,13 +73,19 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', [
+        $options= [
             'discussions' => $discussions,
             'currentDiscussion' => $discussion,
             'newDiscussionForm' => isset($newDiscussionForm) ? $newDiscussionForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
             'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
-        ]);
+        ];
+
+        if ($group) {
+            return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussions.html.twig', $options);
+        }
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', $options);
     }
 
     /**
