@@ -368,6 +368,24 @@ class DiscussionController extends Controller
     }
 
     /**
+     * @param Discussion $discussion
+     * @param Groupe|null $group
+     *
+     * @Security("is_granted('copy_to_group', discussion)")
+     *
+     * @return RedirectResponse
+     */
+    public function setDiscussionPublicAction(Discussion $discussion, Groupe $group = null)
+    {
+        $discussion->setPublic(!$discussion->isPublic());
+        $this->getDoctrine()->getManager()->flush();
+
+        $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.public.success', [], 'cdp_discussion'));
+
+        return $this->redirectResponse($group, $discussion);
+    }
+
+    /**
      * @param Request $request
      *
      * @return JsonResponse

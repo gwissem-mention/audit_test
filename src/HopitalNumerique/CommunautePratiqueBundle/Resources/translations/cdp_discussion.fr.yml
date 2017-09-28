@@ -33,6 +33,11 @@ discussion:
 
             download:
                 label: Télécharger la discussion
+            public:
+                label:
+                    up: Rendre cette discussion publique
+                    down: Rendre cette discussion privée
+                success: Visibilité de la discussion changée.
             group_copy:
                 label: Copier dans un groupe
                 success: Discussion copiée dans le groupe.

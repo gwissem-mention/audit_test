@@ -31,6 +31,12 @@ hopitalnumerique_communautepratique_discussions_copy_discussion:
     requirements:
         discussion: \d+
 
+hopitalnumerique_communautepratique_discussions_public_discussion:
+    path: /{discussion}/toggle-public/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:setDiscussionPublic, group: null }
+    requirements:
+        discussion: \d+
+
 hopitalnumerique_communautepratique_discussions_discussion_read_message:
     path: /reading-message
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:read }

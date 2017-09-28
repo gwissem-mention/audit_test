@@ -45,7 +45,11 @@
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
                 {% endif %}
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
-                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                    {% if scope == 'public' %}
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                    {% else %}
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
+                    {% endif %}
                 {% endif %}
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
                 <option value="" data-action="async">{{ 'discussion.discussion.actions.subscribtion.label'|trans }}</option>
