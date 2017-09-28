@@ -215,4 +215,18 @@ class Message
 
         return $this;
     }
+
+    /**
+     * Test if content contains link, uri
+     *
+     * @return bool
+     */
+    public function needModeration()
+    {
+        $pattern = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
+
+        preg_match_all($pattern, $this->getContent(), $matches);
+
+        return count($matches[0]) > 0 || strstr($this->getContent(), '[URL') || strstr($this->getContent(), '[LINK');
+    }
 }

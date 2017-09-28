@@ -92,10 +92,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $pattern = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
-
-        preg_match_all($pattern, $message->getContent(), $matches);
-        if (count($matches[0]) > 0 || strstr($message->getContent(), '[URL') || strstr($message->getContent(), '[LINK')) {
+        if ($message->needModeration()) {
             $message->setPublished(false);
         }
     }

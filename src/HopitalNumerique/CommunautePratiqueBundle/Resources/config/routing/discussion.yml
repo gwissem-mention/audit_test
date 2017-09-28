@@ -70,3 +70,5 @@ hopitalnumerique_communautepratique_discussions_discussion_message_delete:
 hopitalnumerique_communautepratique_discussions_discussion_message_validate:
     path: /message/{message}/validate
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:validateMessage }
+    methods:
+        - GET
