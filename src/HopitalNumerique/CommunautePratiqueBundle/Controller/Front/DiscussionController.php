@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,11 +67,18 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
+        if ($discussion && $this->isGranted(DiscussionVoter::MANAGE_DOMAINS, $discussion)) {
+            $discussionDomainsForm = $this->createForm(DiscussionDomainType::class, $discussion, [
+                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_discussion_domains', ['discussion' => $discussion->getId()]),
+            ])->createView();
+        }
+
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', [
             'discussions' => $discussions,
             'currentDiscussion' => $discussion,
             'newDiscussionForm' => isset($newDiscussionForm) ? $newDiscussionForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
+            'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
         ]);
     }
 
@@ -166,8 +174,15 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
+        if ($discussion && $this->isGranted(DiscussionVoter::MANAGE_DOMAINS, $discussion)) {
+            $discussionDomainsForm = $this->createForm(DiscussionDomainType::class, $discussion, [
+                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_discussion_domains', ['discussion' => $discussion->getId()]),
+            ])->createView();
+        }
+
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
             'discussion' => $discussion,
+            'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
         ]);
     }
@@ -212,6 +227,27 @@ class DiscussionController extends Controller
         return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
             'discussion' => $discussion->getId(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Discussion $discussion
+     *
+     * @return JsonResponse
+     */
+    public function updateDiscussionDomainsAction(Request $request, Discussion $discussion)
+    {
+        $form = $this->createForm(DiscussionDomainType::class, $discussion);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return new JsonResponse(null);
+        }
+
+        return new JsonResponse(null, 418);
     }
 
     /**

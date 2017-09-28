@@ -38,6 +38,12 @@ hopitalnumerique_communautepratique_discussions_reply_discussion:
     methods:
         - POST
 
+hopitalnumerique_communautepratique_discussions_discussion_domains:
+    path: /{discussion}/update-domains
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:updateDiscussionDomains }
+    methods:
+        - POST
+
 hopitalnumerique_communautepratique_discussions_edit_reply_discussion:
     path: /{discussion}/edit/{message}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply }

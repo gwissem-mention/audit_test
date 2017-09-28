@@ -27,7 +27,11 @@
 
     <div class="actions">
         <div class="actions-block">
-
+            {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MANAGE_DOMAINS'), discussion) and discussionDomainsForm is not null%}
+                {{ form_start(discussionDomainsForm, {'attr': {'class': 'discussion-domains'}}) }}
+                    {{ form_widget(discussionDomainsForm.domains, {'attr': {'class': 'select2'}}) }}
+                {{ form_end(discussionDomainsForm) }}
+            {% endif %}
         </div>
 
         <div class="actions-block">

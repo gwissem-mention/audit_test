@@ -17,6 +17,7 @@ class DiscussionVoter extends Voter
     const MARK_AS_RECOMMENDED = 'mark_as_recommended';
     const COPY_TO_GROUP = 'copy_to_group';
     const DOWNLOAD = 'download';
+    const MANAGE_DOMAINS = 'manage_domains';
 
     /**
      * @param string $attribute
@@ -51,6 +52,7 @@ class DiscussionVoter extends Voter
         switch ($attribute) {
             case self::MARK_AS_RECOMMENDED:
             case self::COPY_TO_GROUP:
+            case self::MANAGE_DOMAINS:
                 return $this->canManage($user, $subject);
             case self::CREATE:
             case self::REPLY:

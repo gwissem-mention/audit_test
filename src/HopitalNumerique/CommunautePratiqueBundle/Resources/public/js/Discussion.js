@@ -84,6 +84,8 @@ var Discussion;
         discussionEvents: function() {
             this.initEditor();
 
+            $('.discussion .select2').select2();
+
             $('.discussion .actions .discussion-actions').on('change', function (e) {
                 var value = $(this).val();
 
@@ -115,6 +117,21 @@ var Discussion;
                     loader.finished();
                 });
             });
+
+            if ($('.discussion-domains select').length) {
+                $('.discussion-domains select').on('change', function (e) {
+                    var $form = $(this).parents('form');
+
+
+                    if ($form.find('select option:selected:enabled').length) {
+                        var loader = $form.nodevoLoader().start();
+
+                        $.post($form.attr('action'), $form.serialize(), function () {
+                            loader.finished();
+                        });
+                    }
+                });
+            }
 
             var scrollTimer;
             $(window).on('scroll', function (e) {
