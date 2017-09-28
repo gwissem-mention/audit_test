@@ -55,7 +55,7 @@ class NewDiscussionActivityCounter
     /**
      * @param Groupe $group
      * @param User $user
-     * 
+     *
      * @return int
      */
     public function getNewDocumentCount(Groupe $group, User $user) {
