@@ -124,6 +124,7 @@ class GroupeController extends Controller
             'discussionCounter' => [
                 'discussion' => $discussionActivityCounter->getNewDiscussionCount($groupe, $this->getUser()),
                 'message' => $discussionActivityCounter->getNewMessageCount($groupe, $this->getUser()),
+                'document' => $discussionActivityCounter->getNewDocumentCount($groupe, $this->getUser()),
             ],
             'discussion' => $discussion,
             'groupe' => $groupe,

@@ -43,6 +43,42 @@ var Discussion;
             });
 
             this.initEditor('#new-discussion-modal textarea');
+            this.discussionReading();
+        },
+
+        discussionReading: function ()
+        {
+            var scrollTimer;
+            $(window).on('scroll', function (e) {
+                if ($('.group .tabs a.tab.discussion.active').length === 0) {
+                    return;
+                }
+
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(function () {
+                    var windowBottom = $(this).scrollTop()+$(window).height();
+
+                    var messages = [];
+                    $('.discussions .discussion .messages .message.new').each(function (k, e) {
+                        if (($(e).offset().top + $(e).height()) < windowBottom) {
+                            messages.push(e);
+                        }
+                    });
+
+                    if (messages.length) {
+                        messages.slice(-1).forEach(function (e) {
+                            var messageId = $(e).data('message-id');
+                            $(e).removeClass('new');
+
+                            $.post(
+                                $('.discussions .discussion .messages').data('read-message-uri'),
+                                {'messageId': messageId}
+                            );
+                        });
+                    }
+
+                }, 1000);
+            });
         },
 
         initLazyLoad: function () {
@@ -134,37 +170,6 @@ var Discussion;
                     }
                 });
             }
-
-            var scrollTimer;
-            $(window).on('scroll', function (e) {
-                if ($('.group .tabs a.tab.discussion.active').length === 0) {
-                    return;
-                }
-
-                clearTimeout(scrollTimer);
-                scrollTimer = setTimeout(function () {
-                    var windowBottom = $(this).scrollTop()+$(window).height();
-
-                    var messages = [];
-                    $('.discussions .discussion .messages .message.new').each(function (k, e) {
-                        if (($(e).offset().top + $(e).height()) < windowBottom) {
-                            messages.push(e);
-                        }
-                    });
-
-                    if (messages.length) {
-                        messages.slice(-1).forEach(function (e) {
-                            var messageId = $(e).data('message-id');
-
-                            $.post(
-                                $('.discussions .discussion .messages').data('read-message-uri'),
-                                {'messageId': messageId}
-                            );
-                        });
-                    }
-
-                }, 1000);
-            });
         }
     }
 })();

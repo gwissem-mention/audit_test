@@ -122,7 +122,6 @@ services:
     HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter
         arguments:
-            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
 

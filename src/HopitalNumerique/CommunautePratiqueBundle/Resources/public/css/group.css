@@ -36,6 +36,13 @@
     margin-bottom: 15px;
 }
 
+.group .tabs .tab .nothing {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    padding-top: 15px;
+}
+
 .group .tabs .tab ul {
     list-style-type: none;
     margin: 0;

@@ -342,7 +342,7 @@ class Discussion
         })->first();
 
         if (!$read) {
-            return false;
+            return true;
         }
 
         return $read->getLastMessageDate() < $message->getCreatedAt();
