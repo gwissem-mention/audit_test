@@ -41,6 +41,7 @@ var Discussion;
                 })
             });
 
+            this.initEditor('#new-discussion-modal textarea');
         },
 
         initLazyLoad: function () {
@@ -63,10 +64,10 @@ var Discussion;
             }
         },
 
-        initEditor: function () {
+        initEditor: function (element) {
             tinyMCE.init({
                 entity_encoding : 'raw',
-                selector     : '.discussions .discussion textarea.content',
+                selector     : element,
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
@@ -82,7 +83,7 @@ var Discussion;
         },
 
         discussionEvents: function() {
-            this.initEditor();
+            this.initEditor('.discussions .discussion textarea.content');
 
             $('.discussion .select2').select2();
 
