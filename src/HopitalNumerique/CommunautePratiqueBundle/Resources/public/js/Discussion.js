@@ -25,9 +25,13 @@ var Discussion;
             that.discussionEvents();
             that.initLazyLoad();
 
-            that.$list.find('a.item').on('click', function (e) {
+            that.$list.find('.item').on('click', function (e) {
                 var $link = $(this);
                 e.preventDefault();
+
+                if ($link.hasClass('dragging')) {
+                    return;
+                }
 
                 var loader = that.$discussion.nodevoLoader().start();
 
@@ -36,7 +40,7 @@ var Discussion;
                 $.get($(this).attr('href'), function (response) {
                     loader.finished();
                     that.$discussion.html(response);
-                    that.$list.find('a').removeClass('active');
+                    that.$list.find('.item').removeClass('active');
                     $link.addClass('active');
                     that.discussionEvents();
                 })
@@ -44,6 +48,103 @@ var Discussion;
 
             this.initEditor('#new-discussion-modal textarea');
             this.discussionReading();
+            this.dragDropEvent();
+        },
+
+        dragDropEvent: function ()
+        {
+            var that = this;
+
+            that.dropItemEvent();
+            that.dragItemEvent();
+
+            that.$discussion.find('.droppable-layer').droppable({
+                drop: function (e, ui) {
+                    that.$discussion.removeClass('dragging');
+                    that.dragDropResetDiscussion(ui.draggable.parent('.item-block'));
+
+                    that.sortDiscussionsTitle(that.$list, 1);
+                    that.dropItemEvent();
+                    that.dragItemEvent();
+                }
+            });
+        },
+
+        dragItemEvent: function ()
+        {
+            var that = this;
+            var $items = that.$list.find('.item');
+
+            if ($items.hasClass('ui-draggable')) {
+                $items.draggable('destroy');
+            }
+
+            $items.draggable({
+                revert: true,
+                start: function () {
+                    $(this).addClass('dragging');
+
+                    if ($(this).parents('.item-block').data('level') > 1) {
+                        that.$discussion.addClass('dragging');
+                    }
+                },
+                stop: function () {
+                    $(this).removeClass('dragging');
+                    that.$discussion.removeClass('dragging');
+                }
+            });
+        },
+
+        dropItemEvent: function ()
+        {
+            var that = this;
+            var $items = that.$list.find('.item-block[data-level="1"] > .item, .item-block[data-level="2"] > .item');
+
+            if ($items.hasClass('ui-droppable')) {
+                $items.droppable('destroy');
+            }
+
+            $items.droppable({
+                over: function () {
+                    $(this).addClass('droppable-over');
+                },
+                out: function () {
+                    $(this).removeClass('droppable-over');
+                },
+                drop: function (e, ui) {
+                    $(this).removeClass('droppable-over');
+                    var $block = $(this).parent('.item-block');
+
+                    if ($block.data('level') < 3) {
+                        $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
+
+                        that.sortDiscussionsTitle($('.discussions .list'), 1);
+                        that.dropItemEvent();
+                        that.dragItemEvent();
+                    }
+                }
+            });
+        },
+
+        dragDropResetDiscussion: function ($element)
+        {
+            $element.data('level', 1);
+            $element.prependTo(this.$list);
+        },
+
+        sortDiscussionsTitle: function ($parent, level)
+        {
+            var that = this;
+
+            $parent.children('.item-block').data('level', +level).sort(function (a, b) {
+                return +a.getAttribute('data-global-position') - +b.getAttribute('data-global-position');
+            }).appendTo($parent);
+
+            if ($parent.find('.item-block[data-level='+level+'] .children > .item-block').length) {
+                $parent.find('.item-block[data-level='+level+'] .children').each(function (k, e) {
+                    that.sortDiscussionsTitle($(e), +level + 1);
+                })
+            }
         },
 
         discussionReading: function ()

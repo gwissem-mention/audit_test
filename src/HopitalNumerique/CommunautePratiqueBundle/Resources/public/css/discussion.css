@@ -54,6 +54,16 @@
     padding: 15px 10px;
     margin-bottom: 5px;
     box-shadow: 0 3px 2px 0 #ddd;
+    cursor: hand;
+}
+
+.discussions .wrapper .list .item.droppable-over {
+    border-color: #777;
+}
+
+.discussions .wrapper .list .item.dragging {
+    cursor: move;
+    z-index: 1000;
 }
 
 .discussions .wrapper .list .item.active,
@@ -109,6 +119,26 @@
     border: 1px solid #ddd;
     width: 100%;
     min-height: 300px;
+    position: relative;
+}
+
+.discussions .discussion .droppable-layer {
+    display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: grey;
+    padding-top: 150px;
+    font-size: 100px;
+    color: #fff;
+    opacity: 0.8;
+    text-align: center;
+    border: 10px dashed #fff;
+    z-index: 500;
+}
+
+.discussions .discussion.dragging .droppable-layer {
+    display: block;
 }
 
 .discussions .discussion .discussion-title {
