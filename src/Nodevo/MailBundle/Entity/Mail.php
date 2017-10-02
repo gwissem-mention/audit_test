@@ -58,6 +58,15 @@ class Mail
     /** @var int */
     const MAIL_AUTODIAG_UPDATE = 75;
 
+    /** @var int Mail id for reports */
+    const MAIL_REPORT_SHARED_FOR_ME = 78;
+
+    /** @var int Mail id for reports */
+    const MAIL_REPORT_SHARED_FOR_OTHER = 79;
+
+    /** @var int Mail id for reports */
+    const MAIL_REPORT_COPIED_FOR_ME = 80;
+
     /**
      * @var int
      *

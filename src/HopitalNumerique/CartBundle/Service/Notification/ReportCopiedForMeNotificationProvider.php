@@ -36,11 +36,12 @@ class ReportCopiedForMeNotificationProvider extends ReportNotificationProviderAb
             $copiedReport->getId(),
             $copiedReport->getName(),
             $userFrom->getPrenomNom(),
-            [
-                'reportId' => $copiedReport->getId(),
-                'userFromId' => $userFrom->getId(),
-                'userToId' => $userTo->getId(),
-            ]
+            array_merge(
+                parent::generateOptions($copiedReport, $userFrom),
+                [
+                    'userToId' => $userTo->getId(),
+                ]
+            )
         );
     }
 
@@ -61,6 +62,6 @@ class ReportCopiedForMeNotificationProvider extends ReportNotificationProviderAb
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendReportCopiedForMe($notification->getUser(), $notification->getData());
     }
 }
