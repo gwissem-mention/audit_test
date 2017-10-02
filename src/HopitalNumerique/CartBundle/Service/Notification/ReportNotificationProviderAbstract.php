@@ -2,9 +2,12 @@
 
 namespace HopitalNumerique\CartBundle\Service\Notification;
 
+use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CartBundle\Repository\ReportSharingRepository;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -13,6 +16,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 abstract class ReportNotificationProviderAbstract extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const SECTION_CODE = 'report';
 
     /**
@@ -50,5 +55,15 @@ abstract class ReportNotificationProviderAbstract extends NotificationProviderAb
     public static function getSectionCode()
     {
         return self::SECTION_CODE;
+    }
+
+    public function generateOptions(Report $report, User $user)
+    {
+        return [
+            'nomRapport' => $report->getName(),
+            'reportId' => $report->getId(),
+            'prenomUtilisateurDist' => $user->getFirstname(),
+            'nomUtilisateurDist' => $user->getLastname(),
+        ];
     }
 }

@@ -6,10 +6,9 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
-use Nodevo\MailBundle\DependencyInjection\MailManagerAwareTrait;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 /**

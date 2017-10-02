@@ -1093,6 +1093,69 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportSharedForMe(User $user, $options)
+    {
+        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_ME);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportSharedForOther(User $user, $options)
+    {
+
+        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_OTHER);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportCopiedForMe(User $user, $options)
+    {
+
+        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
+        dump($mailsToSend);
+        die;
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     *
+     * @return \Swift_Message
+     */
+    public function buildReportMail(User $user, $options, $mailId)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById($mailId);
+
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'urlMonPanier' => $this->_router->generate('account_cart', [], RouterInterface::ABSOLUTE_URL),
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        return $mailsToSend;
+    }
+
+    /**
      * Envoie un mail des réponses+questions d'un questionnaire rempli par un utilisateur
      * (différent des autres envois de mail).
      *

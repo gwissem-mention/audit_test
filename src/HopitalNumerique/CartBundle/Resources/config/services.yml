@@ -153,6 +153,8 @@ services:
             - '@security.token_storage'
             - '@hopitalnumerique\cartbundle\repository\reportsharingrepository'
             - '@hopitalnumerique_user.repository.user'
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider:
         class: HopitalNumerique\CartBundle\Service\Notification\ReportUpdatedNotificationProvider

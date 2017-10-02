@@ -5,7 +5,7 @@ namespace HopitalNumerique\ForumBundle\Service\Notification;
 use CCDNForum\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Nodevo\MailBundle\DependencyInjection\MailManagerAwareTrait;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

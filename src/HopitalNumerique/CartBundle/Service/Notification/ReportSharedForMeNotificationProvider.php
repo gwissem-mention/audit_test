@@ -36,11 +36,13 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
             $report->getId(),
             $report->getName(),
             $userFrom->getPrenomNom(),
-            [
-                'reportId' => $report->getId(),
-                'userFromId' => $userFrom->getId(),
-                'userToId' => $userTo->getId(),
-            ]
+            array_merge(
+                parent::generateOptions($report, $userTo),
+                [
+                    'userFromId' => $userFrom->getId(),
+                    'userToId' => $userTo->getId(),
+                ]
+            )
         );
     }
 
@@ -61,6 +63,6 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendReportSharedForMe($notification->getUser(), $notification->getData());
     }
 }
