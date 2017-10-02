@@ -2,13 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use Html2Text\Html2Text;
 use Doctrine\ORM\QueryBuilder;
-use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
+use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
-use Html2Text\Html2Text;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -16,6 +19,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 abstract class PracticeCommunityNotificationProviderAbstract extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const SECTION_CODE = 'practice_community';
 
     /**
@@ -85,5 +90,21 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     public function getSubscribers(Notification $notification)
     {
         return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
+    }
+
+    public function generateOptions(Groupe $group, User $user = null)
+    {
+        $options = [
+            'groupId' => $group->getId(),
+            'nomGroupe' => $group->getTitre(),
+        ];
+        if (null !== $user) {
+            array_merge($options, [
+                'prenomUtilisateurDist' => $user->getFirstname(),
+                'nomUtilisateurDist' => $user->getLastname(),
+            ]);
+        }
+
+        return $options;
     }
 }

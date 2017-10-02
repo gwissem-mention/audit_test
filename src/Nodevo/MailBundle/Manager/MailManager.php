@@ -1592,6 +1592,124 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupCommentNotification(User $user, $options)
+    {
+        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+            'groupe' => $options['groupId'],
+        ]);
+        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_COMMENT);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupDocumentNotification(User $user, $options)
+    {
+        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+            'groupe' => $options['groupId'],
+        ]);
+        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupCreatedNotification(User $user, $options)
+    {
+        $options['urlCommunaute'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+            'groupe' => $options['groupId'],
+        ]);
+        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupUserJoinedNotification(User $user, $options)
+    {
+        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+            'groupe' => $options['groupId'],
+        ]);
+        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpUserJoinedNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_CDP_USER_JOINED);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpFormCommentNotification(User $user, $options)
+    {
+        $options['urlFiche'] = $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
+            'fiche' => $options['ficheId'],
+        ]);
+        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE);
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     *
+     * @return \Swift_Message
+     */
+    public function buildCdpNotification(User $user, $options, $mailId)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById($mailId);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        return $mailsToSend;
+    }
+
+    /**
      * @param $sender
      * @param $recipient
      * @param $subject

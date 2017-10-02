@@ -37,7 +37,7 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
             ],
             $group->getTitre() . ' - ' . $registration->getUser()->getPrenomNom(),
             null,
-            ['groupId' => $group->getId()]
+            parent::generateOptions($group, $registration->getUser())
         );
     }
 
@@ -46,6 +46,6 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
     }
 }

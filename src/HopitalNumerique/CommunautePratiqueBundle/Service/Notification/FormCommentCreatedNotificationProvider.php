@@ -37,7 +37,13 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
                 $comment->getMessage(),
                 self::getLimitNotifyDetailLength()
             ),
-            ['groupId' => $comment->getFiche()->getGroupe()->getId()]
+            array_merge(
+                parent::generateOptions($comment->getGroupe(), $comment->getUser()),
+                [
+                    'ficheId' => $comment->getFiche()->getId(),
+                    'nomFiche' => $comment->getFiche()->getQuestionPosee(),
+                ]
+            )
         );
     }
 
@@ -46,6 +52,7 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
      */
     public function notify(Notification $notification)
     {
-
+        $notification->addData('commentaire', $notification->getDetail());
+        $this->mailManager->sendCdpFormCommentNotification($notification->getUser(), $notification->getData());
     }
 }
