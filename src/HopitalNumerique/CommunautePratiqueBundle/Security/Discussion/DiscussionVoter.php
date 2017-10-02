@@ -18,6 +18,7 @@ class DiscussionVoter extends Voter
     const COPY_TO_GROUP = 'copy_to_group';
     const DOWNLOAD = 'download';
     const MANAGE_DOMAINS = 'manage_domains';
+    const REORDER = 'reorder_discussion';
 
     /**
      * @param string $attribute
@@ -27,7 +28,7 @@ class DiscussionVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
+        if (!in_array($attribute, [self::REORDER, self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
             return false;
         }
 
@@ -50,10 +51,11 @@ class DiscussionVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::REORDER:
             case self::MARK_AS_RECOMMENDED:
             case self::COPY_TO_GROUP:
             case self::MANAGE_DOMAINS:
-                return $this->canManage($user, $subject);
+                return $this->canManage($user);
             case self::CREATE:
             case self::REPLY:
             case self::DOWNLOAD:
@@ -65,11 +67,10 @@ class DiscussionVoter extends Voter
 
     /**
      * @param User $user
-     * @param Discussion $discussion
      *
      * @return bool
      */
-    public function canManage(User $user, Discussion $discussion)
+    public function canManage(User $user)
     {
         if ($user->hasRoleCDPAdmin()) {
             return true;

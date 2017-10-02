@@ -3,7 +3,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            new Discussion('{{ scope }}');
+            new Discussion('{{ scope }}', {{ is_granted('REORDER_DISCUSSION') }});
         });
     </script>
 {% endblock %}

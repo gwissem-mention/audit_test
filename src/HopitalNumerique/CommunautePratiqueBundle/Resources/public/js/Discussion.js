@@ -7,8 +7,9 @@
 var Discussion;
 
 (function() {
-    Discussion = function (scope){
+    Discussion = function (scope, canReorder){
         this.scope = scope;
+        this.canReorder = canReorder ? canReorder : false;
         this.$container = $('.discussions');
         this.$list = this.$container.find('.list');
         this.$discussion = this.$container.find('.discussion');
@@ -65,7 +66,7 @@ var Discussion;
             that.$discussion.find('.droppable-layer').droppable({
                 drop: function (e, ui) {
                     that.$discussion.removeClass('dragging');
-                    that.dragDropResetDiscussion(ui.draggable.parent('.item-block'));
+                    that.dragDropResetDiscussion($(ui.draggable).parent('.item-block'));
 
                     that.sortDiscussionsTitle(that.$list, 1);
                     that.saveDiscussionOrder();
@@ -127,7 +128,7 @@ var Discussion;
                     ) {
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
-                        that.sortDiscussionsTitle($('.discussions .list'), 1);
+                        that.sortDiscussionsTitle(that.$list, 1);
                         that.saveDiscussionOrder();
                         that.dropItemEvent();
                         that.dragItemEvent();
@@ -155,8 +156,8 @@ var Discussion;
             }).appendTo($parent);
 
             if ($parent.find('.item-block[data-level='+level+'] > .children > .item-block').length > 0) {
-                $parent.find('.item-block[data-level='+level+'] > .children > .item-block').each(function (k, e) {
-                    that.sortDiscussionsTitle($(e).parent('.children'), level + 1);
+                $parent.find('.item-block[data-level='+level+'] > .children').has('.item-block').each(function (k, e) {
+                    that.sortDiscussionsTitle($(e), level + 1);
                 })
             }
         },

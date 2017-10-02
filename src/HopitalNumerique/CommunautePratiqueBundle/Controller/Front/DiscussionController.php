@@ -407,6 +407,13 @@ class DiscussionController extends Controller
         return new JsonResponse(null, 418);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @Security("is_granted('reorder_discussion')")
+     *
+     * @return JsonResponse
+     */
     public function reorderDiscussionAction(Request $request)
     {
         if (null !== ($order = $request->request->get('order'))) {
