@@ -120,7 +120,11 @@ var Discussion;
                     $(this).removeClass('droppable-over');
                     var $block = $(this).parent('.item-block');
 
-                    if ($block.data('level') < 3 && !$(ui.draggable).parent('.item-block').has($block).length) {
+                    if (
+                        $block.data('level') < 3 &&
+                        !$(ui.draggable).parent('.item-block').has($block).length &&
+                        $(ui.draggable).parent('.item-block').find('.children').has('.item-block').length + $block.data('level') < 3
+                    ) {
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
                         that.sortDiscussionsTitle($('.discussions .list'), 1);
