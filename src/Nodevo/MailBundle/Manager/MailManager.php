@@ -839,6 +839,27 @@ class MailManager extends BaseManager
         return $toSend;
     }
 
+    public function sendNextSessionsNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_SUGGESTION_ANAP_NEXT_SESSIONS);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
     /**
      * Envoie un courriel concernant les demandes d'intervention.
      *

@@ -69,6 +69,8 @@ class Mail
 
     const MAIL_USER_ROLE_UPDATED = 86;
 
+    const MAIL_SUGGESTION_ANAP_NEXT_SESSIONS = 87;
+
     /**
      * @var int
      *

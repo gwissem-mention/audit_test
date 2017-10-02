@@ -152,6 +152,8 @@ services:
             - '@nodevo_acl.manager.ressource'
         tags:
             - { name: notification.aggregator, key: coming_training_sessions }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener:
         class: HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener
