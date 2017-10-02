@@ -81,6 +81,8 @@ class Mail
 
     const MAIL_CDP_USER_JOINED = 85;
 
+    const MAIL_GUIDED_SEARCH_NOTIF = 88;
+
     /**
      * @var int
      *

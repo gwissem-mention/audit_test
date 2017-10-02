@@ -1110,6 +1110,16 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendGuidedSearchNotification(User $user, $options)
+    {
+        $options['urlParcoursGuides'] = $this->_router->generate('account_service');
+        $this->sendNotification($user, $options, Mail::MAIL_GUIDED_SEARCH_NOTIF);
+    }
+
+    /**
      * @return object
      */
     public function getCartReportMail()
@@ -1161,8 +1171,6 @@ class MailManager extends BaseManager
     public function sendReportCopiedForMe(User $user, $options)
     {
         $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
-        dump($mailsToSend);
-        die;
         $this->mailer->send($mailsToSend);
     }
 
@@ -1769,6 +1777,32 @@ class MailManager extends BaseManager
             $this->getMailDomaine(),
             $content
         );
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     */
+    public function sendNotification(User $user, $options, $mailId)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById($mailId);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
 
         $this->mailer->send($mailsToSend);
     }
