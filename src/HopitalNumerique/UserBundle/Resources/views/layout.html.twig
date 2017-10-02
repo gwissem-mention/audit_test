@@ -14,6 +14,7 @@
         {% block stylesheets %}
             {% stylesheets output="compiled/login.css" filter="cssrewrite, ?yui_css"
                 'bundles/nodevoadmin/css/avant.css'
+                'bundles/hopitalnumeriqueuser/css/layout.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -23,7 +24,7 @@
     <body class="focusedform">
         <div class="verticalcenter">
             <a href="{{path('hopital_numerique_homepage')}}">
-                <img src="{{asset('bundles/nodevoadmin/img/logo-big.png')}}" alt="Logo" class="brand" />
+                <h3>{{ 'title_ressource_center'|trans|nl2br }}</h3>
             </a>
             <div class="panel panel-primary">
                 {{ block('flashBags') }}
