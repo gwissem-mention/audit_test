@@ -55,6 +55,9 @@ class Mail
     /** @var int Mail id forum topic created */
     const MAIL_FORUM_TOPIC_CREATED = 81;
 
+    /** @var int */
+    const MAIL_AUTODIAG_UPDATE = 75;
+
     /**
      * @var int
      *
