@@ -57,13 +57,11 @@ abstract class ReportNotificationProviderAbstract extends NotificationProviderAb
         return self::SECTION_CODE;
     }
 
-    public function generateOptions(Report $report, User $user)
+    public function generateOptions(Report $report)
     {
         return [
             'nomRapport' => $report->getName(),
             'reportId' => $report->getId(),
-            'prenomUtilisateurDist' => $user->getFirstname(),
-            'nomUtilisateurDist' => $user->getLastname(),
         ];
     }
 }

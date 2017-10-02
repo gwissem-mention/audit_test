@@ -49,21 +49,12 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $title = substr($title, 0, self::getLimitNotifyTitleLength()) . '...';
         }
 
-        $detail = $comment->getContenu();
-        if (strlen($detail) > self::getLimitNotifyDetailLength()) {
-            $detail = substr($detail, 0, self::getLimitNotifyDetailLength()) . '...';
-        }
 
         $this->processNotification(
             $uid,
             $title,
-            $detail,
-            array_merge(
-                parent::generateOptions($object, $infradoc),
-                [
-                    'commentaire'      => $this->processText($comment->getTexte())
-                ]
-            )
+            $this->processText($comment->getTexte()),
+            parent::generateOptions($object, $infradoc)
         );
     }
 
@@ -72,6 +63,7 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
      */
     public function notify(Notification $notification)
     {
+        $notification->addData('commentaire', $notification->getDetail());
         $this->mailManager->sendPublicationCommentNotification($notification->getUser(), $notification->getData());
     }
 }

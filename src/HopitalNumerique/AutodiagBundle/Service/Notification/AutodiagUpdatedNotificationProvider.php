@@ -74,7 +74,6 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
             [
                 'autodiagId' => $autodiag->getId(),
                 'nomautodiag' => $autodiag->getTitle(),
-                'miseAJour' => $reason,
             ]
         );
     }
@@ -100,6 +99,7 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function notify(Notification $notification)
     {
+        $notification->addData('miseAJour', $notification->getDetail());
         $this->mailManager->sendAutodiagUpdateNotification($notification->getUser(), $notification->getData());
     }
 }

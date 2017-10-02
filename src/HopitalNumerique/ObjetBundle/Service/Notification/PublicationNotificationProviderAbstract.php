@@ -91,14 +91,12 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
         return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
     }
 
-    public function generateOptions(Objet $object, Contenu $content)
+    public function generateOptions(Objet $object, Contenu $infradoc = null)
     {
         return [
-            [
-                'idPublication'    => $object->getId(),
-                'idInfradoc'       => $content ? $content->getId() : null,
-                'titrePublication' => $content ? $content->getTitre() : $object->getTitre(),
-            ]
+            'idPublication'    => $object->getId(),
+            'idInfradoc'       => $infradoc ? $infradoc->getId() : null,
+            'titrePublication' => $infradoc ? $infradoc->getTitre() : $object->getTitre(),
         ];
     }
 }

@@ -50,13 +50,8 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
         $this->processNotification(
             $uid,
             $title,
-            $reason,
-            array_merge(
-                parent::generateOptions($object, $infradoc),
-                [
-                    'miseAJour' => $infradoc ? $infradoc->getContenu() : $object->getResume(),
-                ]
-            )
+            $infradoc ? $infradoc->getContenu() : $object->getResume(),
+            parent::generateOptions($object, $infradoc)
         );
     }
 
@@ -65,6 +60,7 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
      */
     public function notify(Notification $notification)
     {
+        $notification->addData('miseAJour', $notification->getDetail());
         $this->mailManager->sendPublicationNotifiedNotification($notification->getUser(), $notification->getData());
     }
 }

@@ -1108,7 +1108,6 @@ class MailManager extends BaseManager
      */
     public function sendReportSharedForOther(User $user, $options)
     {
-
         $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_OTHER);
         $this->mailer->send($mailsToSend);
     }
@@ -1119,7 +1118,6 @@ class MailManager extends BaseManager
      */
     public function sendReportCopiedForMe(User $user, $options)
     {
-
         $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
         dump($mailsToSend);
         die;
@@ -1465,7 +1463,6 @@ class MailManager extends BaseManager
     {
         /** @var Mail $mail */
         $mail = $this->findOneById(Mail::MAIL_PUBLICATION_NOTIFIED);
-
         $mail->setBody($this->replaceContent(
             $mail->getBody(),
             null,
