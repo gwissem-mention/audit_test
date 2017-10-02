@@ -54,7 +54,7 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: current($discussions), $domains, $group, $this->getUser()));
+        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: $group->getPresentationDiscussion() ?: current($discussions), $domains, $group, $this->getUser()));
 
         if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);

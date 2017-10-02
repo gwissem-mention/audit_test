@@ -70,7 +70,7 @@ var Discussion;
                     that.$discussion.removeClass('dragging');
                     that.dragDropResetDiscussion($(ui.draggable).parent('.item-block'));
 
-                    that.sortDiscussionsTitle(that.$list, 1);
+                    that.sortDiscussionsTitle(that.$list.children('.items'), 1);
                     that.saveDiscussionOrder();
                     that.dropItemEvent();
                     that.dragItemEvent();
@@ -81,7 +81,7 @@ var Discussion;
         dragItemEvent: function ()
         {
             var that = this;
-            var $items = that.$list.find('.item');
+            var $items = that.$list.find('.item-block .item');
 
             if ($items.hasClass('ui-draggable')) {
                 $items.draggable('destroy');
@@ -130,7 +130,7 @@ var Discussion;
                     ) {
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
-                        that.sortDiscussionsTitle(that.$list, 1);
+                        that.sortDiscussionsTitle(that.$list.children('.items'), 1);
                         that.saveDiscussionOrder();
                         that.dropItemEvent();
                         that.dragItemEvent();
@@ -142,7 +142,7 @@ var Discussion;
         dragDropResetDiscussion: function ($element)
         {
             $element.attr('data-level', 1);
-            $element.prependTo(this.$list);
+            $element.prependTo(this.$list.children('.items'));
         },
 
         sortDiscussionsTitle: function ($parent, level)
