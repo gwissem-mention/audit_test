@@ -864,30 +864,57 @@ class MailManager extends BaseManager
         return $this->generationMail($user, $mail, $options);
     }
 
-    /**
-     * @param $user
-     * @param $options
-     * @param $topicId
-     *
-     * @return \Swift_Message
-     */
-    public function sendNouveauMessageForumMail($user, $options, $topicId)
+    public function sendForumTopicCreated(User $user, $options)
     {
-        //Création du lien dans le mail
-        $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
-                'forumName' => $options['forum'],
-                'topicId' => $topicId,
-            ])) . '" target="_blank" >%s</a>';
-
-        $options['lienversmessage'] = sprintf(
-            $options['lienversmessage'],
-            $this->truncatePostBody($options['shortMessage'])
-        );
-
         /** @var Mail $mail */
-        $mail = $this->findOneById(36);
+        $mail = $this->findOneById(Mail::MAIL_FORUM_TOPIC_CREATED);
 
-        return $this->generationMail($user, $mail, $options);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                    'urlMessage' => $this->_router->generate('hopitalnumerique_forum_reference_topic', [
+                        'id' => $options['topicId'],
+                    ])
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param array $options
+     */
+    public function sendForumPostCreatedNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_FORUM_POST_CREATED);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                    'urlMessage' => $this->_router->generate('hopitalnumerique_forum_reference_topic', [
+                        'id' => $options['id'],
+                    ])
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
     }
 
     /**

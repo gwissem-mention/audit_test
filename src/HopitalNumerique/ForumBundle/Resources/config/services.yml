@@ -142,6 +142,8 @@ services:
             - '@hopitalnumerique\forumbundle\repository\subscriptionrepository'
         tags:
             - { name: notification.aggregator, key: forum_post_created }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider:
         class: HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider
@@ -152,6 +154,8 @@ services:
             - '@hopitalnumerique\forumbundle\repository\subscriptionrepository'
         tags:
             - { name: notification.aggregator, key: forum_topic_created }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ForumBundle\EventListener\PostCreatedListener:
         class: HopitalNumerique\ForumBundle\EventListener\PostCreatedListener

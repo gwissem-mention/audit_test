@@ -18,6 +18,8 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
 
     const NOTIFICATION_CODE = 'publication_commented';
 
+    const NOTIFICATION_MAIL = 69;
+
     /**
      * @return string
      */
