@@ -46,7 +46,9 @@
                 {% endif %}
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
                     {% if scope == 'public' %}
-                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                        {% if discussion.groups.count == 0 %}
+                            <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                        {% endif %}
                     {% else %}
                         <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
                     {% endif %}
