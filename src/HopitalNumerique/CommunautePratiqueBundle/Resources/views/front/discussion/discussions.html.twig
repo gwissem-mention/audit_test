@@ -42,7 +42,7 @@
     {% endif %}
     <div class="wrapper">
         {% set lazyLoadStep = 10 %}
-        <div class="list" data-lazyload-step="{{ lazyLoadStep }}">
+        <div class="list" data-lazyload-step="{{ lazyLoadStep }}" data-reorder-uri="{{ path('hopitalnumerique_communautepratique_discussions_discussion_reorder') }}">
             {% set displayedItemsCount = 20 %}
             {% set currentDiscussionToShow = currentDiscussion is not null %}
             {% for position, discussion in discussions if scope == 'group' and discussion.parent == null %}

@@ -15,6 +15,25 @@ use HopitalNumerique\UserBundle\Entity\User;
 class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function findByIdsIndexed(array $ids)
+    {
+        if (0 === count($ids)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('discussion', 'discussion.id')
+            ->andWhere('discussion.id IN (:ids)')
+            ->setParameter('ids', $ids)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * @param DiscussionListQuery $query
      *
      * @return Discussion[]

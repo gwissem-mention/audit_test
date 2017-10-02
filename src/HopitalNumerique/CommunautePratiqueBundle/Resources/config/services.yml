@@ -119,6 +119,12 @@ services:
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
             - '@doctrine.orm.entity_manager'
 
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
+            - '@doctrine.orm.entity_manager'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter
         arguments:

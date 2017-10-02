@@ -55,6 +55,10 @@ var Discussion;
         {
             var that = this;
 
+            if (that.scope !== "group") {
+                return;
+            }
+
             that.dropItemEvent();
             that.dragItemEvent();
 
@@ -64,6 +68,7 @@ var Discussion;
                     that.dragDropResetDiscussion(ui.draggable.parent('.item-block'));
 
                     that.sortDiscussionsTitle(that.$list, 1);
+                    that.saveDiscussionOrder();
                     that.dropItemEvent();
                     that.dragItemEvent();
                 }
@@ -119,6 +124,7 @@ var Discussion;
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
                         that.sortDiscussionsTitle($('.discussions .list'), 1);
+                        that.saveDiscussionOrder();
                         that.dropItemEvent();
                         that.dragItemEvent();
                     }
@@ -149,6 +155,24 @@ var Discussion;
                     that.sortDiscussionsTitle($(e).parent('.children'), level + 1);
                 })
             }
+        },
+
+        saveDiscussionOrder: function ()
+        {
+            var that = this;
+            var reorderUri = that.$list.data('reorder-uri');
+
+            var getTree = function ($parent) {
+                var data = {};
+
+                $parent.children('.item-block').each (function (k, e) {
+                    data[$(e).children('.item').data('discussion-id')] = getTree($(e).children('.children'));
+                });
+
+                return data;
+            };
+
+            $.post(reorderUri, {'order': JSON.stringify(getTree(that.$list))});
         },
 
         discussionReading: function ()

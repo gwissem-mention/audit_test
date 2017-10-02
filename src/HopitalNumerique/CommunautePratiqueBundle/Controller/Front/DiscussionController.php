@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -398,6 +400,17 @@ class DiscussionController extends Controller
             } catch (\Exception $e) {
                 return new JsonResponse(null, 418);
             }
+
+            return new JsonResponse();
+        }
+
+        return new JsonResponse(null, 418);
+    }
+
+    public function reorderDiscussionAction(Request $request)
+    {
+        if (null !== ($order = $request->request->get('order'))) {
+            $this->get(ReorderDiscussionHandler::class)->handle(new ReorderDiscussionCommand(json_decode($order, true)));
 
             return new JsonResponse();
         }

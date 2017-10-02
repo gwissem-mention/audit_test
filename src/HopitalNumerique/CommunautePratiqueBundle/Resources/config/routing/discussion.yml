@@ -43,6 +43,12 @@ hopitalnumerique_communautepratique_discussions_discussion_read_message:
     methods:
         - POST
 
+hopitalnumerique_communautepratique_discussions_discussion_reorder:
+    path: /reorder
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reorderDiscussion }
+    methods:
+        - POST
+
 hopitalnumerique_communautepratique_discussions_create_discussion:
     path: /create/{group}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
