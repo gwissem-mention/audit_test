@@ -67,6 +67,8 @@ class Mail
     /** @var int Mail id for reports */
     const MAIL_REPORT_COPIED_FOR_ME = 80;
 
+    const MAIL_USER_ROLE_UPDATED = 86;
+
     /**
      * @var int
      *

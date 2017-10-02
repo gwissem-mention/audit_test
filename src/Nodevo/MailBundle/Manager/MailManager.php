@@ -456,6 +456,27 @@ class MailManager extends BaseManager
         return $this->generationMail($user, $mail, $options, $check);
     }
 
+    public function sendUserRoleUpdateNotification(User $user, $options)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_USER_ROLE_UPDATED);
+        $mail->setBody($this->replaceContent(
+            $mail->getBody(),
+            null,
+            array_merge(
+                $options,
+                [
+                    'prenomUtilisateur' => $user->getFirstname(),
+                ]
+            )
+        ));
+
+        $mailsToSend = $this->generationMail($user, $mail);
+        $mailsToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailsToSend);
+    }
+
     /**
      * Envoi un mail de confirmation de candidature expert.
      *

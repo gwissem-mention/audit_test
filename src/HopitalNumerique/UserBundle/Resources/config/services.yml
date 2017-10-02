@@ -293,6 +293,8 @@ services:
             - '@hopitalnumerique_user.repository.user'
         tags:
             - { name: notification.aggregator, key: user_role_updated }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener:
         class: HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener
