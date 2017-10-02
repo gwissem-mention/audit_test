@@ -56,7 +56,7 @@ var Discussion;
         {
             var that = this;
 
-            if (that.scope !== "group") {
+            if (that.canReorder && that.scope !== "group") {
                 return;
             }
 
@@ -90,7 +90,7 @@ var Discussion;
                 start: function () {
                     $(this).addClass('dragging');
 
-                    if ($(this).parents('.item-block').data('level') > 1) {
+                    if ($(this).parents('.item-block').attr('data-level') > 1) {
                         that.$discussion.addClass('dragging');
                     }
                 },
@@ -122,9 +122,9 @@ var Discussion;
                     var $block = $(this).parent('.item-block');
 
                     if (
-                        $block.data('level') < 3 &&
+                        $block.attr('data-level') < 3 &&
                         !$(ui.draggable).parent('.item-block').has($block).length &&
-                        $(ui.draggable).parent('.item-block').find('.children').has('.item-block').length + $block.data('level') < 3
+                        $(ui.draggable).parent('.item-block').find('.children').has('.item-block').length + $block.attr('data-level') < 3
                     ) {
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
@@ -139,7 +139,7 @@ var Discussion;
 
         dragDropResetDiscussion: function ($element)
         {
-            $element.data('level', 1);
+            $element.attr('data-level', 1);
             $element.prependTo(this.$list);
         },
 
@@ -151,9 +151,9 @@ var Discussion;
                 return;
             }
 
-            $parent.children('.item-block').data('level', level).sort(function (a, b) {
+            $parent.children('.item-block').attr('data-level', level).sort(function (a, b) {
                 return +a.getAttribute('data-global-position') - +b.getAttribute('data-global-position');
-            }).appendTo($parent);
+            }).prependTo($parent);
 
             if ($parent.find('.item-block[data-level='+level+'] > .children > .item-block').length > 0) {
                 $parent.find('.item-block[data-level='+level+'] > .children').has('.item-block').each(function (k, e) {
