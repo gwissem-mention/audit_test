@@ -7,3 +7,13 @@ services:
             - '@security.authorization_checker'
         tags:
             - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@translator'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@twig'
+        tags:
+            - { name: kernel.event_subscriber }

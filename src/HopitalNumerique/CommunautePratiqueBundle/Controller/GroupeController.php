@@ -3,6 +3,8 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Group\GroupRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter;
 use HopitalNumerique\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -178,7 +180,7 @@ class GroupeController extends Controller
         $user = $this->getUser();
 
         if (null !== $user && !$user->hasCommunautePratiqueGroupe($groupe)) {
-            if (count($this->get('hopitalnumerique_questionnaire.manager.reponse')
+            if (count($answers = $this->get('hopitalnumerique_questionnaire.manager.reponse')
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0
             ) {
                 $user->addCommunautePratiqueGroupe($groupe);
@@ -205,6 +207,8 @@ class GroupeController extends Controller
                     $groupe,
                     $urlGroupe
                 );
+
+                $this->get('event_dispatcher')->dispatch(Events::GROUP_REGISTRATION, new GroupRegistrationEvent($user, $groupe, $answers));
             }
         }
 

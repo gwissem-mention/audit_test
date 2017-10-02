@@ -111,10 +111,10 @@ class Discussion
      * Discussion constructor.
      *
      * @param $title
-     * @param User $author
+     * @param User|null $author
      * @param array $domains
      */
-    public function __construct($title, User $author, array $domains)
+    public function __construct($title, User $author = null, array $domains)
     {
         $this->title = $title;
         $this->user = $author;

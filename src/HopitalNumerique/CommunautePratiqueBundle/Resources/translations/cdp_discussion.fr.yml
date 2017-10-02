@@ -67,6 +67,16 @@ discussion:
             form:
                 submit:
                     text: Envoyer
+        presentation:
+            title: Présentation des membres du groupe
+            content:
+                prefix: |
+                    Bonjour
+
+                    Voici ma présentation:
+                suffix: |
+                    Cordialement
+                    %author%
     author_tooltip:
         organization: "Etablissement :"
         presentation: "Présentation :"
