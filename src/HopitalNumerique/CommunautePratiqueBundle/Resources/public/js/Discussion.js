@@ -115,7 +115,7 @@ var Discussion;
                     $(this).removeClass('droppable-over');
                     var $block = $(this).parent('.item-block');
 
-                    if ($block.data('level') < 3) {
+                    if ($block.data('level') < 3 && !$(ui.draggable).parent('.item-block').has($block).length) {
                         $(ui.draggable).parent('.item-block').prependTo($block.children('.children'));
 
                         that.sortDiscussionsTitle($('.discussions .list'), 1);
@@ -136,13 +136,17 @@ var Discussion;
         {
             var that = this;
 
-            $parent.children('.item-block').data('level', +level).sort(function (a, b) {
+            if ($parent.children('.item-block').length === 0) {
+                return;
+            }
+
+            $parent.children('.item-block').data('level', level).sort(function (a, b) {
                 return +a.getAttribute('data-global-position') - +b.getAttribute('data-global-position');
             }).appendTo($parent);
 
-            if ($parent.find('.item-block[data-level='+level+'] .children > .item-block').length) {
-                $parent.find('.item-block[data-level='+level+'] .children').each(function (k, e) {
-                    that.sortDiscussionsTitle($(e), +level + 1);
+            if ($parent.find('.item-block[data-level='+level+'] > .children > .item-block').length > 0) {
+                $parent.find('.item-block[data-level='+level+'] > .children > .item-block').each(function (k, e) {
+                    that.sortDiscussionsTitle($(e).parent('.children'), level + 1);
                 })
             }
         },
