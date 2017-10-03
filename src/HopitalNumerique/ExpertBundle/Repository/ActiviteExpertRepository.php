@@ -43,7 +43,7 @@ class ActiviteExpertRepository extends EntityRepository
             ->leftJoin('actE.etat', 'etat')
             ->leftJoin('actE.prestataire', 'prestataire')
             ->leftJoin('actE.uniteOeuvreConcerne', 'unite')
-            ->leftJoin('actE.activities', 'activities')
+            ->leftJoin('actE.typeActivite', 'activities')
             ->orderBy('actE.dateDebut', 'DESC')
             ->addOrderBy('actE.dateFin', 'ASC')
             ->addOrderBy('exp.lastname', 'ASC')
