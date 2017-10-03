@@ -46,12 +46,12 @@
             {% set displayedItemsCount = 20 %}
             {% set currentDiscussionToShow = currentDiscussion is not null %}
 
-            {% for position, discussion in discussions if scope == 'group' and group.presentationDiscussion.id == discussion.id %}
+            {% for position, discussion in discussions if scope == 'group' and group.presentationDiscussion is not null and group.presentationDiscussion.id == discussion.id %}
                 {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/presentation_discussion_title.html.twig', {level: 1}) }}
             {% endfor %}
 
             <div class="items">
-                {% for position, discussion in discussions if scope == 'public' or (scope == 'group' and discussion.parent == null and group.presentationDiscussion.id != discussion.id) %}
+                {% for position, discussion in discussions if scope == 'public' or (scope == 'group' and discussion.parent == null and (group.presentationDiscussion is null or group.presentationDiscussion.id != discussion.id)) %}
                     {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion_title.html.twig', {level: 1}) }}
                 {% endfor %}
             </div>
