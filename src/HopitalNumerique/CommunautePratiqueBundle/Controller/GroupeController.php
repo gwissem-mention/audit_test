@@ -57,6 +57,7 @@ class GroupeController extends Controller
      *
      * @param Request $request
      * @param Groupe  $groupe
+     * @param Discussion|null $discussion
      *
      * @return RedirectResponse|Response
      */

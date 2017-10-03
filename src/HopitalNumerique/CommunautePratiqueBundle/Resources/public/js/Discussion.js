@@ -106,8 +106,8 @@ var Discussion;
             var that = this;
             var $items = that.$list.find('.item-block[data-level="1"] > .item, .item-block[data-level="2"] > .item');
 
-            if ($items.hasClass('ui-droppable')) {
-                $items.droppable('destroy');
+            if (that.$list.find('.ui-droppable').hasClass('ui-droppable')) {
+                that.$list.find('.ui-droppable').droppable('destroy');
             }
 
             $items.droppable({

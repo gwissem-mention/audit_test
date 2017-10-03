@@ -45,10 +45,14 @@ class ReorderDiscussionHandler
         $this->entityManager->flush();
     }
 
+    /**
+     * @param array $discussions
+     * @param array $order
+     * @param Discussion|null $parent
+     */
     protected function reorder(array $discussions, array $order, Discussion $parent = null)
     {
         foreach ($order as $id => $children) {
-
             $discussions[$id]->setParent($parent);
 
             if (count($children)) {

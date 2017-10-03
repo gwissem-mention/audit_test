@@ -4,7 +4,6 @@
 
 .group .tabs {
     display: flex;
-    flex-direction: row;
     overflow: hidden;
     background: #fff;
 }

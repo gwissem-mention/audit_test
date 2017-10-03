@@ -42,7 +42,7 @@ class DiscussionListQuery
 
     /**
      * @param array $domains
-     * @param array $groups
+     * @param Groupe|null $group
      * @param User|null $user
      *
      * @return DiscussionListQuery
