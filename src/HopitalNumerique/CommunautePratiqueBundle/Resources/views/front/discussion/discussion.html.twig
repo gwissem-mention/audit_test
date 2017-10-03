@@ -133,7 +133,7 @@
                             </a>
                         {% endif %}
                     {% else %}
-                        {{ message.content|raw }}
+                        {{ message.content|parsePublication|unescape }}
                     {% endif %}
                 </div>
             </div>

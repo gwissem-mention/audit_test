@@ -16,6 +16,8 @@ var Discussion;
         this.$messages = this.$container.find('.message');
         this.$lazyLoadBtn = this.$list.find('.load-more');
 
+        tinyMCE.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
+
         this.init();
     };
 
@@ -242,11 +244,11 @@ var Discussion;
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-                plugins      : 'paste link',
+                plugins      : 'paste link publicationDomaine',
                 height       : 120,
                 menubar      : false,
                 content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-                toolbar1     : 'bold | underline | italic | link',
+                toolbar1     : 'bold | underline | italic | link | publicationDomaine',
                 relative_urls: false,
                 statusbar    : false,
                 paste_as_text: true
