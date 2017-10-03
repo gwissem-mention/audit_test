@@ -7,6 +7,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,6 +17,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     /**
      * @var UserRepository $userRepository
      */
@@ -68,7 +71,12 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
             $user->getId(),
             $user->getPrenomNom(),
             null,
-            ['regionId' => $user->getRegion()->getId()]
+            [
+                'regionId' => $user->getRegion()->getId(),
+                'prenomUtilisateurDist' => $user->getFirstname(),
+                'nomUtilisateurDist' => $user->getLastname(),
+                'role' => $user->getRole(),
+            ]
         );
     }
 
@@ -89,6 +97,6 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendUserRoleUpdateNotification($notification->getUser(), $notification->getData());
     }
 }
