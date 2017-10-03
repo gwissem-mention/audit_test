@@ -294,6 +294,8 @@ services:
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
         tags:
             - { name: notification.aggregator, key: guided_search_updated }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener:
         class: HopitalNumerique\RechercheParcoursBundle\EventListener\GuidedSearchUpdatedListener

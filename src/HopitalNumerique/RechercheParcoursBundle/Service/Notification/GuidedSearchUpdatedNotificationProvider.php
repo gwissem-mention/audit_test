@@ -8,6 +8,7 @@ use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\RechercheParcoursBundle\Repository\GuidedSearchRepository;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,6 +18,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'guided_search_updated';
 
     const SECTION_CODE =  'guided_search';
@@ -70,7 +73,10 @@ class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstra
             $parcoursGestion->getId(),
             $parcoursGestion->getNom(),
             $reason,
-            ['parcoursGestionId' => $parcoursGestion->getId()]
+            [
+                'parcoursGestionId' => $parcoursGestion->getId(),
+                'nomParcours' => $parcoursGestion->getNom(),
+            ]
         );
     }
 
@@ -95,6 +101,9 @@ class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstra
      */
     public function notify(Notification $notification)
     {
-
+        if (1 === $notification->getDetailLevel()) {
+            $notification->addData('miseAJour', $notification->getDetail());
+        }
+        $this->mailManager->sendGuidedSearchNotification($notification->getUser(), $notification->getData());
     }
 }
