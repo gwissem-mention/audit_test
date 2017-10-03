@@ -40,8 +40,6 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
                 parent::generateOptions($report, $userFrom),
                 [
                     'reportOwnerId' => $report->getOwner()->getId(),
-                    'prenomUtilisateurDistTo' => $userTo->getFirstname(),
-                    'nomUtilisateurDistTo' => $userTo->getLastname(),
                 ]
             )
         );
@@ -64,6 +62,11 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
      */
     public function notify(Notification $notification)
     {
+        list($firstname, $lastname, $firstnameTo, $lastnameTo) = explode(' ', $notification->getDetail());
+        $notification->addData('prenomUtilisateurDist', $firstname);
+        $notification->addData('nomUtilisateurDist', $lastname);
+        $notification->addData('prenomUtilisateurDistTo', $firstnameTo);
+        $notification->addData('nomUtilisateurDistTo', $lastnameTo);
         $this->mailManager->sendReportSharedForOther($notification->getUser(), $notification->getData());
     }
 }

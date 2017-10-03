@@ -63,6 +63,9 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
      */
     public function notify(Notification $notification)
     {
+        list($firstname, $lastname) = explode(' ', $notification->getDetail());
+        $notification->addData('prenomUtilisateurDist', $firstname);
+        $notification->addData('nomUtilisateurDist', $lastname);
         $this->mailManager->sendReportSharedForMe($notification->getUser(), $notification->getData());
     }
 }
