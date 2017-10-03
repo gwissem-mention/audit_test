@@ -38,9 +38,10 @@ class CreateDiscussionHandler
     {
         $discussion = new Discussion($command->title, $command->author, $command->domains);
         if ($command->group) {
-            $discussion->addGroup($command->group);
-        } else {
-            $discussion->setPublic(true);
+            $discussion
+                ->addGroup($command->group)
+                ->setPublic(false)
+            ;
         }
 
         $this->entityManager->persist($discussion);
@@ -48,6 +49,7 @@ class CreateDiscussionHandler
 
         $messageCommand = new PostDiscussionMessageCommand($discussion, $command->author);
         $messageCommand->content = $command->content;
+        $messageCommand->files = $command->files;
         $this->postMessageHandler->handle($messageCommand);
 
         return $discussion;

@@ -210,6 +210,22 @@ class Discussion
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getMessagesFiles()
+    {
+        $files = new ArrayCollection();
+
+        foreach ($this->getMessages() as $message) {
+            foreach ($message->getFiles() as $file) {
+                $files->add($file);
+            }
+        }
+
+        return $files;
+    }
+
+    /**
      * @return Read[]
      */
     public function getReadings()
@@ -314,18 +330,45 @@ class Discussion
      */
     public function getNewMessageCount(User $user)
     {
+        return $this->getNewMessages($user)->count();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return int
+     */
+    public function getNewMessageFileCount(User $user)
+    {
+        $count = 0;
+        foreach ($this->getNewMessages($user) as $message) {
+            $count += $message->getFiles()->count();
+        }
+
+        return $count;
+    }
+
+    /**
+     * Return user new messages
+     *
+     * @param User $user
+     *
+     * @return ArrayCollection|Message[]
+     */
+    private function getNewMessages(User $user)
+    {
         /** @var Read $read */
         $read = $this->getReadings()->filter(function (Read $read) use ($user) {
             return $read->getUser()->getId() === $user->getId();
         })->first();
 
         if (!$read) {
-            return 0;
+            return new ArrayCollection();
         }
 
         return $this->getMessages()->filter(function (Message $message) use ($read) {
             return $message->getCreatedAt() > $read->getLastMessageDate();
-        })->count();
+        });
     }
 
     /**

@@ -146,6 +146,64 @@
     padding: 15px 25px;
 }
 
+.discussions .discussion .discussion-files {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 25px;
+}
+
+.discussions .discussion .discussion-files h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
+
+.discussions .discussion .discussion-files .more {
+    float: right;
+    color: #7b7b7b;
+    font-size: 18px;
+}
+
+.discussions .discussion .discussion-files .more[aria-expanded=true] {
+    transform: rotate(180deg);
+}
+
+.discussions .discussion .discussion-files h3 .new-document {
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-left: 10px;
+    color: #8b8b8b;
+}
+
+.discussions .discussion .discussion-files .file {
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.discussions .discussion .discussion-files .file .is-new {
+    color: #fff;
+    background: #ec0034;
+    border-radius: 2px;
+    font-size: 10px;
+    padding: 1px 2px;
+}
+
+.discussions .discussion .discussion-files .file .download {
+    color: #777;
+    font-size: 12px;
+}
+
+.discussions .discussion .discussion-files .file .filename {
+    color: #464646;
+    border-bottom: 1px solid #464646;
+    margin: 0 5px;
+}
+
+.discussions .discussion .discussion-files .file .author {
+    color: #8b8b8b;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
 .discussions .discussion .discussion-title h2 {
     font-size: 15px;
     font-weight: bold;

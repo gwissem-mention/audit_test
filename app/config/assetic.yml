@@ -21,6 +21,7 @@ assetic:
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle
         - HopitalNumeriqueEtablissementBundle
+        - HopitalNumeriqueFichierBundle
         - HopitalNumeriqueCoreBundle
         - HopitalNumeriqueModuleBundle
         - HopitalNumeriqueObjetBundle
@@ -79,6 +80,10 @@ assetic:
                 - 'bundles/hopitalnumeriqueaccount/js/InformationsManquantes.js'
         #-->
         #JS
+        dropzone_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/dropzone/dist/min/dropzone.min.js'
+            filters : [ ?yui_js ]
         bbcode_js:
             inputs:
                 - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/js/jquery.bbeditor.js'
@@ -207,6 +212,10 @@ assetic:
             inputs:
                 - '%kernel.root_dir%/Resources/components/jstree/dist/jstree.min.js'
         #CSS
+        dropzone_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/dropzone/dist/min/dropzone.min.css"
+            filters: [ cssembed, ?yui_css ]
         bbcode_css:
             inputs:
                 - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/css/default.css'

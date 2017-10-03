@@ -47,9 +47,15 @@ discussion:
                 label: Ajouter au panier
             subscribtion:
                 label: S'abonner
+        files:
+            title: Documents
+            new_document_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
+            new_document_highlight: "nouveau document | nouveaux documents"
+            author: Déposé par %author% le %date%
+            is_new: NEW
     message:
         title: "Message | Messages"
-        new_message_count: "Un %highlight% a été posté de puis votre dernière visite | De %highlight% ont été postés de puis votre dernière visite"
+        new_message_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
         new_message_highlight: "nouveau message | nouveaux messages"
         item:
             infos: Par %author% le %date%

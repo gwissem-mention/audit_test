@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion;
 
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;

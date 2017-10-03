@@ -16,6 +16,7 @@ class MessageVoter extends Voter
     const DELETE = 'delete';
     const EDIT = 'edit';
     const VALIDATE = 'validate';
+    const VIEW_FILE = 'view_file';
 
     /**
      * @param string $attribute
@@ -25,7 +26,7 @@ class MessageVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::VALIDATE, self::MARK_AS_HELPFUL, self::DELETE, self::EDIT])) {
+        if (!in_array($attribute, [self::VIEW_FILE, self::VALIDATE, self::MARK_AS_HELPFUL, self::DELETE, self::EDIT])) {
             return false;
         }
 
@@ -47,6 +48,10 @@ class MessageVoter extends Voter
     {
         $user = $token->getUser();
 
+        if ($attribute === self::VIEW_FILE) {
+            return $this->canRead($subject, $user instanceof User ? $user : null);
+        }
+
         if (!$user instanceof User) {
             return false;
         }
@@ -58,6 +63,31 @@ class MessageVoter extends Voter
             case self::MARK_AS_HELPFUL:
             case self::VALIDATE:
                 return $this->extendedRights($subject, $user);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Message $message
+     * @param User|null $user
+     *
+     * @return bool
+     */
+    protected function canRead(Message $message, User $user = null)
+    {
+        if ($message->getUser() === $user) {
+            return true;
+        }
+
+        if ($message->getDiscussion()->isPublic()) {
+            return true;
+        }
+
+        foreach ($message->getDiscussion()->getGroups() as $group) {
+            if ($group->getUsers()->contains($user)) {
+                return true;
+            }
         }
 
         return false;

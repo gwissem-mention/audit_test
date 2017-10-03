@@ -222,6 +222,8 @@ white_october_pagerfanta:
 
 fos_js_routing:
     routes_to_expose:
+        - hopitalnumerique_fichier_view
+        - hopitalnumerique_fichier_remove
         - hopitalnumerique_account_contexte_save
         - hopitalnumerique_communautepratique_commentaire_blockview
         - hopitalnumerique_communautepratique_commentaire_delete

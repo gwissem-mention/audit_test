@@ -5,6 +5,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
+use HopitalNumerique\FichierBundle\Entity\File;
+use HopitalNumerique\FichierBundle\Service\FilePathFinder;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +56,14 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion ?: $group->getPresentationDiscussion() ?: current($discussions), $domains, $group, $this->getUser()));
+        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
+            DiscussionDisplayQuery::createPublicDiscussionQuery(
+                $discussion ?: ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions)),
+                $domains,
+                $group,
+                $this->getUser()
+            )
+        );
 
         if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
@@ -425,18 +434,31 @@ class DiscussionController extends Controller
         return new JsonResponse(null, 418);
     }
 
+    /**
+     * @param Message $message
+     * @param File $file
+     *
+     * @Security("is_granted('view_file', message)")
+     *
+     * @return BinaryFileResponse
+     */
+    public function visualizeFileAction(Message $message, File $file)
+    {
+        return new BinaryFileResponse($this->get(FilePathFinder::class)->getFilePath($file));
+    }
+
     private function redirectResponse(Groupe $group = null, Discussion $discussion = null)
     {
-        if (null !== $group && $discussion !== null) {
+        if (null !== $group && null !== $discussion && $discussion->getId()) {
             return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_view_default_discussion', [
                 'groupe' => $group->getId(),
                 'discussion' => $discussion->getId(),
             ]);
-        } elseif (null !== $group && null === $discussion) {
+        } elseif (null !== $group) {
             return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_view', [
                 'groupe' => $group->getId(),
             ]);
-        } elseif (null === $group && $discussion) {
+        } elseif (null === $group && $discussion && $discussion->getId()) {
             return $this->redirectToRoute('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
                 'discussion' => $discussion->getId(),
             ]);

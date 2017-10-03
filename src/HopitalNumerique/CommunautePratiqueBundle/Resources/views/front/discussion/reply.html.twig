@@ -2,6 +2,15 @@
 
 {% trans_default_domain 'cdp_discussion' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Discussion('editReply');
+        });
+    </script>
+{% endblock %}
+
 {% block title_communaute_pratique %}
     {{ (message is defined ? 'discussion.message.reply.edit.title' : 'discussion.message.reply.add.title')|trans }}
 {% endblock %}

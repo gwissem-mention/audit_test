@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Discussion;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
@@ -59,6 +60,13 @@ class NewDiscussionActivityCounter
      * @return int
      */
     public function getNewDocumentCount(Groupe $group, User $user) {
-        return 0;
+        $count = 0;
+
+        /** @var Message $message */
+        foreach ($this->discussionRepository->getDiscussionNotReaded($group, $user) as $message) {
+            $count += $message->getFiles()->count();
+        }
+
+        return $count;
     }
 }

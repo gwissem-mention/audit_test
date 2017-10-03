@@ -35,6 +35,11 @@ class CreateDiscussionCommand
     public $content;
 
     /**
+     * @var array $files
+     */
+    public $files;
+
+    /**
      * @var Domaine[]
      */
     public $domains;

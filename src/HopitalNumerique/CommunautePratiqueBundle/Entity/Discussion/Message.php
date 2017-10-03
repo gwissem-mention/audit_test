@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -64,6 +66,14 @@ class Message
     protected $createdAt;
 
     /**
+     * @var File[]
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\FichierBundle\Entity\File")
+     * @ORM\JoinTable(name="hn_communautepratique_discussion_message_file")
+     */
+    protected $files;
+
+    /**
      * Message constructor.
      *
      * @param Discussion $discussion
@@ -76,6 +86,7 @@ class Message
         $this->content = $content;
         $this->user = $author;
         $this->createdAt = new \DateTime();
+        $this->files = new ArrayCollection();
     }
 
     /**
@@ -228,5 +239,27 @@ class Message
         preg_match_all($pattern, $this->getContent(), $matches);
 
         return count($matches[0]) > 0 || strstr($this->getContent(), '[URL') || strstr($this->getContent(), '[LINK');
+    }
+
+    /**
+     * @return ArrayCollection|File[]
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * @param File $file
+     *
+     * @return Message
+     */
+    public function addFile(File $file)
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+        }
+
+        return $this;
     }
 }

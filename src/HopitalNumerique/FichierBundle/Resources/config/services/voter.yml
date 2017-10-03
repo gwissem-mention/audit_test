@@ -1,0 +1,6 @@
+services:
+    HopitalNumerique\FichierBundle\Security\File\FileVoter:
+        class: HopitalNumerique\FichierBundle\Security\File\FileVoter
+        tags:
+            - { name: security.voter }
+        public: false

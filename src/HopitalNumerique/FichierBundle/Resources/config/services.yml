@@ -1,2 +1,16 @@
 imports:
     - { resource: 'services/manager.yml' }
+    - { resource: 'services/voter.yml' }
+    - { resource: 'services/repository.yml' }
+
+services:
+    HopitalNumerique\FichierBundle\Service\FilePathFinder:
+        class: HopitalNumerique\FichierBundle\Service\FilePathFinder
+        arguments:
+            - '%kernel.root_dir%'
+
+    HopitalNumerique\FichierBundle\Domain\Command\UploadFileHandler:
+        class: HopitalNumerique\FichierBundle\Domain\Command\UploadFileHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\FichierBundle\Service\FilePathFinder'

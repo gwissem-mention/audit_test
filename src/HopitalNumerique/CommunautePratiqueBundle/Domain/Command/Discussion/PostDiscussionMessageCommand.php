@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion;
 
+use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
@@ -29,6 +30,11 @@ class PostDiscussionMessageCommand
     public $message;
 
     /**
+     * @var array
+     */
+    public $files;
+
+    /**
      * PostDiscussionMessageCommand constructor.
      *
      * @param Discussion $discussion
@@ -43,6 +49,9 @@ class PostDiscussionMessageCommand
 
         if (null !== $message) {
             $this->content = $message->getContent();
+            $this->files = $message->getFiles()->map(function (File $file) {
+                return $file->getId();
+            })->toArray();
         }
     }
 }

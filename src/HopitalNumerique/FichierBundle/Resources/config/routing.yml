@@ -1,0 +1,17 @@
+hopitalnumerique_fichier_upload:
+    path: /upload
+    defaults: { _controller: "HopitalNumeriqueFichierBundle:Upload:upload" }
+    methods:
+        - POST
+
+hopitalnumerique_fichier_view:
+    path: /view/{file}
+    defaults: { _controller: "HopitalNumeriqueFichierBundle:Upload:preview" }
+    methods:
+        - GET
+
+hopitalnumerique_fichier_remove:
+    path: /remove/{file}
+    defaults: { _controller: "HopitalNumeriqueFichierBundle:Upload:remove" }
+    methods:
+        - DELETE

@@ -18,6 +18,46 @@
     {% endif %}
 </div>
 
+{% if discussion.getMessagesFiles.count %}
+    <div class="discussion-files">
+        <a href="#files" data-toggle="collapse" class="more"><i class="fa fa-chevron-down"></i></a>
+
+        <h3>
+            {{ 'discussion.discussion.files.title'|trans }}
+            {% if app.user and discussion.getNewMessageFileCount(app.user) %}
+                <span class="new-document">
+                    {{ 'discussion.discussion.files.new_document_count'|transchoice(discussion.getNewMessageFileCount(app.user), {'%highlight%': '<u>'~('discussion.discussion.files.new_document_highlight'|transchoice(discussion.getNewMessageFileCount(app.user)))~'</u>'})|raw }}
+                    <span class="new-message-badge">{{ discussion.getNewMessageFileCount(app.user) }}</span>
+                </span>
+            {% endif %}
+        </h3>
+
+        <div id="files" class="collapse">
+            {% for message in discussion.messages if message.files.count %}
+                {% for file in message.files %}
+                    <div class="file">
+                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_file', {message: message.id, file: file.id}) }}" class="download" target="_blank">
+                            <i class="fa fa-download"></i>
+                        </a>
+
+                        <a href="#" class="filename" data-message-id="{{ message.id }}">
+                            {{ file.clientName }}
+                        </a>
+
+                        <span class="author">
+                            {{ 'discussion.discussion.files.author'|trans({'%author%': message.user.prenomNom, '%date%': message.createdAt|localizeddate('short', 'none')}) }}
+                        </span>
+                        
+                        {% if app.user and discussion.isNewMessage(app.user, message) %}
+                            <span class="is-new">{{ 'discussion.message.item.is_new'|trans }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
 <div class="messages" data-read-message-uri="{{ path('hopitalnumerique_communautepratique_discussions_discussion_read_message') }}">
     <h3 class="title">
         {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}

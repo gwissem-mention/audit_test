@@ -7,7 +7,16 @@
 var Discussion;
 
 (function() {
-    Discussion = function (scope, canReorder){
+    Discussion = function (scope, canReorder) {
+
+        tinyMCE.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
+
+        if (scope === "editReply") {
+            this.initEditReplyForm();
+
+            return;
+        }
+
         this.scope = scope;
         this.canReorder = canReorder ? canReorder : false;
         this.$container = $('.discussions');
@@ -16,12 +25,16 @@ var Discussion;
         this.$messages = this.$container.find('.message');
         this.$lazyLoadBtn = this.$list.find('.load-more');
 
-        tinyMCE.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
-
         this.init();
     };
 
     Discussion.prototype = {
+        initEditReplyForm: function () {
+            this.initEditor('.discussions.reply');
+
+            this.bindFileEvent($('.discussions.reply .file-dropzone .files > .file'));
+        },
+
         init: function () {
             var that = this;
 
@@ -49,7 +62,7 @@ var Discussion;
                 })
             });
 
-            this.initEditor('#new-discussion-modal textarea');
+            this.initEditor('#new-discussion-modal');
             this.discussionReading();
             this.dragDropEvent();
         },
@@ -238,9 +251,11 @@ var Discussion;
         },
 
         initEditor: function (element) {
+            var that = this;
+
             tinyMCE.init({
                 entity_encoding : 'raw',
-                selector     : element,
+                selector     : element + ' textarea',
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
@@ -253,10 +268,73 @@ var Discussion;
                 statusbar    : false,
                 paste_as_text: true
             });
+
+            $(element + ' .file-dropzone .area').dropzone({
+                url : $(element + ' .file-dropzone .area').data('upload-uri'),
+                createImageThumbnails: false,
+                previewTemplate: '<div></div>',
+                init: function () {
+
+                    var fileCount = $(element + ' .file-dropzone .files > .file').length;
+
+                    this.on("success", function (file, response) {
+                        fileCount++;
+                        var $prototype = $(element + ' .file-dropzone .files .prototype .file').clone();
+                        $prototype.find('.filename').text(file.name);
+
+                        $prototype.find('.insert').attr('href', Routing.generate('hopitalnumerique_fichier_view', {file: response.fileId}));
+                        $prototype.find('.remove').attr('href', Routing.generate('hopitalnumerique_fichier_remove', {file: response.fileId}));
+
+                        $($(element + ' .file-dropzone .files .prototype').data('prototype').replace(/__name__/g, fileCount))
+                            .val(response.fileId)
+                            .appendTo($prototype)
+                        ;
+
+                        $prototype.appendTo($(element + ' .file-dropzone .files'));
+
+                        that.bindFileEvent($prototype);
+                    })
+                }
+            });
+        },
+
+        bindFileEvent: function ($element) {
+
+            $element.each(function (k, e) {
+                var $e = $(e);
+                $e.find('.insert').on('click', function (e) {
+                    e.preventDefault();
+
+                    tinymce.activeEditor.execCommand('mceInsertContent', false, " <a href='"+$(this).attr('href')+"' target='_blank'>"+$e.find('.filename').text()+"</a> ");
+                });
+
+                $e.find('.remove').on('click', function (e) {
+                    var that = this;
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        type: 'DELETE',
+                        success: function () {
+                            $(that).parents('.file').remove();
+                        }
+                    });
+                });
+            });
         },
 
         discussionEvents: function() {
-            this.initEditor('.discussions .discussion textarea.content');
+            this.initEditor('.discussions .discussion');
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('.discussion-files .filename').on('click', function (e) {
+                e.preventDefault();
+
+                $('html, body').animate({
+                    scrollTop: $('.messages .message[data-message-id='+$(this).data('message-id')+']').offset().top
+                });
+            });
 
             $('.discussion .select2').select2();
 

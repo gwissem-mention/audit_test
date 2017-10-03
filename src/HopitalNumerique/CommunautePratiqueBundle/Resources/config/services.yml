@@ -111,6 +111,8 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\FichierBundle\Repository\FileRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\ReplaceMessageFileLink'
 
     HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler:
         class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler
@@ -130,6 +132,11 @@ services:
         arguments:
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\ReplaceMessageFileLink:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\ReplaceMessageFileLink
+        arguments:
+            - '@router'
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport
