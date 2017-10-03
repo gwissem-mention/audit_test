@@ -11,6 +11,7 @@ use Nodevo\AclBundle\Entity\Acl;
 use Nodevo\AclBundle\Entity\Ressource;
 use Nodevo\AclBundle\Manager\AclManager;
 use Nodevo\AclBundle\Manager\RessourceManager;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const NOTIFICATION_CODE = 'coming_training_sessions';
 
     const SECTION_CODE = 'anap_suggestion';
@@ -100,7 +103,9 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
             $now->format('YmdHis'),
             $moduleTitle . ' ' . $session->getDateSessionString(),
             $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
-            ['roleIds' => $roleIds]
+            [
+                'roleIds' => $roleIds,
+            ]
         );
     }
 
@@ -142,6 +147,11 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
      */
     public function notify(Notification $notification)
     {
-
+        if (1 === $notification->getDetailLevel()) {
+            $options['liste'] = $notification->getTitle() . ' ' . $notification->getDetail();
+        } else {
+            $options['liste'] = $notification->getTitle();
+        }
+        $this->mailManager->sendNextSessionsNotification($notification->getUser(), $options);
     }
 }
