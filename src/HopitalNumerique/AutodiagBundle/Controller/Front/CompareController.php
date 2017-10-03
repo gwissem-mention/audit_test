@@ -52,6 +52,7 @@ class CompareController extends Controller
             'restitution' => $restitution,
             'result' => $result,
             'noLayout' => false,
+            'isPublished' => $autodiag->isPublished(),
         ]);
     }
 
