@@ -7,15 +7,12 @@ use HopitalNumerique\NotificationBundle\Enum\NotificationLimitTextLengthEnum;
 use HopitalNumerique\ObjetBundle\Entity\Commentaire;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 
 /**
  * Class PublicationCommentedNotificationProvider.
  */
 class PublicationCommentedNotificationProvider extends PublicationNotificationProviderAbstract
 {
-    use MailManagerAwareTrait;
-
     const NOTIFICATION_CODE = 'publication_commented';
 
     const NOTIFICATION_MAIL = 69;

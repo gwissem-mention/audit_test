@@ -10,6 +10,7 @@ use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ReportNotificationProviderAbstract.
@@ -35,18 +36,21 @@ abstract class ReportNotificationProviderAbstract extends NotificationProviderAb
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
      * @param ReportSharingRepository $reportSharingRepository
      * @param UserRepository $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         ReportSharingRepository $reportSharingRepository,
         UserRepository $userRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->reportSharingRepository = $reportSharingRepository;
         $this->userRepository = $userRepository;
+        $this->templatePath = '@HopitalNumeriqueCart/notifications/'. $this::NOTIFICATION_CODE .'.html.twig';
     }
 
     /**

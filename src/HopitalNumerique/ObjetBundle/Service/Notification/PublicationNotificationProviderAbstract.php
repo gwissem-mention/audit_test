@@ -11,14 +11,18 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use Html2Text\Html2Text;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class PublicationNotificationProviderAbstract.
  */
 abstract class PublicationNotificationProviderAbstract extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const SECTION_CODE = 'publication';
 
     /**
@@ -36,15 +40,18 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
      * @param ConsultationRepository $consultationRepository
+     * @param SubscriptionRepository $subscriptionRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         ConsultationRepository $consultationRepository,
         SubscriptionRepository $subscriptionRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->consultationRepository = $consultationRepository;
         $this->subscriptionRepository = $subscriptionRepository;
     }

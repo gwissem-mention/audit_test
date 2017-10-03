@@ -5,16 +5,12 @@ namespace HopitalNumerique\ForumBundle\Service\Notification;
 use CCDNForum\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ForumPostCreatedNotificationProvider.
  */
 class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbstract
 {
-    use MailManagerAwareTrait;
-
     const NOTIFICATION_CODE = 'forum_topic_created';
 
     /**

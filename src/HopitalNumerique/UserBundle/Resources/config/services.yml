@@ -290,6 +290,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@hopitalnumerique_user.repository.user'
         tags:
             - { name: notification.aggregator, key: user_role_updated }

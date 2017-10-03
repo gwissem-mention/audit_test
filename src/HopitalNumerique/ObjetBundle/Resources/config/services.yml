@@ -313,29 +313,29 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider:
-        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider
+    HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract:
+        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@hopitalnumerique_objet.repository.consultation'
             - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
-        tags:
-            - { name: notification.aggregator, key: publication_notified }
         calls:
             - [setMailManager, ['@nodevo_mail.manager.mail']]
 
+    HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider:
+        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider
+        parent: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: publication_notified }
+
+
     HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider:
         class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider
-        arguments:
-            - '@event_dispatcher'
-            - '@security.token_storage'
-            - '@hopitalnumerique_objet.repository.consultation'
-            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+        parent: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
         tags:
             - { name: notification.aggregator, key: publication_commented }
-        calls:
-            - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener:
         class: HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener

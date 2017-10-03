@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
 class GroupedNotificationEvent extends Event
 {
     /**
-     * @var Notification $notification
+     * @var Notification[] $notifications
      */
     protected $notifications;
 
@@ -26,7 +26,7 @@ class GroupedNotificationEvent extends Event
     }
 
     /**
-     * @return Notification
+     * @return Notification[]
      */
     public function getNotifications()
     {

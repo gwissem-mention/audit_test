@@ -16,6 +16,7 @@ use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ComingTrainingSessionsNotificationProvider.
@@ -46,11 +47,12 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         UserRepository $userRepository,
         AclManager $aclManager,
         RessourceManager $resourceManager
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->userRepository = $userRepository;
         $this->aclManager = $aclManager;
         $this->resourceManager = $resourceManager;

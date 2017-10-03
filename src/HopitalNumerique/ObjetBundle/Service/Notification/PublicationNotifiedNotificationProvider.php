@@ -5,15 +5,12 @@ namespace HopitalNumerique\ObjetBundle\Service\Notification;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 
 /**
  * Class PublicationNotifiedNotificationProvider.
  */
 class PublicationNotifiedNotificationProvider extends PublicationNotificationProviderAbstract
 {
-    use MailManagerAwareTrait;
-
     const NOTIFICATION_CODE = 'publication_notified';
 
     const NOTIFICATION_MAIL = 29;

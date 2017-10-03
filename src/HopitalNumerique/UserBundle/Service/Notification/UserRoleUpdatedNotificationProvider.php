@@ -11,6 +11,7 @@ use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class UserRoleUpdatedNotificationProvider.
@@ -32,15 +33,17 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      * UserRoleUpdatedNotificationProvider constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TokenStorageInterface    $tokenStorage
-     * @param UserRepository           $userRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
+     * @param UserRepository $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         UserRepository $userRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->userRepository = $userRepository;
     }
 

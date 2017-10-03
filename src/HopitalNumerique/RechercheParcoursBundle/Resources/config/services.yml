@@ -291,6 +291,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@hopitalnumerique_rechercheparcours.repository.guided_search'
         tags:
             - { name: notification.aggregator, key: guided_search_updated }
