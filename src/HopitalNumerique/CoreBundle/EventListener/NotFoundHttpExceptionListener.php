@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -53,9 +54,16 @@ class NotFoundHttpExceptionListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ($event->getException() instanceof NotFoundHttpException) {
+        $exception = $event->getException();
+        if ($exception instanceof NotFoundHttpException || $exception instanceof AccessDeniedHttpException) {
             $request = new Request();
-            $request->attributes->set('_controller', 'HopitalNumeriqueCoreBundle:CustomException:notFound');
+
+            if ($exception instanceof NotFoundHttpException) {
+                $request->attributes->set('_controller', 'HopitalNumeriqueCoreBundle:CustomException:notFound');
+            } else {
+                $request->attributes->set('_controller', 'HopitalNumeriqueCoreBundle:CustomException:accessDenied');
+            }
+
             $controller = $this->controller_resolver->getController($request);
 
             $path['_controller'] = $controller;
