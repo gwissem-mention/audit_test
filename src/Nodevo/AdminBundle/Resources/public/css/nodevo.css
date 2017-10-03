@@ -23,3 +23,17 @@ input.checkbox {width:16px; height:16px; margin-top: 8px!important;}
 input.radio    {width:16px; height:16px;} .radio input {width: 16px; height: 16px;}
 
 .select2-dropdown { z-index: 10000 !important; }
+
+/* Navbar */
+.navbar .navbar-header .navbar-title {
+    color: #fff;
+    float: left;
+    padding: 10px 15px;
+    line-height: 20px;
+}
+
+.navbar .navbar-header .navbar-title:hover,
+.navbar .navbar-header .navbar-title:focus {
+    color: #fff;
+    text-decoration: none;
+}
