@@ -1,0 +1,50 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+{% set displayMenu = false %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% trans_default_domain 'lost' %}
+{% block body %}
+    <h1>Erreur 403, accès interdit</h1>
+    <h2>... que faire ?</h2>
+
+    <div class="btn-container text-center" style="margin-bottom: 20px;">
+        <button class="btn btn-default" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i> Revenir en arrière
+        </button>
+        <button class="btn btn-default" onclick="location.reload()">
+            <i class="fa fa-refresh"></i> Rafraichir la page
+        </button>
+    </div>
+
+    {% include 'HopitalNumeriqueContextualNavigationBundle:lost:discover.html.twig' %}
+{% endblock %}
+
+{% import _self as self %}
+{% macro lastObjects(list, items, type) %}
+    <div class="col-md-6">
+        {{ ('last.'~list)|trans }}
+        <ul>
+            {% for item in items[list] %}
+                <li>
+                    {% if type == 'object' %}
+                        <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': item.id}) }}">
+                            {{ item.titre }}
+                        </a>
+                    {% elseif type == 'topic' %}
+                        <a href="{{ path('ccdn_forum_user_topic_show', {'forumName': item.board.category.forum.name, 'topicId': item.id}) }}">
+                            {{ item.title }}
+                        </a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>
+                    <b>{{ 'last.empty'|trans }}</b>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}

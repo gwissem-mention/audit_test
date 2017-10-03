@@ -21,4 +21,15 @@ class CustomExceptionController extends Controller
             $this->get(LostInformationRetriever::class)->getLostInformation()
         );
     }
+
+    /**
+     * @return Response
+     */
+    public function accessDeniedAction()
+    {
+        return $this->render(
+            '@Twig/Exception/error403.html.twig',
+            $this->get(LostInformationRetriever::class)->getLostInformation()
+        );
+    }
 }
