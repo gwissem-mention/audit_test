@@ -32,7 +32,13 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
         $this->processNotification(
             $group->getId(),
             $group->getTitre(),
-            $group->getDescriptionCourte() . ' - ' . $group->getDateDemarrage()->format('d/m/Y')
+            $group->getDescriptionCourte() . ' - ' . $group->getDateDemarrage()->format('d/m/Y'),
+            array_merge(
+                parent::generateOptions($group),
+                [
+                    'dateDebut' => $group->getDateDemarrage()->format('d/m/Y'),
+                ]
+            )
         );
     }
 
@@ -54,6 +60,7 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
      */
     public function notify(Notification $notification)
     {
-
+        $notification->addData('description', $notification->getDetail());
+        $this->mailManager->sendCdpGroupCreatedNotification($notification->getUser(), $notification->getData());
     }
 }

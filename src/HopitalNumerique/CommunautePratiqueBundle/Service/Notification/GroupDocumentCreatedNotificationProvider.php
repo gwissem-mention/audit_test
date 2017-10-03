@@ -34,7 +34,12 @@ class GroupDocumentCreatedNotificationProvider extends PracticeCommunityNotifica
             $document->getId(),
             $group->getTitre() . ' - ' . $document->getNom() . ' - ' . $document->getUser()->getPrenomNom(),
             null,
-            ['groupId' => $group->getId()]
+            array_merge(
+                parent::generateOptions($group, $document->getUser()),
+                [
+                    'nomFichier' => $document->getNom(),
+                ]
+            )
         );
     }
 
@@ -43,6 +48,6 @@ class GroupDocumentCreatedNotificationProvider extends PracticeCommunityNotifica
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendCdpGroupDocumentNotification($notification->getUser(), $notification->getData());
     }
 }

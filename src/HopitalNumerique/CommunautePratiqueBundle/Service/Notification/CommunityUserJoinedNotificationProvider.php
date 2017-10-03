@@ -48,7 +48,12 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
 
         $this->processNotification(
             $user->getId(),
-            $title
+            $title,
+            null,
+            [
+                'prenomUtilisateurDist' => $user->getFirstname(),
+                'nomUtilisateurDist' => $user->getLastname(),
+            ]
         );
     }
 
@@ -70,6 +75,6 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
      */
     public function notify(Notification $notification)
     {
-
+        $this->mailManager->sendCdpUserJoinedNotification($notification->getUser(), $notification->getData());
     }
 }

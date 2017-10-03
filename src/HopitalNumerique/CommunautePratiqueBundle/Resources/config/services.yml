@@ -87,6 +87,8 @@ services:
                 - '@security.token_storage'
                 - '@hopitalnumerique_publication.twig.publication_extension'
                 - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
+            calls:
+                - [setMailManager, ['@nodevo_mail.manager.mail']]
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider

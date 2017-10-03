@@ -27,7 +27,7 @@ WHERE `core_mail`.`mail_id` = 69;
 UPDATE `core_mail` SET
   `mail_objet` = '[ANAP] - Nouveau commentaire sur un groupe',
   `mail_description` = 'Nouveau commentaire sur un groupe la communauté de pratique',
-  `mail_body` = 'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de poster un nouveau commentaire sur le groupe <a href=\"%urlroupe\">&quot;%nomGroupe&quot;</a>.\r\n\r\nCommentaire ajouté :\r\n%commentaire\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
+  `mail_body` = 'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de poster un nouveau commentaire sur le groupe <a href=\"%urlGroupe\">&quot;%nomGroupe&quot;</a>.\r\n\r\nCommentaire ajouté :\r\n%commentaire\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
   `mail_params` = '{\"%prenomUtilisateur\":\"Prénom de l\'utilisateur\", \"%prenomUtilisateurDist\":\"Prénom de l\'auteur du commentaire\", \"%nomUtilisateurDist\":\"Nom de l\'auteur du commentaire\", \"%nomGroupe\":\"Titre du groupe\", \"%commentaire\":\"Contenu du commentaire\", \"%urlGroupe\":\"Lien vers le groupe\"}'
 WHERE `core_mail`.`mail_id` = 71;
 

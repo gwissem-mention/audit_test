@@ -71,6 +71,16 @@ class Mail
 
     const MAIL_SUGGESTION_ANAP_NEXT_SESSIONS = 87;
 
+    const MAIL_CDP_GROUP_COMMENT = 71;
+
+    const MAIL_CDP_GROUP_DOCUMENT = 82;
+
+    const MAIL_CDP_GROUP_CREATED = 84;
+
+    const MAIL_CDP_GROUP_USER_JOINED = 83;
+
+    const MAIL_CDP_USER_JOINED = 85;
+
     /**
      * @var int
      *

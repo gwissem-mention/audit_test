@@ -35,7 +35,7 @@ class GroupCommentCreatedNotificationProvider extends PracticeCommunityNotificat
                 $comment->getMessage(),
                 self::getLimitNotifyDetailLength()
             ),
-            ['groupId' => $comment->getGroupe()->getId()]
+            parent::generateOptions($comment->getGroupe(), $comment->getUser())
         );
     }
 
@@ -44,6 +44,7 @@ class GroupCommentCreatedNotificationProvider extends PracticeCommunityNotificat
      */
     public function notify(Notification $notification)
     {
-
+        $notification->addData('commentaire', $notification->getDetail());
+        $this->mailManager->sendCdpGroupCommentNotification($notification->getUser(), $notification->getData());
     }
 }
