@@ -245,7 +245,12 @@
             <div class="col-md-3 no-padding">
                 <div id="block-carte-france">
                     <div class="carte-france-hover">
-                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">Vous êtes à la recherche<br /><strong>d'un ambassadeur dans votre région ?</strong></a></h2>
+                        <h2>
+                            <a href="{{ path('hopital_numerique_registre_homepage') }}">
+                                {{ 'search_professional'|trans }} <br/>
+                                <b>{{ 'search_professional_after'|trans }}</b>
+                            </a>
+                        </h2>
                         <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-ambassadeurs.png')}}" alt="Carte de France"/></a>
 
                     </div>

@@ -10,3 +10,5 @@ menu:
         logout: Déconnexion
         leave: Quitter cet utilisateur
         create: Créer un compte
+search_professional: Vous cherchez un
+search_professional_after: professionnel du réseau dans votre région ?
