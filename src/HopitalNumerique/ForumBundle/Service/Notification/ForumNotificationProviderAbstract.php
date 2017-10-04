@@ -8,14 +8,18 @@ use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ForumBundle\Repository\SubscriptionRepository;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Html2Text\Html2Text;
+use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ForumNotificationProviderAbstract.
  */
 abstract class ForumNotificationProviderAbstract extends NotificationProviderAbstract
 {
+    use MailManagerAwareTrait;
+
     const SECTION_CODE = 'forum';
 
     /**
@@ -32,19 +36,22 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
      * ForumNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TokenStorageInterface    $tokenStorage
-     * @param BBCodeExtension          $bbCodeExtension
-     * @param SubscriptionRepository   $subscriptionRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
+     * @param BBCodeExtension $bbCodeExtension
+     * @param SubscriptionRepository $subscriptionRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         BBCodeExtension $bbCodeExtension,
         SubscriptionRepository $subscriptionRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->bbCodeExtension = $bbCodeExtension;
         $this->subscriptionRepository = $subscriptionRepository;
+        $this->templatePath = '@HopitalNumeriqueForum/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**
@@ -93,7 +100,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
             'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
             'categorie' => $topic->getBoard()->getCategory()->getName(),
             'theme' => $topic->getBoard()->getName(),
-            'message' => $post->getBody()
+            'message' => $post->getBody(),
         ];
     }
 }

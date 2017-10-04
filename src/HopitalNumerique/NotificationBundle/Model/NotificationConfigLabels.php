@@ -39,6 +39,11 @@ class NotificationConfigLabels
         return $this->notificationCode;
     }
 
+    public function getSectionCode()
+    {
+        return $this->notificationSection;
+    }
+
     /**
      * @return string
      */

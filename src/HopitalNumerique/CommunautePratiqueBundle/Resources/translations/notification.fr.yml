@@ -25,3 +25,29 @@ notification_config:
             description: Nouvelles personnes dans la commuauté
             title: Nom de la personne + nom du/des groupe/s de la personne
             detail: -
+    grouped:
+        practice_community_group_comment_created:
+            single: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName% : %commentaire%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                content: %groupeName% : %commentaire% (%auteur%)
+        practice_community_form_comment_created:
+            single: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                content: %ficheName% (%groupeName%) : %commentaire% (%auteur%)
+        practice_community_group_document_created:
+            single: Un nouveau document a été déposé par %auteur% dans %groupeName% : %filename%
+            multiple:
+                header: %number% nouveaux documents ont été déposés
+                content: %domaine%. %groupeName% : %filename% (%auteur%)
+        practice_community_group_user_joined:
+            single: %userName% a rejoint %groupeName%
+            multiple:
+                header: %number% nouvelles personnes ont rejoint la communauté
+                content: %groupeName% : %userName%
+        practice_community_group_created:
+            single: Le groupe %groupeName% a été ouvert : %groupeDescription% (démarrage : %dateDebut%)
+            multiple:
+                header: %number% nouveaux groupes ont été ouverts
+                content: %groupeName% : %groupeDescription% (démarrage : %dateDebut%)

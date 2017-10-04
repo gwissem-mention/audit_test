@@ -27,8 +27,8 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report
-     * @param User   $userFrom
-     * @param User   $userTo
+     * @param User $userFrom
+     * @param User $userTo
      */
     public function fire(Report $report, User $userFrom, User $userTo)
     {

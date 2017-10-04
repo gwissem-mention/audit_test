@@ -9,3 +9,14 @@ notification_config:
             description: Nouveau commentaire sur une publication
             title: Nom de la ressource
             detail: Début du commentaire
+    grouped:
+        publication_notified:
+            single: La publication %publicationTitle% a été mise à jour : %textMaj%
+            mutliple:
+                header: %number% publications ont été mises à jour
+                content: %publicationTitle% : %textMaj%
+        publication_commented:
+            single: Un nouveau commentaire a été déposé concernant %publicationTitle% : %comment%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                content: %publicationTitle% : %comment%

@@ -16,6 +16,7 @@ use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ComingTrainingSessionsNotificationProvider.
@@ -46,14 +47,16 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         UserRepository $userRepository,
         AclManager $aclManager,
         RessourceManager $resourceManager
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->userRepository = $userRepository;
         $this->aclManager = $aclManager;
         $this->resourceManager = $resourceManager;
+        $this->templatePath = '@HopitalNumeriqueModule/Notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**
@@ -101,10 +104,13 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
 
         $this->processNotification(
             $now->format('YmdHis'),
-            $moduleTitle . ' ' . $session->getDateSessionString(),
+            $moduleTitle,
             $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
             [
                 'roleIds' => $roleIds,
+                'formateur' => $session->getFormateur()->getPrenomNom(),
+                'dateSession' => $session->getDateSessionString(),
+                'description' => $session->getDescription(),
             ]
         );
     }
@@ -148,7 +154,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     public function notify(Notification $notification)
     {
         if (1 === $notification->getDetailLevel()) {
-            $options['liste'] = $notification->getTitle() . ' ' . $notification->getDetail();
+            $options['liste'] = $notification->getTitle() . ' ' . $notification->getData('dateSession') . ' ' . $notification->getDetail();
         } else {
             $options['liste'] = $notification->getTitle();
         }

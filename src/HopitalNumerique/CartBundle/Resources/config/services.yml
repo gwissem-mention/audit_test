@@ -151,6 +151,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@hopitalnumerique\cartbundle\repository\reportsharingrepository'
             - '@hopitalnumerique_user.repository.user'
         calls:

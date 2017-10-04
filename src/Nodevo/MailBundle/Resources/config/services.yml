@@ -24,6 +24,7 @@ services:
             - '@hopitalnumerique_expert.manager.courriel_registre'
             - "%nodevo_mail.options%"
             - "@ccdn_component_bb_code.component.bootstrap"
+            - '@hopitalnumerique\notificationbundle\service\notifications'
 
     nodevo_mail.grid.mail:
         class: %nodevo_mail.grid.mail.class%
@@ -47,6 +48,14 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: 'kernel.event_subscriber' }
+
+    Nodevo\MailBundle\EventListener\GroupNotificationSendSubscriber:
+        class: Nodevo\MailBundle\EventListener\GroupNotificationSendSubscriber
+        arguments:
+            - '@nodevo_mail.manager.mail'
+            - '@hopitalnumerique\notificationbundle\service\notifications'
+        tags:
+            - { name: kernel.event_subscriber, event: SEND_NOTIFICATION_GROUP }
 
     nodevo_mail.repository.recommendation_mail_log:
         class: Nodevo\MailBundle\Repository\RecommendationMailLogRepository

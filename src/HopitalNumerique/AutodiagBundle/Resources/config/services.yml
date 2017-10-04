@@ -272,6 +272,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@autodiag.repository.autodiagentry'
         tags:
             - { name: notification.aggregator, key: autodiag_update_published }

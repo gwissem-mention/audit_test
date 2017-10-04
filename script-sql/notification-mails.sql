@@ -298,4 +298,24 @@ INSERT INTO `core_mail` (
   '0'
 );
 
+INSERT INTO core_mail (
+  mail_id,
+  mail_objet,
+  mail_description,
+  mail_expediteur_mail,
+  mail_expediteur_name,
+  mail_body,
+  mail_params,
+  mail_notification_region_referent
+) VALUES (
+  90,
+  '[ANAP] - Notification de l\'activité',
+  'Mail de notification de l\'activité',
+  '%mailContactDomaineCurrent',
+  'ANAP - %nomContactDomaineCurrent',
+  'Bonjour %prenomUtilisateur,\r\n\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
+  '{"%prenomUtilisateur":"Prénom utilisateur", "%message":"Liste des notifications"}',
+  '0'
+);
+
 COMMIT;

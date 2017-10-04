@@ -10,6 +10,7 @@ use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class AutodiagUpdatedNotificationProvider.
@@ -31,16 +32,19 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
      * AutodiagUpdatedNotificationProvider constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TokenStorageInterface    $tokenStorage
-     * @param AutodiagEntryRepository  $autodiagEntryRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
+     * @param AutodiagEntryRepository $autodiagEntryRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         AutodiagEntryRepository $autodiagEntryRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->autodiagEntryRepository = $autodiagEntryRepository;
+        $this->templatePath = '@HopitalNumeriqueAutodiag/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**

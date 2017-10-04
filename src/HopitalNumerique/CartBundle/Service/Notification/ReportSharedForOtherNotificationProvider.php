@@ -5,6 +5,8 @@ namespace HopitalNumerique\CartBundle\Service\Notification;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationDetailLevelEnum;
+use HopitalNumerique\NotificationBundle\Event\GroupedNotificationEvent;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -27,15 +29,15 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report
-     * @param User   $userFrom
-     * @param User   $userTo
+     * @param User $userFrom
+     * @param User $userTo
      */
     public function fire(Report $report, User $userFrom, User $userTo)
     {
         $this->processNotification(
             $report->getId(),
             $report->getName(),
-            $userFrom->getPrenomNom().' '.$userTo->getPrenomNom(),
+            $userFrom->getPrenomNom() . ' ' . $userTo->getPrenomNom(),
             array_merge(
                 parent::generateOptions($report, $userFrom),
                 [

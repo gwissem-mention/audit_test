@@ -13,6 +13,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class NotificationProviderAbstract.
@@ -60,17 +61,31 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
     protected $tokenStorage;
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * @var string
+     */
+    protected $templatePath;
+
+    /**
      * ReportSharedForOtherNotificationProvider constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param TokenStorageInterface    $tokenStorage
+     * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenStorage = $tokenStorage;
+        $this->translator = $translator;
+        $this->templatePath = '@HopitalNumeriqueUser/Notifications/'. $this::NOTIFICATION_CODE .'.html.twig';
     }
 
     /**
@@ -189,5 +204,10 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
         //Sends with notification event.
         $notificationEvent = new NotificationEvent($notification);
         $this->eventDispatcher->dispatch(Events::FIRE_NOTIFICATION, $notificationEvent);
+    }
+
+    public function getTemplatePath()
+    {
+        return $this->templatePath;
     }
 }

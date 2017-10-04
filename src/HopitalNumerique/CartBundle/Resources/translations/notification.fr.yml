@@ -17,3 +17,24 @@ notification_config:
             description: Copie d'un nouveau rapport pour moi
             title: Nom du rapport
             detail: Nom de l'utilisateur qui a copié son rapport pour moi
+    grouped:
+        report_updated:
+            single: Le rapport %reportName% a été modifié par %userName% , %userName2%
+            multiple:
+                header: %number% rapports ont été modifiés
+                content: %reportName% par %userName%, %userName2%
+        report_shared_for_me:
+            single: Le rapport %reportName% a été partagé avec moi par %userName%
+            multiple:
+                header: %number% rapports ont été partagés avec moi
+                content: %reportName% par %userName%
+        report_shared_for_other:
+            single: Le rapport %reportName% a été partagé avec %userNames% par %userName%
+            multiple:
+                header: %number% rapports ont été partagés avec d'autres utilisateurs
+                content: %reportName% avec %userNames% par %userName%
+        report_copied_for_me:
+            single: Le rapport %reportName% a été copié pour moi par %userName%
+            multiple:
+                header: %number% rapports ont été copiés pour moi
+                content: %reportName% par %userName%

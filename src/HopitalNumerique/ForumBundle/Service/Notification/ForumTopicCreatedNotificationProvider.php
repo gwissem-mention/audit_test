@@ -5,16 +5,12 @@ namespace HopitalNumerique\ForumBundle\Service\Notification;
 use CCDNForum\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ForumPostCreatedNotificationProvider.
  */
 class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbstract
 {
-    use MailManagerAwareTrait;
-
     const NOTIFICATION_CODE = 'forum_topic_created';
 
     /**
@@ -34,10 +30,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
     {
         $this->processNotification(
             $topic->getId(),
-            $topic->getBoard()->getName() . ' - ' . $topic->getTitle() . ' - ' . $this->processText(
-                $topic->getFirstPost()->getBody(),
-                static::getLimitNotifyTitleLength()
-            ),
+            $topic->getTitle(),
             $this->processText(
                 $topic->getFirstPost()->getBody(),
                 static::getLimitNotifyDetailLength()

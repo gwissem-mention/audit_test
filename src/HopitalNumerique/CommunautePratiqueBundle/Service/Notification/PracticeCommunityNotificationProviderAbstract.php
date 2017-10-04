@@ -13,6 +13,7 @@ use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class PracticeCommunityNotificationProviderAbstract.
@@ -38,18 +39,21 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param TokenStorageInterface $tokenStorage
+     * @param TranslatorInterface $translator
      * @param PublicationExtension $publicationExtension
      * @param GroupeInscriptionRepository $groupeInscriptionRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
         PublicationExtension $publicationExtension,
         GroupeInscriptionRepository $groupeInscriptionRepository
     ) {
-        parent::__construct($eventDispatcher, $tokenStorage);
+        parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
+        $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**

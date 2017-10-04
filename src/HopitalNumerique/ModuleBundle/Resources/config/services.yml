@@ -147,6 +147,7 @@ services:
         arguments:
             - '@event_dispatcher'
             - '@security.token_storage'
+            - '@translator'
             - '@hopitalnumerique_user.repository.user'
             - '@nodevo_acl.manager.acl'
             - '@nodevo_acl.manager.ressource'

@@ -4,6 +4,7 @@ namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Service\Notifications;
 use HopitalNumerique\ObjetBundle\Entity\Note;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -95,22 +96,28 @@ class MailManager extends BaseManager
     protected $bbcodeEngine;
 
     /**
+     * @var Notifications
+     */
+    protected $notificationService;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
-     * @param EntityManager            $em      Entity      Manager de Doctrine
-     * @param \Swift_Mailer            $mailer
-     * @param \Twig_Environment        $twig
-     * @param                          $router
+     * @param EntityManager $em Entity      Manager de Doctrine
+     * @param \Swift_Mailer $mailer
+     * @param \Twig_Environment $twig
+     * @param $router
      * @param SecurityContextInterface $securityContext
-     * @param RequestStack             $requestStack
-     * @param                          $session
-     * @param DomaineManager           $domaineManager
-     * @param UserManager              $userManager
-     * @param ReferenceManager         $referenceManager
-     * @param ActiviteExpertManager    $activiteExpertManager
-     * @param CourrielRegistreManager  $courrielRegistreManager
-     * @param array                    $options Tableau d'options
-     * @param BBCodeEngine             $BBCodeEngine
+     * @param RequestStack $requestStack
+     * @param $session
+     * @param DomaineManager $domaineManager
+     * @param UserManager $userManager
+     * @param ReferenceManager $referenceManager
+     * @param ActiviteExpertManager $activiteExpertManager
+     * @param CourrielRegistreManager $courrielRegistreManager
+     * @param array $options Tableau d'options
+     * @param BBCodeEngine $BBCodeEngine
+     * @param Notifications $notifications
      */
     public function __construct(
         EntityManager $em,
@@ -126,7 +133,8 @@ class MailManager extends BaseManager
         ActiviteExpertManager $activiteExpertManager,
         CourrielRegistreManager $courrielRegistreManager,
         $options = [],
-        BBCodeEngine $BBCodeEngine
+        BBCodeEngine $BBCodeEngine,
+        Notifications $notifications
     ) {
         parent::__construct($em);
 
@@ -149,6 +157,7 @@ class MailManager extends BaseManager
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
         $this->bbcodeEngine = $BBCodeEngine;
+        $this->notificationService = $notifications;
 
         $this->setOptions();
 
@@ -1652,5 +1661,27 @@ class MailManager extends BaseManager
         $mailsToSend->setTo($user->getEmail());
 
         $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param Notification[] $groupedNotifications
+     */
+    public function sendGroupedNotification($groupedNotifications)
+    {
+        array_multisort($groupedNotifications);
+        $content = "";
+        $need = true;
+        foreach ($groupedNotifications as $section) {
+            foreach ($section as $key => $notifications) {
+                if ($need) {
+                    $user = $notifications[0]->getUser();
+                    $need = false;
+                }
+                $provider = $this->notificationService->getProvider($notifications[0]->getNotificationCode());
+                $content .= $this->_twig->render($provider->getTemplatePath(), ['notifications' => $notifications]);
+            }
+        }
+        $options['message'] = $content;
+        $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
     }
 }

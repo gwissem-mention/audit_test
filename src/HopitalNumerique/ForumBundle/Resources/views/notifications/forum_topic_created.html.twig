@@ -1,0 +1,24 @@
+{% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+{% set notifications = notifications %}
+{% trans_default_domain 'notification' %}
+{% block single %}
+    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
+        '%filName%' : notif.title,
+        '%themeName%' : notif.getData('theme'),
+        '%firstPost%' : notif.detail,
+        '%auteur%' : notif.getData('pseudoAuteur')
+    }) }}
+{% endblock %}
+{% block header %}
+    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
+        '%number%' : notifications|length
+    }) }}
+{% endblock %}
+{% block content %}
+    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
+        '%filName%' : notif.title,
+        '%themeName%' : notif.getData('theme'),
+        '%firstPost%' : notif.detail,
+        '%auteur%' : notif.getData('pseudoAuteur')
+    }) }}
+{% endblock %}
