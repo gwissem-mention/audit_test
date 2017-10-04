@@ -202,14 +202,15 @@ class MailManager extends BaseManager
     /**
      * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoie à l'user.
      *
-     * @param User  $user
-     * @param Mail  $mail
+     * @param User $user
+     * @param Mail $mail
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
-     * @param int   $check
+     * @param int $check
+     * @param bool $setCopy
      *
      * @return \Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail($user, $mail, $options = [], $check = 0)
+    private function generationMail($user, $mail, $options = [], $check = 0, $setCopy = true)
     {
         $options = $this->getAllOptions($options);
 
@@ -224,7 +225,7 @@ class MailManager extends BaseManager
         $body = $this->replaceContent($mail->getBody(), $user, $options);
         $from = [$mailExpediteur => $nameExpediteur];
 
-        if ($mail->getId() !== 1 && $mail->getId() !== 2) {
+        if ($mail->getId() !== 1 && $mail->getId() !== 2 && $setCopy) {
             $cci = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from) : [$this->getMailDomaine()];
 
             if (null !== $user && $user instanceof User) {
@@ -1653,14 +1654,13 @@ class MailManager extends BaseManager
     {
         /** @var Mail $mail */
         $mail = $this->findOneById($mailId);
-        $cloneMail = clone $mail;
 
         $options['prenomUtilisateur'] = $user->getFirstname();
 
-        $mailsToSend = $this->generationMail($user, $cloneMail, $options);
-        $mailsToSend->setTo($user->getEmail());
+        $mailToSend = $this->generationMail($user, $mail, $options, 0, false);
+        $mailToSend->setTo($user->getEmail());
 
-        $this->mailer->send($mailsToSend);
+        $this->mailer->send($mailToSend);
     }
 
     /**

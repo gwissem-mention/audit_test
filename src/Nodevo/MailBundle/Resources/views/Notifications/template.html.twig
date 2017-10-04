@@ -1,6 +1,6 @@
 {% set notif = notifications[0] %}
 {% if notifications|length == 1 %}
-    {% block single %}{% endblock %}
+    <p>{% block single %}{% endblock %}</p>
 {% else %}
     {% block header %}{% endblock %}
     <ul>
