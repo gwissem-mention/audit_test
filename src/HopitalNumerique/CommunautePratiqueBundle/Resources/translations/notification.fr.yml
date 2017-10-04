@@ -40,7 +40,7 @@ notification_config:
             single: Un nouveau document a été déposé par %auteur% dans %groupeName% : %filename%
             multiple:
                 header: %number% nouveaux documents ont été déposés
-                content: %domaine%. %groupeName% : %filename% (%auteur%)
+                content: %groupeName% : %filename% (%auteur%)
         practice_community_group_user_joined:
             single: %userName% a rejoint %groupeName%
             multiple:

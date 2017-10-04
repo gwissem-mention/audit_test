@@ -114,45 +114,50 @@ class SendNotificationHandler
      */
     public function processStack($notifications)
     {
-        foreach ($notifications as $notification) {
+        foreach ($notifications as $key => $notification) {
             if ($notification->getFrequency() === NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT) {
                 $notificationEvent = new NotificationEvent($notification);
                 $this->eventDispatcher->dispatch(Events::SEND_NOTIFICATION, $notificationEvent);
 
                 //Delete notification
                 $this->entityManager->remove($notification);
-                $this->entityManager->flush();
-            } else {
-                $subscriptionFinder = $this->subscriptionFinder;
-                $groupedNotifications = array_filter(
-                    $notifications,
-                    function (Notification $notification) use ($subscriptionFinder) {
-                        $subscribers = $subscriptionFinder->findSubscriptions($notification);
-                        return
-                            count($subscribers)
-                            && $subscribers[0]->getUserId() === $notification->getUser()->getId()
-                            && $notification->getFrequency() !== NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT;
-                    }
-                );
-
-                //Send with GroupedNotificationEvent event.
-                //Specific actions like sending email must be handled in event listeners.
-                if (count($groupedNotifications)) {
-                    $notificationEvent = new GroupedNotificationEvent($groupedNotifications);
-                    $this->eventDispatcher->dispatch(
-                        Events::SEND_NOTIFICATION_GROUP,
-                        $notificationEvent
-                    );
-
-                    //Delete notifications
-                    foreach ($groupedNotifications as $key => $notification) {
-//                        $this->entityManager->remove($notification);
-                        unset($notifications[$key]);
-                    }
-//                    $this->entityManager->flush();
-                }
+                unset($notifications[$key]);
             }
         }
+
+        $subscriptionFinder = $this->subscriptionFinder;
+        $groupedNotifications = array_filter(
+            $notifications,
+            function (Notification $notification) use ($subscriptionFinder) {
+                $subscribers = $subscriptionFinder->findSubscriptions($notification);
+
+                return
+                    count($subscribers) && $subscribers[0]->getUserId() === $notification->getUser()->getId()
+                ;
+            }
+        );
+
+        $userNotificationMap = [];
+        foreach ($groupedNotifications as $notification) {
+            $userNotificationMap[$notification->getUser()->getId()][] = $notification;
+        }
+
+        foreach ($userNotificationMap as $userNotifications) {
+            //Send with GroupedNotificationEvent event.
+            //Specific actions like sending email must be handled in event listeners.
+            $notificationEvent = new GroupedNotificationEvent($userNotifications[0]->getUser(), $userNotifications);
+            $this->eventDispatcher->dispatch(
+                Events::SEND_NOTIFICATION_GROUP,
+                $notificationEvent
+            );
+        }
+
+        //Delete notifications
+        foreach ($notifications as $notification) {
+            $this->entityManager->remove($notification);
+        }
+
+        $this->entityManager->flush();
     }
 
         /**

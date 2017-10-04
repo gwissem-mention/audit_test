@@ -35,9 +35,7 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
             $report->getId(),
             $report->getName(),
             $user->getPrenomNom(),
-            [
-                'reportId' => $report->getId()
-            ]
+            parent::generateOptions($report)
         );
     }
 
@@ -60,6 +58,9 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
      */
     public function notify(Notification $notification)
     {
-
+        list($firstname, $lastname) = explode(' ', $notification->getDetail());
+        $notification->addData('prenomUtilisateurDist', $firstname);
+        $notification->addData('nomUtilisateurDist', $lastname);
+        $this->mailManager->sendReportUpdated($notification->getUser(), $notification->getData());
     }
 }

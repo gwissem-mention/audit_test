@@ -3,9 +3,9 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%auteur%' : notif.title,
-        '%groupeName%' : notif.detail,
-        '%ficheName%' : notif.user.prenomNom
+        '%auteur%' : notif.title|split(' - ')[2],
+        '%groupeName%' : notif.title|split(' - ')[0],
+        '%ficheName%' : notif.title|split(' - ')[1]
     }) }}
 {% endblock %}
 {% block header %}
@@ -15,9 +15,9 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%ficheName%' : notif.title,
-        '%groupeName%' : notif.detail,
-        '%commentaire%': ,
-        '%auteur%':
+        '%ficheName%' : notif.title|split(' - ')[1],
+        '%groupeName%' : notif.title|split(' - ')[0],
+        '%commentaire%': notif.detail,
+        '%auteur%': notif.title|split(' - ')[2]
     }) }}
 {% endblock %}

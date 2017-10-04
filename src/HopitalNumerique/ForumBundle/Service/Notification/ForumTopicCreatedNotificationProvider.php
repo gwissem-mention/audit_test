@@ -35,7 +35,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
                 $topic->getFirstPost()->getBody(),
                 static::getLimitNotifyDetailLength()
             ),
-            parent::generateOptions($topic, $topic->getFirstPost(), $topic->getId())
+            parent::generateOptions($topic, $topic->getFirstPost())
         );
     }
 

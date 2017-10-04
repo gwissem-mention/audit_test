@@ -53,7 +53,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
-        $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . self::NOTIFICATION_CODE . '.html.twig';
+        $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
     /**
@@ -103,7 +103,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
             'nomGroupe' => $group->getTitre(),
         ];
         if (null !== $user) {
-            array_merge($options, [
+            $options = array_merge($options, [
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
             ]);
