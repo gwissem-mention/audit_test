@@ -62,6 +62,7 @@ item:
         contenu: Contenu
         autodiag_chapter: Chapitre d'autodiagnostic
         cdp_group: Groupe de la communauté de pratique
+        cdp_discussion: Discussion de la communauté de pratique
         person: Personne ressource
         guided_search: Parcours guidé
 

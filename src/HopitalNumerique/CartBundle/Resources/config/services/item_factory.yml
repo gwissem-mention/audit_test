@@ -59,3 +59,11 @@ services:
             - { name: cart_bundle.item_factory }
         arguments:
             - '@hopitalnumerique_communautepratique.repository.groupe'
+
+    HopitalNumerique\CartBundle\Service\ItemFactory\Factory\CDPDiscussionFactory:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ItemFactory\Factory\CDPDiscussionFactory
+        tags:
+            - { name: cart_bundle.item_factory }
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
