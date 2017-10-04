@@ -46,6 +46,7 @@ class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstra
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->guidedSearchRepository = $guidedSearchRepository;
+        $this->templatePath = '@HopitalNumeriqueRechercheParcours/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**

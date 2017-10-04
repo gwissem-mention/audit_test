@@ -1670,13 +1670,18 @@ class MailManager extends BaseManager
     {
         array_multisort($groupedNotifications);
         $content = "";
+        $need = true;
         foreach ($groupedNotifications as $section) {
-            foreach ($section as $notifications) {
+            foreach ($section as $key => $notifications) {
+                if ($need) {
+                    $user = $notifications[0]->getUser();
+                    $need = false;
+                }
                 $provider = $this->notificationService->getProvider($notifications[0]->getNotificationCode());
                 $content .= $this->_twig->render($provider->getTemplatePath(), ['notifications' => $notifications]);
             }
         }
-        dump($content);
-        die;
+        $options['message'] = $content;
+        $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
     }
 }

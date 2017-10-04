@@ -53,6 +53,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
+        $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**

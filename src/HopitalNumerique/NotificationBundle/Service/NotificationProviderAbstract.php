@@ -85,6 +85,7 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenStorage = $tokenStorage;
         $this->translator = $translator;
+        $this->templatePath = '@HopitalNumeriqueUser/Notifications/'. $this::NOTIFICATION_CODE .'.html.twig';
     }
 
     /**

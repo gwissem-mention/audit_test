@@ -45,6 +45,7 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->userRepository = $userRepository;
+        $this->templatePath = '@HopitalNumeriqueUser/Notifications/'. $this::NOTIFICATION_CODE .'.html.twig';
     }
 
     /**

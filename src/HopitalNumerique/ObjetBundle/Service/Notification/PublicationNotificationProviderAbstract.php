@@ -54,6 +54,7 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->consultationRepository = $consultationRepository;
         $this->subscriptionRepository = $subscriptionRepository;
+        $this->templatePath = '@HopitalNumeriqueObjet/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**

@@ -30,10 +30,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
     {
         $this->processNotification(
             $topic->getId(),
-            $topic->getBoard()->getName() . ' - ' . $topic->getTitle() . ' - ' . $this->processText(
-                $topic->getFirstPost()->getBody(),
-                static::getLimitNotifyTitleLength()
-            ),
+            $topic->getTitle(),
             $this->processText(
                 $topic->getFirstPost()->getBody(),
                 static::getLimitNotifyDetailLength()

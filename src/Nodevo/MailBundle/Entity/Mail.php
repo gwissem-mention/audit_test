@@ -83,6 +83,8 @@ class Mail
 
     const MAIL_GUIDED_SEARCH_NOTIF = 88;
 
+    const MAIL_GROUPED_NOTIFS = 90;
+
     /**
      * @var int
      *

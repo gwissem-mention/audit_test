@@ -55,7 +55,7 @@ services:
             - '@nodevo_mail.manager.mail'
             - '@hopitalnumerique\notificationbundle\service\notifications'
         tags:
-            - { name: 'kernel.event_subscriber' }
+            - { name: kernel.event_subscriber, event: SEND_NOTIFICATION_GROUP }
 
     nodevo_mail.repository.recommendation_mail_log:
         class: Nodevo\MailBundle\Repository\RecommendationMailLogRepository

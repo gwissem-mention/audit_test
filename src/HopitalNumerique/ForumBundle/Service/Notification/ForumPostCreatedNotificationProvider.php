@@ -31,20 +31,12 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
         $topic = $post->getTopic();
         $this->processNotification(
             $post->getId(),
-            $topic->getTitle() . ' - ' . $this->processText(
-                $post->getBody(),
-                self::getLimitNotifyTitleLength()
-            ),
+            $topic->getTitle(),
             $this->processText(
                 $post->getBody(),
                 self::getLimitNotifyDetailLength()
             ),
-            array_merge(
-                parent::generateOptions($topic, $post, $topic->getId()),
-                [
-                    'fildiscusssion' => $topic->getTitle()
-                ]
-            )
+            parent::generateOptions($topic, $post, $topic->getId())
         );
     }
 
@@ -65,6 +57,7 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function notify(Notification $notification)
     {
+        $notification->addData('fildiscussion', $notification->getTitle());
         $this->mailManager->sendForumPostCreatedNotification($notification->getUser(), $notification->getData());
     }
 }

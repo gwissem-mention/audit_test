@@ -51,6 +51,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->bbCodeExtension = $bbCodeExtension;
         $this->subscriptionRepository = $subscriptionRepository;
+        $this->templatePath = '@HopitalNumeriqueForum/notifications/' . $this::NOTIFICATION_CODE . '.html.twig';
     }
 
     /**
@@ -99,7 +100,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
             'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
             'categorie' => $topic->getBoard()->getCategory()->getName(),
             'theme' => $topic->getBoard()->getName(),
-            'message' => $post->getBody()
+            'message' => $post->getBody(),
         ];
     }
 }

@@ -5,3 +5,9 @@ notification_config:
             description: Prochaines sessions de montée en compétence dans les 3 mois à venir
             title: Nom du module + date de la session
             detail: Description de la session + nom du formateur
+    grouped:
+        coming_training_sessions:
+            single: La session "%moduleName" animée par %formateur% est programmée le %dateSession% : %description%
+            multiple:
+                header: %number% sessions de montée en compétences sont programmées prochainement
+                content: %moduleName% (%dateSession%, %formateur%) : %description%
