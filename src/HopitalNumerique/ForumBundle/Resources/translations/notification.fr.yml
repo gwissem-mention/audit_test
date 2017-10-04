@@ -9,3 +9,14 @@ notification_config:
             description: Nouvelle discussion
             title: Nom du thème + nom du fil + début du premier message
             detail: -
+    grouped:
+        forum_post_created:
+            single: Un nouveau message a été déposé dans la discussion %filName% : %message% (%auteur%)
+            multiple:
+                header: %number% nouveaux messages ont été déposés
+                content: %filName% (%auteur%) : %message%
+        forum_topic_created:
+            single: La nouvelle discussion %filName% (%domaine%) a été créée dans le thème %themeName% : %firstPost% (%auteur%)
+            multiple:
+                header: %number% nouvelles discussions ont été créées
+                content: %themeName% : %filName% (%auteur%). %firstPost%

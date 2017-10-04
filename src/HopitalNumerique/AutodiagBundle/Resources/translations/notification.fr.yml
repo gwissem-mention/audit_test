@@ -5,3 +5,9 @@ notification_config:
             description: Mise à jour d'un autodiagnostic
             title: Titre de l'autodiag
             detail: Contenu de la mise à jour
+    grouped:
+        autodiag_update_published:
+            single: L'autodiagnostic %autodiagName% a été mis à jour : %textMaj%
+            multiple:
+                header: %number% autodiagnostics ont été mis à jour
+                content: %autodiagName% : %textMaj%
