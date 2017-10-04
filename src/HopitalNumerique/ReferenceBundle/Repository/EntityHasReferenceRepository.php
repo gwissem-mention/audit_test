@@ -294,11 +294,12 @@ class EntityHasReferenceRepository extends EntityRepository
                 Expr\Join::WITH,
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeCommunautePratiqueGroupe'),
-                    $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId'),
-                    $qb->expr()->eq('communautePratiqueGroupe.domains', ':domaine')
+                    $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId')
                 )
             )
             ->setParameter('entityTypeCommunautePratiqueGroupe', Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE)
+            ->leftJoin('communautePratiqueGroupe.domains', 'cdpGroupDomain')
+            ->andWhere($qb->expr()->eq('cdpGroupDomain.id', ':domaine'))
             //-->
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameter('domaine', $domaine)
