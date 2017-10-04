@@ -65,8 +65,7 @@ class SendNotificationHandler
         EventDispatcherInterface $eventDispatcher,
         NotificationSubscriptionFinder $subscriptionFinder,
         EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         $this->notificationRepository = $notificationRepository;
         $this->notificationService = $notificationService;
         $this->eventDispatcher = $eventDispatcher;
@@ -121,31 +120,35 @@ class SendNotificationHandler
                 $this->eventDispatcher->dispatch(Events::SEND_NOTIFICATION, $notificationEvent);
 
                 //Delete notification
-//                $this->entityManager->remove($notification);
-//                $this->entityManager->flush();
+                $this->entityManager->remove($notification);
+                $this->entityManager->flush();
             } else {
                 $subscriptionFinder = $this->subscriptionFinder;
-                $notifications = array_filter(
+                $groupedNotifications = array_filter(
                     $notifications,
                     function (Notification $notification) use ($subscriptionFinder) {
                         $subscribers = $subscriptionFinder->findSubscriptions($notification);
-                        return count($subscribers) && $subscribers[0]->getUserId() === $notification->getUser()->getId();
+                        return
+                            count($subscribers)
+                            && $subscribers[0]->getUserId() === $notification->getUser()->getId()
+                            && $notification->getFrequency() !== NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT;
                     }
                 );
 
                 //Send with GroupedNotificationEvent event.
                 //Specific actions like sending email must be handled in event listeners.
-                if (count($notifications)) {
-                    $notificationEvent = new GroupedNotificationEvent($notifications);
+                if (count($groupedNotifications)) {
+                    $notificationEvent = new GroupedNotificationEvent($groupedNotifications);
                     $this->eventDispatcher->dispatch(
                         Events::SEND_NOTIFICATION_GROUP,
                         $notificationEvent
                     );
 
                     //Delete notifications
-//                    foreach ($notifications as $notification) {
+                    foreach ($groupedNotifications as $key => $notification) {
 //                        $this->entityManager->remove($notification);
-//                    }
+                        unset($notifications[$key]);
+                    }
 //                    $this->entityManager->flush();
                 }
             }

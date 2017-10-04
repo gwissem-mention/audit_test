@@ -27,14 +27,7 @@ class SubscriptionRepository extends EntityRepository
             ->select('user.id')
             ->join('subscription.user', 'user')
             ->where('subscription.objet = :object')
-            ->setParameter('object', (int)$objectId);
-
-        if ($infradocId) {
-            $queryBuilder->andWhere('subscription.contenu = :infradoc')
-                ->setParameter('infradoc', (int)$infradocId);
-        }
-
-        return $queryBuilder
+            ->setParameter('object', (int)$objectId)
             ->innerJoin(
                 'HopitalNumeriqueObjetBundle:Consultation',
                 'clt',
@@ -42,9 +35,19 @@ class SubscriptionRepository extends EntityRepository
                 'clt.objet = subscription.objet AND clt.user = user.id' .
                 ($infradocId ? ' AND clt.contenu = subscription.contenu' : '')
             )
-            ->groupBy('user.id')
-            ->having('MAX(clt.dateLastConsulted) < :maxViewDate')
+            ->andWhere('clt.dateLastConsulted < :maxViewDate')
             ->setParameter('maxViewDate', $maxViewDate)
+            ->groupBy('user.id')
         ;
+        if ($infradocId) {
+            $queryBuilder
+                ->andWhere('subscription.contenu = :infradoc')
+                ->setParameter('infradoc', (int)$infradocId)
+            ;
+        } else {
+            $queryBuilder->andWhere('subscription.contenu IS NULL');
+        }
+
+        return $queryBuilder;
     }
 }

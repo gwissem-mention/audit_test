@@ -84,16 +84,12 @@ class NotificationScheduleDateCalculator
 
             case NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY:
                 //If notification schedule hour is not past, send it today, otherwise tomorrow.
-                if ($subscription->getScheduleHour() < $this->currentHour) {
-                    $nextDay = 'today';
+                if ($subscription->getScheduleHour() > $this->currentHour) {
+                    $scheduleDateTime = new \DateTime('now');
                 } else {
-                    $nextDay = 'tomorrow ';
+                    $scheduleDateTime = new \DateTime('tomorrow');
                 }
-                $scheduleDateTime = new \DateTime(sprintf(
-                    $nextDay.'%s %d:00',
-                    $nextDay,
-                    $subscription->getScheduleHour()
-                ));
+                $scheduleDateTime->setTime($subscription->getScheduleHour(), 0);
                 break;
 
             default:

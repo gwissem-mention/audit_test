@@ -12,7 +12,7 @@ notification_config:
     grouped:
         publication_notified:
             single: La publication %publicationTitle% a été mise à jour : %textMaj%
-            mutliple:
+            multiple:
                 header: %number% publications ont été mises à jour
                 content: %publicationTitle% : %textMaj%
         publication_commented:
