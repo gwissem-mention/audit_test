@@ -38,7 +38,7 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
                 self::getLimitNotifyDetailLength()
             ),
             array_merge(
-                parent::generateOptions($comment->getGroupe(), $comment->getUser()),
+                parent::generateOptions($comment->getFiche()->getGroupe(), $comment->getUser()),
                 [
                     'ficheId' => $comment->getFiche()->getId(),
                     'nomFiche' => $comment->getFiche()->getQuestionPosee(),

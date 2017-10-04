@@ -44,7 +44,7 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->autodiagEntryRepository = $autodiagEntryRepository;
-        $this->templatePath = '@HopitalNumeriqueAutodiag/notifications/' . self::NOTIFICATION_CODE . '.html.twig';
+        $this->templatePath = '@HopitalNumeriqueAutodiag/notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
     /**

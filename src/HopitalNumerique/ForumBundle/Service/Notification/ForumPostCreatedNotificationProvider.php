@@ -36,7 +36,7 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
                 $post->getBody(),
                 self::getLimitNotifyDetailLength()
             ),
-            parent::generateOptions($topic, $post, $topic->getId())
+            parent::generateOptions($topic, $post)
         );
     }
 

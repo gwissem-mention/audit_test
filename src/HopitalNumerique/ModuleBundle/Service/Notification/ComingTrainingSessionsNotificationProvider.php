@@ -56,7 +56,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
         $this->userRepository = $userRepository;
         $this->aclManager = $aclManager;
         $this->resourceManager = $resourceManager;
-        $this->templatePath = '@HopitalNumeriqueModule/Notifications/' . self::NOTIFICATION_CODE . '.html.twig';
+        $this->templatePath = '@HopitalNumeriqueModule/Notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
     /**

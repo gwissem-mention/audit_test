@@ -50,7 +50,7 @@ abstract class ReportNotificationProviderAbstract extends NotificationProviderAb
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->reportSharingRepository = $reportSharingRepository;
         $this->userRepository = $userRepository;
-        $this->templatePath = '@HopitalNumeriqueCart/notifications/'. self::NOTIFICATION_CODE .'.html.twig';
+        $this->templatePath = '@HopitalNumeriqueCart/notifications/'. $this::getNotificationCode() .'.html.twig';
     }
 
     /**

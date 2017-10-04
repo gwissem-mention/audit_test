@@ -10,6 +10,10 @@ new_account:
     resource: "@NewAccountBundle/Resources/config/routing.yml"
     prefix:   /mon-compte
 
+test_command:
+    resource: "@NotificationBundle/Resources/config/routing.yml"
+    prefix:   /test
+
 hopital_numerique_search:
     resource: "@HopitalNumeriqueSearchBundle/Resources/config/routing.yml"
     prefix:   /

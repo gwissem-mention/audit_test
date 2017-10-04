@@ -5,7 +5,7 @@
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%groupeName%' : notif.title,
         '%groupeDescription%' : notif.detail,
-        '%dateDebut%' :
+        '%dateDebut%' : notif.getData('dateDebut')
     }) }}
 {% endblock %}
 {% block header %}
@@ -17,6 +17,6 @@
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
         '%groupeName%' : notif.title,
         '%groupeDescription%' : notif.detail,
-        '%dateDebut%' :
+        '%dateDebut%' : notif.getData('dateDebut')
     }) }}
 {% endblock %}

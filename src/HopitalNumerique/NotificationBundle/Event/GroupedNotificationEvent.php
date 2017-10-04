@@ -3,6 +3,7 @@
 namespace HopitalNumerique\NotificationBundle\Event;
 
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -10,6 +11,11 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class GroupedNotificationEvent extends Event
 {
+    /**
+     * @var User
+     */
+    protected $user;
+
     /**
      * @var Notification[] $notifications
      */
@@ -20,9 +26,18 @@ class GroupedNotificationEvent extends Event
      *
      * @param Notification[] $notifications
      */
-    public function __construct(array $notifications)
+    public function __construct(User $user, array $notifications)
     {
+        $this->user= $user;
         $this->notifications = $notifications;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

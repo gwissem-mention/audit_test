@@ -3,8 +3,8 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%userName%' : notif.title,
-        '%groupeName%' : notif.detail
+        '%groupeName%' : notif.title,
+        '%userName%' : notif.detail
     }) }}
 {% endblock %}
 {% block header %}

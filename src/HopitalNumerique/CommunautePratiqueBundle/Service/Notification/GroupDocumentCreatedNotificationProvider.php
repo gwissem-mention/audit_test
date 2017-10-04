@@ -32,7 +32,7 @@ class GroupDocumentCreatedNotificationProvider extends PracticeCommunityNotifica
     {
         $this->processNotification(
             $document->getId(),
-            $group->getTitre() . ' - ' . $document->getNom() . ' - ' . $document->getUser()->getPrenomNom(),
+            $group->getTitre() . ' - ' . $document->getUser()->getPrenomNom(),
             null,
             array_merge(
                 parent::generateOptions($group, $document->getUser()),

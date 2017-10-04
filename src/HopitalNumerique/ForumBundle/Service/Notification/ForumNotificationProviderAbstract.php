@@ -51,7 +51,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->bbCodeExtension = $bbCodeExtension;
         $this->subscriptionRepository = $subscriptionRepository;
-        $this->templatePath = '@HopitalNumeriqueForum/notifications/' . self::NOTIFICATION_CODE . '.html.twig';
+        $this->templatePath = '@HopitalNumeriqueForum/notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
     /**
@@ -88,14 +88,13 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
      *
      * @param Topic $topic
      * @param Post $post
-     * @param $id
      *
      * @return array
      */
-    public function generateOptions(Topic $topic, Post $post, $id)
+    public function generateOptions(Topic $topic, Post $post)
     {
         return [
-            'id' => $id,
+            'id' => $topic->getBoard()->getId(),
             'pseudoAuteur' => $post->getCreatedBy()->getFirstname(),
             'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
             'categorie' => $topic->getBoard()->getCategory()->getName(),

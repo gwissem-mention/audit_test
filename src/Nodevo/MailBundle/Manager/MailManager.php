@@ -96,11 +96,6 @@ class MailManager extends BaseManager
     protected $bbcodeEngine;
 
     /**
-     * @var Notifications
-     */
-    protected $notificationService;
-
-    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -133,8 +128,7 @@ class MailManager extends BaseManager
         ActiviteExpertManager $activiteExpertManager,
         CourrielRegistreManager $courrielRegistreManager,
         $options = [],
-        BBCodeEngine $BBCodeEngine,
-        Notifications $notifications
+        BBCodeEngine $BBCodeEngine
     ) {
         parent::__construct($em);
 
@@ -157,7 +151,6 @@ class MailManager extends BaseManager
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
         $this->bbcodeEngine = $BBCodeEngine;
-        $this->notificationService = $notifications;
 
         $this->setOptions();
 
@@ -366,11 +359,13 @@ class MailManager extends BaseManager
     {
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
 
-        $this->_optionsMail = [
-            'subjectDomaine' => $this->getDomaineSubjet(),
-            'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
-            'nomContactDomaineCurrent' => $domaine->getNom(),
-        ];
+        if (null !== $domaine) {
+            $this->_optionsMail = [
+                'subjectDomaine' => $this->getDomaineSubjet(),
+                'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
+                'nomContactDomaineCurrent' => $domaine->getNom(),
+            ];
+        }
 
         return $this;
     }
@@ -1112,8 +1107,7 @@ class MailManager extends BaseManager
      */
     public function sendReportSharedForMe(User $user, $options)
     {
-        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_ME);
-        $this->mailer->send($mailsToSend);
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_ME);
     }
 
     /**
@@ -1122,8 +1116,7 @@ class MailManager extends BaseManager
      */
     public function sendReportSharedForOther(User $user, $options)
     {
-        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_OTHER);
-        $this->mailer->send($mailsToSend);
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_OTHER);
     }
 
     /**
@@ -1132,8 +1125,12 @@ class MailManager extends BaseManager
      */
     public function sendReportCopiedForMe(User $user, $options)
     {
-        $mailsToSend = $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
-        $this->mailer->send($mailsToSend);
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
+    }
+
+    public function sendReportUpdated(User $user, $options)
+    {
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_UPDATED);
     }
 
     /**
@@ -1145,24 +1142,8 @@ class MailManager extends BaseManager
      */
     public function buildReportMail(User $user, $options, $mailId)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById($mailId);
-
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'urlMonPanier' => $this->_router->generate('account_cart', [], RouterInterface::ABSOLUTE_URL),
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        return $mailsToSend;
+        $options['urlMonPanier'] = $this->_router->generate('account_cart', []);
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1664,22 +1645,15 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
      * @param Notification[] $groupedNotifications
      */
-    public function sendGroupedNotification($groupedNotifications)
+    public function sendGroupedNotification(User $user, $groupedNotifications)
     {
         array_multisort($groupedNotifications);
         $content = "";
-        $need = true;
-        foreach ($groupedNotifications as $section) {
-            foreach ($section as $key => $notifications) {
-                if ($need) {
-                    $user = $notifications[0]->getUser();
-                    $need = false;
-                }
-                $provider = $this->notificationService->getProvider($notifications[0]->getNotificationCode());
-                $content .= $this->_twig->render($provider->getTemplatePath(), ['notifications' => $notifications]);
-            }
+        foreach ($groupedNotifications as $key => $code) {
+            $content .= $this->_twig->render($code['template'], ['notifications' => $code['notification']]);
         }
         $options['message'] = $content;
         $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
