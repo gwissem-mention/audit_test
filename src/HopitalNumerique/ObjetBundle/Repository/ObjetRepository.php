@@ -321,16 +321,19 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByNbVue($limit = 0)
+    public function getObjetsByNbVue($domaine, $limit = 0)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.domaines', 'domaines')
             ->where('obj.etat = 3')
-            ->andWhere('obj.publicationPlusConsulte = :true')
+            ->andWhere('obj.publicationPlusConsulte = TRUE')
+            ->andWhere('obj.isArticle = FALSE')
+            ->andWhere('domaines.slug = :slug')
             ->setParameters([
-                    'true' => true,
+                'slug' => $domaine->getSlug(),
             ])
             ->orderBy('obj.nbVue', 'DESC')
         ;
@@ -339,7 +342,7 @@ class ObjetRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**

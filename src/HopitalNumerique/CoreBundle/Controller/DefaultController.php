@@ -33,8 +33,11 @@ class DefaultController extends Controller
             ['champ' => 'obj.dateCreation', 'tri' => 'DESC']
         );
 
+        // Get current domain
+        $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
         // Get publications (production)
-        $publications = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
+        $publications = $this->get('hopitalnumerique_objet.repository.objet')->getObjetsByNbVue($domaine);
 
         $typeArticleCarrousel = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['id' => 520]);
         $articlesALaUne = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
