@@ -161,6 +161,11 @@ generator:
         shortDescription: Résumé
         description: Contenu
         summary: Liste des fiches de problématique
+
+    cdp_discussion:
+        creation_date: "Date de création :"
+        messages: "Messages :"
+
     person:
         userInfos:
             title: Informations utilisateur
