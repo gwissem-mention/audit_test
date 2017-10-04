@@ -338,6 +338,22 @@ var Discussion;
 
             $('.discussion .select2').select2();
 
+            if ($('.open-popin-referencement').length) {
+                $('.open-popin-referencement').on('click', function (e) {
+                    e.preventDefault();
+
+                    $.fancybox.open({
+                        padding: 0,
+                        autoSize: false,
+                        width: '80%',
+                        scrolling: 'auto',
+                        modal: true,
+                        href: $(this).attr('href'),
+                        type: 'ajax'
+                    });
+                });
+            }
+
             $('.discussion .actions .discussion-actions').on('change', function (e) {
                 var value = $(this).val();
 

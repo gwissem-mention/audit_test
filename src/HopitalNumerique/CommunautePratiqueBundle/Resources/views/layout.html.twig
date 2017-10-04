@@ -5,6 +5,8 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
+        '@jquery_toggles_css'
         '@dropzone_css'
         'bundles/hopitalnumeriquefichier/css/dropzone.css'
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
@@ -21,6 +23,8 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
+        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
+        '@jquery_toggles_js'
         '@tinymce_js'
         '@jquery_ui_js'
         '@dropzone_js'

@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -90,6 +92,11 @@ class Entity
      * @var int Autodiag
      */
     const ENTITY_TYPE_AUTODIAG = 10;
+
+    /**
+     * @var int
+     */
+    const ENTITY_TYPE_CDP_DISCUSSION = 11;
 
     private $refForumTopicId;
 
@@ -184,6 +191,11 @@ class Entity
     protected $autodiagRepository;
 
     /**
+     * @var DiscussionRepository $discussionRepository
+     */
+    protected $discussionRepository;
+
+    /**
      * Constructeur.
      *
      * @param RouterInterface                 $router
@@ -208,6 +220,7 @@ class Entity
      * @param EntityHasReferenceRepository $entityHasReferenceRepository
      * @param BoardRepository $boardRepository
      * @param AutodiagRepository $communautePratiqueGroupeManager
+     * @param DiscussionRepository $discussionRepository
      */
     public function __construct(
         RouterInterface $router,
@@ -231,7 +244,8 @@ class Entity
         $refForumBoardId,
         $entityHasReferenceRepository,
         BoardRepository $boardRepository,
-        AutodiagRepository $autodiagRepository
+        AutodiagRepository $autodiagRepository,
+        DiscussionRepository $discussionRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -255,6 +269,7 @@ class Entity
         $this->entityHasReferenceRepository = $entityHasReferenceRepository;
         $this->forumBoardRepository = $boardRepository;
         $this->autodiagRepository = $autodiagRepository;
+        $this->discussionRepository = $discussionRepository;
     }
 
     /**
@@ -290,6 +305,8 @@ class Entity
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
             case $entity instanceof Groupe:
                 return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
+            case $entity instanceof Discussion:
+                return self::ENTITY_TYPE_CDP_DISCUSSION;
             case $entity instanceof ExpBesoinReponses:
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
             case $entity instanceof Suggestion:
@@ -375,6 +392,8 @@ class Entity
                 return $this->forumBoardRepository->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_AUTODIAG:
                 return $this->autodiagRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                return $this->discussionRepository->findById($ids);
         }
 
         throw new \Exception('Type "' . $type . '" introuvable.');

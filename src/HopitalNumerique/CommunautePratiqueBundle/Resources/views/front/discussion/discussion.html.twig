@@ -74,6 +74,15 @@
             {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MANAGE_DOMAINS'), discussion) and discussionDomainsForm is not null%}
                 {{ form_start(discussionDomainsForm, {'attr': {'class': 'discussion-domains'}}) }}
                     {{ form_widget(discussionDomainsForm.domains, {'attr': {'class': 'select2'}}) }}
+
+                    {% spaceless %}
+                        <a
+                            href="{{ path('hopitalnumerique_reference_referencement_popin', { 'entityType': constant('HopitalNumerique\\CoreBundle\\DependencyInjection\\Entity::ENTITY_TYPE_CDP_DISCUSSION'), 'entityId': discussion.id, 'redirect': 'false' }) }}"
+                            class="open-popin-referencement fancybox.ajax btn btn-link"
+                        >
+                            <i class="fa fa-cog"></i>
+                        </a>
+                    {% endspaceless %}
                 {{ form_end(discussionDomainsForm) }}
             {% endif %}
         </div>
