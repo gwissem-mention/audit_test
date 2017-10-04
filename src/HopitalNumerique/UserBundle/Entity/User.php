@@ -983,7 +983,10 @@ class User extends BaseUser implements SettingsOwnerInterface
      */
     public function isRegionDom()
     {
-        return in_array($this->getRegion()->getId(), Reference::DOMRegionsIds());
+        if (null !== $this->getRegion()) {
+            return in_array($this->getRegion()->getId(), Reference::DOMRegionsIds());
+        }
+        return false;
     }
 
     /**
