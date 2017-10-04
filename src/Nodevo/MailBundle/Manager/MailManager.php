@@ -458,23 +458,7 @@ class MailManager extends BaseManager
 
     public function sendUserRoleUpdateNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_USER_ROLE_UPDATED);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_USER_ROLE_UPDATED);
     }
 
     /**
@@ -841,23 +825,7 @@ class MailManager extends BaseManager
 
     public function sendNextSessionsNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_SUGGESTION_ANAP_NEXT_SESSIONS);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_SUGGESTION_ANAP_NEXT_SESSIONS);
     }
 
     /**
@@ -937,26 +905,10 @@ class MailManager extends BaseManager
      */
     public function sendForumPostCreatedNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_FORUM_POST_CREATED);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                    'urlMessage' => $this->_router->generate('hopitalnumerique_forum_reference_topic', [
-                        'id' => $options['id'],
-                    ])
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $options['urlMessage'] = $this->_router->generate('hopitalnumerique_forum_reference_topic', [
+            'id' => $options['id'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_FORUM_POST_CREATED);
     }
 
     /**
@@ -1422,27 +1374,10 @@ class MailManager extends BaseManager
      */
     public function sendAutodiagUpdateNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_AUTODIAG_UPDATE);
-
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'urlAutodiagnostics' => $this->_router->generate('hopitalnumerique_autodiag_entry_add', [
-                        'autodiag' => $options['autodiagId'],
-                    ], RouterInterface::ABSOLUTE_URL),
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $options['urlAutodiagnostics'] = $this->_router->generate('hopitalnumerique_autodiag_entry_add', [
+            'autodiag' => $options['autodiagId'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_AUTODIAG_UPDATE);
     }
 
     /**
@@ -1478,31 +1413,15 @@ class MailManager extends BaseManager
     }
 
     /**
-     * @param Notification $notification
-     * @param $mailId
+     * @param User $user
+     * @param $options
      */
     public function sendPublicationCommentNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_COMMENTED);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'urlPublication' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
-                        'id' => $options['idPublication'],
-                    ], RouterInterface::ABSOLUTE_URL),
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $options['urlPublication'] = $this->_router->generate('hopital_numerique_publication_publication_objet', [
+            'id' => $options['idPublication'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_PUBLICATION_COMMENTED);
     }
 
     /**
@@ -1511,26 +1430,10 @@ class MailManager extends BaseManager
      */
     public function sendPublicationNotifiedNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_NOTIFIED);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'urlPublication' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
-                        'id' => $options['idPublication'],
-                    ], RouterInterface::ABSOLUTE_URL),
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $options['urlPublication'] = $this->_router->generate('hopital_numerique_publication_publication_objet', [
+            'id' => $options['idPublication'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_PUBLICATION_NOTIFIED);
     }
 
     /**
@@ -1608,8 +1511,7 @@ class MailManager extends BaseManager
         $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_COMMENT);
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_COMMENT);
     }
 
     /**
@@ -1621,8 +1523,7 @@ class MailManager extends BaseManager
         $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
     }
 
     /**
@@ -1634,8 +1535,7 @@ class MailManager extends BaseManager
         $options['urlCommunaute'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
     }
 
     /**
@@ -1647,8 +1547,7 @@ class MailManager extends BaseManager
         $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
     }
 
     /**
@@ -1657,23 +1556,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpUserJoinedNotification(User $user, $options)
     {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_CDP_USER_JOINED);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_USER_JOINED);
     }
 
     /**
@@ -1685,36 +1568,7 @@ class MailManager extends BaseManager
         $options['urlFiche'] = $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
             'fiche' => $options['ficheId'],
         ]);
-        $mailsToSend = $this->buildCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE);
-        $this->mailer->send($mailsToSend);
-    }
-
-    /**
-     * @param User $user
-     * @param $options
-     * @param $mailId
-     *
-     * @return \Swift_Message
-     */
-    public function buildCdpNotification(User $user, $options, $mailId)
-    {
-        /** @var Mail $mail */
-        $mail = $this->findOneById($mailId);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        return $mailsToSend;
+        $this->sendNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE);
     }
 
     /**
@@ -1790,18 +1644,11 @@ class MailManager extends BaseManager
     {
         /** @var Mail $mail */
         $mail = $this->findOneById($mailId);
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                ]
-            )
-        ));
+        $cloneMail = clone $mail;
 
-        $mailsToSend = $this->generationMail($user, $mail);
+        $options['prenomUtilisateur'] = $user->getFirstname();
+
+        $mailsToSend = $this->generationMail($user, $cloneMail, $options);
         $mailsToSend->setTo($user->getEmail());
 
         $this->mailer->send($mailsToSend);
