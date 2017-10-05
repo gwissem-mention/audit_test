@@ -955,18 +955,14 @@ ul.communaute-de-pratiques-mes-groupes li div {
 }
 
 /* Panel du tableau de bord (en haut de page) */
-.communaute-de-pratiques-tableau-de-bord .panel-communaute-de-pratiques-tableau-de-bord {
+.communaute-de-pratiques-tableau-de-bord {
     margin-top: 0;
 }
 
-.communaute-de-pratiques-tableau-de-bord .panel-communaute-de-pratiques-tableau-de-bord .panel-body {
-    padding: 15px;
+.communaute-de-pratiques-tableau-de-bord .groupe {
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe {
-}
-
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header {
+.communaute-de-pratiques-tableau-de-bord .groupe .header {
     border-color: #e6e6e6;
     border-style: solid;
     border-width: 1px 0 0 0;
@@ -974,11 +970,11 @@ ul.communaute-de-pratiques-mes-groupes li div {
     padding: 15px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe:first-child .header {
+.communaute-de-pratiques-tableau-de-bord .groupe:first-child .header {
     border-top-width: 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur {
     background-color: #e6e6e6;
     border-radius: 50%;
     display: block;
@@ -986,61 +982,67 @@ ul.communaute-de-pratiques-mes-groupes li div {
     font-size: 26px;
     height: 32px;
     line-height: 28px;
-    margin: -3px 0 0 0;
+    margin: 6px 0 0 0;
     text-align: center;
     width: 32px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on {
     color: #333;
     font-size: 21px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on:after {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on:after {
     content: 'x';
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off {
     line-height: 30px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off:after {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off:after {
     content: '+';
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .nom {
     font-size: 14px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom .icon {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .nom .icon {
     color: #777;
     font-size: 16px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .infos {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+
+.communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite {
     font-size: 10px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite strong {
+.communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite strong {
     color: #dd3157;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body {
+.communaute-de-pratiques-tableau-de-bord .groupe .body {
     display: none;
     font-size: 11px;
     padding: 0 15px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body.active {
+.communaute-de-pratiques-tableau-de-bord .groupe .body.active {
     display: block;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre {
     background-color: #e6e6e6;
     margin: 0 0 15px 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres {
     float: right;
     font-size: 10px;
     line-height: 12px;
@@ -1049,11 +1051,11 @@ ul.communaute-de-pratiques-mes-groupes li div {
     width: 86px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total {
     margin: 0 0 30px 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total strong {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total strong {
     color: #dd3157;
     display: block;
     font-size: 32px;
@@ -1061,46 +1063,46 @@ ul.communaute-de-pratiques-mes-groupes li div {
     line-height: 32px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal {
     background-color: #f9f7f8;
     margin: 0 86px 0 0;
     padding: 15px;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal .identite {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal .identite {
     height: 67px;
     overflow: hidden;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .communaute-de-pratiques-avatar {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .communaute-de-pratiques-avatar {
     float: left;
     margin: 0 15px 0 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom {
     font-size: 14px;
     font-weight: bold;
     line-height: 13px;
     padding: 10px 0 0 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom .icon,
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .animateur .icon {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom .icon,
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .animateur .icon {
     color: #dd3157;
     font-size: 14px;
     vertical-align: middle;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .contenu {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .contenu {
     height: 150px;
     overflow-y: auto;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .contenu a {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .contenu a {
     color: #333;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire {
     border-color: #e6e6e6;
     border-style: solid;
     border-width: 1px 0;
@@ -1108,22 +1110,22 @@ ul.communaute-de-pratiques-mes-groupes li div {
     padding: 4px 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire a {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire a {
     color: #333;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire .icon {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire .icon {
     font-size: 17px;
     vertical-align: middle;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul li {
+.communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul li {
     margin: 8px 0;
 }
 

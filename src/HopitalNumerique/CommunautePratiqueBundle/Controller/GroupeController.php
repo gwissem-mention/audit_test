@@ -43,6 +43,17 @@ class GroupeController extends Controller
         ->findNonDemarresByUser($domaine, $this->getUser());
         $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
 
+        $groups = [];
+        if (
+            $this->getUser()->getCommunautePratiqueAnimateurGroupes()->count() > 0 ||
+            $this->getUser()->hasRoleCDPAdmin()
+        ) {
+            $groups = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes(
+                $domaine,
+                $this->getUser()->hasRoleCDPAdmin() ? null : $this->getUser()
+            );
+        }
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
 
@@ -50,6 +61,7 @@ class GroupeController extends Controller
                 'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
                 'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
                 'userGroupesEnCours' => $groupeUser,
+                'groupes' => $groups,
             ]
         );
     }
