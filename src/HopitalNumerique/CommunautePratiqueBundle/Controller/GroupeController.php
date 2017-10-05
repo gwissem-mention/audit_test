@@ -5,7 +5,9 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Group\GroupRegistrationEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter;
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
 use HopitalNumerique\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,12 +37,13 @@ class GroupeController extends Controller
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
         $groupeUserEnCour = $this->get('hopitalnumerique_communautepratique.manager.groupe')
-        ->findEnCoursByUser($domaine, $this->getUser());
+        ->findEnCoursByUser($selectedDomain, $this->getUser());
         $groupeUserAVenir = $this->get('hopitalnumerique_communautepratique.manager.groupe')
-        ->findNonDemarresByUser($domaine, $this->getUser());
+        ->findNonDemarresByUser($selectedDomain, $this->getUser());
         $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
 
         $groups = [];
@@ -49,7 +52,7 @@ class GroupeController extends Controller
             $this->getUser()->hasRoleCDPAdmin()
         ) {
             $groups = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes(
-                $domaine,
+                $selectedDomain,
                 $this->getUser()->hasRoleCDPAdmin() ? null : $this->getUser()
             );
         }
@@ -58,8 +61,8 @@ class GroupeController extends Controller
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
 
             [
-                'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
-                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
+                'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($selectedDomain),
+                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($selectedDomain),
                 'userGroupesEnCours' => $groupeUser,
                 'groupes' => $groups,
             ]

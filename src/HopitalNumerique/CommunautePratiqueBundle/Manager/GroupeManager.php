@@ -20,7 +20,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
-    public function findNonDemarresByUser(Domaine $domaine, User $user)
+    public function findNonDemarresByUser(Domaine $domaine = null, User $user)
     {
         return $this->getRepository()->findNonDemarres($domaine, $user, true);
     }
@@ -32,7 +32,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
-    public function findNonDemarres(Domaine $domaine)
+    public function findNonDemarres(Domaine $domaine = null)
     {
         return $this->getRepository()->findNonDemarres($domaine, null, true);
     }
@@ -44,7 +44,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findEnCours(Domaine $domaine)
+    public function findEnCours(Domaine $domaine = null)
     {
         return $this->getRepository()->findEnCours($domaine, null, true);
     }
@@ -56,7 +56,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findTermines(Domaine $domaine)
+    public function findTermines(Domaine $domaine = null)
     {
         return $this->getRepository()->findTermines($domaine, null, true);
     }
@@ -69,7 +69,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findEnCoursByUser(Domaine $domaine, User $user)
+    public function findEnCoursByUser(Domaine $domaine = null, User $user)
     {
         return $this->getRepository()->findEnCours($domaine, $user, true);
     }
@@ -82,7 +82,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findTerminesByUser(Domaine $domaine, User $user)
+    public function findTerminesByUser(Domaine $domaine = null, User $user)
     {
         return $this->getRepository()->findTermines($domaine, $user, true);
     }
@@ -96,7 +96,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
-    public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null)
+    public function findNonFermes(Domaine $domaine = null, User $user = null, $enVedette = null)
     {
         return $this->getRepository()->findNonFermes($domaine, $user, $enVedette, true, true);
     }

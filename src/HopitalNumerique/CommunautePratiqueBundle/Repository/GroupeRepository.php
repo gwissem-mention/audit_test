@@ -22,18 +22,24 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
-    public function findNonDemarres(Domaine $domaine, User $user = null, $isActif = null)
+    public function findNonDemarres(Domaine $domaine = null, User $user = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
-            ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateDemarrage > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
+
+        if (null !== $domaine) {
+            $query
+                ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
+
         if (null !== $user) {
             $query
                 ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
@@ -64,19 +70,25 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findEnCours(Domaine $domaine, User $user = null, $isActif = null)
+    public function findEnCours(Domaine $domaine = null, User $user = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
-            ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateDemarrage <= :aujourdhui')
             ->andWhere('groupe.dateFin >= :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
+
+        if (null !== $domaine) {
+            $query
+                ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
+
         if (null !== $user) {
             $query
                 ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
@@ -172,11 +184,17 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $aujourdhui->setTime(0, 0, 0);
 
         $query
-            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
-            ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateFin < :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
+
+        if (null !== $domaine) {
+            $query
+                ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
+
         if (null !== $user) {
             $query
                 ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
@@ -209,7 +227,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
-    public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null)
+    public function findNonFermes(Domaine $domaine = null, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -222,8 +240,6 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('groupeInscription')
             ->leftJoin('groupeInscription.user', 'groupeUser')
             ->addSelect('groupeUser')
-            ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
-            ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateFin > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
             ->addOrderBy('groupe.dateDemarrage')
@@ -231,6 +247,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->addOrderBy('groupeUser.lastname')
             ->addOrderBy('groupeUser.firstname')
         ;
+
+        if (null !== $domaine) {
+            $query
+                ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
 
         if (null !== $user) {
             $query

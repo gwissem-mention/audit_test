@@ -13,6 +13,7 @@
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
+    {{ selectedDomainSelector() }}
     {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
