@@ -57,9 +57,9 @@ class GroupeController extends Controller
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
             [
                 'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($selectedDomain),
-                'groupesEnCours'     => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($selectedDomain),
+                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($selectedDomain),
                 'userGroupesEnCours' => $groupeUser,
-                'groupes'            => $groups,
+                'groupes' => $groups,
             ]
         );
     }
@@ -141,7 +141,7 @@ class GroupeController extends Controller
             ],
             'discussion' => $discussion,
             'groupe' => $groupe,
-            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe)
+            'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe),
         ]);
     }
 
