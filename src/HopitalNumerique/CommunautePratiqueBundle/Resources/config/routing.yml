@@ -2,10 +2,6 @@ hopitalnumerique_communautepratique_admin:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/admin.yml"
     prefix: "/admin/communaute-de-pratiques"
 
-hopitalnumerique_communautepratique_accueil:
-    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/accueil.yml"
-    prefix: "/communaute-de-pratiques"
-
 hopitalnumerique_communautepratique_inscription:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/inscription.yml"
     prefix: "/communaute-de-pratiques"

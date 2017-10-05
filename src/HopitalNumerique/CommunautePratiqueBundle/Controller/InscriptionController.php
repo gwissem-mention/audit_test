@@ -35,7 +35,7 @@ class InscriptionController extends Controller
             }
 
             return new JsonResponse([
-                'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index'),
+                'url' => $this->generateUrl('hopitalnumerique_communautepratique_groupe_list'),
             ]);
         } else {
             $this->addFlash(
@@ -66,7 +66,7 @@ class InscriptionController extends Controller
                 $this->addFlash('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
 
-            return $this->redirectToRoute('hopitalnumerique_communautepratique_accueil_index');
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_list');
         } else {
             $this->addFlash(
                 'danger',

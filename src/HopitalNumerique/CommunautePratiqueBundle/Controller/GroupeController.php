@@ -123,7 +123,7 @@ class GroupeController extends Controller
                         'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.'
                     );
 
-                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
+                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_list'));
                 }
             }
         } else {

@@ -523,7 +523,7 @@ class PublicationController extends Controller
         if ($isCommunautePratiqueArticle) {
             $request->getSession()->set(
                 'urlToRedirect',
-                $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
+                $this->generateUrl('hopitalnumerique_communautepratique_groupe_list')
             );
         } else {
             $request->getSession()->remove('urlToRedirect');
