@@ -51,7 +51,7 @@ class Contact extends NodevoContact
     protected $statutEtablissementSante;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", cascade={"persist"})
      * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
      */
     protected $etablissementRattachementSante;

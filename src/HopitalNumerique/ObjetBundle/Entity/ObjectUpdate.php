@@ -25,7 +25,7 @@ class ObjectUpdate
     /**
      * @var Objet
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", cascade={"persist"}, inversedBy="updates")
      * @ORM\JoinColumn(referencedColumnName="obj_id")
      */
     protected $object;

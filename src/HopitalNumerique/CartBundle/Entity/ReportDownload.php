@@ -25,7 +25,7 @@ class ReportDownload
     /**
      * @var Report
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CartBundle\Entity\Report")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CartBundle\Entity\Report", inversedBy="downloads")
      */
     protected $report;
 
