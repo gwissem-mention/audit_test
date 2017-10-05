@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\CartBundle\Model\Item;
 
-
+use HopitalNumerique\CartBundle\Entity\Item;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 
 class CDPDiscussion extends Item
@@ -43,7 +43,7 @@ class CDPDiscussion extends Item
      */
     public function getObjectType()
     {
-        return \HopitalNumerique\CartBundle\Entity\Item::CDP_DISCUSSION_TYPE;
+        return Item::CDP_DISCUSSION_TYPE;
     }
 
     /**

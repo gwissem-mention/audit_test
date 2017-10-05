@@ -46,7 +46,7 @@ class CDPDiscussionGenerator implements ItemGeneratorInterface
      *
      * @return ItemInterface
      */
-    public function process($discussion, Report $report)
+    public function process($discussion, Report $reportc)
     {
         $item = new CDPDiscussion(
             $discussion,
@@ -56,11 +56,6 @@ class CDPDiscussionGenerator implements ItemGeneratorInterface
                 $discussion->getId()
             )
         );
-
-        if ($discussion->isPublic()) {
-            //$item->setSummary();
-        }
-
 
         return $item;
     }

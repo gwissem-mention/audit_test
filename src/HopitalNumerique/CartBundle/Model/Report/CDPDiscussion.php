@@ -96,5 +96,4 @@ class CDPDiscussion implements ItemInterface
     {
         return 'cdpDiscussion';
     }
-
 }
