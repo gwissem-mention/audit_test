@@ -2,22 +2,20 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Group\GroupRegistrationEvent;
-use HopitalNumerique\CommunautePratiqueBundle\Events;
-use HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever;
-use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter;
-use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
 use HopitalNumerique\UserBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Group\GroupRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
@@ -38,20 +36,18 @@ class GroupeController extends Controller
         }
 
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
-        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
-        $groupeUserEnCour = $this->get('hopitalnumerique_communautepratique.manager.groupe')
-        ->findEnCoursByUser($selectedDomain, $this->getUser());
-        $groupeUserAVenir = $this->get('hopitalnumerique_communautepratique.manager.groupe')
-        ->findNonDemarresByUser($selectedDomain, $this->getUser());
-        $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
+        $groupeUser = array_merge(
+            $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser($selectedDomain, $this->getUser()),
+            $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarresByUser($selectedDomain, $this->getUser())
+        );
 
         $groups = [];
         if (
             $this->getUser()->getCommunautePratiqueAnimateurGroupes()->count() > 0 ||
             $this->getUser()->hasRoleCDPAdmin()
         ) {
-            $groups = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes(
+            $groups = $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes(
                 $selectedDomain,
                 $this->getUser()->hasRoleCDPAdmin() ? null : $this->getUser()
             );
@@ -59,12 +55,11 @@ class GroupeController extends Controller
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
-
             [
                 'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($selectedDomain),
-                'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($selectedDomain),
+                'groupesEnCours'     => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($selectedDomain),
                 'userGroupesEnCours' => $groupeUser,
-                'groupes' => $groups,
+                'groupes'            => $groups,
             ]
         );
     }
