@@ -142,3 +142,9 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Discussion\CSVExport
         arguments:
             - '@translator'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\ViewMember:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\ViewMember
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository'

@@ -13,3 +13,9 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message']
+
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Member\ViewedMember']
