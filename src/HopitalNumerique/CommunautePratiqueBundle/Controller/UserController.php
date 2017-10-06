@@ -2,15 +2,14 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
-use HopitalNumerique\CommunautePratiqueBundle\Service\ViewMember;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Routing\RouterInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Service\ViewMember;
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
 
 /**
  * Contrôleur des utilisateurs.
@@ -49,6 +48,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
+            'membersViewed' => $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser()),
         ]);
     }
 

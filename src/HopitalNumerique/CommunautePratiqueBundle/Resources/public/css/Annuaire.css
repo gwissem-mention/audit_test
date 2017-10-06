@@ -3,7 +3,8 @@
     justify-content: flex-start;
     align-items: center;
     color: #333;
-    padding: 10px;
+    padding: 5px;
+    margin: 5px 0;
 }
 
 .cdp-directory .directory .directory-user:hover {
@@ -12,6 +13,24 @@
 
 .cdp-directory .directory .directory-user span {
     display: block;
+}
+
+.cdp-directory .directory .directory-user .new-flag {
+    display: none;
+}
+
+.cdp-directory .directory .directory-user.directory-user--new {
+    background: rgba(240, 232, 174, 0.3);
+}
+
+.cdp-directory .directory .directory-user.directory-user--new .new-flag {
+    display: block;
+    margin-left: auto;
+    color: #fff;
+    background: #ec0034;
+    border-radius: 2px;
+    font-size: 10px;
+    padding: 1px 2px;
 }
 
 .cdp-directory .directory .directory-user .avatar {
@@ -236,6 +255,7 @@
 .resultats-nombre {
     float: right;
     margin-top: 7px;
+    text-align: right;
 }
 
 .communaute-de-pratiques-bloc-user .contact {

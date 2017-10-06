@@ -69,7 +69,8 @@
 
             <div class="directory">
                 {% for user in pagerFantaMembres.currentPageResults %}
-                    <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user">
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user{{ membersViewed[user.id] is not defined ? ' directory-user--new' }}">
+
                         <span class="avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></span>
                         <span class="directory-user-username">
                             {{ user.prenomNom }}
@@ -78,12 +79,21 @@
                         <span class="county">
                             - {{ user.county.libelle }}
                         </span>
+
+                        <div class="new-flag">{{ 'directory.member.is_new'|trans }}</div>
                     </a>
                 {% endfor %}
             </div>
 
             {% if pagerFantaMembres.nbPages > 1 %}
-                <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} membres</span></div>
+                <div class="text-center">
+                    {{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}
+
+                    <span class="resultats-nombre">
+                        {{ 'directory.count.member'|transchoice(pagerFantaMembres.count) }}<br />
+                        {{ 'directory.count.new_member'|transchoice(pagerFantaMembres.count - membersViewed|length) }}
+                    </span>
+                </div>
             {% endif %}
 
         </div>
