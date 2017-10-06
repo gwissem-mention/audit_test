@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         }
 
         /** @var Domaine $domaine */
-        $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $domaine = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
         $usersCDP = $this
             ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
