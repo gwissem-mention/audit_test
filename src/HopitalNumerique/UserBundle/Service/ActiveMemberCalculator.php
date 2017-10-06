@@ -139,9 +139,9 @@ class ActiveMemberCalculator
     /**
      * @param User $user
      *
-     * @return array
+     * @return array|null
      */
     public function getMemberActivity(User $user) {
-        return $this->getAllActiveMembers()[$user->getId()];
+        return isset($this->getAllActiveMembers()[$user->getId()]) ? $this->getAllActiveMembers()[$user->getId()] : null;
     }
 }

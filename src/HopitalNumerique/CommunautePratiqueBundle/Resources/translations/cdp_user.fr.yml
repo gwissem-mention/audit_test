@@ -1,0 +1,7 @@
+directory:
+    public:
+        title: Annuaire de la communauté
+details:
+    groups_registration: Participations aux groupes
+    action:
+        send_mail: Envoyer un message

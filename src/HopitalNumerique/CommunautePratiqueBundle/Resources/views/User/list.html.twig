@@ -1,25 +1,29 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
+{% trans_default_domain "cdp_user" %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-user-list.js"
         'bundles/hopitalnumeriquecommunautepratique/js/User/Recherche.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Directory.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Directory();
+        });
+    </script>
 {% endblock %}
 
-{% block title_communaute_pratique %}Annuaire du groupe{% endblock %}
+{% block title_communaute_pratique %}{{ 'directory.public.title'|trans }}{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
-        <div class="contact">
-            <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">
-                <em class="icon icon-settings48"></em>
-                Mise à jour de mes </br> informations personnelles
-            </a>
-        </div>
     {{ communaute_pratique.display_action_contact_invitation() }}
+    {{ selectedDomainSelector() }}
 {% endblock %}
 
 {% block body_communaute_pratique %}
@@ -54,15 +58,28 @@
             {{ form_end(rechercheForm) }}
         </div>
 
-        <div class="communaute-de-pratiques-annuaire-users">
-            <div class="row">
+        <div class="communaute-de-pratiques-annuaire-users cdp-directory">
 
-                {% for membre in pagerFantaMembres.currentPageResults %}
-                    <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, null, false, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) }}
+            <div class="user-details modal fade" id="directory-user-details-modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
                     </div>
-                {% endfor %}
+                </div>
+            </div>
 
+            <div class="directory">
+                {% for user in pagerFantaMembres.currentPageResults %}
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user">
+                        <span class="avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></span>
+                        <span class="directory-user-username">
+                            {{ user.prenomNom }}
+                        </span>
+
+                        <span class="county">
+                            - {{ user.county.libelle }}
+                        </span>
+                    </a>
+                {% endfor %}
             </div>
 
             {% if pagerFantaMembres.nbPages > 1 %}
@@ -74,25 +91,3 @@
     </div>
 
 {% endblock body_communaute_pratique %}
-
-{% block communaute_pratique_sommaire %}
-<div class="communaute-de-pratiques-sommaire">
-    <div class="row">
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-download105"></em> Tableau de bord</a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon-social20"></em> Groupes de travail</a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
-        </div>
-
-        {% if forumCategory %}
-            <div class="col-md-3">
-                <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': forumCategory.id, 'forumName': forumCategory.forumName}) -}}"><em class="icon-chat27"></em> Forum de la communauté de pratique</a>
-            </div>  
-        {% endif %}
-    </div>
-</div>
-{% endblock %}

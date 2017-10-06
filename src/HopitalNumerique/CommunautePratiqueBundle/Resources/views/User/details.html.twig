@@ -1,0 +1,116 @@
+{% trans_default_domain 'cdp_user' %}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">
+        {{ user.prenomNom }}
+
+        {% if memberActivity %}
+            <span
+                class="active-member"
+                data-toggle="tooltip"
+                data-placement="left"
+                data-html="true"
+                title="
+                    <b>Utilisateur parmi les plus actifs :</b><br />
+                    {% if memberActivity['visitCount'] != 0 %}Nombre&nbsp;de&nbsp;visites&nbsp;sur&nbsp;la&nbsp;plateforme&nbsp;:&nbsp;{{ memberActivity['visitCount'] }}<br />{% endif %}
+                    {% if memberActivity['nbPost'] != 0 %}Nombre&nbsp;de&nbsp;posts&nbsp;renseignés&nbsp;sur&nbsp;les&nbsp;forums&nbsp;:&nbsp;{{ memberActivity['nbPost'] }}<br />{% endif %}
+                    {% if memberActivity['nbComment'] != 0 %}Nombre&nbsp;de&nbsp;commentaires&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ memberActivity['nbComment'] }}<br />{% endif %}
+                    {% if memberActivity['nbNote'] != 0 %}Nombre&nbsp;de&nbsp;notations&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ memberActivity['nbNote'] }}<br />{% endif %}
+                    {% if memberActivity['recommendationsCount'] != 0 %}Nombre&nbsp;de&nbsp;recommandations&nbsp;:&nbsp;{{ memberActivity['recommendationsCount'] }}<br />{% endif %}
+                "
+            >
+                <em class="fa fa-trophy yellow"></em>
+            </span>
+        {% endif %}
+
+        {% if user.hasRoleAmbassadeur or user.hasRoleExpert %}
+            {% if user.hasRoleAmbassadeur %}
+                <a href="{{ path('hopital_numerique_intervention_demande_nouveau', {'ambassadeur': user.id}) }}">Ambassadeur Hôpital Numérique</a>
+            {% elseif user.hasRoleExpert %}
+                <a href="{{ path('hopitalnumerique_expert_front_expert') }}">Expert Hôpital Numérique</a>
+            {% endif %}
+        {% endif %}
+    </h4>
+</div>
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+
+            <a href="mailto:{{ user.email }}" class="btn btn-default btn-xs">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                {{ 'details.action.send_mail'|trans }}
+            </a>
+        </div>
+
+        <div class="col-md-9">
+            {{ user.region ? user.region.libelle }}
+            {% if user.organization is not null and user.region and user.organization.codePostal != '' %}
+                -
+            {% endif %}
+            {{ user.organization ? user.organization.codePostal }}
+
+            {% if user.phoneNumber != '' or user.cellPhoneNumber != '' %}
+                <div class="line">
+                    <i class="fa fa-phone"></i> {{ user.phoneNumber != '' ? user.phoneNumber : '' }}{{ user.phoneNumber != '' and user.cellPhoneNumber != '' ? ', ' : '' }}{{ user.cellPhoneNumber != '' ? user.cellPhoneNumber : '' }}
+                </div>
+            {% endif %}
+
+            {% if user.organization is not null or user.organizationLabel != '' %}
+                <div class="line">
+                    <em class="icon icon-hospital11"></em>
+                    {% if user.organization is not null %}
+                        {{ user.organization.nom }}
+                    {% elseif user.organizationLabel != '' %}
+                        {{ user.organizationLabel }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if user.organizationType is not null %}
+                <div class="line">
+                    <em class="icon icon-medical55"></em>
+                    {{ user.organizationType.libelle }}
+                    {% if user.activities|length > 0 -%}
+                        <br>
+                        ({% for activite in user.activities -%}
+                            {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                        {%- endfor %})
+                    {%- endif -%}
+                </div>
+            {% endif %}
+
+            {% if user.jobLabel != '' or user.jobType is not null %}
+                <div class="line">
+                    <em class="icon icon-users149"></em>
+                    {% if user.jobLabel != '' %}
+                        {{ user.jobLabel }}
+                    {% elseif user.jobType is not null %}
+                        {{ user.jobType.libelle }}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% if user.communautePratiqueGroupes|length %}
+        <div class="row">
+            <div class="col-md-12">
+
+                <hr>
+
+                <h4>{{ 'details.groups_registration'|trans }}</h4>
+
+                <ul>
+                    {% for group in user.communautePratiqueGroupes %}
+                        <li>{{ group.titre }} {{ group.dateDemarrage|localizeddate('short', 'none') }} {{ group.dateFin|localizeddate('short', 'none') }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+</div>
