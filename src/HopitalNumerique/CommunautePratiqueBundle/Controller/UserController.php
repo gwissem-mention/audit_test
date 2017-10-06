@@ -45,19 +45,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         /** @var Domaine $domaine */
         $domaine = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
-        $usersCDP = $this
-            ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
-            ->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult()
-        ;
-
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
-            'groupesTermines' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findTermines($domaine),
-            'groupesNonDemarres' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
-            'groupesEnCours' => $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
-            'forumCategory' => $domaine->getCommunautePratiqueForumCategories()->first(),
-            'activeMembers' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
         ]);
     }
 
