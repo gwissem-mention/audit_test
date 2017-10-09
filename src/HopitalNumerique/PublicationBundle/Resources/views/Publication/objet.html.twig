@@ -46,17 +46,23 @@
             </div>
             <div class="col-md-4">
                 <div class="text-right">
-                    <span>{{ 'subscribe'|trans }}</span>
-                    {% spaceless %}
-                        <div
-                            class="toggle toggle-success"
-                            data-path="{{ path('hopitalnumerique_objet_subscribe', {
-                                'object': objet.id,
-                                'content': contenu is defined ? contenu.id : null
-                            }) }}"
-                            data-active="{% if subscribed is not null %}true{% else %}false{% endif %}"
-                        ></div>
-                    {% endspaceless %}
+                    {% if objet.isArticle == false %}
+                        <span>{{ 'subscribe'|trans }}</span>
+                        {% spaceless %}
+                            <div
+                                class="toggle toggle-success"
+                                data-path="{{ path('hopitalnumerique_objet_subscribe', {
+                                    'object': objet.id,
+                                    'content': contenu is defined ? contenu.id : null
+                                }) }}"
+                                data-active="{{ subscribed is not null ? 'true' : 'false' }}"
+                                title="{{
+                                    (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans
+                                    ~ 'subscribe_where'|trans
+                                }}"
+                            ></div>
+                        {% endspaceless %}
+                    {% endif %}
                     {% if contenu is defined %}
                         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id}) }}
                     {% else %}

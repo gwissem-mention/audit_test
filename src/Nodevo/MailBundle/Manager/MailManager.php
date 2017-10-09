@@ -3,8 +3,12 @@
 namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\CartBundle\Model\Item\GuidedSearch;
+use HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever;
+use HopitalNumerique\NewAccountBundle\Service\ProfileCompletionCalculator;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Note;
+use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -100,6 +104,26 @@ class MailManager extends BaseManager
     protected $currentDomain;
 
     /**
+     * @var string
+     */
+    protected $basePath;
+
+    /**
+     * @var ObjetRepository
+     */
+    protected $objectRepository;
+
+    /**
+     * @var ProfileCompletionCalculator
+     */
+    protected $profilecompletionCalculator;
+
+    /**
+     * @var StatsInformationsRetriever
+     */
+    protected $statsInformationsRetriever;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -116,6 +140,9 @@ class MailManager extends BaseManager
      * @param CourrielRegistreManager $courrielRegistreManager
      * @param array $options Tableau d'options
      * @param BBCodeEngine $BBCodeEngine
+     * @param ObjetRepository $objectRepository
+     * @param ProfileCompletionCalculator $calculator
+     * @param StatsInformationsRetriever $statsInformationsRetriever
      */
     public function __construct(
         EntityManager $em,
@@ -131,7 +158,10 @@ class MailManager extends BaseManager
         ActiviteExpertManager $activiteExpertManager,
         CourrielRegistreManager $courrielRegistreManager,
         $options = [],
-        BBCodeEngine $BBCodeEngine
+        BBCodeEngine $BBCodeEngine,
+        ObjetRepository $objectRepository,
+        ProfileCompletionCalculator $calculator,
+        StatsInformationsRetriever $statsInformationsRetriever
     ) {
         parent::__construct($em);
 
@@ -154,6 +184,9 @@ class MailManager extends BaseManager
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
         $this->bbcodeEngine = $BBCodeEngine;
+        $this->objectRepository = $objectRepository;
+        $this->profilecompletionCalculator = $calculator;
+        $this->statsInformationsRetriever = $statsInformationsRetriever;
 
         $this->setOptions();
 
@@ -257,6 +290,7 @@ class MailManager extends BaseManager
         $currentDomain = $this->currentDomain
             ? $this->currentDomain
             : $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+        $basePath = $this->basePath ? $this->basePath : null;
 
         if (null !== $destinataire) {
             $user_mail = $this->_userManager->findOneBy(['email' => $destinataire]);
@@ -272,6 +306,7 @@ class MailManager extends BaseManager
         $bodyHtml = $template->render([
             'content' => $bodyHtml,
             'currentDomain' => $currentDomain,
+            'basePath' => $basePath,
         ]);
 
         //prepare content TEXT
@@ -285,6 +320,7 @@ class MailManager extends BaseManager
         $bodyTxt = $template->render([
             'content' => strip_tags($body),
             'currentDomain' => $currentDomain,
+            'basePath' => $basePath,
         ]);
 
         //prepare Mail
@@ -1086,7 +1122,7 @@ class MailManager extends BaseManager
      */
     public function sendGuidedSearchNotification(User $user, $options)
     {
-        $options['urlParcoursGuides'] = $this->_router->generate('account_service');
+        $options['urlParcoursGuides'] = $this->_router->generate('account_service') . '#' . GuidedSearch::URI_FRAGMENT;
         $this->sendNotification($user, $options, Mail::MAIL_GUIDED_SEARCH_NOTIF);
     }
 
@@ -1156,7 +1192,7 @@ class MailManager extends BaseManager
      */
     public function buildReportMail(User $user, $options, $mailId)
     {
-        $options['urlMonPanier'] = $this->_router->generate('account_cart', []);
+        $options['urlMonPanier'] = $this->_router->generate('account_cart');
         $this->sendNotification($user, $options, $mailId);
     }
 
@@ -1457,6 +1493,7 @@ class MailManager extends BaseManager
             $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_GROUPE);
             $parameters = [
                 'nomGroupe' => $group->getTitre(),
+                'commentaire' => $commentaire->getMessage(),
                 'urlGroupe' => $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
                     'groupe' => $group->getId(),
                 ], RouterInterface::ABSOLUTE_URL),
@@ -1467,7 +1504,9 @@ class MailManager extends BaseManager
             $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_FICHE);
             $group = $commentaire->getFiche()->getGroupe();
             $parameters = [
+                'nomGroupe' => $fiche->getGroupe()->getTitre(),
                 'nomFiche' => $fiche->getQuestionPosee(),
+                'commentaire' => $commentaire->getMessage(),
                 'urlFiche' => $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
                     'fiche' => $fiche->getId(),
                 ], RouterInterface::ABSOLUTE_URL),
@@ -1476,12 +1515,9 @@ class MailManager extends BaseManager
             return false;
         }
 
+        /** @var User $recipient */
         foreach ($group->getUsers() as $recipient) {
-            $concerned = $recipient->isActifInGroupe($group)
-                || $group->hasAnimateur($recipient)
-                || $recipient->hasRoleAdmin()
-                || $recipient->hasRoleAdminHn()
-            ;
+            $concerned = $recipient->hasRoleAdmin() || $recipient->hasRoleAdminHn();
 
             if (!$concerned) {
                 continue;
@@ -1494,8 +1530,9 @@ class MailManager extends BaseManager
                 $currentCourriel->getBody(),
                 null,
                 array_merge($parameters, [
-                    'nomUtilisateur' => $commentaire->getUser()->getLastname(),
-                    'prenomUtilisateur' => $commentaire->getUser()->getFirstname(),
+                    'nomUtilisateurDist' => $commentaire->getUser()->getLastname(),
+                    'prenomUtilisateurDist' => $commentaire->getUser()->getFirstname(),
+                    'prenomUtilisateur' => $recipient->getFirstname(),
                 ])
             );
 
@@ -1516,7 +1553,7 @@ class MailManager extends BaseManager
         $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_COMMENT);
+        $this->sendNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_GROUPE);
     }
 
     /**
@@ -1540,7 +1577,7 @@ class MailManager extends BaseManager
         $options['urlCommunaute'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
             'groupe' => $options['groupId'],
         ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_CREATED);
     }
 
     /**
@@ -1652,6 +1689,7 @@ class MailManager extends BaseManager
         $this->_session->set('domaineId', $domain);
         $this->setOptions();
         $this->currentDomain = $this->_domaineManager->findOneById($domain);
+        $this->basePath = $this->currentDomain->getUrl();
         /** @var Mail $mail */
         $mail = $this->findOneById($mailId);
 
@@ -1674,7 +1712,12 @@ class MailManager extends BaseManager
         foreach ($groupedNotifications as $key => $code) {
             $content .= $this->_twig->render($code['template'], ['notifications' => $code['notification']]);
         }
-        $options['message'] = $content;
+        $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
+            'objects' => $this->objectRepository->getRandomNotviewedObjects($user),
+            'profilCompletion' => $this->profilecompletionCalculator->calculateForUser($user),
+            'stats' => $this->statsInformationsRetriever->getStats(),
+        ]);
+        $options['message'] = strip_tags($content, '<a><b><strong><em><span>');
         $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
     }
 }

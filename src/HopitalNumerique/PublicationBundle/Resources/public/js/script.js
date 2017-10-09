@@ -178,6 +178,11 @@ $(document).ready(function() {
                 method: 'POST',
                 data: {
                     'wanted': active
+                },
+                success: function(data) {
+                    if (data.redirect) {
+                        window.location = data.redirect;
+                    }
                 }
             });
         })

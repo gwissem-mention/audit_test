@@ -63,6 +63,14 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
     }
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 3;
+    }
+
+    /**
      * Removes HTML from text and limit length.
      *
      * @param $bbText string   Text to be processed.

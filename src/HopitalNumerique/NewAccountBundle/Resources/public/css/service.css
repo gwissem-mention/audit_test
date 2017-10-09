@@ -58,6 +58,7 @@
 
 #my-account #services .actions-column {
     text-align: right;
+    width: 17%;
 }
 
 #my-account #services .icon.quick-access::before {

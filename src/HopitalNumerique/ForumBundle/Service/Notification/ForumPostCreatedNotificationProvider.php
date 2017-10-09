@@ -22,6 +22,14 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 1;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Post $post

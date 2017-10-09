@@ -23,11 +23,11 @@ notification-config:
             title: Nom du rapport
             detail: Nom de l'utilisateur qui a copié son rapport pour moi
     autodiag:
-            section: AUTODIAGNOSTICS
-            autodiag_update_published:
-                description: Mise à jour d'un autodiagnostic
-                title: Titre de l'autodiag
-                detail: Contenu de la mise à jour
+        section: AUTODIAGNOSTICS
+        autodiag_update_published:
+            description: Mise à jour d'un autodiagnostic
+            title: Titre de l'autodiag
+            detail: Contenu de la mise à jour
     practice_community:
         section: COMMUNAUTE DE PRATIQUE
         practice_community_group_comment_created:

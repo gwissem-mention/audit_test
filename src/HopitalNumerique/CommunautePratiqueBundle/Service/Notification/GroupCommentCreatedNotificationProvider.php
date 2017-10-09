@@ -22,6 +22,14 @@ class GroupCommentCreatedNotificationProvider extends PracticeCommunityNotificat
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 1;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Commentaire $comment

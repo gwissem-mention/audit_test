@@ -518,29 +518,4 @@ class UserManager extends BaseManager
 
         return null;
     }
-
-    /**
-     * @param $entity
-     */
-    public function save($entity)
-    {
-        /** @var User $entity */
-        $newInscription = [];
-        foreach ($entity->getGroupeInscription() as $inscription) {
-            if (!$this->em->contains($inscription)) {
-                $newInscription[] = $inscription;
-            }
-        }
-
-        parent::save($entity);
-
-        /** @var Inscription $inscription */
-        foreach ($newInscription as $inscription) {
-            /**
-             * Fire 'GROUP_USER_JOINED' event
-             */
-            $event = new UserJoinedEvent($inscription->getGroupe(), $inscription);
-            $this->eventDispatcher->dispatch(Events::GROUP_USER_JOINED, $event);
-        }
-    }
 }

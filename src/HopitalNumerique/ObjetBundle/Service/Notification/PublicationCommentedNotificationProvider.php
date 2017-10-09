@@ -26,6 +26,27 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 2;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubscribers(Notification $notification)
+    {
+        return $this->subscriptionRepository->getSubscribersQueryBuilder(
+            $notification->getCreatedAt(),
+            $notification->getData('idPublication'),
+            $notification->getData('idInfradoc'),
+            $notification->getData('author')
+        );
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Commentaire $comment
@@ -43,7 +64,7 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
         }
 
         if (strlen($title) > self::getLimitNotifyTitleLength()) {
-            $title = substr($title, 0, self::getLimitNotifyTitleLength()) . '...';
+            $title = substr(strip_tags($title), 0, self::getLimitNotifyTitleLength()) . '...';
         }
 
 
@@ -51,7 +72,12 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $uid,
             $title,
             $this->processText($comment->getTexte()),
-            parent::generateOptions($object, $infradoc)
+            array_merge(
+                parent::generateOptions($object, $infradoc),
+                [
+                    'author' => $comment->getUser()->getId(),
+                ]
+            )
         );
     }
 

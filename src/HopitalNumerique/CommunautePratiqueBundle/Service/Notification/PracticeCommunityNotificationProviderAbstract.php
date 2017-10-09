@@ -65,6 +65,14 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     }
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 2;
+    }
+
+    /**
      * @param $comment
      * @param $limit
      *

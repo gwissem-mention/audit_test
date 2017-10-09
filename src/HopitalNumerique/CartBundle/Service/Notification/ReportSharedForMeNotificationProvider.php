@@ -24,6 +24,14 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 3;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report
@@ -39,7 +47,6 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
             array_merge(
                 parent::generateOptions($report, $userTo),
                 [
-                    'userFromId' => $userFrom->getId(),
                     'userToId' => $userTo->getId(),
                 ]
             )

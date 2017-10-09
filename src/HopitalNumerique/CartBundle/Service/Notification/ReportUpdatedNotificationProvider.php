@@ -24,6 +24,14 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 2;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report
@@ -35,7 +43,12 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
             $report->getId(),
             $report->getName(),
             $user->getPrenomNom(),
-            parent::generateOptions($report)
+            array_merge(
+                parent::generateOptions($report),
+                [
+                    'userFromId' => $user->getId()
+                ]
+            )
         );
     }
 
@@ -49,7 +62,8 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
     public function getSubscribers(Notification $notification)
     {
         return $this->reportSharingRepository->getSharingUsersFromReportQueryBuilder(
-            $notification->getData('reportId')
+            $notification->getData('reportId'),
+            $notification->getData('userFromId')
         );
     }
 

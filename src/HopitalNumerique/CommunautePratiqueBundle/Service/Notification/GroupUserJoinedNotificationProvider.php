@@ -23,6 +23,14 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 6;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Groupe $group

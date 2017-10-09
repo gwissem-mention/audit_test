@@ -17,3 +17,7 @@ object:
     update_details: Voir le détail des mises à jour
     last_update: 'Dernière mise à jour : %date%'
 subscribe: S'abonner
+unsubscribe: Se désabonner
+subscribe_to: S'abonner à cette publication ?
+unsubscribe_to: Se désabonner de cette publication ?
+subscribe_where: Les notifications sont paramétrables depuis Mon compte > Mes services

@@ -24,6 +24,21 @@ var ViewedObjectsWidget = (function() {
         init: function() {
             this.initDom();
             this.bindEvents();
+
+            Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (elem) {
+                $(elem).toggles({
+                    on: elem.dataset.active === 'true',
+                    drag: false
+                }).on('toggle', function (e, active) {
+                    $.ajax({
+                        url: this.dataset.path,
+                        method: 'POST',
+                        data: {
+                            'wanted': active
+                        }
+                    });
+                })
+            });
         },
 
         initDom: function() {

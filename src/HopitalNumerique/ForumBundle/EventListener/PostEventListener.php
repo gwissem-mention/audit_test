@@ -195,12 +195,12 @@ class PostEventListener implements EventSubscriberInterface
                             'pseudouser'      => !is_null($user->getPseudonym())
                                 ? $user->getPseudonym()
                                 : $user->getNomPrenom(),
-                            'shortMessage'    => $post->getBody(),
-                            'id' => $topic->getId(),
+                            'message'    => $post->getBody(),
+                            'topicId' => $topic->getId(),
                         ];
 
                         if (false === $post->getEnAttente()) {
-                            $this->mailManager->sendForumPostCreatedNotification(
+                            $this->mailManager->sendForumTopicCreated(
                                 $subscription->getOwnedBy(),
                                 $options
                             );

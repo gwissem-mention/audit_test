@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -183,6 +185,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $etat = null;
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
+
+            $event = new UserJoinedEvent($inscription->getGroupe(), $inscription);
+            $this->get('event_dispatcher')->dispatch(Events::GROUP_USER_JOINED, $event);
 
             $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
 
