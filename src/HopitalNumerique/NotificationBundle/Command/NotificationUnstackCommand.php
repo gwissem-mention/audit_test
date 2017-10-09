@@ -30,6 +30,12 @@ class NotificationUnstackCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $domains = $this->getContainer()->get('hopitalnumerique_domaine.manager.domaine')->getAllDomainesOrdered();
+        $domain = array_shift($domains);
+        list($scheme, $host) = explode("://", $domain->getUrl());
+        $context = $this->getContainer()->get('router')->getContext();
+        $context->setHost($host);
+        $context->setScheme($scheme);
         $this->getContainer()->get(SendNotificationHandler::class)->handle(
             new SendNotificationCommand(
                 $this->getContainer()->get(NotificationRepository::class)

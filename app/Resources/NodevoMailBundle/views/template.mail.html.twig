@@ -13,7 +13,11 @@
     <body>
         <table style="width:100%">
             <tr>
-                <img src="{{app.request.getSchemeAndHttpHost()}}/{{ domaineCurrent.getWebPath() }}" alt="Logo {{domaineCurrent.nom}}" style="margin-left:5px; float:left;" />
+                <img
+                    src="{{ asset(currentDomain.getWebPath(), null, true) }}"
+                    alt="Logo {{ currentDomain.nom }}"
+                    style="margin-left:5px; float:left;"
+                />
                 <br style="clear:both;" />
             </tr>
             <tr>

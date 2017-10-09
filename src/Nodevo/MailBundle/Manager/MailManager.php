@@ -4,7 +4,6 @@ namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use HopitalNumerique\NotificationBundle\Service\Notifications;
 use HopitalNumerique\ObjetBundle\Entity\Note;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -96,6 +95,11 @@ class MailManager extends BaseManager
     protected $bbcodeEngine;
 
     /**
+     * @var Domaine
+     */
+    protected $currentDomain;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -112,7 +116,6 @@ class MailManager extends BaseManager
      * @param CourrielRegistreManager $courrielRegistreManager
      * @param array $options Tableau d'options
      * @param BBCodeEngine $BBCodeEngine
-     * @param Notifications $notifications
      */
     public function __construct(
         EntityManager $em,
@@ -251,6 +254,9 @@ class MailManager extends BaseManager
     public function sendMail($subject, $from, $destinataire = null, $body, $bcc = false, $check = 0)
     {
         $body = quoted_printable_decode($body);
+        $currentDomain = $this->currentDomain
+            ? $this->currentDomain
+            : $this->_domaineManager->findOneById($this->_session->get('domaineId'));
 
         if (null !== $destinataire) {
             $user_mail = $this->_userManager->findOneBy(['email' => $destinataire]);
@@ -263,7 +269,10 @@ class MailManager extends BaseManager
         //prepare content HTML
         $bodyHtml = str_replace(["\r\n", "\n"], '<br />', $body);
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig');
-        $bodyHtml = $template->render(['content' => $bodyHtml]);
+        $bodyHtml = $template->render([
+            'content' => $bodyHtml,
+            'currentDomain' => $currentDomain,
+        ]);
 
         //prepare content TEXT
         $pattern = '/<a[^>]+href=([\'"])(.+?)\1[^>]*>(.*)<\/a>/i';
@@ -273,7 +282,10 @@ class MailManager extends BaseManager
             }
         }
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig');
-        $bodyTxt = $template->render(['content' => strip_tags($body)]);
+        $bodyTxt = $template->render([
+            'content' => strip_tags($body),
+            'currentDomain' => $currentDomain,
+        ]);
 
         //prepare Mail
         $mail = \Swift_Message::newInstance();
@@ -324,7 +336,9 @@ class MailManager extends BaseManager
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
 
-        $content = str_replace('%s', '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) . '" target="_blank" >' . $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() . '</a>', $content);
+        if (false !== strstr('%s', $content)) {
+            $content = str_replace('%s', '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) . '" target="_blank" >' . $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() . '</a>', $content);
+        }
 
         return $content;
     }
@@ -1633,6 +1647,11 @@ class MailManager extends BaseManager
      */
     public function sendNotification(User $user, $options, $mailId)
     {
+        $domains = $user->getDomainesId();
+        $domain = array_shift($domains);
+        $this->_session->set('domaineId', $domain);
+        $this->setOptions();
+        $this->currentDomain = $this->_domaineManager->findOneById($domain);
         /** @var Mail $mail */
         $mail = $this->findOneById($mailId);
 
