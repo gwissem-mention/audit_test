@@ -15,8 +15,32 @@
                 <div class="pull-right">
                     <button type="submit" class="btn btn-success"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
                 </div>
+                <div class="clearfix"></div>
             </div>
         </div>
     {{ form_end(inviteForm) }}
+
+
+    {% if ajoutMembreForm is not null %}
+
+        <h4 class="violet" id="contact-popup-label">Ajouter un membre au groupe</h4>
+
+        {{ form_start(ajoutMembreForm) }}
+
+            {{ form_row(ajoutMembreForm.user, {label: 'Ajouter un membre :'}) }}
+
+            <div class="form_vertical_row">
+
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-success">Ajouter l'utilisateur</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+        {{ form_end(ajoutMembreForm) }}
+
+    {% endif %}
 
 </div>

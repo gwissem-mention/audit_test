@@ -21,6 +21,13 @@ hopitalnumerique_communautepratique_user_listbygroupe:
         groupe: '\d+'
         page: '\d+'
 
+hopitalnumerique_communautepratique_user_add:
+    path: '/group/{group}/add-user'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:addUser' }
+    methods: POST
+    requirements:
+        group: '\d+'
+
 hopitalnumerique_communautepratique_user_viewforgroupe:
     path: '/view/{user}/groupe/{groupe}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe' }
