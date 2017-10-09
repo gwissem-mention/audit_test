@@ -632,6 +632,7 @@ class UserController extends Controller
             'username' => 'Identifiant (login)',
             'email' => 'Adresse e-mail',
             'pseudonym' => 'Pseudonyme pour le forum',
+            'enabledToString' => 'Compte activé',
             'etat.libelle' => 'Etat',
             'phoneNumber' => 'Téléphone Direct',
             'cellPhoneNumber' => 'Téléphone Portable',
@@ -1217,15 +1218,6 @@ class UserController extends Controller
 
                         $this->customRenderView($view, $form, $user, $options);
                     }
-                }
-
-                //bind Référence Etat with Enable FosUserField
-                if (intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'))
-                    === $user->getEtat()->getId() && $this->isGranted('ROLE_USER')
-                ) {
-                    $user->setEnabled(1);
-                } else {
-                    $user->setEnabled(0);
                 }
 
                 $user->setDateLastUpdate(new \DateTime());

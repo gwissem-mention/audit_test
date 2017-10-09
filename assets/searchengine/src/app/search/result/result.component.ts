@@ -4,6 +4,8 @@ import Query from "../../Model/Search/Query";
 import Result from "../../Model/Search/Result";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Text} from "../text.service";
+import Cart from "../cart.service";
+import {Config} from "../../app.config";
 
 @Component({
     selector: 'search-results',
@@ -30,7 +32,7 @@ export class ResultComponent implements OnInit {
     @Output()
     queryChanged: EventEmitter<Query> = new EventEmitter<Query>();
 
-    constructor(private sanitizer:DomSanitizer, protected text: Text) {
+    constructor(private sanitizer:DomSanitizer, protected text: Text, protected cartService: Cart) {
 
     }
 
@@ -72,5 +74,13 @@ export class ResultComponent implements OnInit {
             this.canShowLess = this.query.getCurrentPage() > 1;
             this.canShow = this.resultSet.total > 0;
         });
+    }
+
+    canShowCart(result: Result): boolean {
+        return this.cartService.canShow(result);
+    }
+
+    addToCart(result: Result) {
+        this.cartService.addToCart(result);
     }
 }

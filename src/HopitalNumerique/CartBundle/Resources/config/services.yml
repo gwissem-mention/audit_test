@@ -204,3 +204,7 @@ services:
         arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
             - { name: kernel.event_subscriber, event: report_copied }
+
+    HopitalNumerique\CartBundle\Service\GetCartableType:
+        class: HopitalNumerique\CartBundle\Service\GetCartableType
+

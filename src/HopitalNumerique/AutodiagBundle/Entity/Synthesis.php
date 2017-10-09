@@ -164,6 +164,26 @@ class Synthesis
     }
 
     /**
+     * Creates new synthesis, copy of given synthesis
+     *
+     * @param Synthesis $synthesis
+     *
+     * @return Synthesis
+     */
+    public static function copySynthesis(Synthesis $synthesis)
+    {
+        $new = new self($synthesis->getAutodiag(), $synthesis->getUser());
+
+        foreach ($synthesis->getEntries() as $entry) {
+            $new->addEntry(
+                clone $entry
+            );
+        }
+
+        return $new;
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -294,7 +314,7 @@ class Synthesis
     /**
      * Get Entires.
      *
-     * @return Collection
+     * @return Collection|AutodiagEntry[]
      */
     public function getEntries()
     {
@@ -312,6 +332,7 @@ class Synthesis
     {
         if (!$this->entries->contains($entry)) {
             $this->entries->add($entry);
+            $entry->addSynthesis($this);
 
             if (null === $this->getUpdatedAt() || $entry->getUpdatedAt() > $this->getUpdatedAt()) {
                 $this->setUpdatedAt($entry->getUpdatedAt());

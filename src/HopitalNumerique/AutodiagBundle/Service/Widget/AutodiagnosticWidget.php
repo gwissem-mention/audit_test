@@ -49,16 +49,22 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
     protected $shareMessageGenerator;
 
     /**
+     * @var integer
+     */
+    protected $publicationUnpublished;
+
+    /**
      * AutodiagnosticWidget constructor.
      *
-     * @param \Twig_Environment     $twig
+     * @param \Twig_Environment $twig
      * @param TokenStorageInterface $tokenStorage
-     * @param TranslatorInterface   $translator
-     * @param SynthesisRepository   $synthesisRepository
-     * @param RouterInterface       $router
-     * @param BaseUrlProvider       $baseUrlProvider
-     * @param CurrentDomaine        $currentDomainService
+     * @param TranslatorInterface $translator
+     * @param SynthesisRepository $synthesisRepository
+     * @param RouterInterface $router
+     * @param BaseUrlProvider $baseUrlProvider
+     * @param CurrentDomaine $currentDomainService
      * @param ShareMessageGenerator $shareMessageGenerator
+     * @param $publicationUnpublished
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -68,7 +74,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         RouterInterface $router,
         BaseUrlProvider $baseUrlProvider,
         CurrentDomaine $currentDomainService,
-        ShareMessageGenerator $shareMessageGenerator
+        ShareMessageGenerator $shareMessageGenerator,
+        $publicationUnpublished
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
@@ -77,6 +84,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         $this->baseUrlProvider = $baseUrlProvider;
         $this->currentDomainService = $currentDomainService;
         $this->shareMessageGenerator = $shareMessageGenerator;
+        $this->publicationUnpublished = $publicationUnpublished;
     }
 
     /**
@@ -117,7 +125,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                                 'hopitalnumerique_autodiag_entry_add',
                                 ['autodiag' => $autodiag->getId()]
                             )
-                        ]
+                        ],
+                        'isPublished' => $autodiag->isPublished()
                     ],
                     'syntheses' => [],
                 ];
@@ -126,16 +135,21 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $entryId = $synthesis->getEntries()->count() === 1 ? $synthesis->getEntries()->first()->getId() : null;
             $showUrl = null;
 
-            if (null !== $entryId && !$synthesis->isValidated()) {
-                $showUrl = $baseUrl . $this->router->generate(
-                    'hopitalnumerique_autodiag_entry_edit',
-                    ['entry' => $entryId]
-                );
-            } elseif ($synthesis->isValidated()) {
+            if ($synthesis->isValidated()) {
                 $showUrl = $baseUrl . $this->router->generate(
                     'hopitalnumerique_autodiag_restitution_index',
                     ['synthesis' => $synthesis->getId()]
                 );
+            } elseif (false === $autodiag->isPublished()) {
+                $showUrl = $baseUrl . $this->router->generate(
+                        'hopital_numerique_publication_publication_objet',
+                        ['id' => $this->publicationUnpublished])
+                ;
+            } elseif (null !== $entryId && !$synthesis->isValidated()) {
+                $showUrl = $baseUrl . $this->router->generate(
+                        'hopitalnumerique_autodiag_entry_edit',
+                        ['entry' => $entryId]
+                    );
             }
 
             $sendUrl = $this->router->generate(

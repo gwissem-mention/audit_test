@@ -14,14 +14,17 @@
             </thead>
             <tbody>
             {% for item in data %}
+                {% set isPublished = item.autodiag.isPublished %}
                 <tr class="parent-row">
                     <td>
                         {{ item.autodiag.title }}
                     </td>
                     <td class="actions-column">
-                        <a href="{{ item.autodiag.actions.add }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.new'|trans }}">
-                            <i class="fa fa-plus"></i>
-                        </a>
+                        {% if isPublished %}
+                            <a href="{{ item.autodiag.actions.add }}" class="btn btn-sm btn-success" title="{{ 'autodiagnostic.action.new'|trans }}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% for synthesis in item.syntheses %}

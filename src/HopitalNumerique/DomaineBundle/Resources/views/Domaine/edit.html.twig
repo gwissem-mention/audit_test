@@ -54,8 +54,9 @@
                     {{ form_errors(form) }}
 
                     {# Formulaire : #}
-                    {{ form_row(form.nom) }}
-                    {{ form_row(form.url) }}
+                    {{ form_row(form.nom, { 'attr': {'class' : 'validate[required,max[255]]' }}) }}
+                    {{ form_row(form.url, { 'attr': {'class' : 'validate[required,max[255],custom[url]]' }}) }}
+                    {{ form_row(form.slug, { 'attr': {'class' : 'validate[required,max[255]]' }}) }}
 
                     {# Gestion de l'upload #}
                     <div class="form-group">
@@ -82,9 +83,9 @@
                         </div>
                     </div>
 
-                    {{form_row(form.adresseMailContact)}}
-                    {{form_row(form.template)}}
-                    {{form_row(form.description)}}
+                    {{form_row(form.adresseMailContact, { 'attr': {'class' : 'validate[required,max[255],custom[email]]' }}) }}
+                    {{form_row(form.template, { 'attr': {'class' : 'validate[required]' }}) }}
+                    {{form_row(form.description) }}
                     <div class="tinyMCE-homepage">
                         {{form_row(form.homepage)}}
                     </div>

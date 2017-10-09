@@ -1,3 +1,5 @@
+{% set displayTitle = false %}
+
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
 {% block stylesheets %}
@@ -10,6 +12,8 @@
 {% endblock %}
 
 {% block headerTitle %}Évaluation{% endblock %}
+
+{% block barreActions %}<a class="btn btn-default back" href="{{ path('account_service') }}#interventions-widget"><span class="fa fa-reply"></span></a>{% endblock %}
 
 {% block headerDesc %}
     {% if app.user.hasRoleAmbassadeur %}

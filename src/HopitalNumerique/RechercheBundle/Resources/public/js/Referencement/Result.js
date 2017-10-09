@@ -214,6 +214,7 @@ Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
                     }
                 }
 
+                $(document).trigger('search-results-updated');
                 ajaxLoader.finished();
             }
         });

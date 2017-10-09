@@ -25,7 +25,9 @@
                 {# Affichage de la 'légende' #}
                 {% if 'ok' == key %}
                     <span class="legende rose">
-                        <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
+                        <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les
+                            <a href="{{ path('account_profile') }}">données personnelles</a> suivantes :
+                        </strong>
                     </span>
                     <ul class="rose">
                 {% endif %}
@@ -38,7 +40,9 @@
             </ul>
         </div>      
         <div class="col-md-12 text-right button_donnees_personnelles">
-           <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
+           <a href="{{ path('account_profile') }}" class="btn btn-success" title="Données personnelles">
+               {{ 'données personnelles'|upper }}
+           </a>
         </div>
         <div class="clearfix"></div>
     {% endif %} 

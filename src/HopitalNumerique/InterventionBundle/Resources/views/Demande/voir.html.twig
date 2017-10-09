@@ -1,3 +1,5 @@
+{% set displayTitle = false %}
+
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
 {% block javascripts %}
@@ -14,6 +16,8 @@
 {% endblock %}
 
 {% block headerTitle %}Détail de la demande{% endblock %}
+
+{% block barreActions %}<a class="btn btn-default back" href="{{ path('account_service') }}#interventions-widget"><span class="fa fa-reply"></span></a>{% endblock %}
 
 {% block headerDesc %}
     {% if app.user.hasRoleCmsi %}
@@ -241,13 +245,13 @@
             </div>
             
             <div class="row">
-                <div class="col-md-4">Date de choix du CMSI</div>
+                <div class="col-md-4">Date de réponse du CMSI</div>
                 <div class="col-md-8">
                     {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('d/m/Y') }}{% endif %}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">Date de choix de l'ambassadeur</div>
+                <div class="col-md-4">Date de réponse du professionnel sollicité</div>
                 <div class="col-md-8">
                     {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('d/m/Y') }}{% endif %}
                 </div>

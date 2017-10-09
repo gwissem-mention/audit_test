@@ -15,6 +15,7 @@ services:
             - '@fos_elastica.index_manager'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@hopitalnumerique_reference.repository.reference'
+            - '@security.token_storage'
             - '%search_engine_aggregations%'
 
     fos_elastica.index_manager:

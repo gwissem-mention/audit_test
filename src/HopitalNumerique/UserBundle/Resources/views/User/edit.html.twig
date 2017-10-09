@@ -153,6 +153,8 @@
                         {{ form_row(form.domaines, {'attr': {'class': 'select2'}}) }}
                     {% endif %}
 
+                    {{ form_row(form.enabled) }}
+
                     {% if user.id != 1 %}
                         {{ form_row(form.etat) }}
                     {% else %}

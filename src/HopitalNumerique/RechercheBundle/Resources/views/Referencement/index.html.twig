@@ -5,30 +5,31 @@
 {% block stylesheets -%}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-referencement-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriquerecherche/css/referencement.css'
-        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
-        '@jquery_toggles_css'
+    'bundles/hopitalnumeriquerecherche/css/referencement.css'
+    'bundles/hopitalnumeriquereference/css/referencement-popin.css'
+    '@jquery_toggles_css'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}">
+    <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 {%- endblock %}
 
 {% block javascripts -%}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-recherche-referencement-index.js"
-        'bundles/hopitalnumeriquedomaine/js/Domaine.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category/Count.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Contexte.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Exalead.js'
-        'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
-        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
-        '@jquery_toggles_js'
+    'bundles/hopitalnumeriquedomaine/js/Domaine.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category/Count.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Contexte.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Exalead.js'
+    'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
+    'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
+    'bundles/hopitalnumeriquereference/js/Referencement/Cart.js'
+    '@jquery_toggles_js'
     %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
@@ -41,7 +42,7 @@
             Hn_RechercheBundle_Referencement.initReferenceFilters();
             Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect();
             {% if openRequeteSavingPopin is defined and openRequeteSavingPopin == true %}
-                Hn_RechercheBundle_Referencement.saveFilters();
+            Hn_RechercheBundle_Referencement.saveFilters();
             {% endif %}
         });
     </script>
@@ -111,7 +112,7 @@
                             {{ referencesTreePart.reference.libelle }}
                         </option>
                     {% else %}
-                            <li data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
+                        <li data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
                             {%- if level > 2 -%}
                                 <label><input name="ref-{{ referenceParentId }}" type="{{ referenceParentId == '271' ? 'checkbox' : 'radio' }}"> {{ referencesTreePart.reference.libelle }}</label>
                             {%- else -%}
@@ -260,7 +261,7 @@
                 </div>
 
                 <div id="results-domaines">
-                    D'autres résultats pour <span class="filters"></span> existent sur les thèmes suivants : <span class="domaines"></span>
+                    D'autres résultats pour <span class="filters"></span> existent sur : <span class="domaines"></span>
                 </div>
 
                 <div class="results-bloc">

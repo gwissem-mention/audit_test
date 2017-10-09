@@ -26,11 +26,6 @@
                 <a href="{{ domaineCurrent.urlTitre ? domaineCurrent.urlTitre : path('hopital_numerique_homepage') }}" class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">{{domaineCurrent.description}}</div>
             </div>
-            <div id="logoHn" class="pull-right">
-                <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" target="_blank">
-                    <img src="{{asset('bundles/hopitalnumeriquecore/img/mhn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
-                </a>
-            </div>
             <div class="loggedUser pull-right">
                 <div class="connexion">
                     {% if app.user == false %}

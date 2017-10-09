@@ -78,3 +78,4 @@ parameters:
     search_engine_aggregations: true
 
     resource_domain_id: 17
+    publication_autodiag_unpublished_id: ~

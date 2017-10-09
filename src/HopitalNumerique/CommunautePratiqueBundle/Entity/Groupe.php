@@ -529,7 +529,7 @@ class Groupe
     {
         $this->animateurs[] = $animateur;
 
-        if (!$this->hasUser($animateur)) {
+        if (!$this->hasUser($animateur) && !$this->isRegister($animateur)) {
             $this->addUser($animateur);
         }
 
@@ -633,6 +633,23 @@ class Groupe
     public function getInscriptions()
     {
         return $this->inscriptions;
+    }
+
+    /**
+     * Check if user is register in the group.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isRegister(User $user)
+    {
+        foreach($this->inscriptions as $register) {
+            if($register->getUser()->getId() === $user->getId())
+                return true;
+        }
+
+        return false;
     }
 
     /**

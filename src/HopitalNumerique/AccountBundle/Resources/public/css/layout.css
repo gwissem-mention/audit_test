@@ -1,4 +1,6 @@
-
+.spacer {
+    height: 20px;
+}
     div#tableau-de-bord div.panel div.boutons { padding:0px 0px 10px 0px;text-align:right; }
         div#tableau-de-bord div.panel div.boutons button, div#tableau-de-bord div.panel div.boutons input { text-transform:uppercase; }
 /* <-- Barre avec les actions/boutons */
