@@ -3,3 +3,5 @@ UPDATE core_menu_item SET itm_name = 'Espace de discussion', itm_route_parameter
 UPDATE core_menu_item SET itm_route = NULL, itm_route_parameters = NULL WHERE itm_route = 'hopitalnumerique_communautepratique_accueil_index' AND itm_parent IS NULL;
 
 UPDATE core_menu_item SET itm_name = 'Groupes d\'entre-aide' ,itm_route = 'hopitalnumerique_communautepratique_groupe_list' WHERE itm_route = 'hopitalnumerique_communautepratique_accueil_index' AND mnu_menu = 3;
+INSERT INTO core_menu_item (itm_parent, mnu_menu, itm_name, itm_route, itm_display_children, itm_role, itm_order, itm_display) VALUE (273, 3, 'Annuaire de la communauté', 'hopitalnumerique_communautepratique_user_list', 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3, 1);
+DELETE FROM core_menu_item WHERE itm_id = 277;
