@@ -6,6 +6,7 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-groupe-user.js"
         'bundles/hopitalnumeriquecommunautepratique/js/TableauDeBord.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Directory.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Group.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -47,7 +48,7 @@
                 {{ groupe.descriptionCourte }}
             </a>
 
-            <a href="#discussion" class="tab discussion">
+            <a href="#discussion" class="tab discussion ajax">
                 <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
 
                 {% if (discussionCounter.message + discussionCounter.document + discussionCounter.discussion) > 0%}
@@ -61,7 +62,7 @@
                 {% endif %}
             </a>
 
-            <a href="#members" class="tab">
+            <a href="#members" class="tab ajax">
                 <span class="tab-title">{{ 'group.tabs.members.title'|trans }}</span>
 
                 <ul>
@@ -98,7 +99,12 @@
                 </div>
             {% endspaceless %}
 
-            <div id="members" class="tab-content">
+            <div
+                id="members"
+                class="tab-content"
+                data-init="false"
+                data-content-uri="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', {'groupe': groupe.id}) }}"
+            >
                 <h2>{{ 'group.tabs.members.title'|trans }}</h2>
             </div>
         </div>

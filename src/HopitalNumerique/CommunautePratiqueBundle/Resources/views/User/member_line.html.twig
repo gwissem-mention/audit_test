@@ -1,0 +1,15 @@
+{% trans_default_domain 'cdp_user' %}
+
+<a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user{{ membersViewed[user.id] is not defined ? ' directory-user--new' }}">
+
+    <span class="avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></span>
+    <span class="directory-user-username">
+        {{ user.prenomNom }}
+    </span>
+
+    <span class="county">
+        - {{ user.county.libelle }}
+    </span>
+
+    <div class="new-flag">{{ 'directory.member.is_new'|trans }}</div>
+</a>

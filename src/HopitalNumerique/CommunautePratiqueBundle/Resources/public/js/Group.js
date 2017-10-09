@@ -19,14 +19,15 @@ var Group;
             });
 
             that.$tabs.on('show.bs.tab', function (e) {
-                if ($(e.target).attr('href') === "#discussion" && $('.group #discussion').data('init') === false) {
+                var $block = $('.group').find($(e.target).attr('href'));
 
-                    var loader = $('.group #discussion').nodevoLoader().start();
+                if ($(e.target).hasClass('ajax') && $block.data('init') === false) {
+                    var loader = $block.nodevoLoader().start();
 
-                    $.get($('.group #discussion').data('content-uri'), function (response) {
-                        $('.group #discussion').html(response);
+                    $.get($block.data('content-uri'), function (response) {
+                        $block.html(response);
                         loader.finished();
-                        $('.group #discussion').data('init', true);
+                        $block.data('init', true);
                     })
                 }
             })

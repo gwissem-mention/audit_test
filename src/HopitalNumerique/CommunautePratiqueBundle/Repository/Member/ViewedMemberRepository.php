@@ -11,20 +11,29 @@ class ViewedMemberRepository extends EntityRepository
 {
     /**
      * @param User $viewer
+     * @param User[] $members
      *
      * @return ViewedMember[]
      */
-    public function findByViewer(User $viewer)
+    public function findByViewer(User $viewer, array $members = [])
     {
-        /** @var ViewedMember[] $views */
-        $views = $this->createQueryBuilder('view')
-            ->join('view.member', 'cdp_member')
+
+        $queryBuilder = $this->createQueryBuilder('view')
             ->addSelect('cdp_member')
             ->join('view.viewer', 'viewer', Join::WITH, 'view.viewer = :user')
             ->addSelect('viewer')
             ->setParameter('user', $viewer)
-            ->getQuery()->getResult()
         ;
+
+        if (count($members)) {
+            $queryBuilder
+                ->join('view.member', 'cdp_member', Join::WITH, 'cdp_member.id IN (:members)')
+                ->setParameter('members', $members)
+            ;
+        }
+
+        /** @var ViewedMember[] $views */
+        $views = $queryBuilder->getQuery()->getResult();
 
         $sortedViews = [];
         foreach ($views as $view) {
