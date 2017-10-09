@@ -4,6 +4,7 @@ namespace HopitalNumerique\NotificationBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\NotificationBundle\Entity\Settings;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 
 /**
  * Class UpdateNotificationSettingsHandler.
@@ -31,12 +32,10 @@ class UpdateNotificationSettingsHandler
     public function handle(UpdateNotificationSettingsCommand $notificationSettingsCommand)
     {
         $notification = $notificationSettingsCommand->settings;
-        if ($notification->isWanted()) {
-            $this->entityManager->persist($notification);
-        } elseif (null !== $notification->getId()) {
-            $this->entityManager->remove($notification);
+        if (false === $notification->isWanted()) {
+            $notification->setFrequency(NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_OFF);
         }
-
+        $this->entityManager->persist($notification);
         $this->entityManager->flush();
     }
 }
