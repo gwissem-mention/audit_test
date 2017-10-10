@@ -73,6 +73,21 @@ $container
 ;
 
 $container
+    ->setDefinition("hopital_numerique_search.provider.cdp_message.$serviceIdentifier", new Definition(
+        \HopitalNumerique\SearchBundle\Service\Provider\CDPMessageProvider::class,
+        [
+            $slug,
+            new Reference('HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'),
+            new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'cdp_message')),
+        ]
+    ))
+    ->addTag('fos_elastica.provider', [
+        'index' => $index,
+        'type' => 'cdp_message',
+    ])
+;
+
+$container
     ->setDefinition("hopital_numerique_search.provider.person.$serviceIdentifier", new Definition(
         UserProvider::class,
         [
