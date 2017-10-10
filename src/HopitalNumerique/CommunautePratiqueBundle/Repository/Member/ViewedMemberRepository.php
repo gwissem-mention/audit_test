@@ -19,7 +19,6 @@ class ViewedMemberRepository extends EntityRepository
     {
 
         $queryBuilder = $this->createQueryBuilder('view')
-            ->addSelect('cdp_member')
             ->join('view.viewer', 'viewer', Join::WITH, 'view.viewer = :user')
             ->addSelect('viewer')
             ->setParameter('user', $viewer)
@@ -27,6 +26,7 @@ class ViewedMemberRepository extends EntityRepository
 
         if (count($members)) {
             $queryBuilder
+                ->addSelect('cdp_member')
                 ->join('view.member', 'cdp_member', Join::WITH, 'cdp_member.id IN (:members)')
                 ->setParameter('members', $members)
             ;
