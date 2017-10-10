@@ -3,7 +3,9 @@
 namespace HopitalNumerique\NewAccountBundle\Service;
 
 use HopitalNumerique\NotificationBundle\Entity\Settings;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\NotificationBundle\Repository\SettingsRepository;
+use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\NotificationBundle\Service\Notifications;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -41,9 +43,16 @@ class UserNotificationsSettings
         $sections = $this->notifications->getStructuredProviders();
         $settings = $this->settingsRepository->findAllByUser($user);
         foreach ($sections as $section) {
-            foreach ($section as $key => $notification) {
+            foreach ($section as $key => $provider) {
                 if (!array_key_exists($key, $settings)) {
-                    $settings[$key] = new Settings($key, false, $user->getId());
+                    $setting = new Settings($key, $user->getId());
+                    $setting->setFrequency($provider->getDefaultFrequency());
+                    $settings[$key] = $setting;
+                }
+                foreach ($settings as $setting) {
+                    if ($setting->getNotificationCode() === $key) {
+                        $setting->setWanted($setting->getFrequency() !== NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_OFF);
+                    }
                 }
             }
         }

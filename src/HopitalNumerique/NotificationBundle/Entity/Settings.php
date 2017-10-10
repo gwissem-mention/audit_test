@@ -113,13 +113,11 @@ class Settings
      * Settings constructor.
      *
      * @param string $notificationCode
-     * @param bool $wanted
      * @param integer $user
      */
-    public function __construct($notificationCode = null, $wanted = false, $user = null)
+    public function __construct($notificationCode = null, $user = null)
     {
         $this->notificationCode = $notificationCode;
-        $this->wanted = $wanted;
         $this->userId = $user;
     }
 
