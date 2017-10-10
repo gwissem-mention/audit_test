@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\Discussion
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionListQuery;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -179,6 +180,58 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('user', $user)
 
             ->andWhere('reading.id IS NULL')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine|null $domain
+     *
+     * @return integer
+     */
+    public function getPublicDiscussionCount(Domaine $domain = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('discussion')
+            ->select('count(discussion)')
+            ->andWhere('discussion.public = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain->getId())
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return Discussion[]
+     */
+    public function getRecentPublicDiscussion(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('discussion')
+            ->join('discussion.messages', 'message')->addSelect('message')
+            ->join('discussion.user', 'user')
+            ->andWhere('discussion.public = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('discussion.createdAt', 'DESC')
+            ->addOrderBy('message.createdAt', 'ASC')
+            ->setMaxResults($limit)
 
             ->getQuery()->getResult()
         ;

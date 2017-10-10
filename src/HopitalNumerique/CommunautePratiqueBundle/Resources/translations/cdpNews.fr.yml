@@ -27,3 +27,32 @@ news:
             not_member: |
                 Vous n'avez psa encore rejoint la communauté.
                 Rejoignez la communauté pour entrer en relation avec tous les membres
+
+wall:
+    item:
+        message:
+            title: Nouveau message
+            authored: %author% a participé à la discussion %discussion% (%date%)
+            link: Aller à la discussion
+        discussion:
+            title: Nouvelle discussion
+            authored: %author% a lancé une nouvelle discussion %discussion% (%date%)
+            link: Aller à la discussion
+        closed_group:
+            title: Fin d'un groupe
+            content: |
+                Le groupe thématique "%groupName%" a terminé ses travaux.
+                Retrouvez dans quelques semaines ses publications sur le Centre de ressources
+        opened_group:
+            title: Nouveau groupe
+            content: Un groupe thématique a démarré sur "%groupName%"
+            link: Rejoignez ce groupe
+        new_member:
+            title: Nouveau membre
+            content: %user% (%job% à %organization%) a rejoint la communauté.
+            content_public: La structure %organization% a rejoint la communauté.
+            link: Consulter la fiche de l'utilisateur
+        updated_member:
+            title: Mise à jour de profil
+            content: %user% (%job% à %organization%) a mis à jour son profil.
+            link: Consulter la fiche de l'utilisateur

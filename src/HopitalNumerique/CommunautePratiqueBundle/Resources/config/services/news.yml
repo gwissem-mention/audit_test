@@ -1,0 +1,48 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\WallItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\WallItemRetriever
+        arguments:
+            - '@security.token_storage'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\DiscussionItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\DiscussionItemRetriever
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: discussion }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\MessageItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\MessageItemRetriever
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: message }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\ClosedGroupItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\ClosedGroupItemRetriever
+        arguments:
+            - '@hopitalnumerique_communautepratique.repository.groupe'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: closed_group }
+
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\OpenedGroupItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\OpenedGroupItemRetriever
+        arguments:
+            - '@hopitalnumerique_communautepratique.repository.groupe'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: opened_group }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\NewMemberItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\NewMemberItemRetriever
+        arguments:
+            - '@hopitalnumerique_user.repository.user'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: new_member }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\UpdatedMemberItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\UpdatedMemberItemRetriever
+        arguments:
+            - '@hopitalnumerique_user.repository.user'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: updated_member }

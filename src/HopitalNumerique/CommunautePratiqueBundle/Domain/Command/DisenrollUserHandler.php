@@ -38,7 +38,10 @@ class DisenrollUserHandler
      */
     public function handle(DisenrollUserCommand $command)
     {
-        $command->user->setInscritCommunautePratique(false);
+        $command->user
+            ->setInscritCommunautePratique(false)
+            ->setCommunautePratiqueEnrollmentDate(null)
+        ;
         $this->entityManager->flush($command->user);
 
         $this->eventDispatcher->dispatch(Events::DISENROLL_USER, new EnrolmentEvent($command->user));

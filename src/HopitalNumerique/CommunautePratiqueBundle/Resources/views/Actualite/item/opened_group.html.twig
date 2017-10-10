@@ -1,0 +1,19 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            {{ 'wall.item.opened_group.title'|trans }}
+        </span>
+    </div>
+
+    <div class="content">
+        {{ 'wall.item.opened_group.content'|trans({'%groupName%': item.group.titre}) }}
+    </div>
+
+    <a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', {groupe: item.group.id}) }}" class="link">
+        {{ 'wall.item.opened_group.link'|trans }}
+    </a>
+
+</div>

@@ -1091,4 +1091,58 @@ class UserRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult()
         ;
     }
+
+    /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return User[]
+     */
+    public function getLastUserEnrolledInCDP(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('user.domaines', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain->getId())
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('user.communautePratiqueEnrollmentDate', 'DESC')
+            ->setMaxResults($limit)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return User[]
+     */
+    public function getLastUpdatedUser(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('user.domaines', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain->getId())
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('user.dateLastUpdate', 'DESC')
+            ->setMaxResults($limit)
+
+            ->getQuery()->getResult()
+        ;
+    }
 }

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\Query\AST\Join;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -145,7 +146,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     public function getUsersRecentGroups(User $user, $count = null, array $domains = [])
     {
         $queryBuilder = $this->createQueryBuilder('cdpGroup')
-            ->join('cdpGroup.inscriptions','inscription', Expr\Join::WITH, 'inscription.actif = TRUE')
+            ->join('cdpGroup.inscriptions','inscription')
             ->join('inscription.user', 'user', Expr\Join::WITH, 'user.id = :user')
             ->setParameter('user', $user)
             ->andWhere('cdpGroup.actif = TRUE')
@@ -338,5 +339,60 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         ;
 
         return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return Groupe[]
+     */
+    public function getLastClosed(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('cdp_group')
+            ->andWhere('cdp_group.dateFin < :today')
+            ->setParameter('today', new \DateTime())
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('cdp_group.domains', 'domain', Expr\Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('cdp_group.dateFin', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return Groupe[]
+     */
+    public function getLastOpened(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('cdp_group')
+            ->andWhere('cdp_group.dateFin > :today')
+            ->andWhere('cdp_group.dateInscriptionOuverture < :today')
+            ->setParameter('today', new \DateTime())
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('cdp_group.domains', 'domain', Expr\Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('cdp_group.dateInscriptionOuverture', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult()
+        ;
     }
 }

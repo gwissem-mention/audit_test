@@ -1,0 +1,15 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            {{ 'wall.item.closed_group.title'|trans }}
+        </span>
+    </div>
+
+    <div class="content">
+        {{ 'wall.item.closed_group.content'|trans({'%groupName%': item.groupName})|nl2br }}
+    </div>
+
+</div>

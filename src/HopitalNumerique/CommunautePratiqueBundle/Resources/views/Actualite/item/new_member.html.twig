@@ -1,0 +1,29 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            {{ 'wall.item.new_member.title'|trans }}
+        </span>
+        <span class="author">
+
+        </span>
+    </div>
+
+    <div class="content">
+        {% set organization = null %}
+        {% if item.user.organization %}
+            {% set organization = item.user.organization.nom %}
+        {% else %}
+            {% set organization = item.user.nomEtablissement %}
+        {% endif %}
+
+        {{ ('wall.item.new_member.content'~((not app.user or app.user.inscriptCommunautePratique == false) ? '_public'))|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+    </div>
+
+    <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
+        {{ 'wall.item.new_member.link'|trans }}
+    </a>
+
+</div>

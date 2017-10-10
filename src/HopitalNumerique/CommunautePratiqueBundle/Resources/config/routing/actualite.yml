@@ -1,18 +1,3 @@
 hopitalnumerique_communautepratique_news_index:
     path: /
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Actualite:index }
-
-hopitalnumerique_communautepratique_actualite_list:
-    pattern: '/list/{page}'
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Actualite:list', page:1 }
-    methods: 'GET'
-    requirements:
-        page: '\d+'
-
-hopitalnumerique_communautepratique_actualite_listbycategorie:
-    pattern: '/list/categorie/{categorie}/{page}'
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Actualite:listByCategorie', page:1 }
-    methods: 'GET'
-    requirements:
-        categorie: '\d+'
-        page: '\d+'

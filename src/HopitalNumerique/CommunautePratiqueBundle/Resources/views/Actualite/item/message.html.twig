@@ -1,0 +1,22 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            {{ 'wall.item.message.title'|trans }}
+        </span>
+        <span class="author">
+            {{ 'wall.item.message.authored'|trans({'%author%': item.author.prenomNom, '%discussion%': item.discussion.title, '%date%': item.date|localizeddate('short', 'none')}) }}
+        </span>
+    </div>
+
+    <div class="content">
+        {{ item.content|parsePublication|striptags|unescape|truncate(200) }}
+    </div>
+
+    <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.discussion.id}) }}" class="link">
+        {{ 'wall.item.message.link'|trans }}
+    </a>
+
+</div>

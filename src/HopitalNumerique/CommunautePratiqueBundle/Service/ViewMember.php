@@ -7,6 +7,9 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Member\ViewedMember;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository;
 
+/**
+ * Class ViewMember
+ */
 class ViewMember
 {
     /**
@@ -32,6 +35,8 @@ class ViewMember
     }
 
     /**
+     * Set a cdp member profile viewed by another member
+     *
      * @param User $member
      * @param User $viewer
      */

@@ -7,52 +7,56 @@
 {% block communaute_pratique_actions %}
     {{ selectedDomainSelector() }}
     {{ parent() }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
 {% block body_communaute_pratique %}
-    <div class="row">
-        <div class="col-md-3">
-            <div class="well">
-                <h2>{{ 'news.brick.chat_room.title'|trans }}</h2>
+
+    <div class="news">
+        <div class="blocks">
+
+            <div class="block">
+                <h2 class="block-title">{{ 'news.brick.chat_room.title'|trans }}</h2>
                 <ul>
-                    <li>{{ 'news.brick.chat_room.topic_count'|transchoice(0) }}</li>
-                    <li>{{ 'news.brick.chat_room.message_count'|transchoice(0) }}</li>
+                    <li>{{ 'news.brick.chat_room.topic_count'|transchoice(publicDiscussionCount) }}</li>
+                    <li>{{ 'news.brick.chat_room.message_count'|transchoice(publicMessageCount) }}</li>
                 </ul>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="well">
-                <h2>{{ 'news.brick.help_groups.title'|trans }}</h2>
+
+            <div class="block">
+                <h2 class="block-title">{{ 'news.brick.help_groups.title'|trans }}</h2>
                 <ul>
                     <li>{{ 'news.brick.help_groups.group_count'|transchoice(runningGroupCount) }}</li>
                     <li>{{ 'news.brick.help_groups.contributor_count'|transchoice(contributorsCount) }}</li>
-                    <li>{{ 'news.brick.help_groups.message_count'|transchoice(0) }}</li>
-                    <li>{{ 'news.brick.help_groups.file_count'|transchoice(0) }}</li>
+                    <li>{{ 'news.brick.help_groups.message_count'|transchoice(groupMessageCount) }}</li>
+                    <li>{{ 'news.brick.help_groups.file_count'|transchoice(groupMessageFileCount) }}</li>
                 </ul>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="well">
-                <h2>{{ 'news.brick.community.title'|trans }}</h2>
+
+            <div class="block">
+                <h2 class="block-title">{{ 'news.brick.community.title'|trans }}</h2>
                 <ul>
                     <li>{{ 'news.brick.community.member_count'|transchoice(cdpUserCount) }}</li>
                     <li>{{ 'news.brick.community.organization_count'|transchoice(cdpOrganizationCount) }}</li>
                 </ul>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="well">
+
+            <div class="block">
                 {% if app.user is null %}
                     {{ 'news.brick.my_groups.not_logged'|trans|nl2br }}
                 {% elseif app.user.inscritCommunautePratique == false %}
                     {{ 'news.brick.my_groups.not_member'|trans|nl2br }}
                 {% else %}
-                    <h2>{{ 'news.brick.my_groups.title'|trans|nl2br }}</h2>
+                    <h2 class="block-title">{{ 'news.brick.my_groups.title'|trans|nl2br }}</h2>
 
                     {% if userRecentGroups|length > 0 %}
                         <ul>
                             {% for group in userRecentGroups %}
-                                <li>{{ group.titre }}</li>
+                                <li>
+                                    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {groupe: group.id}) }}">
+                                        {{ group.titre }}
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ul>
                     {% else %}
@@ -60,7 +64,7 @@
 
                         <hr>
 
-                        <a href="#" class="btn btn-primary btn-sm btn-block" title="{{ 'news.brick.my_groups.list.link.title'|trans|e }}">
+                        <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}" class="btn btn-primary btn-sm btn-block" title="{{ 'news.brick.my_groups.list.link.title'|trans|e }}">
                             {{ 'news.brick.my_groups.list.link.text'|trans }}
                         </a>
                     {% endif %}
@@ -70,8 +74,12 @@
         </div>
     </div>
 
-    <div class="well">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, aspernatur ex illo molestiae numquam quas tempore totam unde voluptas voluptatibus? Adipisci delectus, fugit iste nam perferendis repudiandae velit vero voluptates.
+    <div class="news-wall">
+
+        {% for item in wallItems %}
+            {{ include('@HopitalNumeriqueCommunautePratique/Actualite/item/'~item.type~'.html.twig') }}
+        {% endfor %}
+
     </div>
 
 {% endblock body_communaute_pratique %}

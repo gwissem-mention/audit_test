@@ -646,6 +646,13 @@ class User extends BaseUser implements SettingsOwnerInterface
     private $inscritCommunautePratique;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $communautePratiqueEnrollmentDate;
+
+    /**
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist", "remove"})
      */
     private $communautePratiqueAnimateurGroupes;
@@ -2403,6 +2410,26 @@ class User extends BaseUser implements SettingsOwnerInterface
     public function setInscritCommunautePratique($inscritCommunautePratique)
     {
         $this->inscritCommunautePratique = $inscritCommunautePratique;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCommunautePratiqueEnrollmentDate()
+    {
+        return $this->communautePratiqueEnrollmentDate;
+    }
+
+    /**
+     * @param \DateTime $communautePratiqueEnrollmentDate
+     *
+     * @return User
+     */
+    public function setCommunautePratiqueEnrollmentDate($communautePratiqueEnrollmentDate = null)
+    {
+        $this->communautePratiqueEnrollmentDate = $communautePratiqueEnrollmentDate;
 
         return $this;
     }
