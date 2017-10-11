@@ -43,6 +43,9 @@ class CreateDiscussionHandler
                 ->setPublic(false)
             ;
         }
+        if ($command->object) {
+            $discussion->setRelatedObject($command->object);
+        }
 
         $this->entityManager->persist($discussion);
         $this->entityManager->flush($discussion);

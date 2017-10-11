@@ -8,6 +8,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionListQuery;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -234,6 +235,34 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults($limit)
 
             ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Objet $object
+     * @param Domaine|null $domain
+     *
+     * @return Discussion|null
+     */
+    public function getPublicDiscussionForObject(Objet $object, Domaine $domain = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('discussion')
+            ->join('discussion.relatedObject', 'object', Join::WITH, 'object.id = :object')
+            ->setParameter('object', $object)
+            ->andWhere('discussion.public = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $queryBuilder
+            ->setMaxResults(1)
+
+            ->getQuery()->getOneOrNullResult()
         ;
     }
 }
