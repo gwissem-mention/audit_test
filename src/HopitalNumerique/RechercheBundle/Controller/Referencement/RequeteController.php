@@ -8,6 +8,8 @@ use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur concernant la sauvegarde des requêtes de la recherche par référencement.
@@ -16,6 +18,10 @@ class RequeteController extends Controller
 {
     /**
      * Visualiser une requête.
+     *
+     * @param Requete $requete
+     *
+     * @return RedirectResponse
      */
     public function viewAction(Requete $requete)
     {
@@ -28,6 +34,10 @@ class RequeteController extends Controller
 
     /**
      * Popin de détails.
+     *
+     * @param Requete $requete
+     *
+     * @return Response
      */
     public function popinDetailAction(Requete $requete)
     {
@@ -85,6 +95,10 @@ class RequeteController extends Controller
 
     /**
      * Popin de sauvegarde.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function popinSaveAction(Request $request)
     {
@@ -107,6 +121,10 @@ class RequeteController extends Controller
 
     /**
      * Enregistre la requête.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function saveAction(Request $request)
     {
@@ -134,6 +152,10 @@ class RequeteController extends Controller
 
     /**
      * Enregistre la session de la requête.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function saveSessionAction(Request $request)
     {
