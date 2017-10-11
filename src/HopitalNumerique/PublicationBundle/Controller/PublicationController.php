@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectCommand;
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -41,6 +43,12 @@ class PublicationController extends Controller
      */
     public function objetAction(Request $request, Objet $objet)
     {
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, null);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
+
         $rolesAllowedToAccessFrontReferencement = [
             'ROLE_ADMINISTRATEUR_1',
             'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
@@ -434,6 +442,12 @@ class PublicationController extends Controller
             ['object' => $objet->getId()],
             ['position' => 'ASC']
         );
+
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, $contenu);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
 
         $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
             'user' => $this->getUser(),

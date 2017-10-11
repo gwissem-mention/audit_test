@@ -29,6 +29,8 @@ class SubscriptionController extends Controller
     public function subscribeAction(Request $request, Objet $object, Contenu $content = null)
     {
         if (null === $this->getUser()) {
+            $request->getSession()->set('subscribeWanted', true);
+
             return new JsonResponse(['redirect' => $this->generateUrl('account_login')], 301);
         }
         if (true === $request->request->getBoolean('wanted')) {
