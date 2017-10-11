@@ -10,7 +10,7 @@
 
 <div>
     <b>{{ 'profile'|trans }} : {{ profilCompletion }}%.</b>
-    {% if profilCompletion != 1000 %}
+    {% if profilCompletion != 100 %}
         <a href="{{ path('account_profile') }}">Compléter mon profil</a>
     {% endif %}
 </div>

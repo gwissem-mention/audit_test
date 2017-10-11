@@ -123,6 +123,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
             $moduleTitle,
             $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
             [
+                'id' => $session->getModule()->getId(),
                 'roleIds' => $roleIds,
                 'formateur' => $session->getFormateur()->getPrenomNom(),
                 'dateSession' => $session->getDateSessionString(),

@@ -44,7 +44,7 @@ notification_config:
         practice_community_group_user_joined:
             single: %userName% a rejoint %groupeName%
             multiple:
-                header: %number% nouvelles personnes ont rejoint des groupes la communauté
+                header: %number% nouvelles personnes ont rejoint des groupes de la communauté
                 content: %groupeName% : %userName%
         practice_community_group_created:
             single: Le groupe %groupeName% a été ouvert : %groupeDescription% (démarrage : %dateDebut%)

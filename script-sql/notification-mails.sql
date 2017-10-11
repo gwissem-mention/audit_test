@@ -133,8 +133,8 @@ INSERT INTO `core_mail` (
   'Partage d\'un rapport avec d\'autres utilisateurs',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
-  'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de partager le rapport <a href=\"%urlMonPanier\">&quot;%nomRapport&quot;</a> avec %prenomUtilisateurDist2 %nomUtilisateurDist2.\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
-  '{\"%prenomUtilisateur\":\"Prénom utilisateur\", \"%prenomUtilisateurDist\":\"Prénom de l\'utilisateur à l\'origine du partage\", \"%nomUtilisateurDist\":\"Nom de l\'utilisateur à l\'origine du partage\", \"%prenomUtilisateurDist2\":\"Prénom de l\'utilisateur destinataire du partage\", \"%nomUtilisateurDist2\":\"Nom de l\'utilisateur destinataire du partage\", \"%nomRapport\":\"nom du rapport\", \"%urlMonPanier\":\"Lien vers la page mon panier.\"}',
+  'Bonjour %prenomUtilisateur,\r\n\r\n%prenomUtilisateurDist %nomUtilisateurDist vient de partager le rapport <a href=\"%urlMonPanier\">&quot;%nomRapport&quot;</a> avec %prenomUtilisateurTo %nomUtilisateurTo.\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
+  '{\"%prenomUtilisateur\":\"Prénom utilisateur\", \"%prenomUtilisateurDist\":\"Prénom de l\'utilisateur à l\'origine du partage\", \"%nomUtilisateurDist\":\"Nom de l\'utilisateur à l\'origine du partage\", \"%prenomUtilisateurTo\":\"Prénom de l\'utilisateur destinataire du partage\", \"%nomUtilisateurTo\":\"Nom de l\'utilisateur destinataire du partage\", \"%nomRapport\":\"nom du rapport\", \"%urlMonPanier\":\"Lien vers la page mon panier.\"}',
   '0'
 );
 

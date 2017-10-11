@@ -1,11 +1,12 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+{% import '@HopitalNumeriqueCommunautePratique/notifications/practice_community_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%auteur%' : notif.title|split(' - ')[2],
-        '%groupeName%' : notif.title|split(' - ')[0],
-        '%ficheName%' : notif.title|split(' - ')[1]
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.ficheId)
     }) }}
 {% endblock %}
 {% block header %}
@@ -15,8 +16,8 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%ficheName%' : notif.title|split(' - ')[1],
-        '%groupeName%' : notif.title|split(' - ')[0],
+        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.ficheId),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
         '%commentaire%': notif.detail,
         '%auteur%': notif.title|split(' - ')[2]
     }) }}

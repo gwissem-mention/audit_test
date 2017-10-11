@@ -80,8 +80,8 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
         list($firstname, $lastname, $firstnameTo, $lastnameTo) = explode(' ', $notification->getDetail());
         $notification->addData('prenomUtilisateurDist', $firstname);
         $notification->addData('nomUtilisateurDist', $lastname);
-        $notification->addData('prenomUtilisateurDistTo', $firstnameTo);
-        $notification->addData('nomUtilisateurDistTo', $lastnameTo);
+        $notification->addData('prenomUtilisateurTo', $firstnameTo);
+        $notification->addData('nomUtilisateurTo', $lastnameTo);
         $this->mailManager->sendReportSharedForOther($notification->getUser(), $notification->getData());
     }
 }

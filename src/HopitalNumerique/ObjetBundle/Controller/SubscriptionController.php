@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -30,7 +29,7 @@ class SubscriptionController extends Controller
     public function subscribeAction(Request $request, Objet $object, Contenu $content = null)
     {
         if (null === $this->getUser()) {
-            return new JsonResponse(['redirect' => $this->generateUrl('account_login')]);
+            return new JsonResponse(['redirect' => $this->generateUrl('account_login')], 301);
         }
         if (true === $request->request->getBoolean('wanted')) {
             $command = new SubscribeToObjectCommand($this->getUser(), $object, $content);

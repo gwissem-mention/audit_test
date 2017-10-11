@@ -179,9 +179,10 @@ $(document).ready(function() {
                 data: {
                     'wanted': active
                 },
-                success: function(data) {
-                    if (data.redirect) {
-                        window.location = data.redirect;
+                complete: function(data) {
+                    console.log(data);
+                    if (data.status === 301) {
+                        window.location = data.responseJSON.redirect;
                     }
                 }
             });

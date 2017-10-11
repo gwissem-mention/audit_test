@@ -1,9 +1,10 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+{% import '@HopitalNumeriqueForum/notifications/forum_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%filName%' : notif.title,
+        '%filName%' : macro.link(notif.title, notif.id),
         '%message%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
     }) }}
@@ -15,7 +16,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%filName%' : notif.title,
+        '%filName%' : macro.link(notif.title, notif.id),
         '%message%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
     }) }}

@@ -2,13 +2,11 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -887,6 +885,12 @@ class ObjetRepository extends EntityRepository
         ;
     }
 
+    /**
+     * @param User $user
+     * @param int $limit
+     *
+     * @return array
+     */
     public function getRandomNotviewedObjects(User $user, $limit = 5)
     {
         $qb = $this->createQueryBuilder('objet');
