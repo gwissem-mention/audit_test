@@ -1,6 +1,6 @@
 <?php
 
-use \HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;

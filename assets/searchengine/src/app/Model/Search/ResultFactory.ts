@@ -5,6 +5,7 @@ import ForumPost from "./Result/ForumPost";
 import ForumTopic from "./Result/ForumTopic";
 import Person from "./Result/Person";
 import Group from "./Result/Group";
+import CDPMessage from "./Result/CDPMessage";
 
 export default class ResultFactory {
 
@@ -73,6 +74,8 @@ export default class ResultFactory {
                 return new Person(resultData._id, resultData._score, resultData._source.firstname, resultData._source.lastname, resultData._source.username, resultData._source.email);
             case "cdp_groups":
                 return new Group(resultData._id, resultData._score, title, content);
+            case "cdp_message":
+                return new CDPMessage(resultData._id, resultData._score, title, content, resultData._source.discussionId);
             default:
                 console.log(resultData);
         }
