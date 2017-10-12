@@ -14,10 +14,11 @@ class ReportSharingRepository extends EntityRepository
      * Returns user who are origin or target of report shares ($reportId).
      *
      * @param integer $reportId
+     * @param int $authorId
      *
      * @return QueryBuilder
      */
-    public function getSharingUsersFromReportQueryBuilder($reportId)
+    public function getSharingUsersFromReportQueryBuilder($reportId, $authorId = 0)
     {
         return $this->createQueryBuilder('report_sharing')
             ->select('user.id')
@@ -32,6 +33,9 @@ class ReportSharingRepository extends EntityRepository
             ->setParameters([
                 'reportId' => (int)$reportId,
                 'typeShare' => ReportSharing::TYPE_SHARE,
-            ]);
+            ])
+            ->andWhere('user.id != :author')
+            ->setParameter('author', $authorId)
+        ;
     }
 }

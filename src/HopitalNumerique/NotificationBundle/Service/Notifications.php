@@ -66,15 +66,29 @@ class Notifications
      */
     public function getStructuredProviders()
     {
-        $return = [];
+        $unordered = [];
+        $ordered = [];
         foreach ($this->providers as $provider) {
             $section = $provider::getSectionCode();
-            if (!array_key_exists($section, $return)) {
-                $return[$section] = [];
+            $sectionOrder[$provider::getSectionPosition()] = $provider::getSectionCode();
+            $notifOrder[$provider::getSectionCode()][$provider::getNotifPosition()] = $provider::getNotificationCode();
+            if (!array_key_exists($section, $unordered)) {
+                $unordered[$section] = [];
             }
-            $return[$section][$provider::getNotificationCode()] = $provider;
+            $unordered[$section][$provider::getNotificationCode()] = $provider;
         }
-        return $return;
+        ksort($sectionOrder);
+        foreach ($sectionOrder as $item) {
+            $ordered[$item] = $unordered[$item];
+            $tmpNotifOrdered = [];
+            ksort($notifOrder[$item]);
+            foreach ($notifOrder[$item] as $notifPos => $notifCode) {
+                $tmpNotifOrdered[$notifCode] = $ordered[$item][$notifCode];
+            }
+            $ordered[$item] = $tmpNotifOrdered;
+        }
+
+        return $ordered;
     }
 
     /**

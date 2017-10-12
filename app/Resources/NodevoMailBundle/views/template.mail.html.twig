@@ -9,6 +9,9 @@
             a { color: #6C3694; text-decoration: none; }
             a:hover { color: #6C3694; text-decoration: underline; }
         </style>
+        {% if basePath is defined %}
+            <base href="{{ basePath }}" target="_blank">
+        {% endif %}
     </head>
     <body>
         <table style="width:100%">

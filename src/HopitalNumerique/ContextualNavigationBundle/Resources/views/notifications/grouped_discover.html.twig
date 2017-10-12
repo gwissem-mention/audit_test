@@ -1,0 +1,25 @@
+{% trans_default_domain 'discover' %}
+<div>
+    <span>{{ 'objects'|trans }} :</span>
+    <ul>
+        {% for object in objects %}
+            <li>{{ object.titre }} : ({{ object.resume|striptags|slice(0,300)|replace({"\n":' ', "\r":' '}) ~ '...' }})</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div>
+    <b>{{ 'profile'|trans }} : {{ profilCompletion }}%.</b>
+    {% if profilCompletion != 100 %}
+        <a href="{{ path('account_profile') }}">Compléter mon profil</a>
+    {% endif %}
+</div>
+
+<div>
+    <a href="{{ 'stats.url'|trans }}">{{ 'stats.title'|trans }}</a>
+    <div>
+        {% for key, stat in stats %}
+            <b>{{ stat }} {{ ('stats.' ~ key)|trans }}</b>
+        {% endfor %}
+    </div>
+</div>

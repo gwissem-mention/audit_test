@@ -23,6 +23,14 @@ class GroupDocumentCreatedNotificationProvider extends PracticeCommunityNotifica
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 3;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Groupe $group

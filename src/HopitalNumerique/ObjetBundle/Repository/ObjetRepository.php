@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -884,5 +883,26 @@ class ObjetRepository extends EntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @param User $user
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getRandomNotviewedObjects(User $user, $limit = 5)
+    {
+        $qb = $this->createQueryBuilder('objet');
+        $qb
+            ->addSelect('RAND() as HIDDEN random')
+            ->leftJoin('objet.consultations', 'consultations', Expr\Join::WITH, 'consultations.user = :userId')
+            ->andWhere('consultations.id IS NULL')
+            ->orderBy('random')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $user->getId())
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 }

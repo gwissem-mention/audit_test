@@ -1,11 +1,10 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
-{% import '@HopitalNumeriqueRechercheParcours/notifications/guided_search_macro.html.twig' as macro %}
+{% import '@HopitalNumeriqueCommunautePratique/notifications/practice_community_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%guidedName%' : macro.link(notif.title),
-        '%textMaj%' : notif.detail
+        '%userName%' : notif.title
     }) }}
 {% endblock %}
 {% block header %}
@@ -15,7 +14,6 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%guidedName%' : macro.link(notif.title),
-        '%textMaj%' : notif.detail
+        '%userName%' : notif.title
     }) }}
 {% endblock %}

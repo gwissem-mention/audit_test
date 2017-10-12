@@ -1,9 +1,10 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+{% import '@HopitalNumeriqueModule/Notifications/coming_training_session_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%moduleName%' : notif.title,
+        '%moduleName%' : macro.link(notif.title, notif.id),
         '%formateur%' : notif.getData('formateur'),
         '%dateSession%' : notif.getData('dateSession'),
         '%description%' : notif.getData('description')
@@ -16,7 +17,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%moduleName%' : notif.title,
+        '%moduleName%' : macro.link(notif.title, notif.id),
         '%formateur%' : notif.getData('formateur'),
         '%dateSession%' : notif.getData('dateSession'),
         '%description%' : notif.getData('description')

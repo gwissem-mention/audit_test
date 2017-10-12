@@ -24,6 +24,9 @@ services:
             - '@hopitalnumerique_expert.manager.courriel_registre'
             - "%nodevo_mail.options%"
             - "@ccdn_component_bb_code.component.bootstrap"
+            - "@hopitalnumerique_objet.repository.objet"
+            - "@new_account.profile.completion_calculator"
+            - '@HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever'
 
     nodevo_mail.grid.mail:
         class: %nodevo_mail.grid.mail.class%

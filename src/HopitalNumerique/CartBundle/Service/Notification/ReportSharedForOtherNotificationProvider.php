@@ -26,6 +26,14 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 4;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report
@@ -41,7 +49,8 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
             array_merge(
                 parent::generateOptions($report, $userFrom),
                 [
-                    'reportOwnerId' => $report->getOwner()->getId(),
+                    'userFromId' => $userFrom->getId(),
+                    'userToId' => $userTo->getId(),
                 ]
             )
         );
@@ -56,7 +65,11 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->userRepository->getOneUserQueryBuilder($notification->getData('reportOwnerId'));
+        return $this->reportSharingRepository
+            ->getSharingUsersFromReportQueryBuilder(
+                $notification->getData('reportId'),
+                $notification->getData('userFromId')
+            );
     }
 
     /**
@@ -67,8 +80,8 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
         list($firstname, $lastname, $firstnameTo, $lastnameTo) = explode(' ', $notification->getDetail());
         $notification->addData('prenomUtilisateurDist', $firstname);
         $notification->addData('nomUtilisateurDist', $lastname);
-        $notification->addData('prenomUtilisateurDistTo', $firstnameTo);
-        $notification->addData('nomUtilisateurDistTo', $lastnameTo);
+        $notification->addData('prenomUtilisateurTo', $firstnameTo);
+        $notification->addData('nomUtilisateurTo', $lastnameTo);
         $this->mailManager->sendReportSharedForOther($notification->getUser(), $notification->getData());
     }
 }

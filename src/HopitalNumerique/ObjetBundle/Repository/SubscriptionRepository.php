@@ -15,19 +15,22 @@ class SubscriptionRepository extends EntityRepository
      * Returns subscribers ids for an object and optionnaly an infradoc.
      * This will filter on users whose object / infradoc last view date is lower than $maxViewDate.
      *
-     * @param \DateTime    $maxViewDate
-     * @param integer      $objectId
+     * @param \DateTime $maxViewDate
+     * @param integer $objectId
      * @param integer|null $infradocId
      *
+     * @param null $author
      * @return QueryBuilder Users
      */
-    public function getSubscribersQueryBuilder(\DateTime $maxViewDate, $objectId, $infradocId = null)
+    public function getSubscribersQueryBuilder(\DateTime $maxViewDate, $objectId, $infradocId = null, $author = 0)
     {
         $queryBuilder = $this->createQueryBuilder('subscription')
             ->select('user.id')
             ->join('subscription.user', 'user')
             ->where('subscription.objet = :object')
             ->setParameter('object', (int)$objectId)
+            ->andWhere('user.id != :author')
+            ->setParameter('author', $author)
             ->innerJoin(
                 'HopitalNumeriqueObjetBundle:Consultation',
                 'clt',

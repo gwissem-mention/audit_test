@@ -66,6 +66,14 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
     }
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 7;
+    }
+
+    /**
      * Returns users concerned by notification, in this case users who have subscribed to the object / the infradoc.
      *
      * @param Notification $notification

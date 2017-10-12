@@ -76,6 +76,22 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     }
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 8;
+    }
+
+    /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 1;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Session $session
@@ -91,7 +107,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
 
         $sessionTitle = $session->getDescription();
         if (strlen($sessionTitle) > self::getLimitNotifyDetailLength()) {
-            $sessionTitle = substr($sessionTitle, 0, self::getLimitNotifyDetailLength()) . '...';
+            $sessionTitle = substr(strip_tags($sessionTitle, 'a'), 0, self::getLimitNotifyDetailLength()) . '...';
         }
 
         /**
@@ -107,6 +123,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
             $moduleTitle,
             $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
             [
+                'id' => $session->getModule()->getId(),
                 'roleIds' => $roleIds,
                 'formateur' => $session->getFormateur()->getPrenomNom(),
                 'dateSession' => $session->getDateSessionString(),

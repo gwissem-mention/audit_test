@@ -22,6 +22,14 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 2;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Commentaire $comment

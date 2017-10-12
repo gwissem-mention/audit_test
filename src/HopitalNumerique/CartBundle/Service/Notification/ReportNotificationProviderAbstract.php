@@ -61,6 +61,14 @@ abstract class ReportNotificationProviderAbstract extends NotificationProviderAb
         return self::SECTION_CODE;
     }
 
+    /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 6;
+    }
+
     public function generateOptions(Report $report)
     {
         return [

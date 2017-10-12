@@ -148,14 +148,11 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function save($entity)
     {
-        /** @var Groupe $entity */
-        $isCreate = !$entity->getId();
-
         parent::save($entity);
 
-        if ($isCreate) {
+        if ($entity->getActif()) {
             /**
-             * Fire 'GROUP_CREATED' event
+             * Fire 'GROUP_CREATED' event if group is active
              */
             $event = new GroupEvent($entity);
             $this->eventDispatcher->dispatch(Events::GROUP_CREATED, $event);

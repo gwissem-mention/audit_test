@@ -64,6 +64,22 @@ class AutodiagUpdatedNotificationProvider extends NotificationProviderAbstract
     }
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition()
+    {
+        return 1;
+    }
+
+    /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 1;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Autodiag $autodiag

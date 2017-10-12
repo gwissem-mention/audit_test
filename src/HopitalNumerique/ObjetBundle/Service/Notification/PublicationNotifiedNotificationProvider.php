@@ -24,6 +24,14 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
     }
 
     /**
+     * @return integer
+     */
+    public static function getNotifPosition()
+    {
+        return 1;
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Objet   $object
@@ -43,10 +51,10 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
         }
 
         if (strlen($title) > self::getLimitNotifyTitleLength()) {
-            $title = substr($title, 0, self::getLimitNotifyTitleLength()) . '...';
+            $title = substr(strip_tags($title), 0, self::getLimitNotifyTitleLength()) . '...';
         }
         if (strlen($detail) > self::getLimitNotifyDetailLength()) {
-            $detail = substr($detail, 0, self::getLimitNotifyDetailLength()) . '...';
+            $detail = substr(strip_tags($detail, 'a'), 0, self::getLimitNotifyDetailLength()) . '...';
         }
         
         $this->processNotification(

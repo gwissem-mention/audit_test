@@ -23,6 +23,11 @@ interface NotificationProviderInterface
     public static function getSectionCode();
 
     /**
+     * @return integer
+     */
+    public static function getSectionPosition();
+
+    /**
      * @return NotificationConfigLabels
      */
     public function getConfigLabels();
