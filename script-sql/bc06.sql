@@ -23,3 +23,7 @@ ALTER TABLE hn_communautepratique_viewed_member DROP FOREIGN KEY FK_FF8A9B11A76E
 DROP INDEX idx_ff8a9b11a76ed395 ON hn_communautepratique_viewed_member;
 CREATE INDEX IDX_FF8A9B117597D3FE ON hn_communautepratique_viewed_member (member_id);
 ALTER TABLE hn_communautepratique_viewed_member ADD CONSTRAINT FK_FF8A9B11A76ED395 FOREIGN KEY (member_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+
+
+INSERT INTO hn_reference (ref_id, ref_libelle, ref_etat, ref_lock, ref_order) VALUES (4000, 'Discussion de la communauté de pratique', 3, 0, 1);
+INSERT INTO hn_reference_code (reference, label) VALUES (4000, 'CATEGORIE_OBJET');

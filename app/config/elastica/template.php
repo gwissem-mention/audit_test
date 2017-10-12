@@ -1,5 +1,6 @@
 <?php
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -120,6 +121,53 @@ $container->loadFromExtension('fos_elastica', [
                 ],
             ],
             'types' => [
+                'cdp_message' => [
+                    'mappings' => [
+                        'discussionId' => [
+                            'type' => 'keyword',
+                            'property_path' => 'discussion.id',
+                        ],
+                        'title' => [
+                            'type' => 'text',
+                            'property_path' => 'discussion.title',
+                            'analyzer' => 'title_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ],
+                            ],
+                        ],
+                        'content' => [
+                            'type' => 'text',
+                            'analyzer' => 'content_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ],
+                            ],
+                        ],
+                        'domaines' => [
+                            'property_path' => 'discussion.domains',
+                            'type' => 'nested',
+                            'properties' => [
+                                'nom' => null,
+                            ],
+                        ],
+                    ],
+                    'persistence' => [
+                        'driver' => 'orm',
+                        'model' => Message::class,
+                        'provider' => [
+                            'service' => "hopital_numerique_search.provider.cdp_message.$serviceIdentifier",
+                        ],
+                    ],
+                ],
                 'object' => [
                     'mappings' => [
                         'title' => [
