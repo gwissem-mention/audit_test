@@ -2,10 +2,11 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\Validator\Constraints as Assert;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 /**
  * Class CreateDiscussionCommand
@@ -45,16 +46,27 @@ class CreateDiscussionCommand
     public $domains;
 
     /**
+     * @var Objet $object
+     */
+    public $object;
+
+    /**
      * CreateDiscussionCommand constructor.
      *
      * @param User $author
      * @param array $domains
      * @param Groupe|null $group
+     * @param Objet $object
      */
-    public function __construct(User $author, array $domains, Groupe $group = null)
+    public function __construct(User $author, array $domains, Groupe $group = null, Objet $object = null)
     {
         $this->author = $author;
         $this->group = $group;
         $this->domains = $domains;
+
+        if ($object) {
+            $this->object = $object;
+            $this->title = $object->getTitre();
+        }
     }
 }

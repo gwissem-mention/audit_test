@@ -2,6 +2,12 @@ hopitalnumerique_communautepratique_discussions_public:
     path: /
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
 
+hopitalnumerique_communautepratique_discussions_public_object_redirect:
+    path: /object/{object}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:publicationDiscussion }
+    methods:
+        - GET
+
 hopitalnumerique_communautepratique_discussions_group:
     path: /groupe/{group}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
@@ -12,6 +18,12 @@ hopitalnumerique_communautepratique_discussions_group_default_discussion:
     requirements:
         group: \d+
         discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_public_create_from_object:
+    path: /create-from-object/{object}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+    requirements:
+        object: \d+
 
 hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
     path: /{discussion}
@@ -57,6 +69,12 @@ hopitalnumerique_communautepratique_discussions_discussion_message_file:
 
 hopitalnumerique_communautepratique_discussions_create_discussion:
     path: /create/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_create_related_discussion:
+    path: /create-related/{object}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
     methods:
         - POST

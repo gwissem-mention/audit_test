@@ -27,3 +27,13 @@ ALTER TABLE hn_communautepratique_viewed_member ADD CONSTRAINT FK_FF8A9B11A76ED3
 
 INSERT INTO hn_reference (ref_id, ref_libelle, ref_etat, ref_lock, ref_order) VALUES (4000, 'Discussion de la communauté de pratique', 3, 0, 1);
 INSERT INTO hn_reference_code (reference, label) VALUES (4000, 'CATEGORIE_OBJET');
+
+ALTER TABLE hn_communautepratique_discussion ADD object_id INT DEFAULT NULL COMMENT 'ID de l objet';
+ALTER TABLE hn_communautepratique_discussion ADD CONSTRAINT FK_3C9AF352232D562B FOREIGN KEY (object_id) REFERENCES hn_objet (obj_id) ON DELETE SET NULL;
+CREATE INDEX IDX_3C9AF352232D562B ON hn_communautepratique_discussion (object_id);
+
+ALTER TABLE hn_communautepratique_discussion DROP FOREIGN KEY FK_3C9AF352232D562B;
+DROP INDEX IDX_3C9AF352232D562B ON hn_communautepratique_discussion;
+ALTER TABLE hn_communautepratique_discussion CHANGE object_id relatedObject_id INT DEFAULT NULL COMMENT 'ID de l objet';
+ALTER TABLE hn_communautepratique_discussion ADD CONSTRAINT FK_3C9AF352299FDF45 FOREIGN KEY (relatedObject_id) REFERENCES hn_objet (obj_id) ON DELETE SET NULL;
+CREATE INDEX IDX_3C9AF352299FDF45 ON hn_communautepratique_discussion (relatedObject_id);

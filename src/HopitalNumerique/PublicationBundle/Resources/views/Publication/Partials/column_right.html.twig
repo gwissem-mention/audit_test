@@ -6,7 +6,7 @@
 %}
 
     <div id="column-right">
-        {% if app.user %}
+        {% if app.user and app.user.inscritCommunautePratique %}
             <div class="column-right-container" style="margin-bottom: 10px;">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/topic_related.html.twig' %}
             </div>

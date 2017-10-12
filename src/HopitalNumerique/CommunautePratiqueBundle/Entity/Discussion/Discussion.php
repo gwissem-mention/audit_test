@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -105,6 +106,14 @@ class Discussion
      * )
      */
     protected $domains;
+
+    /**
+     * @var Objet
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
+     * @ORM\JoinColumn(referencedColumnName="obj_id", nullable=true, onDelete="SET NULL")
+     */
+    protected $relatedObject;
 
 
     /**
@@ -403,5 +412,25 @@ class Discussion
         }
 
         return false;
+    }
+
+    /**
+     * @return Objet|null
+     */
+    public function getRelatedObject()
+    {
+        return $this->relatedObject;
+    }
+
+    /**
+     * @param Objet|null $object
+     *
+     * @return Discussion
+     */
+    public function setRelatedObject(Objet $object = null)
+    {
+        $this->relatedObject = $object;
+
+        return $this;
     }
 }

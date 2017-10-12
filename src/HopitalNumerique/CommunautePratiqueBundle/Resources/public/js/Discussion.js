@@ -7,7 +7,7 @@
 var Discussion;
 
 (function() {
-    Discussion = function (scope, canReorder) {
+    Discussion = function (scope, canReorder, preopenNewDiscussionModal) {
 
         tinyMCE.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
 
@@ -26,6 +26,10 @@ var Discussion;
         this.$lazyLoadBtn = this.$list.find('.load-more');
 
         this.init();
+
+        if (preopenNewDiscussionModal) {
+            $('#new-discussion-modal').modal('show');
+        }
     };
 
     Discussion.prototype = {

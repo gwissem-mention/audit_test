@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderD
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Service\FilePathFinder;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,10 +45,11 @@ class DiscussionController extends Controller
     /**
      * @param Groupe $group
      * @param Discussion|null $discussion
+     * @param Objet|null $object
      *
      * @return Response
      */
-    public function listAction(Groupe $group = null, Discussion $discussion = null)
+    public function listAction(Groupe $group = null, Discussion $discussion = null, Objet $object = null)
     {
         $discussionRepository = $this->get(DiscussionRepository::class);
 
@@ -66,9 +68,18 @@ class DiscussionController extends Controller
         );
 
         if ($this->isGranted(DiscussionVoter::CREATE)) {
-            $newDiscussionCommand = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]);
+            $newDiscussionCommand = new CreateDiscussionCommand(
+                $this->getUser(),
+                [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()],
+                null,
+                $object
+            );
+            $action = $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion', ['group' => $group ? $group->getId() : null]);
+            if ($object) {
+                $action = $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_related_discussion', ['object' => $object->getId()]);
+            }
             $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $newDiscussionCommand, [
-                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_create_discussion', ['group' => $group ? $group->getId() : null])
+                'action' => $action,
             ])->createView()
             ;
         }
@@ -92,6 +103,7 @@ class DiscussionController extends Controller
         }
 
         $options= [
+            'preopenNewDiscussionModal' => isset($newDiscussionForm) && $object,
             'group' => $group,
             'scope' => null === $group ? 'public' : 'group',
             'discussions' => $discussions,
@@ -109,16 +121,43 @@ class DiscussionController extends Controller
     }
 
     /**
+     * @param Objet $object
+     *
+     * @return RedirectResponse
+     */
+    public function publicationDiscussionAction(Objet $object)
+    {
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+
+        if ($discussion = $this->get(DiscussionRepository::class)->getPublicDiscussionForObject($object, $selectedDomain)) {
+            return $this->redirectToRoute(
+                'hopitalnumerique_communautepratique_discussions_public_desfult_discussion',
+                [
+                    'discussion' => $discussion->getId(),
+                ]
+            );
+        }
+
+        return $this->redirectToRoute(
+            'hopitalnumerique_communautepratique_discussions_public_create_from_object',
+            [
+                'object' => $object->getId(),
+            ]
+        );
+    }
+
+    /**
      * @param Request $request
      * @param Groupe $group
+     * @param Objet $object
      *
      * @Security("is_granted('cdp_discussion_create')")
      *
      * @return Response|RedirectResponse
      */
-    public function createDiscussionAction(Request $request, Groupe $group = null)
+    public function createDiscussionAction(Request $request, Groupe $group = null, Objet $object = null)
     {
-        $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()], $group);
+        $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()], $group, $object);
 
         $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $command);
 
