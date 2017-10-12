@@ -1,0 +1,7 @@
+services:
+    HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectHandler:
+        class: HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectHandler
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository'
+            - '@doctrine.orm.entity_manager'

@@ -44,3 +44,4 @@ CREATE TABLE object_identity_relation (id INT AUTO_INCREMENT NOT NULL, `order` I
 CREATE TABLE object_identity (id VARCHAR(255) NOT NULL, class VARCHAR(255) NOT NULL, objectId VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_BC4304ACBF396750 (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id);
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id);
+ALTER TABLE object_identity_relation CHANGE `order` position INT NOT NULL;

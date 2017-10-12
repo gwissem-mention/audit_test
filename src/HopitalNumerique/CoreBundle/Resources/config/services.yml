@@ -1,6 +1,7 @@
 imports:
     - { resource: events.yml }
     - { resource: services/repository.yml }
+    - { resource: services/handler.yml }
 
 parameters:
 

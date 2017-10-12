@@ -3,9 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Gedmo\Loggable\Entity\LogEntry;
-use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
-use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
-use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -13,14 +10,15 @@ use HopitalNumerique\ObjetBundle\Model\Report;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateCommand;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 
 /**
  * Objet controller.

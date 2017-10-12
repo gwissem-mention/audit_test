@@ -37,7 +37,7 @@ class Relation
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="position")
      */
     protected $order = 0;
 
