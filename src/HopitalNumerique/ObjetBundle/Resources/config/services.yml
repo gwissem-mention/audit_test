@@ -164,18 +164,6 @@ services:
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Risk'
 
-    hopitalnumerique_objet.link_board_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\LinkBoardToObjectHandler
-        arguments:
-            - "@hopitalnumerique_objet.repository.objet"
-            - "@hopitalnumerique_objet.manager.objet"
-            - "@hopitalnumerique_forum.repository.board"
-
-    hopitalnumerique_objet.unlink_board_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\UnlinkBoardToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
     hopitalnumerique_objet.reorder_related_board_handler:
         class: HopitalNumerique\ObjetBundle\Domain\Command\ReorderRelatedBoardsHandler
         arguments:
