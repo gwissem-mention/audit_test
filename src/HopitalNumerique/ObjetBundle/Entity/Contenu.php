@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +18,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\ContenuRepository")
  * @UniqueEntity(fields="alias", message="Cet alias existe déjà.")
  */
-class Contenu
+class Contenu implements ObjectIdentityDisplayableInterface
 {
     /**
      * @var int
@@ -823,5 +824,21 @@ class Contenu
         }
 
         return $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getTitre();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'infradoc';
     }
 }

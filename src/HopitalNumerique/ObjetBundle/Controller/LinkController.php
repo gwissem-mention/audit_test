@@ -3,8 +3,11 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectCommand;
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectHandler;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -40,24 +43,34 @@ class LinkController extends Controller
 
         //bind Objet
         $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
-        $currentObjets = new ArrayCollection($pointDur->getObjets());
 
-        //bind objects
+        $linkObjectHandler = $this->get(LinkObjectHandler::class);
         foreach ($objets as $one) {
-            if (!$currentObjets->contains($one)) {
-                $pointDur->addObjet($one);
-            }
-        }
 
-        $this->get('hopitalnumerique_objet.manager.objet')->save($pointDur);
+            list($type, $objectId) = explode(':', $one);
+
+            switch ($type) {
+                case 'PUBLICATION':
+                case 'ARTICLE':
+                    $object = $this->get('hopitalnumerique_objet.repository.objet')->find($objectId);
+                    break;
+                case 'INFRADOC':
+                    $object = $this->get('hopitalnumerique_objet.repository.contenu')->find($objectId);
+                    break;
+                default:
+                    throw new \LogicException(sprintf('Type {%s} not founded', $type));
+            }
+
+            $linkObjectHandler->handle(new LinkObjectCommand($pointDur, $object));
+        }
 
         $this->get('session')->getFlashBag()->add('success', 'Les productions ont été liées au point dur.');
 
-        return new Response(
-            '{"success":true, "url" : "'
-            . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id])
-            . '"}',
-            200
+        return new JsonResponse(
+            [
+                'success' => true,
+                'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id])
+            ]
         );
     }
 

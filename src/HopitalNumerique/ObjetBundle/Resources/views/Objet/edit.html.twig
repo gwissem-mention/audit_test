@@ -421,6 +421,7 @@
 
                             <fieldset>
                                 <legend>
+                                    <a href="{{ path('hopitalnumerique_objet_objet_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-link pull-right" title="Ajouter une production liée">Ajouter une production</a>
                                     <a href="{{ path('hopitalnumerique_objet_related_risks_list', {'object':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-link pull-right" title="Ajouter un risque lié">Ajouter un risque</a>
                                     <a href="{{ path('hopitalnumerique_objet_board_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-link pull-right" title="Ajouter un board lié">Ajouter un board</a>
                                     Liaisons
@@ -444,29 +445,6 @@
                                     </ol>
                                 </div>
                             </fieldset>
-
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a href="{{ path('hopitalnumerique_objet_objet_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
-
-                                    {# Liste des prod maitrisées #}
-                                    <fieldset>
-                                        <legend>Productions liées</legend>
-
-                                        <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez surle bouton '+' pour lier une production.</p>
-                                        <div class="dd" id="productions-nestable">
-                                            <ol class="dd-list">
-                                                {% import _self as mySelf %}
-                                                {% for production in productions %}
-                                                    {{ mySelf.buildProductionListe(production, objet.id) }}
-                                                {% endfor %}
-                                            </ol>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
 
                             {% if relatedObjects|length > 0 %}
                                 <div class="row resource-row">

@@ -193,11 +193,6 @@ class ObjetController extends Controller
         );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($id, $objet->getDomainesId());
 
-        //build Productions liées
-        $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees(
-            $objet->getObjets()
-        );
-
         $relatedObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjectRelationships($objet);
 
 
@@ -205,19 +200,12 @@ class ObjetController extends Controller
             'contenus' => $contenus,
             'infra' => $infra,
             'toRef' => $toRef,
-            'productions' => $productions,
-            'relatedBoards' => $this
-                ->get('doctrine.orm.default_entity_manager')
-                ->getRepository(RelatedBoard::class)
-                ->findBy(['object' => $objet->getId()], ['position' => 'ASC'])
-            ,
             'objectsRelated' => $this->get(ObjectIdentityRepository::class)->getRelatedObjects(ObjectIdentity::createFromDomainObject($objet)),
             'relatedObjects' => $relatedObjects,
             'domainesCommunsWithUser' => $this
                 ->get('hopitalnumerique_core.dependency_injection.entity')
                 ->getEntityDomainesCommunsWithUser($objet, $user)
             ,
-            'relatedRisks' => $objet->getRelatedRisks(),
         ];
 
         return $this->renderForm(
@@ -513,11 +501,8 @@ class ObjetController extends Controller
                     'infra' => isset($options['infra']) ? $options['infra'] : false,
                     'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                     'note' => isset($options['note']) ? $options['note'] : 0,
-                    'productions' => isset($options['productions']) ? $options['productions'] : [],
                     'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                     'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
-                    'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
-                    'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
                 ]);
@@ -543,10 +528,7 @@ class ObjetController extends Controller
                         'infra' => isset($options['infra']) ? $options['infra'] : false,
                         'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                         'note' => isset($options['note']) ? $options['note'] : 0,
-                        'productions' => isset($options['productions']) ? $options['productions'] : [],
                         'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
-                        'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
-                        'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                         'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
@@ -668,10 +650,7 @@ class ObjetController extends Controller
                 'infra' => isset($options['infra']) ? $options['infra'] : false,
                 'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                 'note' => isset($options['note']) ? $options['note'] : 0,
-                'productions' => isset($options['productions']) ? $options['productions'] : [],
                 'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
-                'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
-                'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                 'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],
