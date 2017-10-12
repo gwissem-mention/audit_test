@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -13,7 +14,7 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\RiskRepository")
  * @ORM\Table(name="hn_objet_risk")
  */
-class Risk
+class Risk implements ObjectIdentityDisplayableInterface
 {
     /**
      * @var int
@@ -356,5 +357,18 @@ class Risk
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getLabel();
+    }
+
+    public function getObjectIdentityType()
+    {
+        return 'risk';
     }
 }

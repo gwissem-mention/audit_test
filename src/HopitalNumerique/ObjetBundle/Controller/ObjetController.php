@@ -3,6 +3,9 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Gedmo\Loggable\Entity\LogEntry;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -199,6 +202,7 @@ class ObjetController extends Controller
 
         $relatedObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjectRelationships($objet);
 
+
         $options = [
             'contenus' => $contenus,
             'infra' => $infra,
@@ -209,6 +213,7 @@ class ObjetController extends Controller
                 ->getRepository(RelatedBoard::class)
                 ->findBy(['object' => $objet->getId()], ['position' => 'ASC'])
             ,
+            'objectsRelated' => $this->get(ObjectIdentityRepository::class)->getRelatedObjects(ObjectIdentity::createFromDomainObject($objet)),
             'relatedObjects' => $relatedObjects,
             'domainesCommunsWithUser' => $this
                 ->get('hopitalnumerique_core.dependency_injection.entity')
@@ -511,6 +516,7 @@ class ObjetController extends Controller
                     'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                     'note' => isset($options['note']) ? $options['note'] : 0,
                     'productions' => isset($options['productions']) ? $options['productions'] : [],
+                    'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                     'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                     'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                     'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
@@ -540,6 +546,7 @@ class ObjetController extends Controller
                         'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                         'note' => isset($options['note']) ? $options['note'] : 0,
                         'productions' => isset($options['productions']) ? $options['productions'] : [],
+                        'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                         'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                         'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                         'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
@@ -664,6 +671,7 @@ class ObjetController extends Controller
                 'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                 'note' => isset($options['note']) ? $options['note'] : 0,
                 'productions' => isset($options['productions']) ? $options['productions'] : [],
+                'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                 'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                 'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
                 'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],

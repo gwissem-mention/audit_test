@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use CCDNForum\ForumBundle\Entity\Board as BaseBoard;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
@@ -11,7 +12,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
-class Board extends BaseBoard
+class Board extends BaseBoard implements ObjectIdentityDisplayableInterface
 {
     const BOARD_MHN_ID = 46;
     const BOARD_RSE_ID = 45;
@@ -176,4 +177,22 @@ class Board extends BaseBoard
     {
         return array_values(parent::getReadAuthorisedRoles()) ?: [];
     }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'board';
+    }
+
+
 }

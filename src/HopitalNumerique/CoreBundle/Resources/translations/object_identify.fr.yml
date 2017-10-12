@@ -1,0 +1,4 @@
+types:
+    risk: Risque
+    board: Board
+    object: Production

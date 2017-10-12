@@ -1,0 +1,10 @@
+services:
+    HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository:
+        class: HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCoreBundle:ObjectIdentity\Relation']
+
+    HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository:
+        class: HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCoreBundle:ObjectIdentity\ObjectIdentity']

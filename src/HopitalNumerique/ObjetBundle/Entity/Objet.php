@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
@@ -28,7 +29,7 @@ use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\Loggable
  */
-class Objet implements RoutedItemInterface
+class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
 {
     const FICHIER_1 = 1;
     const FICHIER_2 = 2;
@@ -1986,5 +1987,21 @@ class Objet implements RoutedItemInterface
         $this->updates->add($update);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getTitre();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'object';
     }
 }

@@ -416,6 +416,34 @@
                         </div>
 
                         <div class="tab-pane" id="productions">
+
+
+
+                            <fieldset>
+                                <legend>
+                                    <a href="#" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une liaison"><i class="fa fa-plus"></i></a>
+                                    Liaisons
+                                </legend>
+
+                                <div class="dd">
+                                    <ol class="dd-list">
+                                        {% for object in objectsRelated %}
+                                            <li class="dd-item dd3-item">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">
+                                                    <b>{{ ('types.'~object.object.objectIdentityType)|trans({}, 'object_identify') }}</b>
+                                                    -
+                                                    {{ object.object.objectIdentityTitle }}
+                                                </div>
+                                                <div class="dd3-actions">
+                                                    <div class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </fieldset>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <a href="{{ path('hopitalnumerique_objet_objet_addLink', {'id':objet.id}) }}" class="addLink fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
