@@ -170,22 +170,6 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_objet.repository.related_board"
 
-    hopitalnumerique_objet.reorder_related_risks_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\ReorderRelatedRisksHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
-    hopitalnumerique_objet.add_related_risks_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\LinkRisksToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@hopitalnumerique_objet.repository.risk"
-
-    hopitalnumerique_objet.unlink_risk_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\UnlinkRiskToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
     hopitalnumerique_objet.handler.edit_risk:
         class: HopitalNumerique\ObjetBundle\Domain\Command\EditRiskHandler
         arguments:
