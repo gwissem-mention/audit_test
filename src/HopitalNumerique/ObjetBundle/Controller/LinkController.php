@@ -2,13 +2,14 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectCommand;
 use HopitalNumerique\CoreBundle\Domain\Command\Relation\LinkObjectHandler;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 
 /**
  * Link controller.
@@ -27,8 +28,10 @@ class LinkController extends Controller
         $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo(null, $objet);
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', [
+            'type' => 'object',
             'arbo' => $arbo,
             'idObjet' => $objet->getId(),
+            'saveLinkUri' => $this->generateUrl('hopitalnumerique_objet_objet_saveLink')
         ]);
     }
 
@@ -75,33 +78,34 @@ class LinkController extends Controller
     }
 
     /**
-     * Suppresion d'un lien point dur -> objet.
+     * @param Objet $object
      *
-     * METHOD = POST|DELETE
+     * @return JsonResponse|Response
      */
-    public function deleteLinkAction(Objet $pointDur, $id, $obj)
+    public function linkDiscussionAction(Objet $object)
     {
-        $objets = $pointDur->getObjets();
-
-        //$linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
-        $linkName = ($obj == 1 ? ['PUBLICATION' . ':' . $id, 'ARTICLE' . ':' . $id] : ['INFRADOC' . ':' . $id]);
-        foreach ($objets as $key => $objet) {
-            if (in_array($objet, $linkName)) {
-                unset($objets[$key]);
+        if ($objects = $this->get('request')->request->get('objets')) {
+            $linkObjectHandler = $this->get(LinkObjectHandler::class);
+            foreach ($objects as $objectToLink) {
+                $linkObjectHandler->handle(new LinkObjectCommand($object, $this->get(DiscussionRepository::class)->find($objectToLink)));
             }
+
+            $this->get('session')->getFlashBag()->add('success', 'Les discussions ont été liées au point dur.');
+
+            return new JsonResponse(
+                [
+                    'success' => true,
+                    'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()])
+                ]
+            );
         }
-        $pointDur->setObjets($objets);
-        $this->get('hopitalnumerique_objet.manager.objet')->save($pointDur);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
-
-        return new Response(
-            '{"success":true, "url" : "' . $this->generateUrl(
-                'hopitalnumerique_objet_objet_edit',
-                ['id' => $pointDur->getId()]
-            ) . '"}',
-            200
-        );
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', [
+            'type' => 'discussion',
+            'arbo' => $this->get(DiscussionRepository::class)->getPublicDiscussionList(),
+            'idObjet' => $object->getId(),
+            'saveLinkUri' => $this->generateUrl('hopitalnumerique_objet_objet_ad_discussion_link', ['object' => $object->getId()]),
+        ]);
     }
 
     /**
@@ -124,7 +128,6 @@ class LinkController extends Controller
         $objet->setObjets($doctrineArray->toArray());
         $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
 
-        //return success.true si le fichier existe deja
-        return new Response('{"success":true}', 200);
+        return new JsonResponse(['success' => true], 200);
     }
 }

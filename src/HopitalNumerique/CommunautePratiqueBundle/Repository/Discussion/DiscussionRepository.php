@@ -265,4 +265,17 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @return Discussion[]
+     */
+    public function getPublicDiscussionList()
+    {
+        return $this->createQueryBuilder('discussion')
+            ->select('discussion.title as text', 'discussion.id as value')
+            ->andWhere('discussion.public = TRUE')
+
+            ->getQuery()->getResult()
+        ;
+    }
 }

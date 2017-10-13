@@ -78,6 +78,12 @@ hopitalnumerique_objet_objet_addLink:
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_objet_ad_discussion_link:
+    path:  /objet/addLink/discussion/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:linkDiscussion" }
+    requirements:
+        id: \d+
+
 hopitalnumerique_objet_board_addLink:
     path:  /objet/board/addLink/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:addLink" }
@@ -91,13 +97,6 @@ hopitalnumerique_objet_objet_saveLink:
 hopitalnumerique_objet_board_saveLink:
     path:  /objet/board/saveLink
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:saveLink" }
-
-hopitalnumerique_objet_objet_deleteLink:
-    path:  /objet/deleteLink/{pointDur}/{id}/{obj}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:deleteLink" }
-    requirements: 
-        id: \d+
-        pointDur: \d+
 
 hopitalnumerique_objet_board_deleteLink:
     path:  /objet/board/deleteLink/{object}/{board}
