@@ -428,10 +428,10 @@
                                     Liaisons
                                 </legend>
 
-                                <div class="dd">
+                                <div class="dd" id="objects-nestable" data-reorder-uri="{{ path('hopitalnumerique_objet_objet_reorder', {object: objet.id}) }}">
                                     <ol class="dd-list">
                                         {% for object in objectsRelated %}
-                                            <li class="dd-item dd3-item">
+                                            <li class="dd-item dd3-item" data-id="{{ object.id }}">
                                                 <div class="dd-handle dd3-handle"></div>
                                                 <div class="dd3-content">
                                                     <b>{{ ('types.'~object.object.objectIdentityType)|trans({}, 'object_identify') }}</b>
@@ -478,8 +478,6 @@
             {% if objet.id %}
                 <input type="hidden" id="add-contenu-url" value="{{ path('hopitalnumerique_objet_contenu_add', {'id':objet.id}) }}"/>
                 <input type="hidden" id="reorder-objet-url" value="{{ path('hopitalnumerique_objet_contenu_reorder') }}"/>
-                <input type="hidden" id="reorder-prods-url" value="{{ path('hopitalnumerique_objet_objet_reorder', {'id':objet.id}) }}"/>
-                <input type="hidden" id="reorder-boards-url" value="{{ path('hopitalnumerique_objet_board_reorder', {'object':objet.id}) }}"/>
                 <input type="hidden" id="objet-id" value="{{ objet.id }}"/>
                 <input type="hidden" id="parse-upload-url" value="{{ path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id}) }}"/>
             {% endif %}

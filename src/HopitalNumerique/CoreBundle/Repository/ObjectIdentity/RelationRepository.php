@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CoreBundle\Repository\ObjectIdentity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\Relation;
 
@@ -26,5 +27,22 @@ class RelationRepository extends EntityRepository
         $this->_em->persist($relation);
 
         return $relation;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     * @return array
+     */
+    public function getObjectIdentityRelations(ObjectIdentity $objectIdentity)
+    {
+        return $this->createQueryBuilder('relation')
+            ->join('relation.sourceObjectIdentity', 'source', Join::WITH, 'source.id = :source')
+            ->setParameter('source', $objectIdentity)
+
+            ->join('relation.targetObjectIdentity', 'target')
+            ->addSelect('target')
+
+            ->getQuery()->getResult()
+        ;
     }
 }

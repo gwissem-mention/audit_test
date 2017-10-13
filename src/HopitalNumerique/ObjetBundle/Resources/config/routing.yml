@@ -106,7 +106,7 @@ hopitalnumerique_objet_board_deleteLink:
         board: \d+
 
 hopitalnumerique_objet_objet_reorder:
-    path:  /objet/reorder/{id}
+    path:  /objet/reorder/{object}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:reorder" }
     requirements: 
         id: \d+

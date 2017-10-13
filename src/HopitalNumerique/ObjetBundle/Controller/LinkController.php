@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\ReorderObjectLinksCommand;
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\ReorderObjectLinksHandler;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -115,18 +118,12 @@ class LinkController extends Controller
      *
      * @return Response
      */
-    public function reorderAction(Objet $objet)
+    public function reorderAction(Objet $object)
     {
         //get datas serialzed
-        $datas = $this->get('request')->request->get('datas');
+        $datas = $this->get('request')->request->get('datas', []);
 
-        $doctrineArray = new ArrayCollection();
-        foreach ($datas as $one) {
-            $doctrineArray->add($one['id']);
-        }
-
-        $objet->setObjets($doctrineArray->toArray());
-        $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
+        $this->get(ReorderObjectLinksHandler::class)->handle(new ReorderObjectLinksCommand(ObjectIdentity::createFromDomainObject($object), $datas));
 
         return new JsonResponse(['success' => true], 200);
     }
