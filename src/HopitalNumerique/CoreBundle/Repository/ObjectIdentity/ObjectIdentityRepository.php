@@ -4,25 +4,32 @@ namespace HopitalNumerique\CoreBundle\Repository\ObjectIdentity;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\Relation;
 
 class ObjectIdentityRepository extends EntityRepository
 {
+
     /**
      * @param ObjectIdentity $objectIdentity
      *
-     * @return null|object
+     * @return object
+     * @throws NoResultException
      */
     public function populate(ObjectIdentity $objectIdentity)
     {
-        return $this->_em->getRepository($objectIdentity->getClass())->find($objectIdentity->getObjectId());
+        if ($object = $this->_em->getRepository($objectIdentity->getClass())->find($objectIdentity->getObjectId())) {
+            return $object;
+        }
+
+        throw new NoResultException();
     }
 
     /**
      * @param ObjectIdentity[] $objectsIdentity
      */
-    public function populateMultiple(array $objectsIdentity)
+    public function populateMultiple(array &$objectsIdentity)
     {
         $grouped = [];
         foreach ($objectsIdentity as $objectIdentity) {
@@ -36,6 +43,14 @@ class ObjectIdentityRepository extends EntityRepository
         foreach ($grouped as $class => $ids) {
             foreach ($this->_em->getRepository($class)->findById($ids) as $object) {
                 $objectsIdentity[array_search($object->getId(), $ids)]->setObject($object);
+            }
+        }
+
+        foreach ($objectsIdentity as $key => $objectIdentity) {
+            if (null === $objectIdentity->getObject()) {
+                $this->_em->remove($objectIdentity);
+                $this->_em->flush($objectIdentity);
+                unset($objectsIdentity[$key]);
             }
         }
     }

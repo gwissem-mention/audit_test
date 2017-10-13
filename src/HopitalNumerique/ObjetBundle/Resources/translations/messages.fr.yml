@@ -6,7 +6,7 @@ related_board:
             success: Suppression effectuée avec succès.
 
 links:
-    production:
+    object:
         title: Ajouter une production liée
         form:
             list:

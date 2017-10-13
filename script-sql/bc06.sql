@@ -45,3 +45,8 @@ CREATE TABLE object_identity (id VARCHAR(255) NOT NULL, class VARCHAR(255) NOT N
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id);
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id);
 ALTER TABLE object_identity_relation CHANGE `order` position INT NOT NULL;
+
+ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C13AED7BF5;
+ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C179608353;
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;

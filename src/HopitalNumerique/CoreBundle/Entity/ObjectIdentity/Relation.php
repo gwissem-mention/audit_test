@@ -24,6 +24,7 @@ class Relation
      * @var ObjectIdentity
      *
      * @ORM\ManyToOne(targetEntity="ObjectIdentity", inversedBy="relations")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $sourceObjectIdentity;
 
@@ -31,6 +32,7 @@ class Relation
      * @var ObjectIdentity
      *
      * @ORM\ManyToOne(targetEntity="ObjectIdentity")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $targetObjectIdentity;
 
