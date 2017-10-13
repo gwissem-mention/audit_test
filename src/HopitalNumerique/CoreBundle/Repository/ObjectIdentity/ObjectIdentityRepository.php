@@ -62,4 +62,27 @@ class ObjectIdentityRepository extends EntityRepository
 
         return $objects;
     }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     *
+     * @return ObjectIdentity[]
+     */
+    public function getRelatedByObjects(ObjectIdentity $objectIdentity)
+    {
+        /** @var ObjectIdentity[] $objects */
+        $objects = $this->createQueryBuilder('object', 'object.id')
+            ->join(Relation::class, 'relation', Join::WITH, 'relation.sourceObjectIdentity = object.id')
+            ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.id = :target')
+            ->setParameter('target', $objectIdentity)
+
+            ->addOrderBy('relation.order')
+
+            ->getQuery()->getResult()
+        ;
+
+        $this->populateMultiple($objects);
+
+        return $objects;
+    }
 }

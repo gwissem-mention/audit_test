@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Gedmo\Loggable\Entity\LogEntry;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -172,6 +173,8 @@ class ObjetController extends Controller
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
 
+        $this->get(LinkGenerator::class)->getLink(ObjectIdentity::createFromDomainObject($objet), 'admin_edit');
+
         $user = $this->getUser();
 
         // l'objet est locked, on redirige vers la home page
@@ -193,15 +196,12 @@ class ObjetController extends Controller
         );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($id, $objet->getDomainesId());
 
-        $relatedObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjectRelationships($objet);
-
-
         $options = [
             'contenus' => $contenus,
             'infra' => $infra,
             'toRef' => $toRef,
             'objectsRelated' => $this->get(ObjectIdentityRepository::class)->getRelatedObjects(ObjectIdentity::createFromDomainObject($objet)),
-            'relatedObjects' => $relatedObjects,
+            'relatedObjects' => $this->get(ObjectIdentityRepository::class)->getRelatedByObjects(ObjectIdentity::createFromDomainObject($objet)),
             'domainesCommunsWithUser' => $this
                 ->get('hopitalnumerique_core.dependency_injection.entity')
                 ->getEntityDomainesCommunsWithUser($objet, $user)

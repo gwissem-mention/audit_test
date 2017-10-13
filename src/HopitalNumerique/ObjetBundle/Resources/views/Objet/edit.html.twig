@@ -452,9 +452,18 @@
                                     <div class="col-md-12">
                                         <fieldset>
                                             <legend>Cette production est également liée depuis</legend>
-                                            {% for relatedObject in relatedObjects %}
-                                                <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
-                                            {% endfor %}
+
+                                            <ul>
+                                                {% for relatedObject in relatedObjects %}
+                                                    <li>
+                                                        <a href="{{ objectIdentityLink(relatedObject, 'admin_edit') }}">
+                                                            <b>{{ ('types.'~relatedObject.object.objectIdentityType)|trans({}, 'object_identify') }}</b>
+                                                            -
+                                                            {{ relatedObject.object.objectIdentityTitle }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
                                         </fieldset>
                                     </div>
                                 </div>

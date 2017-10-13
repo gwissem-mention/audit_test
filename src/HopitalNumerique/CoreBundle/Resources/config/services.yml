@@ -2,8 +2,7 @@ imports:
     - { resource: events.yml }
     - { resource: services/repository.yml }
     - { resource: services/handler.yml }
-
-parameters:
+    - { resource: services/twig.yml }
 
 services:
     hopitalnumerique_core.dependency_injection.entity:
@@ -53,3 +52,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -10 }
         arguments: [ '@controller_resolver', '@request_stack', '@http_kernel' ]
+
+    HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator:
+        class: HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator
+        arguments:
+            - '@router'
+            - '%object_identity_routing%'

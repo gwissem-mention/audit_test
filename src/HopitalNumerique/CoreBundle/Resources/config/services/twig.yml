@@ -1,0 +1,7 @@
+services:
+    HopitalNumerique\CoreBundle\Twig\CoreExtension:
+        class: HopitalNumerique\CoreBundle\Twig\CoreExtension
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator'
+        tags:
+            - { name: twig.extension }

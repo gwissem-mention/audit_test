@@ -1,0 +1,7 @@
+parameters:
+    object_identity_routing:
+        admin_edit:
+            HopitalNumerique\ObjetBundle\Entity\Objet:
+                route: hopitalnumerique_objet_objet_edit
+                parameters:
+                    id: objectId
