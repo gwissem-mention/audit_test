@@ -29,6 +29,7 @@ class CoreExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('objectIdentityLink', [$this, 'getObjectIdentityLink']),
+            new \Twig_SimpleFunction('generateObjectIdentity', [$this, 'generateObjectIdentity']),
         ];
     }
 
@@ -41,5 +42,15 @@ class CoreExtension extends \Twig_Extension
     public function getObjectIdentityLink(ObjectIdentity $objectIdentity, $type)
     {
         return $this->linkGenerator->getLink($objectIdentity, $type);
+    }
+
+    /**
+     * @param mixed $object
+     *
+     * @return ObjectIdentity
+     */
+    public function generateObjectIdentity($object)
+    {
+        return ObjectIdentity::createFromDomainObject($object);
     }
 }

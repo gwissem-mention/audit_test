@@ -11,3 +11,9 @@ services:
         arguments:
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository'
             - '@doctrine.orm.entity_manager'
+
+    HopitalNumerique\CoreBundle\Domain\Command\Relation\RemoveObjectLinkHandler:
+        class: HopitalNumerique\CoreBundle\Domain\Command\Relation\RemoveObjectLinkHandler
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository'
+            - '@doctrine.orm.entity_manager'

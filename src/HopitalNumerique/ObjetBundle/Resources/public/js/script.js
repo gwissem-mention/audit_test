@@ -114,6 +114,15 @@ $(document).ready(function() {
         });
     });
 
+    $('#objects-nestable .remove-relation').on('click', function (e) {
+        e.preventDefault();
+        var $line = $(this).parents('.relation-line');
+
+        $.get($(this).attr('href'), function() {
+            $line.remove();
+        });
+    });
+
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
     $('.dd3-content a, .uploadSommaire, .addLink').fancybox({

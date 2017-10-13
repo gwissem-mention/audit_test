@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\RemoveObjectLinkCommand;
+use HopitalNumerique\CoreBundle\Domain\Command\Relation\RemoveObjectLinkHandler;
 use HopitalNumerique\CoreBundle\Domain\Command\Relation\ReorderObjectLinksCommand;
 use HopitalNumerique\CoreBundle\Domain\Command\Relation\ReorderObjectLinksHandler;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
@@ -126,5 +128,18 @@ class LinkController extends Controller
         $this->get(ReorderObjectLinksHandler::class)->handle(new ReorderObjectLinksCommand(ObjectIdentity::createFromDomainObject($object), $datas));
 
         return new JsonResponse(['success' => true], 200);
+    }
+
+    /**
+     * @param ObjectIdentity $source
+     * @param ObjectIdentity $target
+     *
+     * @return JsonResponse
+     */
+    public function removeLinkAction(ObjectIdentity $source, ObjectIdentity $target)
+    {
+        $this->get(RemoveObjectLinkHandler::class)->handle(new RemoveObjectLinkCommand($source, $target));
+
+        return new JsonResponse();
     }
 }
