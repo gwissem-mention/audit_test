@@ -86,10 +86,19 @@
             <div class="description">{{'Module_account_parameters_notifications_explanations'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</div>
             {% for key, section in notifications.sections %}
                 {% set trans_path = 'notification-config.' ~ key ~ '.' %}
+                {% set rowOpen = false %}
                 <div class="row content">
                     <div class="col-md-12">
                         <strong>{{ (trans_path ~ 'section')|trans }}</strong>
                         {% for notification_key, notification in section %}
+                            {% if section|length > 3 and (loop.index0 is divisible by(3) or loop.first) %}
+                                {% if rowOpen == true %}
+                                    </div>
+                                    {% set rowOpen = false %}
+                                {% endif %}
+                                {% set rowOpen = true %}
+                                <div class="row">
+                            {% endif %}
                             {% set hasDetail = (trans_path ~ notification_key ~ '.detail')|trans != '-' %}
                             <div class="col-md-4">
                                 {{ form_widget(form.notificationsSettings[notification_key].wanted, { 'attr': {
@@ -110,6 +119,9 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if loop.last and rowOpen == true %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
