@@ -37,9 +37,27 @@ class RelationRepository extends EntityRepository
     {
         return $this->createQueryBuilder('relation')
             ->join('relation.sourceObjectIdentity', 'source', Join::WITH, 'source.id = :source')
-            ->setParameter('source', $objectIdentity)
+            ->setParameter('source', $objectIdentity->getId())
 
             ->join('relation.targetObjectIdentity', 'target')
+            ->addSelect('target')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     *
+     * @return array
+     */
+    public function getObjectIdentityRelatedByRelations(ObjectIdentity $objectIdentity)
+    {
+        return $this->createQueryBuilder('relation')
+            ->join('relation.sourceObjectIdentity', 'source')
+
+            ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.id = :target')
+            ->setParameter('target', $objectIdentity->getId())
             ->addSelect('target')
 
             ->getQuery()->getResult()

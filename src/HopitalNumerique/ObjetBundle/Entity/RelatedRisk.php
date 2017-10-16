@@ -5,6 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @deprecated Use object identity relation instead
  * @ORM\Entity
  * @ORM\Table(name="hn_objet_related_risk")
  */

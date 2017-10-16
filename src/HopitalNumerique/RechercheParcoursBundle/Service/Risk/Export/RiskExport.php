@@ -101,7 +101,7 @@ abstract class RiskExport
             ) {
                 $relatedRisks[] = sprintf(
                     '%s (%s)',
-                    $relatedRisk->getObject()->getTitre(),
+                    $relatedRisk->getObject()->getObjectIdentityTitle(),
                     $this->router->generate('hopital_numerique_publication_publication_objet', ['id' => $relatedRisk->getObject()->getId()], RouterInterface::ABSOLUTE_URL)
                 );
             }

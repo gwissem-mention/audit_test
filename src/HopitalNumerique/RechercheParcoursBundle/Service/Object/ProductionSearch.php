@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Object;
 
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
+use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -35,19 +38,31 @@ class ProductionSearch
     protected $hotPoint;
 
     /**
+     * @var ObjectIdentityRepository $objectIdentityRepository
+     */
+    protected $objectIdentityRepository;
+
+    /**
      * ProductionSearch constructor.
      *
      * @param ObjetRepository $objectRepository
      * @param RouterInterface $router
      * @param CurrentDomaine $domainService
+     * @param ObjectIdentityRepository $objectIdentityRepository
      * @param boolean $hotPoint
      */
-    public function __construct(ObjetRepository $objectRepository, RouterInterface $router, CurrentDomaine $domainService, $hotPoint = false)
-    {
+    public function __construct(
+        ObjetRepository $objectRepository,
+        RouterInterface $router,
+        CurrentDomaine $domainService,
+        ObjectIdentityRepository $objectIdentityRepository,
+        $hotPoint = false
+    ) {
         $this->objectRepository = $objectRepository;
         $this->router = $router;
         $this->domainService = $domainService;
         $this->hotPoint = $hotPoint;
+        $this->objectIdentityRepository = $objectIdentityRepository;
     }
 
     /**
@@ -88,7 +103,7 @@ class ProductionSearch
                 $object->isInfraDoc() ? $object->getContenus()->first()->getTitre() : null,
                 $object->getSource()
             );
-            $production->relatedRisks = $object->getRelatedRisks();
+            $production->relatedRisks = $this->objectIdentityRepository->getRelatedObjects(ObjectIdentity::createFromDomainObject($object), Risk::class);
             $production->relatedHotPoints = $this->getProductionsForObject($object, true);
             $production->relatedProductions = $this->getProductionsForObject($object);
 

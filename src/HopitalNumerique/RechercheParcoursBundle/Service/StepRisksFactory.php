@@ -2,13 +2,15 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service;
 
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Repository\RiskRepository;
 use HopitalNumerique\RechercheParcoursBundle\DTO\StepRiskDTO;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
-use HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class StepRisksFactory
@@ -24,15 +26,22 @@ class StepRisksFactory
     protected $tokenStorage;
 
     /**
+     * @var ObjectIdentityRepository $objectIdentityRepository
+     */
+    protected $objectIdentityRepository;
+
+    /**
      * StepRisksFactory constructor.
      *
      * @param RiskRepository $riskRepository
      * @param TokenStorageInterface $tokenStorage
+     * @param ObjectIdentityRepository $objectIdentityRepository
      */
-    public function __construct(RiskRepository $riskRepository, TokenStorageInterface $tokenStorage)
+    public function __construct(RiskRepository $riskRepository, TokenStorageInterface $tokenStorage, ObjectIdentityRepository $objectIdentityRepository)
     {
         $this->riskRepository = $riskRepository;
         $this->tokenStorage = $tokenStorage;
+        $this->objectIdentityRepository = $objectIdentityRepository;
     }
 
 
@@ -103,7 +112,8 @@ class StepRisksFactory
             $riskDTO->label = $risk->getLabel();
             $riskDTO->natureLabel = $risk->getNature()->getLibelle();
             $riskDTO->natureCode = $risk->getNature()->getSigle();
-            $riskDTO->relatedRisks = $risk->getRelatedRisks();
+            $riskDTO->relatedRisks = $this->objectIdentityRepository->getRelatedByObjects(ObjectIdentity::createFromDomainObject($risk));
+
 
             if (is_null($guidedSearchStep)) {
                 $risksDTO[] = $riskDTO;

@@ -4,6 +4,9 @@ namespace HopitalNumerique\ObjetBundle\Service\Risk;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Entity\RelatedRisk;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis;
@@ -23,15 +26,32 @@ class Fusion
     protected $riskAnalysisRepository;
 
     /**
+     * @var ObjectIdentityRepository $objectIdentityRepository
+     */
+    protected $objectIdentityRepository;
+
+    /**
+     * @var RelationRepository $relationRepository
+     */
+    protected $relationRepository;
+
+    /**
      * Fusion constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param RiskAnalysisRepository $riskAnalysisRepository
+     * @param ObjectIdentityRepository $objectIdentityRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, RiskAnalysisRepository $riskAnalysisRepository)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        RiskAnalysisRepository $riskAnalysisRepository,
+        ObjectIdentityRepository $objectIdentityRepository,
+        RelationRepository $relationRepository
+    ) {
         $this->entityManager = $entityManager;
         $this->riskAnalysisRepository = $riskAnalysisRepository;
+        $this->objectIdentityRepository = $objectIdentityRepository;
+        $this->relationRepository = $relationRepository;
     }
 
     /**
@@ -52,13 +72,10 @@ class Fusion
             $target->addDomain($domain);
         }
 
-        foreach ($risk->getRelatedRisks() as $relatedRisk) {
-            if ($target->getRelatedRisks()->filter(function (RelatedRisk $targetRelatedRisk) use ($relatedRisk) {
-                    return $targetRelatedRisk->getObject() === $relatedRisk->getObject();
-                })->count() === 0) {
-                $newRelatedRisk = new RelatedRisk($relatedRisk->getObject(), $target, $relatedRisk->getPosition());
-                $this->entityManager->persist($newRelatedRisk);
-            }
+        foreach ($this->relationRepository->getObjectIdentityRelatedByRelations(ObjectIdentity::createFromDomainObject($risk)) as $relation) {
+            $this->relationRepository->addRelation($relation->getSourceObjectIdentity(), ObjectIdentity::createFromDomainObject($target));
+
+            $this->entityManager->remove($relation);
         }
 
         $riskAnalysis = $this->riskAnalysisRepository->getRiskAnalysisForRisk($risk);

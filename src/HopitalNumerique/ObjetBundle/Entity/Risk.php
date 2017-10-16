@@ -88,6 +88,8 @@ class Risk implements ObjectIdentityDisplayableInterface
     /**
      * @var ArrayCollection|RelatedRisk[]
      *
+     * @deprecated Use object identity relation instead
+     *
      * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="risk", cascade={"remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position": "ASC"})
      */
@@ -308,32 +310,13 @@ class Risk implements ObjectIdentityDisplayableInterface
     /**
      * Return Entity between Object and Risk
      *
+     * @deprecated Use object identity relation instead
+     *
      * @return ArrayCollection|RelatedRisk[]
      */
     public function getRelatedRisks()
     {
         return $this->relatedRisks;
-    }
-
-    /**
-     * Count related risks object type
-     *
-     * @return array
-     */
-    public function countRelatedRisksObjectType()
-    {
-        $result = [];
-        foreach ($this->getRelatedRisks() as $relatedRisk) {
-            foreach ($relatedRisk->getObject()->getTypeLabels() as $typeLabel) {
-                if (!isset($result[$typeLabel])) {
-                    $result[$typeLabel] = 0;
-                }
-
-                $result[$typeLabel]++;
-            }
-        }
-
-        return $result;
     }
 
     /**

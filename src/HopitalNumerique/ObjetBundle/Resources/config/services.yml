@@ -196,6 +196,8 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_rechercheparcours.repository.risk_analysis"
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository'
 
     hopitalnumerique_objet.widgets.updated_objects:
         class: HopitalNumerique\ObjetBundle\Service\Widget\ObjectUpdatedWidget

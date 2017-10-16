@@ -23,7 +23,7 @@ class Relation
     /**
      * @var ObjectIdentity
      *
-     * @ORM\ManyToOne(targetEntity="ObjectIdentity", inversedBy="relations")
+     * @ORM\ManyToOne(targetEntity="ObjectIdentity", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $sourceObjectIdentity;
@@ -31,7 +31,7 @@ class Relation
     /**
      * @var ObjectIdentity
      *
-     * @ORM\ManyToOne(targetEntity="ObjectIdentity")
+     * @ORM\ManyToOne(targetEntity="ObjectIdentity", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $targetObjectIdentity;

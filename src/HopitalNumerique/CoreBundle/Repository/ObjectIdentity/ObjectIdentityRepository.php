@@ -57,21 +57,29 @@ class ObjectIdentityRepository extends EntityRepository
 
     /**
      * @param ObjectIdentity $objectIdentity
+     * @param string $targetClass
      *
      * @return ObjectIdentity[]
      */
-    public function getRelatedObjects(ObjectIdentity $objectIdentity)
+    public function getRelatedObjects(ObjectIdentity $objectIdentity, $targetClass = null)
     {
-        /** @var ObjectIdentity[] $objects */
-        $objects = $this->createQueryBuilder('object', 'object.id')
+        $queryBuilder = $this->createQueryBuilder('object', 'object.id')
             ->join(Relation::class, 'relation', Join::WITH, 'relation.targetObjectIdentity = object.id')
             ->join('relation.sourceObjectIdentity', 'source', Join::WITH, 'source.id = :source')
             ->setParameter('source', $objectIdentity)
 
             ->addOrderBy('relation.order')
-
-            ->getQuery()->getResult()
         ;
+
+        if (null !== $targetClass) {
+            $queryBuilder
+                ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.class = :targetClass')
+                ->setParameter('targetClass', $targetClass)
+            ;
+        }
+
+        /** @var ObjectIdentity[] $objects */
+        $objects = $queryBuilder->getQuery()->getResult();
 
         $this->populateMultiple($objects);
 
@@ -80,21 +88,28 @@ class ObjectIdentityRepository extends EntityRepository
 
     /**
      * @param ObjectIdentity $objectIdentity
+     * @param string $sourceClass
      *
      * @return ObjectIdentity[]
      */
-    public function getRelatedByObjects(ObjectIdentity $objectIdentity)
+    public function getRelatedByObjects(ObjectIdentity $objectIdentity, $sourceClass = null)
     {
-        /** @var ObjectIdentity[] $objects */
-        $objects = $this->createQueryBuilder('object', 'object.id')
+        $queryBuilder = $this->createQueryBuilder('object', 'object.id')
             ->join(Relation::class, 'relation', Join::WITH, 'relation.sourceObjectIdentity = object.id')
             ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.id = :target')
             ->setParameter('target', $objectIdentity)
 
             ->addOrderBy('relation.order')
-
-            ->getQuery()->getResult()
         ;
+
+        if (null !== $sourceClass) {
+            $queryBuilder
+                ->join('relation.sourceObjectIdentity', 'source', Join::WITH, 'source.class = :sourceClass')
+                ->setParameter('sourceClass', $sourceClass)
+            ;
+        }
+
+        $objects = $queryBuilder->getQuery()->getResult();
 
         $this->populateMultiple($objects);
 
