@@ -64,6 +64,10 @@
     margin-top: 15px;
 }
 
+#my-account #notifications-parameters .panel-body .content .row {
+    margin: 0;
+}
+
 #my-account #notifications-parameters .panel-body .pointer-label.high {
     font-size: 12px;
     background-color: transparent;
