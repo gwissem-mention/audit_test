@@ -48,20 +48,4 @@ class RelatedBoardController extends Controller
             'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $currentObject->getId()]),
         ]);
     }
-
-    /**
-     * @param Objet $object
-     *
-     * @return Response
-     */
-    public function reorderAction(Objet $object)
-    {
-        $boards = $this->get('request')->request->get('boards');
-
-        $reorderRelatedBoardsCommand = new ReorderRelatedBoardsCommand($object, $boards);
-
-        $this->get('hopitalnumerique_objet.reorder_related_board_handler')->handle($reorderRelatedBoardsCommand);
-
-        return new JsonResponse();
-    }
 }

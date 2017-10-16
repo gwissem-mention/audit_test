@@ -115,12 +115,6 @@ hopitalnumerique_objet_objet_remove_link:
     path:  /objet/remove/{source}/{target}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Link:removeLink" }
 
-hopitalnumerique_objet_board_reorder:
-    path:  /objet/board/reorder/{object}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Objet/RelatedBoard:reorder" }
-    requirements:
-        object: \d+
-
 #partie Contenu
 hopitalnumerique_objet_contenu_add:
     path:  /objet/contenu/add/{id}
