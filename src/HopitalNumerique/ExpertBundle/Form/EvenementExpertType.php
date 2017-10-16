@@ -12,6 +12,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EvenementExpertType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -44,9 +48,12 @@ class EvenementExpertType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => ['class' => 'validate[required] datepicker'],
             ])
-            ;
+        ;
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -54,6 +61,9 @@ class EvenementExpertType extends AbstractType
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'hopitalnumerique_expert_evenementexpert';

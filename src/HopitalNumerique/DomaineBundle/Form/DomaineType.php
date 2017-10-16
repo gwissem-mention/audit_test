@@ -19,7 +19,6 @@ class DomaineType extends AbstractType
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Nom du domaine',
-                'attr' => ['class' => 'validate[required,max[255]]'],
             ])
             ->add('file', 'file', [
                 'required' => false,
@@ -40,13 +39,11 @@ class DomaineType extends AbstractType
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'URL du domaine',
-                'attr' => ['class' => 'validate[required,max[255],custom[url]]'],
             ])
             ->add('adresseMailContact', 'text', [
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Adresse mail du contact',
-                'attr' => ['class' => 'validate[required,max[255],custom[email]]'],
             ])
             ->add('template', 'genemu_jqueryselect2_entity', [
                 'class' => 'HopitalNumeriqueDomaineBundle:Template',
@@ -55,7 +52,6 @@ class DomaineType extends AbstractType
                 'required' => true,
                 'label' => 'Template',
                 'empty_value' => ' - ',
-                'attr' => ['class' => 'validate[required]'],
             ])
             ->add('homepage', 'textarea', [
                 'required' => false,
@@ -65,6 +61,11 @@ class DomaineType extends AbstractType
             ->add('urlTitre', 'text', [
                 'required' => false,
                 'label' => 'Lien du titre',
+            ])
+            ->add('slug', 'text', [
+                'max_length' => 255,
+                'required'   => true,
+                'label'      => 'Domaine',
             ])
         ;
         if (null !== $domaine && null !== $domaine->getId()) {

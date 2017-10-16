@@ -383,18 +383,6 @@ class ObjetManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des objets selon le/les types et trié par nombre de vu.
-     *
-     * @param int $limit
-     *
-     * @return array
-     */
-    public function getObjetsByNbVue($limit = 0)
-    {
-        return $this->getRepository()->getObjetsByNbVue($limit)->getQuery()->getResult();
-    }
-
-    /**
      * Retourne l'ensemble des productions actives.
      */
     public function getProductionsActive()

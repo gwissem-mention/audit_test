@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\ExpertBundle\Form;
 
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
+use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -54,7 +54,7 @@ class ActiviteExpertType extends AbstractType
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('dateDebut', DateType::class, [
+            ->add('dateDebut', 'genemu_jquerydate', [
                 'required' => true,
                 'label' => 'Date de début',
                 'widget' => 'single_text',
@@ -133,7 +133,7 @@ class ActiviteExpertType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert',
+            'data_class' => ActiviteExpert::class,
         ]);
     }
 
