@@ -193,6 +193,4 @@ class Board extends BaseBoard implements ObjectIdentityDisplayableInterface
     {
         return 'board';
     }
-
-
 }

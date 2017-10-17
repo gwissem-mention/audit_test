@@ -350,6 +350,9 @@ class Risk implements ObjectIdentityDisplayableInterface
         return $this->getLabel();
     }
 
+    /**
+     * @return string
+     */
     public function getObjectIdentityType()
     {
         return 'risk';

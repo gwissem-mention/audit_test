@@ -10,8 +10,9 @@ use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\Relation;
 
 class ObjectIdentityRepository extends EntityRepository
 {
-
     /**
+     * Return the referenced object corresponding to the ObjectIdentity
+     *
      * @param ObjectIdentity $objectIdentity
      *
      * @return object
@@ -27,6 +28,8 @@ class ObjectIdentityRepository extends EntityRepository
     }
 
     /**
+     * Return the referenced objects corresponding to the ObjectIdentity list
+     *
      * @param ObjectIdentity[] $objectsIdentity
      */
     public function populateMultiple(array &$objectsIdentity)

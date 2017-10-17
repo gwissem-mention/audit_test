@@ -36,7 +36,7 @@ class LinkController extends Controller
             'type' => 'object',
             'arbo' => $arbo,
             'idObjet' => $objet->getId(),
-            'saveLinkUri' => $this->generateUrl('hopitalnumerique_objet_objet_saveLink')
+            'saveLinkUri' => $this->generateUrl('hopitalnumerique_objet_objet_saveLink'),
         ]);
     }
 
@@ -66,7 +66,7 @@ class LinkController extends Controller
                     $object = $this->get('hopitalnumerique_objet.repository.contenu')->find($objectId);
                     break;
                 default:
-                    throw new \LogicException(sprintf('Type {%s} not founded', $type));
+                    throw new \LogicException(sprintf('Type {%s} not found', $type));
             }
 
             $linkObjectHandler->handle(new LinkObjectCommand($pointDur, $object));
@@ -77,7 +77,7 @@ class LinkController extends Controller
         return new JsonResponse(
             [
                 'success' => true,
-                'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id])
+                'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id]),
             ]
         );
     }
@@ -100,7 +100,7 @@ class LinkController extends Controller
             return new JsonResponse(
                 [
                     'success' => true,
-                    'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()])
+                    'url' => $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()]),
                 ]
             );
         }

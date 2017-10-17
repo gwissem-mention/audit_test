@@ -13,6 +13,7 @@ return PhpCsFixer\Config::create()
         'array_syntax' => ['syntax' => 'short'],
         'concat_space' => ['spacing' => 'one'],
         'dir_constant' => true,
+        'phpdoc_align' => ['tags' => []],
     ))
     ->setFinder($finder)
 ;
