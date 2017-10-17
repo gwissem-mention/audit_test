@@ -928,7 +928,7 @@ class MailManager extends BaseManager
 
         return $this->generationMail($user, $mail, $options);
     }
-    
+
     /**
      * @param User $user
      * @param array $options
