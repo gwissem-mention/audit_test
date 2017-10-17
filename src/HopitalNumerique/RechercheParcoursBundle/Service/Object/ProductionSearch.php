@@ -124,15 +124,15 @@ class ProductionSearch
     private function getProductionsForObject(Objet $object, $hotPoint = false)
     {
         $relatedHotPoints = [];
-        foreach ($object->getObjets() as $objectId) {
-            list($type, $id) = explode(':', $objectId);
+        $relations = $this->objectIdentityRepository->getRelatedObjects(ObjectIdentity::createFromDomainObject($object), [Objet::class]);
+        foreach ($relations as $relation) {
 
-            if ($type !== 'PUBLICATION') {
+            if ($relation->getObject()->isArticle()) {
                 continue;
             }
 
             /** @var Objet $hotPoint */
-            $relatedObject = $this->objectRepository->find($id);
+            $relatedObject = $relation->getObject();
             if (
                 (
                     ($hotPoint && in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $relatedObject->getTypeIds())) ||
