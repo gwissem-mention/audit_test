@@ -28,7 +28,8 @@ var ViewedObjectsWidget = (function() {
             Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (elem) {
                 $(elem).toggles({
                     on: elem.dataset.active === 'true',
-                    drag: false
+                    drag: false,
+                    text: {on: 'OUI', off: 'NON'},
                 }).on('toggle', function (e, active) {
                     $.ajax({
                         url: this.dataset.path,
