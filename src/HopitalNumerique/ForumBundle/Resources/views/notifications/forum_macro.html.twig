@@ -1,17 +1,17 @@
 {% macro linkTopic(value, topicId) %}
     <a
-        href="{{ path('ccdn_forum_user_topic_show', [
-            'topicId' => topicId
-        ]) }}"
+        href="{{ path('ccdn_forum_user_topic_show', {
+            'topicId': topicId
+        }) }}"
         target="_blank"
     >{{ value }}</a>
 {% endmacro %}
 
 {% macro linkTheme(value, boardId) %}
     <a
-        href="{{ path('ccdn_forum_user_board_show', [
-            'boardId' => boardId
-        ]) }}"
+        href="{{ path('ccdn_forum_user_board_show', {
+            'boardId': boardId
+        }) }}"
         target="_blank"
     >{{ value }}</a>
 {% endmacro %}

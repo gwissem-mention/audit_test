@@ -1,8 +1,8 @@
 {% macro link(value, moduleId) %}
     <a
-        href="{{ path('hopitalnumerique_module_evaluation_view_front', [
-        'id' => moduleId
-        ]) }}"
+        href="{{ path('hopitalnumerique_module_evaluation_view_front', {
+            'id': moduleId
+        }) }}"
         target="_blank"
     >{{ value }}</a>
 {% endmacro %}
