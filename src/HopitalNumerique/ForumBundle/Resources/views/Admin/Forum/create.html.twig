@@ -29,6 +29,7 @@
 {% endblock information_page %}
 
 {%- block body_content -%}
+    {% trans_default_domain ForumBundle.translation %}
     {%- spaceless -%}
 
     <section class="clearfix">
@@ -40,15 +41,17 @@
                 <div class="form-group">
                     <div id="titre-creation">
                         <h4>
-                            {{ domaineCurrent.nom }} - {{ 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
+                            {{ domaineCurrent.nom }} - {{ 'title.admin.manage-forums.create'|trans -}}
                         </h4>
                     </div>
                 </div>
 
                 {{- form_errors(form) -}}
 
-                {{- form_row(form.name) -}}
-                
+                {{- form_row(form.name, {'label':'forum.name-label'|trans}) -}}
+
+                {{- form_row(form.domain, {'label':'forum.domain-label'|trans}) -}}
+
                 <div class="row">
                     <button type="button" class="btn btn-link" onclick="selectionnerAllRolesCreateForum();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
@@ -58,7 +61,7 @@
                     </button>
                 </div>
 
-                {{form_row(form.readAuthorisedRoles)}}
+                {{form_row(form.readAuthorisedRoles, {'label':'forum.roles.board-view-label'|trans})}}
 
                 {{- form_rest(form) -}}
 
@@ -66,11 +69,11 @@
                     <div class="form-group">
                         <div class="col-lg-12">
                             <input type="submit" class="btn btn-success" value="
-                                {{- 'form.button.save' |trans({}, ForumBundle.translation ) -}}
+                                {{- 'form.button.save'|trans -}}
                             " name="submit[post]" id="submit[post]">
 
                             <a class="btn btn-default" href="{{- path('ccdn_forum_admin_forum_list') -}}">
-                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                                {{- 'form.button.cancel'|trans -}}
                             </a>
                         </div>
                     </div>

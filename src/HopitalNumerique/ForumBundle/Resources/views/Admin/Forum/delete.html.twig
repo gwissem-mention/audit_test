@@ -20,8 +20,8 @@
 {% endblock information_page %}
 
 {%- block body_content -%}
+    {% trans_default_domain ForumBundle.translation %}
     {%- spaceless -%}
-
     <section class="clearfix">
         {%- form_theme form ccdn_forum_forum.forum.admin.delete.form_theme -%}
         <form action="{{- path('ccdn_forum_admin_forum_delete_process', {'forumId': forum.id}) -}}"
@@ -44,11 +44,11 @@
                     <div class="form-group">
                         <div class="col-lg-12">
                             <input type="submit" class="btn btn-danger" value="
-                                {{- 'form.button.confirm-delete' |trans({}, ForumBundle.translation ) -}}
+                                {{- 'form.button.confirm-delete' |trans -}}
                             " name="submit[post]" id="submit[post]">
 
                             <a class="btn btn-default" href="{{- path('ccdn_forum_admin_forum_list') -}}">
-                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                                {{- 'form.button.cancel' |trans -}}
                             </a>
                         </div>
                     </div>

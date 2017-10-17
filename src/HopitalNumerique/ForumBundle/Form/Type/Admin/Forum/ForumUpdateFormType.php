@@ -16,6 +16,8 @@ namespace HopitalNumerique\ForumBundle\Form\Type\Admin\Forum;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -54,15 +56,11 @@ class ForumUpdateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text',
-                [
-                    'label' => 'forum.name-label',
-                    'translation_domain' => 'CCDNForumForumBundle',
-                    'attr' => [
-                        'class' => 'validate[required,minSize[3],maxSize[255]]',
-                    ],
-                ]
-            )
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'class' => 'validate[required,minSize[3],maxSize[255]]',
+                ],
+            ])
             ->add('domain', EntityType::class, [
                 'class' => Domaine::class,
                 'empty_value' => '-',
@@ -70,16 +68,12 @@ class ForumUpdateFormType extends AbstractType
                     'class' => 'validate[required]',
                 ],
             ])
-            ->add('readAuthorisedRoles', 'choice',
-                [
-                    'required' => false,
-                    'expanded' => true,
-                    'multiple' => true,
-                    'choices' => $options['available_roles'],
-                    'label' => 'forum.roles.board-view-label',
-                    'translation_domain' => 'CCDNForumForumBundle',
-                ]
-            )
+            ->add('readAuthorisedRoles', ChoiceType::class, [
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => $options['available_roles'],
+            ])
         ;
     }
 
