@@ -4,7 +4,7 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%autodiagName%' : macro.link(notif.title, notif.autodiagId),
+        '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
         '%textMaj%' : notif.detail
     }) }}
 {% endblock %}
@@ -15,7 +15,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%autodiagName%' : macro.link(notif.title, notif.autodiagId),
+        '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
         '%textMaj%' : notif.detail
     }) }}
 {% endblock %}

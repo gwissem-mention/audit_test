@@ -3,8 +3,8 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.topicId),
-        '%themeName%' : macro.linkTheme(notif.title, notif.id),
+        '%filName%' : macro.linkTopic(notif.title, notif.getData('topicId')),
+        '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
         '%firstPost%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
     }) }}
@@ -16,8 +16,8 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.topicId),
-        '%themeName%' : macro.linkTheme(notif.title, notif.id),
+        '%filName%' : macro.linkTopic(notif.title, notif.getData('topicId')),
+        '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
         '%firstPost%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
     }) }}

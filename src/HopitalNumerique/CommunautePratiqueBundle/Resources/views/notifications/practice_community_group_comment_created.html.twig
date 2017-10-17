@@ -5,7 +5,7 @@
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%auteur%' : notif.title|split(' - ')[1],
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%commentaire%' : notif.detail
     }) }}
 {% endblock %}
@@ -17,7 +17,7 @@
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
         '%auteur%' : notif.title|split(' - ')[1],
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%commentaire%' : notif.detail
     }) }}
 {% endblock %}

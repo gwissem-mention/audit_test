@@ -5,8 +5,8 @@
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%auteur%' : notif.title|split(' - ')[2],
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
-        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.ficheId)
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId'))
     }) }}
 {% endblock %}
 {% block header %}
@@ -16,8 +16,8 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.ficheId),
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%commentaire%': notif.detail,
         '%auteur%': notif.title|split(' - ')[2]
     }) }}

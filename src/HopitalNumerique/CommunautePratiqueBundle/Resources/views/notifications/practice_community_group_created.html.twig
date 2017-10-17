@@ -4,7 +4,7 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%groupeDescription%' : notif.detail,
         '%dateDebut%' : notif.getData('dateDebut')
     }) }}
@@ -16,7 +16,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.groupId),
+        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%groupeDescription%' : notif.detail,
         '%dateDebut%' : notif.getData('dateDebut')
     }) }}

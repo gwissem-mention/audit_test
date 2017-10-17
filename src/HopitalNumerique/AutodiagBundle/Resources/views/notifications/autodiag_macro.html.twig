@@ -1,8 +1,8 @@
 {% macro link(value, autodiag) %}
     <a
-        href="{{ path('hopitalnumerique_autodiag_entry_add', [
-            'autodiag' => autodiag
-        ]) }}"
+        href="{{ path('hopitalnumerique_autodiag_entry_add', {
+            'autodiag': autodiag
+        }) }}"
         target="_blank"
     >{{ value }}</a>
 {% endmacro %}
