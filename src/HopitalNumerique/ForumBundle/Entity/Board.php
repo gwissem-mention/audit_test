@@ -187,6 +187,22 @@ class Board extends BaseBoard implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return [$this->getCategory()->getName()];
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityDescription()
+    {
+        return $this->getDescription();
+    }
+
+    /**
      * @return string
      */
     public function getObjectIdentityType()

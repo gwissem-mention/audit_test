@@ -351,6 +351,22 @@ class Risk implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return [$this->getNature()->getLibelle()];
+    }
+
+    /**
+     * @return null
+     */
+    public function getObjectIdentityDescription()
+    {
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function getObjectIdentityType()

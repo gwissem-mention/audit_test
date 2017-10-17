@@ -835,6 +835,22 @@ class Contenu implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return $this->getObjet()->getTypeLabels();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityDescription()
+    {
+        return $this->getObjet()->getResumeResume();
+    }
+
+    /**
      * @return string
      */
     public function getObjectIdentityType()

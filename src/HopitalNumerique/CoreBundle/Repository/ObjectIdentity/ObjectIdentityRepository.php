@@ -64,7 +64,7 @@ class ObjectIdentityRepository extends EntityRepository
      *
      * @return ObjectIdentity[]
      */
-    public function getRelatedObjects(ObjectIdentity $objectIdentity, $targetClass = null)
+    public function getRelatedObjects(ObjectIdentity $objectIdentity, $targetClass = [])
     {
         $queryBuilder = $this->createQueryBuilder('object', 'object.id')
             ->join(Relation::class, 'relation', Join::WITH, 'relation.targetObjectIdentity = object.id')
@@ -74,9 +74,9 @@ class ObjectIdentityRepository extends EntityRepository
             ->addOrderBy('relation.order')
         ;
 
-        if (null !== $targetClass) {
+        if (count($targetClass)) {
             $queryBuilder
-                ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.class = :targetClass')
+                ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.class IN (:targetClass)')
                 ->setParameter('targetClass', $targetClass)
             ;
         }

@@ -136,7 +136,7 @@ services:
 
     hopitalnumerique_objet.dependency_injection.production_liee:
         class: 'HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee'
-        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity']
 
     hopitalnumerique_objet.doctrine.note_reader:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'

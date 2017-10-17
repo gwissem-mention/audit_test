@@ -103,7 +103,7 @@ class ProductionSearch
                 $object->isInfraDoc() ? $object->getContenus()->first()->getTitre() : null,
                 $object->getSource()
             );
-            $production->relatedRisks = $this->objectIdentityRepository->getRelatedObjects(ObjectIdentity::createFromDomainObject($object), Risk::class);
+            $production->relatedRisks = $this->objectIdentityRepository->getRelatedObjects(ObjectIdentity::createFromDomainObject($object), [Risk::class]);
             $production->relatedHotPoints = $this->getProductionsForObject($object, true);
             $production->relatedProductions = $this->getProductionsForObject($object);
 
