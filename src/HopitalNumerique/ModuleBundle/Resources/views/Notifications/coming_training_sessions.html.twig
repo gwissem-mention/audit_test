@@ -4,7 +4,7 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%moduleName%' : macro.link(notif.title, notif.id),
+        '%moduleName%' : macro.link(notif.title, notif.getData('id')),
         '%formateur%' : notif.getData('formateur'),
         '%dateSession%' : notif.getData('dateSession'),
         '%description%' : notif.getData('description')
@@ -17,7 +17,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%moduleName%' : macro.link(notif.title, notif.id),
+        '%moduleName%' : macro.link(notif.title, notif.getData('id')),
         '%formateur%' : notif.getData('formateur'),
         '%dateSession%' : notif.getData('dateSession'),
         '%description%' : notif.getData('description')

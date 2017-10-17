@@ -3,7 +3,7 @@
 {% trans_default_domain 'notification' %}
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%publicationTitle%' : macro.link(notif.title, notif.idPublication),
+        '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
         '%comment%' : notif.detail
     }) }}
 {% endblock %}
@@ -14,7 +14,7 @@
 {% endblock %}
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%publicationTitle%' : macro.link(notif.title, notif.idPublication),
+        '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
         '%comment%' : notif.detail
     }) }}
 {% endblock %}
