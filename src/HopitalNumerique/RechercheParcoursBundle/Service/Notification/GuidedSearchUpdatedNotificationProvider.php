@@ -4,6 +4,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Service\Notification;
 
 use \Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
@@ -121,7 +122,7 @@ class GuidedSearchUpdatedNotificationProvider extends NotificationProviderAbstra
      */
     public function notify(Notification $notification)
     {
-        if (1 === $notification->getDetailLevel()) {
+        if (1 === $notification->getDetailLevel() || NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT === $notification->getFrequency()) {
             $notification->addData('miseAJour', $notification->getDetail());
         }
         $this->mailManager->sendGuidedSearchNotification($notification->getUser(), $notification->getData());

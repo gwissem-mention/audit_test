@@ -5,6 +5,7 @@ namespace HopitalNumerique\ModuleBundle\Service\Notification;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\AclBundle\Entity\Acl;
@@ -170,7 +171,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
      */
     public function notify(Notification $notification)
     {
-        if (1 === $notification->getDetailLevel()) {
+        if (1 === $notification->getDetailLevel() || NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT === $notification->getFrequency()) {
             $options['liste'] = $notification->getTitle() . ' ' . $notification->getData('dateSession') . ' ' . $notification->getDetail();
         } else {
             $options['liste'] = $notification->getTitle();
