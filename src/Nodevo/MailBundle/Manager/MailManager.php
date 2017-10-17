@@ -928,32 +928,7 @@ class MailManager extends BaseManager
 
         return $this->generationMail($user, $mail, $options);
     }
-
-    public function sendForumTopicCreated(User $user, $options)
-    {
-        /** @var Mail $mail */
-        $mail = $this->findOneById(Mail::MAIL_FORUM_TOPIC_CREATED);
-
-        $mail->setBody($this->replaceContent(
-            $mail->getBody(),
-            null,
-            array_merge(
-                $options,
-                [
-                    'prenomUtilisateur' => $user->getFirstname(),
-                    'urlMessage' => $this->_router->generate('hopitalnumerique_forum_reference_topic', [
-                        'id' => $options['topicId'],
-                    ])
-                ]
-            )
-        ));
-
-        $mailsToSend = $this->generationMail($user, $mail);
-        $mailsToSend->setTo($user->getEmail());
-
-        $this->mailer->send($mailsToSend);
-    }
-
+    
     /**
      * @param User $user
      * @param array $options
@@ -964,6 +939,18 @@ class MailManager extends BaseManager
             'id' => $options['id'],
         ]);
         $this->sendNotification($user, $options, Mail::MAIL_FORUM_POST_CREATED);
+    }
+
+    /**
+     * @param User $user
+     * @param array $options
+     */
+    public function sendForumTopicCreatedNotification(User $user, $options)
+    {
+        $options['urlMessage'] = $this->_router->generate('hopitalnumerique_forum_reference_topic', [
+            'id' => $options['id'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_FORUM_TOPIC_CREATED);
     }
 
     /**
