@@ -131,9 +131,11 @@ class SendNotificationHandler
             function (Notification $notification) use ($subscriptionFinder) {
                 $subscribers = $subscriptionFinder->findSubscriptions($notification);
 
-                return
-                    count($subscribers) && $subscribers[0]->getUserId() === $notification->getUser()->getId()
-                ;
+                if (count($subscribers) && $subscribers[0]->getUserId() === $notification->getUser()->getId()) {
+                    return true;
+                }
+                $this->entityManager->remove($notification);
+                return false;
             }
         );
 

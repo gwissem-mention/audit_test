@@ -173,7 +173,7 @@ INSERT INTO `core_mail` (
   'Nouvelle discussion sur le forum',
   '%mailContactDomaineCurrent',
   'ANAP - %nomContactDomaineCurrent',
-  'Bonjour %prenomUtilisateur,\r\n\r\nUne nouvelle discussion vient d\'être proposée par %pseudoUser sur le forum <a href=\"%urlMessage\">&quot;%forum &gt; %categorie &gt; %theme &gt; %fildiscusssion&quot;</a>.\r\n\r\nMessage posté :\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
+  'Bonjour %prenomUtilisateur,\r\n\r\nUne nouvelle discussion vient d\'être proposée par %pseudoAuteur sur le forum <a href=\"%urlMessage\">&quot;%forum &gt; %categorie &gt; %theme &gt; %fildiscusssion&quot;</a>.\r\n\r\nMessage posté :\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP',
   '{\"%prenomUtilisateur\":\"Prénom utilisateur\", \"%pseudoAuteur\":\"Pseudo de l\'auteur\", \"%forum\":\"Nom du forum sur lequel la discussion a été ouverte.\", \"%categorie\":\"Nom de la catégorie dans la laquelle la discussion a été ouverte.\", \"%theme\":\"Nom du thème dans lequel la discussion a été ouverte.\", \"%fildiscusssion\":\"Titre du fil de discussion.\", \"%message\":\"Contenu du message\", \"%urlMessage\":\"Lien vers le nouveau message posté.\"}',
   '0'
 );
@@ -317,5 +317,9 @@ INSERT INTO core_mail (
   '{"%prenomUtilisateur":"Prénom utilisateur", "%message":"Liste des notifications"}',
   '0'
 );
+
+UPDATE `core_mail` SET
+  `mail_body` = 'Bonjour %prenomUtilisateur,\r\n\r\nUne nouvelle discussion vient d\'être proposée par %pseudoAuteur sur le forum <a href=\"%urlMessage\">&quot;%forum &gt; %categorie &gt; %theme &gt; %fildiscusssion&quot;</a>.\r\n\r\nMessage posté :\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP'
+WHERE `core_mail`.`mail_id` = 81;
 
 COMMIT;

@@ -92,7 +92,6 @@ class PostEventListener implements EventSubscriberInterface
             'hopitalnumerique.user.post.create.success' => 'moderatePost',
             ForumEvents::USER_POST_EDIT_SUCCESS => 'moderatePost',
             ForumEvents::USER_TOPIC_CREATE_COMPLETE => 'moderateTopic',
-            ForumEvents::USER_TOPIC_REPLY_COMPLETE => 'onTopicReplyComplete'
         ];
     }
 
@@ -110,7 +109,6 @@ class PostEventListener implements EventSubscriberInterface
     public function moderateTopic(UserTopicEvent $event)
     {
         $this->moderate($event->getTopic()->getFirstPost());
-        $this->onTopicReplyComplete($event);
     }
 
     /**
@@ -157,59 +155,6 @@ class PostEventListener implements EventSubscriberInterface
 
             // Save the modified post
             $this->postModel->savePost($post);
-        }
-    }
-
-    /**
-     * @param UserTopicEvent $event
-     */
-    public function onTopicReplyComplete(UserTopicEvent $event)
-    {
-        if ($event->getTopic()) {
-            if ($event->getTopic()->getId()) {
-                $user = $this->tokenStorage->getToken()->getUser();
-                $topic = $event->getTopic();
-
-                if ($event->authorWantsToSubscribe()) {
-                    $this->subscriptionModel->subscribe($event->getTopic(), $user);
-                }
-
-                $subscriptions = $this->subscriptionModel->findAllSubscriptionsToSend($event->getTopic());
-
-                /** @var Post $post */
-                $post = $this->postRepository->getLastPostForTopicById($topic->getId());
-
-                // Sends e-mails to subscribers
-                foreach ($subscriptions as $subscription) {
-                    // Except for the user who just responded
-                    if ($user->getId() !== $subscription->getOwnedBy()->getId() && !is_null($post)) {
-                        $topic = $event->getTopic();
-
-                        $options = [
-                            'user'            => $subscription->getOwnedBy()->getNomPrenom(),
-                            'forum'           => $topic->getBoard()->getCategory()->getForum()->getName(),
-                            'categorie'       => $topic->getBoard()->getCategory()->getName(),
-                            'theme'           => $topic->getBoard()->getName(),
-                            'fildiscusssion'  => $topic->getTitle(),
-                            'lienversmessage' => 'lien',
-                            'pseudouser'      => !is_null($user->getPseudonym())
-                                ? $user->getPseudonym()
-                                : $user->getNomPrenom(),
-                            'message'    => $post->getBody(),
-                            'topicId' => $topic->getId(),
-                        ];
-
-                        if (false === $post->getEnAttente()) {
-                            $this->mailManager->sendForumTopicCreated(
-                                $subscription->getOwnedBy(),
-                                $options
-                            );
-                        }
-                    }
-                }
-
-                $this->subscriptionModel->markTheseAsUnread($subscriptions, $user);
-            }
         }
     }
 }
