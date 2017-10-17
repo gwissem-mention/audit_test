@@ -47,7 +47,9 @@
             <div class="col-md-4">
                 <div class="text-right">
                     {% if objet.isArticle == false %}
-                        <span>{{ 'subscribe'|trans }}</span>
+                        <span title="{{
+                            (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans ~ ' ' ~ 'subscribe_where'|trans
+                        }}">{{ 'subscribe'|trans }}</span>
                         {% spaceless %}
                             <div
                                 class="toggle toggle-success"
@@ -57,8 +59,7 @@
                                 }) }}"
                                 data-active="{{ subscribed is not null ? 'true' : 'false' }}"
                                 title="{{
-                                    (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans
-                                    ~ 'subscribe_where'|trans
+                                    (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans ~ ' ' ~ 'subscribe_where'|trans
                                 }}"
                             ></div>
                         {% endspaceless %}
