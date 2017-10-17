@@ -11,6 +11,10 @@
 }
 
 #my-account #notifications-parameters .panel-body .content {
+    margin-bottom: 30px;
+}
+
+#my-account #notifications-parameters .panel-body .content .row:nth-of-type(1) {
     margin-bottom: 25px;
 }
 

@@ -332,3 +332,7 @@
 #publication .recherche-referencement h3 {
     font-weight: normal;
 }
+
+#publication .toggle-slide .toggle-blob {
+    z-index: 2;
+}

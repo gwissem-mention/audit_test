@@ -108,12 +108,13 @@
                                 <b>{{ (trans_path ~ notification_key ~ '.description')|trans }}</b>
                                 <div class="description">
                                     {{ form_widget(form.notificationsSettings[notification_key].frequency, {'attr': {
-                                        'class' : 'validate[required]'
+                                        'class' : 'validate[required]',
+                                        'data-value' : form.notificationsSettings[notification_key].frequency.vars.value
                                     }}) }}
                                     {{ 'notification-config.information'|trans }}
                                     <b>{{ (trans_path ~ notification_key ~ '.title')|trans }}</b>
                                     <div style="{% if hasDetail == false %}display: none;{% endif %}">
-                                        {{ 'notification-config.also'|trans }}:<br>
+                                        {{ 'notification-config.also'|trans }} :<br>
                                         <b>{{ (trans_path ~ notification_key ~ '.detail')|trans }}</b>
                                         {{ form_widget(form.notificationsSettings[notification_key].detailLevel) }}
                                     </div>

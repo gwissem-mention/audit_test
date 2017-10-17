@@ -3,7 +3,7 @@ notification-config:
         day: Je choisis le jour
         hour: Je choisis l'heure
     information: Vous recevrez le
-    also: Vous pouvez également recevoir
+    also: Vous pouvez également recevoir en complément
     report:
         section: RAPPORTS
         report_updated:
