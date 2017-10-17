@@ -8,6 +8,7 @@ use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
+use Nodevo\RoleBundle\Manager\RoleManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,6 +26,11 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     protected $userRepository;
 
+    /**
+     * @var RoleManager
+     */
+    protected $roleManager;
+
     const NOTIFICATION_CODE = 'user_role_updated';
 
     const SECTION_CODE = 'resource_user';
@@ -41,11 +47,13 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RoleManager $roleManager
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->userRepository = $userRepository;
         $this->templatePath = '@HopitalNumeriqueUser/Notifications/'. $this::getNotificationCode() .'.html.twig';
+        $this->roleManager = $roleManager;
     }
 
     /**
@@ -95,7 +103,7 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
                 'regionId' => $user->getRegion()->getId(),
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
-                'role' => $user->getRole(),
+                'role' => $this->roleManager->findOneBy(['role' => $user->getRole()])->getName(),
             ]
         );
     }
