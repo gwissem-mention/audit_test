@@ -18,8 +18,8 @@ class SubscriptionRepository extends EntityRepository
      * @param \DateTime $maxViewDate
      * @param integer $objectId
      * @param integer|null $infradocId
+     * @param int $author
      *
-     * @param null $author
      * @return QueryBuilder Users
      */
     public function getSubscribersQueryBuilder(\DateTime $maxViewDate, $objectId, $infradocId = null, $author = 0)
@@ -38,9 +38,10 @@ class SubscriptionRepository extends EntityRepository
                 'clt.objet = subscription.objet AND clt.user = user.id' .
                 ($infradocId ? ' AND clt.contenu = subscription.contenu' : '')
             )
-            ->andWhere('clt.dateLastConsulted < :maxViewDate')
-            ->setParameter('maxViewDate', $maxViewDate)
+            ->addSelect('clt.dateLastConsulted as HIDDEN maxDate')
             ->groupBy('user.id')
+            ->having('maxDate < :maxViewDate')
+            ->setParameter('maxViewDate', $maxViewDate)
         ;
         if ($infradocId) {
             $queryBuilder

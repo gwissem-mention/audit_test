@@ -67,7 +67,7 @@ class SettingsRepository extends EntityRepository
 
         //Take care here not overwriting incoming query parts by using things like setParameters() or having().
         $query = $usersQueryBuilder
-            ->select($fields)
+            ->addSelect($fields)
             ->leftJoin(
                 Settings::class,
                 'settings',
