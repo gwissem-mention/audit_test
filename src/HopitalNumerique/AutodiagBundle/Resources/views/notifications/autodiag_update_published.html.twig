@@ -6,12 +6,12 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
             '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
             '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
             '%textMaj%' : notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}
 {% block header %}
@@ -23,11 +23,11 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
             '%autodiagName%' : macro.link(notif.title, notif.getData('autodiagId')),
             '%textMaj%' : notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}

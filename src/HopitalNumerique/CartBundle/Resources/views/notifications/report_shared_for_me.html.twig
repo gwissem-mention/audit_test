@@ -6,7 +6,7 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
             '%reportName%' : layout.link(notif.title),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
             '%reportName%' : layout.link(notif.title),
@@ -23,11 +23,11 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%reportName%' : layout.link(notif.title),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
             '%reportName%' : layout.link(notif.title),
             '%userName%' : notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}

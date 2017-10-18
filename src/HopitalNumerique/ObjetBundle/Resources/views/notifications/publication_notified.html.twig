@@ -6,12 +6,12 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
             '%textMaj%' : notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}
 {% block header %}
@@ -23,11 +23,11 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
             '%textMaj%' : notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}

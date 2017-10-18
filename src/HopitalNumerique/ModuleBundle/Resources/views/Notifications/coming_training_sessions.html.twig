@@ -8,14 +8,14 @@
             '%moduleName%' : macro.link(notif.title, notif.getData('id')),
             '%formateur%' : notif.getData('formateur'),
             '%dateSession%' : notif.getData('dateSession'),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
             '%moduleName%' : macro.link(notif.title, notif.getData('id')),
             '%formateur%' : notif.getData('formateur'),
             '%dateSession%' : notif.getData('dateSession'),
             '%description%' : notif.getData('description')
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}
 {% block header %}
@@ -29,13 +29,13 @@
             '%moduleName%' : macro.link(notif.title, notif.getData('id')),
             '%formateur%' : notif.getData('formateur'),
             '%dateSession%' : notif.getData('dateSession'),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
             '%moduleName%' : macro.link(notif.title, notif.getData('id')),
             '%formateur%' : notif.getData('formateur'),
             '%dateSession%' : notif.getData('dateSession'),
             '%description%' : notif.getData('description')
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}

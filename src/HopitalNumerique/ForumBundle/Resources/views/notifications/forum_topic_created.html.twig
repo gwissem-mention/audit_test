@@ -7,7 +7,7 @@
         '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
         '%firstPost%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
-    }) }}
+    })|raw }}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -20,5 +20,5 @@
         '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
         '%firstPost%' : notif.detail,
         '%auteur%' : notif.getData('pseudoAuteur')
-    }) }}
+    })|raw }}
 {% endblock %}
