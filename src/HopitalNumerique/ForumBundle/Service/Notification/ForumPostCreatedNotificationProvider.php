@@ -57,7 +57,7 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('id'));
+        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('topicId'));
     }
 
     /**
