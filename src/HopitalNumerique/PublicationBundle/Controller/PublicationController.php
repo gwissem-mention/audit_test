@@ -162,7 +162,7 @@ class PublicationController extends Controller
         );
         shuffle($topicRelated);
 
-        $objectRelations = $this->get(ObjectIdentityRepository::class)->getRelatedObjects(
+        $objectRelations = $this->get(ObjectIdentityRepository::class)->getBidirectionalRelationsObjects(
             ObjectIdentity::createFromDomainObject($objet),
             [
                 Objet::class,
@@ -425,13 +425,16 @@ class PublicationController extends Controller
         $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
         shuffle($topicRelated);
 
-        $objectRelations = $this->get(ObjectIdentityRepository::class)->getRelatedObjects(
-            ObjectIdentity::createFromDomainObject($objet),
-            [
-                Objet::class,
-                Contenu::class,
-                Board::class,
-            ]
+        $objectIdentityRepository = $this->get(ObjectIdentityRepository::class);
+        $relationAcceptedClasses = [
+            Objet::class,
+            Contenu::class,
+            Board::class,
+        ];
+
+        $objectRelations = array_merge(
+            $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($objet), $relationAcceptedClasses),
+            $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($contenu), $relationAcceptedClasses)
         );
 
         //render

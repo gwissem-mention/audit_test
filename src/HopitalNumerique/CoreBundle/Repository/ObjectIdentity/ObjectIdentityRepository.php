@@ -121,6 +121,39 @@ class ObjectIdentityRepository extends EntityRepository
 
     /**
      * @param ObjectIdentity $objectIdentity
+     * @param array $acceptedClasses
+     *
+     * @return array
+     */
+    public function getBidirectionalRelationsObjects(ObjectIdentity $objectIdentity, $acceptedClasses = [])
+    {
+        $queryBuilder = $this->createQueryBuilder('object', 'object.id')
+            ->join(Relation::class, 'relation', Join::WITH, 'relation.sourceObjectIdentity = object.id OR relation.targetObjectIdentity = object.id')
+            ->join('relation.targetObjectIdentity', 'target')
+            ->join('relation.sourceObjectIdentity', 'source')
+            ->andWhere('source.id = :object OR target.id = :object')
+            ->setParameter('object', $objectIdentity)
+
+            ->addGroupBy('object.id')
+        ;
+
+        if (count($acceptedClasses)) {
+            $queryBuilder
+                ->andWhere('source.class IN (:acceptedClasses)')
+                ->andWhere('target.class IN (:acceptedClasses)')
+                ->setParameter('acceptedClasses', $acceptedClasses)
+            ;
+        }
+
+        $objects = $queryBuilder->getQuery()->getResult();
+
+        $this->populateMultiple($objects);
+
+        return $objects;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
      *
      * @return ObjectIdentity
      */
