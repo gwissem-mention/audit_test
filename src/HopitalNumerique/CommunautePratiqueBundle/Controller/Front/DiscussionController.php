@@ -58,14 +58,19 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
-            DiscussionDisplayQuery::createPublicDiscussionQuery(
-                $discussion ?: ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions)),
-                $domains,
-                $group,
-                $this->getUser()
-            )
-        );
+        $discussion = $discussion ?: ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
+        if ($discussion instanceof Discussion) {
+            $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
+                DiscussionDisplayQuery::createPublicDiscussionQuery(
+                    $discussion,
+                    $domains,
+                    $group,
+                    $this->getUser()
+                )
+            );
+        } else {
+            $discussion = null;
+        }
 
         if ($this->isGranted(DiscussionVoter::CREATE)) {
             $newDiscussionCommand = new CreateDiscussionCommand(

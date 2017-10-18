@@ -63,7 +63,7 @@ class NewDiscussionActivityCounter
         $count = 0;
 
         /** @var Message $message */
-        foreach ($this->discussionRepository->getDiscussionNotReaded($group, $user) as $message) {
+        foreach ($this->messageRepository->getMessageNotReaded($group, $user) as $message) {
             $count += $message->getFiles()->count();
         }
 
