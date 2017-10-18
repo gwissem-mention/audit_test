@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Service\Notification;
 
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Enum\NotificationLimitTextLengthEnum;
+use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\ObjetBundle\Entity\Commentaire;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -67,11 +68,10 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $title = substr(strip_tags($title), 0, self::getLimitNotifyTitleLength()) . '...';
         }
 
-
         $this->processNotification(
             $uid,
             $title,
-            $this->processText($comment->getTexte()),
+            NotificationProviderAbstract::normalizeDetailContent($comment->getTexte()),
             array_merge(
                 parent::generateOptions($object, $infradoc),
                 [
