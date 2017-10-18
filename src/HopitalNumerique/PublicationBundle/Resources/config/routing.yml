@@ -168,3 +168,10 @@ hopitalnumerique_suggestion_back_delete:
 hopitalnumerique_suggestion_back_isFileExist:
     path:  /admin/suggestion/isFileExist
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:isFileExist" }
+
+# Subscription
+hopitalnumerique_objet_subscribe:
+    path: /publication/subscribe/{object}/{content}
+    defaults: { _controller: HopitalNumeriqueObjetBundle:Subscription:subscribe, content: null }
+    requirements:
+        object: \d+

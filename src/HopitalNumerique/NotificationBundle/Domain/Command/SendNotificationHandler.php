@@ -86,19 +86,8 @@ class SendNotificationHandler
      */
     public function processStack($notifications)
     {
-        foreach ($notifications as $key => $notification) {
-            if ($notification->getFrequency() === NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT) {
-                $notificationEvent = new NotificationEvent($notification);
-                $this->eventDispatcher->dispatch(Events::SEND_NOTIFICATION, $notificationEvent);
-
-                //Delete notification
-                $this->entityManager->remove($notification);
-                unset($notifications[$key]);
-            }
-        }
-
         $subscriptionFinder = $this->subscriptionFinder;
-        $groupedNotifications = array_filter(
+        $notifications = array_filter(
             $notifications,
             function (Notification $notification) use ($subscriptionFinder) {
                 $subscribers = $subscriptionFinder->findSubscriptions($notification);
@@ -110,9 +99,19 @@ class SendNotificationHandler
                 return false;
             }
         );
+        foreach ($notifications as $key => $notification) {
+            if ($notification->getFrequency() === NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT) {
+                $notificationEvent = new NotificationEvent($notification);
+                $this->eventDispatcher->dispatch(Events::SEND_NOTIFICATION, $notificationEvent);
+
+                //Delete notification
+                $this->entityManager->remove($notification);
+                unset($notifications[$key]);
+            }
+        }
 
         $userNotificationMap = [];
-        foreach ($groupedNotifications as $notification) {
+        foreach ($notifications as $notification) {
             $userNotificationMap[$notification->getUser()->getId()][] = $notification;
         }
 

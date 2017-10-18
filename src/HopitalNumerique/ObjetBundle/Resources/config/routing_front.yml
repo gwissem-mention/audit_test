@@ -3,10 +3,3 @@
 hopitalnumerique_objet_objet_index:
     pattern:  /index-des-publications
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:treeIndex" }
-
-# Subscription
-hopitalnumerique_objet_subscribe:
-    path: /objet/subscribe/{object}/{content}
-    defaults: { _controller: HopitalNumeriqueObjetBundle:Subscription:subscribe, content: null }
-    requirements:
-        object: \d+
