@@ -64,10 +64,6 @@ services:
         tags:
             - { name: form.type }
 
-    HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener:
-        class: HopitalNumerique\NotificationBundle\EventListener\NotificationCreatedListener
-        tags:
-            - { name: doctrine.event_subscriber }
     HopitalNumerique\NotificationBundle\EventListener\NotificationSendListener:
         class: HopitalNumerique\NotificationBundle\EventListener\NotificationSendListener
         arguments:
