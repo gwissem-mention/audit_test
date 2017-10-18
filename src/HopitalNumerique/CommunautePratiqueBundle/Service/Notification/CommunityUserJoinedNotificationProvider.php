@@ -52,7 +52,10 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
             $user->getId(),
             $title,
             null,
-            []
+            [
+                'prenomUtilisateurDist' => $user->getFirstname(),
+                'nomUtilisateurDist' => $user->getLastname(),
+            ]
         );
     }
 
