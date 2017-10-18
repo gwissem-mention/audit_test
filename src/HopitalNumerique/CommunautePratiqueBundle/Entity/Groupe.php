@@ -173,6 +173,11 @@ class Groupe
     private $commentaires;
 
     /**
+     * @ORM\Column(name="group_new", type="boolean", nullable=false, options={"default"=false})
+     */
+    protected $isNew;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -1001,5 +1006,25 @@ class Groupe
         }
 
         return str_replace('"', '\'', json_encode($animateurs));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * @param bool $isNew
+     *
+     * @return $this
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+
+        return $this;
     }
 }
