@@ -3,11 +3,20 @@
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%auteur%' : notif.title|split(' - ')[2],
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
-        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId'))
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
+            '%auteur%' : notif.title|split(' - ')[2],
+            '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+            '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
+            '%auteur%' : notif.title|split(' - ')[2],
+            '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+            '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
+            '%commentaire%': notif.detail
+        }) }}
+    {% endif %}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -15,10 +24,17 @@
     }) }}
 {% endblock %}
 {% block content %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
-        '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
-        '%commentaire%': notif.detail,
-        '%auteur%': notif.title|split(' - ')[2]
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
+            '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
+            '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
+            '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
+            '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+            '%commentaire%': notif.detail,
+            '%auteur%': notif.title|split(' - ')[2]
+        }) }}
+    {% endif %}
 {% endblock %}

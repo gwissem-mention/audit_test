@@ -3,12 +3,20 @@
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%moduleName%' : macro.link(notif.title, notif.getData('id')),
-        '%formateur%' : notif.getData('formateur'),
-        '%dateSession%' : notif.getData('dateSession'),
-        '%description%' : notif.getData('description')
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
+            '%moduleName%' : macro.link(notif.title, notif.getData('id')),
+            '%formateur%' : notif.getData('formateur'),
+            '%dateSession%' : notif.getData('dateSession'),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
+            '%moduleName%' : macro.link(notif.title, notif.getData('id')),
+            '%formateur%' : notif.getData('formateur'),
+            '%dateSession%' : notif.getData('dateSession'),
+            '%description%' : notif.getData('description')
+        }) }}
+    {% endif %}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -16,10 +24,18 @@
     }) }}
 {% endblock %}
 {% block content %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%moduleName%' : macro.link(notif.title, notif.getData('id')),
-        '%formateur%' : notif.getData('formateur'),
-        '%dateSession%' : notif.getData('dateSession'),
-        '%description%' : notif.getData('description')
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
+            '%moduleName%' : macro.link(notif.title, notif.getData('id')),
+            '%formateur%' : notif.getData('formateur'),
+            '%dateSession%' : notif.getData('dateSession'),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
+            '%moduleName%' : macro.link(notif.title, notif.getData('id')),
+            '%formateur%' : notif.getData('formateur'),
+            '%dateSession%' : notif.getData('dateSession'),
+            '%description%' : notif.getData('description')
+        }) }}
+    {% endif %}
 {% endblock %}
