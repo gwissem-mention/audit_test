@@ -59,8 +59,6 @@ class GroupNotificationSendSubscriber implements EventSubscriberInterface
                 ['notification'][] = $notification;
         }
 
-        foreach ($sortedNotifications as $sortedNotification) {
-            $this->mailManager->sendGroupedNotification($event->getUser(), $sortedNotification);
-        }
+        $this->mailManager->sendGroupedNotification($event->getUser(), $sortedNotifications);
     }
 }

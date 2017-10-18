@@ -1696,8 +1696,10 @@ class MailManager extends BaseManager
     {
         array_multisort($groupedNotifications);
         $content = "";
-        foreach ($groupedNotifications as $key => $code) {
-            $content .= $this->_twig->render($code['template'], ['notifications' => $code['notification']]);
+        foreach ($groupedNotifications as $groupedNotification) {
+            foreach ($groupedNotification as $key => $code) {
+                $content .= $this->_twig->render($code['template'], ['notifications' => $code['notification']]);
+            }
         }
         $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
             'objects' => $this->objectRepository->getRandomNotviewedObjects($user),
