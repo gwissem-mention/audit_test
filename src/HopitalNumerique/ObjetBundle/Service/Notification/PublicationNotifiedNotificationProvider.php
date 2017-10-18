@@ -43,24 +43,22 @@ class PublicationNotifiedNotificationProvider extends PublicationNotificationPro
         if (!$infradoc) {
             $uid = $object->getId();
             $title = $object->getTitre();
-            $detail = $object->getResume();
         } else {
             $uid = [$object->getId(), $infradoc];
             $title = $infradoc->getTitre();
-            $detail = $infradoc->getContenu();
         }
 
         if (strlen($title) > self::getLimitNotifyTitleLength()) {
             $title = substr(strip_tags($title), 0, self::getLimitNotifyTitleLength()) . '...';
         }
-        if (strlen($detail) > self::getLimitNotifyDetailLength()) {
-            $detail = substr(strip_tags($detail, 'a'), 0, self::getLimitNotifyDetailLength()) . '...';
+        if (strlen($reason) > self::getLimitNotifyDetailLength()) {
+            $reason = substr($reason, 0, self::getLimitNotifyDetailLength()) . '...';
         }
-        
+
         $this->processNotification(
             $uid,
             $title,
-            $detail,
+            $reason,
             parent::generateOptions($object, $infradoc)
         );
     }

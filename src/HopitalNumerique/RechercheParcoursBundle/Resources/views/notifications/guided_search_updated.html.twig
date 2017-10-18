@@ -3,10 +3,16 @@
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
 {% block single %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%guidedName%' : macro.link(notif.title),
-        '%textMaj%' : notif.detail
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
+            '%guidedName%' : macro.link(notif.title),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
+            '%guidedName%' : macro.link(notif.title),
+            '%textMaj%' : notif.detail
+        }) }}
+    {% endif %}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -14,8 +20,14 @@
     }) }}
 {% endblock %}
 {% block content %}
-    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%guidedName%' : macro.link(notif.title),
-        '%textMaj%' : notif.detail
-    }) }}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
+            '%guidedName%' : macro.link(notif.title),
+        }) }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
+            '%guidedName%' : macro.link(notif.title),
+            '%textMaj%' : notif.detail
+        }) }}
+    {% endif %}
 {% endblock %}

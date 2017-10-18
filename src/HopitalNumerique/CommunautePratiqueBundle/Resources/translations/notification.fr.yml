@@ -28,14 +28,18 @@ notification_config:
     grouped:
         practice_community_group_comment_created:
             single: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName% : %commentaire%
+            single_undetail: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName%
             multiple:
                 header: %number% nouveaux commentaires ont été déposés
-                content: %groupeName% : %commentaire% (%auteur%)
+                detail: %groupeName% : %commentaire% (%auteur%)
+                undetail: %groupeName%
         practice_community_form_comment_created:
-            single: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName%
+            single: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName% : %commentaire%
+            single_undetail: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName%
             multiple:
                 header: %number% nouveaux commentaires ont été déposés
-                content: %ficheName% (%groupeName%) : %commentaire% (%auteur%)
+                detail: %ficheName% (%groupeName%) : %commentaire% (%auteur%)
+                undetail: %ficheName% (%groupeName%)
         practice_community_group_document_created:
             single: Un nouveau document a été déposé par %auteur% dans %groupeName% : %filename%
             multiple:
@@ -48,9 +52,11 @@ notification_config:
                 content: %groupeName% : %userName%
         practice_community_group_created:
             single: Le groupe %groupeName% a été ouvert : %groupeDescription% (démarrage : %dateDebut%)
+            single_undetail: Le groupe %groupeName% a été ouvert
             multiple:
                 header: %number% nouveaux groupes ont été ouverts
-                content: %groupeName% : %groupeDescription% (démarrage : %dateDebut%)
+                detail: %groupeName% : %groupeDescription% (démarrage : %dateDebut%)
+                undetail: %groupeName%
         practice_community_user_joined:
             single: %userName% a rejoint la communauté
             multiple:

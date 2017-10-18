@@ -20,21 +20,29 @@ notification_config:
     grouped:
         report_updated:
             single: Le rapport %reportName% a été modifié par %userName% , %userName2%
+            single_undetail: Le rapport %reportName%
             multiple:
                 header: %number% rapports ont été modifiés
-                content: %reportName% par %userName%, %userName2%
+                detail: %reportName% par %userName%, %userName2%
+                undetail: %reportName%
         report_shared_for_me:
             single: Le rapport %reportName% a été partagé avec moi par %userName%
+            single_undetail: Le rapport %reportName% a été partagé avec moi
             multiple:
                 header: %number% rapports ont été partagés avec moi
-                content: %reportName% par %userName%
+                detail: %reportName% par %userName%
+                undetail: %reportName%
         report_shared_for_other:
             single: Le rapport %reportName% a été partagé avec %userNames% par %userName%
+            single_undetail: Le rapport %reportName% a été partagé
             multiple:
                 header: %number% rapports ont été partagés avec d'autres utilisateurs
-                content: %reportName% avec %userNames% par %userName%
+                detail: %reportName% avec %userNames% par %userName%
+                undetail: %reportName% avec %userNames%
         report_copied_for_me:
             single: Le rapport %reportName% a été copié pour moi par %userName%
+            single_undetail: Le rapport %reportName% a été copié pour moi
             multiple:
                 header: %number% rapports ont été copiés pour moi
-                content: %reportName% par %userName%
+                detail: %reportName% par %userName%
+                undetail: %reportName%

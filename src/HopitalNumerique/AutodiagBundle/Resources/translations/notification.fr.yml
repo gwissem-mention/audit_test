@@ -8,6 +8,8 @@ notification_config:
     grouped:
         autodiag_update_published:
             single: L'autodiagnostic %autodiagName% a été mis à jour : %textMaj%
+            single_undetail: L'autodiagnostic %autodiagName% a été mis à jour
             multiple:
                 header: %number% autodiagnostics ont été mis à jour
-                content: %autodiagName% : %textMaj%
+                detail: %autodiagName% : %textMaj%
+                undetail: %autodiagName%
