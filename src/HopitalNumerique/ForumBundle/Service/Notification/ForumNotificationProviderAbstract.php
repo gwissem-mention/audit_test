@@ -104,7 +104,10 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
         return [
             'id' => $topic->getBoard()->getId(),
             'topicId' => $topic->getId(),
-            'pseudoAuteur' => $post->getCreatedBy()->getFirstname(),
+            'pseudoAuteur' => null !== $post->getCreatedBy()->getPseudonym()
+                ? $post->getCreatedBy()->getPseudonym()
+                : $post->getCreatedBy()->getPrenomNom()
+            ,
             'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
             'categorie' => $topic->getBoard()->getCategory()->getName(),
             'theme' => $topic->getBoard()->getName(),
