@@ -254,10 +254,10 @@ function fillRelatedProductionsList(url) {
         dataType: 'json',
         success: function (json) {
             $.each(json, function(index, value) {
-                if (preselectedValues.indexOf(index) != -1) {
-                    relatedProdList.append('<option value="'+ index +'" selected="selected">'+ value +'</option>');
+                if (preselectedValues[index] !== undefined) {
+                    relatedProdList.append('<option value="'+ index +'" selected="selected">'+ value.text +'</option>');
                 } else {
-                    relatedProdList.append('<option value="'+ index +'">'+ value +'</option>');
+                    relatedProdList.append('<option value="'+ index +'">'+ value.text +'</option>');
                 }
             });
             relatedProdList.select2("destroy");

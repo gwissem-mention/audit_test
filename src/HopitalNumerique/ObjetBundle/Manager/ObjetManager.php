@@ -712,7 +712,18 @@ class ObjetManager extends BaseManager
         $objetsAndContenuArbo = $this->getObjetsAndContenuArbo();
 
         foreach ($objetsAndContenuArbo as $objetOrContenu) {
-            $objetsAndContenuForFormTypeChoices[$objetOrContenu['value']] = $objetOrContenu['text'];
+
+            if (false !== strpos($objetOrContenu['value'], 'INFRADOC')) {
+                $class = Contenu::class;
+            } else {
+                $class = Objet::class;
+            }
+
+            $objetsAndContenuForFormTypeChoices[(new ObjectIdentity($class, explode(':', $objetOrContenu['value'])[1]))->getId()] = [
+                'text' => $objetOrContenu['text'],
+                'class' => $class,
+                'id' => explode(':', $objetOrContenu['value'])[1],
+            ];
         }
 
         return $objetsAndContenuForFormTypeChoices;

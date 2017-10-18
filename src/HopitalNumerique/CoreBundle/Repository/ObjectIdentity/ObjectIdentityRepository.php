@@ -118,4 +118,21 @@ class ObjectIdentityRepository extends EntityRepository
 
         return $objects;
     }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     *
+     * @return ObjectIdentity
+     */
+    public function findOrCreate(ObjectIdentity $objectIdentity)
+    {
+        /** @var ObjectIdentity|null $persistedObjectIdentity */
+        if ($persistedObjectIdentity = $this->find($objectIdentity->getId())) {
+            return $persistedObjectIdentity;
+        }
+
+        $this->_em->persist($objectIdentity);
+
+        return $objectIdentity;
+    }
 }
