@@ -148,6 +148,8 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function save($entity)
     {
+        parent::save($entity);
+
         if ($entity->getActif() && $entity->isNew()) {
             /**
              * Fire 'GROUP_CREATED' event if group is active
@@ -155,8 +157,8 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
             $event = new GroupEvent($entity);
             $this->eventDispatcher->dispatch(Events::GROUP_CREATED, $event);
             $entity->setIsNew(false);
-        }
 
-        parent::save($entity);
+            parent::save($entity);
+        }
     }
 }

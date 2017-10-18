@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -74,14 +75,26 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Returns query builder of practice community members.
      *
+     * @param array|null $domainIds Filter users that are in at least one of the given domains
+     *
      * @return QueryBuilder
      */
-    public function getCommunityMembersQueryBuilder()
+    public function createCommunityMembersQueryBuilder($domainIds = null)
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
             ->select('user.id')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.inscritCommunautePratique = :isRegistered')
-            ->setParameter('isRegistered', 1);
+            ->setParameter('isRegistered', 1)
+        ;
+
+        if (is_array($domainIds)) {
+            $qb
+                ->join('user.domaines', 'domain')
+                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+            ;
+        }
+
+        return $qb;
     }
 }

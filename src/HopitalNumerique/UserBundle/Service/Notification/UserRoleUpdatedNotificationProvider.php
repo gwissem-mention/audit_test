@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Service\Notification;
 
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
@@ -104,6 +105,9 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
                 'role' => $this->roleManager->findOneBy(['role' => $user->getRole()])->getName(),
+                'domainIds' => $user->getDomaines()->map(function (Domaine $domain) {
+                    return $domain->getId();
+                })->toArray(),
             ]
         );
     }
@@ -117,7 +121,10 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->userRepository->getUsersByRegionQueryBuilder($notification->getData('regionId'));
+        return $this->userRepository->createUsersByRegionQueryBuilder(
+            $notification->getData('regionId'),
+            $notification->getData('domainIds')
+        );
     }
 
     /**
@@ -125,6 +132,11 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
      */
     public function notify(Notification $notification)
     {
-        $this->mailManager->sendUserRoleUpdateNotification($notification->getUser(), $notification->getData());
+        $this->mailManager->sendUserRoleUpdateNotification($notification->getUser(), [
+            'regionId' => $notification->getData('regionId'),
+            'prenomUtilisateurDist' => $notification->getData('prenomUtilisateurDist'),
+            'nomUtilisateurDist' => $notification->getData('nomUtilisateurDist'),
+            'role' => $notification->getData('role'),
+        ]);
     }
 }

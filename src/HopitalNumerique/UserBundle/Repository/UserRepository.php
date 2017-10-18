@@ -1059,12 +1059,13 @@ class UserRepository extends EntityRepository
      * Returns query builder with active user ids by region.
      *
      * @param integer $regionId Region id.
+     * @param array|null $domainIds Filter users that are in at least one of the given domains
      *
      * @return QueryBuilder
      */
-    public function getUsersByRegionQueryBuilder($regionId)
+    public function createUsersByRegionQueryBuilder($regionId, $domainIds = null)
     {
-        return $this->createQueryBuilder('user')
+        $qb = $this->createQueryBuilder('user')
             ->select('user.id')
             ->where('user.region = :regionId')
             ->andWhere('user.enabled = :enabledState')
@@ -1073,6 +1074,15 @@ class UserRepository extends EntityRepository
                 'enabledState' => 1,
             ])
         ;
+
+        if (is_array($domainIds)) {
+            $qb
+                ->join('user.domaines', 'domain')
+                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+            ;
+        }
+
+        return $qb;
     }
 
     /**
