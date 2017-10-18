@@ -129,9 +129,8 @@ class ContenuRepository extends EntityRepository
     public function getViewedContent(User $user, $domains = null)
     {
         $qb = $this->createQueryBuilder('content')
-            ->addSelect('object', 'parent', 'consultations')
+            ->addSelect('object', 'consultations')
             ->join('content.objet', 'object')
-            ->join('content.parent', 'parent')
             ->join('content.consultations', 'consultations', Expr\Join::WITH, 'consultations.user = :userId')
             ->setParameter('userId', $user->getId())
         ;
