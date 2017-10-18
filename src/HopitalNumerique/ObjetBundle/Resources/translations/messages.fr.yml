@@ -4,3 +4,15 @@ related_board:
             success: Les boards ont été liés à la publication.
         remove:
             success: Suppression effectuée avec succès.
+
+links:
+    object:
+        title: Ajouter une production liée
+        form:
+            list:
+                label: Liste des productions
+    discussion:
+        title: Ajouter une discussion liée
+        form:
+            list:
+                label: Liste des discussions

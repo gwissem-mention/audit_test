@@ -5,6 +5,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -13,7 +14,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository")
  * @ORM\Table(name="hn_communautepratique_discussion")
  */
-class Discussion
+class Discussion implements ObjectIdentityDisplayableInterface
 {
     /**
      * @var int
@@ -432,5 +433,21 @@ class Discussion
         $this->relatedObject = $object;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'discussion';
     }
 }

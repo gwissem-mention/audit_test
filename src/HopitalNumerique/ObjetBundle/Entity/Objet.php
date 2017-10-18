@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
@@ -13,6 +14,7 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\RoleBundle\Entity\Role;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
@@ -28,7 +30,7 @@ use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\Loggable
  */
-class Objet implements RoutedItemInterface
+class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
 {
     const FICHIER_1 = 1;
     const FICHIER_2 = 2;
@@ -229,6 +231,7 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var array
+     * @deprecated
      *
      * @ORM\Column(name="obj_objets", type="array", options = {"comment" = "Liste des productions liés à l objet"})
      */
@@ -293,6 +296,8 @@ class Objet implements RoutedItemInterface
     protected $types;
 
     /**
+     * @var Consultation[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
      */
     protected $consultations;
@@ -308,6 +313,8 @@ class Objet implements RoutedItemInterface
     protected $listeNotes;
 
     /**
+     * @var Contenu[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" }, orphanRemoval=true)
      */
     protected $contenus;
@@ -329,11 +336,15 @@ class Objet implements RoutedItemInterface
     /**
      * Ensemble des notes de maitrise liées à cette publication.
      *
+     * @var MaitriseUser[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser", mappedBy="objet", cascade={"persist", "remove" })
      */
     protected $maitriseUsers;
 
     /**
+     * @var UploadedFile
+     *
      * @Assert\File(
      *     maxSize = "100M"
      * )
@@ -397,6 +408,7 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var ArrayCollection|RelatedBoard[]
+     * @deprecated
      *
      * @ORM\OneToMany(targetEntity="RelatedBoard", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -404,6 +416,7 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var ArrayCollection|RelatedRisk
+     * @deprecated
      *
      * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="object", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC"})
@@ -979,6 +992,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * @deprecated Use object identify relation instead
+     *
      * @param Objet $objet
      *
      * @return Objet
@@ -991,26 +1006,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param Objet $objet
-     */
-    public function removeObjet(Objet $objet)
-    {
-        $this->objets->removeElement($objet);
-    }
-
-    /**
-     * @param array|Collection $objets
+     * @deprecated Use object identify relation instead
      *
-     * @return Objet
-     */
-    public function setObjets(array $objets)
-    {
-        $this->objets = $objets;
-
-        return $this;
-    }
-
-    /**
      * @return array|Collection
      */
     public function getObjets()
@@ -1891,81 +1888,13 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getRelatedBoards()
-    {
-        return $this->relatedBoards;
-    }
-
-    /**
-     * @param Board $board
-     * @param null  $position
+     * @deprecated Use object identify relation instead
      *
-     * @return Objet
-     */
-    public function linkBoard(Board $board, $position = null)
-    {
-        foreach ($this->relatedBoards as $relatedBoard) {
-            if ($relatedBoard->getBoard()->getId() === $board->getId()) {
-                return $this;
-            }
-        }
-
-        $this->relatedBoards->add(new RelatedBoard($this, $board, $position));
-
-        return $this;
-    }
-
-    /**
-     * @param RelatedBoard $relatedBoard
-     *
-     * @return Objet
-     */
-    public function removeRelatedBoard(RelatedBoard $relatedBoard)
-    {
-        $this->relatedBoards->removeElement($relatedBoard);
-
-        return $this;
-    }
-
-    /**
      * @return ArrayCollection|RelatedRisk[]
      */
     public function getRelatedRisks()
     {
         return $this->relatedRisks;
-    }
-
-    /**
-     * @param RelatedRisk $relatedRisk
-     *
-     * @return Objet
-     */
-    public function removeRelatedRisk(RelatedRisk $relatedRisk)
-    {
-        $this->relatedRisks->removeElement($relatedRisk);
-
-        return $this;
-    }
-
-    /**
-     * @param Risk $risk
-     * @param integer|null $position
-     *
-     * @return Objet
-     */
-    public function linkRisk(Risk $risk, $position = null)
-    {
-        foreach ($this->relatedRisks as $relatedRisk) {
-            if ($relatedRisk->getRisk()->getId() === $risk->getId()) {
-                return $this;
-            }
-        }
-
-        $this->relatedRisks->add(new RelatedRisk($this, $risk, $position));
-
-        return $this;
     }
 
     /**
@@ -1986,5 +1915,21 @@ class Objet implements RoutedItemInterface
         $this->updates->add($update);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getTitre();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'object';
     }
 }

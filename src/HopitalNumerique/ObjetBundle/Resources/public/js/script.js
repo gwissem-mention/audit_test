@@ -98,11 +98,11 @@ $(document).ready(function() {
     });
 
     //Création et gestion de l'arborescence des productions liées
-    $('#productions-nestable').nestable({'maxDepth':1,'group':0}).on('change', function() {
+    $('#objects-nestable').nestable({'maxDepth':1,'group':0}).on('change', function() {
         var serializedDatas = $(this).nestable('serialize');
 
         $.ajax({
-            url  : $('#reorder-prods-url').val(),
+            url  : $(this).data('reorder-uri'),
             data : {
                 datas : serializedDatas
             },
@@ -114,35 +114,12 @@ $(document).ready(function() {
         });
     });
 
-    $('#boards-nestable').nestable({'maxDepth':1,'group':0}).on('change', function() {
-        var data = $(this).nestable('serialize');
+    $('#objects-nestable .remove-relation').on('click', function (e) {
+        e.preventDefault();
+        var $line = $(this).parents('.relation-line');
 
-        $.ajax({
-            url  : $('#reorder-boards-url').val(),
-            data : {
-                boards : data
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function(data) {
-
-            }
-        });
-    });
-
-    $('#risks-nestable').nestable({'maxDepth':1,'group':0}).on('change', function() {
-        var data = $(this).nestable('serialize');
-
-        $.ajax({
-            url  : $(this).data('reorder-uri'),
-            data : {
-                risks : data
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function(data) {
-
-            }
+        $.get($(this).attr('href'), function() {
+            $line.remove();
         });
     });
 

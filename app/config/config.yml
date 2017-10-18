@@ -5,6 +5,7 @@ imports:
     - { resource: forum.yml }
     - { resource: services.yml }
     - { resource: elastica.yml }
+    - { resource: object_identity_routing.yml }
 
 framework:
     translator:      { fallback: "%locale%" }

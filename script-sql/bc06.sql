@@ -37,3 +37,16 @@ DROP INDEX IDX_3C9AF352232D562B ON hn_communautepratique_discussion;
 ALTER TABLE hn_communautepratique_discussion CHANGE object_id relatedObject_id INT DEFAULT NULL COMMENT 'ID de l objet';
 ALTER TABLE hn_communautepratique_discussion ADD CONSTRAINT FK_3C9AF352299FDF45 FOREIGN KEY (relatedObject_id) REFERENCES hn_objet (obj_id) ON DELETE SET NULL;
 CREATE INDEX IDX_3C9AF352299FDF45 ON hn_communautepratique_discussion (relatedObject_id);
+
+
+/** ObjectIdentity stuffs **/
+CREATE TABLE object_identity_relation (id INT AUTO_INCREMENT NOT NULL, `order` INT NOT NULL, sourceObjectIdentity_id VARCHAR(255) DEFAULT NULL, targetObjectIdentity_id VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_D278C1C1BF396750 (id), INDEX IDX_D278C1C179608353 (sourceObjectIdentity_id), INDEX IDX_D278C1C13AED7BF5 (targetObjectIdentity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE object_identity (id VARCHAR(255) NOT NULL, class VARCHAR(255) NOT NULL, objectId VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_BC4304ACBF396750 (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id);
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id);
+ALTER TABLE object_identity_relation CHANGE `order` position INT NOT NULL;
+
+ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C13AED7BF5;
+ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C179608353;
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;
+ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;

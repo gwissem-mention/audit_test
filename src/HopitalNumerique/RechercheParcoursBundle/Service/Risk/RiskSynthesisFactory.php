@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Service\Risk;
 
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
@@ -9,6 +11,7 @@ use HopitalNumerique\RechercheParcoursBundle\DTO\RiskSynthesisDTO;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
 use HopitalNumerique\RechercheParcoursBundle\DTO\RiskSynthesisRiskDTO;
 use HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepUrlGenerator;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RiskSynthesisFactory
@@ -19,13 +22,20 @@ class RiskSynthesisFactory
     protected $guidedSearchUrlGenerator;
 
     /**
+     * @var ObjectIdentityRepository $objectIdentityRepository
+     */
+    protected $objectIdentityRepository;
+
+    /**
      * RiskSynthesisFactory constructor.
      *
      * @param GuidedSearchStepUrlGenerator $guidedSearchUrlGenerator
+     * @param ObjectIdentityRepository $objectIdentityRepository
      */
-    public function __construct(GuidedSearchStepUrlGenerator $guidedSearchUrlGenerator)
+    public function __construct(GuidedSearchStepUrlGenerator $guidedSearchUrlGenerator, ObjectIdentityRepository $objectIdentityRepository)
     {
         $this->guidedSearchUrlGenerator = $guidedSearchUrlGenerator;
+        $this->objectIdentityRepository = $objectIdentityRepository;
     }
 
     /**
@@ -41,6 +51,23 @@ class RiskSynthesisFactory
         $riskSynthesis = new RiskSynthesisDTO();
 
         $riskSynthesis->global = RiskSynthesisRiskDTO::createFromGuidedSearchSteps($guidedSearch->getSteps(), $user);
+
+
+        foreach ($riskSynthesis->global->highestCriticalRisksAnalysis as $riskAnalysis) {
+            if ($objects = $this->objectIdentityRepository->getRelatedByObjects(ObjectIdentity::createFromDomainObject($riskAnalysis->getRisk()), Objet::class)) {
+                if (!isset($riskSynthesis->global->riskRelatedObjects[$riskAnalysis->getRisk()->getId()])) {
+                    $riskSynthesis->global->riskRelatedObjects[$riskAnalysis->getRisk()->getId()] = [];
+                }
+
+                foreach ($objects as $object) {
+                    foreach ($object->getObject()->getTypes() as $type) {
+                        $riskSynthesis->global->riskRelatedObjects[$riskAnalysis->getRisk()->getId()][$type->getLibelle()] =
+                            (isset($riskSynthesis->global->riskRelatedObjects[$riskAnalysis->getRisk()->getId()][$type->getLibelle()]) ?
+                                $riskSynthesis->global->riskRelatedObjects[$riskAnalysis->getRisk()->getId()][$type->getLibelle()] : 0) + 1;
+                    }
+                }
+            }
+        }
 
 
         foreach ($guidedSearch->getGuidedSearchReference()->getRecherchesParcoursGestion()->getRechercheParcours() as $guidedSearchReference) {

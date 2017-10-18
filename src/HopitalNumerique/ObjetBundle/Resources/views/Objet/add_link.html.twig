@@ -1,13 +1,13 @@
 <div class="panel panel-midnightblue" style="margin:0" >
     <div class="panel-heading">
-        <h4>Ajouter une production liée</h4>
+        <h4>{{ ('links.'~type~'.title')|trans }}</h4>
     </div>
 
     <div class="panel-body" >
         <form action="" class="form-horizontal" style="min-height:200px">
             <div class="form-group">
                 <div class="col-md-12" style="height: 205px; overflow-y: auto;">
-                    <label for="Objets" class="col-md-12">Liste des productions</label>
+                    <label for="Objets" class="col-md-12">{{ ('links.'~type~'.form.list.label')|trans }}</label>
                     <select name="objets" id="objets-linked" multiple="multiple" class="form-control col-md-12">
                         {% for objet in arbo %}
                             <option value="{{objet['value']}}" >{{objet['text']}}</option>
@@ -17,7 +17,7 @@
             </div>
         </form>
 
-        <input type="hidden" id="save-link-url" value="{{path('hopitalnumerique_objet_objet_saveLink')}}" />
+        <input type="hidden" id="save-link-url" value="{{ saveLinkUri}}" />
 
         <div class="panel-footer" >
             <div class="row">
