@@ -74,21 +74,12 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 
     /**
      * @param $comment
-     * @param $limit
      *
      * @return string
      */
-    public function processComment($comment, $limit)
+    public function processComment($comment)
     {
-        //Parse custom publication tags
-        $htmlText = $this->publicationExtension->parsePublication($comment);
-
-        //Remove HTML code
-        $htmlToPdf = new Html2Text($htmlText, ['do_links' => 'none', 'width' => 0]);
-        $cleanText = $htmlToPdf->getText();
-
-        //Truncate and return
-        return mb_strimwidth($cleanText, 0, $limit, '...');
+        return $this->publicationExtension->parsePublication($comment);
     }
 
     /**

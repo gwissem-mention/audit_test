@@ -89,24 +89,6 @@ abstract class PublicationNotificationProviderAbstract extends NotificationProvi
         );
     }
 
-    /**
-     * Removes HTML from text and limit length.
-     *
-     * @param $htmlText string   Text to be processed.
-     * @param $limit    int|bool Max text length (see NotificationProvider static method getLimitNotify...)
-     *
-     * @return string
-     */
-    protected function processText($htmlText, $limit = false)
-    {
-        //Remove HTML code
-        $htmlToPdf = new Html2Text($htmlText, ['do_links' => 'none', 'width' => 0]);
-        $cleanText = $htmlToPdf->getText();
-
-        //Truncate and return
-        return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
-    }
-
     public function generateOptions(Objet $object, Contenu $infradoc = null)
     {
         return [

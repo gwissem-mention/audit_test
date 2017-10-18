@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -41,10 +42,7 @@ class FormCommentCreatedNotificationProvider extends PracticeCommunityNotificati
             $comment->getFiche()->getGroupe()->getTitre() . ' - ' .
                 $comment->getFiche()->getQuestionPosee() . ' - ' .
                 $comment->getUser()->getPrenomNom(),
-            $this->processComment(
-                $comment->getMessage(),
-                self::getLimitNotifyDetailLength()
-            ),
+            NotificationProviderAbstract::normalizeDetailContent($this->processComment($comment->getMessage())),
             array_merge(
                 parent::generateOptions($comment->getFiche()->getGroupe(), $comment->getUser()),
                 [

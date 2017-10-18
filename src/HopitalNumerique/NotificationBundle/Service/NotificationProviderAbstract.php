@@ -210,4 +210,27 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
     {
         return $this->templatePath;
     }
+
+    /**
+     * Convert HTML to text and truncate to closest word to max length
+     *
+     * @param $content
+     * @param int $limit Value `-1` is equivalent to no length limit
+     *
+     * @return Html2Text|string
+     */
+    public static function normalizeDetailContent($content, $limit = self::LIMIT_NOTIFY_DETAIL_LENGTH)
+    {
+        $content = strip_tags($content);
+        $content = str_replace(["\r\n", "\r", "\n"], "\n", $content);
+
+        $pureText = $content;
+        $pureText = preg_replace("/\r|\n/", "", $pureText);
+
+        if (-1 !== $limit && strlen($pureText) > $limit) {
+            return preg_replace('/\s+?(\S+)?$/', '', substr($content, 0, ($limit + 1))) . '...';
+        }
+
+        return $content;
+    }
 }

@@ -84,7 +84,7 @@ class SendNotificationHandler
     /**
      * @param Notification[] $notifications
      */
-    public function processStack($notifications)
+    private function processStack($notifications)
     {
         $subscriptionFinder = $this->subscriptionFinder;
         $notifications = array_filter(
@@ -99,6 +99,7 @@ class SendNotificationHandler
                 return false;
             }
         );
+
         foreach ($notifications as $key => $notification) {
             if ($notification->getFrequency() === NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT) {
                 $notificationEvent = new NotificationEvent($notification);
