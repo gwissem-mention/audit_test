@@ -109,6 +109,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
             'categorie' => $topic->getBoard()->getCategory()->getName(),
             'theme' => $topic->getBoard()->getName(),
             'message' => $post->getBody(),
+            'fildiscussion' => $topic->getTitle()
         ];
     }
 }

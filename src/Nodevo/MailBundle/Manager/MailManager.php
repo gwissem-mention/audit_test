@@ -935,8 +935,8 @@ class MailManager extends BaseManager
      */
     public function sendForumPostCreatedNotification(User $user, $options)
     {
-        $options['urlMessage'] = $this->_router->generate('hopitalnumerique_forum_reference_topic', [
-            'id' => $options['id'],
+        $options['urlMessage'] = $this->_router->generate('ccdn_forum_user_topic_show', [
+            'topicId' => $options['topicId'],
         ]);
         $this->sendNotification($user, $options, Mail::MAIL_FORUM_POST_CREATED);
     }
@@ -947,8 +947,8 @@ class MailManager extends BaseManager
      */
     public function sendForumTopicCreatedNotification(User $user, $options)
     {
-        $options['urlMessage'] = $this->_router->generate('hopitalnumerique_forum_reference_topic', [
-            'id' => $options['id'],
+        $options['urlMessage'] = $this->_router->generate('ccdn_forum_user_topic_show', [
+            'topicId' => $options['topicId'],
         ]);
         $this->sendNotification($user, $options, Mail::MAIL_FORUM_TOPIC_CREATED);
     }
