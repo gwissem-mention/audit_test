@@ -352,6 +352,26 @@
                     </div>
                 </li>
 
+                <li data-visible="{{ userConf['cdp_discussion']['visible'] }}" data-row="{{userConf['cdp_discussion']['row']}}" data-col="{{userConf['cdp_discussion']['col']}}" data-sizex="1" data-sizey="1" data-id="cdp_discussion" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">Discussion</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                <li><strong>{{ blockCDPDiscussion['active'] }}</strong> discussions commentées depuis 1 mois</li>
+                                <li><strong>{{ blockCDPDiscussion['messages'] }}</strong> contributions depuis 1 mois</li>
+                                <li><strong>{{ blockCDPDiscussion['withoutReply'] }}</strong> discussions sans réponse</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
                 <li data-visible="{{ userConf['forum']['visible'] }}" data-row="{{userConf[ 'forum' ]['row']}}" data-col="{{userConf[ 'forum' ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ 'forum' }}" >
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading">

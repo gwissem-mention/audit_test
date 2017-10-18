@@ -73,6 +73,7 @@ class DefaultController extends Controller
         $blocSessions = $this->getBlockSession();
         $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas($this->domains);
         $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($this->domains);
+        $blocCDPDiscussion = $this->get('hn.admin.cdp_grid_block')->getBlockDiscussionDatas($this->domains);
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
             'anneeEnCours' => date('Y'),
@@ -86,6 +87,7 @@ class DefaultController extends Controller
             'blocSessions' => $blocSessions,
             'blocPaiements' => $blocPaiements,
             'blockCDP' => $blocCDP,
+            'blockCDPDiscussion' => $blocCDPDiscussion,
             'userDomains' => $userDomains,
             'selectedDomain' => $selectedDomainId,
             'domainForFilters' => 1 === count($this->domains) ? current($this->domains)->getNom() : null,
@@ -445,6 +447,7 @@ class DefaultController extends Controller
         $datas['paiements'] = ['row' => 4, 'col' => 3];
         $datas['cdp'] = ['row' => 5, 'col' => 3];
         $datas['forum'] = ['row' => 6, 'col' => 1];
+        $datas['cdp_discussion'] = ['row' => 6, 'col' => 2];
 
         if (!is_null($settings)) {
             // Sort widgets
