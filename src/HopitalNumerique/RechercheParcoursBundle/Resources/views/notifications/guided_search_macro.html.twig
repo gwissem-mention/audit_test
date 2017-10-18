@@ -1,7 +1,7 @@
-{% macro link(value) %}
+{% macro link(value, id) %}
     <a
         href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {
-            'id': notif.getData('parcoursGestionId')
+            'id': id
         }) }}"
         target="_blank"
     >{{ value }}</a>

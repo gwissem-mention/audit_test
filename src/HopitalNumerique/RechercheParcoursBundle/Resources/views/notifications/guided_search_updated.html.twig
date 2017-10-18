@@ -5,11 +5,11 @@
 {% block single %}
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
-            '%guidedName%' : macro.link(notif.title),
+            '%guidedName%' : macro.link(notif.title, notif.getData('parcoursGestionId')),
         }) }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-            '%guidedName%' : macro.link(notif.title),
+            '%guidedName%' : macro.link(notif.title, notif.getData('parcoursGestionId')),
             '%textMaj%' : notif.detail
         }) }}
     {% endif %}
@@ -22,11 +22,11 @@
 {% block content %}
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
-            '%guidedName%' : macro.link(notif.title),
+            '%guidedName%' : macro.link(notif.title, notif.getData('parcoursGestionId')),
         }) }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
-            '%guidedName%' : macro.link(notif.title),
+            '%guidedName%' : macro.link(notif.title, notif.getData('parcoursGestionId')),
             '%textMaj%' : notif.detail
         }) }}
     {% endif %}
