@@ -319,7 +319,7 @@ INSERT INTO core_mail (
 );
 
 UPDATE `core_mail` SET
-  `mail_body` = 'Bonjour %prenomUtilisateur,\r\n\r\nUne nouvelle discussion vient d\'être proposée par %pseudoAuteur sur le forum <a href=\"%urlMessage\">&quot;%forum &gt; %categorie &gt; %theme &gt; %fildiscusssion&quot;</a>.\r\n\r\nMessage posté :\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP'
+  `mail_body` = 'Bonjour %prenomUtilisateur,\r\n\r\nUne nouvelle discussion vient d\'être proposée par %pseudoAuteur sur le forum <a href=\"%urlMessage\">&quot;%forum &gt; %categorie &gt; %theme &gt; %fildiscussion&quot;</a>.\r\n\r\nMessage posté :\r\n%message\r\n\r\nCordialement,\r\n\r\nL\'équipe ANAP'
 WHERE `core_mail`.`mail_id` = 81;
 
 COMMIT;
