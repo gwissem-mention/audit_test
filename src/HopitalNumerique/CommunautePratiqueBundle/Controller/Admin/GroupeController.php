@@ -34,7 +34,9 @@ class GroupeController extends Controller
      */
     public function addAction(Request $request)
     {
+        /** @var Groupe $nouveauGroupe */
         $nouveauGroupe = $this->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
+        $nouveauGroupe->setIsNew(true);
 
         if ($request->query->has('domaine')) {
             $nouveauGroupe->setDomaine(
