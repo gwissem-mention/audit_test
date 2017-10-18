@@ -1,8 +1,1 @@
-{% macro link(value, publication) %}
-    <a
-        href="{{ path('hopital_numerique_publication_publication_objet', {
-            'id': publication
-        }) }}"
-        target="_blank"
-    >{{ value }}</a>
-{% endmacro %}
+{% macro link(value, publication) %}<a href="{{ path('hopital_numerique_publication_publication_objet', {'id': publication}) }}" target="_blank">{{ value }}</a>{% endmacro %}

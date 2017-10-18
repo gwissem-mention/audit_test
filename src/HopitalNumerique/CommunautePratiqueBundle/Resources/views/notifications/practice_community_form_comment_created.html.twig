@@ -8,14 +8,14 @@
             '%auteur%' : notif.title|split(' - ')[2],
             '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
             '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
             '%auteur%' : notif.title|split(' - ')[2],
             '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
             '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
             '%commentaire%': notif.detail
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}
 {% block header %}
@@ -28,13 +28,13 @@
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
             '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
-        }) }}
+        })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
             '%ficheName%' : macro.linkForm(notif.title|split(' - ')[1], notif.getData('ficheId')),
             '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
             '%commentaire%': notif.detail,
             '%auteur%': notif.title|split(' - ')[2]
-        }) }}
+        })|raw  }}
     {% endif %}
 {% endblock %}

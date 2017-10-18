@@ -6,7 +6,7 @@
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%userName%' : notif.detail
-    }) }}
+    })|raw  }}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -17,5 +17,5 @@
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
         '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%userName%' : notif.detail
-    }) }}
+    })|raw  }}
 {% endblock %}

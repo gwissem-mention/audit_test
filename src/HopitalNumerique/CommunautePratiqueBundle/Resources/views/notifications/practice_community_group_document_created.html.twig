@@ -7,7 +7,7 @@
         '%auteur%' : notif.title|split(' - ')[1],
         '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%filename%' : notif.getData('nomFichier')
-    }) }}
+    })|raw  }}
 {% endblock %}
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
@@ -19,5 +19,5 @@
         '%auteur%' : notif.title|split(' - ')[1],
         '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
         '%filename%' : notif.getData('nomFichier')
-    }) }}
+    })|raw  }}
 {% endblock %}
