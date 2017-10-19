@@ -64,10 +64,6 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
             $title = $infradoc->getFullTitle();
         }
 
-        if (strlen($title) > self::getLimitNotifyTitleLength()) {
-            $title = substr(strip_tags($title), 0, self::getLimitNotifyTitleLength()) . '...';
-        }
-
         $this->processNotification(
             $uid,
             $title,

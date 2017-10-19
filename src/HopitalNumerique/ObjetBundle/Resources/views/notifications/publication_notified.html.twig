@@ -1,7 +1,11 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+
 {% import 'HopitalNumeriqueObjetBundle:notifications:publication_macro.html.twig' as macro %}
+
 {% set notifications = notifications %}
+
 {% trans_default_domain 'notification' %}
+
 {% block single %}
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
@@ -14,18 +18,20 @@
         })|raw  }}
     {% endif %}
 {% endblock %}
+
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
         '%number%' : notifications|length
     }) }}
 {% endblock %}
+
 {% block content %}
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
         })|raw  }}
     {% else %}
-        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
             '%publicationTitle%' : macro.link(notif.title, notif.getData('idPublication')),
             '%textMaj%' : notif.detail
         })|raw  }}
