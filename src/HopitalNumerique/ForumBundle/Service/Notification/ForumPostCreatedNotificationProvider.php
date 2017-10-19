@@ -44,7 +44,12 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
                 $post->getBody(),
                 self::getLimitNotifyDetailLength()
             ),
-            parent::generateOptions($topic, $post)
+            array_merge(
+                parent::generateOptions($topic, $post),
+                [
+                    'boardId' => $topic->getBoard()->getId(),
+                ]
+            )
         );
     }
 
@@ -57,7 +62,10 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder($notification->getData('topicId'));
+        return $this->subscriptionRepository->getTopicSubscribersQueryBuilder(
+            $notification->getData('topicId'),
+            $notification->getData('boardId')
+        );
     }
 
     /**
@@ -65,7 +73,10 @@ class ForumPostCreatedNotificationProvider extends ForumNotificationProviderAbst
      */
     public function notify(Notification $notification)
     {
-        $notification->addData('fildiscussion', $notification->getTitle());
+        $notification
+            ->addData('fildiscussion', $notification->getTitle())
+            ->addData('message', $notification->getDetail())
+        ;
         $this->mailManager->sendForumPostCreatedNotification($notification->getUser(), $notification->getData());
     }
 }

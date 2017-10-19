@@ -81,14 +81,7 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
     protected function processText($bbText, $limit = false)
     {
         //Parse BB Code
-        $htmlText = $this->bbCodeExtension->BBCodeParse($bbText);
-
-        //Remove HTML code
-        $htmlToPdf = new Html2Text($htmlText, ['do_links' => 'none', 'width' => 0]);
-        $cleanText = $htmlToPdf->getText();
-
-        //Truncate and return
-        return $limit ? mb_strimwidth($cleanText, 0, $limit, '...') : $cleanText;
+        return $this->bbCodeExtension->BBCodeParse($bbText);
     }
 
     /**
@@ -111,7 +104,6 @@ abstract class ForumNotificationProviderAbstract extends NotificationProviderAbs
             'forum' => $topic->getBoard()->getCategory()->getForum()->getName(),
             'categorie' => $topic->getBoard()->getCategory()->getName(),
             'theme' => $topic->getBoard()->getName(),
-            'message' => $post->getBody(),
             'fildiscussion' => $topic->getTitle()
         ];
     }

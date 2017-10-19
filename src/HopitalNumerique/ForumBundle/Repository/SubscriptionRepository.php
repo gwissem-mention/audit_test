@@ -13,18 +13,28 @@ class SubscriptionRepository extends ParentSubscriptionRepository
     /**
      * Returns query builder of topic subscribers.
      *
-     * @param $topicId
+     * @param int $topicId
+     * @param int|null $boardId
      *
      * @return QueryBuilder
      */
-    public function getTopicSubscribersQueryBuilder($topicId)
+    public function getTopicSubscribersQueryBuilder($topicId, $boardId = null)
     {
-        return $this->createSelectQuery(['s'])
+        $qb = $this->createSelectQuery(['s'])
             ->select('user.id')
             ->join('s.ownedBy', 'user')
             ->where('s.topic = :topicId')
             ->setParameter('topicId', $topicId)
         ;
+
+        if (null !== $boardId) {
+            $qb
+                ->orWhere('s.board = :boardId')
+                ->setParameter('boardId', $boardId)
+            ;
+        }
+
+        return $qb;
     }
 
     /**
