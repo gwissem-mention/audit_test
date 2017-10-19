@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
+use HopitalNumerique\NotificationBundle\Service\Provider\FrequenciesBlacklistInterface;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\AclBundle\Entity\Acl;
@@ -16,15 +17,16 @@ use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class ComingTrainingSessionsNotificationProvider.
  */
-class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbstract
+class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbstract implements FrequenciesBlacklistInterface
 {
     use MailManagerAwareTrait;
+
+    const DEFAULT_FREQUENCY = NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_WEEKLY;
 
     const NOTIFICATION_CODE = 'coming_training_sessions';
 
@@ -173,5 +175,17 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
             $options['liste'] = $notification->getTitle();
         }
         $this->mailManager->sendNextSessionsNotification($notification->getUser(), $options);
+    }
+
+    /**
+     * Gets frequencies blacklist.
+     *
+     * @return array
+     */
+    public function getForbiddenFrequencies()
+    {
+        return [
+            NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT,
+        ];
     }
 }
