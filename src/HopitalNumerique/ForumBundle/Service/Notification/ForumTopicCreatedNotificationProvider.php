@@ -64,6 +64,7 @@ class ForumTopicCreatedNotificationProvider extends ForumNotificationProviderAbs
      */
     public function notify(Notification $notification)
     {
+        $notification->addData('message', $notification->getDetail());
         $this->mailManager->sendForumTopicCreatedNotification($notification->getUser(), $notification->getData());
     }
 }
