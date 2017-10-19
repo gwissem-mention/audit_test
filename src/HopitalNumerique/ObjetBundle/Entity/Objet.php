@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -1923,6 +1922,22 @@ class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
     public function getObjectIdentityTitle()
     {
         return $this->getTitre();
+    }
+
+    /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return $this->getTypeLabels();
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityDescription()
+    {
+        return $this->getResumeResume();
     }
 
     /**

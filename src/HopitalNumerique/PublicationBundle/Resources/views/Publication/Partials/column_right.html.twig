@@ -1,8 +1,8 @@
 {% if
     contenu is defined and contenu is not sameas(false) and contenu.contenu|parsePublication|glossaire_list(contenu) is not empty or
     contenu.contenu is not defined and objet.resume is defined and objet.resume|parsePublication|glossaire_list(objet) is not empty or
-    (productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0) or
-    (objet.domaines|length > 1) or relatedBoards|length > 0
+    (objectRelations|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0) or
+    (objet.domaines|length > 1)
 %}
 
     <div id="column-right">
@@ -12,7 +12,7 @@
             </div>
         {% endif %}
         {% if objet.associatedProductions == true %}
-            {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 or relatedBoards|length > 0 %}
+            {% if objectRelations|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0%}
                 <div class="column-right-container">
                     {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
                 </div>

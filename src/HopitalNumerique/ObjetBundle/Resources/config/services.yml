@@ -48,13 +48,14 @@ services:
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-
-    hopitalnumerique_objet.repository.contenu:
-        class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
-        factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
-            - 'HopitalNumeriqueObjetBundle:Contenu'
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.manager.note"
+            - "@session"
+            - "@hopitalnumerique_user.manager.user"
+            - "@hopitalnumerique_reference.manager.reference"
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
 
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
@@ -136,7 +137,7 @@ services:
 
     hopitalnumerique_objet.dependency_injection.production_liee:
         class: 'HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee'
-        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity']
 
     hopitalnumerique_objet.doctrine.note_reader:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'
@@ -163,12 +164,6 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Risk'
-
-    hopitalnumerique_objet.reorder_related_board_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\ReorderRelatedBoardsHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@hopitalnumerique_objet.repository.related_board"
 
     hopitalnumerique_objet.handler.edit_risk:
         class: HopitalNumerique\ObjetBundle\Domain\Command\EditRiskHandler

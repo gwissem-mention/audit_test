@@ -10,6 +10,16 @@ interface ObjectIdentityDisplayableInterface
     public function getObjectIdentityTitle();
 
     /**
+     * @return array
+     */
+    public function getObjectIdentityCategories();
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityDescription();
+
+    /**
      * @return string
      */
     public function getObjectIdentityType();

@@ -444,6 +444,22 @@ class Discussion implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return [];
+    }
+
+    /**
+     * @return null
+     */
+    public function getObjectIdentityDescription()
+    {
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function getObjectIdentityType()

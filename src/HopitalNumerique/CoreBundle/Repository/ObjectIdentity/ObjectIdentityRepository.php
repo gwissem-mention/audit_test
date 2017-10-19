@@ -64,7 +64,7 @@ class ObjectIdentityRepository extends EntityRepository
      *
      * @return ObjectIdentity[]
      */
-    public function getRelatedObjects(ObjectIdentity $objectIdentity, $targetClass = null)
+    public function getRelatedObjects(ObjectIdentity $objectIdentity, $targetClass = [])
     {
         $queryBuilder = $this->createQueryBuilder('object', 'object.id')
             ->join(Relation::class, 'relation', Join::WITH, 'relation.targetObjectIdentity = object.id')
@@ -74,9 +74,9 @@ class ObjectIdentityRepository extends EntityRepository
             ->addOrderBy('relation.order')
         ;
 
-        if (null !== $targetClass) {
+        if (count($targetClass)) {
             $queryBuilder
-                ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.class = :targetClass')
+                ->join('relation.targetObjectIdentity', 'target', Join::WITH, 'target.class IN (:targetClass)')
                 ->setParameter('targetClass', $targetClass)
             ;
         }
@@ -117,5 +117,55 @@ class ObjectIdentityRepository extends EntityRepository
         $this->populateMultiple($objects);
 
         return $objects;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     * @param array $acceptedClasses
+     *
+     * @return array
+     */
+    public function getBidirectionalRelationsObjects(ObjectIdentity $objectIdentity, $acceptedClasses = [])
+    {
+        $queryBuilder = $this->createQueryBuilder('object', 'object.id')
+            ->join(Relation::class, 'relation', Join::WITH, 'relation.sourceObjectIdentity = object.id OR relation.targetObjectIdentity = object.id')
+            ->join('relation.targetObjectIdentity', 'target')
+            ->join('relation.sourceObjectIdentity', 'source')
+            ->andWhere('source.id = :object OR target.id = :object')
+            ->setParameter('object', $objectIdentity)
+
+            ->addGroupBy('object.id')
+        ;
+
+        if (count($acceptedClasses)) {
+            $queryBuilder
+                ->andWhere('source.class IN (:acceptedClasses)')
+                ->andWhere('target.class IN (:acceptedClasses)')
+                ->setParameter('acceptedClasses', $acceptedClasses)
+            ;
+        }
+
+        $objects = $queryBuilder->getQuery()->getResult();
+
+        $this->populateMultiple($objects);
+
+        return $objects;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     *
+     * @return ObjectIdentity
+     */
+    public function findOrCreate(ObjectIdentity $objectIdentity)
+    {
+        /** @var ObjectIdentity|null $persistedObjectIdentity */
+        if ($persistedObjectIdentity = $this->find($objectIdentity->getId())) {
+            return $persistedObjectIdentity;
+        }
+
+        $this->_em->persist($objectIdentity);
+
+        return $objectIdentity;
     }
 }

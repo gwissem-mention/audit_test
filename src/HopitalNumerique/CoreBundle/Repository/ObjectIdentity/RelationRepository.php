@@ -31,6 +31,21 @@ class RelationRepository extends EntityRepository
 
     /**
      * @param ObjectIdentity $objectIdentity
+     */
+    public function removeFrom(ObjectIdentity $objectIdentity, $except = [])
+    {
+        /** @var Relation $single */
+        foreach ($this->findBySourceObjectIdentity($objectIdentity) as $single) {
+            if (in_array($single->getTargetObjectIdentity()->getId(), $except)) {
+                continue;
+            }
+
+            $this->_em->remove($single);
+        }
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
      * @return array
      */
     public function getObjectIdentityRelations(ObjectIdentity $objectIdentity)
