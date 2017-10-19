@@ -10,12 +10,13 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use HopitalNumerique\ForumBundle\Entity\Post;
 use HopitalNumerique\ForumBundle\Entity\Topic;
+use HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
+class MigrateCDPForumGroupBoardCommand extends ContainerAwareCommand
 {
     /**
      * @inheritdoc
@@ -23,9 +24,9 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:cdp:migrate:forum:public')
-            ->setDescription('Migrate CDP forum public boards')
-            ->setHelp('Migrate forum boards messages to public discussions')
+            ->setName('app:cdp:migrate:forum:group')
+            ->setDescription('Migrate CDP forum group boards')
+            ->setHelp('Migrate forum boards messages to group discussions')
         ;
     }
 
@@ -33,7 +34,7 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
     {
         $entityManager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $boardRepository = $this->getContainer()->get('hopitalnumerique_forum.repository.board');
-        $categoryRepository = $this->getContainer()->get('ccdn_forum_forum.repository.category');
+        $questionnaire = $this->getContainer()->get(QuestionnaireRepository::class)->find(27);
 
         $users = [];
 
@@ -42,9 +43,7 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
         $output->writeln('**************************');
         $output->writeln('');
 
-        $boards = $boardRepository->findById([29, 7, 51, 52]);
-
-        $boards = array_merge($boards, $categoryRepository->findOneCategoryById(1)->getBoards()->toArray());
+        $boards = $boardRepository->findById([13, 19, 23]);
 
         /** @var Board $board */
         foreach ($boards as $board) {
@@ -62,6 +61,27 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
 
             $output->writeln(sprintf('    Board : %s', $board->getName()));
 
+            $group = new Groupe();
+            $group
+                ->setTitre($board->getName())
+                ->setDateCreation(new \DateTime())
+                ->setDateDemarrage(new \DateTime())
+                ->setDateFin((new \DateTime())->add(new \DateInterval('P1Y')))
+                ->setDateInscriptionOuverture(new \DateTime())
+                ->setActif(true)
+                ->setDescriptionCourte($board->getDescription())
+                ->setDescriptionHtml($board->getDescription())
+                ->setNombreParticipantsMaximum(20)
+                ->setVedette(false)
+                ->setQuestionnaire($questionnaire)
+            ;
+
+            foreach ($domains as $domain) {
+                $group->addDomain($domain);
+            }
+
+            $entityManager->persist($group);
+
             /** @var Topic $topic */
             foreach ($board->getTopics() as $topic) {
 
@@ -73,6 +93,8 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
 
                 $discussion = new Discussion($topic->getTitle(), $topic->getFirstPost()->getCreatedBy(), $domains);
                 $discussion
+                    ->addGroup($group)
+                    ->setPublic(false)
                     ->setCreatedAt($topic->getFirstPost()->getCreatedDate())
                 ;
 
@@ -86,6 +108,8 @@ class MigrateCDPForumPublicBoardCommand extends ContainerAwareCommand
                     $message->setCreatedAt($post->getCreatedDate());
 
                     $entityManager->persist($message);
+
+                    $group->addUser($post->getCreatedBy());
 
                     $users[$post->getCreatedBy()->getId()] = $post->getCreatedBy();
                 }

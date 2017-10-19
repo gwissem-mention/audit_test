@@ -637,7 +637,14 @@ class Groupe
      */
     public function addInscription(Inscription $inscription)
     {
-        $this->inscriptions[] = $inscription;
+        if ($this->inscriptions->filter(function (Inscription $registration) use ($inscription) {
+            return
+                $registration->getUser()->getId() === $inscription->getUser()->getId() &&
+                $registration->getGroupe()->getId() === $inscription->getGroupe()->getId()
+            ;
+        })->count() === 0) {
+            $this->inscriptions[] = $inscription;
+        }
 
         return $this;
     }
