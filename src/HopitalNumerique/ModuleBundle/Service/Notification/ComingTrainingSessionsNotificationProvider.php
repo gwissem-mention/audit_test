@@ -101,16 +101,6 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     {
         $now = new \DateTime();
 
-        $moduleTitle = $session->getModuleTitre();
-        if (strlen($moduleTitle) > self::getLimitNotifyTitleLength()) {
-            $moduleTitle = substr($moduleTitle, 0, self::getLimitNotifyTitleLength()) . '...';
-        }
-
-        $sessionTitle = $session->getDescription();
-        if (strlen($sessionTitle) > self::getLimitNotifyDetailLength()) {
-            $sessionTitle = substr(strip_tags($sessionTitle, 'a'), 0, self::getLimitNotifyDetailLength()) . '...';
-        }
-
         /**
          * @var Role $sessionRole
          */
@@ -121,8 +111,8 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
 
         $this->processNotification(
             $now->format('YmdHis'),
-            $moduleTitle,
-            $sessionTitle . ' ' . $session->getFormateur()->getPrenomNom(),
+            $session->getModuleTitre(),
+            $session->getDescription(),
             [
                 'id' => $session->getModule()->getId(),
                 'roleIds' => $roleIds,
@@ -172,7 +162,13 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     public function notify(Notification $notification)
     {
         if (1 === $notification->getDetailLevel() || NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT === $notification->getFrequency()) {
-            $options['liste'] = $notification->getTitle() . ' ' . $notification->getData('dateSession') . ' ' . $notification->getDetail();
+            $options['liste'] = sprintf(
+                '%s - %s - %s - %s',
+                $notification->getTitle(),
+                $notification->getData('dateSession'),
+                $notification->getData('formateur'),
+                $notification->getDetail()
+            );
         } else {
             $options['liste'] = $notification->getTitle();
         }
