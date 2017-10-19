@@ -1400,9 +1400,7 @@ class MailManager extends BaseManager
      */
     public function sendAutodiagUpdateNotification(User $user, $options)
     {
-        $options['urlAutodiagnostics'] = $this->_router->generate('hopitalnumerique_autodiag_entry_add', [
-            'autodiag' => $options['autodiagId'],
-        ]);
+        $options['urlAutodiagnostics'] = $this->_router->generate('account_service') . '#autodiagnostic-widget';
         $this->sendNotification($user, $options, Mail::MAIL_AUTODIAG_UPDATE);
     }
 
