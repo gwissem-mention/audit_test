@@ -201,9 +201,10 @@ var Discussion;
 
         discussionReading: function ()
         {
+            var that = this;
             var scrollTimer;
             $(window).on('scroll', function (e) {
-                if ($('.group .tabs a.tab.discussion.active').length === 0) {
+                if (that.scope === 'group' && $('.group .tabs a.tab.discussion.active').length === 0) {
                     return;
                 }
 
