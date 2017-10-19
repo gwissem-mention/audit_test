@@ -40,7 +40,7 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
         $this->processNotification(
             $group->getId(),
             $group->getTitre(),
-            $group->getDescriptionCourte() . ' - ' . $group->getDateDemarrage()->format('d/m/Y'),
+            $group->getDescriptionCourte(),
             array_merge(
                 parent::generateOptions($group),
                 [
