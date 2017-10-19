@@ -19,7 +19,10 @@ class PostCreatedListener extends NotificationListenerAbstract
      */
     public function onPostPublished(PostEvent $event)
     {
-        $this->getProvider()->fire($event->getPost());
+        $post = $event->getPost();
+        if ($post->getTopic()->getFirstPost()->getId() !== $post->getId()) {
+            $this->getProvider()->fire($event->getPost());
+        }
     }
 
     /**
