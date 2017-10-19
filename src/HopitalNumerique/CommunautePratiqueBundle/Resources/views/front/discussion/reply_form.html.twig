@@ -4,7 +4,7 @@
 
     {% set user = app.user %}
 
-    {% if message is defined %}
+    {% if message is defined and message %}
         {% set user = message.user %}
     {% endif %}
 
@@ -18,9 +18,18 @@
             </div>
             <div class="message-body">
                 {{ form_start(form) }}
+
                     {{ form_widget(form.content, {'attr': {'class': 'validate[required] content'}}) }}
 
                     {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/message_file_zone.html.twig', {'files': form.files, 'message': message is defined ? message : null}) }}
+
+                    {% if form.biography is defined %}
+                        <div class="reply-biography">
+                            <a href="{{ path('account_profile') }}" class="profile-link" target="_blank">{{ 'discussion.message.reply.form.biography.link.text'|trans }}</a>
+                            {{ form_label(form.biography) }}
+                            {{ form_widget(form.biography) }}
+                        </div>
+                    {% endif %}
 
                     <div class="save">
                         <input type="submit" class="btn btn-success pull-right" value="{{ 'discussion.message.reply.form.submit.text'|trans|e }}">

@@ -259,7 +259,7 @@ var Discussion;
 
             tinyMCE.init({
                 entity_encoding : 'raw',
-                selector     : element + ' textarea',
+                selector     : element + ' textarea.content',
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',

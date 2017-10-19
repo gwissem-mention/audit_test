@@ -26,6 +26,14 @@ class DiscussionMessageType extends AbstractType
                 'label' => false,
             ])
         ;
+
+        if (null !== $builder->getData() && !$builder->getData()->author->getPresentation() && null === $builder->getData()->message) {
+            $builder
+                ->add('biography', TextareaType::class, [
+                    'required' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -35,7 +43,7 @@ class DiscussionMessageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PostDiscussionMessageCommand::class,
-            'label_format' => 'discussion.message.answer.form.%name%.label',
+            'label_format' => 'discussion.message.reply.form.%name%.label',
             'translation_domain' => 'cdp_discussion',
         ]);
     }
