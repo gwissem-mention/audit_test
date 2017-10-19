@@ -8,3 +8,9 @@ services:
         class: HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueCoreBundle:ObjectIdentity\ObjectIdentity']
+
+
+    HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository:
+        class: HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCoreBundle:ObjectIdentity\Subscription']

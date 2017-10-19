@@ -5,6 +5,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Service\FilePathFinder;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -68,6 +69,7 @@ class DiscussionController extends Controller
                     $this->getUser()
                 )
             );
+            $discussionSubscribed = $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser());
         } else {
             $discussion = null;
         }
@@ -108,6 +110,7 @@ class DiscussionController extends Controller
         }
 
         $options= [
+            'isDiscussionSubscribed' => isset($discussionSubscribed) ? $discussionSubscribed : false,
             'preopenNewDiscussionModal' => isset($newDiscussionForm) && $object,
             'group' => $group,
             'scope' => null === $group ? 'public' : 'group',
@@ -253,6 +256,7 @@ class DiscussionController extends Controller
             'group' => $group,
             'scope' => null === $group ? 'public' : 'group',
             'discussion' => $discussion,
+            'isDiscussionSubscribed' => $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser()),
             'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
         ]);
@@ -436,6 +440,30 @@ class DiscussionController extends Controller
         $this->getDoctrine()->getManager()->flush();
 
         $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.public.success', [], 'cdp_discussion'));
+
+        return $this->redirectResponse($group, $discussion);
+    }
+
+    /**
+     * @param Discussion $discussion
+     * @param Groupe|null $group
+     *
+     * @Security("is_granted('subscribe', discussion)")
+     *
+     * @return RedirectResponse
+     */
+    public function subscribeAction(Discussion $discussion, Groupe $group = null)
+    {
+        $subscriptionService = $this->get(UserSubscription::class);
+        if ($subscriptionService->isSubscribed($discussion, $this->getUser())) {
+            $subscriptionService->unsubscribe($discussion, $this->getUser());
+
+            $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.subscription.un.success', [], 'cdp_discussion'));
+        } else {
+            $subscriptionService->subscribe($discussion, $this->getUser());
+
+            $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.subscription.sub.success', [], 'cdp_discussion'));
+        }
 
         return $this->redirectResponse($group, $discussion);
     }
