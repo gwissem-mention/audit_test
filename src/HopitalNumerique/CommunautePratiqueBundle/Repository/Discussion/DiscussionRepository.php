@@ -278,4 +278,42 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getResult()
         ;
     }
+
+    /**
+     * @param Domaine[] $domains
+     *
+     * @return integer
+     */
+    public function countActiveDiscussions(array $domains)
+    {
+        return $this->createQueryBuilder('discussion')
+            ->select('COUNT(DISTINCT discussion.id)')
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->join('discussion.messages', 'message', Join::WITH, 'message.createdAt >= :date')
+            ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     *
+     * @return integer
+     */
+    public function countDiscussionWithoutReply(array $domains)
+    {
+        return count($this->createQueryBuilder('discussion')
+            ->select('COUNT(DISTINCT discussion.id)')
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->join('discussion.messages', 'message')
+
+            ->addGroupBy('discussion.id')
+            ->andHaving('COUNT(message) = 1')
+
+            ->getQuery()->getScalarResult())
+        ;
+    }
 }

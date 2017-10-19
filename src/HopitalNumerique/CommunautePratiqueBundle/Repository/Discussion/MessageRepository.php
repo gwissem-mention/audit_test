@@ -130,4 +130,23 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getResult()
         ;
     }
+
+    /**
+     * @param Domaine[] $domains
+     *
+     * @return integer
+     */
+    public function countRecentMessages(array $domains)
+    {
+        return $this->createQueryBuilder('message')
+            ->select('COUNT(message.id)')
+            ->join('message.discussion', 'discussion')
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->andWhere('message.createdAt >= :date')
+            ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
 }
