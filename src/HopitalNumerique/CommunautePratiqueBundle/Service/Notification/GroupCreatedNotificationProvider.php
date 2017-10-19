@@ -60,7 +60,7 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->groupeInscriptionRepository->getCommunityMembersQueryBuilder();
+        return $this->groupeInscriptionRepository->createCommunityMembersQueryBuilder([$notification->getData('domainId')]);
     }
 
     /**

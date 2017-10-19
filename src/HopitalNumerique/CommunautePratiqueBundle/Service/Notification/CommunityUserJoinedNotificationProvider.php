@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -55,6 +56,9 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
             [
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
+                'domainIds' => $user->getDomaines()->map(function (Domaine $domain) {
+                    return $domain->getId();
+                })->toArray(),
             ]
         );
     }
@@ -69,7 +73,9 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->groupeInscriptionRepository->getCommunityMembersQueryBuilder();
+        return $this->groupeInscriptionRepository->createCommunityMembersQueryBuilder(
+            $notification->getData('domainIds')
+        );
     }
 
     /**
@@ -77,6 +83,9 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificat
      */
     public function notify(Notification $notification)
     {
-        $this->mailManager->sendCdpUserJoinedNotification($notification->getUser(), $notification->getData());
+        $this->mailManager->sendCdpUserJoinedNotification($notification->getUser(), [
+            'prenomUtilisateurDist' => $notification->getData('prenomUtilisateurDist'),
+            'nomUtilisateurDist' => $notification->getData('nomUtilisateurDist'),
+        ]);
     }
 }
