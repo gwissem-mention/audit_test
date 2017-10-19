@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\ForumBundle\EventListener;
 
-use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserPostEvent;
+use HopitalNumerique\ForumBundle\Event\PostEvent;
 use HopitalNumerique\ForumBundle\Events;
 use HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider;
 use HopitalNumerique\NotificationBundle\EventListener\NotificationListenerAbstract;
@@ -15,9 +15,9 @@ use HopitalNumerique\NotificationBundle\EventListener\NotificationListenerAbstra
 class PostCreatedListener extends NotificationListenerAbstract
 {
     /**
-     * @param UserPostEvent $event
+     * @param PostEvent $event
      */
-    public function onPostCreatedSuccess(UserPostEvent $event)
+    public function onPostPublished(PostEvent $event)
     {
         $this->getProvider()->fire($event->getPost());
     }
@@ -28,7 +28,7 @@ class PostCreatedListener extends NotificationListenerAbstract
     public static function getSubscribedEvents()
     {
         return [
-            Events::POST_CREATE_SUCCESS => 'onPostCreatedSuccess',
+            Events::POST_PUBLISHED => 'onPostPublished',
         ];
     }
 
