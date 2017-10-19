@@ -19,11 +19,11 @@ notification_config:
             detail: Nom de l'utilisateur qui a copié son rapport pour moi
     grouped:
         report_updated:
-            single: Le rapport %reportName% a été modifié par %userName% , %userName2%
+            single: Le rapport %reportName% a été modifié par %userName%
             single_undetail: Le rapport %reportName%
             multiple:
                 header: %number% rapports ont été modifiés
-                detail: %reportName% par %userName%, %userName2%
+                detail: %reportName% par %userName%
                 undetail: %reportName%
         report_shared_for_me:
             single: Le rapport %reportName% a été partagé avec moi par %userName%

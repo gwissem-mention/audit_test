@@ -236,10 +236,11 @@ class MailManager extends BaseManager
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      * @param int $check
      * @param bool $setCopy
+     * @param bool $convertBodyLineEndings If true, body is converted with nl2br
      *
      * @return \Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail($user, $mail, $options = [], $check = 0, $setCopy = true)
+    private function generationMail($user, $mail, $options = [], $check = 0, $setCopy = true, $convertBodyLineEndings = true)
     {
         $options = $this->getAllOptions($options);
 
@@ -269,22 +270,23 @@ class MailManager extends BaseManager
 
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail($subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check);
+        return $this->sendMail($subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check, $convertBodyLineEndings);
     }
 
     /**
      * Envoi un mail.
      *
-     * @param string            $subject      Sujet du mail
-     * @param string            $from         Expéditeur
-     * @param string            $destinataire Destinataire
-     * @param string            $body         Contenu du mail
-     * @param array|bool|string $bcc          Copie(s) cachée(s)
-     * @param int               $check
+     * @param string $subject Sujet du mail
+     * @param string $from Expéditeur
+     * @param string $destinataire Destinataire
+     * @param string $body Contenu du mail
+     * @param array|bool|string $bcc Copie(s) cachée(s)
+     * @param int $check
+     * @param bool $convertBodyLineEndings If true, body is converted with nl2br
      *
      * @return \Swift_Message
      */
-    public function sendMail($subject, $from, $destinataire = null, $body, $bcc = false, $check = 0)
+    public function sendMail($subject, $from, $destinataire = null, $body, $bcc = false, $check = 0, $convertBodyLineEndings = true)
     {
         $body = quoted_printable_decode($body);
         $currentDomain = $this->currentDomain
@@ -301,7 +303,7 @@ class MailManager extends BaseManager
         }
 
         //prepare content HTML
-        $bodyHtml = nl2br($body);
+        $bodyHtml = $convertBodyLineEndings ? nl2br($body) : $body;
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig');
         $bodyHtml = $template->render([
             'content' => $bodyHtml,
@@ -1678,7 +1680,7 @@ class MailManager extends BaseManager
 
         $options['prenomUtilisateur'] = $user->getFirstname();
 
-        $mailToSend = $this->generationMail($user, $mail, $options, 0, false);
+        $mailToSend = $this->generationMail($user, $mail, $options, 0, false, false);
         $mailToSend->setTo($user->getEmail());
 
         $this->mailer->send($mailToSend);
@@ -1691,18 +1693,19 @@ class MailManager extends BaseManager
     public function sendGroupedNotification(User $user, $groupedNotifications)
     {
         array_multisort($groupedNotifications);
-        $content = "";
-        foreach ($groupedNotifications as $groupedNotification) {
-            foreach ($groupedNotification as $key => $code) {
-                $content .= $this->_twig->render($code['template'], ['notifications' => $code['notification']]);
-            }
-        }
+
+        $content = $this->_twig->render('@NodevoMail/Notifications/grouped_layout.html.twig', [
+            'notifications' => $groupedNotifications,
+        ]);
+
         $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
             'objects' => $this->objectRepository->getRandomNotviewedObjects($user),
             'profilCompletion' => $this->profilecompletionCalculator->calculateForUser($user),
             'stats' => $this->statsInformationsRetriever->getStats(),
         ]);
-        $options['message'] = strip_tags($content, '<a><b><strong><em><span>');
+
+        $options['message'] = $content;
+
         $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
     }
 }

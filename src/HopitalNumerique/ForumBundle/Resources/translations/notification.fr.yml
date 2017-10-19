@@ -11,12 +11,12 @@ notification_config:
             detail: -
     grouped:
         forum_post_created:
-            single: Un nouveau message a été déposé dans la discussion %filName% : %message% (%auteur%)
+            single: Un nouveau message a été déposé dans la discussion %filName% (%auteur%) : %message%
             multiple:
                 header: %number% nouveaux messages ont été déposés
                 content: %filName% (%auteur%) : %message%
         forum_topic_created:
-            single: La nouvelle discussion %filName% a été créée dans le thème %themeName% : %firstPost% (%auteur%)
+            single: La nouvelle discussion %filName% a été créée dans le thème %themeName% (%auteur%) : %firstPost%
             multiple:
                 header: %number% nouvelles discussions ont été créées
                 content: %themeName% : %filName% (%auteur%). %firstPost%
