@@ -7,8 +7,11 @@ use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserPostEvent;
 use CCDNForum\ForumBundle\Entity\Model\Post;
 use CCDNForum\ForumBundle\Model\FrontModel\ModelInterface;
+use HopitalNumerique\ForumBundle\Event\PostEvent;
+use HopitalNumerique\ForumBundle\Events;
 use HopitalNumerique\ForumBundle\Model\FrontModel\SubscriptionModel;
 use HopitalNumerique\ForumBundle\Model\Component\Repository\PostRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Nodevo\MailBundle\Manager\MailManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -55,15 +58,21 @@ class PostEventListener implements EventSubscriberInterface
     private $postRepository;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * PostEventListener constructor.
      *
-     * @param ModelInterface    $postModel
-     * @param MailManager       $mailManager
-     * @param UserManager       $userManager
-     * @param                   $mailer
-     * @param TokenStorage      $tokenStorage
+     * @param ModelInterface $postModel
+     * @param MailManager $mailManager
+     * @param UserManager $userManager
+     * @param $mailer
+     * @param TokenStorage $tokenStorage
      * @param SubscriptionModel $subscriptionModel
-     * @param PostRepository    $postRepository
+     * @param PostRepository $postRepository
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         ModelInterface $postModel,
@@ -72,7 +81,8 @@ class PostEventListener implements EventSubscriberInterface
         $mailer,
         TokenStorage $tokenStorage,
         SubscriptionModel $subscriptionModel,
-        PostRepository $postRepository
+        PostRepository $postRepository,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->postModel = $postModel;
         $this->mailManager = $mailManager;
@@ -81,6 +91,7 @@ class PostEventListener implements EventSubscriberInterface
         $this->tokenStorage = $tokenStorage;
         $this->subscriptionModel = $subscriptionModel;
         $this->postRepository = $postRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -89,7 +100,7 @@ class PostEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'hopitalnumerique.user.post.create.success' => 'moderatePost',
+            Events::POST_CREATED => 'moderatePost',
             ForumEvents::USER_POST_EDIT_SUCCESS => 'moderatePost',
             ForumEvents::USER_TOPIC_CREATE_COMPLETE => 'moderateTopic',
         ];
@@ -155,6 +166,8 @@ class PostEventListener implements EventSubscriberInterface
 
             // Save the modified post
             $this->postModel->savePost($post);
+
+            $this->eventDispatcher->dispatch(Events::POST_PUBLISHED, new PostEvent($post));
         }
     }
 }

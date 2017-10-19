@@ -10,5 +10,14 @@ final class Events
     /**
      * This event occurs when a message is posted
      */
-    const POST_CREATE_SUCCESS = 'hopitalnumerique.user.post.create.success';
+    const POST_PUBLISHED = 'hopitalnumerique.post.published';
+
+    /**
+     * This event occurs when a new post in created.
+     * The event listener method receives a
+     * CCDNForum\ForumBundle\Component\Dispatcher\Event\UserPostEvent instance.
+     *
+     * @Event
+     */
+    const POST_CREATED = 'hopitalnumerique.user.post.create.success';
 }

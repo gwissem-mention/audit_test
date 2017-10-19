@@ -3,6 +3,8 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use HopitalNumerique\ForumBundle\Entity\Post;
+use HopitalNumerique\ForumBundle\Event\PostEvent;
+use HopitalNumerique\ForumBundle\Events;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,11 +44,7 @@ class UserPostController extends UserPostControllerBase
         $this->container->get('hopitalnumerique_forum.manager.post')->save($post);
 
         if (null === $post->getEditedDate()) {
-            $sendEmailToSubscriberCommand = new SendEmailToSubscriberCommand($this->getUser(), $post);
-
-            $this->container->get('hopitalnumerique_forum.send_email_to_subscriber_handler')->handle(
-                $sendEmailToSubscriberCommand
-            );
+            $this->container->get('event_dispatcher')->dispatch(Events::POST_PUBLISHED, new PostEvent($post));
         }
 
         $this->container->get('session')->getFlashBag()->add(

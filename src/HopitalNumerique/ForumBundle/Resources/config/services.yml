@@ -110,6 +110,7 @@ services:
             - "@security.token_storage"
             - "@ccdn_forum_forum.model.subscription"
             - "@ccdn_forum_forum.repository.post"
+            - "@event_dispatcher"
         tags:
             - { name: 'kernel.event_subscriber' }
 
@@ -160,7 +161,7 @@ services:
         class: HopitalNumerique\ForumBundle\EventListener\PostCreatedListener
         arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
         tags:
-            - { name: kernel.event_subscriber, event: hopitalnumerique.user.post.create.success }
+            - { name: kernel.event_subscriber }
 
     HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener:
         class: HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener

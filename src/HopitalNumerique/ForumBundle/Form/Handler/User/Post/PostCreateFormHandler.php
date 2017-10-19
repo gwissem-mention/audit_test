@@ -7,6 +7,7 @@ use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserPostEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 use CCDNForum\ForumBundle\Entity\Post;
 use CCDNForum\ForumBundle\Form\Handler\User\Post\PostCreateFormHandler as BaseHandler;
+use HopitalNumerique\ForumBundle\Events;
 
 /**
  *Surcharge pour ajouter des events.
@@ -26,7 +27,7 @@ class PostCreateFormHandler extends BaseHandler
         $this->dispatcher->dispatch(ForumEvents::USER_TOPIC_REPLY_SUCCESS, new UserTopicEvent($this->request, $post->getTopic()));
 
         $this->postModel->savePost($post);
-        $this->dispatcher->dispatch('hopitalnumerique.user.post.create.success', new UserPostEvent($this->request, $post));
+        $this->dispatcher->dispatch(Events::POST_CREATED, new UserPostEvent($this->request, $post));
 
         $this->dispatcher->dispatch(ForumEvents::USER_TOPIC_REPLY_COMPLETE, new UserTopicEvent($this->request, $this->topic, $this->didAuthorSubscribe()));
     }
