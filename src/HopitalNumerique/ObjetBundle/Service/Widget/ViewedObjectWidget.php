@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Service\Widget;
 
 use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Subscription;
 use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -94,8 +95,10 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
      */
     public function getWidget()
     {
+        $user = $this->tokenStorage->getToken()->getUser();
+
         $objects = $this->objectRepository->getViewedObjects(
-            $this->tokenStorage->getToken()->getUser(),
+            $user,
             $this->domains
         );
 
@@ -106,8 +109,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
 
         $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
-        $data = [];
-
+        $objectsData = [];
         /** @var Objet $object */
         foreach ($objects as $object) {
             $baseUrl = $this->baseUrlProvider->getBaseUrl(
@@ -115,13 +117,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 $this->domains
             );
 
-            $subscribed = $this->subscriptionRepository->findOneBy([
-                'user' => $this->tokenStorage->getToken()->getUser(),
-                'objet' => $object,
-                'contenu' => null,
-            ]);
-
-            $data[] = [
+            $objectsData[$object->getId()] = [
                 'shortTitle' => $object->getTitre(),
                 'fullTitle' => $object->getTitre(),
                 'modificationDate' => $object->getDateModification(),
@@ -139,10 +135,12 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 'subscription' => [
                     'objectId' => $object->getId(),
                     'contentId' => null,
-                    'subscribed' => $subscribed ? $subscribed->getId() : null,
+                    'subscribed' => false,
                 ],
             ];
         }
+
+        $contentData = [];
 
         /** @var Contenu $content */
         foreach ($contents as $content) {
@@ -151,14 +149,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 $this->domains
             );
 
-            $subscribed = $this->subscriptionRepository->findOneBy([
-                'user' => $this->tokenStorage->getToken()->getUser(),
-                'contenu' => $content,
-                'objet' => $object,
-            ]);
-
-
-            $data[] = [
+            $contentData[$content->getId()] = [
                 'shortTitle' => $content->getShortTitle(),
                 'fullTitle' => $content->getFullTitle(),
                 'modificationDate' => $content->getDateModification(),
@@ -179,12 +170,24 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 ),
                 'sameDomain' => $baseUrl === $currentDomainUrl,
                 'subscription' => [
-                    'objectId' => $object->getId(),
+                    'objectId' => $content->getObjet()->getId(),
                     'contentId' => $content->getId(),
-                    'subscribed' => $subscribed ? $subscribed->getId() : null,
+                    'subscribed' => false,
                 ],
             ];
         }
+
+        $subscriptions = $this->subscriptionRepository->findByUser($user);
+        foreach ($subscriptions as $subscription) {
+            /* @var Subscription $subscription */
+            if (null !== $subscription->getContenu()) {
+                $contentData[$subscription->getContenu()->getId()]['subscription']['subscribed'] = true;
+            } elseif (null !== $subscription->getObjet()) {
+                $objectsData[$subscription->getObjet()->getId()]['subscription']['subscribed'] = true;
+            }
+        }
+
+        $data = array_merge($objectsData, $contentData);
 
         usort($data, function ($a, $b) {
             return $a['consultationDate'] < $b['consultationDate'];
