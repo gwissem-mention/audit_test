@@ -56,7 +56,7 @@ class SendEmailToSubscriberHandler
                     'forum'           => $topic->getBoard()->getCategory()->getForum()->getName(),
                     'categorie'       => $topic->getBoard()->getCategory()->getName(),
                     'theme'           => $topic->getBoard()->getName(),
-                    'fildiscusssion'  => $topic->getTitle(),
+                    'fildiscussion'  => $topic->getTitle(),
                     'lienversmessage' => 'lien',
                     'pseudouser'      => !is_null($command->user->getPseudonym())
                         ? $command->user->getPseudonym() : $command->user->getNomPrenom(),
