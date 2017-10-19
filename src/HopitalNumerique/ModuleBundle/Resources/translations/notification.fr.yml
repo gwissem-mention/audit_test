@@ -7,8 +7,8 @@ notification_config:
             detail: Description de la session + nom du formateur
     grouped:
         coming_training_sessions:
-            single: La session "%moduleName" animée par %formateur% est programmée le %dateSession% : %description%
-            single_undetail: La session "%moduleName" animée par %formateur% est programmée le %dateSession%
+            single: La session "%moduleName%" animée par %formateur% est programmée le %dateSession% : %description%
+            single_undetail: La session "%moduleName%" animée par %formateur% est programmée le %dateSession%
             multiple:
                 header: %number% sessions de montée en compétences sont programmées prochainement
                 detail: %moduleName% (%dateSession%, %formateur%) : %description%
