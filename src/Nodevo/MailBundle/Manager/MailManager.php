@@ -301,7 +301,7 @@ class MailManager extends BaseManager
         }
 
         //prepare content HTML
-        $bodyHtml = str_replace(["\r\n", "\n"], '<br />', $body);
+        $bodyHtml = nl2br($body);
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig');
         $bodyHtml = $template->render([
             'content' => $bodyHtml,
@@ -360,10 +360,8 @@ class MailManager extends BaseManager
             foreach ($options as $key => $option) {
                 //Récupération de la variable du template
                 $variableARemplacer = '%' . $key;
-                //Remplacement de la mise en forme
-                $message = nl2br($option);
                 //Mise à jour du contenu passé en arg
-                $content = str_replace($variableARemplacer, $message, $content);
+                $content = str_replace($variableARemplacer, $option, $content);
             }
         }
 
