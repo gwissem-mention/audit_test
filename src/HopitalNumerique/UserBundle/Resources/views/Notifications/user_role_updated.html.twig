@@ -6,7 +6,8 @@
 
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%userName%' : notif.title
+        '%userName%' : notif.title,
+        '%role%' : notif.getData('role'),
     }) }}
 {% endblock %}
 
@@ -18,6 +19,7 @@
 
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%userName%' : notif.title
+        '%userName%' : notif.title,
+        '%role%' : notif.getData('role'),
     }) }}
 {% endblock %}
