@@ -24,6 +24,7 @@
     {% if notif.detailLevel == 0 %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
             '%groupeName%' : macro.linkGroup(notif.title|split(' - ')[0], notif.getData('groupId')),
+            '%auteur%' : notif.title|split(' - ')[1],
         })|raw  }}
     {% else %}
         {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
