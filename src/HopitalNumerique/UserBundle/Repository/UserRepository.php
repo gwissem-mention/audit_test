@@ -1089,10 +1089,11 @@ class UserRepository extends EntityRepository
      * Returns query builder with active user ids by role(s).
      *
      * @param array $roles List of role ids.
+     * @param array|null $domainIds Filter users that are in at least one of the given domains
      *
      * @return QueryBuilder
      */
-    public function getUsersByRolesQueryBuilder(array $roles)
+    public function createUsersByRolesQueryBuilder(array $roles, array $domainIds = null)
     {
         $parameters = ['enabledState' => 1];
         $where = 'user.enabled = :enabledState ';
@@ -1109,10 +1110,19 @@ class UserRepository extends EntityRepository
             $where .= ' AND 1=0 ';
         }
 
-        return $this->createQueryBuilder('user')
+        $qb = $this->createQueryBuilder('user')
             ->select('user.id')
             ->where($where)
             ->setParameters($parameters)
         ;
+
+        if (is_array($domainIds)) {
+            $qb
+                ->join('user.domaines', 'domain')
+                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+            ;
+        }
+
+        return $qb;
     }
 }

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Service\Notification;
 
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
@@ -106,10 +107,14 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
         /**
          * @var Role $sessionRole
          */
-        $roleIds = [];
+        $roles = [];
         foreach ($session->getRestrictionAcces() as $sessionRole) {
-            $roleIds[] = $sessionRole->getRole();
+            $roles[] = $sessionRole->getRole();
         }
+
+        $domains = $session->getModule()->getDomaines()->map(function (Domaine $domain) {
+            return $domain->getId();
+        })->toArray();
 
         $this->processNotification(
             $now->format('YmdHis'),
@@ -117,7 +122,8 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
             $session->getDescription(),
             [
                 'id' => $session->getModule()->getId(),
-                'roleIds' => $roleIds,
+                'roles' => $roles,
+                'domains' => $domains,
                 'formateur' => $session->getFormateur()->getPrenomNom(),
                 'dateSession' => $session->getDateSessionString(),
                 'description' => $session->getDescription(),
@@ -134,28 +140,10 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
      */
     public function getSubscribers(Notification $notification)
     {
-        //Get the resource that matches training sessions url.
-        /** @var Ressource $resource */
-        $resource = $this->resourceManager->getRessourceMatchingUrl('/module/');
-
-        //Filter training sessions allowed role (keep only those allowed to use training session resource).
-        /** @var Acl[][] $acl */
-        $grantedRoles = [];
-        $acl = $this->aclManager->getAclByRessourceByRole();
-        foreach ($acl as $roleId => $roleAcl) {
-            foreach ($roleAcl as $resourceId => $resourceAcl) {
-                if (in_array($resourceAcl->getRole()->getRole(), $notification->getData('roleIds'))) {
-                    if ($resource->getId() === $resourceId) {
-                        if ($resourceAcl->getRead()) {
-                            $grantedRoles[] = $resourceAcl->getRole()->getRole();
-                        }
-                    }
-                }
-            }
-        }
-
-        //Finally get query builder of active users with those roles.
-        return $this->userRepository->getUsersByRolesQueryBuilder($grantedRoles);
+        return $this->userRepository->createUsersByRolesQueryBuilder(
+            $notification->getData('roles'),
+            $notification->getData('domains')
+        );
     }
 
     /**=
