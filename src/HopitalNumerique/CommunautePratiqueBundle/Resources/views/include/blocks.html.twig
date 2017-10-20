@@ -143,30 +143,6 @@
 {% endmacro %}
 
 {##
- # Affiche des boutons de liens en rapport avec le groupe.
- #
- # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
- #}
-{% macro display_groupe_sommaire(groupe) %}
-    <div class="communaute-de-pratiques-sommaire">
-        <div class="row">
-            <div class="col-md-3">
-                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}"><em class="fa fa-home"></em><span> Groupe thématique</span></a>
-            </div>
-            <div class="col-md-3">
-                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-documents7"></em><span> Mes documents</span></a>
-            </div>
-            <div class="col-md-3">
-                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-social20"></em><span> Annuaire du groupe</span></a>
-            </div>
-            <div class="col-md-3">
-                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-arrow"></em><span> Retour à la communauté</span></a>
-            </div>
-        </div>
-    </div>
-{% endmacro %}
-
-{##
  # Affiche un petit bloc d'un document.
  #
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document document  Document
