@@ -7,7 +7,7 @@ notification_config:
             detail: -
     grouped:
         user_role_updated:
-            single: %userName% est à disposition dans ma région
+            single: %userName% (%role%) est à disposition dans ma région
             multiple:
                 header: %number% nouvelles personnes ressource sont à disposition dans ma région
-                content: %userName% : %infos%
+                content: %userName% (%role%)
