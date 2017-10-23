@@ -346,6 +346,26 @@
 
 }
 
+.discussions .discussion .messages .message.reply .reply-biography {
+    margin-bottom: 15px;
+}
+
+.discussions .discussion .messages .message.reply .reply-biography .profile-link {
+    float: right;
+    color: #333;
+    font-size: 13px;
+    padding-top: 4px;
+}
+
+.discussions .discussion .messages .message.reply .reply-biography label {
+    font-weight: normal;;
+}
+
+.discussions .discussion .messages .message.reply .reply-biography textarea {
+    resize: vertical;
+    border-radius: 0;
+}
+
 .discussions .discussion .messages .message.reply .save {
     margin-top: 10px;
 }

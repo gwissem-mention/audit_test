@@ -80,7 +80,10 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
                 null,
                 [$this->currentDomain->get()]
             );
-            $discussion->addGroup($group);
+            $discussion
+                ->addGroup($group)
+                ->setPublic(false)
+            ;
             $group->setPresentationDiscussion($discussion);
 
             $this->entityManager->persist($discussion);

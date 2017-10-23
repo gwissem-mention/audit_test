@@ -201,9 +201,10 @@ var Discussion;
 
         discussionReading: function ()
         {
+            var that = this;
             var scrollTimer;
             $(window).on('scroll', function (e) {
-                if ($('.group .tabs a.tab.discussion.active').length === 0) {
+                if (that.scope === 'group' && $('.group .tabs a.tab.discussion.active').length === 0) {
                     return;
                 }
 
@@ -259,7 +260,7 @@ var Discussion;
 
             tinyMCE.init({
                 entity_encoding : 'raw',
-                selector     : element + ' textarea',
+                selector     : element + ' textarea.content',
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',

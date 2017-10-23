@@ -66,6 +66,12 @@ class PostDiscussionMessageHandler
             $this->entityManager->persist($message);
         }
 
+        if (!empty($command->biography)) {
+            $command->author->setPresentation($command->biography);
+
+            $this->entityManager->flush($command->author);
+        }
+
         /** @var File $file */
         foreach ($this->fileRepository->findById($command->files) as $file) {
             $file->setActive(true);

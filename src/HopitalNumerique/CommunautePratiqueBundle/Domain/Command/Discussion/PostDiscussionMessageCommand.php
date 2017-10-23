@@ -35,6 +35,11 @@ class PostDiscussionMessageCommand
     public $files;
 
     /**
+     * @var string
+     */
+    public $biography;
+
+    /**
      * PostDiscussionMessageCommand constructor.
      *
      * @param Discussion $discussion

@@ -90,7 +90,7 @@ class DiscussionController extends Controller
         }
 
         if ($this->isGranted(DiscussionVoter::REPLY) && $discussion) {
-            $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
+            $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, new PostDiscussionMessageCommand($discussion, $this->getUser()), [
                 'action' => $this->generateUrl(
                     'hopitalnumerique_communautepratique_discussions_reply_discussion',
                     [

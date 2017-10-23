@@ -73,6 +73,10 @@ discussion:
             edit:
                 title: Modifier une réponse
             form:
+                biography:
+                    label: Vous ne vous êtes pas présenté. Complétez votre biographie
+                    link:
+                        text: Voir mon profil
                 submit:
                     text: Envoyer
         presentation:
