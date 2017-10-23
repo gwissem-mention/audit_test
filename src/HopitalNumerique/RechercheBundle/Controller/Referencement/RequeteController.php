@@ -102,6 +102,11 @@ class RequeteController extends Controller
      */
     public function popinSaveAction(Request $request)
     {
+        $searches = $this->container->get('hopitalnumerique_recherche.repository.requete')->getSavedSearchesByUser(
+            $this->container->get('security.token_storage')->getToken()->getUser(),
+            $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+        );
+
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setWantToSaveRequete(true);
         $requete = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete();
         if (null === $requete) {
@@ -116,6 +121,7 @@ class RequeteController extends Controller
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig', [
             'requete' => $requete,
             'requeteForm' => (null !== $requeteForm ? $requeteForm->createView() : null),
+            'nbRecherches' => (count($searches) + 1),
         ]);
     }
 

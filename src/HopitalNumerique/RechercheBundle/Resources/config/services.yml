@@ -64,6 +64,7 @@ services:
             - '@hopitalnumerique_recherche.manager.requete'
             - '@stat.manager.recherche'
             - '@security.token_storage'
+            - '@hopitalnumerique_recherche.repository.requete'
 
     hopitalnumerique_recherche.doctrine.referencement.category:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Category'
