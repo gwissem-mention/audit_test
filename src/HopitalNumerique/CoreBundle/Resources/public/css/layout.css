@@ -97,6 +97,15 @@
             .recherche-referencement .results-bloc .title a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
         .recherche-referencement .results-bloc .title a .subtitle { color: #5d5d5d;display: block;font-size: 85%; }
     .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
+
+.recherche-referencement .results-bloc .category a.synthesis {
+    color: #000;
+    font-size: 13px;
+    font-weight: normal;
+    cursor: pointer;
+    text-transform: none;
+    float: right;
+}
 /* --> */
 
 @media print {
