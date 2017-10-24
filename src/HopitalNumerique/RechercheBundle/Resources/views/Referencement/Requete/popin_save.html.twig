@@ -8,7 +8,7 @@
     {%- if app.user is not null -%}
         {{ form_start(requeteForm) }}
             <div class="form-group">
-                {{ form_widget(requeteForm.nom, { 'attr': {'placeholder': 'Ma recherche du ' ~ "now"|date('d/m/Y à H:i')} }) }}
+                {{ form_widget(requeteForm.nom, { 'attr': {'placeholder': 'Recherche ' ~ nbRecherches ~ ' - ' ~ "now"|date('d/m/Y à H:i', "Europe/Paris")} }) }}
             </div>
             <div class="text-right">
                 <button type="submit" name="save-as-new" class="btn btn-md btn-success">Enregistrer{{ requete.id is not null ? ' comme nouvelle recherche' : '' }}</button>

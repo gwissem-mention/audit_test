@@ -4,7 +4,7 @@ hopitalnumerique_recherche_referencement:
 
 #Recherche
 hopital_numerique_recherche_homepage_requete_generator:
-    path:  /recherche-par-referencement/requete-generator/{refs}/{q}/{type}
+    path:  /recherche-par-referencement/requete-generator/{refs}/{type}/{q}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:generateManuallyRequete, refs:'', q:'', type:''}
 
 hopital_numerique_recherche_send:

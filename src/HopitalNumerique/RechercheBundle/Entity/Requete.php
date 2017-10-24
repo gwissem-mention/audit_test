@@ -95,6 +95,13 @@ class Requete
     protected $domaine;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="date_save", type="string", options = {"comment" = "Date d'enregistrement de la recherche"}, nullable=true)
+     */
+    private $dateSave;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
@@ -342,6 +349,26 @@ class Requete
     public function getDomaine()
     {
         return $this->domaine;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateSave()
+    {
+        return $this->dateSave;
+    }
+
+    /**
+     * @param \DateTime $dateSave
+     *
+     * @return $this
+     */
+    public function setDateSave($dateSave)
+    {
+        $this->dateSave = $dateSave;
+
+        return $this;
     }
 
     /**

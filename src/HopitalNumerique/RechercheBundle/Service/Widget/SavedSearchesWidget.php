@@ -75,6 +75,7 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
             $data[] = [
                 'information' => [
                     'name' => $search->getNom(),
+                    'dateSave' => $search->getDateSave(),
                 ],
                 'actions' => [
                     'edit' => $this->router->generate(
