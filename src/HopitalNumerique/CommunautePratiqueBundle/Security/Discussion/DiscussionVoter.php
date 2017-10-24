@@ -17,6 +17,7 @@ class DiscussionVoter extends Voter
     const MARK_AS_RECOMMENDED = 'mark_as_recommended';
     const COPY_TO_GROUP = 'copy_to_group';
     const DOWNLOAD = 'download';
+    const SUBSCRIBE = 'subscribe';
     const MANAGE_DOMAINS = 'manage_domains';
     const REORDER = 'reorder_discussion';
 
@@ -28,7 +29,7 @@ class DiscussionVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::REORDER, self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
+        if (!in_array($attribute, [self::SUBSCRIBE, self::REORDER, self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
             return false;
         }
 
@@ -59,6 +60,7 @@ class DiscussionVoter extends Voter
             case self::CREATE:
             case self::REPLY:
             case self::DOWNLOAD:
+            case self::SUBSCRIBE:
                 return $this->canCreate($user);
         }
 

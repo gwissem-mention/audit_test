@@ -50,3 +50,12 @@ ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C13AED7BF5;
 ALTER TABLE object_identity_relation DROP FOREIGN KEY FK_D278C1C179608353;
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C13AED7BF5 FOREIGN KEY (targetObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;
 ALTER TABLE object_identity_relation ADD CONSTRAINT FK_D278C1C179608353 FOREIGN KEY (sourceObjectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;
+
+
+CREATE TABLE object_identity_subscription (user_id INT NOT NULL, subscribedAt DATETIME NOT NULL, objectIdentity_id VARCHAR(255) NOT NULL, INDEX IDX_A855FE45A76ED395 (user_id), PRIMARY KEY(objectIdentity_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE object_identity_subscription ADD CONSTRAINT FK_A855FE45697602BB FOREIGN KEY (objectIdentity_id) REFERENCES object_identity (id) ON DELETE CASCADE;
+ALTER TABLE object_identity_subscription ADD CONSTRAINT FK_A855FE45A76ED395 FOREIGN KEY (user_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+
+ALTER TABLE object_identity_subscription DROP PRIMARY KEY;
+CREATE INDEX IDX_A855FE45697602BB ON object_identity_subscription (objectIdentity_id);
+ALTER TABLE object_identity_subscription ADD PRIMARY KEY (objectIdentity_id, user_id);

@@ -58,3 +58,10 @@ services:
         arguments:
             - '@router'
             - '%object_identity_routing%'
+
+    HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription:
+        class: HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@doctrine.orm.entity_manager'
