@@ -119,7 +119,8 @@ class GlossaireExtension extends \Twig_Extension
         $testString = [];
         $text = $this->convertBadPortionsToAsciiHtml($text);
         foreach ($references as $glossaireReference) {
-            $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)(' . $glossaireReference->getSigleHtmlForGlossaire() . ')([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+            $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)(' .preg_quote($glossaireReference->getSigleHtmlForGlossaire(), '/').
+                ')([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' .($glossaireReference->isCasseSensible() ? '' : 'i');
             preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
             foreach ($wordSearchPatternMatches[0] as $key => $wordSearchPatternMatch) {
@@ -171,7 +172,8 @@ class GlossaireExtension extends \Twig_Extension
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
-                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'’\& ]{1,1}' . $glossaireReference->getSigleHtmlForGlossaire() . '[\;\<\>\,\"\(\)\'’\.\& ]{1,1}/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
+                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'’\& ]{1,1}' .preg_quote($glossaireReference->getSigleHtmlForGlossaire(), '/').
+                    '[\;\<\>\,\"\(\)\'’\.\& ]{1,1}/' . ($glossaireReference->isCasseSensible() ? '' : 'i');
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
