@@ -21,9 +21,6 @@ $(document).ready(function() {
         });
     });
 
-    var contenuId = $('#current-content-id').attr('data-current-id');
-    $('[data-content="' + contenuId + '"]').parents('ul').slideDown();
-
     var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
 
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */
@@ -149,18 +146,15 @@ $(document).ready(function() {
     // Sommaire : Toggle
     $('.toggle-children').click(function() {
         var contenuId = $(this).attr('data-contenu');
-        var childrenContainerIsOpen = !$(this).find('.fa').hasClass('fa-plus-circle');
+        var $fa = $(this).find('.fa');
 
-        if (childrenContainerIsOpen) {
-            $(this).find('.fa').removeClass('fa-minus-circle');
-            $(this).find('.fa').addClass('fa-plus-circle');
-        } else {
-            $(this).find('.fa').removeClass('fa-plus-circle');
-            $(this).find('.fa').addClass('fa-minus-circle');
-        }
+        $fa.toggleClass('fa-minus-circle');
+        $fa.toggleClass('fa-plus-circle');
 
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
     });
+    var contenuId = $('#current-content-id').attr('data-current-id');
+    $('a[data-contenu="' + contenuId + '"]').click();
 
     $('#note-moyenne-etoile')
         .rateit({
