@@ -115,6 +115,34 @@ class MailController extends Controller
     }
 
     /**
+     * Redirect user to the right domain when he came from a link in a mail
+     * @param string $pathEncoded
+     *
+     * @return RedirectResponse
+     */
+    public function redirectAction($pathEncoded)
+    {
+        list($type, $entityId, $userId) = explode('/', base64_decode($pathEncoded));
+
+        // Actually useless but will be soon useful with practice community
+        switch($type) {
+            case 'publication':
+                $url = $this->get('router')->generate('hopital_numerique_publication_publication_objet', [
+                    'id' => $entityId
+                ]);
+                $entityDomains = $this->get('hopitalnumerique_objet.repository.objet')->findOneById($entityId)->getDomaines()->toArray();
+                break;
+        }
+
+        $baseUrl = $this->get('hopitalnumerique_domaine.service.base_url_provider')->getBaseUrl(
+            $entityDomains,
+            $this->get('hopitalnumerique_domaine.manager.domaine')->getDomainesUserConnected($userId)
+        );
+
+        return $this->redirect($baseUrl . $url);
+    }
+
+    /**
      * Effectue le render du formulaire Mail.
      *
      * @param string $formName Nom du service associé au formulaire

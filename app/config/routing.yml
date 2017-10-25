@@ -206,6 +206,9 @@ nodevo_mail:
 nodevo_mail_recommandation:
     resource: '@NodevoMailBundle/Resources/config/routing/recommandation.yml'
     prefix: '/mail/recommandation'
+nodevo_mail_redirect:
+    path: /mail/redirect/{pathEncoded}
+    defaults: { _controller: "NodevoMailBundle:Mail:redirect" }
 
 nodevo_contact:
     resource: "@NodevoContactBundle/Resources/config/routing.yml"

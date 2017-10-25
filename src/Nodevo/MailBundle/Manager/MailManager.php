@@ -125,11 +125,6 @@ class MailManager extends BaseManager
     protected $statsInformationsRetriever;
 
     /**
-     * @var BaseUrlProvider
-     */
-    protected $baseUrlProvider;
-
-    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -167,8 +162,7 @@ class MailManager extends BaseManager
         BBCodeEngine $BBCodeEngine,
         ObjetRepository $objectRepository,
         ProfileCompletionCalculator $calculator,
-        StatsInformationsRetriever $statsInformationsRetriever,
-        BaseUrlProvider $baseUrlProvider
+        StatsInformationsRetriever $statsInformationsRetriever
     )
     {
         parent::__construct($em);
@@ -195,7 +189,6 @@ class MailManager extends BaseManager
         $this->objectRepository = $objectRepository;
         $this->profilecompletionCalculator = $calculator;
         $this->statsInformationsRetriever = $statsInformationsRetriever;
-        $this->baseUrlProvider = $baseUrlProvider;
 
         $this->setOptions();
 
@@ -1453,10 +1446,7 @@ class MailManager extends BaseManager
      */
     public function sendPublicationCommentNotification(User $user, $options)
     {
-        $options['urlPublication'] = $this->_router->generate('hopital_numerique_publication_publication_objet', [
-            'id' => $options['idPublication'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_PUBLICATION_COMMENTED);
+        $this->sendPublicationNotification($user, $options, Mail::MAIL_PUBLICATION_COMMENTED);
     }
 
     /**
@@ -1465,10 +1455,13 @@ class MailManager extends BaseManager
      */
     public function sendPublicationNotifiedNotification(User $user, $options)
     {
-        $options['urlPublication'] = $this->_router->generate('hopital_numerique_publication_publication_objet', [
-            'id' => $options['idPublication'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_PUBLICATION_NOTIFIED);
+        $this->sendPublicationNotification($user, $options, Mail::MAIL_PUBLICATION_NOTIFIED);
+    }
+
+    public function sendPublicationNotification(User $user, $options, $mailId)
+    {
+        $options['urlPublication'] = $this->getEncodedPath('publication', $options['idPublication'], $user);
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1544,10 +1537,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupCommentNotification(User $user, $options)
     {
-        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-            'groupe' => $options['groupId'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_GROUPE);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_GROUPE);
     }
 
     /**
@@ -1556,10 +1546,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupDocumentNotification(User $user, $options)
     {
-        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-            'groupe' => $options['groupId'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
     }
 
     /**
@@ -1568,10 +1555,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupCreatedNotification(User $user, $options)
     {
-        $options['urlCommunaute'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-            'groupe' => $options['groupId'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_CREATED);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_CREATED);
     }
 
     /**
@@ -1580,10 +1564,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupUserJoinedNotification(User $user, $options)
     {
-        $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-            'groupe' => $options['groupId'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
     }
 
     /**
@@ -1601,10 +1582,27 @@ class MailManager extends BaseManager
      */
     public function sendCdpFormCommentNotification(User $user, $options)
     {
-        $options['urlFiche'] = $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
-            'fiche' => $options['ficheId'],
-        ]);
-        $this->sendNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE, true);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     * @param bool $isFiche
+     */
+    public function sendCdpNotification(User $user, $options, $mailId, $isFiche = false)
+    {
+        if ($isFiche) {
+            $options['urlFiche'] = $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
+                'fiche' => $options['ficheId'],
+            ]);
+        } else {
+            $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+                'groupe' => $options['groupId'],
+            ]);
+        }
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1709,11 +1707,8 @@ class MailManager extends BaseManager
 
         $objects = $this->objectRepository->getRandomNotviewedObjects($user);
         foreach ($objects as $object) {
-            $baseUrl = $this->baseUrlProvider->getBaseUrl($object->getDomaines()->toArray(), $user->getDomaines(), false);
             $object->setPath(
-                $baseUrl . $this->_router->generate('hopital_numerique_publication_publication_objet', [
-                    'id' => $object->getId()
-                ])
+                $this->getEncodedPath('publication', $object->getId(), $user)
             );
         }
 
@@ -1726,5 +1721,23 @@ class MailManager extends BaseManager
         $options['message'] = $content;
 
         $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
+    }
+
+    /**
+     * @param $type
+     * @param $entityId
+     * @param User $user
+     *
+     * @return string
+     */
+    public function getEncodedPath($type, $entityId, User $user)
+    {
+        return $this->_router->generate('nodevo_mail_redirect', [
+            'pathEncoded' => base64_encode(implode('/', [
+                $type,
+                $entityId,
+                $user->getId(),
+            ])),
+        ]);
     }
 }
