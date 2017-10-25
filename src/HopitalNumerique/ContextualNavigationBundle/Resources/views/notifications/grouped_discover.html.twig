@@ -5,7 +5,7 @@
     </div>
     {% for object in objects %}
         <div style="margin-bottom: 10px;">
-            <div>{{ object.titre }}</div>
+            <a href="{{ object.path }}">{{ object.titre }}</a>
             <div class="italic">
                 <small>
                     {{ object.resume|striptags|slice(0,300)|replace({"\n":' ', "\r":' '}) ~ '...' }}
