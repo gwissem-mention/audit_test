@@ -5,6 +5,7 @@ namespace Nodevo\MailBundle\Manager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\CartBundle\Model\Item\GuidedSearch;
 use HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever;
+use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
 use HopitalNumerique\NewAccountBundle\Service\ProfileCompletionCalculator;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Note;
@@ -124,6 +125,11 @@ class MailManager extends BaseManager
     protected $statsInformationsRetriever;
 
     /**
+     * @var BaseUrlProvider
+     */
+    protected $baseUrlProvider;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -161,8 +167,10 @@ class MailManager extends BaseManager
         BBCodeEngine $BBCodeEngine,
         ObjetRepository $objectRepository,
         ProfileCompletionCalculator $calculator,
-        StatsInformationsRetriever $statsInformationsRetriever
-    ) {
+        StatsInformationsRetriever $statsInformationsRetriever,
+        BaseUrlProvider $baseUrlProvider
+    )
+    {
         parent::__construct($em);
 
         $this->mailer = $mailer;
@@ -187,6 +195,7 @@ class MailManager extends BaseManager
         $this->objectRepository = $objectRepository;
         $this->profilecompletionCalculator = $calculator;
         $this->statsInformationsRetriever = $statsInformationsRetriever;
+        $this->baseUrlProvider = $baseUrlProvider;
 
         $this->setOptions();
 
@@ -1698,8 +1707,18 @@ class MailManager extends BaseManager
             'notifications' => $groupedNotifications,
         ]);
 
+        $objects = $this->objectRepository->getRandomNotviewedObjects($user);
+        foreach ($objects as $object) {
+            $baseUrl = $this->baseUrlProvider->getBaseUrl($object->getDomaines()->toArray(), $user->getDomaines(), false);
+            $object->setPath(
+                $baseUrl . $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                    'id' => $object->getId()
+                ])
+            );
+        }
+
         $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
-            'objects' => $this->objectRepository->getRandomNotviewedObjects($user),
+            'objects' => $objects,
             'profilCompletion' => $this->profilecompletionCalculator->calculateForUser($user),
             'stats' => $this->statsInformationsRetriever->getStats(),
         ]);
