@@ -119,6 +119,12 @@
     /* Sous-chapitres */
     .sous-chapitres-container {}
     .sous-chapitres-container .title { text-decoration: underline; }
+    .sous-chapitres-container ul.parent {
+        display: flow-root;
+    }
+    .sous-chapitres-container ul.parent li.list-sous-chapitres {
+        margin-left: -20px;
+    }
 
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}

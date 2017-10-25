@@ -21,6 +21,7 @@ Hn_RechercheBundle_Referencement.init = function()
 {
     Hn_RechercheBundle_Referencement.initEvents();
     Hn_RechercheBundle_Referencement.initTreeDisplay();
+    Hn_RechercheBundle_Referencement.initFancyBoxOnSynthesis();
 };
 
 /**
@@ -34,7 +35,7 @@ Hn_RechercheBundle_Referencement.initTreeDisplay = function()
             $('[data-reference][data-level=1]').first()
         )
     );
-}
+};
 
 /**
  * Initialisation des événements.
@@ -52,6 +53,18 @@ Hn_RechercheBundle_Referencement.initEvents = function()
     });
 };
 
+/**
+ * Initialisation de la FancyBox sur les liens redirigeant vers la synthèse
+ */
+Hn_RechercheBundle_Referencement.initFancyBoxOnSynthesis = function()
+{
+    $('a.synthesis').fancybox({
+        'padding': 0,
+        'autoSize': false,
+        'width': '80%',
+        'scrolling': 'no'
+    });
+};
 
 //<-- Accesseurs / mutateurs
 Hn_RechercheBundle_Referencement.getElementByReferenceId = function(referenceId)
