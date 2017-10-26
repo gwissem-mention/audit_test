@@ -119,8 +119,11 @@
     /* Sous-chapitres */
     .sous-chapitres-container {}
     .sous-chapitres-container .title { text-decoration: underline; }
-    .sous-chapitres-container ul.parent {
-        display: grid;
+
+    @media screen and (min-width: 1271px) {
+        .sous-chapitres-container ul.parent {
+            margin-left: 270px;
+        }
     }
     .sous-chapitres-container ul.parent li.list-sous-chapitres {
         margin-left: -20px;
