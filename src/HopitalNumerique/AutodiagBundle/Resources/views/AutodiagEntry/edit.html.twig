@@ -79,12 +79,12 @@
             </div>
             <div class="synthesis-name">
                 <h2>
-
                     {% if entry.id is not null %}
                         <span class="inplace-edit-text" data-url="{{path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': entry.synthesis.id})}}">{{ entry.synthesis.name }}</span>
                     {% endif %}
                     {% if autodiag.publicUpdatedDate > entry.updatedAt %}
                         - {{ 'ad.autodiagentry.outofdate'|trans }}
+                        {{ reason ? ': ' ~ reason : '' }}
                     {% endif %}
                 </h2>
             </div>
