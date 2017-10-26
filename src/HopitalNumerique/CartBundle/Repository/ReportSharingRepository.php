@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CartBundle\Repository;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -14,11 +15,11 @@ class ReportSharingRepository extends EntityRepository
      * Returns user who are origin or target of report shares ($reportId).
      *
      * @param integer $reportId
-     * @param int $authorId
+     * @param array $authorsId
      *
      * @return QueryBuilder
      */
-    public function getSharingUsersFromReportQueryBuilder($reportId, $authorId = 0)
+    public function getSharingUsersFromReportQueryBuilder($reportId, $authorsId = [0])
     {
         return $this->createQueryBuilder('report_sharing')
             ->select('user.id')
@@ -34,8 +35,8 @@ class ReportSharingRepository extends EntityRepository
                 'reportId' => (int)$reportId,
                 'typeShare' => ReportSharing::TYPE_SHARE,
             ])
-            ->andWhere('user.id != :author')
-            ->setParameter('author', $authorId)
+            ->andWhere('user.id NOT IN (:authors)')
+            ->setParameter('authors', $authorsId, Connection::PARAM_INT_ARRAY)
         ;
     }
 }

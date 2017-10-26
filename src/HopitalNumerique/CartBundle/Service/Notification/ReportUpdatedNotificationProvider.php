@@ -63,7 +63,7 @@ class ReportUpdatedNotificationProvider extends ReportNotificationProviderAbstra
     {
         return $this->reportSharingRepository->getSharingUsersFromReportQueryBuilder(
             $notification->getData('reportId'),
-            $notification->getData('userFromId')
+            [$notification->getData('userFromId')]
         );
     }
 

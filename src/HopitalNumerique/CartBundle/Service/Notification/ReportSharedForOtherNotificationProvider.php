@@ -45,7 +45,7 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
         $this->processNotification(
             $report->getId(),
             $report->getName(),
-            $userTo->getPrenomNom(),
+            $userFrom->getPrenomNom() . ' ' . $userTo->getPrenomNom(),
             array_merge(
                 parent::generateOptions($report, $userFrom),
                 [
@@ -68,7 +68,10 @@ class ReportSharedForOtherNotificationProvider extends ReportNotificationProvide
         return $this->reportSharingRepository
             ->getSharingUsersFromReportQueryBuilder(
                 $notification->getData('reportId'),
-                $notification->getData('userFromId')
+                [
+                    $notification->getData('userFromId'),
+                    $notification->getData('userToId'),
+                ]
             );
     }
 
