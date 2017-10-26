@@ -120,7 +120,7 @@
     .sous-chapitres-container {}
     .sous-chapitres-container .title { text-decoration: underline; }
     .sous-chapitres-container ul.parent {
-        display: flow-root;
+        display: grid;
     }
     .sous-chapitres-container ul.parent li.list-sous-chapitres {
         margin-left: -20px;
