@@ -277,6 +277,10 @@ $container->loadFromExtension('fos_elastica', [
                                     'property_path' => 'roles',
                                     'index' => 'not_analyzed',
                                 ],
+                                'synthesis' => [
+                                    'type' => 'text',
+                                    'property_path' => 'synthese',
+                                ],
                             ],
                         ],
                     ],
