@@ -65,7 +65,7 @@
 }
 
 #my-account #notifications-parameters .panel-body .content .description > div {
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 #my-account #notifications-parameters .panel-body .content .row {
@@ -82,7 +82,7 @@
 }
 
 #my-account #notifications-parameters .panel-body .content select.form-control {
-    margin: 15px 0;
+    margin: 10px 0;
 }
 
 .toggle-success .toggle-slide .toggle-on, .toggle-success .toggle-slide .toggle-on.active {
