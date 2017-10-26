@@ -46,10 +46,9 @@ class SettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $frequencies = [
-            '' => 'form.choose',
+            NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT => 'form.straight',
             NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY => 'form.daily',
             NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_WEEKLY => 'form.weekly',
-            NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT => 'form.straight',
         ];
 
         $builder

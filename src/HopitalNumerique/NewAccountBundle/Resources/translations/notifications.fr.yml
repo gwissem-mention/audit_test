@@ -95,6 +95,6 @@ notification-config:
 
 form:
     choose: Je choisis ma fréquence
-    daily: Quotidiennement
-    weekly: Hebdomadairement
+    daily: Quotidien
+    weekly: Hebdomadaire
     straight: A chaque évènement
