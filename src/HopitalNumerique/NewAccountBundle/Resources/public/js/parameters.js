@@ -13,6 +13,11 @@ $(function () {
         })
     ;
     });
+    Array.prototype.forEach.call(document.querySelectorAll('#notifications-parameters select'), function (select) {
+        if (1 === select.options.length) {
+            select.style.display = 'none';
+        }
+    });
     $('#notifications-parameters .panel-body .content .description select').change(function (evt) {
         evt.target.dataset.value = evt.target.value
     });

@@ -174,6 +174,7 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     {
         return [
             NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT,
+            NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY,
         ];
     }
 }
