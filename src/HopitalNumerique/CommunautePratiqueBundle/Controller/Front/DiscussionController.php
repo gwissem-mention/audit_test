@@ -180,7 +180,9 @@ class DiscussionController extends Controller
                 );
             }
         } else {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+            
+            return $this->redirect($this->generateUrl('account_login'));
         }
 
         $this->denyAccessUnlessGranted('cdp_discussion_create');
