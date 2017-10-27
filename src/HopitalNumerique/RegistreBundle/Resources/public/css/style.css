@@ -1,3 +1,6 @@
+#registre-ambassadeur {
+    margin-top: 20px;
+}
 #registre-ambassadeur h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
 #registre-ambassadeur h3 a {font-size: 11px; color:#000000; display: block; background: url('../img/tdb.png') no-repeat right; padding-right: 30px; height: 22px; padding-top:11px; font-weight: normal}
 .listesDesAmbassadeurs {font-size: 11px; font-weight: normal; margin-left: 20px;}
@@ -58,7 +61,6 @@
     #registre-ambassadeur .map span{display: block;}
     #registre-ambassadeur .domainesFonctionnels{display: block;}
     #registre-ambassadeur .outilsMaitrises{display: block;}
-    #registre-ambassadeur .lienTableauDeBord{display:none;}
     #registre-ambassadeur .annuaire_ambassadeur .fiche .content a.link{margin-bottom: 0px; }
     #registre-ambassadeur .annuaire_ambassadeur .fiche .content .description{height:110px}
 }
