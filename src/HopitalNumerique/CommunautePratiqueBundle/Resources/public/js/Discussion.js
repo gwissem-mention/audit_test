@@ -293,6 +293,10 @@ var Discussion;
                 paste_as_text: true
             });
 
+            $(element + ' .file-dropzone .area i').on('click', function (e) {
+                $(this).parents('.area').trigger('click');
+            });
+
             $(element + ' .file-dropzone .area').dropzone({
                 url : $(element + ' .file-dropzone .area').data('upload-uri'),
                 createImageThumbnails: false,

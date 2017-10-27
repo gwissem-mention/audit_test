@@ -29,12 +29,17 @@ class UploadController extends Controller
 
         $acceptedFilesExtension = explode(',', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
 
-        if (
-            !in_array($uploadedFile->getClientOriginalExtension(), $acceptedFilesExtension) ||
-            $uploadedFile->getSize() > (10 * 1000000)
+        if (!in_array($uploadedFile->getClientOriginalExtension(), $acceptedFilesExtension)
         ) {
             return new JsonResponse(
-                $this->get('translator')->trans('upload.error.type_or_size', ['%ext%' => $this->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees')]),
+                $this->get('translator')->trans('upload.error.type', ['%ext%' => $this->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees')]),
+                418
+            );
+        }
+
+        if ($uploadedFile->getSize() > (10 * 1000000)) {
+            return new JsonResponse(
+                $this->get('translator')->trans('upload.error.size'),
                 418
             );
         }
