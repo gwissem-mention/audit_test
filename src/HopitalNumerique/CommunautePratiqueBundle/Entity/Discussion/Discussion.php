@@ -16,6 +16,9 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class Discussion implements ObjectIdentityDisplayableInterface
 {
+    const CREATED_IN_GROUP = 1;
+    const CREATED_AS_PUBLIC = 0;
+
     /**
      * @var int
      *
@@ -116,6 +119,12 @@ class Discussion implements ObjectIdentityDisplayableInterface
      */
     protected $relatedObject;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $creationPosition = self::CREATED_AS_PUBLIC;
 
     /**
      * Discussion constructor.
@@ -465,5 +474,25 @@ class Discussion implements ObjectIdentityDisplayableInterface
     public function getObjectIdentityType()
     {
         return 'discussion';
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreationPosition()
+    {
+        return $this->creationPosition;
+    }
+
+    /**
+     * @param int $creationPosition
+     *
+     * @return Discussion
+     */
+    public function setCreationPosition($creationPosition)
+    {
+        $this->creationPosition = $creationPosition;
+
+        return $this;
     }
 }
