@@ -42,7 +42,7 @@
             </a>
 
             {% if not app.user %}
-                {% set groupLink = path('account_login') %}
+                {% set groupLink = path('account_login', {urlToRedirect: currentUri}) %}
                 <a href="{{ groupLink }}" class="block">
             {% elseif not app.user.inscritCommunautePratique %}
                 {% set groupLink = path('hopital_numerique_publication_publication_article', {id: cdpArticle.id, categorie: 'article', alias: cdpArticle.alias}) %}

@@ -25,7 +25,7 @@ class ActualiteController extends Controller
     /**
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $discussionRepository = $this->get(DiscussionRepository::class);
         $messageRepository = $this->get(MessageRepository::class);
@@ -37,7 +37,9 @@ class ActualiteController extends Controller
 
         $cdpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
 
+
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
+            'currentUri' => base64_encode($request->getUri()),
             'publicDiscussionCount' => $discussionRepository->getPublicDiscussionCount($selectedDomain),
             'publicMessageCount' => $messageRepository->getPublicMessageCount($selectedDomain),
             'groupMessageCount' => $messageRepository->getGroupMessageCount($selectedDomain),

@@ -106,7 +106,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/mon-compte/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mon-compte/connexion, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/quick-sign-up$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/mon-compte/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
