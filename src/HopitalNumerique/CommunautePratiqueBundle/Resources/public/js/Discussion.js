@@ -296,6 +296,7 @@ var Discussion;
             $(element + ' .file-dropzone .area').dropzone({
                 url : $(element + ' .file-dropzone .area').data('upload-uri'),
                 createImageThumbnails: false,
+                maxFilesize: 10,
                 previewTemplate: '<div></div>',
                 init: function () {
 
@@ -318,6 +319,9 @@ var Discussion;
 
                         that.bindFileEvent($prototype);
                     })
+                },
+                error: function (file, errorMessage) {
+                    alert(errorMessage);
                 }
             });
         },

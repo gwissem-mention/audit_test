@@ -1,0 +1,3 @@
+upload:
+    error:
+        type_or_size: 'Upload échoué, veuillez fournir un fichier de 10MO maximum et ayant pour extension: %ext%'
