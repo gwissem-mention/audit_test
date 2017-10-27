@@ -134,7 +134,7 @@ class MigrateCDPForumGroupBoardCommand extends ContainerAwareCommand
         foreach ($users as $user) {
             $output->write(sprintf('    User : %s =>', $user->getPrenomNom()));
             $user
-                ->setCommunautePratiqueEnrollmentDate($user->getCommunautePratiqueEnrollmentDate() ?: new \DateTime())
+                ->setCommunautePratiqueEnrollmentDate($user->getCommunautePratiqueEnrollmentDate() ?: $user->getRegistrationDate())
                 ->setInscritCommunautePratique(true)
             ;
             $output->writeln(' [REGISTERED]');
