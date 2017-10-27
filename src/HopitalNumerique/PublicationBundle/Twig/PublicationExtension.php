@@ -47,7 +47,7 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content, $glossaires = false)
     {
-        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
+        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\’\«\»\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
 
         // matches[0] tableau des chaines completes trouvée
