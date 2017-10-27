@@ -233,6 +233,12 @@ class DiscussionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->get(PostDiscussionMessageHandler::class)->handle($command);
 
+            if (null !== $message) {
+                $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.edit.success', [], 'cdp_discussion'));
+            } else {
+                $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.add.success', [], 'cdp_discussion'));
+            }
+
             return $this->redirectResponse($group, $discussion);
         }
 
@@ -377,6 +383,8 @@ class DiscussionController extends Controller
         $message->setPublished(true);
 
         $this->getDoctrine()->getManager()->flush();
+
+        $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.validate.success', [], 'cdp_discussion'));
 
         return $this->redirectResponse($group, $message->getDiscussion());
     }
