@@ -30,6 +30,7 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\OpenedGroupItemRetriever
         arguments:
             - '@hopitalnumerique_communautepratique.repository.groupe'
+            - '@security.token_storage'
         tags:
             - { name: cdp.wall_item_retriever, alias: opened_group }
 
