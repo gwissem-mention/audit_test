@@ -86,7 +86,7 @@ discussion:
                 title: Répondre à une discussion
                 success: Message publié avec succès.
             edit:
-                title: Modifier une réponse
+                title: Modifier un message
                 success: Message modifié avec succès.
             form:
                 biography:
