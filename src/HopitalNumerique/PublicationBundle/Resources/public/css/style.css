@@ -195,6 +195,26 @@
         #articles h4.categorie {margin-left:0;}
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
+        #articles .column-left-container {
+            background-color: #e5e5e5;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        #articles .column-left-container .recherche-referencement h2 {
+            font-weight: 500;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 20px;
+        }
+        #articles .column-left-container .recherche-referencement .results-bloc a:hover {
+            text-decoration: none;
+        }
+        #articles .column-left-container .recherche-referencement .results-bloc a acronym {
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px dotted #333;
+            cursor: help;
+        }
+
         /* Sous-menu */
         #articles .menu-main{list-style:none; padding:0; margin-bottom: 20px}
         #articles .menu-main li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
