@@ -23,7 +23,7 @@
         {% endfor %}
     </div>
 
-    {% if members|length > 1 %}
+    {% if members|length > 0 %}
         <div class="text-center">
             <span class="resultats-nombre">
                 {{ 'directory.count.member'|transchoice(members|length) }}<br />
