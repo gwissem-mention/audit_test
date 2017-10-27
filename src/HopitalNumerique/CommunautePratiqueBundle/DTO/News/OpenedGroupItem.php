@@ -12,13 +12,20 @@ class OpenedGroupItem implements WallItemInterface
     protected $group;
 
     /**
+     * @var boolean
+     */
+    protected $registered;
+
+    /**
      * ClosedGroupItem constructor.
      *
      * @param Groupe $group
+     * @param boolean $registered
      */
-    public function __construct(Groupe $group)
+    public function __construct(Groupe $group, $registered)
     {
         $this->group = $group;
+        $this->registered = $registered;
     }
 
     /**
@@ -35,6 +42,14 @@ class OpenedGroupItem implements WallItemInterface
     public function getDate()
     {
         return $this->group->getDateInscriptionOuverture();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegistered()
+    {
+        return $this->registered;
     }
 
     /**

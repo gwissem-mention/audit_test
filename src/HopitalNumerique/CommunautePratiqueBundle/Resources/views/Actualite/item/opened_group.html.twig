@@ -12,8 +12,15 @@
         {{ 'wall.item.opened_group.content'|trans({'%groupName%': item.group.titre}) }}
     </div>
 
-    <a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', {groupe: item.group.id}) }}" class="link">
-        {{ 'wall.item.opened_group.link'|trans }}
-    </a>
+
+    {% if item.registered %}
+        <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {groupe: item.group.id}) }}" class="link">
+            {{ 'wall.item.opened_group.link'|trans }}
+        </a>
+    {% else %}
+        <a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', {groupe: item.group.id}) }}" class="link">
+            {{ 'wall.item.opened_group.link'|trans }}
+        </a>
+    {% endif %}
 
 </div>
