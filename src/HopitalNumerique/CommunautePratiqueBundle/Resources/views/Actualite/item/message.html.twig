@@ -15,7 +15,7 @@
         {{ item.content|parsePublication|striptags|unescape|truncate(200) }}
     </div>
 
-    <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.discussion.id}) }}" class="link">
+    <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.discussion.id}) }}#{{ 'message-'~item.messageId }}" class="link">
         {{ 'wall.item.message.link'|trans }}
     </a>
 

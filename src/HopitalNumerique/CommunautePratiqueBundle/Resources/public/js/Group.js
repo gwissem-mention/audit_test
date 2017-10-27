@@ -18,16 +18,32 @@ var Group;
                 $(this).tab('show').addClass('active');
             });
 
+            that.$tabs.find('.members-to-validate').on('click', function (e) {
+                e.stopPropagation();
+
+                $(this).parents('a.tab').data('filter', 'to-validate').trigger('click');
+            });
+
             that.$tabs.on('show.bs.tab', function (e) {
                 var $block = $('.group').find($(e.target).attr('href'));
 
                 if ($(e.target).hasClass('ajax') && $block.data('init') === false) {
                     var loader = $block.nodevoLoader().start();
 
-                    $.get($block.data('content-uri'), function (response) {
+                    var uri = $block.data('content-uri');
+
+                    if ($(e.target).data('filter')) {
+                        uri = $block.data('content-uri-'+$(e.target).data('filter'));
+                        $(e.target).data('filter', null);
+                    }
+
+                    $.get(uri, function (response) {
                         $block.html(response);
                         loader.finished();
-                        $block.data('init', true);
+
+                        if ($block.data('cache') === undefined || $block.data('cache') === 'enabled') {
+                            $block.data('init', true);
+                        }
                     })
                 }
             })

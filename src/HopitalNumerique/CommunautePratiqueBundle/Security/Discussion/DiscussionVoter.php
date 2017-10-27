@@ -52,9 +52,10 @@ class DiscussionVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::COPY_TO_GROUP:
+                return $this->canChangeVisibility($user, $subject);
             case self::REORDER:
             case self::MARK_AS_RECOMMENDED:
-            case self::COPY_TO_GROUP:
             case self::MANAGE_DOMAINS:
                 return $this->canManage($user);
             case self::CREATE:
@@ -65,6 +66,31 @@ class DiscussionVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * @param User $user
+     * @param Discussion $discussion
+     *
+     * @return bool
+     */
+    protected function canChangeVisibility(User $user, Discussion $discussion)
+    {
+        if ($this->canManage($user)) {
+            return true;
+        }
+
+        if ($discussion->getGroups()->count()) {
+            foreach ($discussion->getGroups() as $group) {
+                if ($group->getAnimateurs()->exists(function ($key, User $animator) use ($user) {
+                    return $animator->getId() === $user->getId();
+                })) {
+                    return true;
+                }
+            }
+        }
+
+        return $user->getCommunautePratiqueAnimateurGroupes()->count() > 0;
     }
 
     /**
@@ -89,7 +115,7 @@ class DiscussionVoter extends Voter
     public function canCreate(User $user)
     {
         if ($user->hasRoleCDPAdmin()) {
-            return true;
+            //return true;
         }
 
         if ($user->isInscritCommunautePratique()) {

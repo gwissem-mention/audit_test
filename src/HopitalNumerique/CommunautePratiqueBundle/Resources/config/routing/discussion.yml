@@ -77,6 +77,7 @@ hopitalnumerique_communautepratique_discussions_create_discussion:
     path: /create/{group}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
     methods:
+        - GET
         - POST
 
 hopitalnumerique_communautepratique_discussions_create_related_discussion:

@@ -34,21 +34,23 @@ class GroupeController extends Controller
      */
     public function addAction(Request $request)
     {
+        /** @var Groupe $nouveauGroupe */
         $nouveauGroupe = $this->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
 
-        if ($request->query->has('domaine')) {
-            $nouveauGroupe->setDomaine(
-                $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
-                    intval($request->query->getInt('domaine'))
-                )
-            );
+        if ($request->query->has('domains')) {
+
+            $domains = $this->get('hopitalnumerique_domaine.repository.domaine')->findById(explode('-', $request->query->get('domains')));
+            foreach ($domains as $domain) {
+                $nouveauGroupe->addDomain($domain);
+            }
         } elseif ($request->request->has('hopitalnumerique_communautepratiquebundle_groupe')) {
             $formPost = $request->request->get('hopitalnumerique_communautepratiquebundle_groupe');
+
 
             return $this->redirect(
                 $this->generateUrl(
                     'hopitalnumerique_communautepratique_admin_groupe_add',
-                    ['domaine' => intval($formPost['domaine'])]
+                    ['domains' => implode('-', $formPost['domains'])]
                 )
             );
         }

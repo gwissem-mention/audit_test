@@ -190,11 +190,11 @@
 .discussions .discussion .discussion-files .file .download {
     color: #777;
     font-size: 12px;
+    text-decoration: none;
 }
 
 .discussions .discussion .discussion-files .file .filename {
     color: #464646;
-    border-bottom: 1px solid #464646;
     margin: 0 5px;
 }
 
@@ -230,7 +230,8 @@
     margin-top: 5px;
 }
 
-.discussions .discussion .messages .title a {
+.discussions .discussion .messages .title a,
+.discussions .discussion .discussion-files a {
     color: #777;
     text-decoration: underline;
 }

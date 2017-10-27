@@ -72,6 +72,11 @@
     <body>
         {% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
         {% block layout_body %}{% endblock %}
+
+        <a href="#" class="go-to-top">
+            <i class="arrow fa fa-arrow-up"></i>
+            {{ 'go_to_top.text'|trans }}
+        </a>
     </body>
 </html>
 

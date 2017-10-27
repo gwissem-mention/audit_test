@@ -25,6 +25,9 @@
 
 {% block communaute_pratique_actions_before %}
     <div class="clearfix"></div>
+    <a href="{{ path('hopitalnumerique_communautepratique_news_index') }}" class="btn btn-default btn-sm pull-left">
+        <i class="fa fa-reply"></i>
+    </a>
     {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
 {% endblock %}
 
@@ -66,7 +69,10 @@
                 <span class="tab-title">{{ 'group.tabs.members.title'|trans }}</span>
 
                 <ul>
-                    <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.inscriptions|length, {'%countTxt%': '<b>'~groupe.inscriptions|length~'</b>'})|raw }}</li>
+                    <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.validatedInscriptions|length, {'%countTxt%': '<b>'~groupe.validatedInscriptions|length~'</b>'})|raw }}</li>
+                    {% if is_granted('validate_registration', groupe) %}
+                        <li class="members-to-validate">{{ 'group.tabs.members.members_to_validate_count'|transchoice(groupe.inscriptionsToValidate|length, {'%countTxt%': '<b>'~groupe.inscriptionsToValidate|length~'</b>'})|raw }}</li>
+                    {% endif %}
                     <li>{{ 'group.tabs.members.animators_count'|transchoice(groupe.animateurs|length, {'%countTxt%': '<b>'~groupe.animateurs|length~'</b>'})|raw }}</li>
                 </ul>
             </a>
@@ -103,7 +109,9 @@
                 id="members"
                 class="tab-content"
                 data-init="false"
+                data-cache="disabled"
                 data-content-uri="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', {'groupe': groupe.id}) }}"
+                data-content-uri-to-validate="{{ path('hopitalnumerique_communautepratique_user_listbygroupe_filtered', {'groupe': groupe.id}) }}"
             >
                 <h2>{{ 'group.tabs.members.title'|trans }}</h2>
             </div>

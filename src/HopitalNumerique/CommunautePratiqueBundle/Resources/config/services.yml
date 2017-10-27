@@ -106,6 +106,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler'
+            - '@event_dispatcher'
 
     HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler:
         class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler

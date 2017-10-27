@@ -56,6 +56,14 @@ class MessageItem implements WallItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getMessageId()
+    {
+        return $this->message->getId();
+    }
+
+    /**
      * @return string
      */
     public function getType()

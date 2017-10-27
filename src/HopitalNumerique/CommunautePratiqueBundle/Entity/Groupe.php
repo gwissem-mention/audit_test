@@ -670,6 +670,26 @@ class Groupe
     }
 
     /**
+     * @return Inscription[]|Collection
+     */
+    public function getValidatedInscriptions()
+    {
+        return $this->getInscriptions()->filter(function (Inscription $registration) {
+            return $registration->isActif();
+        });
+    }
+
+    /**
+     * @return Inscription[]|Collection
+     */
+    public function getInscriptionsToValidate()
+    {
+        return $this->getInscriptions()->filter(function (Inscription $registration) {
+            return !$registration->isActif();
+        });
+    }
+
+    /**
      * Check if user is register in the group.
      *
      * @param User $user

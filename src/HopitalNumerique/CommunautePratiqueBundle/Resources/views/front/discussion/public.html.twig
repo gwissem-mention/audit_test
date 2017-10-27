@@ -9,6 +9,9 @@
 {% block communaute_pratique_actions %}
     {{ selectedDomainSelector() }}
     {{ parent() }}
+    {% if app.user and app.user.inscritCommunautePratique %}
+        {{ communaute_pratique.display_action_contact_invitation() }}
+    {% endif %}
 {% endblock %}
 
 {% block body_communaute_pratique %}

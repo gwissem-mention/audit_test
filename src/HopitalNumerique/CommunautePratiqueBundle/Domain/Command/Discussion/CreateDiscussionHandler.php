@@ -4,6 +4,9 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionCreatedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CreateDiscussionHandler
 {
@@ -18,14 +21,24 @@ class CreateDiscussionHandler
     protected $postMessageHandler;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * CreateDiscussionHandler constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param PostDiscussionMessageHandler $postMessageHandler
+     * @param EventDispatcherInterface
      */
-    public function __construct(EntityManagerInterface $entityManager, PostDiscussionMessageHandler $postMessageHandler)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        PostDiscussionMessageHandler $postMessageHandler,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
         $this->postMessageHandler = $postMessageHandler;
     }
 
@@ -49,6 +62,8 @@ class CreateDiscussionHandler
 
         $this->entityManager->persist($discussion);
         $this->entityManager->flush($discussion);
+
+        $this->eventDispatcher->dispatch(Events::DISCUSSION_CREATED, new DiscussionCreatedEvent($discussion));
 
         $messageCommand = new PostDiscussionMessageCommand($discussion, $command->author);
         $messageCommand->content = $command->content;

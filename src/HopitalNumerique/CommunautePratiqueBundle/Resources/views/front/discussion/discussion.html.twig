@@ -26,7 +26,7 @@
             {{ 'discussion.discussion.files.title'|trans }}
             {% if app.user and discussion.getNewMessageFileCount(app.user) %}
                 <span class="new-document">
-                    {{ 'discussion.discussion.files.new_document_count'|transchoice(discussion.getNewMessageFileCount(app.user), {'%highlight%': '<u>'~('discussion.discussion.files.new_document_highlight'|transchoice(discussion.getNewMessageFileCount(app.user)))~'</u>'})|raw }}
+                    {{ 'discussion.discussion.files.new_document_count'|transchoice(discussion.getNewMessageFileCount(app.user), {'%highlight%': '<a href="#" class="goto-new-file">'~('discussion.discussion.files.new_document_highlight'|transchoice(discussion.getNewMessageFileCount(app.user)))~'</a>'})|raw }}
                     <span class="new-message-badge">{{ discussion.getNewMessageFileCount(app.user) }}</span>
                 </span>
             {% endif %}
@@ -99,14 +99,12 @@
                             <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
                         {% endif %}
                     {% else %}
-                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto" data-confirm="{{ ('discussion.discussion.actions.public.confirm.'~(discussion.public ? 'down' : 'up'))|trans }}">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
                     {% endif %}
                 {% endif %}
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
 
-                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::SUBSCRIBE'), discussion) %}
-                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_subscribe', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.subscription.'~(isDiscussionSubscribed ? 'un' : 'sub')~'.label')|trans }}</option>
-                {% endif %}
+                <option value="{{ path('hopitalnumerique_communautepratique_discussions_subscribe', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.subscription.'~(isDiscussionSubscribed ? 'un' : 'sub')~'.label')|trans }}</option>
 
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">
@@ -130,11 +128,11 @@
             {% set isNewMessage = true %}
         {% endif %}
 
-        <div class="message{{ message.helpful ? ' message--helpful' }}{{ isNewMessage ? ' new' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
+        <div class="message{{ message.helpful ? ' message--helpful' }}{{ isNewMessage ? ' new' }}{{ isNewMessage and message.files|length ? ' newFile' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
             <div class="message-avatar">
                 <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
             </div>
-            <div class="message-content">
+            <div class="message-content" id="{{ 'message-'~message.id }}">
                 <div class="message-infos">
                     <div class="actions">
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::MARK_AS_HELPFUL'), message) %}

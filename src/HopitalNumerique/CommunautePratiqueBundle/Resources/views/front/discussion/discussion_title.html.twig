@@ -1,19 +1,6 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-{% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
 {% spaceless %}
-    {% set hidden = false %}
-    {% if loop.index > displayedItemsCount %}
-        {% set hidden = true %}
-        {% if currentDiscussionToShow == true %}
-            {% set displayedItemsCount = displayedItemsCount + lazyLoadStep %}
-            {% set hidden = false %}
-        {% endif %}
-    {% endif %}
-
-    {% if not currentDiscussion or currentDiscussion.id == discussion.id %}
-        {% set currentDiscussionToShow = false %}
-    {% endif %}
     <div
         class="item-block"
         data-level="{{ level }}"
@@ -32,7 +19,7 @@
             {% endif %}
 
             {% if discussion.hasHelpfulMessage %}
-                <i class="icon fa fa-star"></i>
+                <i class="target-highlight icon fa fa-star"></i>
             {% endif %}
 
             {% if discussion.recommended %}

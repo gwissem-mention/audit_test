@@ -45,6 +45,8 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder = $this->createQueryBuilder('message')
             ->select('count(message)')
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE')
+
+            ->andWhere('message.published = TRUE')
         ;
 
         if ($domain) {
@@ -68,6 +70,8 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->select('count(message)')
             ->join('message.discussion', 'discussion')
             ->join('discussion.groups', 'groups')
+
+            ->andWhere('message.published = TRUE')
         ;
 
         if ($domain) {
@@ -92,6 +96,8 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.discussion', 'discussion')
             ->join('message.files', 'file')
             ->join('discussion.groups', 'groups')
+
+            ->andWhere('message.published = TRUE')
         ;
 
         if ($domain) {
@@ -114,6 +120,8 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('message')
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE AND discussion.createdAt != message.createdAt')
+
+            ->andWhere('message.published = TRUE')
         ;
 
         if ($domain) {

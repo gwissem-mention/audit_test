@@ -10,3 +10,10 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\GroupVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\GroupVoter
+        tags:
+            - { name: security.voter }
+        public: false

@@ -31,21 +31,23 @@ class GroupeController extends Controller
      */
     public function listAction(Request $request)
     {
-        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
-        }
-
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
-        $groupeUser = array_merge(
-            $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser($selectedDomain, $this->getUser()),
-            $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarresByUser($selectedDomain, $this->getUser())
-        );
-
+        if ($this->getUser()) {
+            $groupeUser = array_merge(
+                $this->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser($selectedDomain, $this->getUser()),
+                $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarresByUser($selectedDomain, $this->getUser())
+            );
+        } else {
+            $groupeUser = [];
+        }
         $groups = [];
         if (
-            $this->getUser()->getCommunautePratiqueAnimateurGroupes()->count() > 0 ||
-            $this->getUser()->hasRoleCDPAdmin()
+            $this->getUser() &&
+            (
+                $this->getUser()->getCommunautePratiqueAnimateurGroupes()->count() > 0 ||
+                $this->getUser()->hasRoleCDPAdmin()
+            )
         ) {
             $groups = $this->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes(
                 $selectedDomain,

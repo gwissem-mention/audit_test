@@ -35,6 +35,8 @@ class ActualiteController extends Controller
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
+        $cdpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
+
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
             'publicDiscussionCount' => $discussionRepository->getPublicDiscussionCount($selectedDomain),
             'publicMessageCount' => $messageRepository->getPublicMessageCount($selectedDomain),
@@ -42,10 +44,11 @@ class ActualiteController extends Controller
             'groupMessageFileCount' => $messageRepository->getMessageFileCount($selectedDomain),
             'runningGroupCount' => $cdpGroupRepository->countActiveGroups($domains),
             'cdpUserCount' => $userRepository->countCDPUsers($domains),
-            'contributorsCount' => $userRepository->getCDPUsersInGroupCount($domains),
+            'contributorsCount' => $userRepository->getCDPContributorCount($domains),
             'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains),
             'userRecentGroups' => $this->getUser() ? $cdpGroupRepository->getUsersRecentGroups($this->getUser(), 4, $domains) : [],
             'wallItems' => $this->get(WallItemRetriever::class)->retrieve($selectedDomain),
+            'cdpArticle' => $cdpArticle,
         ]);
     }
 }

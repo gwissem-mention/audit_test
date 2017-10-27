@@ -1,15 +1,17 @@
 {% trans_default_domain 'cdp_user' %}
 
-<a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user{{ membersViewed[user.id] is not defined ? ' directory-user--new' }}">
+<a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: user.id}) }}" class="directory-user{{ app.user and app.user.communautePratiqueEnrollmentDate < user.communautePratiqueEnrollmentDate and membersViewed[user.id] is not defined ? ' directory-user--new' }}">
 
     <span class="avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></span>
     <span class="directory-user-username">
         {{ user.prenomNom }}
     </span>
 
-    <span class="county">
-        - {{ user.county.libelle }}
-    </span>
+    {% if user.county %}
+        <span class="county">
+            - {{ user.county.libelle }}
+        </span>
+    {% endif %}
 
     <div class="new-flag">{{ 'directory.member.is_new'|trans }}</div>
 </a>

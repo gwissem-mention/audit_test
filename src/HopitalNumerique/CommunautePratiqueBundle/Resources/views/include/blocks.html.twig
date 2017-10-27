@@ -7,7 +7,7 @@
     <div class="communaute-de-pratiques-groupe">
         <div class="row">
             <div class="col-sm-9">
-                {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                {% if (app.user and app.user.hasCommunautePratiqueGroupe(groupe)) %}
                     <h2><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a></h2>
                 {% else %}
                     <h2>{{ groupe.titre }}</h2>
@@ -40,16 +40,16 @@
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"{% if date('now') >= groupe.dateDemarrage %} style="visibility: hidden;"{% endif %}><div class="contenu"></div></div>
                 {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
-                    {% if (app.user.hasCommunautePratiqueGroupe(groupe) and (app.user.isActifInGroupe(groupe) or app.user.hasRoleAdmin) ) %}
+                    {% if app.user and (app.user.hasCommunautePratiqueGroupe(groupe) and (app.user.isActifInGroupe(groupe) or (app.user and app.user.hasRoleAdmin)) ) %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
-                    {% elseif (app.user.hasCommunautePratiqueGroupe(groupe) and not app.user.isActifInGroupe(groupe)) %}
+                    {% elseif app.user and (app.user.hasCommunautePratiqueGroupe(groupe) and not app.user.isActifInGroupe(groupe)) %}
                         <span class="button" style="cursor:default">En attente d'acceptation</span>
                     {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                         <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                     {% else %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre</a>
                     {% endif %}
-                {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                {% elseif app.user (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                     <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Vous êtes inscrit</a>
                 {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
@@ -97,12 +97,14 @@
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
  #}
 {% macro display_action_contact_invitation(idGroupe) %}
-    <div class="invite">
-        <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}', '{{ idGroupe }}');">
-            <em class="icon-users149"></em>
-            Inviter d'autres<br /> personnes
-        </a>
-    </div>
+    {% if app.user and app.user.inscritCommunautePratique %}
+        <div class="invite">
+            <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}', '{{ idGroupe }}');">
+                <em class="icon-users149"></em>
+                Inviter d'autres<br /> personnes
+            </a>
+        </div>
+    {% endif %}
 {% endmacro %}
 
 {##

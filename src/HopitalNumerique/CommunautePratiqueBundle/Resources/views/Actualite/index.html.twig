@@ -15,15 +15,15 @@
     <div class="news">
         <div class="blocks">
 
-            <div class="block">
+            <a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}" class="block">
                 <h2 class="block-title">{{ 'news.brick.chat_room.title'|trans }}</h2>
                 <ul>
                     <li>{{ 'news.brick.chat_room.topic_count'|transchoice(publicDiscussionCount) }}</li>
                     <li>{{ 'news.brick.chat_room.message_count'|transchoice(publicMessageCount) }}</li>
                 </ul>
-            </div>
+            </a>
 
-            <div class="block">
+            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}" class="block">
                 <h2 class="block-title">{{ 'news.brick.help_groups.title'|trans }}</h2>
                 <ul>
                     <li>{{ 'news.brick.help_groups.group_count'|transchoice(runningGroupCount) }}</li>
@@ -31,17 +31,26 @@
                     <li>{{ 'news.brick.help_groups.message_count'|transchoice(groupMessageCount) }}</li>
                     <li>{{ 'news.brick.help_groups.file_count'|transchoice(groupMessageFileCount) }}</li>
                 </ul>
-            </div>
+            </a>
 
-            <div class="block">
+            <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}" class="block">
                 <h2 class="block-title">{{ 'news.brick.community.title'|trans }}</h2>
                 <ul>
                     <li>{{ 'news.brick.community.member_count'|transchoice(cdpUserCount) }}</li>
                     <li>{{ 'news.brick.community.organization_count'|transchoice(cdpOrganizationCount) }}</li>
                 </ul>
-            </div>
+            </a>
 
-            <div class="block">
+            {% if not app.user %}
+                {% set groupLink = path('account_login') %}
+                <a href="{{ groupLink }}" class="block">
+            {% elseif not app.user.inscritCommunautePratique %}
+                {% set groupLink = path('hopital_numerique_publication_publication_article', {id: cdpArticle.id, categorie: 'article', alias: cdpArticle.alias}) %}
+                <a href="{{ groupLink }}" class="block">
+            {% else %}
+                <div class="block">
+            {% endif %}
+
                 {% if app.user is null %}
                     {{ 'news.brick.my_groups.not_logged'|trans|nl2br }}
                 {% elseif app.user.inscritCommunautePratique == false %}
@@ -70,7 +79,7 @@
                     {% endif %}
 
                 {% endif %}
-            </div>
+            </{{ groupLink is defined ? 'a' : 'div' }}>
         </div>
     </div>
 

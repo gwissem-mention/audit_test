@@ -1,3 +1,41 @@
+.go-to-top {
+    text-transform: uppercase;
+    position: fixed;
+    bottom: 25%;
+    right: calc(((100vw - 1196px) / 2) - 120px);
+    color: #777;
+    text-align: center;
+    transition-duration: 0.5s;
+    opacity: 0;
+}
+
+.go-to-top.active {
+    transition-duration: 0.5s;
+    opacity: 1;
+}
+
+.go-to-top:hover {
+    text-decoration: none;
+    transition-duration: 0.5s;
+}
+
+.go-to-top:hover .arrow {
+    line-height: 38px;
+    transition-duration: 0.5s;
+}
+
+.go-to-top .arrow {
+    transition-duration: 0.5s;
+    background: #ec0034;
+    display: block;
+    color: #fff;
+    height: 45px;
+    width: 45px;
+    line-height: 45px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+}
+
 /* STYLES GLOBAUX */
 
 .avatar {

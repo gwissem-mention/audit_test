@@ -13,4 +13,5 @@ group:
         members:
             title: Annuaire des membres
             members_count: "%countTxt% membre | %countTxt% membres"
+            members_to_validate_count: "%countTxt% membre à valider | %countTxt% membres à valider"
             animators_count: "%countTxt% animateur | %countTxt% animateurs"

@@ -39,6 +39,9 @@ discussion:
                 label:
                     up: Rendre cette discussion publique
                     down: Rendre cette discussion privée
+                confirm:
+                    up: Êtes vous sûr de vouloir rendre cette discussion publique ?
+                    down: Êtes vous sûr de vouloir rendre cette discussion privée ?
                 success: Visibilité de la discussion changée.
             group_copy:
                 label: Copier dans un groupe

@@ -9,6 +9,8 @@ use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\ReplaceMessageFileLink;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Repository\FileRepository;
+use HopitalNumerique\UserBundle\Event\UserEvent;
+use HopitalNumerique\UserBundle\UserEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PostDiscussionMessageHandler
@@ -67,7 +69,10 @@ class PostDiscussionMessageHandler
         }
 
         if (!empty($command->biography)) {
-            $command->author->setPresentation($command->biography);
+            $command->author
+                ->setPresentation($command->biography)
+                ->setDateLastUpdate(new \DateTime())
+            ;
 
             $this->entityManager->flush($command->author);
         }

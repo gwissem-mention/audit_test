@@ -1,20 +1,6 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-{% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
 {% spaceless %}
-    {% set hidden = false %}
-    {% if loop.index > displayedItemsCount %}
-        {% set hidden = true %}
-        {% if currentDiscussionToShow == true %}
-            {% set displayedItemsCount = displayedItemsCount + lazyLoadStep %}
-            {% set hidden = false %}
-        {% endif %}
-    {% endif %}
-
-    {% if not currentDiscussion or currentDiscussion.id == discussion.id %}
-        {% set currentDiscussionToShow = false %}
-    {% endif %}
-
     <a
         href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
         data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
@@ -28,7 +14,7 @@
         {% endif %}
 
         {% if discussion.hasHelpfulMessage %}
-            <i class="icon fa fa-star"></i>
+            <i class="target-highlight icon fa fa-star"></i>
         {% endif %}
 
         {% if discussion.recommended %}

@@ -22,12 +22,6 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      */
     public function listAction(Request $request, $page = 1, $membreId = null)
     {
-        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()
-        ) {
-            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_user_list'));
-
-            return $this->redirectToRoute('account_login');
-        }
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
 
         if ($request->request->has('resetFiltres')) {
@@ -49,7 +43,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
-            'membersViewed' => $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser()),
+            'membersViewed' => $this->getUser() ? $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser()) : [],
         ]);
     }
 
@@ -60,7 +54,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      */
     public function userDetailsAction(User $user)
     {
-        $this->get(ViewMember::class)->viewMember($user, $this->getUser());
+        if ($this->getUser()) {
+            $this->get(ViewMember::class)->viewMember($user, $this->getUser());
+        }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:details.html.twig', [
             'user' => $user,
@@ -71,14 +67,21 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
     /**
      * Affiche tous les membres d'un groupe.
      */
-    public function listByGroupeAction(Groupe $groupe, Request $request, $page = 1)
+    public function listByGroupeAction(Groupe $groupe, $filtered = false)
     {
         if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
         $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        $members = $this->get('hopitalnumerique_user.repository.user')->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine)->getQuery()->getResult();
+
+        $membersQueryBuilder = $this->get('hopitalnumerique_user.repository.user')->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
+        $membersQueryBuilder
+            ->andWhere('groupeInscription.actif = :filter')
+            ->setParameter('filter', !$filtered)
+        ;
+
+        $members = $membersQueryBuilder->getQuery()->getResult();
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', [
             'groupe' => $groupe,

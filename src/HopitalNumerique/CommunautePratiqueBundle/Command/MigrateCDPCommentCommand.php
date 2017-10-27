@@ -45,7 +45,7 @@ class MigrateCDPCommentCommand extends ContainerAwareCommand
             $comment = $group->getCommentaires()->last();
 
             $output->write(sprintf('    Comment of group : %s', $group->getTitre()));
-            $discussion = new Discussion($group->getTitre(), $comment->getUser(), $group->getDomains()->toArray());
+            $discussion = new Discussion('Discussion entre les membres du groupe', $comment->getUser(), $group->getDomains()->toArray());
             $discussion
                 ->setCreatedAt($comment->getDateCreation())
                 ->addGroup($group)

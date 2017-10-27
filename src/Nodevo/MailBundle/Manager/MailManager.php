@@ -3,6 +3,7 @@
 namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -186,6 +187,50 @@ class MailManager extends BaseManager
     public function isAllowedToDelete()
     {
         return $this->_allowDelete;
+    }
+
+    public function sendCDPSubscriptionMail(Message $message, User $user)
+    {
+        $uri = $this->_router->generate(
+            'hopitalnumerique_communautepratique_discussions_public_desfult_discussion',
+            [
+                'discussion' => $message->getDiscussion()->getId(),
+            ],
+            RouterInterface::ABSOLUTE_URL
+        );
+
+
+        if (!$message->getDiscussion()->isPublic()) {
+            $group = null;
+            foreach ($user->getCommunautePratiqueGroupes() as $userGroup) {
+                if ($message->getDiscussion()->getGroups()->contains($userGroup)) {
+                    $group = $userGroup;
+                    break;
+                }
+            }
+
+            if (null !== $group) {
+                $uri = $this->_router->generate(
+                    'hopitalnumerique_communautepratique_groupe_view_default_discussion',
+                    [
+                        'groupe' => $group->getId(),
+                        'discussion' => $message->getDiscussion()->getId(),
+                    ],
+                    RouterInterface::ABSOLUTE_URL
+                );
+            }
+        }
+
+        $this->mailer->send($this->generationMail(
+            $user,
+            $this->findOneById(81),
+            [
+                'nomUtilisateur' => $message->getUser()->getLastname(),
+                'prenomUtilisateur' => $message->getUser()->getFirstname(),
+                'discussionName' => $message->getDiscussion()->getTitle(),
+                'urlDiscussion' => $uri,
+            ]
+        ));
     }
 
     /**

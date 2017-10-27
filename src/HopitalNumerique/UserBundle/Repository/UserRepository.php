@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Repository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -922,7 +923,7 @@ class UserRepository extends EntityRepository
      *
      * @return null|integer
      */
-    public function getCDPUsersInGroupCount(array $domains)
+    public function getCDPContributorCount(array $domains)
     {
         if (empty($domains)) {
             return null;
@@ -932,7 +933,9 @@ class UserRepository extends EntityRepository
 
         return $qb
             ->select('COUNT(DISTINCT user.id)')
-            ->join('user.groupeInscription','group_registration', Join::WITH, 'group_registration.actif = TRUE')
+            ->join(Message::class,'message', Join::WITH, 'message.user = user')
+            ->join('message.discussion', 'discussion')
+            ->join('discussion.domains', 'discussion_domain', Join::WITH, 'discussion_domain IN (:domains)')
             ->join(
                 'user.domaines',
                 'domain',

@@ -15,6 +15,10 @@ var Discussion;
             this.initEditReplyForm();
 
             return;
+        } else if (scope === "addDiscussion") {
+            this.initEditor('#new-discussion');
+
+            return;
         }
 
         this.scope = scope;
@@ -46,6 +50,9 @@ var Discussion;
             that.initLazyLoad();
 
             that.$list.find('.item').on('click', function (e) {
+                var scrollToHighlight = $(e.target).hasClass('target-highlight');
+                var scrollToNewMessage = $(e.target).hasClass('new-message-badge');
+
                 var $link = $(this);
                 e.preventDefault();
 
@@ -63,6 +70,18 @@ var Discussion;
                     that.$list.find('.item').removeClass('active');
                     $link.addClass('active');
                     that.discussionEvents();
+
+                    if (scrollToHighlight && that.$discussion.find('.message--helpful').length) {
+                        $('html, body').animate({
+                            scrollTop: that.$discussion.find('.message--helpful').slice(0, 1).position().top
+                        });
+                    }
+
+                    if (scrollToNewMessage && that.$discussion.find('#new-message').length) {
+                        $('html, body').animate({
+                            scrollTop: that.$discussion.find('#new-message').position().top
+                        });
+                    }
                 })
             });
 
@@ -196,7 +215,7 @@ var Discussion;
                 return data;
             };
 
-            $.post(reorderUri, {'order': JSON.stringify(getTree(that.$list))});
+            $.post(reorderUri, {'order': JSON.stringify(getTree(that.$list.find('.items')))});
         },
 
         discussionReading: function ()
@@ -331,6 +350,14 @@ var Discussion;
         discussionEvents: function() {
             this.initEditor('.discussions .discussion');
 
+            $('.goto-new-file').on('click', function (e) {
+                e.preventDefault();
+
+                $('html, body').animate({
+                    scrollTop: $('.discussion .newFile').slice(0, 1).position().top
+                });
+            });
+
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.discussion-files .filename').on('click', function (e) {
@@ -361,6 +388,13 @@ var Discussion;
 
             $('.discussion .actions .discussion-actions').on('change', function (e) {
                 var value = $(this).val();
+
+                if ($(this).find('option:selected').data('confirm')) {
+                    if (!confirm($(this).find('option:selected').data('confirm'))) {
+                        $(this).val('');
+                        return;
+                    }
+                }
 
                 switch ($(this).find('option:selected').data('action')) {
                     case 'goto':

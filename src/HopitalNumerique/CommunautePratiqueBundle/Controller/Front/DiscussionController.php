@@ -69,7 +69,7 @@ class DiscussionController extends Controller
                     $this->getUser()
                 )
             );
-            $discussionSubscribed = $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser());
+            $discussionSubscribed = $discussion && $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser());
         } else {
             $discussion = null;
         }
@@ -159,13 +159,35 @@ class DiscussionController extends Controller
      * @param Groupe $group
      * @param Objet $object
      *
-     * @Security("is_granted('cdp_discussion_create')")
-     *
      * @return Response|RedirectResponse
      */
     public function createDiscussionAction(Request $request, Groupe $group = null, Objet $object = null)
     {
-        $command = new CreateDiscussionCommand($this->getUser(), [$this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()], $group, $object);
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
+
+        if ($this->getUser()) {
+            if (!$this->isGranted('cdp_discussion_create')) {
+                $cpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
+
+                return $this->redirectToRoute(
+                    'hopital_numerique_publication_publication_article',
+                    [
+                        'id' => $cpArticle->getId(),
+                        'categorie' => 'article',
+                        'alias' => $cpArticle->getAlias(),
+                    ]
+                );
+            }
+        } else {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
+        $this->denyAccessUnlessGranted('cdp_discussion_create');
+
+
+
+        $command = new CreateDiscussionCommand($this->getUser(), $domains, $group, $object);
 
         $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $command);
 
@@ -400,14 +422,14 @@ class DiscussionController extends Controller
         $user = $this->getUser();
 
         if ($user->hasRoleCDPAdmin()) {
-            $groupsAvailable = array_filter($groupRepository->findAll(), function (Groupe $group) use ($discussion) {
-                return !$discussion->getGroups()->contains($group);
-            });
+            $groupsAvailable = $groupRepository->findAll();
         } else {
-            $groupsAvailable = $user->getCommunautePratiqueAnimateurGroupes()->filter(function (Groupe $group) use ($discussion) {
-                return !$discussion->getGroups()->contains($group);
-            });
+            $groupsAvailable = $user->getCommunautePratiqueAnimateurGroupes()->toArray();
         }
+
+        $groupsAvailable = array_filter($groupsAvailable, function (Groupe $group) use ($discussion) {
+            return !$discussion->getGroups()->contains($group) && $group->getDateDemarrage() < new \DateTime();
+        });
 
         if ($groupId = $request->request->get('group', null)) {
             if ($group = $groupRepository->find($groupId)) {
@@ -448,12 +470,18 @@ class DiscussionController extends Controller
      * @param Discussion $discussion
      * @param Groupe|null $group
      *
-     * @Security("is_granted('subscribe', discussion)")
-     *
      * @return RedirectResponse
      */
-    public function subscribeAction(Discussion $discussion, Groupe $group = null)
+    public function subscribeAction(Request $request, Discussion $discussion, Groupe $group = null)
     {
+        if (!$this->isGranted('subscribe', $discussion)) {
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+
+            return $this->redirectToRoute('account_login');
+        }
+
+        $this->denyAccessUnlessGranted('subscribe', $discussion);
+
         $subscriptionService = $this->get(UserSubscription::class);
         if ($subscriptionService->isSubscribed($discussion, $this->getUser())) {
             $subscriptionService->unsubscribe($discussion, $this->getUser());

@@ -14,12 +14,18 @@ hopitalnumerique_communautepratique_user_details:
         user: \d+
 
 hopitalnumerique_communautepratique_user_listbygroupe:
-    path: '/list/groupe/{groupe}/{page}'
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', page:1 }
-    methods: 'GET|POST'
+    path: '/list/groupe/{groupe}/'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', filtered: false }
+    methods: GET
     requirements:
         groupe: '\d+'
-        page: '\d+'
+
+hopitalnumerique_communautepratique_user_listbygroupe_filtered:
+    path: '/list/groupe/{groupe}/filtered'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', filtered: true }
+    methods: GET
+    requirements:
+        groupe: '\d+'
 
 hopitalnumerique_communautepratique_user_add:
     path: '/group/{group}/add-user'

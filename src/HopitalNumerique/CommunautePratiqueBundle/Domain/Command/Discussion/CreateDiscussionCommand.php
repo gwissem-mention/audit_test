@@ -26,6 +26,7 @@ class CreateDiscussionCommand
     /**
      * @var string $title
      * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     public $title;
 

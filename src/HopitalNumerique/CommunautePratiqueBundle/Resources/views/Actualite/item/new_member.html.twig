@@ -19,7 +19,7 @@
             {% set organization = item.user.nomEtablissement %}
         {% endif %}
 
-        {{ ('wall.item.new_member.content'~((not app.user or app.user.inscriptCommunautePratique == false) ? '_public'))|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+        {{ ('wall.item.new_member.content'~((not app.user or app.user.inscritCommunautePratique == false) ? '_public'))|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
     </div>
 
     <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
