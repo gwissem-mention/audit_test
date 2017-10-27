@@ -90,5 +90,7 @@ class PostDiscussionMessageHandler
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
 
         $this->entityManager->flush($message);
+
+        return $message;
     }
 }

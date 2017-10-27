@@ -85,6 +85,7 @@ discussion:
             add:
                 title: Répondre à une discussion
                 success: Message publié avec succès.
+                moderate: Votre message contient un lien, un animateur doit le valider avant publication."
             edit:
                 title: Modifier un message
                 success: Message modifié avec succès.

@@ -233,12 +233,16 @@ class DiscussionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get(PostDiscussionMessageHandler::class)->handle($command);
+            $messageUpdated = $this->get(PostDiscussionMessageHandler::class)->handle($command);
 
             if (null !== $message) {
                 $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.edit.success', [], 'cdp_discussion'));
             } else {
-                $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.add.success', [], 'cdp_discussion'));
+                if ($messageUpdated->isPublished()) {
+                    $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.add.success', [], 'cdp_discussion'));
+                } else {
+                    $this->addFlash('success', $this->get('translator')->trans('discussion.message.reply.add.moderate', [], 'cdp_discussion'));
+                }
             }
 
             return $this->redirectResponse($group, $discussion);
