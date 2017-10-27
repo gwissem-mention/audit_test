@@ -82,7 +82,7 @@ assetic:
         #JS
         dropzone_js:
             inputs:
-                - '%kernel.root_dir%/Resources/components/dropzone/dist/min/dropzone.min.js'
+                - '%kernel.root_dir%/Resources/components/dropzone/dist/dropzone.js'
             filters : [ ?yui_js ]
         bbcode_js:
             inputs:
