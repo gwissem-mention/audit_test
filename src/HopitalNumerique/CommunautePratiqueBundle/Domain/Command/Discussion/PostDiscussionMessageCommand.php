@@ -6,6 +6,7 @@ use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PostDiscussionMessageCommand
 {
@@ -21,6 +22,7 @@ class PostDiscussionMessageCommand
 
     /**
      * @var string $content
+     * @Assert\NotNull
      */
     public $content;
 
