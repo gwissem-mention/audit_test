@@ -52,13 +52,14 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function userDetailsAction(User $user)
+    public function userDetailsAction(User $user, Groupe $group = null)
     {
         if ($this->getUser()) {
             $this->get(ViewMember::class)->viewMember($user, $this->getUser());
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:details.html.twig', [
+            'group' => $group,
             'user' => $user,
             'memberActivity' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getMemberActivity($user),
         ]);

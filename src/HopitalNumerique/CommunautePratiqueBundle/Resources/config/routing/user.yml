@@ -7,7 +7,7 @@ hopitalnumerique_communautepratique_user_list:
         membreId: \d+
 
 hopitalnumerique_communautepratique_user_details:
-    path: /details/{user}
+    path: /details/{user}/{group}
     defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:userDetails"}
     methods: GET
     requirements:

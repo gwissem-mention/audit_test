@@ -25,6 +25,22 @@
             </span>
         {% endif %}
 
+        {% if group %}
+            <a href="{{ path('hopitalnumerique_communautepratique_user_desinscritgroupe', {user: user.id, groupe: group.id}) }}" class="ajax-action" title="Désinscrire l'utilisateur"><em class="fa fa-times-circle"></em></a>
+
+            {% if not group.hasAnimateur(user) and not user.hasRoleAdmin %}
+                {% if user.isActifInGroupe(group) %}
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_activegroupe', {user: user.id, groupe: group.id}) }}" class="ajax-action" title="Cette personne est bien membre du groupe. Cliquez pour la sortir du groupe">
+                        <i class='fa fa-check-circle green'></i>
+                    </a>
+                {% else %}
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_activegroupe', {user: user.id, groupe: group.id}) }}" class="ajax-action" title="Cette personne n'est pas encore membre du groupe. Cliquez pour la faire entrer dans le groupe">
+                        <i class='fa fa-times-circle orange'> </i>
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
         {% if user.hasRoleAmbassadeur or user.hasRoleExpert %}
             {% if user.hasRoleAmbassadeur %}
                 <a href="{{ path('hopital_numerique_intervention_demande_nouveau', {'ambassadeur': user.id}) }}">Ambassadeur Hôpital Numérique</a>

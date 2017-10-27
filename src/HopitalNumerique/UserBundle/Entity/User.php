@@ -2595,6 +2595,22 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
+     * @param Groupe $group
+     *
+     * @return bool
+     */
+    public function isRegisteredInCDPGroup(Groupe $group)
+    {
+        foreach ($this->getGroupeInscription() as $registration) {
+            if ($registration->isActif() && $registration->getGroupe()->getId() == $group->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Has $groupeInscription ?
      *
      * @param Inscription $groupeInscription
@@ -2630,7 +2646,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     /**
      * Get groupeInscription.
      *
-     * @return Collection
+     * @return Collection|Inscription[]
      */
     public function getGroupeInscription()
     {
