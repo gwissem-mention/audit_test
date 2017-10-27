@@ -26,7 +26,7 @@
         </span>
 
         <span class="infos">
-            {{ 'discussion.list.presentation.message_infos'|transchoice(discussion.messages|length, {'%date%': discussion.messages.first.createdAt|localizeddate('short', 'none')})|raw }}
+            {{ 'discussion.list.presentation.message_infos'|transchoice(discussion.messages|length, {'%date%': discussion.messages.first.createdAt|date('d/m/Y')})|raw }}
         </span>
     </a>
 {% endspaceless %}

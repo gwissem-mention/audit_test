@@ -107,7 +107,7 @@
 
                 <ul>
                     {% for group in user.communautePratiqueGroupes %}
-                        <li>{{ group.titre }} {{ group.dateDemarrage|localizeddate('short', 'none') }} {{ group.dateFin|localizeddate('short', 'none') }}</li>
+                        <li>{{ group.titre }} {{ group.dateDemarrage|date('d/m/Y') }} {{ group.dateFin|date('d/m/Y') }}</li>
                     {% endfor %}
                 </ul>
             </div>
