@@ -577,6 +577,9 @@ class Entity
         $title = null;
 
         switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                $title = $entity->getTitle();
+                break;
             case self::ENTITY_TYPE_OBJET:
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 $title = $entity->getTitre();
@@ -688,6 +691,8 @@ class Entity
                 return $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle();
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle();
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                return $this->referenceManager->findOneById(4000)->getLibelle();
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->referenceManager->findOneById($this->refExpressionBesoinReponseId)->getLibelle();
             case self::ENTITY_TYPE_FORUM_BOARD:
@@ -736,6 +741,9 @@ class Entity
                 break;
             case self::ENTITY_TYPE_FORUM_BOARD:
                 $description = $entity->getDescription();
+                break;
+            case self::ENTITY_TYPE_CDP_DISCUSSION;
+                $description = $entity->getMessages()->first()->getContent();
                 break;
         }
 
@@ -822,6 +830,28 @@ class Entity
                 return $this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return $this->router->generate('ccdn_forum_user_board_show', ['boardId' => $entityId]);
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                if (!$entity->isPublic()) {
+                    $group = $entity->getGroups()->first();
+
+                    if ($group) {
+                        return $this->router->generate(
+                            'hopitalnumerique_communautepratique_groupe_view_default_discussion',
+                            [
+                                'groupe' => $group->getId(),
+                                'discussion' => $entityId,
+                            ]
+                        );
+                    }
+                }
+
+                return $this->router->generate(
+                    'hopitalnumerique_communautepratique_discussions_public_desfult_discussion',
+                    [
+                        'discussion' => $entityId,
+                    ],
+                    RouterInterface::ABSOLUTE_URL
+                );
         }
 
         return null;
