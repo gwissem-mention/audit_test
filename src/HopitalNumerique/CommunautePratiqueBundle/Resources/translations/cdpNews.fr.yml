@@ -19,8 +19,8 @@ news:
             list:
                 empty: Vous ne participez actuellement à aucun groupe
                 link:
-                    text: Groupe d'entre-aide
-                    title: Groupe d'entre-aide
+                    text: Groupes d'entre-aide
+                    title: Groupes d'entre-aide
             not_logged: |
                 Vous n'êtes pas connecté.
                 Créez votre compte et connectez-vous pour voir toutes les actualités de la communauté
