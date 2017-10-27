@@ -438,7 +438,7 @@ class DiscussionController extends Controller
 
                 $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.group_copy.success', [], 'cdp_discussion'));
 
-                return $this->redirectResponse($group, $discussion);
+                return $this->redirectResponse(null, $discussion);
             }
         }
 
