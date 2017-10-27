@@ -7,6 +7,8 @@ import {Text} from "../text.service";
 import Cart from "../cart.service";
 import {Config} from "../../app.config";
 
+declare let $ : any;
+
 @Component({
     selector: 'search-results',
     styleUrls: ['./result.component.scss'],
@@ -74,6 +76,7 @@ export class ResultComponent implements OnInit {
             this.canShowLess = this.query.getCurrentPage() > 1;
             this.canShow = this.resultSet.total > 0;
         });
+        this.initFancybox();
     }
 
     canShowCart(result: Result): boolean {
@@ -82,5 +85,14 @@ export class ResultComponent implements OnInit {
 
     addToCart(result: Result) {
         this.cartService.addToCart(result);
+    }
+
+    initFancybox() {
+        $('a.synthesis').fancybox({
+            'padding': 0,
+            'autoSize': false,
+            'width': '80%',
+            'scrolling': 'no'
+        });
     }
 }

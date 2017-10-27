@@ -19,6 +19,11 @@
 
         <div *ngFor="let result of results" class="result">
 
+            <a *ngIf="result.getSynthese()" class="pull-right synthesis fancybox.iframe" [href]="result.getSynthese()">
+                Synthèse
+                <i class="fa fa-sign-out">&nbsp;</i>
+            </a>
+
             <div *ngIf="mode != 'lite'" class="type">
                 {{ this.text.get('type.' + result.getType(), result.getType()) }}
                 <span class="external-source text-mutted" *ngIf="result.getSource()">({{ result.getSource() }})</span>

@@ -14,6 +14,10 @@ abstract class Result {
 
     abstract getSource(): string;
 
+    getSynthese(): string {
+        return null;
+    }
+
     getId(): number {
         return this.id;
     }
