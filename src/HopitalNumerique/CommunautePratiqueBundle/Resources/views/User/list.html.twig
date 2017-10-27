@@ -70,6 +70,8 @@
             <div class="directory">
                 {% for user in pagerFantaMembres.currentPageResults %}
                     {{ include('@HopitalNumeriqueCommunautePratique/User/member_line.html.twig') }}
+                {% else %}
+                    {{ 'directory.empty'|trans }}
                 {% endfor %}
             </div>
 

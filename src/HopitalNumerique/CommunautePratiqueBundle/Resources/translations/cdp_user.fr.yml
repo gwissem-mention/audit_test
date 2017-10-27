@@ -1,4 +1,5 @@
 directory:
+    empty: Aucun résultat
     public:
         title: Annuaire de la communauté
     count:
