@@ -830,8 +830,6 @@ class Entity
                 return $this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return $this->router->generate('ccdn_forum_user_board_show', ['boardId' => $entityId]);
-
-
             case self::ENTITY_TYPE_CDP_DISCUSSION:
                 if (!$entity->isPublic()) {
                     $group = $entity->getGroups()->first();

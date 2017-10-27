@@ -125,6 +125,8 @@ class EntityHasReferenceRepository extends EntityRepository
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
                 'GROUP_CONCAT(contenuType.id) AS contenuTypeIds',
                 'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds',
+                'GROUP_CONCAT(discussionGroups.id) as discussionGroupsIds',
+                'discussion.public as isDiscussionPublic',
                 'objet.id as objetId',
                 'AVG(objetNote.note) AS avgObjetNote'
             )
@@ -304,6 +306,7 @@ class EntityHasReferenceRepository extends EntityRepository
 
             // CDP discussion
             ->leftJoin(Discussion::class, 'discussion', Expr\Join::WITH, 'entityHasReference.entityId = discussion.id AND entityHasReference.entityType = :entityTypeDiscussion')
+            ->leftJoin('discussion.groups', 'discussionGroups')
             ->setParameter('entityTypeDiscussion', Entity::ENTITY_TYPE_CDP_DISCUSSION)
             // END CDP discussion
 
