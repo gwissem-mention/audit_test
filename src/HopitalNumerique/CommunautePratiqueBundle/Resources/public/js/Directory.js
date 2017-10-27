@@ -24,6 +24,14 @@ var Directory;
                     $modal.find('.modal-content').html(response);
 
                     $modal.find('[data-toggle="tooltip"]').tooltip();
+
+                    $modal.find('.ajax-action').on('click', function (e) {
+                        e.preventDefault();
+
+                        $.post($(this).attr('href'));
+
+                        $(this).hide();
+                    })
                 });
             });
         }
