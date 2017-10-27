@@ -577,7 +577,7 @@ class Groupe
     /**
      * Get animateurs.
      *
-     * @return Collection
+     * @return Collection|User[]
      */
     public function getAnimateurs()
     {
