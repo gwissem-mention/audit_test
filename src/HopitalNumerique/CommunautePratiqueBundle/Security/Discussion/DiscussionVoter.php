@@ -115,7 +115,7 @@ class DiscussionVoter extends Voter
     public function canCreate(User $user)
     {
         if ($user->hasRoleCDPAdmin()) {
-            //return true;
+            return true;
         }
 
         if ($user->isInscritCommunautePratique()) {
