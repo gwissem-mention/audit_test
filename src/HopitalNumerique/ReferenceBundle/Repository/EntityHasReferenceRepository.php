@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -298,9 +299,14 @@ class EntityHasReferenceRepository extends EntityRepository
                 )
             )
             ->setParameter('entityTypeCommunautePratiqueGroupe', Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE)
-            ->leftJoin('communautePratiqueGroupe.domains', 'cdpGroupDomain')
-            ->andWhere($qb->expr()->eq('cdpGroupDomain.id', ':domaine'))
+            ->leftJoin('communautePratiqueGroupe.domains', 'cdpGroupDomain', Expr\Join::WITH, $qb->expr()->eq('cdpGroupDomain.id', ':domaine'))
             //-->
+
+            // CDP discussion
+            ->leftJoin(Discussion::class, 'discussion', Expr\Join::WITH, 'entityHasReference.entityId = discussion.id AND entityHasReference.entityType = :entityTypeDiscussion')
+            ->setParameter('entityTypeDiscussion', Entity::ENTITY_TYPE_CDP_DISCUSSION)
+            // END CDP discussion
+
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameter('domaine', $domaine)
         ;
