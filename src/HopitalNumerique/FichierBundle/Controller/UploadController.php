@@ -27,6 +27,18 @@ class UploadController extends Controller
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
+        $acceptedFilesExtension = explode(',', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
+
+        if (
+            !in_array($uploadedFile->getClientOriginalExtension(), $acceptedFilesExtension) ||
+            $uploadedFile->getSize() > (10 * 1000000)
+        ) {
+            return new JsonResponse(
+                $this->get('translator')->trans('upload.error.type_or_size', ['%ext%' => $this->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees')]),
+                418
+            );
+        }
+
         /** @var File $file */
         $file = $this->get(UploadFileHandler::class)->handle(new UploadFileCommand($uploadedFile, $this->getUser()));
 
