@@ -7,7 +7,7 @@
             {{ 'wall.item.discussion.title'|trans }}
         </span>
         <span class="author">
-            {{ 'wall.item.discussion.authored'|trans({'%author%': item.author.prenomNom, '%discussion%': item.title, '%date%': item.date|localizeddate('short', 'none')}) }}
+            {{ 'wall.item.discussion.authored'|trans({'%author%': item.author.prenomNom, '%discussion%': item.title, '%date%': item.date|date('d/m/Y')}) }}
         </span>
     </div>
 
