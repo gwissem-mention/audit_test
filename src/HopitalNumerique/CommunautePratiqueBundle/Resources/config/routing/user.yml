@@ -8,7 +8,7 @@ hopitalnumerique_communautepratique_user_list:
 
 hopitalnumerique_communautepratique_user_details:
     path: /details/{user}/{group}
-    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:userDetails"}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:userDetails", group: null}
     methods: GET
     requirements:
         user: \d+

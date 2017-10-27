@@ -43,9 +43,10 @@
 
         {% if user.hasRoleAmbassadeur or user.hasRoleExpert %}
             {% if user.hasRoleAmbassadeur %}
-                <a href="{{ path('hopital_numerique_intervention_demande_nouveau', {'ambassadeur': user.id}) }}">Ambassadeur Hôpital Numérique</a>
+                <a href="{{ path('hopital_numerique_intervention_demande_nouveau', {'ambassadeur': user.id}) }}">Professionnel du réseau</a>
             {% elseif user.hasRoleExpert %}
                 <a href="{{ path('hopitalnumerique_expert_front_expert') }}">Expert Hôpital Numérique</a>
+                {% elseif user.roleAdmin %}
             {% endif %}
         {% endif %}
     </h4>
