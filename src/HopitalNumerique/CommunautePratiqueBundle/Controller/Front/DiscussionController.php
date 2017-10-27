@@ -181,7 +181,7 @@ class DiscussionController extends Controller
             }
         } else {
             $request->getSession()->set('urlToRedirect', $request->getUri());
-            
+
             return $this->redirect($this->generateUrl('account_login'));
         }
 

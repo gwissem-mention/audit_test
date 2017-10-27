@@ -59,10 +59,9 @@ class MessageVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
             case self::DELETE:
-                return $this->canEdit($subject, $user);
             case self::MARK_AS_HELPFUL:
             case self::VALIDATE:
-                return $this->extendedRights($subject, $user);
+                return $this->canEdit($subject, $user);
         }
 
         return false;
@@ -99,32 +98,9 @@ class MessageVoter extends Voter
      *
      * @return bool
      */
-    public function extendedRights(Message $message, User $user)
-    {
-        if ($user->hasRoleCDPAdmin()) {
-            return true;
-        }
-
-        foreach ($message->getDiscussion()->getGroups() as $group) {
-            if ($group->getAnimateurs()->exists(function ($key, User $animator) use ($user) {
-                return $animator->getId() === $user->getId();
-            })) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Message $message
-     * @param User $user
-     *
-     * @return bool
-     */
     public function canEdit(Message $message, User $user)
     {
-        if ($user->hasRoleCDPAdmin()) {
+        if ($user->hasRoleCDPAdmin() || $user->getCommunautePratiqueAnimateurGroupes()->count()) {
             return true;
         }
 
