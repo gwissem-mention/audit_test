@@ -28,7 +28,9 @@ var Directory;
                     $modal.find('.ajax-action').on('click', function (e) {
                         e.preventDefault();
 
-                        $.post($(this).attr('href'));
+                        $.post($(this).attr('href'),{}, function () {
+                            location.reload();
+                        });
 
                         $(this).hide();
                     })
