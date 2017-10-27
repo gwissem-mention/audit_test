@@ -115,6 +115,22 @@ class MessagePostedSubscriber implements EventSubscriberInterface
 
         if ($message->needModeration()) {
             $message->setPublished(false);
+
+            $animators = [];
+            foreach ($message->getDiscussion()->getGroups() as $group) {
+                foreach ($group->getAnimateurs() as $animator) {
+                    $animators[$animator->getEmail()] = $animator;
+                }
+            }
+
+            foreach ($message->getDiscussion()->getDomains() as $domain) {
+                $animators[$domain->getAdresseMailContact()] = (new User())->setEmail($domain->getAdresseMailContact());
+            }
+
+            foreach ($animators as $animator) {
+                $this->mailManager->sendCDPNeedModerationMail($message, $animator);
+            }
+
         }
     }
 
