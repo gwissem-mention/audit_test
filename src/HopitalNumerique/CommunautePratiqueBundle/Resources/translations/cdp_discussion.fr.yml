@@ -26,6 +26,8 @@ discussion:
         success: Nouvelle discussion créée avec succés.
     discussion:
         actions:
+            title:
+                label: Sélectionnez une action
             up:
                 label:
                     up: Recommander pour la communauté

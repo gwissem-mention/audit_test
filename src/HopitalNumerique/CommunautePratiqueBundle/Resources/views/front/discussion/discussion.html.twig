@@ -93,7 +93,7 @@
 
         <div class="actions-block">
             <select class="discussion-actions">
-                <option></option>
+                <option value="">{{ 'discussion.discussion.actions.title.label'|trans }}</option>
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
                 {% endif %}
