@@ -77,10 +77,14 @@ discussion:
                 confirm: Voulez-vous vraiment supprimer ce message ?
                 success: Message supprimé avec succés.
         reply:
+            validate:
+                success: Message publié avec succès.
             add:
                 title: Répondre à une discussion
+                success: Message publié avec succès.
             edit:
                 title: Modifier une réponse
+                success: Message modifié avec succès.
             form:
                 biography:
                     label: Vous ne vous êtes pas présenté. Complétez votre biographie
