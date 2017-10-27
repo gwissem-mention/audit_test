@@ -57,6 +57,12 @@
                 {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
                 {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites", { 'types' : types } )) }}
+                
+                {% if objet.isArticle and objet.resume|parsePublication|glossaire_list(objet) is not empty %}
+                    <div class="column-left-container">
+                        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/glossary.html.twig' %}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
 
