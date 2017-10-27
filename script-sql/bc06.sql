@@ -124,3 +124,10 @@ INSERT INTO core_mail (mail_id, mail_objet, mail_description, mail_expediteur_ma
 %urlDiscussion
 
 Cordialement,', '{"%nomUtilisateur":"Nom de l''utilisateur", "%prenomUtilisateur":"Prénom de l''utilisateur", "%discussionName":"Nom de la discussion", "%urlDiscussion":"URL de la discussion"}', 0);
+
+
+
+
+ALTER TABLE hn_communautepratique_discussion ADD creationPosition INT;
+UPDATE hn_communautepratique_discussion SET creationPosition = 0;
+ALTER TABLE hn_communautepratique_discussion CHANGE creationPosition creationPosition INT NOT NULL;

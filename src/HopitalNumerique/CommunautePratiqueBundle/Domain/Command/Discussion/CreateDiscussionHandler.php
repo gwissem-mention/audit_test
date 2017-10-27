@@ -50,6 +50,7 @@ class CreateDiscussionHandler
     public function handle(CreateDiscussionCommand $command)
     {
         $discussion = new Discussion($command->title, $command->author, $command->domains);
+        $discussion->setCreationPosition($command->source);
         if ($command->group) {
             $discussion
                 ->addGroup($command->group)

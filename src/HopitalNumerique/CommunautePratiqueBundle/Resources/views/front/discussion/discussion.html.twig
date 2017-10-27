@@ -7,13 +7,17 @@
 <div class="discussion-title">
     <h2>{{ discussion.title }}</h2>
 
-    {% if discussion.groups|length and scope == 'public' %}
+    {% if discussion.creationPosition is constant('CREATED_IN_GROUP', discussion) and discussion.groups|length and scope == 'public' %}
         <div class="group">
             {% set groupsLabel = [] %}
             {% for group in discussion.groups %}
                 {% set groupsLabel = groupsLabel|merge(['<b>'~group.titre~'</b>']) %}
             {% endfor %}
             {{ 'discussion.public.discussion.from_group'|transchoice(groupsLabel|length, {'%groups%': groupsLabel|join(', ')})|raw }}
+        </div>
+    {% elseif discussion.creationPosition is constant('CREATED_AS_PUBLIC', discussion) and discussion.public and scope == 'group' %}
+        <div class="group">
+            {{ 'discussion.public.discussion.from_public'|trans }}
         </div>
     {% endif %}
 </div>
