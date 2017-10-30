@@ -39,7 +39,7 @@ class AmbassadeurController extends Controller
         if (!$user instanceof User) {
             $this->addFlash(
                 'warning',
-                'Solliciter un ambassadeur nécessite d\'être identifié. Créez un compte ou identifiez-vous.'
+                'Solliciter un professionnel du réseau nécessite d\'être identifié. Créez un compte ou identifiez-vous.'
             );
         }
 
