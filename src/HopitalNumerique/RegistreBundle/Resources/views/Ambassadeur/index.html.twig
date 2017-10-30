@@ -2,7 +2,7 @@
 
 {# Référencement #}
 {% block title %}{{parent()}} - Registre{% endblock %}
-{% block metadesc %}Registre des ambassadeurs{% endblock %}
+{% block metadesc %}Registre des professionnels du réseau{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -66,7 +66,16 @@
                         {% if regions.regions %}
 			                {% for region in regions.regions %}
 			                    <div class="col-md-12">
-				                    <h4 class="violet">{{ 'network_professionals'|trans }}</h4>
+                                    {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
+                                    <h4 class="violet">
+                                        {{ region.libelle }} ( {{ ambassadeurs[region.id]|length }}
+                                        {% if ambassadeurs[region.id]|length > 1 %}
+                                            {{ 'professionals'|trans }}
+                                        {% else %}
+                                            {{ 'professional'|trans }}
+                                        {% endif %}
+                                        {{ 'network'|trans }} )
+                                    </h4>
 				                </div>
 				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
 				                {% set ambassadeurExisteRegion = false %}
@@ -135,20 +144,20 @@
 				                {# Affichage dans le cas où il n'y ait aucun ambassadeur pour cette région #}
 				                {% if not ambassadeurExisteRegion %}
 				                    <div class="aucune-fiche col-md-6">
-				                        <div class="content">- Aucun ambassadeur pour cette région -</div>
+				                        <div class="content">{{ 'no_network_professionals'|trans }}</div>
 				                    </div>
 				                {% endif %}
 			                {% else %}
 			                    <div class="col-md-12">
-			                        - Aucune régions sélectionnées - 
+			                        {{ 'no_regions_selected'|trans }}
 			                    </div>
 			                {% endfor %}
 			            {% else %}
 			                <div class="col-md-12">
-			                    <h4 class="violet">Aucune région sélectionnée</h4>
+			                    <h4 class="violet">{{ 'no_region_selected_title'|trans }}</h4>
 			                </div>
 			                <div class="col-md-12">
-			                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
+			                    {{ 'select_region'|trans }}
 			                </div>
 			            {% endif %}
 		                <div class="clearfix"></div>
