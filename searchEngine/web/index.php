@@ -52,8 +52,12 @@ $app['search.repository'] = function () use ($app) {
     return new \Search\Service\SearchRepository($app['query.factory'], $app['elastic.client']);
 };
 
+$app['stats.repository'] = function () use ($app) {
+    return new \Search\Service\SearchStatsRepository($app['db']);
+};
+
 $app['search.controller'] = function () use ($app) {
-    return new \Search\Controller\SearchController($app['search.repository'], $app['user.repository'], $app['query.transformer']);
+    return new \Search\Controller\SearchController($app['search.repository'], $app['user.repository'], $app['query.transformer'], $app['stats.repository']);
 };
 /************************/
 
