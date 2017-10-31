@@ -4,9 +4,8 @@
     (objectRelations|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0) or
     (objet.domaines|length > 1)
 %}
-
     <div id="column-right">
-        {% if app.user and app.user.inscritCommunautePratique and not objet.isArticle%}
+        {% if app.user and not objet.isArticle and app.user.inscritCommunautePratique %}
             <div class="column-right-container" style="margin-bottom: 10px;">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/topic_related.html.twig' %}
             </div>

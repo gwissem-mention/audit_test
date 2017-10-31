@@ -89,7 +89,7 @@ class Discussion implements ObjectIdentityDisplayableInterface
     /**
      * @var Groupe[]
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", inversedBy="discussions")
      * @ORM\JoinTable(name="hn_communautepratique_discussion_group", inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="group_id")})
      */
     protected $groups;
@@ -142,6 +142,7 @@ class Discussion implements ObjectIdentityDisplayableInterface
         $this->groups = new ArrayCollection();
         $this->readings = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->messages = new ArrayCollection();
     }
 
     /**
@@ -368,6 +369,14 @@ class Discussion implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFirstMessageContent()
+    {
+        return $this->getMessages()->first() ? $this->getMessages()->first()->getContent() : null;
+    }
+
+    /**
      * Return user new messages
      *
      * @param User $user
@@ -388,6 +397,13 @@ class Discussion implements ObjectIdentityDisplayableInterface
         return $this->getMessages()->filter(function (Message $message) use ($read) {
             return $message->getCreatedAt() > $read->getLastMessageDate();
         });
+    }
+
+    public function isNewDiscussion(User $user)
+    {
+        return 0 === $this->getReadings()->filter(function (Read $read) use ($user) {
+            return $read->getUser()->getId() === $user->getId();
+        })->count();
     }
 
     /**

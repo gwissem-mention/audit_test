@@ -20,6 +20,7 @@ class DiscussionVoter extends Voter
     const SUBSCRIBE = 'subscribe';
     const MANAGE_DOMAINS = 'manage_domains';
     const REORDER = 'reorder_discussion';
+    const SET_AS_PUBLIC = 'set_as_public';
 
     /**
      * @param string $attribute
@@ -29,7 +30,16 @@ class DiscussionVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::SUBSCRIBE, self::REORDER, self::DOWNLOAD, self::MARK_AS_RECOMMENDED, self::COPY_TO_GROUP, self::CREATE, self::REPLY])) {
+        if (!in_array($attribute, [self::SET_AS_PUBLIC,
+            self::MANAGE_DOMAINS,
+            self::SUBSCRIBE,
+            self::REORDER,
+            self::DOWNLOAD,
+            self::MARK_AS_RECOMMENDED,
+            self::COPY_TO_GROUP,
+            self::CREATE,
+            self::REPLY])
+        ) {
             return false;
         }
 
@@ -52,8 +62,10 @@ class DiscussionVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::SET_AS_PUBLIC:
+                return $this->canSetDiscussionAsPublic($user, $subject);
             case self::COPY_TO_GROUP:
-                return $this->canChangeVisibility($user, $subject);
+                return $this->canCopyToGroup($user, $subject);
             case self::REORDER:
             case self::MARK_AS_RECOMMENDED:
             case self::MANAGE_DOMAINS:
@@ -74,7 +86,7 @@ class DiscussionVoter extends Voter
      *
      * @return bool
      */
-    protected function canChangeVisibility(User $user, Discussion $discussion)
+    protected function canSetDiscussionAsPublic(User $user, Discussion $discussion)
     {
         if ($this->canManage($user)) {
             return true;
@@ -88,6 +100,20 @@ class DiscussionVoter extends Voter
                     return true;
                 }
             }
+        }
+
+        return false;
+    }
+    /**
+     * @param User $user
+     * @param Discussion $discussion
+     *
+     * @return bool
+     */
+    protected function canCopyToGroup(User $user, Discussion $discussion)
+    {
+        if ($this->canSetDiscussionAsPublic($user, $discussion)) {
+            return true;
         }
 
         return $user->getCommunautePratiqueAnimateurGroupes()->count() > 0;

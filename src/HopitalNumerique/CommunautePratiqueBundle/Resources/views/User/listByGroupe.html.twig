@@ -27,7 +27,9 @@
         <div class="text-center">
             <span class="resultats-nombre">
                 {{ 'directory.count.member'|transchoice(members|length) }}<br />
-                {{ 'directory.count.new_member'|transchoice(members|length - membersViewed|length) }}
+                {% if newMembersCount > 0 %}
+                    {{ 'directory.count.new_member'|transchoice(newMembersCount) }}
+                {% endif %}
             </span>
             <div class="clearfix"></div>
         </div>

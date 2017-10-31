@@ -22,6 +22,14 @@ class RelationRepository extends EntityRepository
             return $relation;
         }
 
+        if ($this->_em->getRepository(ObjectIdentity::class)->find($source->getId())) {
+            $source = $this->_em->getRepository(ObjectIdentity::class)->find($source->getId());
+        }
+
+        if ($this->_em->getRepository(ObjectIdentity::class)->find($target->getId())) {
+            $target = $this->_em->getRepository(ObjectIdentity::class)->find($target->getId());
+        }
+
         $relation = new Relation($source, $target);
 
         $this->_em->persist($relation);

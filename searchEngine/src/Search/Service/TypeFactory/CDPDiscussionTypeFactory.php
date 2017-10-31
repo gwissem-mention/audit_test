@@ -7,9 +7,9 @@ use Elastica\Query\Type;
 use Search\Model\Query;
 use Search\Model\User;
 
-class CDPMessageTypeFactory extends ConfigurableFactory
+class CDPDiscussionTypeFactory extends ConfigurableFactory
 {
-    const TYPE = "cdp_message";
+    const TYPE = "cdp_discussion";
 
     public function getQuery(Query $source, User $user)
     {

@@ -7,16 +7,9 @@ services:
             - '@security.authorization_checker'
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
             - '@nodevo_mail.manager.mail'
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
         tags:
             - { name: kernel.event_subscriber }
-
-    HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionCreatedSubscriber:
-        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionCreatedSubscriber
-        arguments:
-            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\userSubscription'
-        tags:
-            - { name: kernel.event_subscriber }
-
     HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber
         arguments:

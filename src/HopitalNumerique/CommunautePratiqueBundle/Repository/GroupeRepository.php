@@ -20,10 +20,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param bool                                           $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool $checkRegistration
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
-    public function findNonDemarres(Domaine $domaine = null, User $user = null, $isActif = null)
+    public function findNonDemarres(Domaine $domaine = null, User $user = null, $isActif = null, $checkRegistration = false)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -42,11 +43,24 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (null !== $user) {
-            $query
-                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
-                ->setParameter('user', $user)
-            ;
+            if ($checkRegistration) {
+                $query
+                    ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
+                    ->setParameter('user', $user)
+                ;
+            }
+
+            if (!$user->hasRoleCDPAdmin()) {
+                $query
+                    ->leftJoin('groupe.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groupe.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $query->andWhere('groupe.requiredRoles is empty');
         }
+
         if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
@@ -71,7 +85,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findEnCours(Domaine $domaine = null, User $user = null, $isActif = null)
+    public function findEnCours(Domaine $domaine = null, User $user = null, $isActif = null, $checkRegistration = false)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -91,11 +105,24 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (null !== $user) {
-            $query
-                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
-                ->setParameter('user', $user)
-            ;
+            if ($checkRegistration) {
+                $query
+                    ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
+                    ->setParameter('user', $user)
+                ;
+            }
+
+            if (!$user->hasRoleCDPAdmin()) {
+                $query
+                    ->leftJoin('groupe.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groupe.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $query->andWhere('groupe.requiredRoles is empty');
         }
+
         if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
@@ -113,10 +140,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param Domaine[] $domains
+     * @param User|null $user
      *
      * @return integer
      */
-    public function countActiveGroups(array $domains = [])
+    public function countActiveGroups(array $domains = [], User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('g')
             ->select('COUNT(g)')
@@ -131,6 +159,18 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ->join('g.domains', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
                 ->setParameter('domains', $domains)
             ;
+        }
+
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $queryBuilder
+                    ->leftJoin('g.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR g.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $queryBuilder->andWhere('g.requiredRoles is empty');
         }
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
@@ -228,7 +268,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
-    public function findNonFermes(Domaine $domaine = null, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null)
+    public function findNonFermes(Domaine $domaine = null, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null, $checkRegistration = false)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -257,14 +297,28 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (null !== $user) {
-            $query
-                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
-                ->setParameter('user', $user)
-                ->innerJoin('inscription.user', 'user')
-                ->addOrderBy('user.lastname')
-                ->addOrderBy('user.firstname')
-            ;
+            if ($checkRegistration) {
+                $query
+                    ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
+                    ->setParameter('user', $user)
+                    ->innerJoin('inscription.user', 'user')
+                    ->addOrderBy('user.lastname')
+                    ->addOrderBy('user.firstname')
+                ;
+            }
+
+            if (!$user->hasRoleCDPAdmin()) {
+                $query
+                    ->leftJoin('groupe.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groupe.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $query->andWhere('groupe.requiredRoles is empty');
         }
+
+
         if (null !== $enVedette) {
             $query
                 ->andWhere('groupe.vedette = :vedette')
@@ -344,10 +398,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param Domaine|null $domain
      * @param int $limit
+     * @param User $user
      *
      * @return Groupe[]
      */
-    public function getLastClosed(Domaine $domain = null, $limit = 20)
+    public function getLastClosed(Domaine $domain = null, $limit = 20, User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('cdp_group')
             ->andWhere('cdp_group.dateFin < :today')
@@ -361,6 +416,18 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
 
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $queryBuilder
+                    ->leftJoin('cdp_group.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR cdp_group.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $queryBuilder->andWhere('cdp_group.requiredRoles is empty');
+        }
+
         return $queryBuilder
             ->addOrderBy('cdp_group.dateFin', 'DESC')
             ->setMaxResults($limit)
@@ -371,10 +438,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param Domaine|null $domain
      * @param int $limit
+     * @param User|null $user
      *
      * @return Groupe[]
      */
-    public function getLastOpened(Domaine $domain = null, $limit = 20)
+    public function getLastOpened(Domaine $domain = null, $limit = 20, User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('cdp_group')
             ->andWhere('cdp_group.dateFin > :today')
@@ -387,6 +455,18 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ->join('cdp_group.domains', 'domain', Expr\Join::WITH, 'domain.id = :domain')
                 ->setParameter('domain', $domain)
             ;
+        }
+
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $queryBuilder
+                    ->leftJoin('cdp_group.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR cdp_group.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $queryBuilder->andWhere('cdp_group.requiredRoles is empty');
         }
 
         return $queryBuilder

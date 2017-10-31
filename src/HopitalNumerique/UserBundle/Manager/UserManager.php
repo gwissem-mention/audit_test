@@ -424,7 +424,7 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe)
     {
-        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
+        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($this->currentDomaine->get(), $groupe);
     }
 
     /**

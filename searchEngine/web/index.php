@@ -37,7 +37,7 @@ $app['query.factory'] = function () use ($app) {
     $factory->addTypeFactory(new \Search\Service\TypeFactory\PostTypeFactory($config));
     $factory->addTypeFactory(new \Search\Service\TypeFactory\TopicTypeFactory($config));
     $factory->addTypeFactory(new \Search\Service\TypeFactory\GroupTypeFactory($config));
-    $factory->addTypeFactory(new \Search\Service\TypeFactory\CDPMessageTypeFactory($config));
+    $factory->addTypeFactory(new \Search\Service\TypeFactory\CDPDiscussionTypeFactory($config));
 
     return $factory;
 };

@@ -5,6 +5,10 @@ parameters:
                 route: hopital_numerique_publication_publication_objet
                 parameters:
                     id: objectId
+            HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion:
+                route: hopitalnumerique_communautepratique_discussions_public_desfult_discussion
+                parameters:
+                    discussion: objectId
             HopitalNumerique\ObjetBundle\Entity\Contenu:
                 route: hopital_numerique_publication_publication_contenu_without_alias
                 parameters:

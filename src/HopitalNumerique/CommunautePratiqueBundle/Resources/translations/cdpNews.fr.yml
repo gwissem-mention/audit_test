@@ -49,8 +49,15 @@ wall:
             link: Rejoignez ce groupe
         new_member:
             title: Nouveau membre
-            content: %user% (%job% à %organization%) a rejoint la communauté.
-            content_public: La structure %organization% a rejoint la communauté.
+            content:
+                public:
+                    organization: La structure %organization% a rejoint la communauté.
+                    without_organization: Une nouvelle structure a rejoint la communauté.
+                private:
+                    both: %user% (%job% à %organization%) a rejoint la communauté.
+                    organization: %user% (%organization%) a rejoint la communauté.
+                    job: %user% (%job%) a rejoint la communauté.
+                    none: %user% a rejoint la communauté.
             link: Consulter la fiche de l'utilisateur
         updated_member:
             title: Mise à jour de profil

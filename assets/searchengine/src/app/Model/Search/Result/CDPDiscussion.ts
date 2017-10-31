@@ -2,7 +2,7 @@ import Result from "../Result";
 
 declare let Routing: any;
 
-export default class CDPMessage extends Result {
+export default class CDPDiscussion extends Result {
 
     constructor(id: number, score: number, public title: string, public content: string, protected discussionId: number)
     {
@@ -11,7 +11,7 @@ export default class CDPMessage extends Result {
 
     getType() :string
     {
-        return 'cdp_message';
+        return 'cdp_discussion';
     }
 
     getTitle() :string

@@ -61,10 +61,11 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param Domaine|null $domain
+     * @param User|null $user
      *
      * @return integer
      */
-    public function getGroupMessageCount(Domaine $domain = null)
+    public function getGroupMessageCount(Domaine $domain = null, User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('message')
             ->select('count(message)')
@@ -81,15 +82,28 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
 
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $queryBuilder
+                    ->leftJoin('groups.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groups.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $queryBuilder->andWhere('groups.requiredRoles is empty');
+        }
+
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
      * @param Domaine|null $domain
+     * @param User|null $user
      *
      * @return integer
      */
-    public function getMessageFileCount(Domaine $domain = null)
+    public function getMessageFileCount(Domaine $domain = null, User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('message')
             ->select('count(file)')
@@ -105,6 +119,19 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
                 ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
                 ->setParameter('domain', $domain)
             ;
+        }
+
+
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $queryBuilder
+                    ->leftJoin('groups.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groups.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $queryBuilder->andWhere('groups.requiredRoles is empty');
         }
 
         return $queryBuilder->getQuery()->getSingleScalarResult();

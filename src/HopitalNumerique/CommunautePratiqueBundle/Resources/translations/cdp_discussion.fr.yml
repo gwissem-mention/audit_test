@@ -1,3 +1,6 @@
+block:
+    title: Discussion
+
 discussion:
     public:
         title: Espace de discussion
@@ -45,10 +48,13 @@ discussion:
                 confirm:
                     up: Êtes vous sûr de vouloir rendre cette discussion publique ?
                     down: Êtes vous sûr de vouloir rendre cette discussion privée ?
-                success: Visibilité de la discussion changée.
+                success: Discussion copiée dans l'espace public.
             group_copy:
                 label: Copier dans un groupe
                 success: Discussion copiée dans le groupe.
+                modal:
+                    title: Copier la discussion dans le groupe "%groupName%"
+                    empty: Aucun groupe disponible
             cart:
                 label: Ajouter au panier
             subscription:
@@ -85,7 +91,7 @@ discussion:
             add:
                 title: Répondre à une discussion
                 success: Message publié avec succès.
-                moderate: Votre message contient un lien, un animateur doit le valider avant publication."
+                moderate: Votre message contient un lien, un animateur doit le valider avant publication.
             edit:
                 title: Modifier un message
                 success: Message modifié avec succès.

@@ -22,6 +22,26 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      */
     public function listAction(Request $request, $page = 1, $membreId = null)
     {
+        if ($this->getUser()) {
+            if (!$this->getUser()->isInscritCommunautePratique()) {
+                $cpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
+                $request->getSession()->set('urlToRedirectAfterCDPRegistration', $request->getUri());
+
+                return $this->redirectToRoute(
+                    'hopital_numerique_publication_publication_article',
+                    [
+                        'id' => $cpArticle->getId(),
+                        'categorie' => 'article',
+                        'alias' => $cpArticle->getAlias(),
+                    ]
+                );
+            }
+        } else {
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+
+            return $this->redirect($this->generateUrl('account_login'));
+        }
+
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
 
         if ($request->request->has('resetFiltres')) {
@@ -41,6 +61,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $domaine = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
+            'newMembersCount' => $this->get('hopitalnumerique_user.repository.user')->getCDPNewMembersCount($this->getUser(), null, $domaine),
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
             'membersViewed' => $this->getUser() ? $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser()) : [],
@@ -89,6 +110,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
             'canDeleteMembre' => $this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe),
             'members' => $members,
             'membersViewed' => $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser(), $members),
+            'newMembersCount' => $this->get('hopitalnumerique_user.repository.user')->getCDPNewMembersCount($this->getUser(), $groupe, $domaine),
         ]);
     }
 
@@ -112,7 +134,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
             $ajoutMembreForm->handleRequest($request);
 
             if ($ajoutMembreForm->isValid()) {
-                $group->addUser($ajoutMembreForm->get('user')->getData());
+                $group->addUser($ajoutMembreForm->get('user')->getData(), true);
                 $this->get('hopitalnumerique_communautepratique.manager.groupe')->save($group);
                 $this->get('session')->getFlashBag()->add('success', 'L\'utilisateur a bien été ajouté au groupe.');
 

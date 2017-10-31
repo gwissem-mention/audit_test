@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -165,6 +166,7 @@ class PublicationController extends Controller
         $objectRelations = $this->get(ObjectIdentityRepository::class)->getBidirectionalRelationsObjects(
             ObjectIdentity::createFromDomainObject($objet),
             [
+                Discussion::class,
                 Objet::class,
                 Contenu::class,
                 Board::class,

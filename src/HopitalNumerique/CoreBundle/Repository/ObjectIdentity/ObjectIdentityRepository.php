@@ -132,8 +132,9 @@ class ObjectIdentityRepository extends EntityRepository
             ->join('relation.targetObjectIdentity', 'target')
             ->join('relation.sourceObjectIdentity', 'source')
             ->andWhere('source.id = :object OR target.id = :object')
+            ->andWhere('object.id != :object')
             ->setParameter('object', $objectIdentity)
-
+            ->addOrderBy('relation.order')
             ->addGroupBy('object.id')
         ;
 

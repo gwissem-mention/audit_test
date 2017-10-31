@@ -27,7 +27,7 @@
 
         {{ form_start(ajoutMembreForm) }}
 
-            {{ form_row(ajoutMembreForm.user, {label: 'Ajouter un membre :'}) }}
+            {{ form_row(ajoutMembreForm.user, {label: 'Ajouter un membre :', 'attr': {'class': 'select2'}}) }}
 
             <div class="form_vertical_row">
 
@@ -40,6 +40,12 @@
             </div>
 
         {{ form_end(ajoutMembreForm) }}
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#contact-popup .select2').select2({ width: '100%' });
+            });
+        </script>
 
     {% endif %}
 

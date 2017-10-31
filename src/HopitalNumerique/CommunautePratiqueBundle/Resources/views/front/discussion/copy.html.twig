@@ -4,16 +4,24 @@
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{{ discussion.title }}</h4>
+        <h4 class="modal-title">
+            {{ 'discussion.discussion.actions.group_copy.modal.title'|trans({'%groupName%': discussion.title}) }}
+        </h4>
     </div>
     <div class="modal-body">
-        <select name="group">
-            {% for group in groups %}
-                <option value="{{ group.id }}">{{ group }}</option>
-            {% endfor %}
-        </select>
+        {% if groups|length %}
+            <select name="group" style="width: 100%;">
+                {% for group in groups %}
+                    <option value="{{ group.id }}">{{ group }}</option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <b>{{ 'discussion.discussion.actions.group_copy.modal.empty'|trans }}</b>
+        {% endif %}
     </div>
-    <div class="modal-footer">
-        <input type="submit" class="btn btn-success">
-    </div>
+    {% if groups|length %}
+        <div class="modal-footer">
+            <input type="submit" class="btn btn-success">
+        </div>
+    {% endif %}
 </form>

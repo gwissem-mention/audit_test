@@ -57,10 +57,11 @@ class MessageVoter extends Voter
         }
 
         switch ($attribute) {
-            case self::EDIT:
-            case self::DELETE:
             case self::MARK_AS_HELPFUL:
             case self::VALIDATE:
+                return $this->canManage($subject, $user);
+            case self::EDIT:
+            case self::DELETE:
                 return $this->canEdit($subject, $user);
         }
 
@@ -89,6 +90,10 @@ class MessageVoter extends Voter
             }
         }
 
+        if ($user->hasRoleCDPAdmin()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -105,6 +110,21 @@ class MessageVoter extends Voter
         }
 
         if ($message->getUser()->getId() === $user->getId()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Message $message
+     * @param User $user
+     *
+     * @return bool
+     */
+    protected function canManage(Message $message, User $user)
+    {
+        if ($user->hasRoleCDPAdmin() || $user->getCommunautePratiqueAnimateurGroupes()->count()) {
             return true;
         }
 

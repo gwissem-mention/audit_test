@@ -70,6 +70,10 @@ class DiscussionController extends Controller
                 )
             );
             $discussionSubscribed = $discussion && $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser());
+
+            if ($discussion && $this->getUser()) {
+                $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->get('hopitalnumerique_user.repository.user')->find($this->getUser()->getId()), $discussion->getMessages()->last()->getId()));
+            }
         } else {
             $discussion = null;
         }
@@ -169,6 +173,7 @@ class DiscussionController extends Controller
         if ($this->getUser()) {
             if (!$this->isGranted('cdp_discussion_create')) {
                 $cpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
+                $request->getSession()->set('urlToRedirectAfterCDPRegistration', $request->getUri());
 
                 return $this->redirectToRoute(
                     'hopital_numerique_publication_publication_article',
@@ -186,8 +191,6 @@ class DiscussionController extends Controller
         }
 
         $this->denyAccessUnlessGranted('cdp_discussion_create');
-
-
 
         $command = new CreateDiscussionCommand($this->getUser(), $domains, $group, $object);
 
@@ -276,7 +279,7 @@ class DiscussionController extends Controller
 
         if ($this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
-                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId()])
+                'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_reply_discussion', ['discussion' => $discussion->getId(), 'group' => $group ? $group->getId() : null])
             ])->createView();
         }
 
@@ -284,6 +287,10 @@ class DiscussionController extends Controller
             $discussionDomainsForm = $this->createForm(DiscussionDomainType::class, $discussion, [
                 'action' => $this->generateUrl('hopitalnumerique_communautepratique_discussions_discussion_domains', ['discussion' => $discussion->getId()]),
             ])->createView();
+        }
+
+        if ($this->getUser()) {
+            $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->getUser(), $discussion->getMessages()->last()->getId()));
         }
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
@@ -439,6 +446,24 @@ class DiscussionController extends Controller
             $groupsAvailable = $groupRepository->findAll();
         } else {
             $groupsAvailable = $user->getCommunautePratiqueAnimateurGroupes()->toArray();
+            $groupsAvailable = array_filter($groupsAvailable, function (Groupe $group) use ($user) {
+
+                if ($user->hasRoleCDPAdmin()) {
+                    return true;
+                }
+
+                if ($group->getRequiredRoles()->count() === 0) {
+                    return true;
+                }
+
+                foreach ($group->getRequiredRoles() as $role) {
+                    if ($user->isGranted($role)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
         $groupsAvailable = array_filter($groupsAvailable, function (Groupe $group) use ($discussion) {
@@ -466,7 +491,7 @@ class DiscussionController extends Controller
      * @param Discussion $discussion
      * @param Groupe|null $group
      *
-     * @Security("is_granted('copy_to_group', discussion)")
+     * @Security("is_granted('set_as_public', discussion)")
      *
      * @return RedirectResponse
      */

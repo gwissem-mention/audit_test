@@ -73,17 +73,17 @@ $container
 ;
 
 $container
-    ->setDefinition("hopital_numerique_search.provider.cdp_message.$serviceIdentifier", new Definition(
-        \HopitalNumerique\SearchBundle\Service\Provider\CDPMessageProvider::class,
+    ->setDefinition("hopital_numerique_search.provider.cdp_discussion.$serviceIdentifier", new Definition(
+        \HopitalNumerique\SearchBundle\Service\Provider\CDPDiscussionProvider::class,
         [
             $slug,
-            new Reference('HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'),
-            new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'cdp_message')),
+            new Reference('HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'),
+            new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'cdp_discussion')),
         ]
     ))
     ->addTag('fos_elastica.provider', [
         'index' => $index,
-        'type' => 'cdp_message',
+        'type' => 'cdp_discussion',
     ])
 ;
 

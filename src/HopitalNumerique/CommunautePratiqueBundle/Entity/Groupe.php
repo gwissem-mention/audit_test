@@ -197,6 +197,13 @@ class Groupe
     protected $presentationDiscussion;
 
     /**
+     * @var Discussion[]
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion", mappedBy="groups")
+     */
+    protected $discussions;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -210,6 +217,7 @@ class Groupe
         $this->users = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->requiredRoles = new ArrayCollection();
+        $this->discussions = new ArrayCollection();
     }
 
     /**
@@ -588,12 +596,13 @@ class Groupe
      * Add users.
      *
      * @param User $users
+     * @param boolean $autoValidate
      *
      * @return Groupe
      */
-    public function addUser(User $users)
+    public function addUser(User $users, $autoValidate = false)
     {
-        $this->addInscription(new Inscription($this, $users));
+        $this->addInscription(new Inscription($this, $users, $autoValidate));
 
         return $this;
     }
@@ -937,19 +946,11 @@ class Groupe
     {
         $dateDerniereActivite = $this->dateCreation;
 
-        foreach ($this->commentaires as $commentaire) {
-            if (null === $dateDerniereActivite || $commentaire->getDateCreation() > $dateDerniereActivite) {
-                $dateDerniereActivite = $commentaire->getDateCreation();
-            }
-        }
-
-        foreach ($this->fiches as $fiche) {
-            if (null === $dateDerniereActivite || $fiche->getDateCreation() > $dateDerniereActivite) {
-                $dateDerniereActivite = $fiche->getDateCreation();
-            }
-            if (null !== $fiche->getDateDerniereActivite()
-                    && $fiche->getDateDerniereActivite() > $dateDerniereActivite) {
-                $dateDerniereActivite = $fiche->getDateDerniereActivite();
+        foreach ($this->getDiscussions() as $discussion) {
+            foreach ($discussion->getMessages() as $message) {
+                if (null === $dateDerniereActivite || $message->getCreatedAt() > $dateDerniereActivite) {
+                    $dateDerniereActivite = $message->getCreatedAt();
+                }
             }
         }
 
@@ -1066,6 +1067,14 @@ class Groupe
     }
 
     /**
+     * @return Discussion[]
+     */
+    public function getDiscussions()
+    {
+        return $this->discussions;
+    }
+
+    /**
      * @param Role $role
      *
      * @return Groupe
@@ -1097,5 +1106,33 @@ class Groupe
         $this->presentationDiscussion = $presentationDiscussion;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMessagesCount()
+    {
+        $count = 0;
+
+        foreach ($this->getDiscussions() as $discussion) {
+            $count += $discussion->getMessages()->count();
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMessageFilesCount()
+    {
+        $count = 0;
+
+        foreach ($this->getDiscussions() as $discussion) {
+            $count += $discussion->getMessagesFiles()->count();
+        }
+
+        return $count;
     }
 }

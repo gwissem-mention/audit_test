@@ -134,8 +134,12 @@ class EntityHasReferenceManager extends BaseManager
                 ;
 
             if ($entityHaveReferenceWithoutRoles['entityType'] === Entity::ENTITY_TYPE_CDP_DISCUSSION && $entityHaveReferenceWithoutRoles['isDiscussionPublic'] == 0) {
-                $userIsInCdpGroup = function ($groups) use ($user) {
+                $userIsInCdpGroup = function ($groups, $roles) use ($user) {
                     if (!$user instanceof User || !$user->getCommunautePratiqueGroupes()) {
+                        return false;
+                    }
+
+                    if ($roles) {
                         return false;
                     }
 
@@ -150,7 +154,7 @@ class EntityHasReferenceManager extends BaseManager
                     return false;
                 };
 
-                $entityValid = $entityValid && $userIsInCdpGroup($entityHaveReferenceWithoutRoles['discussionGroupsIds']);
+                $entityValid = $entityValid && $userIsInCdpGroup($entityHaveReferenceWithoutRoles['discussionGroupsIds'], $entityHaveReferenceWithoutRoles['discussionGroupsRequiredRolesIds']);
             }
 
             if ($entityValid) {

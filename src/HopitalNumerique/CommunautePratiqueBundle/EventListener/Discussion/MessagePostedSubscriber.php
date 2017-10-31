@@ -9,6 +9,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -42,6 +43,11 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     protected $mailManager;
 
     /**
+     * @var UserSubscription
+     */
+    protected $userSubscription;
+
+    /**
      * MessagePostedSubscriber constructor.
      *
      * @param ReadRepository $readRepository
@@ -49,19 +55,22 @@ class MessagePostedSubscriber implements EventSubscriberInterface
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param SubscriptionRepository $subscriptionRepository
      * @param MailManager $mailManager
+     * @param UserSubscription $userSubscription
      */
     public function __construct(
         ReadRepository $readRepository,
         EntityManagerInterface $entityManager,
         AuthorizationCheckerInterface $authorizationChecker,
         SubscriptionRepository $subscriptionRepository,
-        MailManager $mailManager
+        MailManager $mailManager,
+        UserSubscription $userSubscription
     ) {
         $this->readRepository = $readRepository;
         $this->entityManager = $entityManager;
         $this->authorizationChecker = $authorizationChecker;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->mailManager = $mailManager;
+        $this->userSubscription = $userSubscription;
     }
 
     /**
@@ -73,9 +82,18 @@ class MessagePostedSubscriber implements EventSubscriberInterface
             Events::DISCUSSION_MESSAGE_POSTED => [
                 ['moderateMessage', 0],
                 ['readDiscussion', 0],
+                ['autoSubscribe', 0],
                 ['notifySubscriber', 0],
             ],
         ];
+    }
+
+    /**
+     * @param MessagePostedEvent $event
+     */
+    public function autoSubscribe(MessagePostedEvent $event)
+    {
+        $this->userSubscription->subscribe($event->getMessage()->getDiscussion(), $event->getMessage()->getUser());
     }
 
     /**

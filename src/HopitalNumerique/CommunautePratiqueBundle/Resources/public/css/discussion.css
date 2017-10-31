@@ -1,3 +1,11 @@
+.new-flag {
+    color: #fff;
+    background: #ec0034;
+    border-radius: 2px;
+    font-size: 10px;
+    padding: 1px 2px;
+}
+
 .discussions .new-message-badge {
     background: linear-gradient(to bottom, #d7504d, #c9312e);
     color: #fff;
@@ -261,7 +269,7 @@
     padding: 15px 0;
 }
 
-.discussions .discussion .messages .message.message--helpful .message-content .message-body {
+.discussions .discussion .messages .message.message--helpful:not(.need-moderation) .message-content .message-body {
     background: rgba(240, 232, 174, 0.5);
 }
 
@@ -285,6 +293,10 @@
     margin-left: 20px;
 }
 
+.discussions .discussion .messages .message .message-body a {
+    word-break: break-all;
+}
+
 .discussions .discussion .messages .message .message-body {
     margin-left: 10px;
     padding-top: 4px;
@@ -298,6 +310,15 @@
 
 .discussions .discussion .messages .message .animator .fa {
     color: #ec0034;
+}
+
+.discussions .discussion .messages .message .moderate .label,
+.discussions .discussion .messages .message .moderate .content {
+    padding: 10px;
+}
+
+.discussions .discussion .messages .message .moderate .btn {
+    margin-top: 10px;
 }
 
 .discussions .discussion .messages .message .is-new {

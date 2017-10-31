@@ -3,4 +3,4 @@ admin:
         edit:
             form:
                 requiredRoles:
-                    label: Rôles requis
+                    label: Rôles requis (vide pour aucune restriction)

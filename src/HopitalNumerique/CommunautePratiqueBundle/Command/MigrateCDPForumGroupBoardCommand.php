@@ -35,6 +35,7 @@ class MigrateCDPForumGroupBoardCommand extends ContainerAwareCommand
         $entityManager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $boardRepository = $this->getContainer()->get('hopitalnumerique_forum.repository.board');
         $questionnaire = $this->getContainer()->get(QuestionnaireRepository::class)->find(27);
+        $bbCodeParser = $this->getContainer()->get('ccdn_component_bb_code.component.bootstrap');
 
         $users = [];
 
@@ -104,7 +105,11 @@ class MigrateCDPForumGroupBoardCommand extends ContainerAwareCommand
                 foreach ($topic->getPosts() as $post) {
                     $output->write('.');
 
-                    $message = new Message($discussion, nl2br($post->getBody()), $post->getCreatedBy());
+                    $message = new Message(
+                        $discussion,
+                        str_replace(['<pre>', '</pre>'], '', nl2br($bbCodeParser->process($post->getBody()))),
+                        $post->getCreatedBy()
+                    );
                     $message->setCreatedAt($post->getCreatedDate());
 
                     $entityManager->persist($message);
@@ -120,6 +125,8 @@ class MigrateCDPForumGroupBoardCommand extends ContainerAwareCommand
 
                 $output->writeln('[SAVED]');
             }
+
+            $entityManager->flush();
 
             $output->writeln('');
         }

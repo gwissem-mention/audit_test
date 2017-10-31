@@ -28,6 +28,10 @@
 
             <span class="title">
                 {{ discussion.title }}
+
+                {% if app.user is not null and discussion.newDiscussion(app.user) > 0 %}
+                    <span class="new-flag">NEW</span>
+                {% endif %}
             </span>
 
             <span class="infos">

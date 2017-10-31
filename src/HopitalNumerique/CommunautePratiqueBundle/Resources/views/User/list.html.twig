@@ -75,17 +75,20 @@
                 {% endfor %}
             </div>
 
-            {% if pagerFantaMembres.nbPages > 1 %}
+
                 <div class="text-center">
-                    {{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}
+                    {% if pagerFantaMembres.nbPages > 1 %}
+                        {{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}
+                    {% endif %}
 
                     <span class="resultats-nombre">
                         {{ 'directory.count.member'|transchoice(pagerFantaMembres.count) }}<br />
-                        {{ 'directory.count.new_member'|transchoice(pagerFantaMembres.count - membersViewed|length) }}
+                        {% if newMembersCount > 0 %}
+                            {{ 'directory.count.new_member'|transchoice(newMembersCount) }}
+                        {% endif %}
                     </span>
                     <div class="clearfix"></div>
                 </div>
-            {% endif %}
 
         </div>
 

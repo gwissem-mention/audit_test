@@ -28,7 +28,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes à venir</a></li>
                     <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes en cours</a></li>
-                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-social20"></em> &nbsp; Groupes terminés</a></li>
+                    <li role="presentation"><a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-social20"></em> &nbsp; Groupes terminés</a></li>
                     {% if groupes|length %}
                         <li role="presentation"><a href="#dashboard" role="tab" data-toggle="tab"><em class="icon-download105"></em> &nbsp; Tableau de bord</a></li>
                     {% endif %}

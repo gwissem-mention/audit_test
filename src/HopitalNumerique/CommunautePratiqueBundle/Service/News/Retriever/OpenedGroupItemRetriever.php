@@ -44,7 +44,7 @@ class OpenedGroupItemRetriever implements WallItemRetrieverInterface
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
         $items = [];
-        foreach ($this->groupRepository->getLastOpened($domain, 1) as $group) {
+        foreach ($this->groupRepository->getLastOpened($domain, 1, $user instanceof User ? $user : null) as $group) {
             $isRegistered = false;
             if ($user instanceof User) {
                 if ($user->getCommunautePratiqueGroupes() && (new ArrayCollection($user->getCommunautePratiqueGroupes()))->contains($group)) {

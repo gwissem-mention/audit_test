@@ -91,7 +91,7 @@ class ConfigFactory
                 'forum_post' => 'Message du forum',
                 'forum_topic' => $labels[1995],
                 'cdp_groups' => $labels[1998],
-                'cdp_message' => $labels[4000],
+                'cdp_discussion' => $labels[4000],
                 'person' => $labels[1996],
                 'autodiag' => $labels[671],
             ],

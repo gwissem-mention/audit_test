@@ -2509,9 +2509,9 @@ class User extends BaseUser implements SettingsOwnerInterface
      *
      * @return User
      */
-    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe)
+    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe, $autoValidate = false)
     {
-        $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
+        $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this, $autoValidate));
 
         return $this;
     }

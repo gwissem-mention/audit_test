@@ -97,16 +97,10 @@
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
                 {% endif %}
-                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
-                    {% if scope == 'public' %}
-                        {% if discussion.groups.count == 0 %}
-                            <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
-                        {% endif %}
-                    {% else %}
-                        {% if not discussion.public %}
-                            <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto" data-confirm="{{ ('discussion.discussion.actions.public.confirm.'~(discussion.public ? 'down' : 'up'))|trans }}">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
-                        {% endif %}
-                    {% endif %}
+                {% if scope == 'public' and discussion.groups.count == 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                {% elseif not discussion.public and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::SET_AS_PUBLIC'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto" data-confirm="{{ ('discussion.discussion.actions.public.confirm.'~(discussion.public ? 'down' : 'up'))|trans }}">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
                 {% endif %}
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
 
@@ -134,7 +128,7 @@
             {% set isNewMessage = true %}
         {% endif %}
 
-        <div class="message{{ message.helpful ? ' message--helpful' }}{{ isNewMessage ? ' new' }}{{ isNewMessage and message.files|length ? ' newFile' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
+        <div class="message{{ not message.published ? ' need-moderation' }}{{ message.helpful  ? ' message--helpful' }}{{ isNewMessage ? ' new' }}{{ isNewMessage and message.files|length ? ' newFile' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
             <div class="message-avatar">
                 <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
             </div>
@@ -180,19 +174,21 @@
                 <div class="message-body">
                     {% if not message.published %}
 
-                        <div class="label label-danger center-block">{{ 'discussion.message.actions.publish.text'|trans }}</div>
-                        <div class="bg-danger">
-                            <div class="bb_wrapper">
+                        <div class="moderate">
+                            <div class="label label-danger center-block">{{ 'discussion.message.actions.publish.text'|trans }}</div>
+                            <div class="content bg-danger">
+                                <div class="bb_wrapper">
                                     {{ message.content|raw }}
+                                </div>
                             </div>
-                        </div>
 
-                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::VALIDATE'), message) %}
-                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id, 'group': group ? group.id : null}) }}" class="btn btn-primary pull-right">
-                                <i class="fa fa-check"></i>
-                                {{ 'discussion.message.actions.publish.btn'|trans }}
-                            </a>
-                        {% endif %}
+                            {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::VALIDATE'), message) %}
+                                <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id, 'group': group ? group.id : null}) }}" class="btn btn-primary pull-right">
+                                    <i class="fa fa-check"></i>
+                                    {{ 'discussion.message.actions.publish.btn'|trans }}
+                                </a>
+                            {% endif %}
+                        </div>
                     {% else %}
                         {{ message.content|parsePublication|unescape }}
                     {% endif %}

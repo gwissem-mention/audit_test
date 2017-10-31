@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class GroupVoter extends Voter
 {
+    const ACCESS = 'access';
     const VALIDATE_REGISTRATION = 'validate_registration';
 
     /**
@@ -22,7 +23,7 @@ class GroupVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::VALIDATE_REGISTRATION])) {
+        if (!in_array($attribute, [self::ACCESS, self::VALIDATE_REGISTRATION])) {
             return false;
         }
 
@@ -49,8 +50,34 @@ class GroupVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::ACCESS:
+                return $this->canAccess($subject, $user);
             case self::VALIDATE_REGISTRATION:
                 return $this->isAnimator($subject, $user);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Groupe $group
+     * @param User $user
+     *
+     * @return bool
+     */
+    protected function canAccess(Groupe $group, User $user)
+    {
+        if (
+            ($this->isAnimator($group, $user)) ||
+            ($group->getRequiredRoles()->count() === 0)
+        ) {
+            return true;
+        }
+
+        foreach ($group->getRequiredRoles() as $role) {
+            if ($user->isGranted($role)) {
+                return true;
+            }
         }
 
         return false;

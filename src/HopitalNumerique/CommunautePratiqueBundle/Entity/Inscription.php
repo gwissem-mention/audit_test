@@ -46,11 +46,11 @@ class Inscription
      * @param Groupe $groupe
      * @param User   $user
      */
-    public function __construct(Groupe $groupe, User $user)
+    public function __construct(Groupe $groupe, User $user, $actif = false)
     {
         $this->groupe = $groupe;
         $this->user = $user;
-        $this->actif = false;
+        $this->actif = $actif;
     }
 
     /**
