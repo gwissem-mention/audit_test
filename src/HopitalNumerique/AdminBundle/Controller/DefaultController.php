@@ -24,13 +24,14 @@ class DefaultController extends Controller
     protected $domains;
 
     /**
-     * Index Action.
+     * Index action.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function indexAction(Request $request)
     {
-        //On récupère l'user connecté
-        $user = $this->getUser();
-
         /**
          * Gestion des domaines
          * @var Domaine[] $userDomains
@@ -151,6 +152,10 @@ class DefaultController extends Controller
             'bottom5-points-dur' => [],
             'top5-productions' => [],
             'bottom5-productions' => [],
+            'top5-productions-3mois' => [],
+            'bottom5-productions-3mois' => [],
+            'top5-points-dur-3mois' => [],
+            'bottom5-points-dur-3mois' => [],
         ];
 
         //Bloc "Publication" + TOP + BOTTOM
@@ -168,8 +173,11 @@ class DefaultController extends Controller
         }
 
         $interval = new \DateInterval('P1M');
+        $intervalLast3Months = new \DateInterval('P3M');
         $today = new \DateTime('now');
         foreach ($publications as $publication) {
+            $creationDate = \DateTimeImmutable::createFromMutable($publication['dateCreation']);
+
             if ($publication['etat'] == 4) {
                 $blocObjets['publications-non-publiees']++;
             }
@@ -182,10 +190,17 @@ class DefaultController extends Controller
                 $blocObjets['top5-points-dur'][] = $publication;
 
                 //Bottom 5 - On affiche ceux qui ont plus d'un mois
-                if ($publication['dateCreation']->add($interval) <= $today) {
+                if ($creationDate->add($interval) <= $today) {
                     $blocObjets['bottom5-points-dur'][] = $publication;
                 }
-                //Productions
+
+                // Top/Bottom 5 hard points last 3 months
+                if ($creationDate->add($intervalLast3Months) >= $today) {
+                    $blocObjets['top5-points-dur-3mois'][] = $publication;
+                    $blocObjets['bottom5-points-dur-3mois'][] = $publication;
+                }
+
+            //Productions
             } elseif (in_array('175', $publication['types'])) {
                 $blocObjets['productions']++;
 
@@ -193,8 +208,14 @@ class DefaultController extends Controller
                 $blocObjets['top5-productions'][] = $publication;
 
                 //Bottom 5
-                if ($publication['dateCreation']->add($interval) <= $today) {
+                if ($creationDate->add($interval) <= $today) {
                     $blocObjets['bottom5-productions'][] = $publication;
+                }
+
+                // Top/Bottom 5 productions last 3 months
+                if ($creationDate->add($intervalLast3Months) >= $today) {
+                    $blocObjets['top5-productions-3mois'][] = $publication;
+                    $blocObjets['bottom5-productions-3mois'][] = $publication;
                 }
             }
         }
@@ -208,6 +229,10 @@ class DefaultController extends Controller
         $blocObjets['bottom5-points-dur'] = $this->get5('bottom', $blocObjets['bottom5-points-dur']);
         $blocObjets['top5-productions'] = $this->get5('top', $blocObjets['top5-productions']);
         $blocObjets['bottom5-productions'] = $this->get5('bottom', $blocObjets['bottom5-productions']);
+        $blocObjets['top5-productions-3mois'] = $this->get5('top', $blocObjets['top5-productions-3mois']);
+        $blocObjets['bottom5-productions-3mois'] = $this->get5('bottom', $blocObjets['bottom5-productions-3mois']);
+        $blocObjets['top5-points-dur-3mois'] = $this->get5('top', $blocObjets['top5-points-dur-3mois']);
+        $blocObjets['bottom5-points-dur-3mois'] = $this->get5('bottom', $blocObjets['bottom5-points-dur-3mois']);
 
         return $blocObjets;
     }
@@ -447,6 +472,10 @@ class DefaultController extends Controller
         $datas['paiements'] = ['row' => 4, 'col' => 3];
         $datas['cdp'] = ['row' => 5, 'col' => 3];
         $datas['forum'] = ['row' => 6, 'col' => 1];
+        $datas['top5-productions-3mois'] = ['row' => 6, 'col' => 2];
+        $datas['bottom5-productions-3mois'] = ['row' => 6, 'col' => 3];
+        $datas['top5-points-dur-3mois'] = ['row' => 7, 'col' => 1];
+        $datas['bottom5-points-dur-3mois'] = ['row' => 7, 'col' => 2];
         $datas['cdp_discussion'] = ['row' => 6, 'col' => 2];
 
         if (!is_null($settings)) {

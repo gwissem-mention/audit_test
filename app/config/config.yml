@@ -266,6 +266,7 @@ fos_js_routing:
         - ccdn_forum_user_topic_show
         - hopitalnumerique_autodiag_entry_add
         - hopital_numerique_cart_add
+        - hopital_numerique_publication_synthese
 
 # Miniatures
 liip_imagine:

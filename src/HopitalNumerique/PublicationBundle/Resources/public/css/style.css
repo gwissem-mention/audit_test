@@ -120,6 +120,15 @@
     .sous-chapitres-container {}
     .sous-chapitres-container .title { text-decoration: underline; }
 
+    @media screen and (min-width: 1271px) {
+        .sous-chapitres-container ul.parent {
+            margin-left: 270px;
+        }
+    }
+    .sous-chapitres-container ul.parent li.list-sous-chapitres {
+        margin-left: -20px;
+    }
+
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}
     #publication #publication-resume h2{font-size: 18px; color: #d60030; font-weight: bold;}
@@ -129,6 +138,9 @@
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 	#publication #publication-resume iframe{ margin-right: 15px;}
 	#publication #publication-resume ul { overflow: hidden; }
+    #publication #publication-resume h2 acronym {
+        color: #d60030;
+    }
 
     /* Bloc Ressources associées */
     #publication #productions-associes{ margin-top: 30px; }
@@ -183,6 +195,26 @@
         #articles h4.categorie {margin-left:0;}
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
+        #articles .column-left-container {
+            background-color: #e5e5e5;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        #articles .column-left-container .recherche-referencement h2 {
+            font-weight: 500;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 20px;
+        }
+        #articles .column-left-container .recherche-referencement .results-bloc a:hover {
+            text-decoration: none;
+        }
+        #articles .column-left-container .recherche-referencement .results-bloc a acronym {
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px dotted #333;
+            cursor: help;
+        }
+
         /* Sous-menu */
         #articles .menu-main{list-style:none; padding:0; margin-bottom: 20px}
         #articles .menu-main li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }

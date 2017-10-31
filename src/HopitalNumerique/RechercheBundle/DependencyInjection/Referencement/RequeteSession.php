@@ -7,6 +7,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation as ReferencementModulation;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Manager\RequeteManager;
+use HopitalNumerique\RechercheBundle\Repository\RequeteRepository;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\StatBundle\Entity\StatRecherche;
@@ -14,6 +15,7 @@ use HopitalNumerique\StatBundle\Manager\StatRechercheManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Enregistrement temporaire de la requête de recherche par référencement.
@@ -88,16 +90,28 @@ class RequeteSession
     protected $statRechercheManager;
 
     /**
-     * Constructeur.
+     * @var TokenStorageInterface $tokenStorage
+     */
+    private $tokenStorage;
+
+    /**
+     * @var RequeteRepository $requestRepository
+     */
+    private $requestRepository;
+
+    /**
+     * RequeteSession constructor.
      *
-     * @param SessionInterface        $session
-     * @param ConnectedUser           $connectedUser
-     * @param CurrentDomaine          $currentDomaine
-     * @param ReferenceTree           $referenceTree
+     * @param SessionInterface $session
+     * @param ConnectedUser $connectedUser
+     * @param CurrentDomaine $currentDomaine
+     * @param ReferenceTree $referenceTree
      * @param ReferencementModulation $referencementModulation
-     * @param ReferenceManager        $referenceManager
-     * @param RequeteManager          $requeteManager
-     * @param StatRechercheManager    $statRechercheManager
+     * @param ReferenceManager $referenceManager
+     * @param RequeteManager $requeteManager
+     * @param StatRechercheManager $statRechercheManager
+     * @param TokenStorageInterface $tokenStorage
+     * @param RequeteRepository $requestRepository
      */
     public function __construct(
         SessionInterface $session,
@@ -107,7 +121,9 @@ class RequeteSession
         ReferencementModulation $referencementModulation,
         ReferenceManager $referenceManager,
         RequeteManager $requeteManager,
-        StatRechercheManager $statRechercheManager
+        StatRechercheManager $statRechercheManager,
+        TokenStorageInterface $tokenStorage,
+        RequeteRepository $requestRepository
     ) {
         $this->session = $session;
         $this->connectedUser = $connectedUser;
@@ -116,8 +132,9 @@ class RequeteSession
         $this->referenceManager = $referenceManager;
         $this->requeteManager = $requeteManager;
         $this->statRechercheManager = $statRechercheManager;
-
         $this->domaine = $currentDomaine->get();
+        $this->tokenStorage = $tokenStorage;
+        $this->requestRepository = $requestRepository;
     }
 
     /**
@@ -322,6 +339,8 @@ class RequeteSession
 
     /**
      * Enregistre la requête actuelle pour l'utilisateur connecté.
+     *
+     * @param User|null $user
      */
     public function saveAsNewRequete(User $user = null)
     {
@@ -343,16 +362,27 @@ class RequeteSession
     }
 
     /**
-     * Enregistre la requête.
+     * Enregistre la requête
+     *
+     * @param Requete $requete
      */
     public function saveRequete(Requete $requete)
     {
+        $date = new \DateTime("now", new \DateTimeZone('Europe/Paris'));
+        $date = $date->format('d/m/Y').' à '.$date->format('G:i');
+
         if ($requete->getNom() == '') {
-            $requete->setNom('Ma recherche du ' . date('d/m/Y') . ' à ' . date('G:i'));
+            $searches = $this->requestRepository->getSavedSearchesByUser(
+                $this->tokenStorage->getToken()->getUser(),
+                $this->domaine
+            );
+            $requete->setNom('Recherche '. (count($searches) + 1) .' - '. $date);
         }
         $requete->setRefs($this->getReferenceIds());
         $requete->setCategPointDur($this->getCategoryFilters());
         $requete->setRechercheTextuelle($this->getSearchedText());
+        $requete->setDateSave($date);
+
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
     }

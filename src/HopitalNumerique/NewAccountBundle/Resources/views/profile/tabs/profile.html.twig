@@ -26,6 +26,7 @@
                     {% endif %}
                     <div class="inputUpload" style="display:{{visibility}}">
                         {{ form_widget(form.file) }}
+                        {{ form_widget(form.path) }}
                     </div>
 
                     {% if user.getAbsolutePath() is not null %}

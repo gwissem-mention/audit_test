@@ -1,0 +1,15 @@
+search_criteria: Critères de recherche
+select_all: '> Sélectionner tout'
+unselect_all: '> Désélectionner tout'
+directory_network_professionals: Annuaire des professionnels du réseau
+professional: professionnel
+professionals: professionnels
+network: du réseau
+business_knowledge: Connaissances métiers
+si_knowledge: Connaissances SI
+solicit_professional: Solliciter ce professionnel
+not_specified: Non renseigné
+no_network_professionals: '- Aucun professionnel du réseau pour cette région -'
+no_regions_selected: '- Aucune régions sélectionnées -'
+no_region_selected_title: 'Aucune région sélectionnée'
+select_region: '- Merci de sélectionner une région pour rechercher les professionnels du réseau -'

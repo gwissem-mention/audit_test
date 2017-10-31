@@ -148,6 +148,7 @@ forum:
     name-th:                           "Nom"
     category-count-th:                 "Nombre de catégorie"
     name-label:                        "Nom : "
+    domain-label:                      "Domaine : "
     roles:
         board-view-label:              "Rôles autorisés à voir le thème :"
     confirm-delete-label:              "Je confirme que je veux supprimer ce forum."

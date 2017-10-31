@@ -1,5 +1,13 @@
 <div class="category">
     {{ category|raw }}
+
+    {% if objetId is defined and objetId is not null %}
+        <a href="{{ path('hopital_numerique_publication_synthese', {'id': objetId}) }}" class="synthesis fancybox.iframe">
+            Synthèse
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+        </a>
+    {% endif %}
+
     {% if source is defined and source is not null %}
         <span class="text-muted">({{ source }})</span>
     {% endif %}
@@ -17,6 +25,7 @@
             <br /><span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> {{ subtitle }}</span>
         {%- endif -%}
     </a>
+
     {% if cartItemType is defined and cartItemType is not null and app.user and id is defined %}
         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {
             objectType: cartItemType,

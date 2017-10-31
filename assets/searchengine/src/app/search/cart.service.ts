@@ -9,6 +9,7 @@ import Group from "../Model/Search/Result/Group";
 
 declare let $ : any;
 declare let Routing: any;
+declare let $ : any;
 
 @Injectable()
 export default class Cart {

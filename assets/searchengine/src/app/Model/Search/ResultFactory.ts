@@ -45,7 +45,8 @@ export default class ResultFactory {
                     resultData._id,
                     resultData._score,
                     title,
-                    resultData._source.alias
+                    resultData._source.alias,
+                    resultData._source.synthesis
                 );
                 result.setSource(resultData._source.source);
                 result.setContent(content);
@@ -56,12 +57,12 @@ export default class ResultFactory {
             case "content":
                 let parentData = resultData._source.parent;
                 
-                result = new Publication(resultData._id, resultData._score, title, resultData._source.alias);
+                result = new Publication(resultData._id, resultData._score, title, resultData._source.alias, null);
                 result.setContent(content);
                 result.setSource(parentData.source);
                 result.types = resultData._source.types.map((x: any) => x.libelle);
 
-                let parent = new Publication(parentData.id, 0, parentData.title, parentData.alias);
+                let parent = new Publication(parentData.id, 0, parentData.title, parentData.alias, parentData.synthesis);
                 result.setParent(parent);
                 result.setCode(resultData._source.content_code);
 

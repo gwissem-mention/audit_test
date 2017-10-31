@@ -154,6 +154,18 @@ class ContenuController extends Controller
             }
         }
 
+        //We put the order of each elements
+        $em = $this->getDoctrine()->getManager();
+        $i = 1;
+        foreach ($contenus as $contenu) {
+            if ($contenu->getParent() === $parent) {
+                $contenu->setOrder($i);
+                $em->persist($contenu);
+                $i++;
+            }
+        }
+        $em->flush();
+
         return new Response('{"success":true, "childs":' . $stillHaveChilds . '}', 200);
     }
 

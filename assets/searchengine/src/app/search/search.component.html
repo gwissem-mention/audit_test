@@ -3,7 +3,7 @@
 
     <div class="resultset-wrapper">
         <div class="results-wrapper">
-            <search-results [mode]="'lite'" [resultSet]="hotResultSet" [query]="hotQuery"  (queryChanged)="refreshHotQuery($event)"></search-results>
+            <search-results [mode]="'lite'" [resultSet]="hotResultSet" [query]="hotQuery" (queryChanged)="refreshHotQuery($event)"></search-results>
             <search-results [resultSet]="resultSet" [query]="query" (queryChanged)="refreshQuery($event)"></search-results>
 
             <div *ngIf="noResutls" class="no-results-wrapper">

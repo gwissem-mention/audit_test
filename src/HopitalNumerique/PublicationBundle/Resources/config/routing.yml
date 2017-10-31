@@ -54,7 +54,7 @@ hopital_numerique_publication_publication_contenu_without_alias:
 
 hopital_numerique_publication_publication_article:
     path:  /publication/{categorie}/{id}-{alias}
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article" }
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article", id:1, alias:alias }
     requirements:
         id: \d+
 

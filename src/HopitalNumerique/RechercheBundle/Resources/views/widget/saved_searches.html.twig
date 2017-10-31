@@ -16,7 +16,13 @@
             {% for search in data %}
                 <tr>
                     <td>
-                        <span class="inplace-edit-search" data-url="{{ search.actions.edit }}" data-field-link="{{ search.actions.launch }}">{{ search.information.name }}</span>
+                        {% if search.information.dateSave is not empty %}
+                            {{ search.information.dateSave }} -
+                        {% endif %}
+                        <span class="inplace-edit-search" data-url="{{ search.actions.edit }}"
+                              data-field-link="{{ search.actions.launch }}">
+                            {{ search.information.name }}
+                        </span>
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">

@@ -23,9 +23,7 @@
 
     <body class="focusedform">
         <div class="verticalcenter">
-            <a href="{{path('hopital_numerique_homepage')}}">
-                <h3>{{ 'title_ressource_center'|trans|nl2br }}</h3>
-            </a>
+            <h3>{{ 'title_ressource_center'|trans|nl2br }}</h3>
             <div class="panel panel-primary">
                 {{ block('flashBags') }}
                 {% if error is defined and error %}

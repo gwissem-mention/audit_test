@@ -64,9 +64,11 @@ hopital_numerique_forum:
 hopital_numerique_account:
     resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
     prefix:   /mon-compte
+
 hopitalnumerique_account_contexte:
     resource: '@HopitalNumeriqueAccountBundle/Resources/config/routing/contexte.yml'
     prefix: '/recherche-par-referencement/contexte'
+
 hopitalnumerique_account_inscription:
     resource: '@HopitalNumeriqueAccountBundle/Resources/config/routing/inscription.yml'
     prefix: '/inscription'
