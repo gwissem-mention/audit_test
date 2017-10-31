@@ -79,6 +79,11 @@ class Reference
     const PARCOURS_GUIDE = 1997;
 
     /**
+     * @var int Shared references parent ID
+     */
+    const SHARED_REFERENCES_ID = 1963;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", options = {"comment" = "ID de la référence"})

@@ -49,7 +49,27 @@ class Referencement
     {
         $references = $this->referenceManager->findByDomaines($domaines, true, false, null, true, $inRecherche);
 
-        return $this->treeService->getOrderedReferencesTreePart($references, $referenceRoot);
+        $referencesTree = $this->treeService->getOrderedReferencesTreePart($references, $referenceRoot);
+
+        // If root reference defined, select shared references too
+        if ($referenceRoot) {
+            $referencesTree = array_merge(
+                $referencesTree,
+                $this->treeService->getOrderedReferencesTreePart($references, $this->referenceManager->findOneById(Reference::SHARED_REFERENCES_ID))
+            );
+
+            $referencesTree = array_unique($referencesTree, SORT_REGULAR);
+
+            usort($referencesTree, function ($a, $b) {
+                if ($a['reference']->getOrder() === $b['reference']->getOrder()) {
+                    return 0;
+                }
+
+                return $a['reference']->getOrder() > $b['reference']->getOrder() ? 1 : -1;
+            });
+        }
+
+        return $referencesTree;
     }
 
     /**
