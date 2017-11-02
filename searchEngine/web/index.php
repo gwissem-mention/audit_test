@@ -16,7 +16,12 @@ $app['db'] = function () use ($app) {
     $database = $app['config']['parameters']['database_name'];
     $user = $app['config']['parameters']['database_user'];
     $password = $app['config']['parameters']['database_password'];
-    return new \PDO("mysql:host=$host;dbname=$database", $user, $password);
+    return new \PDO(
+        "mysql:host=$host;dbname=$database",
+        $user,
+        $password,
+        [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"]
+    );
 };
 
 $app['user.repository'] = function () use ($app) {
