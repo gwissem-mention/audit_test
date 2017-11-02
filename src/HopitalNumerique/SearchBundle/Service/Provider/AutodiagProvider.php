@@ -70,6 +70,7 @@ class AutodiagProvider extends AbstractProvider
                         'chapter_label' => $attribute['chapter_label'],
                         'chapter_code' => $chapterCodes[$attribute['chapter_id']],
                         'autodiag_id' => $attribute['autodiag_id'],
+                        'autodiag_title' => $attribute['autodiag_title'],
                     ]
                 );
                 $this->type->addDocument($document);
@@ -91,7 +92,8 @@ class AutodiagProvider extends AbstractProvider
                 'container.id as chapter_id',
                 'container.label as chapter_label',
                 'container.code as chapter_code',
-                'autodiag.id as autodiag_id'
+                'autodiag.id as autodiag_id',
+                'autodiag.title as autodiag_title'
             )
             ->join('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight', 'weight', Join::WITH, 'weight.attribute = attribute.id')
             ->join('weight.container', 'container', Join::WITH, $qb->expr()->isInstanceOf('container', Chapter::class))
