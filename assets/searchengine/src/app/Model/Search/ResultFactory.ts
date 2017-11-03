@@ -1,10 +1,11 @@
 import Result from "./Result";
-import Autodiag from "./Result/Autodiag";
+import AutodiagAttribute from "./Result/AutodiagAttribute";
 import Publication from "./Result/Publication";
 import ForumPost from "./Result/ForumPost";
 import ForumTopic from "./Result/ForumTopic";
 import Person from "./Result/Person";
 import Group from "./Result/Group";
+import Autodiag from "./Result/Autodiag";
 
 export default class ResultFactory {
 
@@ -38,7 +39,11 @@ export default class ResultFactory {
                             : chapterLabel;
                 }
 
-                return new Autodiag(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.chapter_code, resultData._source.autodiag_id);
+                result = new AutodiagAttribute(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.chapter_code, resultData._source.autodiag_id);
+                let simpleParent = new Autodiag(resultData._source.autodiag_id, 0, resultData._source.autodiag_title);
+                result.setParent(simpleParent);
+
+                return result;
             case "object":
                 result = new Publication(
                     resultData._id,
