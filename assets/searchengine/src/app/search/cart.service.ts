@@ -8,6 +8,7 @@ import Person from "../Model/Search/Result/Person";
 import Group from "../Model/Search/Result/Group";
 
 declare let Routing: any;
+declare let $ : any;
 
 @Injectable()
 export default class Cart {
@@ -25,7 +26,7 @@ export default class Cart {
         }
     }
 
-    getCartItemType(result: Result): string {
+    getCartItemType(result: any): string {
         switch (true) {
             case result instanceof Publication:
                 return result.hasParent() ? 'contenu' : 'objet';

@@ -3,24 +3,24 @@ hopitalnumerique_account_informationsmanquantes:
     resource: 'routing/informations_manquantes.yml'
 
 hopital_numerique_account_homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: HopitalNumeriqueAccountBundle:Default:index }
 
 hopital_numerique_account_homepage_reorder:
-    pattern:  /reorder
+    path:  /reorder
     defaults: { _controller: HopitalNumeriqueAccountBundle:Default:reorder }
 
 # Connexion
 account_login:
-    pattern:  /connexion/{urlToRedirect}
+    path:  /connexion/{urlToRedirect}
     defaults: { _controller: HopitalNumeriqueUserBundle:Security:loginCustom, urlToRedirect:'' }
 
 account_login_check:
-    pattern:  /login_check
+    path:  /login_check
     defaults: { _controller: FOSUserBundle:Security:check }
 
 account_logout:
-    pattern:  /deconnexion
+    path:  /deconnexion
     defaults: { _controller: FOSUserBundle:Security:logout }
 
 fos_user_resetting:
@@ -30,5 +30,5 @@ fos_user_resetting:
 #Inscription
 #--Requetes de recherche
 hopital_numerique_requete_homepage:
-    pattern:  /requetes/{indexVue}
+    path:  /requetes/{indexVue}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index, indexVue:true }

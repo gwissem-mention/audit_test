@@ -371,6 +371,124 @@
                         </div>
                     </div>
                 </li>
+
+                <!-- Top 5 productions last 3 months -->
+                <li data-visible="{{ userConf['top5-productions-3mois']['visible'] }}"
+                    data-row="{{ userConf['top5-productions-3mois']['row'] }}"
+                    data-col="{{ userConf['top5-productions-3mois']['col'] }}" data-sizex="1" data-sizey="1"
+                    data-id="top5-productions-3mois">
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 productions 3 derniers mois</span>
+                            </h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for production in blocObjets['top5-productions-3mois'] %}
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}"
+                                           title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucune production</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Bottom 5 productions last 3 months -->
+                <li data-visible="{{ userConf['bottom5-productions-3mois']['visible'] }}"
+                    data-row="{{ userConf['bottom5-productions-3mois']['row'] }}"
+                    data-col="{{ userConf['bottom5-productions-3mois']['col'] }}" data-sizex="1" data-sizey="1"
+                    data-id="bottom5-productions-3mois">
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Bottom 5 productions 3 derniers mois</span>
+                            </h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for production in blocObjets['bottom5-productions-3mois'] %}
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}"
+                                           title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucune production</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Top 5 hard points last 3 months -->
+                <li data-visible="{{ userConf['top5-points-dur-3mois']['visible'] }}"
+                    data-row="{{ userConf['top5-points-dur-3mois']['row'] }}"
+                    data-col="{{ userConf['top5-points-dur-3mois']['col'] }}" data-sizex="1" data-sizey="1"
+                    data-id="top5-points-dur-3mois">
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-up"></i><span class="title">Top 5 points durs 3 derniers mois</span>
+                            </h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for pointDur in blocObjets['top5-points-dur-3mois'] %}
+                                    <li><a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}"
+                                           title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucun point dur</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Bottom 5 hard points last 3 months -->
+                <li data-visible="{{ userConf['bottom5-points-dur-3mois']['visible'] }}"
+                    data-row="{{ userConf['bottom5-points-dur-3mois']['row'] }}"
+                    data-col="{{ userConf['bottom5-points-dur-3mois']['col'] }}" data-sizex="1" data-sizey="1"
+                    data-id="bottom5-points-dur-3mois">
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-thumbs-o-down"></i><span class="title">Bottom 5 points durs 3 derniers mois</span>
+                            </h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% for pointDur in blocObjets['bottom5-points-dur-3mois'] %}
+                                    <li><a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}"
+                                           title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucun point dur</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
 

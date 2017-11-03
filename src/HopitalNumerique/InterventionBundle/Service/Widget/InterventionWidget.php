@@ -138,7 +138,7 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
 
                 if (null !== $request['ambassadeurDateChoix']) {
                     $row['information']['ambassadorDate'] =
-                        $this->translator->trans('intervention.ambassador', [], 'widget')
+                        $this->translator->trans('intervention.network_professionnal', [], 'widget')
                         . ' '
                         . $request['ambassadeurDateChoix']->format('d/m/y')
                     ;
@@ -207,7 +207,7 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
 
                 if (null !== $request['ambassadeurDateChoix']) {
                     $row['information']['ambassadorDate'] =
-                        $this->translator->trans('intervention.ambassador', [], 'widget')
+                        $this->translator->trans('intervention.network_professionnal', [], 'widget')
                         . ' '
                         . $request['ambassadeurDateChoix']->format('d/m/y')
                     ;
@@ -270,7 +270,7 @@ class InterventionWidget extends WidgetAbstract implements DomainAwareInterface
 
                 if (null !== $request['ambassadeurDateChoix']) {
                     $row['information']['ambassadorDate'] =
-                        $this->translator->trans('intervention.ambassador', [], 'widget')
+                        $this->translator->trans('intervention.network_professionnal', [], 'widget')
                         . ' '
                         . $request['ambassadeurDateChoix']->format('d/m/y')
                     ;

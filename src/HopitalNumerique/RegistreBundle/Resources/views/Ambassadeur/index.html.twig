@@ -2,7 +2,7 @@
 
 {# Référencement #}
 {% block title %}{{parent()}} - Registre{% endblock %}
-{% block metadesc %}Registre des ambassadeurs{% endblock %}
+{% block metadesc %}Registre des professionnels du réseau{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -27,21 +27,18 @@
 
 {% block body %}
     <div id="registre-ambassadeur">
-        {# En-tête #}
-        <div class="col-md-12">
-            <h3 class="violet">Annuaire des ambassadeurs
-                <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right lienTableauDeBord">Tableau de bord</a>
-            </h3>
-        </div> 
-        
         {# Critère de recherche #}
         <div class="col-md-3">
-            <h4 class="violet">Critères de recherche</h4>
+            <h4 class="violet">{{ 'search_criteria'|trans }}</h4>
             <div class="map">
                 {# Carte de france #}
                 <div id="canvas_france"></div>
-                <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">> Sélectionner tout</span>
-                <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">> Désélectionner tout</span>
+                <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">
+                    {{ 'select_all'|trans }}
+                </span>
+                <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">
+                    {{ 'unselect_all'|trans }}
+                </span>
                 <input type="hidden" id="selected-region" value='{{regions.regionsSelected|raw}}' />
                 {#<div id="btn_appliquer_filtre" onclick='appliquerRegionsSelectionnees();' class="btn background-rose col-md-12" title="Appliquer le nouveau filtre">Activer la recherche</div>#}
                 <input type="hidden" id="hopital_numerique_registre_edit_session" value='{{path('hopital_numerique_registre_edit_session')}}' />
@@ -52,11 +49,11 @@
         <div class="content col-md-9 no_padding">
 			{% block content %}
 			    <div class="annuaire_ambassadeur">
-			    
+
 			        {% block chapo %}
 		                <div class="col-md-12">
 				            <div class="chapo">
-				                <h1 class="violet">Annuaire des professionnels du réseau</h1>
+				                <h1 class="violet">{{ 'directory_network_professionals'|trans }}</h1>
 				                <div class="description">{{'Module_annuaire_ambassadeur'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</div>
 				            </div>
 			            </div>
@@ -69,8 +66,16 @@
                         {% if regions.regions %}
 			                {% for region in regions.regions %}
 			                    <div class="col-md-12">
-			                         {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
-				                    <h4 class="violet">{{region.libelle}} ( {{ ambassadeurs[region.id]|length }} ambassadeur{% if ambassadeurs[region.id]|length > 1%}s{% endif %} )</h4>
+                                    {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
+                                    <h4 class="violet">
+                                        {{ region.libelle }} ( {{ ambassadeurs[region.id]|length }}
+                                        {% if ambassadeurs[region.id]|length > 1 %}
+                                            {{ 'professionals'|trans }}
+                                        {% else %}
+                                            {{ 'professional'|trans }}
+                                        {% endif %}
+                                        {{ 'network'|trans }} )
+                                    </h4>
 				                </div>
 				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
 				                {% set ambassadeurExisteRegion = false %}
@@ -115,18 +120,18 @@
                                                         {% endif %}
                                                     
                                                         <div class="col-md-12">
-                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Connaissances métiers</a>
+                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> {{ 'business_knowledge'|trans }}</a>
                                                         </div>
                                                 
                                                         <div class="col-md-12" style="margin-top: -5px;">
-                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_connaissance_si',{'id':ambassadeur.id})}}">> Connaissances SI</a>
+                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_connaissance_si',{'id':ambassadeur.id})}}">> {{ 'si_knowledge'|trans }}</a>
                                                         </div>
         					
         					                            <div class="col-md-12 sol-button">
                                                             {% if app.user and not app.user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
-                                                                <a class="btn background-violet disabled solicit" href="#">Solliciter ce professionnel</a>
+                                                                <a class="btn background-violet disabled solicit" href="#">{{ 'solicit_professional'|trans }}</a>
                                                             {% else %}
-                                                                <a class="btn background-violet solicit" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter ce professionnel</a>
+                                                                <a class="btn background-violet solicit" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">{{ 'solicit_professional'|trans }}</a>
                                                             {% endif %}
                                                         </div>
         					                            <div class="clearfix"></div>
@@ -139,20 +144,20 @@
 				                {# Affichage dans le cas où il n'y ait aucun ambassadeur pour cette région #}
 				                {% if not ambassadeurExisteRegion %}
 				                    <div class="aucune-fiche col-md-6">
-				                        <div class="content">- Aucun ambassadeur pour cette région -</div>
+				                        <div class="content">{{ 'no_network_professionals'|trans }}</div>
 				                    </div>
 				                {% endif %}
 			                {% else %}
 			                    <div class="col-md-12">
-			                        - Aucune régions sélectionnées - 
+			                        {{ 'no_regions_selected'|trans }}
 			                    </div>
 			                {% endfor %}
 			            {% else %}
 			                <div class="col-md-12">
-			                    <h4 class="violet">Aucune région sélectionnée</h4>
+			                    <h4 class="violet">{{ 'no_region_selected_title'|trans }}</h4>
 			                </div>
 			                <div class="col-md-12">
-			                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
+			                    {{ 'select_region'|trans }}
 			                </div>
 			            {% endif %}
 		                <div class="clearfix"></div>

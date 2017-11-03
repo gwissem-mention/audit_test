@@ -9,6 +9,7 @@ export default class Publication extends Result {
     content: string;
     code: string;
     source: string;
+    synthesis: string;
     types: string[] = [];
 
     children: Publication[] = [];
@@ -18,11 +19,13 @@ export default class Publication extends Result {
         id: number,
         score: number,
         title: string,
-        alias: string
+        alias: string,
+        synthesis: string
     ) {
         super(id, score);
         this.title = title;
         this.alias = alias;
+        this.synthesis = synthesis;
     }
 
     setSource(source: string) {
@@ -52,10 +55,6 @@ export default class Publication extends Result {
         return this.types.join(', ');
     }
 
-    getTypesToString(): string {
-        return this.types.join(', ');
-    }
-
     getTitle(): string {
         return this.code
             ? this.code + ' ' + this.title
@@ -81,5 +80,19 @@ export default class Publication extends Result {
     
     getSource(): string {
         return this.source;
+    }
+
+    getSynthese(): string {
+        if (undefined === this.parent) {
+            if (null !== this.synthesis && '' !== this.synthesis) {
+                return Routing.generate('hopital_numerique_publication_synthese', {'id': this.id});
+            }
+        } else {
+            if (null !== this.parent.synthesis && '' !== this.parent.synthesis) {
+                return Routing.generate('hopital_numerique_publication_synthese', {'id': this.parent.id});
+            }
+        }
+
+        return null;
     }
 }

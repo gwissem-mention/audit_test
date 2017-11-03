@@ -277,6 +277,10 @@ $container->loadFromExtension('fos_elastica', [
                                     'property_path' => 'roles',
                                     'index' => 'not_analyzed',
                                 ],
+                                'synthesis' => [
+                                    'type' => 'text',
+                                    'property_path' => 'synthese',
+                                ],
                             ],
                         ],
                     ],
@@ -517,6 +521,9 @@ $container->loadFromExtension('fos_elastica', [
                                     'term_vector' => 'with_positions_offsets',
                                 ],
                             ],
+                        ],
+                        'autodiag_title' => [
+                            'type' => 'text',
                         ],
                         'chapter_code' => [
                             'type' => 'keyword',

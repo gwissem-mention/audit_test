@@ -4,7 +4,7 @@ request:
     label: Le %date% : %state%
     open: 'Nb interventions ouvertes non évaluées :'
     accepted: 'Nb interventions acceptées par le CMSI :'
-    ambassadorsCount: 'Nb interventions acceptées par l''ambassadeur :'
+    networkProfessionnalsCount: 'Nb interventions acceptées par le professionnel du réseau :'
     initial: 'Nb interventions initiales :'
 intervention:
     title: Mes interventions
@@ -22,5 +22,5 @@ intervention:
         edit: Éditer la demande
     relaunch:
         confirm: Envoyer une relance pour cette intervention ?
-    ambassador: Ambassadeur
+    network_professionnal: Professionnel du réseau
     evaluation: Évaluation

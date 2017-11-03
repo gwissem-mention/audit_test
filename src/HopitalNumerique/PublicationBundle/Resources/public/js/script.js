@@ -21,8 +21,19 @@ $(document).ready(function() {
         });
     });
 
-    var contenuId = $('#current-content-id').attr('data-current-id');
-    $('[data-content="' + contenuId + '"]').parents('ul').slideDown();
+    var contenuId = $('#current-content-id').attr('data-current-id'),
+        parentsUl = $("[data-content='" + contenuId + "']").parents('ul'),
+        selector = undefined !== parentsUl[0] ? parentsUl[0].querySelector("[data-content='" + contenuId + "']") : null,
+        toggleChildren = [];
+
+    parentsUl.slideDown();
+
+    if (null !== selector) {
+        for (var i = 0; i < parentsUl.length - 1; i++) {
+            toggleChildren[i] = parentsUl[i].parentNode.getElementsByClassName('toggle-children')[0];
+        }
+        toggleElements(toggleChildren);
+    }
 
     var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
 
@@ -155,15 +166,10 @@ $(document).ready(function() {
     // Sommaire : Toggle
     $('.toggle-children').click(function() {
         var contenuId = $(this).attr('data-contenu');
-        var childrenContainerIsOpen = !$(this).find('.fa').hasClass('fa-plus-circle');
+        var $fa = $(this).find('.fa');
 
-        if (childrenContainerIsOpen) {
-            $(this).find('.fa').removeClass('fa-minus-circle');
-            $(this).find('.fa').addClass('fa-plus-circle');
-        } else {
-            $(this).find('.fa').removeClass('fa-plus-circle');
-            $(this).find('.fa').addClass('fa-minus-circle');
-        }
+        $fa.toggleClass('fa-minus-circle');
+        $fa.toggleClass('fa-plus-circle');
 
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
     });
@@ -397,4 +403,13 @@ function deleteNote()
             loader.finished();
         }
     });
+}
+
+function toggleElements(elements)
+{
+    for (var i = 0; i < elements.length; i++) {
+        var $fa = $(elements[i]).find('.fa');
+        $fa.toggleClass('fa-minus-circle');
+        $fa.toggleClass('fa-plus-circle');
+    }
 }

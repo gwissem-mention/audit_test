@@ -57,6 +57,12 @@
                 {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
                 {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites", { 'types' : types } )) }}
+                
+                {% if objet.isArticle and objet.resume|parsePublication|glossaire_list(objet) is not empty %}
+                    <div class="column-left-container">
+                        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/glossary.html.twig' %}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
 
@@ -102,7 +108,7 @@
                     </div>
                 {% endif %}
                 <div class="row col-md-12">
-                    {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
+                    {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
                 </div>
 
                 {% if is_communaute_pratique %} {# Article La communauté de pratique #}

@@ -187,6 +187,18 @@ class ReferencementController extends Controller
             foreach ($entities as $entity) {
                 $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')
                     ->getEntityId($entity);
+                $subtitle = $dependencyInjectionEntity->getSubtitleByEntity($entity);
+
+                $objetId = null;
+                $objet = $this->get('hopitalnumerique_objet.repository.objet')->find($entityId);
+                $objetContenu = $this->get('hopitalnumerique_objet.repository.contenu')->find($entityId);
+
+                if (null !== $objetContenu && !empty($objetContenu->getObjet()->getSynthese()) && null !== $subtitle) {
+                        $objetId = $objetContenu->getObjet()->getId();
+                } elseif (null !== $objet && !empty($objet->getSynthese())) {
+                    $objetId = $objet->getId();
+                }
+
                 $entitiesByType[$entityType][$entityId]['viewHtml'] =
                     $this->renderView(
                         'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig',
@@ -195,13 +207,14 @@ class ReferencementController extends Controller
                             'type' => $dependencyInjectionEntity->getEntityType($entity),
                             'category' => $dependencyInjectionEntity->getCategoryByEntity($entity),
                             'title' => $dependencyInjectionEntity->getTitleByEntity($entity),
-                            'subtitle' => $dependencyInjectionEntity->getSubtitleByEntity($entity),
+                            'subtitle' => $subtitle,
                             'url' => $dependencyInjectionEntity->getFrontUrlByEntity($entity),
                             'description' => $dependencyInjectionEntity->getDescriptionByEntity($entity),
                             'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
                             'source' => $dependencyInjectionEntity->getSourceByEntity($entity),
                             'showCog' => $showCog,
-                            'cartItemType' => $cartItemType
+                            'cartItemType' => $cartItemType,
+                            'objetId' => $objetId,
                         ]
                     );
             }
