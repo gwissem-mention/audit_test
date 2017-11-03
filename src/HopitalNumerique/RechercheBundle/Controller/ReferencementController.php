@@ -193,14 +193,10 @@ class ReferencementController extends Controller
                 $objet = $this->get('hopitalnumerique_objet.repository.objet')->find($entityId);
                 $objetContenu = $this->get('hopitalnumerique_objet.repository.contenu')->find($entityId);
 
-                if (null !== $objetContenu && null !== $objetContenu->getObjet()->getSynthese() && null !== $subtitle) {
-                    if (!empty($objetContenu->getObjet()->getSynthese())) {
+                if (null !== $objetContenu && !empty($objetContenu->getObjet()->getSynthese()) && null !== $subtitle) {
                         $objetId = $objetContenu->getObjet()->getId();
-                    }
-                } elseif (null !== $objet && null !== $objet->getSynthese()) {
-                    if (!empty($objet->getSynthese())) {
-                        $objetId = $objet->getId();
-                    }
+                } elseif (null !== $objet && !empty($objet->getSynthese())) {
+                    $objetId = $objet->getId();
                 }
 
                 $entitiesByType[$entityType][$entityId]['viewHtml'] =
