@@ -414,17 +414,13 @@ class Discussion implements ObjectIdentityDisplayableInterface
      */
     public function isNewMessage(User $user, Message $message)
     {
-        if ($this->getCreatedAt() < $user->getCommunautePratiqueEnrollmentDate()) {
-            return false;
-        }
-
         /** @var Read $read */
         $read = $this->getReadings()->filter(function (Read $read) use ($user) {
             return $read->getUser()->getId() === $user->getId();
         })->first();
 
         if (!$read) {
-            return true;
+            return $this->getCreatedAt() > $user->getCommunautePratiqueEnrollmentDate();
         }
 
         return $read->getLastMessageDate() < $message->getCreatedAt();
