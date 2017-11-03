@@ -4,6 +4,7 @@ namespace HopitalNumerique\NewAccountBundle\Controller\Front;
 
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Form\Type\UserAccountType;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,13 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
+
+        $rolesContract = [
+            Role::$ROLE_EXPERT_LABEL,
+            Role::$ROLE_AMBASSADEUR_LABEL,
+        ];
+
+        $contracts = $this->get('hopitalnumerique_user.repository.contractualisation')->findByUser($user->getId());
 
         $missingInformation = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
            ->getMissingInformationByTab($user)
@@ -44,6 +52,8 @@ class ProfileController extends Controller
             'user'               => $user,
             'missingInformation' => $missingInformation,
             'page'               => 'profile-page',
+            'rolesContract'      => $rolesContract,
+            'contracts'          => $contracts,
         ]);
     }
 }

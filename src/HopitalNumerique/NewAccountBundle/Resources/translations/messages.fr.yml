@@ -11,6 +11,7 @@ account:
         profile: Profil
         structure: Structure
         skills: Compétences
+        contracts: Contrats
         picture:
             delete: Supprimer la photo
     service:
@@ -58,6 +59,13 @@ account:
         hobbies: Mes centres d'intérêt
         hobby:
             add: Ajouter un centre d'intérêt
+        contracts:
+            contractingDocuments: Mes documents de contractualisation
+            name: Nom du document
+            archived: Document archivé
+            renewalDate: Date de renouvellement
+            type: Type de document
+            noFile: '- Aucun fichier de contractualisation à afficher -'
     cdp:
         join: Rejoindre la communauté
         access: Rejoindre la communauté
