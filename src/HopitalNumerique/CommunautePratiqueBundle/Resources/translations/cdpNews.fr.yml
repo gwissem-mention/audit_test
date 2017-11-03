@@ -33,11 +33,11 @@ wall:
         message:
             title: Nouveau message
             authored: %author% a participé à la discussion %discussion% (%date%)
-            link: Aller à la discussion
+            link: > Aller à la discussion
         discussion:
             title: Nouvelle discussion
             authored: %author% a lancé une nouvelle discussion %discussion% (%date%)
-            link: Aller à la discussion
+            link: > Aller à la discussion
         closed_group:
             title: Fin d'un groupe
             content: |
@@ -46,7 +46,7 @@ wall:
         opened_group:
             title: Nouveau groupe
             content: Un groupe thématique a démarré sur "%groupName%"
-            link: Rejoignez ce groupe
+            link: > Rejoignez ce groupe
         new_member:
             title: Nouveau membre
             content:
@@ -58,8 +58,8 @@ wall:
                     organization: %user% (%organization%) a rejoint la communauté.
                     job: %user% (%job%) a rejoint la communauté.
                     none: %user% a rejoint la communauté.
-            link: Consulter la fiche de l'utilisateur
+            link: > Consulter la fiche de l'utilisateur
         updated_member:
             title: Mise à jour de profil
             content: %user% (%job% à %organization%) a mis à jour son profil.
-            link: Consulter la fiche de l'utilisateur
+            link: > Consulter la fiche de l'utilisateur

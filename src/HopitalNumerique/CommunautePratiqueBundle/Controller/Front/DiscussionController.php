@@ -70,10 +70,6 @@ class DiscussionController extends Controller
                 )
             );
             $discussionSubscribed = $discussion && $this->getUser() && $this->get(UserSubscription::class)->isSubscribed($discussion, $this->getUser());
-
-            if ($discussion && $this->getUser()) {
-                $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->get('hopitalnumerique_user.repository.user')->find($this->getUser()->getId()), $discussion->getMessages()->last()->getId()));
-            }
         } else {
             $discussion = null;
         }
@@ -126,10 +122,16 @@ class DiscussionController extends Controller
         ];
 
         if ($group) {
-            return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussions.html.twig', $options);
+            $response = $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussions.html.twig', $options);
+        } else {
+            $response =  $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', $options);
         }
 
-        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', $options);
+        if ($discussion && $this->getUser()) {
+            $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->get('hopitalnumerique_user.repository.user')->find($this->getUser()->getId()), $discussion->getMessages()->last()->getId()));
+        }
+
+        return $response;
     }
 
     /**

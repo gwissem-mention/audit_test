@@ -403,7 +403,7 @@ class Discussion implements ObjectIdentityDisplayableInterface
     {
         return 0 === $this->getReadings()->filter(function (Read $read) use ($user) {
             return $read->getUser()->getId() === $user->getId();
-        })->count();
+        })->count() && $this->getCreatedAt() >= $user->getCommunautePratiqueEnrollmentDate();
     }
 
     /**
@@ -414,6 +414,10 @@ class Discussion implements ObjectIdentityDisplayableInterface
      */
     public function isNewMessage(User $user, Message $message)
     {
+        if ($this->getCreatedAt() < $user->getCommunautePratiqueEnrollmentDate()) {
+            return false;
+        }
+
         /** @var Read $read */
         $read = $this->getReadings()->filter(function (Read $read) use ($user) {
             return $read->getUser()->getId() === $user->getId();
