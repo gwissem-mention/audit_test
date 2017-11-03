@@ -8,8 +8,9 @@ $(function() {
         $('.profile-tab-nav').first().tab('show');
     }
 
-    $('.profile-tab-nav').on('shown.bs.tab', function(event){
+    $('.profile-tab-nav').on('show.bs.tab', function(event) {
         window.location.hash = '?' + event.target.dataset.target.substring(1);
+        $('.panel .profile-tab').removeClass('active');
     });
 
     var tabErrorHandler = new TabErrorHandler();

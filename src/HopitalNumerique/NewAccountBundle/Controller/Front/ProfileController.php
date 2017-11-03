@@ -24,13 +24,6 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        $rolesContract = [
-            Role::$ROLE_EXPERT_LABEL,
-            Role::$ROLE_AMBASSADEUR_LABEL,
-        ];
-
-        $contracts = $this->get('hopitalnumerique_user.repository.contractualisation')->findByUser($user->getId());
-
         $missingInformation = $this->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
            ->getMissingInformationByTab($user)
         ;
@@ -47,13 +40,14 @@ class ProfileController extends Controller
             return $this->redirectToRoute('account_profile');
         }
 
+        $widgets =$this->get('new_account.dashboard.widgets_aggregator')->getWidgets('user_informations');
+
         return $this->render('NewAccountBundle:profile:profile.html.twig', [
-            'form'               => $form->createView(),
-            'user'               => $user,
+            'form' => $form->createView(),
+            'user' => $user,
             'missingInformation' => $missingInformation,
-            'page'               => 'profile-page',
-            'rolesContract'      => $rolesContract,
-            'contracts'          => $contracts,
+            'page' => 'profile-page',
+            'widgets' => $widgets,
         ]);
     }
 }
