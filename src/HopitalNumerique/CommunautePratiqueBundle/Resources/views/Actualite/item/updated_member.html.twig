@@ -20,10 +20,10 @@
         {% endif %}
 
         {{ 'wall.item.updated_member.content'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-    </div>
 
-    <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
-        {{ 'wall.item.updated_member.link'|trans }}
-    </a>
+        <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
+            {{ 'wall.item.updated_member.link'|trans }}
+        </a>
+    </div>
 
 </div>

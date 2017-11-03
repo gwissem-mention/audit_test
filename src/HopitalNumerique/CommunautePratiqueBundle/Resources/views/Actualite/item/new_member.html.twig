@@ -36,10 +36,10 @@
         {% else %}
             {{ 'wall.item.new_member.content.private.none'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
         {% endif %}
-    </div>
 
-    <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
-        {{ 'wall.item.new_member.link'|trans }}
-    </a>
+        <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
+            {{ 'wall.item.new_member.link'|trans }}
+        </a>
+    </div>
 
 </div>
