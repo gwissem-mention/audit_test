@@ -1,0 +1,122 @@
+<div class="row tabs">
+    <div class="col-md-12">
+        <h2>{{ 'account.profile.activity_monitoring'|trans }}</h2>
+    </div>
+    <div class="col-md-12">
+        <table class="table activiteTable">
+            <thead>
+                <tr>
+                    <th>{{ 'account.user.activityMonitoring.activityTitle'|trans }}</th>
+                    <th>{{ 'account.user.activityMonitoring.activityDates'|trans }}</th>
+                    <th>{{ 'account.user.activityMonitoring.recipientName'|trans }}</th>
+                    <th>{{ 'account.user.activityMonitoring.unitConcerned'|trans }}</th>
+                    <th>{{ 'account.user.activityMonitoring.remaining'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for activite in activites %}
+                {# Ligne de l'activité #}
+                <tr>
+                    <td>{{ activite.titre }}</td>
+                    <td>{{ activite.dateDebut|date('d/m/Y') }} - {{ activite.dateFin|date('d/m/Y') }}</td>
+                    <td>{% if activite.prestataire is not null %}{{ activite.prestataire.libelle }}{% endif %}</td>
+                    <td>{% if activite.uniteOeuvreConcerne is not null %}{{ activite.uniteOeuvreConcerne.libelle }}{% endif %}</td>
+                    <td>
+                        {% if is_granted('ROLE_EXPERT_6') %}
+                            {{ activite.nbVacationParExpert - totalVacation[activite.id] }}
+                        {% else %}
+                            {{ activite.nbVacationParExpert * activite.expertConcernes|length - totalVacation[activite.id] }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {# Ligne de 'travail attendu' #}
+                <tr>
+                    <td class="backInactif" colspan="2"></td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.expectedWork'|trans }}</td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.totalAmount'|trans }}</td>
+                    <td class="backInactif"></td>
+                </tr>
+
+                {# Ligne des valeurs de 'travail attendu' #}
+                <tr>
+                    <td class="backInactif" colspan="2"></td>
+                    <td>
+                        {% if is_granted('ROLE_EXPERT_6') %}
+                            {{ activite.nbVacationParExpert }}
+                        {% else %}
+                            {{ activite.nbVacationParExpert * activite.expertConcernes|length }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if is_granted('ROLE_EXPERT_6') %}
+                            {{ activite.nbVacationParExpert * montantVacation }} €
+                        {% else %}
+                            {{ activite.nbVacationParExpert * montantVacation * activite.expertConcernes|length }} €
+                        {% endif %}
+                    </td>
+                    <td class="backInactif"></td>
+                </tr>
+
+                {# Ligne d'entete evenement #}
+                <tr>
+                    <td class="backInactif" colspan="2"></td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.event'|trans }}</td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.numberVacations'|trans }}</td>
+                    <td class="backInactif"></td>
+                </tr>
+
+                {# Lignes des événements #}
+                {% for evenement in activite.evenements %}
+                    {# Ligne des valeurs de 'travail attendu' #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td>{{ evenement.nom.libelle }}, le {{ evenement.date|date('d/m/Y') }}</td>
+                        <td>
+                            {% if evenement.id in evenementVacations|keys %}
+                                {{ evenement.nbVacation * evenementVacations[evenement.id] }}
+                                ( {{ evenement.nbVacation * montantVacation * evenementVacations[evenement.id] }} € )
+                            {% else %}
+                                {{ evenement.nbVacation }} ( {{ evenement.nbVacation * montantVacation }} € )
+                            {% endif %}
+                        </td>
+                        <td class="backInactif"></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td colspan="2">{{ 'account.user.activityMonitoring.noEvent'|trans }}</td>
+                        <td class="backInactif"></td>
+                    </tr>
+                {% endfor %}
+
+                {# Ligne de l'état de l'activité #}
+                <tr>
+                    <td class="backInactif" colspan="2"></td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.statusProgress'|trans }}</td>
+                    <td class="backTitle bold">{{ 'account.user.activityMonitoring.statusPayment'|trans }}</td>
+                    <td class="backInactif"></td>
+                </tr>
+
+                {# Ligne des valeurs de l'etat de l'activité #}
+                <tr>
+                    <td class="backInactif" colspan="2"></td>
+                    <td>{{ activite.etat.libelle }}</td>
+                    <td>
+                        {% if activite.etatValidation %}
+                            {{ 'account.user.activityMonitoring.paid'|trans }}
+                        {% else %}
+                            {{ 'account.user.activityMonitoring.waiting'|trans }}
+                        {% endif %}
+                    </td>
+                    <td class="backInactif"></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" align="center">{{ 'account.user.activityMonitoring.noActivities'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

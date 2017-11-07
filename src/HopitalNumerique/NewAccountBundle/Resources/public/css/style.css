@@ -174,7 +174,7 @@
     margin-bottom: 2px;
 }
 
-#my-account .panel .panel-body .contracts h2 {
+#my-account .panel .panel-body .tabs h2 {
     color: #6F3596;
     font-size: 14px;
     font-weight: bold;
@@ -183,25 +183,33 @@
     text-transform: uppercase;
 }
 
-#my-account .panel .panel-body .contracts .table thead tr {
+#my-account .panel .panel-body .tabs .table thead tr {
     color: #FFF;
     text-transform: uppercase;
     font-size: 12px;
 }
 
-#my-account .panel .panel-body .contracts .table th {
+#my-account .panel .panel-body .tabs .table th {
     background-color: #6F3596;
     border: 1px solid #DDD;
 }
 
-#my-account .panel .panel-body .contracts .table tbody td.archive {
+#my-account .panel .panel-body .tabs .table tbody td.archive {
     text-align: center;
 }
 
-#my-account .panel .panel-body .contracts .table tbody td.archive .no-archived {
+#my-account .panel .panel-body .tabs .table tbody td.archive .no-archived {
     color: #CC0037;
 }
 
-#my-account .panel .panel-body .contracts .table tbody td.archive .yes-archived {
+#my-account .panel .panel-body .tabs .table tbody td.archive .yes-archived {
     color: #64B95E;
+}
+
+#my-account .panel .panel-body .tabs .factures th:first-child {
+    width: 100px;
+}
+
+#my-account .panel .panel-body .tabs .factures th:last-child {
+    width: 50px;
 }

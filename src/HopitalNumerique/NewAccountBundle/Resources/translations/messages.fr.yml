@@ -12,6 +12,8 @@ account:
         structure: Structure
         skills: Compétences
         contracts: Contrats
+        payments: Paiements
+        activity_monitoring: Suivi d'activité
         picture:
             delete: Supprimer la photo
     service:
@@ -66,6 +68,42 @@ account:
             renewalDate: Date de renouvellement
             type: Type de document
             noFile: '- Aucun fichier de contractualisation à afficher -'
+        payments:
+            title: Interventions / Modules thématiques
+            date: Date
+            referentIntervention: Référent intervention
+            referentEstablishment: Établissement du référent
+            type: Type
+            total: Total
+            noIntervention: '- Aucune intervention ou module disponible -'
+            totalInvoice: Total Facture
+            generateInvoice: Générer ma facture
+            invoices: Factures
+            number: N°
+            amount: Montant
+            invoiceStatus: Etat facture
+            actions: Actions
+            paid: Payée
+            cancelled: Annulée
+            unpaid: Non payée
+            export: Exporter
+            noInvoices: '- Aucune facture disponible -'
+        activityMonitoring:
+            activityTitle: Titre de l'activité
+            activityDates: Dates de l'activité
+            recipientName: Nom du prestataire
+            unitConcerned: Unité d'œuvre concernée
+            remaining: Reliquat
+            expectedWork: Travail attendu
+            totalAmount: Montant total
+            event: Évènement
+            numberVacations: Nombre de vacations (euros)
+            noEvent: '- Aucun événement pour cette activité -'
+            statusProgress: Etat d'avancement
+            statusPayment: Etat de paiement
+            paid: Payé
+            waiting: En attente
+            noActivities: '- Aucune activité -'
     cdp:
         join: Rejoindre la communauté
         access: Rejoindre la communauté
