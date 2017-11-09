@@ -23,5 +23,5 @@
         </p>
     {% endif %}
 
-    <a href="{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs':'null', 'q':glossaireReference.id }) }}">Rechercher les résultats correspondants</a>
+    <a href="{{ path('hopital_numerique_search', {'q':glossaireReference.libelle }) }}">Rechercher les résultats correspondants</a>
 {% endblock %}
