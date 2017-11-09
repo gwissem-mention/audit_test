@@ -101,16 +101,16 @@
                         <div class="profile-tab tab-pane fade" id="tab5">
                             {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
                         </div>
-                        {{ form_widget(form._token) }}
-                    </div>
-                    {{ form_end(form, {'render_rest': false}) }}
-                    <div class="tab-content">
+
                         {% for widget in widgets %}
-                            <div class="profile-tab tab-pane fade" id="{{ widget.name }}">
+                            <div class="profile-tab profile-activity-tab tab-pane fade" id="{{ widget.name }}">
                                 {{ widget.content|raw }}
                             </div>
                         {% endfor %}
+
+                        {{ form_widget(form._token) }}
                     </div>
+                    {{ form_end(form, {'render_rest': false}) }}
                 </div>
             </div>
         </div>
