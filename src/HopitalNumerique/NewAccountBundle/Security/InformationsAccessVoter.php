@@ -68,8 +68,12 @@ class InformationsAccessVoter extends Voter
      */
     public function canAccessPaymentsActivity(User $user)
     {
-        return $user->hasRoleAmbassadeur() || $user->hasRoleExpert() || $user->hasRoleAdmin() ||
-            $user->hasRoleAdminHn() || $user->hasRoleAdminDomaine();
+        return
+            $user->hasRoleAmbassadeur() ||
+            $user->hasRoleExpert() ||
+            $user->hasRoleAdmin() ||
+            $user->hasRoleAdminHn()
+        ;
     }
 
     /**
@@ -79,7 +83,12 @@ class InformationsAccessVoter extends Voter
      */
     public function canAccessContracts(User $user)
     {
-        return $user->hasRoleExpert() || $user->hasRoleAmbassadeur();
+        return
+            $user->hasRoleAdminHn() ||
+            $user->hasRoleAdmin() ||
+            $user->hasRoleExpert() ||
+            $user->hasRoleAmbassadeur()
+        ;
     }
 
     /**
