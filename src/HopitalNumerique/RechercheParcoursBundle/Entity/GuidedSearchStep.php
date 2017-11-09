@@ -177,6 +177,28 @@ class GuidedSearchStep
     }
 
     /**
+     * @return integer
+     */
+    public function getThinnestReferenceId()
+    {
+        $referenceId = $this
+            ->getGuidedSearch()
+            ->getGuidedSearchReference()
+            ->getRecherchesParcoursDetails()
+            ->filter(
+                function (RechercheParcoursDetails $guidedSearchParent) {
+                    return $guidedSearchParent->getId() === $this->getGuidedSearchParentReferenceId();
+                }
+            )
+            ->first()
+            ->getReference()
+            ->getId()
+        ;
+
+        return $this->getGuidedSearchSubReferenceId() ?: $referenceId;
+    }
+
+    /**
      * @return ArrayCollection|RiskAnalysis[]
      */
     public function getRisksAnalysis()

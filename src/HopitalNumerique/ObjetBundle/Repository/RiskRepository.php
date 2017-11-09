@@ -4,8 +4,11 @@ namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 
 /**
  * Class RiskRepository
@@ -76,14 +79,61 @@ class RiskRepository extends EntityRepository
      *
      * @return array|Risk[]
      */
-    public function getPublicRisksForDomain(Domaine $domain)
+    public function getPublicRisksForDomain(Domaine $domain, $referenceId = null)
     {
-        return $this->createQueryBuilder('r', 'r.id')
-            ->join('r.domains', 'd', Join::WITH, 'd.id = :domainId')
-            ->setParameter('domainId', $domain->getId())
+        return $this
+            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referenceId)
             ->andWhere('r.private = false')
 
             ->getQuery()->getResult()
         ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer $referenceId
+     *
+     * @return Risk[]
+     */
+    public function getRisksForDomainAndReference(Domaine $domain, $referenceId)
+    {
+        return $this
+            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referenceId)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine $domain
+     * @param integer|null $referenceId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function createRiskForDomainAndReferenceQueryBuilder(Domaine $domain, $referenceId = null)
+    {
+        $queryBuilder =  $this->createQueryBuilder('r', 'r.id')
+            ->join('r.domains', 'd', Join::WITH, 'd.id = :domainId')
+            ->setParameter('domainId', $domain->getId())
+        ;
+
+        if ($referenceId) {
+            $queryBuilder
+                ->join(
+                    EntityHasReference::class,
+                    'entityHasReference',
+                    Join::WITH,
+                    '
+                        entityHasReference.entityType = :entityType AND
+                        entityHasReference.entityId = r.id AND
+                        entityHasReference.reference = :referenceId
+                    '
+                )
+                ->setParameter('entityType', Entity::ENTITY_TYPE_RISK)
+                ->setParameter('referenceId', $referenceId)
+            ;
+        }
+
+        return $queryBuilder;
     }
 }

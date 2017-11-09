@@ -98,6 +98,8 @@ services:
             - '@hopitalnumerique_objet.repository.risk'
             - '@doctrine.orm.entity_manager'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.repository.reference'
+            - '@validator'
 
     hopitalnumerique_rechercheparcours.hydrator.edit_recherche_parcours_gestion_command:
         class: HopitalNumerique\RechercheParcoursBundle\Service\EditGuidedSearchConfigCommandFactory
