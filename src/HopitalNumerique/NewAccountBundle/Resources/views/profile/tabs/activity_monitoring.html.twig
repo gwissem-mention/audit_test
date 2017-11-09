@@ -1,17 +1,16 @@
-<div class="row tabs">
-    <div class="col-md-12">
-        {{ 'Module_moncompte_activity_monitoring'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
-    </div>
-    <div class="col-md-12">
+<div class="tabs">
+    {{ 'Module_moncompte_activity_monitoring'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+
+    <div class="content">
         <table class="table activiteTable">
             <thead>
-                <tr>
-                    <th>{{ 'account.user.activityMonitoring.activityTitle'|trans }}</th>
-                    <th>{{ 'account.user.activityMonitoring.activityDates'|trans }}</th>
-                    <th>{{ 'account.user.activityMonitoring.recipientName'|trans }}</th>
-                    <th>{{ 'account.user.activityMonitoring.unitConcerned'|trans }}</th>
-                    <th>{{ 'account.user.activityMonitoring.remaining'|trans }}</th>
-                </tr>
+            <tr>
+                <th>{{ 'account.user.activityMonitoring.activityTitle'|trans }}</th>
+                <th>{{ 'account.user.activityMonitoring.activityDates'|trans }}</th>
+                <th>{{ 'account.user.activityMonitoring.recipientName'|trans }}</th>
+                <th>{{ 'account.user.activityMonitoring.unitConcerned'|trans }}</th>
+                <th>{{ 'account.user.activityMonitoring.remaining'|trans }}</th>
+            </tr>
             </thead>
             <tbody>
             {% for activite in activites %}
