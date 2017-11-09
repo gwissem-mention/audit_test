@@ -1967,6 +1967,14 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasRoleAnap()
+    {
+        return $this->hasRole(Role::$ROLE_ANAP_MEMBRE);
+    }
+
+    /**
      * Add ConnaissancesAmbassadeur.
      *
      * @param ConnaissanceAmbassadeur $connaissanceAmbassadeur

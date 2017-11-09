@@ -25,7 +25,6 @@
 {% endblock %}
 
 {% block content %}
-    {{ form_start(form, {"attr": {"id": "my-profile-form", "novalidate": "novalidate"}}) }}
     <div class="row">
         <div class="col-md-9" style="display: flex">
             <div style="display: flex">
@@ -75,17 +74,17 @@
                                 <span class="tab-completion">(0%)</span>
                             </a>
                         </li>
-                        {% for role in user.roles if role in rolesContract %}
+                        {% for widget in widgets %}
                             <li>
-                                <a data-target="#tab6" data-toggle="tab" class="profile-tab-nav nav-tab-6">
-                                    {{ 'account.profile.contracts'|trans }}
-                                    <span class="tab-completion">(0%)</span>
+                                <a data-target="#{{ widget.name }}" data-toggle="tab" class="profile-tab-nav">
+                                    {{ widget.title }}
                                 </a>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="panel-body">
+                    {{ form_start(form, {"attr": {"id": "my-profile-form", "novalidate": "novalidate"}}) }}
                     <div class="tab-content">
                         <div class="profile-tab tab-pane fade in" id="tab1">
                             {% include 'NewAccountBundle:profile/tabs:personal_information.html.twig' %}
@@ -102,18 +101,20 @@
                         <div class="profile-tab tab-pane fade" id="tab5">
                             {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
                         </div>
-                        <div class="profile-tab tab-pane fade" id="tab6">
-                            {% include 'NewAccountBundle:profile/tabs:contracts.html.twig' %}
-                        </div>
+                        {{ form_widget(form._token) }}
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                    <div class="tab-content">
+                        {% for widget in widgets %}
+                            <div class="profile-tab tab-pane fade" id="{{ widget.name }}">
+                                {{ widget.content|raw }}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    {{ form_widget(form._token) }}
-
-    {{ form_end(form, {'render_rest': false}) }}
 
     {% if page is defined %}
         <div id="current-page" data-page="{{ page }}" class="hide"></div>

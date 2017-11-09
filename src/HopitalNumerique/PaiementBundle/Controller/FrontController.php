@@ -5,6 +5,8 @@ namespace HopitalNumerique\PaiementBundle\Controller;
 use HopitalNumerique\PaiementBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use \Symfony\Component\HttpFoundation\RedirectResponse;
+use \Symfony\Component\HttpFoundation\Response;
 
 /**
  * Front controller.
@@ -14,17 +16,17 @@ class FrontController extends Controller
     /**
      * Interface de suivi des paiements en front.
      *
-     * @return view
+     * @return RedirectResponse|Response
      */
     public function suiviAction()
     {
         //On récupère l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         if (is_null($user->getRegion())) {
-            $this->get('session')->getFlashBag()->add('warning', 'Merci de saisir votre région avant d\'accéder à l\'interface de suivi des paiements.');
+            $this->addFlash('warning', 'Merci de saisir votre région avant d\'accéder à l\'interface de suivi des paiements.');
 
-            return $this->redirect($this->generateUrl('hopital_numerique_user_informations_personnelles'));
+            return $this->redirectToRoute('hopital_numerique_user_informations_personnelles');
         }
 
         //get interventions + formations
@@ -51,7 +53,9 @@ class FrontController extends Controller
     /**
      * Enregistre la facture.
      *
-     * @return Redirect
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
     public function createFactureAction(Request $request)
     {
@@ -59,18 +63,18 @@ class FrontController extends Controller
         $formations = $request->request->get('formation');
 
         //On récupère l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         if (!$this->get('hopitalnumerique_module.manager.inscription')->allInscriptionsIsOk($user)) {
-            $this->get('session')->getFlashBag()->add('warning', 'Merci d\'évaluer l\'ensemble de vos formations avant de générer votre facture.');
+            $this->addFlash('warning', 'Merci d\'évaluer l\'ensemble de vos formations avant de générer votre facture.');
 
-            return $this->redirect($this->generateUrl('hopitalnumerique_paiement_front'));
+            return $this->redirectToRoute('account_profile');
         }
 
         if (is_null($interventions) && is_null($formations)) {
-            $this->get('session')->getFlashBag()->add('warning', 'Merci de sélectioner au moins 1 ligne');
+            $this->addFlash('warning', 'Merci de sélectioner au moins 1 ligne');
 
-            return $this->redirect($this->generateUrl('hopitalnumerique_paiement_front'));
+            return $this->redirectToRoute('account_profile');
         }
 
         $remboursement = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy(['region' => $user->getRegion()]);
@@ -97,15 +101,17 @@ class FrontController extends Controller
         $facture->setName('facture' . $code . '.pdf');
         $this->get('hopitalnumerique_paiement.manager.facture')->save($facture);
 
-        $this->get('session')->getFlashBag()->add('success', 'Facture générée avec succès');
+        $this->addFlash('success', 'Facture générée avec succès');
 
-        return $this->redirect($this->generateUrl('hopitalnumerique_paiement_front'));
+        return $this->redirectToRoute('account_profile');
     }
 
     /**
      * Exporte la facture.
      *
-     * @return Pdf
+     * @param Facture $facture
+     *
+     * @return RedirectResponse|Response
      */
     public function exportAction(Facture $facture)
     {
@@ -123,7 +129,7 @@ class FrontController extends Controller
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add(('danger'), 'Le document n\'existe plus sur le serveur.');
 
-            return $this->redirect($this->generateUrl('hopitalnumerique_paiement_front'));
+            return $this->redirectToRoute('account_profile');
         }
     }
 }
