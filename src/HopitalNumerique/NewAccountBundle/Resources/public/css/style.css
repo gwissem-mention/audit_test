@@ -214,7 +214,4 @@
     width: 50px;
 }
 
-#my-account .panel .panel-body .tabs .profile-activity-tab table.table thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
-#my-account .panel .panel-body .tabs .profile-activity-tab table.table thead tr a { color:#FFFFFF; font-size: 12px }
-#my-account .panel .panel-body .tabs .profile-activity-tab table.table thead th { background-color:#6F3596; vertical-align: middle }
-#my-account .panel .panel-body .tabs .profile-activity-tab table.table th, table.table td { border: 1px solid #ddd;padding:4px; }
+#my-account .panel .panel-body .profile-activity-tab .content {padding: 15px;}
