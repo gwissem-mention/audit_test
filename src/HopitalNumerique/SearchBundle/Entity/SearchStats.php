@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class SearchStats
  *
+ * @ORM\Entity
  * @ORM\Table(name="hn_search_stats")
  */
 class SearchStats
