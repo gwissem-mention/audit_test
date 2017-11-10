@@ -282,3 +282,9 @@ services:
         class: HopitalNumerique\UserBundle\Service\ShareMessageGenerator
         arguments:
             - '@translator'
+
+    HopitalNumerique\UserBundle\Security\ContractVoter:
+        class: HopitalNumerique\UserBundle\Security\ContractVoter
+        tags:
+            - { name: security.voter }
+        public: false

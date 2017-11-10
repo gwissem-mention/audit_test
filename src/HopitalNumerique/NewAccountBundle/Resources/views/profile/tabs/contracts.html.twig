@@ -15,7 +15,11 @@
             <tbody>
                 {% for contract in contracts %}
                     <tr>
-                        <td>{{ contract.nomDocument }}</td>
+                        <td>
+                            <a href="{{ path('hopitalnumerique_user_contract_download', {contract: contract.id}) }}">
+                                {{ contract.nomDocument }}
+                            </a>
+                        </td>
                         <td class="archive">
                             {% if contract.archiver %}
                                 <i class="fa fa-check yes-archived" aria-hidden="true"></i>
