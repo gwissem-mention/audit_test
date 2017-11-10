@@ -14,7 +14,7 @@ import {Observable} from "rxjs/Observable";
 
 let queryString = require("query-string");
 
-const SEARCH_DELAY = 150;
+const SEARCH_DELAY = 300;
 
 @Component({
     selector: 'search-engine',
