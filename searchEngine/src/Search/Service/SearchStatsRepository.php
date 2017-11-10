@@ -39,8 +39,8 @@ class SearchStatsRepository
         $isProduction = $isProduction ? 1 : 0;
 
         $sql = $this->connexion->prepare(
-            'INSERT INTO hn_search_stats(search_token, search_date, search_results, search_index, search_term, search_size, search_from, search_is_production)
-            VALUES (:token, NOW(), :nbResults, :index, :term, :size, :from, :isProduction);'
+            'INSERT INTO hn_search_stats(search_token, user_id, search_date, search_results, search_index, search_term, search_size, search_from, search_is_production)
+            (SELECT token, user_id, NOW(), :nbResults, :index, :term, :size, :from, :isProduction FROM core_user_token WHERE token = :token);'
         );
         $sql->bindParam(':token', $token);
         $sql->bindParam(':nbResults', $nbResults);
