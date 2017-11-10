@@ -77,7 +77,7 @@ Hn_Reference_Referencement_Popin.initEvents = function()
     $('.referencement-popin #toggle-check-all').click(function () {
         Hn_Reference_Referencement_Popin.toggleCheckAll();
     });
-    $('.referencement-popin input[type="checkbox"][id!="toggle-check-all"]').click(function (event) {
+    $('.referencement-popin input[type="checkbox"][id!="toggle-check-all"]').change(function (event) {
         Hn_Reference_Referencement_Popin.checkReference_click(event);
     });
     $('.referencement-popin [data-action="save"]').click(function () {
@@ -116,7 +116,9 @@ Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree = function(re
                 $(referenceLine).show();
             } else {
                 $(referenceLine).hide();
-                Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree(referenceEnfantId, false);
+                if ($(referenceLine).data('children-open') == 1) {
+                    Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree(referenceEnfantId, false);
+                }
             }
         });
     }
@@ -142,22 +144,14 @@ Hn_Reference_Referencement_Popin.checkReference_click = function(event)
     var checkbox = $(event.target);
     var referenceId = parseInt($(checkbox).attr('data-reference'));
     var referenceParentId = $(checkbox).attr('data-reference-parent');
-    var isChecked = checkbox.is(':checked');
+    var justChecked = checkbox.is(':checked');
 
-    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, referenceParentId, isChecked);
-    if (isChecked) {
+    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, referenceParentId, justChecked);
+    if (justChecked) {
         Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId, referenceParentId);
     }
     Hn_Reference_Referencement_Popin.refreshCountElements(referenceId);
     Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying();
-
-    //<-- Simuler le clic sur tous les éléments frères (même référence mais parent différent)
-    $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]').each(function (i, checkboxWithSameReference) {
-        if (isChecked !== $(checkboxWithSameReference).is(':checked')) {
-            $(checkboxWithSameReference).click();
-        }
-    });
-    //-->
 };
 
 /**
@@ -168,15 +162,15 @@ Hn_Reference_Referencement_Popin.checkReference_click = function(event)
  */
 Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren = function(referenceParentId, referenceGrandParentId, check)
 {
-    $('tr[data-reference-parent="' + referenceParentId + '"][data-reference-grand-parent="' + referenceGrandParentId + '"] input[type="checkbox"]').each(function (key, checkbox) {
-        if (check != $(checkbox).is(':checked')) {
-            $(checkbox).click();
-        }
+    $('[data-reference="' + referenceParentId + '"]').each(function(key, element) {
+        var level = parseInt($(this).data('level'));
 
-        if (check) {
-            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), referenceParentId, check);
-        } else {
-            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), referenceParentId, check);
+        var currentElement = $(this).next();
+
+        // check all next siblings in a lower level of parent element
+        while (currentElement.length > 0 && parseInt(currentElement.data('level')) > level) {
+            currentElement.find('input[type="checkbox"]').get(0).checked = check;
+            currentElement = currentElement.next();
         }
     });
 };
@@ -292,8 +286,9 @@ Hn_Reference_Referencement_Popin.setReference = function(referenceId)
     var referenceCheckbox = $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]').get(0);
 
     if (!$(referenceCheckbox).is(':checked')) {
-        $(referenceCheckbox).click();
-        Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), false);
+        referenceCheckbox.checked = true;
+        Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), true);
+        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId, $(referenceCheckbox).attr('data-reference-parent'));
     }
 };
 
@@ -351,24 +346,39 @@ Hn_Reference_Referencement_Popin.refreshCountElements = function(referenceId)
  */
 Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying = function(referenceId, referenceParentId)
 {
-    if (undefined === referenceId) {
-        referenceId = '';
-        referenceParentId = '';
-    }
-    var referenceLine = $('tr[data-reference="' + referenceId + '"][data-reference-parent="' + referenceParentId + '"]');
-    var referenceChildrenLines = $('tr[data-reference-parent="' + referenceId + '"][data-reference-grand-parent="' + referenceParentId + '"]');
-    var referenceIsChecked = (1 === $(referenceLine).find('input:checked').size());
-    var hasCheckedChildren = ($(referenceChildrenLines).find('input:checked').size() > 0);
-
-    if (referenceIsChecked) {
-        $(referenceLine).find('.toggle').css({ display:(hasCheckedChildren ? 'none' : 'block') });
-    } else {
-        $(referenceLine).find('.toggle').css({ display:'none' });
-    }
-
-    $(referenceChildrenLines).each(function (i, referenceChildLine) {
-        Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying($(referenceChildLine).attr('data-reference'), $(referenceChildLine).attr('data-reference-parent'));
+    // Creates lines data array
+    var lines = [].map.call(document.querySelectorAll('tr[data-reference]'), function (line) {
+        return {
+            reference: line.dataset.reference,
+            deep: line.dataset.level,
+            parent: line.dataset.referenceParent,
+            checked: $('input[type="checkbox"]', $(line)).prop('checked'),
+        };
     });
+
+    // Sort by deep asc
+    lines.sort(function (a, b) {
+        return a.deep > b.deep;
+    });
+
+    var i, line;
+    var map = {};
+    for (i = 0; (line = lines[i]) !== undefined; i++) {
+        if (line.checked) {
+            map[line.reference] = line;
+
+            if (undefined !== map[line.parent]) {
+                delete map[line.parent];
+            }
+        }
+
+        document.querySelector('tr[data-reference="' + line.reference + '"] .toggle').style.display = 'none';
+    }
+
+    var mapKeys = Object.keys(map);
+    for (i = 0; (line = map[mapKeys[i]]) !== undefined; i++) {
+        document.querySelector('tr[data-reference="' + line.reference + '"] .toggle').style.display = 'block';
+    }
 };
 
 
