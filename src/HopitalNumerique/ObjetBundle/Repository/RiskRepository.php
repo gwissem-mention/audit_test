@@ -76,6 +76,7 @@ class RiskRepository extends EntityRepository
 
     /**
      * @param Domaine $domain
+     * @param integer|null $referenceId
      *
      * @return array|Risk[]
      */
@@ -83,7 +84,7 @@ class RiskRepository extends EntityRepository
     {
         return $this
             ->createRiskForDomainAndReferenceQueryBuilder($domain, $referenceId)
-            ->andWhere('r.private = false')
+            ->andWhere('risk.private = false')
 
             ->getQuery()->getResult()
         ;
@@ -112,8 +113,8 @@ class RiskRepository extends EntityRepository
      */
     private function createRiskForDomainAndReferenceQueryBuilder(Domaine $domain, $referenceId = null)
     {
-        $queryBuilder =  $this->createQueryBuilder('r', 'r.id')
-            ->join('r.domains', 'd', Join::WITH, 'd.id = :domainId')
+        $queryBuilder =  $this->createQueryBuilder('risk', 'risk.id')
+            ->join('risk.domains', 'domain', Join::WITH, 'domain.id = :domainId')
             ->setParameter('domainId', $domain->getId())
         ;
 
@@ -125,7 +126,7 @@ class RiskRepository extends EntityRepository
                     Join::WITH,
                     '
                         entityHasReference.entityType = :entityType AND
-                        entityHasReference.entityId = r.id AND
+                        entityHasReference.entityId = risk.id AND
                         entityHasReference.reference = :referenceId
                     '
                 )
