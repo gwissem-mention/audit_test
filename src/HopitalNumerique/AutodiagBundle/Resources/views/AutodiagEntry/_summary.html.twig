@@ -31,4 +31,20 @@
             </a>
         </div>
     {% endif %}
+
+    {% set glossaryList = autodiag|autodiagToString|glossaire_list(autodiag) %}
+
+    {% if glossaryList|length %}
+        <div class="recherche-referencement" id="productions_liees">
+            <h2>Glossaire</h2>
+            <div class="clearfix"></div>
+            <div class="mysep background-rose"></div>
+            <div class="results-bloc">
+                <div class="clearfix" style="margin-bottom: 10px"></div>
+                {% for glossary in glossaryList %}
+                    {{ glossary|raw }}<br>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 </div>

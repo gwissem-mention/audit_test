@@ -123,6 +123,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    HopitalNumerique\AutodiagBundle\Twig\AutodiagToStringExtension:
+        class: HopitalNumerique\AutodiagBundle\Twig\AutodiagToStringExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
     autodiag.result.builder:
         class: HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder
         arguments:
