@@ -32,7 +32,7 @@ class GuidedSearchRiskController extends Controller
         $guidedSearch = $guidedSearchStep->getGuidedSearch();
         $this->denyAccessUnlessGranted('access', $guidedSearch);
 
-        $addPrivateRiskCommand = new AddPrivateRiskCommand($guidedSearch, $this->getUser());
+        $addPrivateRiskCommand = new AddPrivateRiskCommand($guidedSearchStep, $this->getUser());
         $form = $this->createForm(AddRiskType::class, $addPrivateRiskCommand);
 
         $form->handleRequest($request);

@@ -45,9 +45,31 @@ class StepRisksFactory
      */
     public function getStepRiskDTO(Domaine $domain, GuidedSearch $guidedSearch, GuidedSearchStep $guidedSearchStep = null)
     {
-        $risks = $this->riskRepository->getPublicRisksForDomain($domain);;
+        $risks = $this
+            ->riskRepository
+            ->getPublicRisksForDomain(
+                $domain,
+                $guidedSearchStep ?
+                    $guidedSearchStep->getThinnestReferenceId() :
+                    null
+            )
+        ;
+
+        $availableRisks = $this
+            ->riskRepository
+            ->getRisksForDomainAndReference(
+                $domain,
+                $guidedSearchStep ?
+                    $guidedSearchStep->getThinnestReferenceId() :
+                    null
+            )
+        ;
 
         foreach ($guidedSearch->getPrivateRisks() as $privateRisk) {
+            if (!isset($availableRisks[$privateRisk->getId()])) {
+                continue;
+            }
+
             $risks[$privateRisk->getId()] = $privateRisk;
         }
 

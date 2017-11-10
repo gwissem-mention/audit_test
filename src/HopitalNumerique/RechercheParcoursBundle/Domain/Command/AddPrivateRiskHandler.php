@@ -3,10 +3,13 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Repository\RiskRepository;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
+use HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 
 class AddPrivateRiskHandler
 {
@@ -26,17 +29,36 @@ class AddPrivateRiskHandler
     protected $currentDomain;
 
     /**
+     * @var ReferenceRepository
+     */
+    protected $referenceRepository;
+
+    /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
      * AddPrivateRiskHandler constructor.
      *
      * @param RiskRepository $riskRepository
      * @param EntityManagerInterface $entityManagerInterface
      * @param CurrentDomaine $currentDomain
+     * @param ReferenceRepository $referenceRepository
+     * @param ValidatorInterface $validator
      */
-    public function __construct(RiskRepository $riskRepository, EntityManagerInterface $entityManager, CurrentDomaine $currentDomain)
-    {
+    public function __construct(
+        RiskRepository $riskRepository,
+        EntityManagerInterface $entityManager,
+        CurrentDomaine $currentDomain,
+        ReferenceRepository $referenceRepository,
+        ValidatorInterface $validator
+    ) {
         $this->riskRepository = $riskRepository;
         $this->entityManager = $entityManager;
         $this->currentDomain = $currentDomain;
+        $this->referenceRepository = $referenceRepository;
+        $this->validator = $validator;
     }
 
     /**
@@ -46,13 +68,27 @@ class AddPrivateRiskHandler
     {
         $risk = $this->getOrCreateRisk($addPrivateRiskCommand);
 
-        $addPrivateRiskCommand->guidedSearch->addPrivateRisk($risk);
+        $addPrivateRiskCommand->guidedSearchStep->getGuidedSearch()->addPrivateRisk($risk);
 
         if (!is_null($addPrivateRiskCommand->user)) {
             $risk->addOwner($addPrivateRiskCommand->user);
         }
 
         $this->entityManager->flush();
+
+        if ($reference = $this->referenceRepository->find($addPrivateRiskCommand->guidedSearchStep->getThinnestReferenceId())) {
+            $mappedReference = (new EntityHasReference())
+                ->setReference($reference)
+                ->setEntityId($risk->getId())
+                ->setEntityType(Entity::ENTITY_TYPE_RISK)
+                ->setPrimary(false)
+            ;
+
+            if (!$this->validator->validate($mappedReference, null, ['insert'])->count()) {
+                $this->entityManager->persist($mappedReference);
+                $this->entityManager->flush();
+            }
+        }
     }
 
     /**
