@@ -27,21 +27,55 @@ class TokenRepository extends EntityRepository
     /**
      * Get all expired tokens for a user
      *
-     * @param User $user
+     * @param User|null $user
      * @return Token[]
      */
-    public function getExpiresByUser(User $user)
+    public function getExpires(User $user = null)
     {
         $queryBuilder = $this->createQueryBuilder('token');
         $queryBuilder
-            ->where('token.user = :user')
             ->andWhere('token.expiresAt < :now')
+            ->setParameter('now', new \DateTime())
+        ;
+
+        if (null !== $user) {
+            $queryBuilder
+                ->andWhere('token.user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Finds current active token for session id and user.
+     *
+     * @param $sessionId
+     * @param User|null $user
+     *
+     * @return Token|null
+     */
+    public function findActive($sessionId, User $user = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('token');
+        $queryBuilder
+            ->andWhere('token.expiresAt >= :now')
+            ->andWhere('token.sessionId = :session')
+            ->setMaxResults(1)
             ->setParameters([
-                'user' => $user,
                 'now' => new \DateTime(),
+                'session' => $sessionId,
             ])
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        if (null !== $user) {
+            $queryBuilder
+                ->andWhere('token.user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

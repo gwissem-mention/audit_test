@@ -182,6 +182,7 @@ services:
         arguments:
             - '@session'
             - '@hopitalnumerique_user.token.token_storage'
+            - '@security.token_storage'
         tags:
             - { name: 'kernel.event_subscriber' }
 

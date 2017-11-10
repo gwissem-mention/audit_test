@@ -3,10 +3,12 @@
 namespace HopitalNumerique\SearchBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Class SearchStats
  *
+ * @ORM\Entity
  * @ORM\Table(name="hn_search_stats")
  */
 class SearchStats
@@ -26,6 +28,14 @@ class SearchStats
      * @ORM\Column(name="search_token", type="string", length=255)
      */
     protected $token;
+
+    /**
+     * @var User|null
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinColumn(referencedColumnName="usr_id")
+     */
+    protected $user;
 
     /**
      * @var \DateTime
@@ -114,6 +124,26 @@ class SearchStats
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     *
+     * @return SearchStats
+     */
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
