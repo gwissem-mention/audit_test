@@ -51,23 +51,21 @@ class Referencement
 
         $referencesTree = $this->treeService->getOrderedReferencesTreePart($references, $referenceRoot);
 
-        // If root reference defined, select shared references too
-        if ($referenceRoot) {
-            $referencesTree = array_merge(
-                $referencesTree,
-                $this->treeService->getOrderedReferencesTreePart($references, $this->referenceManager->findOneById(Reference::SHARED_REFERENCES_ID))
-            );
+        // Select shared references too
+        $referencesTree = array_merge(
+            $referencesTree,
+            $this->treeService->getOrderedReferencesTreePart($references, $this->referenceManager->findOneById(Reference::SHARED_REFERENCES_ID))
+        );
 
-            $referencesTree = array_unique($referencesTree, SORT_REGULAR);
+        $referencesTree = array_unique($referencesTree, SORT_REGULAR);
 
-            usort($referencesTree, function ($a, $b) {
-                if ($a['reference']->getOrder() === $b['reference']->getOrder()) {
-                    return 0;
-                }
+        usort($referencesTree, function ($a, $b) {
+            if ($a['reference']->getOrder() === $b['reference']->getOrder()) {
+                return 0;
+            }
 
-                return $a['reference']->getOrder() > $b['reference']->getOrder() ? 1 : -1;
-            });
-        }
+            return $a['reference']->getOrder() > $b['reference']->getOrder() ? 1 : -1;
+        });
 
         return $referencesTree;
     }
