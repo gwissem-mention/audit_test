@@ -10,6 +10,8 @@ $(function () {
             }
             evt.currentTarget.previousElementSibling.checked = active;
             evt.currentTarget.previousElementSibling.classList.toggle('active');
+
+            saveNotificationsSettings();
         })
     ;
     });
@@ -31,6 +33,9 @@ $(function () {
         format: function (value) {
             $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
             return $days[value - 1];
+        },
+        ondragend: function () {
+            saveNotificationsSettings();
         }
     });
     $('.slider-input:last').jRange({
@@ -41,6 +46,22 @@ $(function () {
         snap: true,
         format: function (value) {
             return value + 'h00';
+        },
+        ondragend: function () {
+            saveNotificationsSettings();
         }
     });
+
+    $('.notifications-settings-form').find('select, input[type=checkbox]').on('change', function (e) {
+        saveNotificationsSettings();
+    });
+
+    function saveNotificationsSettings() {
+        var $form = $('.notifications-settings-form');
+
+        $.post(
+            $form.attr('action'),
+            $form.serialize()
+        );
+    }
 });

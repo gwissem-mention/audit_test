@@ -25,46 +25,4 @@ class UpdateUserParametersCommand
      */
     public $newPassword;
 
-    /**
-     * @var Settings[]
-     */
-    public $notificationsSettings;
-
-    /**
-     * @var boolean
-     */
-    public $publicationNotification;
-
-    /**
-     * @var boolean
-     */
-    public $activityNewsletter;
-
-    /**
-     * @var int
-     */
-    public $scheduleDay;
-
-    /**
-     * @var int
-     */
-    public $scheduleHour;
-
-    /**
-     * UpdateUserParametersCommand constructor.
-     * @param User $user
-     * @param Settings[] $notificationsSettings
-     * @param array $schedules
-     */
-    public function __construct(User $user, array $notificationsSettings, array $schedules = null)
-    {
-        $this->publicationNotification = $user->getNotficationRequete();
-        $this->activityNewsletter = $user->isActivityNewsletterEnabled();
-        $this->notificationsSettings = $notificationsSettings;
-        if (null !== $schedules) {
-            $this->scheduleDay = $schedules['scheduleDay'];
-            $this->scheduleHour = $schedules['scheduleHour'];
-        }
-    }
-
 }
