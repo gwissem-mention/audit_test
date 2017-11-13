@@ -248,6 +248,36 @@
     margin-top: 20px;
 }
 
+#autodiag-entry #summary .glossary-list {
+    background: #e5e5e5;
+    padding: 10px;
+}
+
+#autodiag-entry #summary .glossary-list h2 {
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #d60030;
+}
+
+#autodiag-entry #summary .glossary-list .mysep {
+    width: 85px;
+    height: 4px;
+    margin-bottom: 10px
+}
+
+#autodiag-entry #summary .glossary-list .results-bloc a:hover {
+    text-decoration: none;
+}
+#autodiag-entry #summary .glossary-list .results-bloc a acronym {
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px dotted #333;
+    cursor: help;
+}
+
 @media screen and (max-width: 991px) {
     #autodiag-entry #summary {
         padding-top: 0 !important;
