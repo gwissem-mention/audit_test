@@ -59,7 +59,9 @@ class MigrateConsultationCommand extends ContainerAwareCommand
             }
         }
 
-        $db->query(sprintf($insertQuery, implode(', ', $queries)));
+        if (count($queries)) {
+            $db->query(sprintf($insertQuery, implode(', ', $queries)));
+        }
         $db->query('DELETE FROM hn_objet_consultation WHERE viewsCount >= 0');
     }
 }

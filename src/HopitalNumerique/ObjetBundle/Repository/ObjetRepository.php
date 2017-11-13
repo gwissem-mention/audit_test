@@ -890,4 +890,46 @@ class ObjetRepository extends EntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * Get most or least viewed objects
+     *
+     * @param array $domains
+     * @param integer $type Publication / Hot point
+     * @param string $sort ASC/DESC
+     * @param int|null $interval
+     *
+     * @return array
+     */
+    public function getTopOrBottom($domains, $type, $sort = 'DESC', $interval = null)
+    {
+
+        $queryBuilder = $this->createQueryBuilder('object')
+            ->select('object.id', 'object.alias', 'object.titre', 'COUNT(view.id) as viewsCount')
+
+            ->join('object.domaines', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
+
+            ->join('object.types', 'type')
+            ->join('type.parents', 'parentType')
+            ->andWhere('type.id = :type OR parentType.id = :type')
+            ->setParameter('type', $type)
+
+            ->addGroupBy('object.id')
+            ->addOrderBy('viewsCount', $sort)
+
+            ->setMaxResults(5)
+        ;
+
+        if ($interval) {
+            $queryBuilder
+                ->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.consultationDate >= :intervalDate AND view.domaine IN (:domains)')
+                ->setParameter('intervalDate', (new \DateTimeImmutable())->sub(new \DateInterval(sprintf('P%dM', $interval))))
+            ;
+        } else {
+            $queryBuilder->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.domaine IN (:domains)');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

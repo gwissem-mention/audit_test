@@ -138,6 +138,7 @@ class DefaultController extends Controller
     {
         $noteRepository = $this->get('hopitalnumerique_objet.repository.note');
         $commentRepository = $this->get('hopitalnumerique_objet.repository.commentaire');
+        $objectRepository = $this->get('hopitalnumerique_objet.repository.objet');
 
         $blocObjets = [
             'points-durs' => 0,
@@ -157,7 +158,7 @@ class DefaultController extends Controller
         ];
 
         //Bloc "Publication" + TOP + BOTTOM
-        $datas = $this->get('hopitalnumerique_objet.repository.objet')->getObjetsForDashboard($this->domains);
+        $datas = $objectRepository->getObjetsForDashboard($this->domains);
         $publications = [];
         foreach ($datas as $one) {
             if (!isset($publications[$one['id']])) {
@@ -170,11 +171,7 @@ class DefaultController extends Controller
             }
         }
 
-        $interval = new \DateInterval('P1M');
-        $intervalLast3Months = new \DateInterval('P3M');
-        $today = new \DateTime('now');
         foreach ($publications as $publication) {
-            $creationDate = \DateTimeImmutable::createFromMutable($publication['dateCreation']);
 
             if ($publication['etat'] == 4) {
                 $blocObjets['publications-non-publiees']++;
@@ -184,53 +181,25 @@ class DefaultController extends Controller
             if (in_array('184', $publication['types'])) {
                 $blocObjets['points-durs']++;
 
-                //Build Top 5
-                $blocObjets['top5-points-dur'][] = $publication;
-
-                //Bottom 5 - On affiche ceux qui ont plus d'un mois
-                if ($creationDate->add($interval) <= $today) {
-                    $blocObjets['bottom5-points-dur'][] = $publication;
-                }
-
-                // Top/Bottom 5 hard points last 3 months
-                if ($creationDate->add($intervalLast3Months) >= $today) {
-                    $blocObjets['top5-points-dur-3mois'][] = $publication;
-                    $blocObjets['bottom5-points-dur-3mois'][] = $publication;
-                }
-
             //Productions
             } elseif (in_array('175', $publication['types'])) {
                 $blocObjets['productions']++;
-
-                //Build Top 5
-                $blocObjets['top5-productions'][] = $publication;
-
-                //Bottom 5
-                if ($creationDate->add($interval) <= $today) {
-                    $blocObjets['bottom5-productions'][] = $publication;
-                }
-
-                // Top/Bottom 5 productions last 3 months
-                if ($creationDate->add($intervalLast3Months) >= $today) {
-                    $blocObjets['top5-productions-3mois'][] = $publication;
-                    $blocObjets['bottom5-productions-3mois'][] = $publication;
-                }
             }
         }
-
 
         // Pourcentage de publications ayant comme note moyenne + de 3.5
         $blocObjets['nb-notes'] = $noteRepository->countByDomains($this->domains, 3.5);
         $blocObjets['nb-commentaires'] = $commentRepository->countByDomains($this->domains);
         $blocObjets['pourcent-note-publication'] = round($noteRepository->computeAverageByDomains($this->domains, 3.5));
-        $blocObjets['top5-points-dur'] = $this->get5('top', $blocObjets['top5-points-dur']);
-        $blocObjets['bottom5-points-dur'] = $this->get5('bottom', $blocObjets['bottom5-points-dur']);
-        $blocObjets['top5-productions'] = $this->get5('top', $blocObjets['top5-productions']);
-        $blocObjets['bottom5-productions'] = $this->get5('bottom', $blocObjets['bottom5-productions']);
-        $blocObjets['top5-productions-3mois'] = $this->get5('top', $blocObjets['top5-productions-3mois']);
-        $blocObjets['bottom5-productions-3mois'] = $this->get5('bottom', $blocObjets['bottom5-productions-3mois']);
-        $blocObjets['top5-points-dur-3mois'] = $this->get5('top', $blocObjets['top5-points-dur-3mois']);
-        $blocObjets['bottom5-points-dur-3mois'] = $this->get5('bottom', $blocObjets['bottom5-points-dur-3mois']);
+
+        $blocObjets['top5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC');
+        $blocObjets['bottom5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC');
+        $blocObjets['top5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC');
+        $blocObjets['bottom5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC');
+        $blocObjets['top5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC', 3);
+        $blocObjets['bottom5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC', 3);
+        $blocObjets['top5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC', 3);
+        $blocObjets['bottom5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC', 3);
 
         return $blocObjets;
     }
@@ -414,36 +383,6 @@ class DefaultController extends Controller
         ];
 
         return $blocSessions;
-    }
-
-    /**
-     * Tri le tableau en TOP / FLOP 5.
-     *
-     * @param string $type  Top / bottom
-     * @param array  $datas Tableau de données
-     *
-     * @return array
-     */
-    private function get5($type, $datas)
-    {
-        if (count($datas) == 0) {
-            return $datas;
-        }
-
-        $sort = [];
-        foreach ($datas as $k => $v) {
-            $sort['nbVue'][$k] = $v['nbVue'];
-            $sort['titre'][$k] = $v['titre'];
-        }
-
-        //sort For Top
-        if ($type == 'top') {
-            array_multisort($sort['nbVue'], SORT_DESC, $sort['titre'], SORT_ASC, $datas);
-        } else {
-            array_multisort($sort['nbVue'], SORT_ASC, $sort['titre'], SORT_ASC, $datas);
-        }
-
-        return array_slice($datas, 0, 5);
     }
 
     /**
