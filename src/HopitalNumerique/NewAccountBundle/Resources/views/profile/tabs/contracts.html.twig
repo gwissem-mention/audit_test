@@ -16,7 +16,7 @@
                 {% for contract in contracts %}
                     <tr>
                         <td>
-                            <a href="{{ path('hopitalnumerique_user_contract_download', {contract: contract.id}) }}">
+                            <a href="{{ path('hopitalnumerique_user_contract_download', {contract: contract.id}) }}" target="_blank">
                                 {{ contract.nomDocument }}
                             </a>
                         </td>
