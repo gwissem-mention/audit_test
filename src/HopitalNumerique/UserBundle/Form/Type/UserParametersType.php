@@ -32,14 +32,6 @@ class UserParametersType extends AbstractType
                     'label' => 'form.newPassword.second.label',
                 ],
             ])
-            ->add('notificationsSettings', CollectionType::class, [
-                'entry_type' => SettingsType::class
-            ])
-            ->add('scheduleDay', HiddenType::class)
-            ->add('scheduleHour', HiddenType::class)
-            ->add('activityNewsletter', CheckboxType::class, [
-                'required' => false,
-            ])
         ;
     }
 

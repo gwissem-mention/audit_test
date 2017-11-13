@@ -261,6 +261,12 @@ services:
             - '@fos_user.user_manager.default'
             - '@hopitalnumerique\notificationbundle\domain\command\updatenotificationsettingshandler'
 
+    HopitalNumerique\UserBundle\Domain\Command\UpdateNotificationsSettingsHandler:
+        class: HopitalNumerique\UserBundle\Domain\Command\UpdateNotificationsSettingsHandler
+        arguments:
+            - '@fos_user.user_manager.default'
+            - '@hopitalnumerique\notificationbundle\domain\command\updatenotificationsettingshandler'
+
     hopitalnumerique_user.widgets.activity:
         class: HopitalNumerique\UserBundle\Service\Widget\ActivityWidget
         tags:

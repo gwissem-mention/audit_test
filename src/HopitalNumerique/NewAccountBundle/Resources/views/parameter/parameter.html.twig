@@ -41,11 +41,6 @@
 {% block content %}
     {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
-        <div class="col-md-offset-9 col-md-3 submit-btn text-right">
-            <input type="submit" class="btn btn-success" value="{{ 'account.save'|trans }}">
-        </div>
-    </div>
 
     <fieldset class="panel panel-default">
         <div class="panel-heading custom-panel-heading">
@@ -73,8 +68,22 @@
                     {{ form_row(form.newPassword.second) }}
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-offset-9 col-md-3 submit-btn text-right">
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-success" value="{{ 'account.save'|trans }}">
+                    </div>
+                </div>
+            </div>
         </div>
     </fieldset>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+    {{ form_start(notificationsForm, {attr: {class: 'notifications-settings-form'}}) }}
+    {{ form_errors(notificationsForm) }}
 
     <fieldset class="panel panel-default" id="notifications-parameters">
         <div class="panel-heading custom-panel-heading">
@@ -101,22 +110,22 @@
                             {% endif %}
                             {% set hasDetail = (trans_path ~ notification_key ~ '.detail')|trans != '-' %}
                             <div class="col-md-4">
-                                {{ form_widget(form.notificationsSettings[notification_key].wanted, { 'attr': {
-                                    'class': (form.notificationsSettings[notification_key].wanted.vars.checked ? 'active') ~ ' hidden'
+                                {{ form_widget(notificationsForm.notificationsSettings[notification_key].wanted, { 'attr': {
+                                    'class': (notificationsForm.notificationsSettings[notification_key].wanted.vars.checked ? 'active') ~ ' hidden'
                                 } }) }}
-                                <div class="toggle toggle-success" data-toggle="{{ form.notificationsSettings[notification_key].wanted.vars.checked }}"></div>
+                                <div class="toggle toggle-success" data-toggle="{{ notificationsForm.notificationsSettings[notification_key].wanted.vars.checked }}"></div>
                                 <b>{{ (trans_path ~ notification_key ~ '.description')|trans }}</b>
                                 <div class="description">
-                                    {{ form_widget(form.notificationsSettings[notification_key].frequency, {'attr': {
+                                    {{ form_widget(notificationsForm.notificationsSettings[notification_key].frequency, {'attr': {
                                         'class' : 'validate[required]',
-                                        'data-value' : form.notificationsSettings[notification_key].frequency.vars.value
+                                        'data-value' : notificationsForm.notificationsSettings[notification_key].frequency.vars.value
                                     }}) }}
                                     {{ 'notification-config.information'|trans }}
                                     <b>{{ (trans_path ~ notification_key ~ '.title')|trans }}</b>
                                     <div style="{% if hasDetail == false %}display: none;{% endif %}">
                                         {{ 'notification-config.also'|trans }} :<br>
                                         <b>{{ (trans_path ~ notification_key ~ '.detail')|trans }}</b>
-                                        {{ form_widget(form.notificationsSettings[notification_key].detailLevel) }}
+                                        {{ form_widget(notificationsForm.notificationsSettings[notification_key].detailLevel) }}
                                     </div>
                                 </div>
                             </div>
@@ -130,20 +139,20 @@
             <div class="description">{{'Module_account_parameters_notifications'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</div>
             <div class="col-md-12 schedules">
                 <span>{{ 'notification-config.choose.day'|trans }} :</span>
-                {{ form_row(form.scheduleDay, {'attr': {'class' : 'slider-input'}}) }}
+                {{ form_row(notificationsForm.scheduleDay, {'attr': {'class' : 'slider-input'}}) }}
                 <span>{{ 'notification-config.choose.hour'|trans }} :</span>
-                {{ form_row(form.scheduleHour, {'attr': {'class' : 'slider-input'}}) }}
+                {{ form_row(notificationsForm.scheduleHour, {'attr': {'class' : 'slider-input'}}) }}
             </div>
             <div class="col-md-12 authorize">
-                {{ form_widget(form.activityNewsletter) }}
-                {{ form_label(form.activityNewsletter) }}
+                {{ form_widget(notificationsForm.activityNewsletter) }}
+                {{ form_label(notificationsForm.activityNewsletter) }}
             </div>
         </div>
         {% trans_default_domain 'messages' %}
     </fieldset>
 
-    {{ form_rest(form) }}
-    {{ form_end(form) }}
+    {{ form_rest(notificationsForm) }}
+    {{ form_end(notificationsForm) }}
 
     <fieldset class="panel panel-default">
         <div class="panel-heading custom-panel-heading">
