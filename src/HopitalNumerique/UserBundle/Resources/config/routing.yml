@@ -105,7 +105,7 @@ hopitalnumerique_user_front_organizations:
 
 #Contractualisation
 hopitalnumerique_user_contract_download:
-    path:  /user/contract/{contract}/download
+    path:  /mon-compte/mes-services/contract/{contract}/download
     defaults: { _controller: "HopitalNumeriqueUserBundle:Front/Contract:download" }
     requirements:
         contract: \d+
