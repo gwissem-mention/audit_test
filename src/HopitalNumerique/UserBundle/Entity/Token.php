@@ -50,7 +50,11 @@ class Token
      */
     protected $user;
 
-    public function __construct($sessionId, User $user)
+    /**
+     * @param $sessionId
+     * @param User|null $user
+     */
+    public function __construct($sessionId, User $user = null)
     {
         $this->token = $this->generateToken();
         $this->createdAt = new \DateTimeImmutable();

@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Form\Type\Risk;
 
-use HopitalNumerique\RechercheParcoursBundle\Domain\Command\IncludeRiskCommand;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -10,7 +9,7 @@ use HopitalNumerique\ObjetBundle\Entity\Risk;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use HopitalNumerique\RechercheParcoursBundle\Domain\Command\AddPrivateRiskCommand;
+use HopitalNumerique\RechercheParcoursBundle\Domain\Command\IncludeRiskCommand;
 
 class ShowRiskType extends AbstractType
 {

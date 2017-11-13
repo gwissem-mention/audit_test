@@ -18,8 +18,10 @@ use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ForumBundle\Repository\BoardRepository;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\ObjetBundle\Repository\RiskRepository;
 use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\PublicationBundle\Repository\SuggestionRepository;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
@@ -90,6 +92,11 @@ class Entity
      * @var int Autodiag
      */
     const ENTITY_TYPE_AUTODIAG = 10;
+
+    /**
+     * @var int Autodiag
+     */
+    const ENTITY_TYPE_RISK = 12;
 
     private $refForumTopicId;
 
@@ -184,6 +191,11 @@ class Entity
     protected $autodiagRepository;
 
     /**
+     * @var RiskRepository
+     */
+    protected $riskRepository;
+
+    /**
      * Constructeur.
      *
      * @param RouterInterface                 $router
@@ -208,6 +220,7 @@ class Entity
      * @param EntityHasReferenceRepository $entityHasReferenceRepository
      * @param BoardRepository $boardRepository
      * @param AutodiagRepository $communautePratiqueGroupeManager
+     * @param RiskRepository $riskRepository
      */
     public function __construct(
         RouterInterface $router,
@@ -231,7 +244,8 @@ class Entity
         $refForumBoardId,
         $entityHasReferenceRepository,
         BoardRepository $boardRepository,
-        AutodiagRepository $autodiagRepository
+        AutodiagRepository $autodiagRepository,
+        RiskRepository $riskRepository
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -255,6 +269,7 @@ class Entity
         $this->entityHasReferenceRepository = $entityHasReferenceRepository;
         $this->forumBoardRepository = $boardRepository;
         $this->autodiagRepository = $autodiagRepository;
+        $this->riskRepository = $riskRepository;
     }
 
     /**
@@ -296,6 +311,8 @@ class Entity
                 return self::ENTITY_TYPE_SUGGESTION;
             case $entity instanceof Autodiag:
                 return self::ENTITY_TYPE_AUTODIAG;
+            case $entity instanceof Risk:
+                return self::ENTITY_TYPE_RISK;
         }
 
         return null;
@@ -375,6 +392,8 @@ class Entity
                 return $this->forumBoardRepository->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_AUTODIAG:
                 return $this->autodiagRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_RISK:
+                return $this->riskRepository->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "' . $type . '" introuvable.');
@@ -426,6 +445,7 @@ class Entity
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->getDomainesByEntity($entity->getQuestion()->getExpBesoinGestion());
             case self::ENTITY_TYPE_SUGGESTION:
+            case self::ENTITY_TYPE_RISK:
                 return $entity->getDomains();
         }
 
@@ -585,6 +605,9 @@ class Entity
             case self::ENTITY_TYPE_AUTODIAG:
                 $title = $entity->getTitle();
                 break;
+            case self::ENTITY_TYPE_RISK:
+                $title = $entity->getLabel();
+                break;
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -668,6 +691,8 @@ class Entity
                 return $this->referenceManager->findOneById($this->refExpressionBesoinReponseId)->getLibelle();
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return $this->referenceManager->findOneById($this->refForumBoardId)->getLibelle();
+            case self::ENTITY_TYPE_RISK:
+                return $entity->getNature()->getLibelle();
         }
 
         return implode(' &diams; ', $categories);

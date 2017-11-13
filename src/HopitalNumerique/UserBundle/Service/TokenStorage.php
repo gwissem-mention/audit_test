@@ -45,12 +45,16 @@ class TokenStorage
      * Create new token for session id and User
      *
      * @param $sessionId
-     * @param User $user
+     * @param User|null $user
      *
      * @return Token
      */
-    public function createToken($sessionId, User $user)
+    public function createToken($sessionId, User $user = null)
     {
+        if (null !== $token = $this->tokenRepository->findActive($sessionId, $user)) {
+            return $token;
+        }
+
         $token = new Token($sessionId, $user);
 
         $this->entityManager->persist($token);
@@ -61,7 +65,7 @@ class TokenStorage
             new TokenEvent($token)
         );
 
-        $this->removeExpiresByUser($user);
+        $this->removeExpires($user);
 
         return $token;
     }
@@ -89,11 +93,11 @@ class TokenStorage
     /**
      * Remove all expired token for user
      *
-     * @param User $user
+     * @param User|null $user
      */
-    public function removeExpiresByUser(User $user)
+    public function removeExpires(User $user = null)
     {
-        $tokens = $this->tokenRepository->getExpiresByUser($user);
+        $tokens = $this->tokenRepository->getExpires($user);
         foreach ($tokens as $token) {
             $this->eventDispatcher->dispatch(
                 UserEvents::TOKEN_DELETED,

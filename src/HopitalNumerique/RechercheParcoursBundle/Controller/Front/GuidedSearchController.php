@@ -245,7 +245,7 @@ class GuidedSearchController extends Controller
 
         if ($guidedSearchConfig->hasPublicationType(GuidedSearchConfigPublicationType::TYPE_RISK)) {
             $riskStep['risks'] = $this->get('hopitalnumerique_rechercheparcours.factory.step_risks')->getStepRiskDTO($domain, $guidedSearch, $guidedSearchStep);
-            $riskStep['addForm'] = $this->createForm(AddRiskType::class, new AddPrivateRiskCommand($guidedSearch, $this->getUser()))->createView();
+            $riskStep['addForm'] = $this->createForm(AddRiskType::class, new AddPrivateRiskCommand($guidedSearchStep, $this->getUser()))->createView();
             $riskStep['showRiskForm'] = $this->createForm(ShowRiskType::class, new IncludeRiskCommand($guidedSearchStep))->createView();
         }
 
