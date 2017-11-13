@@ -7,7 +7,7 @@
                 <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': object.id}) }}">
                     {{ object.titre }}
                 </a>
-                {{ 'most_viewed_object.views_count'|transchoice(object.consultations.first.viewsCount) }}
+                {{ 'most_viewed_object.views_count'|transchoice(object.viewsCount) }}
             </li>
         {% endfor %}
     </ol>

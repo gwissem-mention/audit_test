@@ -674,8 +674,11 @@ class ObjetRepository extends EntityRepository
     public function getUpdatedObjectsSinceLastView(User $user)
     {
         return $this->createQueryBuilder('o')
-            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND o.dateModification > c.dateLastConsulted')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
             ->setParameter('userId', $user->getId())
+
+            ->groupBy('c.objet')
+            ->having('MAX(c.consultationDate) < o.dateModification')
 
             ->getQuery()->getResult()
         ;
@@ -689,11 +692,13 @@ class ObjetRepository extends EntityRepository
     public function getMostViewedObjectsForUser(User $user)
     {
         return $this->createQueryBuilder('o')
+            ->addSelect('o.id, o.titre, COUNT(c) as viewsCount')
             ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND c.contenu IS NULL')
             ->addSelect('c')
             ->setParameter('userId', $user->getId())
 
-            ->orderBy('c.viewsCount', 'DESC')
+            ->groupBy('c.objet')
+            ->orderBy('viewsCount', 'DESC')
 
             ->setMaxResults(5)
 
@@ -712,7 +717,7 @@ class ObjetRepository extends EntityRepository
             ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
             ->setParameter('userId', $user->getId())
 
-            ->orderBy('c.dateLastConsulted', 'DESC')
+            ->orderBy('c.consultationDate', 'DESC')
 
             ->setMaxResults(5)
 
@@ -741,7 +746,7 @@ class ObjetRepository extends EntityRepository
         }
 
         return $qb
-            ->orderBy('consultations.dateLastConsulted', 'DESC')
+            ->orderBy('consultations.consultationDate', 'DESC')
             ->getQuery()
             ->getResult()
         ;

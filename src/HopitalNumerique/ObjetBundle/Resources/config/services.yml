@@ -62,7 +62,9 @@ services:
 
     hopitalnumerique_objet.manager.consultation:
         class: %hopitalnumerique_objet.manager.consultation.class%
-        arguments: ["@doctrine.orm.entity_manager","@security.context"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
 
     hopitalnumerique_objet.manager.fichiermodifiable:
         class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
