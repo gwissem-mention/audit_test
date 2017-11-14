@@ -145,13 +145,13 @@ class ConsultationManager extends BaseManager
                     // Si la date de dernière mise à jour de l'objet est
                     // postérieure à la dernière consultation de l'objet : Notif updated
                     $consulted['objets'][$one->getObjet()->getId()] = $one->getObjet()->getDateModification()
-                                                                      > $one->getDateLastConsulted();
+                                                                      > $one->getConsultationDate();
                     // Cas contenu
                 } else {
                     // Si la date de dernière mise à jour du contenu est
                     // postérieure à la dernière consultation du contenu : Notif updated
                     $consulted['contenus'][$one->getContenu()->getId()] = $one->getContenu()->getDateModification()
-                                                                          > $one->getDateLastConsulted();
+                                                                          > $one->getConsultationDate();
                 }
             }
 
