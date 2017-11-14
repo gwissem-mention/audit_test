@@ -76,14 +76,14 @@ class RiskRepository extends EntityRepository
 
     /**
      * @param Domaine $domain
-     * @param integer|null $referenceId
+     * @param integer[] $referencesId
      *
      * @return array|Risk[]
      */
-    public function getPublicRisksForDomain(Domaine $domain, $referenceId = null)
+    public function getPublicRisksForDomain(Domaine $domain, $referencesId = [])
     {
         return $this
-            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referenceId)
+            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referencesId)
             ->andWhere('risk.private = false')
 
             ->getQuery()->getResult()
@@ -92,14 +92,14 @@ class RiskRepository extends EntityRepository
 
     /**
      * @param Domaine $domain
-     * @param integer $referenceId
+     * @param array $referencesId
      *
      * @return Risk[]
      */
-    public function getRisksForDomainAndReference(Domaine $domain, $referenceId)
+    public function getRisksForDomainAndReference(Domaine $domain, $referencesId)
     {
         return $this
-            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referenceId)
+            ->createRiskForDomainAndReferenceQueryBuilder($domain, $referencesId)
 
             ->getQuery()->getResult()
         ;
@@ -107,32 +107,40 @@ class RiskRepository extends EntityRepository
 
     /**
      * @param Domaine $domain
-     * @param integer|null $referenceId
+     * @param array $referencesId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function createRiskForDomainAndReferenceQueryBuilder(Domaine $domain, $referenceId = null)
+    private function createRiskForDomainAndReferenceQueryBuilder(Domaine $domain, $referencesId = [])
     {
         $queryBuilder =  $this->createQueryBuilder('risk', 'risk.id')
             ->join('risk.domains', 'domain', Join::WITH, 'domain.id = :domainId')
             ->setParameter('domainId', $domain->getId())
         ;
 
-        if ($referenceId) {
-            $queryBuilder
-                ->join(
-                    EntityHasReference::class,
-                    'entityHasReference',
-                    Join::WITH,
-                    '
-                        entityHasReference.entityType = :entityType AND
-                        entityHasReference.entityId = risk.id AND
-                        entityHasReference.reference = :referenceId
-                    '
-                )
-                ->setParameter('entityType', Entity::ENTITY_TYPE_RISK)
-                ->setParameter('referenceId', $referenceId)
-            ;
+        if ($referencesId) {
+            foreach ($referencesId as $referenceId) {
+                $queryBuilder
+                    ->join(
+                        EntityHasReference::class,
+                        sprintf('entityHasReference%d', $referenceId),
+                        Join::WITH,
+                        sprintf('
+                                entityHasReference%d.entityType = :entityType AND
+                                entityHasReference%d.entityId = risk.id AND
+                                %s
+                                
+                            ',
+                            $referenceId,
+                            $referenceId,
+                            sprintf(is_array($referenceId) ? 'entityHasReference%d.reference IN (:referenceId%d)' : 'entityHasReference%d.reference = :referenceId%d',$referenceId, $referenceId)
+                        )
+                    )
+                    ->setParameter(sprintf('referenceId%d', $referenceId), $referenceId)
+                ;
+            }
+
+            $queryBuilder->setParameter('entityType', Entity::ENTITY_TYPE_RISK);
         }
 
         return $queryBuilder;

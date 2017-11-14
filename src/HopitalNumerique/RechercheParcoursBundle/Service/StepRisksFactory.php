@@ -50,7 +50,7 @@ class StepRisksFactory
             ->getPublicRisksForDomain(
                 $domain,
                 $guidedSearchStep ?
-                    $guidedSearchStep->getThinnestReferenceId() :
+                    $guidedSearchStep->getReferencesId() :
                     null
             )
         ;
@@ -60,7 +60,7 @@ class StepRisksFactory
             ->getRisksForDomainAndReference(
                 $domain,
                 $guidedSearchStep ?
-                    $guidedSearchStep->getThinnestReferenceId() :
+                    $guidedSearchStep->getReferencesId() :
                     null
             )
         ;
