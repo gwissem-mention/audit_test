@@ -56,9 +56,9 @@ class Consultation
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="cln_date_last_consulted", type="datetime")
+     * @ORM\Column(type="datetime")
      */
-    private $dateLastConsulted;
+    private $consultationDate;
 
     /**
      * @var string
@@ -68,15 +68,11 @@ class Consultation
     protected $sessionId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
+     * Consultation constructor.
      */
-    protected $viewsCount = 1;
-
     public function __construct()
     {
-        $this->dateLastConsulted = new \DateTime();
+        $this->consultationDate = new \DateTime();
     }
 
     /**
@@ -150,23 +146,19 @@ class Consultation
     }
 
     /**
-     * Get dateLastConsulted.
-     *
      * @return \DateTime $dateLastConsulted
      */
-    public function getDateLastConsulted()
+    public function getConsultationDate()
     {
-        return $this->dateLastConsulted;
+        return $this->consultationDate;
     }
 
     /**
-     * Set dateLastConsulted.
-     *
-     * @param \DateTime $dateLastConsulted
+     * @param \DateTime $consultationDate
      */
-    public function setDateLastConsulted($dateLastConsulted)
+    public function setConsultationDate($consultationDate)
     {
-        $this->dateLastConsulted = $dateLastConsulted;
+        $this->consultationDate = $consultationDate;
     }
 
     /**
@@ -215,25 +207,5 @@ class Consultation
     public function getsessionId()
     {
         return $this->sessionId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getViewsCount()
-    {
-        return $this->viewsCount;
-    }
-
-    /**
-     * @param int $viewsCount
-     *
-     * @return Consultation
-     */
-    public function setViewsCount($viewsCount)
-    {
-        $this->viewsCount = $viewsCount;
-
-        return $this;
     }
 }
