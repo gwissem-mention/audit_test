@@ -199,6 +199,14 @@ class GuidedSearchStep
     }
 
     /**
+     * @return array
+     */
+    public function getReferencesId()
+    {
+        return [$this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getAllChildrenId(), $this->getThinnestReferenceId()];
+    }
+
+    /**
      * @return ArrayCollection|RiskAnalysis[]
      */
     public function getRisksAnalysis()

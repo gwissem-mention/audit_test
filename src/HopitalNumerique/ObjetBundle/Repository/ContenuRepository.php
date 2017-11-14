@@ -144,7 +144,7 @@ class ContenuRepository extends EntityRepository
         }
 
         return $qb
-            ->orderBy('consultations.dateLastConsulted', 'DESC')
+            ->orderBy('consultations.consultationDate', 'DESC')
             ->getQuery()
             ->getResult()
         ;

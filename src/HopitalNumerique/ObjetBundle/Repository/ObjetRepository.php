@@ -674,8 +674,11 @@ class ObjetRepository extends EntityRepository
     public function getUpdatedObjectsSinceLastView(User $user)
     {
         return $this->createQueryBuilder('o')
-            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND o.dateModification > c.dateLastConsulted')
+            ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
             ->setParameter('userId', $user->getId())
+
+            ->groupBy('c.objet')
+            ->having('MAX(c.consultationDate) < o.dateModification')
 
             ->getQuery()->getResult()
         ;
@@ -689,11 +692,13 @@ class ObjetRepository extends EntityRepository
     public function getMostViewedObjectsForUser(User $user)
     {
         return $this->createQueryBuilder('o')
+            ->addSelect('o.id, o.titre, COUNT(c) as viewsCount')
             ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND c.contenu IS NULL')
             ->addSelect('c')
             ->setParameter('userId', $user->getId())
 
-            ->orderBy('c.viewsCount', 'DESC')
+            ->groupBy('c.objet')
+            ->orderBy('viewsCount', 'DESC')
 
             ->setMaxResults(5)
 
@@ -712,7 +717,7 @@ class ObjetRepository extends EntityRepository
             ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId')
             ->setParameter('userId', $user->getId())
 
-            ->orderBy('c.dateLastConsulted', 'DESC')
+            ->orderBy('c.consultationDate', 'DESC')
 
             ->setMaxResults(5)
 
@@ -741,7 +746,7 @@ class ObjetRepository extends EntityRepository
         }
 
         return $qb
-            ->orderBy('consultations.dateLastConsulted', 'DESC')
+            ->orderBy('consultations.consultationDate', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -884,5 +889,47 @@ class ObjetRepository extends EntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Get most or least viewed objects
+     *
+     * @param array $domains
+     * @param integer $type Publication / Hot point
+     * @param string $sort ASC/DESC
+     * @param int|null $interval
+     *
+     * @return array
+     */
+    public function getTopOrBottom($domains, $type, $sort = 'DESC', $interval = null)
+    {
+
+        $queryBuilder = $this->createQueryBuilder('object')
+            ->select('object.id', 'object.alias', 'object.titre', 'COUNT(view.id) as viewsCount')
+
+            ->join('object.domaines', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
+
+            ->join('object.types', 'type')
+            ->join('type.parents', 'parentType')
+            ->andWhere('type.id = :type OR parentType.id = :type')
+            ->setParameter('type', $type)
+
+            ->addGroupBy('object.id')
+            ->addOrderBy('viewsCount', $sort)
+
+            ->setMaxResults(5)
+        ;
+
+        if ($interval) {
+            $queryBuilder
+                ->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.consultationDate >= :intervalDate AND view.domaine IN (:domains)')
+                ->setParameter('intervalDate', (new \DateTimeImmutable())->sub(new \DateInterval(sprintf('P%dM', $interval))))
+            ;
+        } else {
+            $queryBuilder->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.domaine IN (:domains)');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

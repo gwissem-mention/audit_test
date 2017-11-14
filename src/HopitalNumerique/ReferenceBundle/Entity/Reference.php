@@ -583,11 +583,24 @@ class Reference
     /**
      * Get enfants.
      *
-     * @return Collection
+     * @return Collection|Reference[]
      */
     public function getEnfants()
     {
         return $this->enfants;
+    }
+
+    public function getAllChildrenId()
+    {
+        $ids = [];
+
+        foreach ($this->getEnfants() as $child) {
+            $ids[] = $child->getId();
+
+            $ids = array_merge($ids, $child->getAllChildrenId());
+        }
+
+        return $ids;
     }
 
     /**

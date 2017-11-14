@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -11,12 +12,14 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class ConsultationRepository extends EntityRepository
 {
+    const CONSULTATION_DELAY = 'PT15M';
+
     /**
      * Retourne les dernières consultations de l'user $user.
      *
      * @param User $user L'user connecté
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getLastsConsultations($user, $domaineId)
     {
@@ -32,7 +35,7 @@ class ConsultationRepository extends EntityRepository
                             'user' => $user,
                             'domaineId' => $domaineId,
                         ])
-                    ->orderBy('clt.dateLastConsulted', 'DESC');
+                    ->orderBy('clt.consultationDate', 'DESC');
     }
 
     public function getUsersConcerneByObjet($idObjet, $domaineIds)
@@ -51,13 +54,13 @@ class ConsultationRepository extends EntityRepository
                         ])
                     ->leftJoin('clt.user', 'user')
                     ->groupBy('user')
-                    ->orderBy('clt.dateLastConsulted', 'DESC');
+                    ->orderBy('clt.consultationDate', 'DESC');
     }
 
     /**
      * Get nombre consultations.
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getNbConsultations($domaineId = null)
     {
@@ -90,5 +93,25 @@ class ConsultationRepository extends EntityRepository
 
             ->getQuery()->getSingleScalarResult()
         ;
+    }
+
+    /**
+     * @param $parameters
+     *
+     * @return Consultation|null
+     */
+    public function findCurrentConsultation($parameters)
+    {
+        /** @var Consultation $consultation */
+        $consultation = $this->findOneBy($parameters, ['consultationDate' => 'DESC']);
+
+        if (
+            null !== $consultation &&
+            $consultation->getConsultationDate() >= (new \DateTimeImmutable())->sub(new \DateInterval(self::CONSULTATION_DELAY))
+        ) {
+            return $consultation;
+        }
+
+        return null;
     }
 }
