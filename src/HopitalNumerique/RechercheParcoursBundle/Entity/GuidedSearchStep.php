@@ -203,7 +203,13 @@ class GuidedSearchStep
      */
     public function getReferencesId()
     {
-        return [$this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getAllChildrenId(), $this->getThinnestReferenceId()];
+        return [
+            array_merge(
+                [$this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getId()],
+                $this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getAllChildrenId()
+            ),
+            $this->getThinnestReferenceId(),
+        ];
     }
 
     /**
