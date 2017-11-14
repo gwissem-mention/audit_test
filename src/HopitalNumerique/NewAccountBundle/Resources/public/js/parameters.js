@@ -36,6 +36,9 @@ $(function () {
         },
         ondragend: function () {
             saveNotificationsSettings();
+        },
+        onbarclicked: function () {
+            saveNotificationsSettings();
         }
     });
     $('.slider-input:last').jRange({
@@ -48,6 +51,9 @@ $(function () {
             return value + 'h00';
         },
         ondragend: function () {
+            saveNotificationsSettings();
+        },
+        onbarclicked: function () {
             saveNotificationsSettings();
         }
     });
