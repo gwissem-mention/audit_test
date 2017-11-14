@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Repository\RiskRepository;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository;
@@ -76,18 +77,34 @@ class AddPrivateRiskHandler
 
         $this->entityManager->flush();
 
-        if ($reference = $this->referenceRepository->find($addPrivateRiskCommand->guidedSearchStep->getThinnestReferenceId())) {
-            $mappedReference = (new EntityHasReference())
-                ->setReference($reference)
-                ->setEntityId($risk->getId())
-                ->setEntityType(Entity::ENTITY_TYPE_RISK)
-                ->setPrimary(false)
-            ;
+        $this->addReference(
+            $risk,
+            $addPrivateRiskCommand->guidedSearchStep->getGuidedSearch()->getGuidedSearchReference()->getReference()
+        );
 
-            if (!$this->validator->validate($mappedReference, null, ['insert'])->count()) {
-                $this->entityManager->persist($mappedReference);
-                $this->entityManager->flush();
-            }
+        if ($reference = $this->referenceRepository->find($addPrivateRiskCommand->guidedSearchStep->getThinnestReferenceId())) {
+            $this->addReference($risk, $reference);
+        }
+    }
+
+    /**
+     * Refeference risk
+     *
+     * @param Risk $risk
+     * @param Reference $reference
+     */
+    private function addReference(Risk $risk, Reference $reference)
+    {
+        $mappedReference = (new EntityHasReference())
+            ->setReference($reference)
+            ->setEntityId($risk->getId())
+            ->setEntityType(Entity::ENTITY_TYPE_RISK)
+            ->setPrimary(false)
+        ;
+
+        if (!$this->validator->validate($mappedReference, null, ['insert'])->count()) {
+            $this->entityManager->persist($mappedReference);
+            $this->entityManager->flush();
         }
     }
 
