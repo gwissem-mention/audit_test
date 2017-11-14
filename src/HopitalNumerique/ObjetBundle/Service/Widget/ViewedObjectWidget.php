@@ -111,7 +111,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 'fullTitle' => $object->getTitre(),
                 'modificationDate' => $object->getDateModification(),
                 'consultationId' => $object->getConsultations()->first()->getId(),
-                'consultationDate' => $object->getConsultations()->first()->getDateLastConsulted(),
+                'consultationDate' => $object->getConsultations()->first()->getConsultationDate(),
                 'showLink' => $baseUrl . $this->router->generate(
                     'hopital_numerique_publication_publication_objet',
                     ['id' => $object->getId(), 'alias' => $object->getAlias()]
@@ -136,7 +136,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 'fullTitle' => $content->getFullTitle(),
                 'modificationDate' => $content->getDateModification(),
                 'consultationId' => $content->getConsultations()->first()->getId(),
-                'consultationDate' => $content->getConsultations()->first()->getDateLastConsulted(),
+                'consultationDate' => $content->getConsultations()->first()->getConsultationDate(),
                 'showLink' => $baseUrl . $this->router->generate(
                     'hopital_numerique_publication_publication_contenu',
                     [
