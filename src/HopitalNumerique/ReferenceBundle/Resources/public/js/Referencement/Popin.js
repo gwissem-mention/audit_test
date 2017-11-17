@@ -65,6 +65,9 @@ Hn_Reference_Referencement_Popin.init = function()
         Hn_Reference_Referencement_Popin.setReference($(referenceCheckbox).attr('data-reference'));
     });
 
+    Hn_Reference_Referencement_Popin.refreshCountElements();
+    Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying();
+
     $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
     $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
 };
@@ -99,29 +102,41 @@ Hn_Reference_Referencement_Popin.initEvents = function()
  * @param integer referenceParentId ID du parent des sous-références
  * @param boolean open              (facultatif) S'il faut afficher ou cacher les lignes
  */
-Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree = function(referenceParentId, open)
+Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree = function(element)
 {
-    var referenceParentLine = $('tr[data-reference="' + referenceParentId + '"]');
-    var referencesLines = $('tr[data-reference-parent="' + referenceParentId + '"]');
-    var haveToOpen = (undefined === open ? ('1' !== referenceParentLine.attr('data-children-open')) : open);
+    var reference = element.dataset.reference;
+    var level = parseInt(element.dataset.level);
+    var children = document.querySelectorAll('[data-level="' + (level + 1) + '"][data-reference-parent="' + reference + '"');
 
-    referenceParentLine.attr('data-children-open', (haveToOpen ? '1' : '0'));
-    referenceParentLine.find('td:last-child .fa').removeClass(haveToOpen ? 'fa-arrow-right' : 'fa-arrow-down');
-    referenceParentLine.find('td:last-child .fa').addClass(haveToOpen ? 'fa-arrow-down' : 'fa-arrow-right');
+    var isVisible = false;
 
-    if (referencesLines.size() > 0) {
-        $(referencesLines).each(function (key, referenceLine) {
-            var referenceEnfantId = $(referenceLine).attr('data-reference');
-            if (haveToOpen) {
-                $(referenceLine).show();
-            } else {
-                $(referenceLine).hide();
-                if ($(referenceLine).data('children-open') == 1) {
-                    Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree(referenceEnfantId, false);
-                }
+    for (var i = 0; i < children.length; ++i) {
+        if ($(children[i]).is(':visible')) {
+            isVisible = false;
+            $(children[i]).hide();
+
+            var next = children[i].nextElementSibling;
+
+            while (null !== next && next.dataset.level > children[i].dataset.level) {
+                $(next).hide()
+                next = next.nextElementSibling;
             }
-        });
+        } else {
+            isVisible = true;
+            $(children[i]).show()
+        }
     }
+
+    if (isVisible) {
+        $(element).find('td:last-child .fa').removeClass('fa-arrow-right');
+        $(element).find('td:last-child .fa').addClass('fa-arrow-down');
+    } else {
+
+        $(element).find('td:last-child .fa').removeClass('fa-arrow-down');
+        $(element).find('td:last-child .fa').addClass('fa-arrow-right');
+    }
+
+    return;
 };
 
 /**
@@ -150,7 +165,7 @@ Hn_Reference_Referencement_Popin.checkReference_click = function(event)
     if (justChecked) {
         Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId, referenceParentId);
     }
-    Hn_Reference_Referencement_Popin.refreshCountElements(referenceId);
+    Hn_Reference_Referencement_Popin.refreshCountElements();
     Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying();
 };
 
@@ -329,13 +344,22 @@ Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose = function()
  */
 Hn_Reference_Referencement_Popin.refreshCountElements = function(referenceId)
 {
-    var checkedChildren = $('tr[data-reference-parent="' + referenceId + '"] input:checked');
+    if (undefined === referenceId) {
+        var lines = document.querySelectorAll('.referencement-popin tr[data-reference]');
 
-    $('tr[data-reference="' + referenceId + '"] .count-checked-children').html($(checkedChildren).size());
+        for (var i = 0; i < lines.length ; i++) {
+            var line = lines[i];
+            var next = line.nextElementSibling;
+            var count = 0;
+            while (next && parseInt(next.dataset.level) >= (parseInt(line.dataset.level) + 1)) {
+                if (parseInt(next.dataset.level) === (parseInt(line.dataset.level) + 1)) {
+                    count += next.querySelector('input[type="checkbox"]').checked ? 1 : 0;
+                }
+                next = next.nextElementSibling;
+            }
 
-    var referenceParentId = $('tr[data-reference="' + referenceId + '"]').attr('data-reference-parent');
-    if ('' != referenceParentId) {
-        Hn_Reference_Referencement_Popin.refreshCountElements(referenceParentId);
+            line.querySelector('.count-checked-children') && (line.querySelector('.count-checked-children').innerHTML = count);
+        }
     }
 };
 
