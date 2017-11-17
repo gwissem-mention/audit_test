@@ -52,7 +52,7 @@
             </td>
             <td>
                 {%- if referenceParameters.enfants|length > 0 -%}
-                    <a onclick="Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree({{ referenceParameters.reference.id }});" class="btn btn-{{ level < 2 ? 'sky' : (level <3 ? 'md' : 'sm') }}"><i class="fa fa-arrow-right"></i></a>
+                    <a onclick="Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree(this.parentNode.parentNode);" class="btn btn-{{ level < 2 ? 'sky' : (level <3 ? 'md' : 'sm') }}"><i class="fa fa-arrow-right"></i></a>
                 {%- endif -%}
             </td>
         </tr>
