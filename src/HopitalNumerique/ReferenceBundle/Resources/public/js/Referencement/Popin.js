@@ -106,7 +106,7 @@ Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree = function(el
 {
     var reference = element.dataset.reference;
     var level = parseInt(element.dataset.level);
-    var children = document.querySelectorAll('[data-level="' + (level + 1) + '"][data-reference-parent="' + reference + '"');
+    var children = document.querySelectorAll('[data-level="' + (level + 1) + '"][data-reference-parent="' + reference + '"]');
 
     var isVisible = false;
 
