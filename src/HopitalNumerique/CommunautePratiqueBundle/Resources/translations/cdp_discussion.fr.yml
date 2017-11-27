@@ -9,7 +9,7 @@ discussion:
         animator: Animateur de groupes
         discussion:
             from_group: "Discussion issue du groupe %groups% | Discussion issue des groupes %groups%"
-            from_public: Discussion est également disponible dans l'espace public
+            from_public: ATTENTION : discussion affichée dans l'espace public de discussion
             subscribed: Vous suivez cette discussion
     list:
         item:
