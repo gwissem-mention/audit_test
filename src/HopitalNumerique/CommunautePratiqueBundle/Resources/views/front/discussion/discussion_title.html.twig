@@ -36,7 +36,7 @@
 
             <span class="infos">
                 {{ 'discussion.list.item.message_count'|transchoice(discussion.messages|length, {'%messageCount%': '<b>'~discussion.messages|length~'</b>'})|raw }} -
-                {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|date('d/m/Y')~'</b>', '%author%': '<b>'~discussion.messages.last.user.prenomNom~'</b>'})|raw }}<br />
+                {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|date('d/m/Y')~'</b>', '%time%': '<b>'~discussion.messages.first.createdAt|date('H:i')~'</b>', '%author%': '<b>'~discussion.messages.last.user.prenomNom~'</b>'})|raw }}<br />
                 {{ 'discussion.list.item.created_at'|trans({'%date%': '<b>'~discussion.createdAt|date('d/m/Y')~'</b>'})|raw }}<br />
             </span>
         </a>

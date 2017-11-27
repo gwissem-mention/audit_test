@@ -11,7 +11,7 @@ discussion:
     list:
         item:
             message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
-            last_message: Dernier le %date% par %author%
+            last_message: Dernier le %date% à %time% par %author%
             created_at: Discussion créée le %date%
             new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
         presentation:
@@ -69,14 +69,14 @@ discussion:
             title: Documents
             new_document_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
             new_document_highlight: "nouveau document | nouveaux documents"
-            author: Déposé par %author% le %date%
+            author: Déposé par %author% le %date% à %time%
             is_new: NEW
     message:
         title: "Message | Messages"
         new_message_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
         new_message_highlight: "nouveau message | nouveaux messages"
         item:
-            infos: Par %author% le %date%
+            infos: Par %author% le %date% à %time%
             is_new: NEW
         actions:
             publish:
