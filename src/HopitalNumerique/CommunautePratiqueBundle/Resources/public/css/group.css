@@ -30,6 +30,10 @@
     background: #fff;
 }
 
+.group .tabs .tab.active {
+    cursor: default;
+}
+
 .group .tabs .tab .tab-title {
     color: #ec0034;
     display: block;
