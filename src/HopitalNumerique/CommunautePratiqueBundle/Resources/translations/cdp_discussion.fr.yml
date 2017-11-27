@@ -2,12 +2,15 @@ block:
     title: Discussion
 
 discussion:
+    group:
+        animator: Animateur du groupe
     public:
         title: Espace de discussion
         animator: Animateur de groupes
         discussion:
             from_group: "Discussion issue du groupe %groups% | Discussion issue des groupes %groups%"
-            from_public: Discussion issue de l'espace public
+            from_public: Discussion est également disponible dans l'espace public
+            subscribed: Vous suivez cette discussion
     list:
         item:
             message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
@@ -59,10 +62,10 @@ discussion:
                 label: Ajouter au panier
             subscription:
                 sub:
-                    label: S'abonner
+                    label: Suivre cette discussion
                     success: Vous êtes désormais abonné à cette discussion.
                 un:
-                    label: Se désabonner
+                    label: Ne plus suivre cette discussion
                     success: Vous n'êtes plus abonné à cette discussion.
 
         files:
@@ -122,3 +125,8 @@ discussion:
             author: Auteur
             creation_date: Date de création
             message: Message
+    icon_tooltip:
+        helpfulMessage: Contribution d'intérêt
+        recommended: Discussion recommandée par la communauté
+        new: Nouvelle discussion
+        newMessage: Nouveaux messages

@@ -6,31 +6,52 @@
         data-level="{{ level }}"
         data-global-position="{{ position }}"
     >
-        <a
-            href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
-            data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
-            data-discussion-id="{{ discussion.id }}"
-            class="item{{ hidden ? ' hidden' }}{{ currentDiscussion and discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}"
+        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
+           data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
+           data-discussion-id="{{ discussion.id }}"
+           class="item{{ hidden ? ' hidden' }}{{ currentDiscussion and discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}"
         >
+
             {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
-                <span class="icon new-message-badge" title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
+                <span class="icon new-message-badge"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
                     {{ discussion.newMessageCount(app.user) }}
                 </span>
             {% endif %}
 
             {% if discussion.hasHelpfulMessage %}
-                <i class="target-highlight icon fa fa-star"></i>
+            <span class="target-highlight icon fa fa-star"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  data-html="true"
+                  title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans() }}"
+            ></span>
             {% endif %}
 
             {% if discussion.recommended %}
-                <i class="icon fa fa-thumbs-o-up"></i>
+                <span class="icon fa fa-thumbs-o-up"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="{{ 'discussion.icon_tooltip.recommended'|trans() }}"
+                ></span>
             {% endif %}
 
             <span class="title">
                 {{ discussion.title }}
 
                 {% if app.user is not null and discussion.newDiscussion(app.user) > 0 %}
-                    <span class="new-flag">NEW</span>
+                    <span class="new-flag"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          data-html="true"
+                          title="{{ 'discussion.icon_tooltip.new'|trans() }}"
+                    >
+                        NEW
+                    </span>
                 {% endif %}
             </span>
 

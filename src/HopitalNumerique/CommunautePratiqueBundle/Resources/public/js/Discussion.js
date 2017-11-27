@@ -357,6 +357,30 @@ var Discussion;
                 });
             });
 
+            $('.discussion-user').on('click', function (e) {
+                e.preventDefault();
+
+                var $modal = $('#action-modal');
+                $modal.find('.modal-content').html('');
+                $modal.modal();
+
+                $.get($(this).attr('href'), function (response) {
+                    $modal.find('.modal-content').html(response);
+
+                    $modal.find('[data-toggle="tooltip"]').tooltip();
+
+                    $modal.find('.ajax-action').on('click', function (e) {
+                        e.preventDefault();
+
+                        $.post($(this).attr('href'),{}, function () {
+                            location.reload();
+                        });
+
+                        $(this).hide();
+                    })
+                });
+            });
+
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.discussion-files .filename').on('click', function (e) {
