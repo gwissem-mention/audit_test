@@ -311,7 +311,6 @@ var Discussion;
                         var $prototype = $(element + ' .file-dropzone .files .prototype .file').clone();
                         $prototype.find('.filename').text(file.name);
 
-                        $prototype.find('.insert').attr('href', Routing.generate('hopitalnumerique_fichier_view', {file: response.fileId}));
                         $prototype.find('.remove').attr('href', Routing.generate('hopitalnumerique_fichier_remove', {file: response.fileId}));
 
                         $($(element + ' .file-dropzone .files .prototype').data('prototype').replace(/__name__/g, fileCount))
@@ -331,16 +330,8 @@ var Discussion;
         },
 
         bindFileEvent: function ($element) {
-
             $element.each(function (k, e) {
-                var $e = $(e);
-                $e.find('.insert').on('click', function (e) {
-                    e.preventDefault();
-
-                    tinymce.activeEditor.execCommand('mceInsertContent', false, " <a href='"+$(this).attr('href')+"' target='_blank'>"+$e.find('.filename').text()+"</a> ");
-                });
-
-                $e.find('.remove').on('click', function (e) {
+                $(e).find('.remove').on('click', function (e) {
                     var that = this;
                     e.preventDefault();
 

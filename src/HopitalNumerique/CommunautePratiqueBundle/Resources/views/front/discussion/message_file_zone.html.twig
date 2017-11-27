@@ -6,7 +6,6 @@
                 <span class="filename"></span>
 
                 <div class="btn-group">
-                    <a href="#" class="btn btn-sm btn-success insert">Ajouter le fichier dans mon message</a>
                     <a href="#" class="btn btn-sm btn-danger remove"><i class="fa fa-times"></i></a>
                 </div>
             </div>
@@ -22,7 +21,6 @@
                     {% endfor %}
 
                     <div class="btn-group">
-                        <a href="{{ path('hopitalnumerique_fichier_view', {file: file.id}) }}" class="btn btn-sm btn-success insert">Ajouter le fichier dans mon message</a>
                         <a href="{{ path('hopitalnumerique_fichier_remove', {file: file.id}) }}" class="btn btn-sm btn-danger remove"><i class="fa fa-times"></i></a>
                     </div>
                 </div>

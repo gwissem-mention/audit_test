@@ -92,39 +92,27 @@ class MigrateCDPFicheCommand extends ContainerAwareCommand
 
         $entityManager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $filePathFinder = $this->getContainer()->get(FilePathFinder::class);
-        $router = $this->getContainer()->get('router');
         $filesystem = new Filesystem();
         $baseDir = $this->getContainer()->getParameter('kernel.root_dir');
 
-        $files = [];
         foreach ($fiche->getDocuments() as $document) {
-            $path = $baseDir.'/../'.$document->getPathname();
+            $path = $baseDir . '/../' . $document->getPathname();
 
             if (!$filesystem->exists($path)) {
                 continue;
             }
 
-            $name = uniqid().'.'.$document->getExtension();
+            $name = uniqid() . '.' . $document->getExtension();
             $file = new File($document->getLibelle(), $name, $fiche->getUser());
             $file->setActive(true);
 
-            $filesystem->copy($path, $filePathFinder->getUserFolderPath($fiche->getUser()).'/'.$name);
+            $filesystem->copy($path, $filePathFinder->getUserFolderPath($fiche->getUser()) . '/' . $name);
 
             $entityManager->persist($file);
             $message->addFile($file);
 
             $entityManager->flush();
-
-            $files[] = '<a href="'.$router->generate(
-                'hopitalnumerique_communautepratique_discussions_discussion_message_file',
-                [
-                    'message' => $message->getId(),
-                    'file' => $file->getId(),
-                ]
-            ).'">'.$document->getLibelle().'</a>';
         }
-
-        $message->setContent($message->getContent().sprintf('<p><b>Fichiers:</b><br /> %s</p>', implode('<br />', $files)));
     }
 
     /**
