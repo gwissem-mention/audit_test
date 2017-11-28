@@ -30,6 +30,10 @@ news:
 
 wall:
     item:
+        public:
+            title: Nouvelle discussion
+            authored: 'La discussion %discussion% à été rendu publique le %date%'
+            link: > Aller à la discussion
         message:
             title: Nouveau message
             authored: %author% a participé à la discussion %discussion% (%date%)

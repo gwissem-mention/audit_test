@@ -19,3 +19,12 @@ services:
             - '@twig'
         tags:
             - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Activity\ActivitySubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Activity\ActivitySubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+        tags:
+            - { name: kernel.event_subscriber }

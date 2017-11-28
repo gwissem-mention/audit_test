@@ -18,7 +18,7 @@ discussion:
             created_at: Discussion créée le %date%
             new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
         presentation:
-            message_infos: "]0,1] %count% message (le dernier le %date%)|]1, Inf[ %count% messages (le dernier le %date%)"
+            message_infos: "]0,1] %count% message (le dernier le %date%)|]1, Inf[ %count% messages (le dernier le %date% à %time%)"
         load_more: Voir plus
     new_discussion:
         text: Créer une nouvelle discussion

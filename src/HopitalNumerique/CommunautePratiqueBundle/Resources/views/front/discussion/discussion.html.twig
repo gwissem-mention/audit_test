@@ -9,7 +9,7 @@
 
     {% if isDiscussionSubscribed %}
         <span class="group">
-            <b>({{ 'discussion.public.discussion.subscribed'|trans() }})</b>
+            <b>({{ 'discussion.public.discussion.subscribed'|trans }})</b>
         </span>
     {% endif %}
 
@@ -149,7 +149,7 @@
                                 <span data-toggle="tooltip"
                                       data-placement="top"
                                       data-html="true"
-                                      title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans() }}"
+                                      title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans }}"
                                 >
                                     <i class="fa fa-star-o inactive"></i>
                                     <i class="fa fa-star active"></i>
@@ -170,7 +170,7 @@
                         {% endif %}
                     </div>
 
-                    <a class="discussion-user" href="{{ path('hopitalnumerique_communautepratique_user_details', {user: message.user.id, group: group is defined ? group.id : null}) }}">
+                    <a class="discussion-user" href="{{ path('hopitalnumerique_communautepratique_user_details', {user: message.user.id, group: group ? group.id : null}) }}">
                         {% if app.user and app.user.inscritCommunautePratique %}
                             {{ 'discussion.message.item.infos'|trans({'%author%': '<b data-toggle="tooltip" data-html="true" title="'~include('@HopitalNumeriqueCommunautePratique/front/discussion/author_tooltip.html.twig', {'user': message.user})|e~'">'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')})|raw }}
                         {% else %}
@@ -180,14 +180,15 @@
 
                     {% if message.user.communautePratiqueAnimateurGroupes.count > 0 %}
                         <span class="animator">
-                        <i class="fa fa-bullhorn"></i>
-                        {% if 'group' == scope %}
-                            {% if message.user in group.animateurs %}
-                                {{ 'discussion.group.animator'|trans }}
+                            <i class="fa fa-bullhorn"></i>
+                            {% if 'group' == scope %}
+                                {% if message.user in group.animateurs %}
+                                    {{ 'discussion.group.animator'|trans }}
+                                {% endif %}
+                            {% else %}
+                                {{ 'discussion.public.animator'|trans }}
                             {% endif %}
-                        {% else %}
-                            {{ 'discussion.public.animator'|trans }}
-                        {% endif %}
+                        </span>
                     {% endif %}
 
                     {% if isNewMessage %}
@@ -195,7 +196,7 @@
                               data-toggle="tooltip"
                               data-placement="top"
                               data-html="true"
-                              title="{{ 'discussion.icon_tooltip.new'|trans() }}"
+                              title="{{ 'discussion.icon_tooltip.new'|trans }}"
                         >
                             {{ 'discussion.message.item.is_new'|trans }}
                         </span>
