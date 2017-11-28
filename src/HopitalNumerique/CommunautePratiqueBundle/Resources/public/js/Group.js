@@ -3,8 +3,8 @@ var Group;
 (function() {
     Group = function () {
         this.$tabs = $('.group .tabs a.tab');
-
         this.init();
+        this.loadActiveTab();
     };
 
     Group.prototype = {
@@ -46,11 +46,15 @@ var Group;
                         }
                     })
                 }
-            })
+            });
+        },
+
+        loadActiveTab: function () {
+            document.querySelector('.group .tabs a.tab.active').click();
         },
 
         preOpenDiscussionTab: function () {
             $('.group .tabs a.tab.discussion').trigger('click');
-        }
+        },
     }
 })();

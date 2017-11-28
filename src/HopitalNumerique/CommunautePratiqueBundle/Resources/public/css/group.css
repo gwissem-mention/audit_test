@@ -8,6 +8,11 @@
     background: #fff;
 }
 
+.load-more-link {
+    color: #ec0034;
+    cursor: pointer;
+}
+
 .group .tabs .tab {
     display: block;
     color: #777;

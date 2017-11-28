@@ -15,3 +15,7 @@ group:
             members_count: "%countTxt% membre | %countTxt% membres"
             members_to_validate_count: "%countTxt% membre à valider | %countTxt% membres à valider"
             animators_count: "%countTxt% animateur | %countTxt% animateurs"
+    icon_tooltip:
+        return: Retour à la liste des groupes.
+    description:
+        load_more: Lire la suite...

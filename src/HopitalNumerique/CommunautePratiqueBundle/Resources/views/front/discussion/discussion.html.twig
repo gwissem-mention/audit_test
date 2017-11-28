@@ -46,7 +46,7 @@
 
             {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', {'messages': discussion.messages}) }}
 
-            {% for message in discussion.messages if message.files.count %}
+            {% for message in discussion.messages|sort|reverse if message.files.count %}
                 {% for file in message.files %}
                     {% spaceless %}
                         <div class="file">
