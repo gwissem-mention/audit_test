@@ -63,6 +63,7 @@
     margin-bottom: 5px;
     box-shadow: 0 3px 2px 0 #ddd;
     cursor: hand;
+    box-sizing: border-box !important;
 }
 
 .discussions .wrapper .list .item.droppable-over {

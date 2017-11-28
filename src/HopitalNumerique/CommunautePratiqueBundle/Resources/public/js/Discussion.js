@@ -29,6 +29,14 @@ var Discussion;
         this.$messages = this.$container.find('.message');
         this.$lazyLoadBtn = this.$list.find('.load-more');
 
+        this.activeDiscussion = {
+            element: undefined,
+            width: 0,
+            left: 0,
+            top: undefined,
+            pinned: false,
+        };
+
         this.init();
 
         if (preopenNewDiscussionModal) {
@@ -54,6 +62,7 @@ var Discussion;
                 var scrollToNewMessage = $(e.target).hasClass('new-message-badge');
 
                 var $link = $(this);
+
                 e.preventDefault();
 
                 if ($link.hasClass('dragging')) {
@@ -62,6 +71,7 @@ var Discussion;
 
                 var loader = that.$discussion.nodevoLoader().start();
 
+                that.setActiveDiscussion($(this));
                 window.history.pushState("", "", $(this).data('url'));
 
                 $.get($(this).attr('href'), function (response) {
@@ -85,9 +95,31 @@ var Discussion;
                 })
             });
 
+            that.setActiveDiscussion(that.$list.find('.item.active'));
+
             this.initEditor('#new-discussion-modal');
             this.discussionReading();
             this.dragDropEvent();
+
+            $(window).scroll(function() {
+                if ($(this).scrollTop() >= that.activeDiscussion.top) {
+                    if (!that.activeDiscussion.pinned) {
+                        that.activeDiscussion.pinned = true;
+
+                        that.activeDiscussion.element.css({
+                            position: 'fixed',
+                            left: that.activeDiscussion.left,
+                            top: 0,
+                            width: that.activeDiscussion.width,
+                            zIndex: 100
+                        });
+                    }
+                }
+
+                if (undefined !== that.activeDiscussion.top && $(this).scrollTop() < that.activeDiscussion.top) {
+                    that.resetActiveTabPosition(that.activeDiscussion.element);
+                }
+            });
         },
 
         dragDropEvent: function ()
@@ -462,6 +494,26 @@ var Discussion;
                     }
                 });
             }
+        },
+
+        setActiveDiscussion: function ($element) {
+            undefined !== this.activeDiscussion.element && this.resetActiveTabPosition(this.activeDiscussion.element);
+            this.activeDiscussion = {
+                element: $element,
+                width: $element.outerWidth(),
+                top: $element.offset().top,
+                left: $element.left,
+            };
+        },
+
+        resetActiveTabPosition: function ($tab) {
+            $tab.css({
+                position: 'relative',
+                left: 'auto',
+                zIndex: 1,
+                width: 'auto'
+            });
+            this.activeDiscussion.pinned = false;
         }
     }
 })();
