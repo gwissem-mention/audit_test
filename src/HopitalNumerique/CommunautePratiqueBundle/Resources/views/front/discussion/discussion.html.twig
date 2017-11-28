@@ -37,27 +37,7 @@
         </h3>
 
         <div id="files" class="collapse">
-            {% for message in discussion.messages if message.files.count %}
-                {% for file in message.files %}
-                    {% spaceless %}
-                        <div class="file">
-                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_file', {message: message.id, file: file.id}) }}" class="download" target="_blank">
-                                <i class="fa fa-download"></i>
-                            </a>
-
-                            <a href="#" class="filename" data-message-id="{{ message.id }}">{{ file.clientName }}</a>
-
-                            <span class="author">
-                                {{ 'discussion.discussion.files.author'|trans({'%author%': message.user.prenomNom, '%date%': message.createdAt|date('d/m/Y')}) }}
-                            </span>
-
-                            {% if app.user and discussion.isNewMessage(app.user, message) %}
-                                <span class="is-new">{{ 'discussion.message.item.is_new'|trans }}</span>
-                            {% endif %}
-                        </div>
-                    {% endspaceless %}
-                {% endfor %}
-            {% endfor %}
+            {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', {'messages': discussion.messages}) }}
         </div>
     </div>
 {% endif %}
@@ -192,6 +172,9 @@
                     {% else %}
                         {{ message.content|parsePublication|unescape }}
                     {% endif %}
+                </div>
+                <div class="message-documents discussion-files">
+                    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', { 'messages': [message], scrollTo: false }) }}
                 </div>
             </div>
         </div>

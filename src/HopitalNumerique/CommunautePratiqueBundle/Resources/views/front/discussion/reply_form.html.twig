@@ -20,6 +20,7 @@
                 {{ form_start(form) }}
 
                     {{ form_widget(form.content, {'attr': {'class': 'validate[required] content'}}) }}
+                    {{ form_errors(form.content) }}
 
                     {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/message_file_zone.html.twig', {'files': form.files, 'message': message is defined ? message : null}) }}
 

@@ -6,11 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
-use HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\ReplaceMessageFileLink;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Repository\FileRepository;
-use HopitalNumerique\UserBundle\Event\UserEvent;
-use HopitalNumerique\UserBundle\UserEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PostDiscussionMessageHandler
@@ -31,28 +28,20 @@ class PostDiscussionMessageHandler
     protected $fileRepository;
 
     /**
-     * @var ReplaceMessageFileLink $replaceFileLink
-     */
-    protected $replaceFileLink;
-
-    /**
      * PostDiscussionMessageHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param EntityManagerInterface $entityManager
      * @param FileRepository $fileRepository
-     * @param ReplaceMessageFileLink $replaceFileLink
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface $entityManager,
-        FileRepository $fileRepository,
-        ReplaceMessageFileLink $replaceFileLink
+        FileRepository $fileRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->entityManager = $entityManager;
         $this->fileRepository = $fileRepository;
-        $this->replaceFileLink = $replaceFileLink;
     }
 
     /**
@@ -84,8 +73,6 @@ class PostDiscussionMessageHandler
         }
 
         $this->entityManager->flush($message);
-
-        $this->replaceFileLink->replaceFilesLink($message);
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
 

@@ -60,6 +60,8 @@ class FileVoter extends Voter
     }
 
     /**
+     * Checks if file can be deleted by current user.
+     *
      * @param File $file
      * @param User $user
      *
@@ -67,15 +69,7 @@ class FileVoter extends Voter
      */
     protected function canDelete(File $file, User $user)
     {
-        if (!$this->canView($file, $user)) {
-            return false;
-        }
-
-        if ($file->isActive() === false) {
-            return true;
-        }
-
-        return false;
+        return $this->canView($file, $user);
     }
 
     /**

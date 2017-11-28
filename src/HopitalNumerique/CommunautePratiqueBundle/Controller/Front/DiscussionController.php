@@ -87,8 +87,7 @@ class DiscussionController extends Controller
             }
             $newDiscussionForm = $this->createForm(CreateDiscussionType::class, $newDiscussionCommand, [
                 'action' => $action,
-            ])->createView()
-            ;
+            ])->createView();
         }
 
         if ($this->isGranted(DiscussionVoter::REPLY) && $discussion) {
@@ -109,7 +108,7 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        $options= [
+        $options = [
             'isDiscussionSubscribed' => isset($discussionSubscribed) ? $discussionSubscribed : false,
             'preopenNewDiscussionModal' => isset($newDiscussionForm) && $object,
             'group' => $group,
@@ -124,7 +123,7 @@ class DiscussionController extends Controller
         if ($group) {
             $response = $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussions.html.twig', $options);
         } else {
-            $response =  $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', $options);
+            $response = $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/public.html.twig', $options);
         }
 
         if ($discussion && $this->getUser()) {
