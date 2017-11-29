@@ -1,6 +1,6 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-{% for message in discussion.messages|sort|reverse if message.files.count %}
+{% for message in messages|sort|reverse if message.files.count %}
     {% for file in message.files %}
         {% spaceless %}
             <div class="file">
