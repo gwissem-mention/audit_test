@@ -505,7 +505,31 @@ class DiscussionController extends Controller
 
         $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new ActivityRegistrationEvent($discussion));
 
-        $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.public.success', [], 'cdp_discussion'));
+        if (!$discussion->isPublic()) {
+            // Unsubscribe users if is not in group of discussion.
+            $subscribers = $this->get(UserSubscription::class)->listSubscribed($discussion);
+            foreach ($subscribers as $subscriber) {
+                $user = $subscriber->getUser();
+                $hasGroup = false;
+                if (!empty($user)) {
+                    foreach ($user->getCommunautePratiqueGroupes() as $group) {
+                        $hasGroup = $discussion->getGroups()->contains($group);
+                    }
+                }
+
+                if (!$hasGroup) {
+                    $this->get(UserSubscription::class)->unsubscribe($discussion, $user);
+                }
+            }
+        }
+
+        if ($discussion->isPublic()) {
+            $translation = 'discussion.discussion.actions.public.success';
+        } else {
+            $translation = 'discussion.discussion.actions.private.success';
+        }
+
+        $this->addFlash('success', $this->get('translator')->trans($translation, [], 'cdp_discussion'));
 
         return $this->redirectResponse($group, $discussion);
     }

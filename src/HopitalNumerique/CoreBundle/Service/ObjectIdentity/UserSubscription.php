@@ -82,4 +82,14 @@ class UserSubscription
     {
         return null !== $this->subscriptionRepository->findOneBy(['objectIdentity' => ObjectIdentity::createFromDomainObject($object), 'user' => $user]);
     }
+
+    /**
+     * @param mixed $object
+     *
+     * @return bool
+     */
+    public function listSubscribed($object)
+    {
+        return $this->subscriptionRepository->findBy(['objectIdentity' => ObjectIdentity::createFromDomainObject($object)]);
+    }
 }
