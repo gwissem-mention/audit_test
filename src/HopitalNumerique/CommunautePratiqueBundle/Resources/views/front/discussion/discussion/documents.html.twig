@@ -1,6 +1,6 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-{% for message in messages if message.files.count %}
+{% for message in discussion.messages|sort|reverse if message.files.count %}
     {% for file in message.files %}
         {% spaceless %}
             <div class="file">
@@ -17,7 +17,7 @@
                 {% endif %}
 
                 <span class="author">
-                    {{ 'discussion.discussion.files.author'|trans({'%author%': message.user.prenomNom, '%date%': message.createdAt|date('d/m/Y')}) }}
+                    {{ 'discussion.discussion.files.author'|trans({'%author%': message.user.prenomNom, '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')}) }}
                 </span>
 
                 {% if app.user and discussion.isNewMessage(app.user, message) %}
