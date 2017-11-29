@@ -6,20 +6,26 @@
         <span class="title">
             {{ 'wall.item.opened_group.title'|trans }}
         </span>
+        <span class="author">
+            ({{ item.date|date('d/m/Y H:i') }})
+        </span>
     </div>
 
     <div class="content">
-        {{ 'wall.item.opened_group.content'|trans({'%groupName%': item.group.titre}) }}
-
+        {% set link = 'hopitalnumerique_communautepratique_groupe_inscrit' %}
         {% if item.registered %}
-            <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {groupe: item.group.id}) }}" class="link">
-                {{ 'wall.item.opened_group.link'|trans }}
-            </a>
-        {% else %}
-            <a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', {groupe: item.group.id}) }}" class="link">
-                {{ 'wall.item.opened_group.link'|trans }}
-            </a>
+            {% set link = 'hopitalnumerique_communautepratique_groupe_view' %}
         {% endif %}
+
+        <a href="{{ path(link, {groupe: item.group.id}) }}"
+           class="link"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.opened_group.link'|trans }}"
+        >
+            {{ 'wall.item.opened_group.content'|trans({'%groupName%': item.group.titre}) }}
+        </a>
     </div>
 
 </div>

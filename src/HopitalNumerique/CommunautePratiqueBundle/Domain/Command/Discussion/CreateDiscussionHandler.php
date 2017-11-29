@@ -68,6 +68,7 @@ class CreateDiscussionHandler
 
         $messageCommand = new PostDiscussionMessageCommand($discussion, $command->author);
         $messageCommand->content = $command->content;
+        $messageCommand->createdAt = $discussion->getCreatedAt();
         $messageCommand->files = $command->files;
         $this->postMessageHandler->handle($messageCommand);
 

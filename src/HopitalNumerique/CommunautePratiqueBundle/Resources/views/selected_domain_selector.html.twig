@@ -2,6 +2,7 @@
 
 {% if availableDomains|length > 1 %}
     <span class="domain_selector_wrapper">
+        <span>{{ 'selector.title'|trans }}</span>
         <select id="cdpSelectedDomain" data-uri="{{ path('hopitalnumerique_communautepratique_selected_domain_set') }}">
             {% for domain in availableDomains %}
                 <option value="{{ domain.id }}"{{ selectedDomain is not null and selectedDomain.id == domain.id ? " selected"}}>{{ domain.nom }}</option>

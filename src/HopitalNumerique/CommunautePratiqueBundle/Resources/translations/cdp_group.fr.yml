@@ -18,4 +18,4 @@ group:
     icon_tooltip:
         return: Retour à la liste des groupes.
     description:
-        load_more: Lire la suite...
+        load_more: > Lire la suite

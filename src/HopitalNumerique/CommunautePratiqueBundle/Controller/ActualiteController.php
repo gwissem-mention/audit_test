@@ -37,9 +37,8 @@ class ActualiteController extends Controller
 
         $cdpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
 
-
         return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
-            'currentUri' => base64_encode($request->getUri()),
+            'currentUri' => str_replace('=', '', base64_encode($request->getUri())),
             'publicDiscussionCount' => $discussionRepository->getPublicDiscussionCount($selectedDomain),
             'publicMessageCount' => $messageRepository->getPublicMessageCount($selectedDomain),
             'groupMessageCount' => $messageRepository->getGroupMessageCount($selectedDomain, $this->getUser()),

@@ -7,38 +7,41 @@
             {{ 'wall.item.new_member.title'|trans }}
         </span>
         <span class="author">
-
+            ({{ item.date|date('d/m/Y H:i') }})
         </span>
     </div>
 
     <div class="content">
-        {% set organization = null %}
-        {% if item.user.organization %}
-            {% set organization = item.user.organization.nom %}
-        {% else %}
-            {% set organization = item.user.organizationLabel %}
-        {% endif %}
-
-        {% if not app.user or app.user.inscritCommunautePratique == false %}
-            {% if organization %}
-                {{ 'wall.item.new_member.content.public.organization'|trans({'%organization%': organization}) }}
+        <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}"
+           class="link"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.new_member.link'|trans }}"
+        >
+            {% set organization = null %}
+            {% if item.user.organization %}
+                {% set organization = item.user.organization.nom %}
             {% else %}
-                {{ 'wall.item.new_member.content.public.without_organization'|trans({'%organization%': organization}) }}
+                {% set organization = item.user.organizationLabel %}
             {% endif %}
-        {% endif %}
-
-        {% if item.user.jobLabel and organization %}
-            {{ 'wall.item.new_member.content.private.both'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-        {% elseif item.user.jobLabel %}
-            {{ 'wall.item.new_member.content.private.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-        {% elseif organization %}
-            {{ 'wall.item.new_member.content.private.organization'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-        {% else %}
-            {{ 'wall.item.new_member.content.private.none'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-        {% endif %}
-
-        <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
-            {{ 'wall.item.new_member.link'|trans }}
+            {% if not app.user or app.user.inscritCommunautePratique == false %}
+                {% if organization %}
+                    {{ 'wall.item.new_member.content.public.organization'|trans({'%organization%': organization}) }}
+                {% else %}
+                    {{ 'wall.item.new_member.content.public.without_organization'|trans({'%organization%': organization}) }}
+                {% endif %}
+            {% else %}
+                {% if item.user.jobLabel and organization %}
+                    {{ 'wall.item.new_member.content.private.both'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                {% elseif item.user.jobLabel %}
+                    {{ 'wall.item.new_member.content.private.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                {% elseif organization %}
+                    {{ 'wall.item.new_member.content.private.organization'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                {% else %}
+                    {{ 'wall.item.new_member.content.private.none'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                {% endif %}
+            {% endif %}
         </a>
     </div>
 

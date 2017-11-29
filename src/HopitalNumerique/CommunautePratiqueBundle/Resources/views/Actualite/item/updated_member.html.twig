@@ -7,7 +7,7 @@
             {{ 'wall.item.updated_member.title'|trans }}
         </span>
         <span class="author">
-
+            ({{ item.date|date('d/m/Y H:i') }})
         </span>
     </div>
 
@@ -16,13 +16,22 @@
         {% if item.user.organization %}
             {% set organization = item.user.organization.nom %}
         {% else %}
-            {% set organization = item.user.nomEtablissement %}
+            {% set organization = item.user.organizationLabel %}
         {% endif %}
 
-        {{ 'wall.item.updated_member.content'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+        <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: item.user.id, group: null}) }}"
+           class="link item-modal"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.updated_member.link'|trans }}"
+        >
+            {% if organization %}
+                {{ 'wall.item.updated_member.content'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+            {% else %}
+                {{ 'wall.item.updated_member.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel}) }}
+            {% endif %}
 
-        <a href="{{ path('hopitalnumerique_communautepratique_user_list', {membreId: item.user.id}) }}" class="link">
-            {{ 'wall.item.updated_member.link'|trans }}
         </a>
     </div>
 

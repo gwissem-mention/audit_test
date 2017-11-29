@@ -7,15 +7,19 @@
             {{ 'wall.item.public.title'|trans }}
         </span>
         <span class="author">
-            {{ 'wall.item.public.authored'|trans({'%discussion%': item.title, '%date%': item.date|date('d/m/Y')}) }}
+            {{ 'wall.item.public.authored'|trans({'%discussion%': item.title, '%date%': item.date|date('d/m/Y'), '%time%': item.date|date('H:i')}) }}
         </span>
     </div>
 
     <div class="content">
-        {{ item.content|parsePublication|striptags|unescape|truncate(200) }}
-
-        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.discussion.id}) }}" class="link">
-            {{ 'wall.item.public.link'|trans }}
+        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.discussion.id}) }}"
+           class="link"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.public.link'|trans }}"
+        >
+            {{ item.content|parsePublication|striptags|unescape|truncate(200) }}
         </a>
     </div>
 
