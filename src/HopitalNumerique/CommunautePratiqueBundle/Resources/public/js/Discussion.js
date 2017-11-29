@@ -484,7 +484,6 @@ var Discussion;
                 $('.discussion-domains select').on('change', function (e) {
                     var $form = $(this).parents('form');
 
-
                     if ($form.find('select option:selected:enabled').length) {
                         var loader = $form.nodevoLoader().start();
 

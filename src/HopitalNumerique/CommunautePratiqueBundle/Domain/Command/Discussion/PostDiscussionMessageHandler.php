@@ -54,6 +54,9 @@ class PostDiscussionMessageHandler
             $message->setContent($command->content);
         } else {
             $message = new Message($command->discussion, $command->content, $command->author);
+            if ($command->createdAt) {
+                $message->setCreatedAt($command->createdAt);
+            }
             $this->entityManager->persist($message);
         }
 

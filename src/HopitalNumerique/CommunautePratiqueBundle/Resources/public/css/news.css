@@ -47,7 +47,7 @@
     border: 1px solid #ddd;
     display: flex;
     flex-wrap: wrap;
-    padding: 0 16px;
+    padding: 0 16px 16px;
 }
 
 .news-wall .item {
@@ -78,16 +78,11 @@
 .news-wall .item .content {
     border: 1px solid #ddd;
     padding: 8px;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .news-wall .item .link {
     display: block;
-    padding: 8px 0 0;
-    color: #777;
-    font-size: 11px;
-}
-
-.news-wall .item .link:hover {
-    color: #ec0034;
+    color: #000;
+    font-size: 12px;
 }

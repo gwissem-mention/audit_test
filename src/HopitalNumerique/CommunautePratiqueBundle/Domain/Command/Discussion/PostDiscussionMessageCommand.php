@@ -42,6 +42,11 @@ class PostDiscussionMessageCommand
     public $biography;
 
     /**
+     * @var \DateTime|null
+     */
+    public $createdAt = null;
+
+    /**
      * PostDiscussionMessageCommand constructor.
      *
      * @param Discussion $discussion
