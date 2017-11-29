@@ -97,6 +97,9 @@
                         {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'down' : 'up'))|trans }}
                     </option>
                 {% endif %}
+                {% if discussion.getMessagesFiles.count > 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_document_discussion', {'discussion': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.full'|trans }}</option>
+                {% endif %}
             </select>
         </div>
     </div>
