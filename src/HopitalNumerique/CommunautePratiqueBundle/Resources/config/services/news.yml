@@ -26,6 +26,15 @@ services:
         tags:
             - { name: cdp.wall_item_retriever, alias: closed_group }
 
+    HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\ActivityItemRetriever:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\ActivityItemRetriever
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@security.token_storage'
+        tags:
+            - { name: cdp.wall_item_retriever, alias: activity }
+
 
     HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\OpenedGroupItemRetriever:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\News\Retriever\OpenedGroupItemRetriever

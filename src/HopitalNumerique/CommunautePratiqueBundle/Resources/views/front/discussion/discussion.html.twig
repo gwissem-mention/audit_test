@@ -7,6 +7,12 @@
 <div class="discussion-title">
     <h2>{{ discussion.title }}</h2>
 
+    {% if isDiscussionSubscribed %}
+        <span class="group">
+            <b>({{ 'discussion.public.discussion.subscribed'|trans }})</b>
+        </span>
+    {% endif %}
+
     {% if discussion.creationPosition is constant('CREATED_IN_GROUP', discussion) and discussion.groups|length and scope == 'public' %}
         <div class="group">
             {% set groupsLabel = [] %}
@@ -37,7 +43,30 @@
         </h3>
 
         <div id="files" class="collapse">
+
             {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', {'messages': discussion.messages}) }}
+
+            {% for message in discussion.messages|sort|reverse if message.files.count %}
+                {% for file in message.files %}
+                    {% spaceless %}
+                        <div class="file">
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_file', {message: message.id, file: file.id}) }}" class="download" target="_blank">
+                                <i class="fa fa-download"></i>
+                            </a>
+
+                            <a href="#" class="filename" data-message-id="{{ message.id }}">{{ file.clientName }}</a>
+
+                            <span class="author">
+                                {{ 'discussion.discussion.files.author'|trans({'%author%': message.user.prenomNom, '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')}) }}
+                            </span>
+
+                            {% if app.user and discussion.isNewMessage(app.user, message) %}
+                                <span class="is-new">{{ 'discussion.message.item.is_new'|trans }}</span>
+                            {% endif %}
+                        </div>
+                    {% endspaceless %}
+                {% endfor %}
+            {% endfor %}
         </div>
     </div>
 {% endif %}
@@ -117,8 +146,14 @@
                     <div class="actions">
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::MARK_AS_HELPFUL'), message) %}
                             <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_helpful', {'message': message.id}) }}" class="helpful{{ message.helpful ? ' active' }}">
-                                <i class="fa fa-star-o inactive"></i>
-                                <i class="fa fa-star active"></i>
+                                <span data-toggle="tooltip"
+                                      data-placement="top"
+                                      data-html="true"
+                                      title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans }}"
+                                >
+                                    <i class="fa fa-star-o inactive"></i>
+                                    <i class="fa fa-star active"></i>
+                                </span>
                             </a>
                         {% endif %}
 
@@ -134,21 +169,37 @@
                             </a>
                         {% endif %}
                     </div>
-                    {% if app.user and app.user.inscritCommunautePratique %}
-                        {{ 'discussion.message.item.infos'|trans({'%author%': '<b data-toggle="tooltip" data-html="true" title="'~include('@HopitalNumeriqueCommunautePratique/front/discussion/author_tooltip.html.twig', {'user': message.user})|e~'">'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y')})|raw }}
-                    {% else %}
-                        {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y')})|raw }}
-                    {% endif %}
+
+                    <a class="discussion-user" href="{{ path('hopitalnumerique_communautepratique_user_details', {user: message.user.id, group: group ? group.id : null}) }}">
+                        {% if app.user and app.user.inscritCommunautePratique %}
+                            {{ 'discussion.message.item.infos'|trans({'%author%': '<b data-toggle="tooltip" data-html="true" title="'~include('@HopitalNumeriqueCommunautePratique/front/discussion/author_tooltip.html.twig', {'user': message.user})|e~'">'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')})|raw }}
+                        {% else %}
+                            {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')})|raw }}
+                        {% endif %}
+                    </a>
 
                     {% if message.user.communautePratiqueAnimateurGroupes.count > 0 %}
                         <span class="animator">
                             <i class="fa fa-bullhorn"></i>
-                            {{ 'discussion.public.animator'|trans }}
+                            {% if 'group' == scope %}
+                                {% if message.user in group.animateurs %}
+                                    {{ 'discussion.group.animator'|trans }}
+                                {% endif %}
+                            {% else %}
+                                {{ 'discussion.public.animator'|trans }}
+                            {% endif %}
                         </span>
                     {% endif %}
 
                     {% if isNewMessage %}
-                        <span class="is-new">{{ 'discussion.message.item.is_new'|trans }}</span>
+                        <span class="is-new"
+                              data-toggle="tooltip"
+                              data-placement="top"
+                              data-html="true"
+                              title="{{ 'discussion.icon_tooltip.new'|trans }}"
+                        >
+                            {{ 'discussion.message.item.is_new'|trans }}
+                        </span>
                     {% endif %}
                 </div>
                 <div class="message-body">
@@ -185,11 +236,8 @@
     {% endif %}
 </div>
 
-
 <div class="modal fade" tabindex="-1" role="dialog" id="action-modal">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-        </div>
+        <div class="modal-content"></div>
     </div>
 </div>

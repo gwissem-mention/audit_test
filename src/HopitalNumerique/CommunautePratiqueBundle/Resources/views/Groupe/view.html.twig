@@ -26,7 +26,13 @@
 
 {% block communaute_pratique_actions_before %}
     <div class="clearfix"></div>
-    <a href="{{ path('hopitalnumerique_communautepratique_news_index') }}" class="btn btn-default btn-sm pull-left">
+    <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"
+       class="btn btn-default btn-sm pull-left"
+       data-toggle="tooltip"
+       data-placement="top"
+       data-html="true"
+       title="{{ 'group.icon_tooltip.return'|trans }}"
+    >
         <i class="fa fa-reply"></i>
     </a>
     {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
@@ -47,12 +53,13 @@
     <div class="group">
         <div class="tabs">
 
-            <a href="#description" class="tab active">
+            <a href="#description" class="tab">
                 <span class="tab-title">{{ 'group.tabs.description.title'|trans }}</span>
-                {{ groupe.descriptionCourte }}
+                {{ groupe.descriptionCourte|parsePublication|striptags|unescape|truncate(140) }}
+                <span data-toggle="modal" data-target="#description-details-modal" class="load-more-link">{{ 'group.description.load_more'|trans }}</span>
             </a>
 
-            <a href="#discussion" class="tab discussion ajax">
+            <a href="#discussion" class="tab discussion ajax active">
                 <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
 
                 {% if (discussionCounter.message + discussionCounter.document + discussionCounter.discussion) > 0%}
@@ -115,6 +122,22 @@
                 data-content-uri-to-validate="{{ path('hopitalnumerique_communautepratique_user_listbygroupe_filtered', {'groupe': groupe.id}) }}"
             >
                 <h2>{{ 'group.tabs.members.title'|trans }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="description-details modal fade" id="description-details-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="group">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'group.tabs.description.title'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ groupe.descriptionCourte }}
+                </div>
             </div>
         </div>
     </div>

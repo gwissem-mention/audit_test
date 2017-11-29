@@ -4,6 +4,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Activity\ActivityRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\FichierBundle\Entity\File;
@@ -500,6 +502,8 @@ class DiscussionController extends Controller
     {
         $discussion->setPublic(!$discussion->isPublic());
         $this->getDoctrine()->getManager()->flush();
+
+        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new ActivityRegistrationEvent($discussion));
 
         $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.public.success', [], 'cdp_discussion'));
 

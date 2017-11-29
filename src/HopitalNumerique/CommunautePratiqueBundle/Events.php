@@ -31,4 +31,9 @@ final class Events
      * Occurs when a discussion is created
      */
     const DISCUSSION_CREATED = 'communautepratique.discussion.discussion_created';
+
+    /**
+     * Occurs when a discussion was set in public
+     */
+    const DISCUSSION_PUBLIC = 'communautepratique.discussion.discussion_public';
 }

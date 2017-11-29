@@ -1,6 +1,13 @@
 {% trans_default_domain 'cdp_discussion' %}
 
 {% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-discussion-group.js"
+    'bundles/hopitalnumeriquecommunautepratique/js/Directory.js'
+    %}
+
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script type="text/javascript">
         $(document).ready(function() {
             new Discussion('{{ scope }}', {{ is_granted('REORDER_DISCUSSION') ? 'true' : 'false' }}, {{ preopenNewDiscussionModal ? 'true' : 'false' }});

@@ -8,6 +8,11 @@
     background: #fff;
 }
 
+.load-more-link {
+    color: #ec0034;
+    cursor: pointer;
+}
+
 .group .tabs .tab {
     display: block;
     color: #777;
@@ -28,6 +33,10 @@
     border-top-color: #ec0034;
     border-bottom-color: #fff;
     background: #fff;
+}
+
+.group .tabs .tab.active {
+    cursor: default;
 }
 
 .group .tabs .tab .tab-title {
