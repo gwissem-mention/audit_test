@@ -5,7 +5,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\EventListener\Activity;
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Activity;
 use HopitalNumerique\CommunautePratiqueBundle\Enum\ActivityEnum;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Activity\ActivityRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
@@ -59,9 +59,9 @@ class ActivitySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param ActivityRegistrationEvent $event
+     * @param DiscussionVisibilityEvent $event
      */
-    public function savePublicActivity(ActivityRegistrationEvent $event)
+    public function savePublicActivity(DiscussionVisibilityEvent $event)
     {
         $objectIdentity = $this->objectIdentityRepository->findOrCreate(
             ObjectIdentity::createFromDomainObject($event->getDiscussion())

@@ -48,11 +48,13 @@ discussion:
             public:
                 label:
                     up: Rendre cette discussion publique
-                    down: Rendre cette discussion privée
+                    down: Retirer cette discussion de l'espace public
                 confirm:
                     up: Êtes vous sûr de vouloir rendre cette discussion publique ?
                     down: Êtes vous sûr de vouloir rendre cette discussion privée ?
                 success: Discussion copiée dans l'espace public.
+            private:
+                success: Discussion rendu dans l'espace privée.
             group_copy:
                 label: Copier dans un groupe
                 success: Discussion copiée dans le groupe.

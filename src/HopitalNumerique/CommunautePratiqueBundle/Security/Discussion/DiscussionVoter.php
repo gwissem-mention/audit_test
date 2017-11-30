@@ -12,6 +12,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
  */
 class DiscussionVoter extends Voter
 {
+    const ACCESS = 'ACCESS';
     const CREATE = 'cdp_discussion_create';
     const REPLY = 'cdp_discussion_reply';
     const MARK_AS_RECOMMENDED = 'mark_as_recommended';
@@ -31,6 +32,7 @@ class DiscussionVoter extends Voter
     protected function supports($attribute, $subject)
     {
         if (!in_array($attribute, [self::SET_AS_PUBLIC,
+            self::ACCESS,
             self::MANAGE_DOMAINS,
             self::SUBSCRIBE,
             self::REORDER,
@@ -57,6 +59,12 @@ class DiscussionVoter extends Voter
     {
         $user = $token->getUser();
 
+        switch ($attribute) {
+            case self::ACCESS:
+            case self::REPLY:
+                return $this->canAccess($user, $subject);
+        }
+
         if (!$user instanceof User) {
             return false;
         }
@@ -71,7 +79,6 @@ class DiscussionVoter extends Voter
             case self::MANAGE_DOMAINS:
                 return $this->canManage($user);
             case self::CREATE:
-            case self::REPLY:
             case self::DOWNLOAD:
             case self::SUBSCRIBE:
                 return $this->canCreate($user);
@@ -146,6 +153,35 @@ class DiscussionVoter extends Voter
 
         if ($user->isInscritCommunautePratique()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param User|null $user
+     * @param Discussion $discussion
+     *
+     * @return bool
+     */
+    public function canAccess(User $user = null, Discussion $discussion)
+    {
+        if ($discussion->isPublic()) {
+            return true;
+        }
+
+        if (null === $user) {
+            return false;
+        }
+
+        if ($this->canManage($user)) {
+            return true;
+        }
+
+        foreach ($discussion->getGroups() as $group) {
+            if ($user->isRegisteredInCDPGroup($group)) {
+                return true;
+            }
         }
 
         return false;

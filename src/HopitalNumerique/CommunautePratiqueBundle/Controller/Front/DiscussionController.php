@@ -4,7 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Activity\ActivityRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
@@ -61,7 +61,8 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussion ?: ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
+
+        $discussion = $discussion && in_array($discussion, $discussions) && $this->isGranted('ACCESS', $discussion) ? $discussion : ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
         if ($discussion instanceof Discussion) {
             $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
                 DiscussionDisplayQuery::createPublicDiscussionQuery(
@@ -92,7 +93,7 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        if ($this->isGranted(DiscussionVoter::REPLY) && $discussion) {
+        if ($discussion && $this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, new PostDiscussionMessageCommand($discussion, $this->getUser()), [
                 'action' => $this->generateUrl(
                     'hopitalnumerique_communautepratique_discussions_reply_discussion',
@@ -279,6 +280,8 @@ class DiscussionController extends Controller
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $group, $this->getUser()));
+
+        $this->denyAccessUnlessGranted('ACCESS', $discussion);
 
         if ($this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
@@ -533,9 +536,15 @@ class DiscussionController extends Controller
         $discussion->setPublic(!$discussion->isPublic());
         $this->getDoctrine()->getManager()->flush();
 
-        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new ActivityRegistrationEvent($discussion));
+        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new DiscussionVisibilityEvent($discussion));
 
-        $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.public.success', [], 'cdp_discussion'));
+        if ($discussion->isPublic()) {
+            $translation = 'discussion.discussion.actions.public.success';
+        } else {
+            $translation = 'discussion.discussion.actions.private.success';
+        }
+
+        $this->addFlash('success', $this->get('translator')->trans($translation, [], 'cdp_discussion'));
 
         return $this->redirectResponse($group, $discussion);
     }
