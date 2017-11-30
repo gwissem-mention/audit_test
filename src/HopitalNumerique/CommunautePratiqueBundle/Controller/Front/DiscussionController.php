@@ -443,7 +443,7 @@ class DiscussionController extends Controller
      */
     public function downloadFullDocumentDiscussionAction(Discussion $discussion)
     {
-        $zipName = $discussion->getTitle();
+	$zipName = stream_get_meta_data(tmpfile())['uri'];
         $zip = new \ZipArchive();
 
         $zip->open($zipName, $zip::CREATE);
@@ -455,13 +455,8 @@ class DiscussionController extends Controller
         }
 
         $zip->close();
-        header('Content-Type', 'application/zip');
-        header('Content-disposition: attachment; filename="' . $zipName . '.zip"');
-        header('Content-Length: ' . filesize($zipName));
 
-        readfile($zipName);
-
-        unlink($zipName);
+	return new BinaryFileResponse($zipName);
     }
 
     /**
