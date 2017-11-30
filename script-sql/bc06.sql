@@ -1,3 +1,18 @@
+/** BC05 **/
+CREATE TABLE hn_objet_subscription (comm_id INT AUTO_INCREMENT NOT NULL COMMENT 'Subscription id', objet_id INT DEFAULT NULL COMMENT 'ID de l objet', contenu_id INT DEFAULT NULL COMMENT 'ID du contenu', user_id INT DEFAULT NULL, creationDate DATETIME NOT NULL COMMENT 'Subscription creation date time', INDEX IDX_23FA45D6F520CF5A (objet_id), INDEX IDX_23FA45D63C1CC488 (contenu_id), INDEX IDX_23FA45D6A76ED395 (user_id), PRIMARY KEY(comm_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE hn_notification (id INT AUTO_INCREMENT NOT NULL COMMENT 'Notification id', uniqueId VARCHAR(32) NOT NULL COMMENT 'This id is used to deduplicate', notificationCode VARCHAR(100) NOT NULL COMMENT 'Notification code', title VARCHAR(255) NOT NULL COMMENT 'Notification title', detail LONGTEXT DEFAULT NULL COMMENT 'Notification detail', data LONGTEXT DEFAULT NULL COMMENT 'Notification additional data(DC2Type:array)', frequency VARCHAR(10) NOT NULL COMMENT 'Notification frequency (daily,weekly,straight,off)', detailLevel SMALLINT NOT NULL COMMENT 'Notification level of details (0 is lowest detail)', scheduleFor DATETIME NOT NULL COMMENT 'Notification sending scheduled date time', createdAt DATETIME NOT NULL COMMENT 'Notification creation date time', userId INT DEFAULT NULL, INDEX IDX_F75902CB64B64DCC (userId), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE hn_notification_user_settings (id INT AUTO_INCREMENT NOT NULL COMMENT 'Notification settings unique id', notificationCode VARCHAR(100) NOT NULL COMMENT 'Notification code', userId VARCHAR(255) NOT NULL, frequency VARCHAR(10) NOT NULL COMMENT 'Notification frequency (daily,weekly,straight,off)', detailLevel TINYINT(1) NOT NULL COMMENT 'Notification level of details (0 is lowest detail)', scheduleDay SMALLINT DEFAULT NULL COMMENT 'Schedule day (1 to 7)', scheduleHour SMALLINT DEFAULT NULL COMMENT 'Schedule time (0 to 23)', createdAt DATETIME NOT NULL COMMENT 'Setting creation date time', updatedAt DATETIME DEFAULT NULL COMMENT 'Setting update date time', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE hn_objet_subscription ADD CONSTRAINT FK_23FA45D6F520CF5A FOREIGN KEY (objet_id) REFERENCES hn_objet (obj_id) ON DELETE CASCADE;
+ALTER TABLE hn_objet_subscription ADD CONSTRAINT FK_23FA45D63C1CC488 FOREIGN KEY (contenu_id) REFERENCES hn_objet_contenu (con_id) ON DELETE CASCADE;
+ALTER TABLE hn_objet_subscription ADD CONSTRAINT FK_23FA45D6A76ED395 FOREIGN KEY (user_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+ALTER TABLE hn_notification ADD CONSTRAINT FK_F75902CB64B64DCC FOREIGN KEY (userId) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+ALTER TABLE hn_objet_note ADD note_commentaire VARCHAR(255) DEFAULT NULL;
+ALTER TABLE hn_guided_search ADD updatedAt DATETIME DEFAULT NULL COMMENT 'Keeps last user risk update date for guided search.';
+ALTER TABLE hn_communautepratique_groupe ADD group_new TINYINT(1) DEFAULT '0' NOT NULL;
+
+
+
+/** BC06 **/
 CREATE TABLE hn_communautepratique_groupe_domain (group_id INT UNSIGNED NOT NULL, dom_id INT NOT NULL, INDEX IDX_F07BC6D6FE54D947 (group_id), INDEX IDX_F07BC6D669893F8F (dom_id), PRIMARY KEY(group_id, dom_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE hn_communautepratique_groupe_domain ADD CONSTRAINT FK_F07BC6D669893F8F FOREIGN KEY (dom_id) REFERENCES hn_domaine (dom_id) ON DELETE CASCADE;
 ALTER TABLE hn_communautepratique_groupe_domain ADD CONSTRAINT FK_F07BC6D6FE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id) ON DELETE CASCADE;
