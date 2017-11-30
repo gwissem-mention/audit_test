@@ -206,7 +206,7 @@ class Groupe
     /**
      * @ORM\Column(name="group_new", type="boolean", nullable=false, options={"default"=false})
      */
-    protected $isNew;
+    protected $isNew = false;
 
     /**
      * Constructor.
@@ -607,9 +607,10 @@ class Groupe
      */
     public function addUser(User $users, $autoValidate = false)
     {
-        $this->addInscription(new Inscription($this, $users, $autoValidate));
+        $registration = new Inscription($this, $users, $autoValidate);
+        $this->addInscription($registration);
 
-        return $register;
+        return $registration;
     }
 
     /**
