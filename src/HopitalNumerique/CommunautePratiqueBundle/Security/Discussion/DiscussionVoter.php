@@ -61,8 +61,7 @@ class DiscussionVoter extends Voter
 
         switch ($attribute) {
             case self::ACCESS:
-            case self::REPLY:
-                return $this->canAccess($user, $subject);
+                return $this->canAccess($user instanceof User ? $user : null, $subject);
         }
 
         if (!$user instanceof User) {
@@ -70,6 +69,8 @@ class DiscussionVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::REPLY:
+                return $this->canAccess($user, $subject);
             case self::SET_AS_PUBLIC:
                 return $this->canSetDiscussionAsPublic($user, $subject);
             case self::COPY_TO_GROUP:
