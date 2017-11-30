@@ -4,10 +4,11 @@
 
     <div class="infos">
         <span class="title">
+            <i class="fa fa-info-circle"></i>
             {{ 'wall.item.updated_member.title'|trans }}
         </span>
-        <span class="author">
-            ({{ item.date|date('d/m/Y H:i') }})
+        <span class="date">
+               - {{ item.date|date('d/m/Y H:i') }}
         </span>
     </div>
 
@@ -26,10 +27,14 @@
            data-html="true"
            title="{{ 'wall.item.updated_member.link'|trans }}"
         >
-            {% if organization %}
+            {% if item.user.jobLabel and organization %}
                 {{ 'wall.item.updated_member.content'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
-            {% else %}
+            {% elseif item.user.jobLabel %}
                 {{ 'wall.item.updated_member.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel}) }}
+            {% elseif organization %}
+                {{ 'wall.item.updated_member.organization'|trans({'%user%': item.user.prenomNom, '%organization%': organization}) }}
+            {% else %}
+                {{ 'wall.item.updated_member.none'|trans }}
             {% endif %}
 
         </a>

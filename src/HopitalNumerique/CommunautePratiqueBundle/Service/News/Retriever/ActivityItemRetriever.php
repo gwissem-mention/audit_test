@@ -54,7 +54,10 @@ class ActivityItemRetriever implements WallItemRetrieverInterface
 
             switch ($activity->getType()) {
                 case ActivityEnum::TYPE_PUBLIC:
-                    $items[] = new PublicItem($activity, $object);
+                    if ($object->isPublic()) {
+                        $items[] = new PublicItem($activity, $object);
+                    }
+
                     break;
                 default:
                     throw new \InvalidArgumentException();

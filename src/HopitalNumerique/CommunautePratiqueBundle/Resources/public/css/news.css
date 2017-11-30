@@ -51,38 +51,36 @@
 }
 
 .news-wall .item {
-    width: 50%;
+    width: 100%;
     padding: 16px 8px 0 0;
     box-sizing: border-box;
 }
 
-.news-wall .item:nth-child(even) {
-    padding-left: 8px;
-    padding-right: 0;
-}
-
 .news-wall .item .infos {
-    background: #eee;
-    padding: 8px;
+    padding: 8px 8px 0;
 }
 
 .news-wall .item .infos .title {
     font-weight: bold;
-    display: block;
 }
 
 .news-wall .item .infos .author {
     display: block;
 }
 
+.news-wall .item .infos .date {
+    color: #777;
+    font-size: 11px;
+}
+
 .news-wall .item .content {
-    border: 1px solid #ddd;
-    padding: 8px;
-    font-size: 12px;
+    padding: 0 8px;
+    font-size: 14px;
+    color: #d60030;
+    font-style: italic;
 }
 
 .news-wall .item .link {
-    display: block;
-    color: #000;
-    font-size: 12px;
+    font-style: italic;
+    font-size: 14px;
 }

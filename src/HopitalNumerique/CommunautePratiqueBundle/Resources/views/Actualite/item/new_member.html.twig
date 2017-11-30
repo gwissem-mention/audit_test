@@ -4,10 +4,11 @@
 
     <div class="infos">
         <span class="title">
+            <i class="fa fa-info-circle"></i>
             {{ 'wall.item.new_member.title'|trans }}
         </span>
-        <span class="author">
-            ({{ item.date|date('d/m/Y H:i') }})
+        <span class="date">
+               - {{ item.date|date('d/m/Y H:i') }}
         </span>
     </div>
 
@@ -35,11 +36,11 @@
                 {% if item.user.jobLabel and organization %}
                     {{ 'wall.item.new_member.content.private.both'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
                 {% elseif item.user.jobLabel %}
-                    {{ 'wall.item.new_member.content.private.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                    {{ 'wall.item.new_member.content.private.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel}) }}
                 {% elseif organization %}
-                    {{ 'wall.item.new_member.content.private.organization'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                    {{ 'wall.item.new_member.content.private.organization'|trans({'%user%': item.user.prenomNom, '%organization%': organization}) }}
                 {% else %}
-                    {{ 'wall.item.new_member.content.private.none'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                    {{ 'wall.item.new_member.content.private.none'|trans }}
                 {% endif %}
             {% endif %}
         </a>
