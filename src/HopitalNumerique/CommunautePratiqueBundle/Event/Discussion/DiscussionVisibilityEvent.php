@@ -1,11 +1,11 @@
 <?php
 
-namespace HopitalNumerique\CommunautePratiqueBundle\Event\Activity;
+namespace HopitalNumerique\CommunautePratiqueBundle\Event\Discussion;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use Symfony\Component\EventDispatcher\Event;
 
-class ActivityRegistrationEvent extends Event
+class DiscussionVisibilityEvent extends Event
 {
     /**
      * @var Discussion

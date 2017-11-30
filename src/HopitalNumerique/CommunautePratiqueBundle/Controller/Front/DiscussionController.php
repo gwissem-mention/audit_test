@@ -4,7 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Activity\ActivityRegistrationEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
@@ -61,7 +61,8 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussion && $this->isGranted('ACCESS', $discussion) ? $discussion : ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
+
+        $discussion = $discussion && in_array($discussion, $discussions) && $this->isGranted('ACCESS', $discussion) ? $discussion : ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
         if ($discussion instanceof Discussion) {
             $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
                 DiscussionDisplayQuery::createPublicDiscussionQuery(
@@ -505,25 +506,7 @@ class DiscussionController extends Controller
         $discussion->setPublic(!$discussion->isPublic());
         $this->getDoctrine()->getManager()->flush();
 
-        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new ActivityRegistrationEvent($discussion));
-
-        if (!$discussion->isPublic()) {
-            // Unsubscribe users if is not in group of discussion.
-            $subscribers = $this->get(UserSubscription::class)->listSubscribed($discussion);
-            foreach ($subscribers as $subscriber) {
-                $user = $subscriber->getUser();
-                $hasGroup = false;
-                if (!empty($user) && !empty($groups = $user->getCommunautePratiqueGroupes())) {
-                    foreach ($groups as $group) {
-                        $hasGroup = $discussion->getGroups()->contains($group);
-                    }
-                }
-
-                if (!$hasGroup) {
-                    $this->get(UserSubscription::class)->unsubscribe($discussion, $user);
-                }
-            }
-        }
+        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_PUBLIC, new DiscussionVisibilityEvent($discussion));
 
         if ($discussion->isPublic()) {
             $translation = 'discussion.discussion.actions.public.success';
