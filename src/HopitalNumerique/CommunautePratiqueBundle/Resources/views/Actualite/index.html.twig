@@ -3,6 +3,7 @@
 {% trans_default_domain 'cdpNews' %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function() {
             new Item();
