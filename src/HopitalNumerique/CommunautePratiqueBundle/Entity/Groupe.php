@@ -173,6 +173,11 @@ class Groupe
     private $commentaires;
 
     /**
+     * @ORM\Column(name="group_new", type="boolean", nullable=false, options={"default"=false})
+     */
+    protected $isNew;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -557,17 +562,18 @@ class Groupe
     }
 
     /**
-     * Add users.
+     * Adds a user to practice community group and returns new 'Inscription' object.
      *
-     * @param User $users
+     * @param User $user
      *
-     * @return Groupe
+     * @return Inscription
      */
-    public function addUser(User $users)
+    public function addUser(User $user)
     {
-        $this->addInscription(new Inscription($this, $users));
+        $register = new Inscription($this, $user);
+        $this->addInscription($register);
 
-        return $this;
+        return $register;
     }
 
     /**
@@ -1000,5 +1006,25 @@ class Groupe
         }
 
         return str_replace('"', '\'', json_encode($animateurs));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * @param bool $isNew
+     *
+     * @return $this
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+
+        return $this;
     }
 }

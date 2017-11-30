@@ -138,7 +138,7 @@ class Session
     protected $nombrePlaceDisponible;
 
     /**
-     * @var int
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_module_session_rolerestriction",
@@ -226,6 +226,7 @@ class Session
         $this->dateOuvertureInscription = new \DateTime();
         $this->connaissances = new ArrayCollection();
         $this->connaissancesMetier = new ArrayCollection();
+        $this->restrictionAcces = new ArrayCollection();
     }
 
     /**
@@ -536,7 +537,9 @@ class Session
      */
     public function addRestrictionAcces(Role $role)
     {
-        $this->restrictionAcces[] = $role;
+        if (!$this->restrictionAcces->contains($role)) {
+            $this->restrictionAcces->add($role);
+        }
 
         return $this;
     }
@@ -558,7 +561,7 @@ class Session
      *
      * @return Session
      */
-    public function setRestrictionAcces($restrictionsAcces)
+    public function setRestrictionAcces(Collection $restrictionsAcces)
     {
         $this->restrictionAcces = $restrictionsAcces;
 
@@ -888,30 +891,6 @@ class Session
         }
 
         return $this;
-    }
-
-    /**
-     * Add restrictionAcces.
-     *
-     * @param Role $restrictionAcces
-     *
-     * @return Session
-     */
-    public function addRestrictionAcce(Role $restrictionAcces)
-    {
-        $this->restrictionAcces[] = $restrictionAcces;
-
-        return $this;
-    }
-
-    /**
-     * Remove restrictionAcces.
-     *
-     * @param Role $restrictionAcces
-     */
-    public function removeRestrictionAcce(Role $restrictionAcces)
-    {
-        $this->restrictionAcces->removeElement($restrictionAcces);
     }
 
     /**

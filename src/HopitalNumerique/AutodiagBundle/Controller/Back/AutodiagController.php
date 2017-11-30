@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Exception\Import\FileNotFoundException;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
@@ -15,7 +16,6 @@ use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,9 +84,12 @@ class AutodiagController extends Controller
             }
 
             $importHandler = $this->get('autodiag.import.handler');
-            $notify = $form->get('notify_update')->getData();
-            $reason = $form->get('reason')->getData();
-            $importHandler->handleNotification($autodiag, $notify, $reason);
+
+            $importHandler->handleNotification(
+                $autodiag,
+                $form->get('notify_update')->getData(),
+                $form->get('reason')->getData()
+            );
 
             $this->addFlash('success', $this->get('translator')->trans('ad.back.saved'));
 
@@ -123,8 +126,11 @@ class AutodiagController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $import->setNotifyUpdate($form->get('notify_update')->getData());
-                $import->setUpdateReason($form->get('reason')->getData());
+                $notify = $form->get('notify_update')->getData();
+                $reason = $form->get('reason')->getData();
+
+                $import->setNotifyUpdate($notify);
+                $import->setUpdateReason($reason);
 
                 try {
                     $importHandler->handleSurveyImport(
@@ -132,12 +138,10 @@ class AutodiagController extends Controller
                         $this->get('autodiag.import.chapter'),
                         $this->get('autodiag.import.question')
                     );
-
                     $this->get('autodiag.score_calculator')->defetAutodiagScore($autodiag);
-
                     $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
-                } catch (\Exception $e) {
-                    $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));
+                } catch (FileNotFoundException $exception) {
+                    $this->addFlash('danger', $this->get('translator')->trans('ad.import.error.file_not_found'));
                 }
 
                 return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
@@ -177,12 +181,18 @@ class AutodiagController extends Controller
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $import->setNotifyUpdate($form->get('notify_update')->getData());
-                $import->setUpdateReason($form->get('reason')->getData());
+                $notify = $form->get('notify_update')->getData();
+                $reason = $form->get('reason')->getData();
 
-                $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
+                $import->setNotifyUpdate($notify);
+                $import->setUpdateReason($reason);
 
-                $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+                try {
+                    $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
+                    $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+                } catch (FileNotFoundException $exception) {
+                    $this->addFlash('danger', $this->get('translator')->trans('ad.import.error.file_not_found'));
+                }
 
                 return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
                     'id' => $autodiag->getId(),
@@ -220,12 +230,18 @@ class AutodiagController extends Controller
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $import->setNotifyUpdate($form->get('notify_update')->getData());
-                $import->setUpdateReason($form->get('reason')->getData());
+                $notify = $form->get('notify_update')->getData();
+                $reason = $form->get('reason')->getData();
 
-                $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
+                $import->setNotifyUpdate($notify);
+                $import->setUpdateReason($reason);
 
-                $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+                try {
+                    $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
+                    $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
+                } catch (FileNotFoundException $exception) {
+                    $this->addFlash('danger', $this->get('translator')->trans('ad.import.error.file_not_found'));
+                }
 
                 return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
                     'id' => $autodiag->getId(),

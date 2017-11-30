@@ -1,0 +1,3 @@
+test_command_send:
+    path: /testSend
+    defaults: { _controller: NotificationBundle:Notification:testCommand }

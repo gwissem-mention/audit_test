@@ -10,6 +10,10 @@ new_account:
     resource: "@NewAccountBundle/Resources/config/routing.yml"
     prefix:   /mon-compte
 
+test_command:
+    resource: "@NotificationBundle/Resources/config/routing.yml"
+    prefix:   /test
+
 hopital_numerique_search:
     resource: "@HopitalNumeriqueSearchBundle/Resources/config/routing.yml"
     prefix:   /
@@ -204,6 +208,9 @@ nodevo_mail:
 nodevo_mail_recommandation:
     resource: '@NodevoMailBundle/Resources/config/routing/recommandation.yml'
     prefix: '/mail/recommandation'
+nodevo_mail_redirect:
+    path: /mail/redirect/{pathEncoded}
+    defaults: { _controller: "NodevoMailBundle:Mail:redirect" }
 
 nodevo_contact:
     resource: "@NodevoContactBundle/Resources/config/routing.yml"

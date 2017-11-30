@@ -1023,4 +1023,106 @@ class UserRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult()
         ;
     }
+
+    /**
+     * Returns query builder with all active users query builder.
+     *
+     * @return QueryBuilder
+     */
+    public function getActiveUsersQueryBuilder()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.enabled = 1')
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', Reference::STATUT_ACTIF_ID)
+        ;
+    }
+
+    /**
+     * Returns query builder with a single user.
+     *
+     * @param $userId
+     *
+     * @return QueryBuilder
+     */
+    public function getOneUserQueryBuilder($userId)
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.id = :userId')
+            ->setParameter('userId', $userId)
+        ;
+    }
+
+    /**
+     * Returns query builder with active user ids by region.
+     *
+     * @param integer $regionId Region id.
+     * @param array|null $domainIds Filter users that are in at least one of the given domains
+     *
+     * @return QueryBuilder
+     */
+    public function createUsersByRegionQueryBuilder($regionId, $domainIds = null)
+    {
+        $qb = $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.region = :regionId')
+            ->andWhere('user.enabled = :enabledState')
+            ->setParameters([
+                'regionId' => (int)$regionId,
+                'enabledState' => 1,
+            ])
+        ;
+
+        if (is_array($domainIds)) {
+            $qb
+                ->join('user.domaines', 'domain')
+                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+            ;
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Returns query builder with active user ids by role(s).
+     *
+     * @param array $roles List of role ids.
+     * @param array|null $domainIds Filter users that are in at least one of the given domains
+     *
+     * @return QueryBuilder
+     */
+    public function createUsersByRolesQueryBuilder(array $roles, array $domainIds = null)
+    {
+        $parameters = ['enabledState' => 1];
+        $where = 'user.enabled = :enabledState ';
+
+        if (count($roles)) {
+            $where .= 'AND (';
+            $i = 0;
+            foreach ($roles as $role) {
+                $where .= 'user.roles LIKE :role' . ++$i . ' OR ';
+                $parameters['role'.$i] = "%$role%";
+            }
+            $where = substr($where, 0, -4) . ')';
+        } else {
+            $where .= ' AND 1=0 ';
+        }
+
+        $qb = $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where($where)
+            ->setParameters($parameters)
+        ;
+
+        if (is_array($domainIds)) {
+            $qb
+                ->join('user.domaines', 'domain')
+                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+            ;
+        }
+
+        return $qb;
+    }
 }

@@ -5,6 +5,10 @@ services:
         arguments: ['HopitalNumeriqueModuleBundle:Inscription']
         calls:
             - ["setAdminGridSessionStatus", ["%admin_grid_session_status%"]]
+    hn.module.repository.module:
+        class: HopitalNumerique\ModuleBundle\Repository\ModuleRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueModuleBundle:Module']
     hn.module.repository.session:
         class: HopitalNumerique\ModuleBundle\Repository\SessionRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]

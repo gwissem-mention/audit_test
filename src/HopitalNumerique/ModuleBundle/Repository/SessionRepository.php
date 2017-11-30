@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -250,5 +251,34 @@ class SessionRepository extends EntityRepository
         ;
 
         return $queryBuilder;
+    }
+
+    /**
+     * Returns coming training sessions for module starting between today and maxDate.
+     *
+     * @param Module $module
+     * @param $maxDate
+     *
+     * @return Session[]
+     */
+    public function getComingSessionsForModule($module, $maxDate)
+    {
+        return $this->createQueryBuilder('session')
+            ->select('session', 'session')
+            ->andWhere(
+                'session.module = :module',
+                'session.dateSession > :today',
+                'session.dateSession < :maxDate',
+                'session.etat = :sessionState'
+            )
+            ->orderBy('session.dateSession', 'ASC')
+            ->setParameters([
+                'module' => $module,
+                'today' => new \DateTime(),
+                'maxDate' => $maxDate,
+                'sessionState' => Reference::STATUT_SESSION_ACTIVE_ID,
+            ])
+            ->getQuery()->getResult()
+        ;
     }
 }

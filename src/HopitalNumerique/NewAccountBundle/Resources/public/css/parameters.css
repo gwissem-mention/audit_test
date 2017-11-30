@@ -9,3 +9,106 @@
 #my-account .icon.unsubscribe-icon::before {
     content: '\f08b';
 }
+
+#my-account #notifications-parameters .panel-body .content {
+    margin-bottom: 30px;
+}
+
+#my-account #notifications-parameters .panel-body .content .row:nth-of-type(1) {
+    margin-bottom: 25px;
+}
+
+#my-account #notifications-parameters .panel-body .content strong {
+    color: #6F3596;
+    border-bottom: 1px solid #ccc;
+    display: block;
+    margin: auto 15px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+}
+
+#my-account #notifications-parameters .panel-body .content .col-md-4 {
+    margin-top: 15px;
+}
+
+#my-account #notifications-parameters .panel-body .content .toggle {
+    display: inline-block;
+    vertical-align: baseline;
+    margin-right: 15px;
+}
+
+#my-account #notifications-parameters .panel-body .content b {
+    display: inline-block;
+    vertical-align: middle;
+    width: 80%;
+}
+
+#my-account #notifications-parameters .panel-body .content .toggle .btn {
+    background-image: none;
+    border-color: transparent;
+}
+
+#my-account #notifications-parameters .panel-body .slider-container {
+    display: inline-block;
+    margin-top: 30px;
+    margin-right: 50px;
+}
+
+#my-account #notifications-parameters .panel-body .content .description select[data-value='straight'] ~ div,
+#my-account #notifications-parameters .panel-body .content input:not(.active) ~ .description {
+    display: none;
+}
+
+#my-account #notifications-parameters .panel-body .content input[type="checkbox"]:not(.hidden) {
+    float: left;
+    margin-right: 5px;
+}
+
+#my-account #notifications-parameters .panel-body .content .description > div {
+    margin-top: 10px;
+}
+
+#my-account #notifications-parameters .panel-body .content .row {
+    margin: 0;
+}
+
+#my-account #notifications-parameters .panel-body .pointer-label.high {
+    font-size: 12px;
+    background-color: transparent;
+}
+
+#my-account #notifications-parameters .panel-body .selected-bar {
+    background: #6F3596 none;
+}
+
+#my-account #notifications-parameters .panel-body .content select.form-control {
+    margin: 10px 0;
+}
+
+.toggle-success .toggle-slide .toggle-on, .toggle-success .toggle-slide .toggle-on.active {
+    background-color: #85c744;
+}
+
+.toggle-success .toggle-slide.active .toggle-blob {
+    border: 1px solid #85c744;
+}
+
+#my-account #notifications-parameters .panel-body .authorize {
+    margin-top: 50px;
+}
+
+#my-account #notifications-parameters .panel-body .authorize label {
+    margin-left: 10px;
+}
+
+#my-account #notifications-parameters .panel-body > .description:last-child {
+    margin-top: 30px;
+}
+
+#my-account #notifications-parameters .panel-body > .description:first-child {
+    margin-bottom: 20px;
+}
+
+#my-account #notifications-parameters .panel-body > .schedules span {
+    margin-right: 15px;
+}

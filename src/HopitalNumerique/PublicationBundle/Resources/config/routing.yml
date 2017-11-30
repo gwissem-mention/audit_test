@@ -112,6 +112,12 @@ hopital_numerique_publication_note_add:
     requirements:
         _method: POST
 
+hopital_numerique_publication_note_add_comment:
+    path:  /publication/note/comment
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    '@HopitalNumeriqueObjet/formNoteCommentaire.html.twig'
+
 #--Calcul note moyenne
 hopital_numerique_publication_note_moyenne_objet:
     path:  /publication/note/note_moyenne.{_format}
@@ -162,3 +168,10 @@ hopitalnumerique_suggestion_back_delete:
 hopitalnumerique_suggestion_back_isFileExist:
     path:  /admin/suggestion/isFileExist
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:isFileExist" }
+
+# Subscription
+hopitalnumerique_objet_subscribe:
+    path: /subscribe/publication/{object}/{content}
+    defaults: { _controller: HopitalNumeriqueObjetBundle:Subscription:subscribe, content: null }
+    requirements:
+        object: \d+

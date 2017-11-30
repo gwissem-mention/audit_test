@@ -1,0 +1,64 @@
+notification_config:
+    practice_community:
+        section_title: COMMUNAUTE DE PRATIQUE
+        practice_community_group_comment_created:
+            description: Nouveau commentaire dans un de mes groupes
+            title: Nom du groupe + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_form_comment_created:
+            description: Nouveau commentaire sur une fiche d'un de mes groupes
+            title: Nom du groupe + nom de la fiche + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_group_document_created:
+            description: Nouveau document dans un de mes groupes
+            title: Nom du groupe + nom du fichier + auteur
+            detail: -
+        practice_community_group_user_joined:
+            description: Nouvelle personne dans un de mes groupes
+            title: Nom du groupe + nom de la personne
+            detail: -
+        practice_community_group_created:
+            description: Nouveau groupe dans la communauté
+            title: Nom du groupe
+            detail: Description du groupe + date de démarrage
+        practice_community_user_joined:
+            description: Nouvelles personnes dans la commuauté
+            title: Nom de la personne + nom du/des groupe/s de la personne
+            detail: -
+    grouped:
+        practice_community_group_comment_created:
+            single: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName% : %commentaire%
+            single_undetail: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                detail: %groupeName% : %commentaire% (%auteur%)
+                undetail: %groupeName%
+        practice_community_form_comment_created:
+            single: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName% : %commentaire%
+            single_undetail: Un nouveau commentaire a été déposé par %auteur% dans %groupeName% concernant %ficheName%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                detail: %ficheName% (%groupeName%) : %commentaire% (%auteur%)
+                undetail: %ficheName% (%groupeName%)
+        practice_community_group_document_created:
+            single: Un nouveau document a été déposé par %auteur% dans %groupeName% : %filename%
+            multiple:
+                header: %number% nouveaux documents ont été déposés
+                content: %groupeName% : %filename% (%auteur%)
+        practice_community_group_user_joined:
+            single: %userName% a rejoint %groupeName%
+            multiple:
+                header: %number% nouvelles personnes ont rejoint des groupes de la communauté
+                content: %groupeName% : %userName%
+        practice_community_group_created:
+            single: Le groupe %groupeName% a été ouvert : %groupeDescription% (démarrage : %dateDebut%)
+            single_undetail: Le groupe %groupeName% a été ouvert
+            multiple:
+                header: %number% nouveaux groupes ont été ouverts
+                detail: %groupeName% : %groupeDescription% (démarrage : %dateDebut%)
+                undetail: %groupeName%
+        practice_community_user_joined:
+            single: %userName% a rejoint la communauté
+            multiple:
+                header: %number% nouvelles personnes ont rejoint la communauté
+                content: %userName%

@@ -1,0 +1,48 @@
+notification_config:
+    report:
+        section_title: RAPPORTS
+        report_updated:
+            description: Modification d'un rapport partagé par ou avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a modifié le rapport
+        report_shared_for_me:
+            description: Partage d'un nouveau rapport avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé son rapport avec moi
+        report_shared_for_other:
+            description: Partage d'un rapport avec d'autres utilisateurs
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé le rapport, nom de l'utilisateur avec qui il a été partagé
+        report_copied_for_me:
+            description: Copie d'un nouveau rapport pour moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a copié son rapport pour moi
+    grouped:
+        report_updated:
+            single: Le rapport %reportName% a été modifié par %userName%
+            single_undetail: Le rapport %reportName%
+            multiple:
+                header: %number% rapports ont été modifiés
+                detail: %reportName% par %userName%
+                undetail: %reportName%
+        report_shared_for_me:
+            single: Le rapport %reportName% a été partagé avec moi par %userName%
+            single_undetail: Le rapport %reportName% a été partagé avec moi
+            multiple:
+                header: %number% rapports ont été partagés avec moi
+                detail: %reportName% par %userName%
+                undetail: %reportName%
+        report_shared_for_other:
+            single: Le rapport %reportName% a été partagé avec %userNames% par %userName%
+            single_undetail: Le rapport %reportName% a été partagé
+            multiple:
+                header: %number% rapports ont été partagés avec d'autres utilisateurs
+                detail: %reportName% avec %userNames% par %userName%
+                undetail: %reportName% avec %userNames%
+        report_copied_for_me:
+            single: Le rapport %reportName% a été copié pour moi par %userName%
+            single_undetail: Le rapport %reportName% a été copié pour moi
+            multiple:
+                header: %number% rapports ont été copiés pour moi
+                detail: %reportName% par %userName%
+                undetail: %reportName%

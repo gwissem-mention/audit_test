@@ -95,6 +95,8 @@ ad:
 
     import:
         success: Le fichier d'import a bien été traité.
+        error:
+            file_not_found: L'import n'a pas été effectué
         lines:
             count: "{0}Aucune ligne n'a été importée|{1}%count% ligne a été importée|]1,Inf[%count% lignes ont été importées"
         chapter:

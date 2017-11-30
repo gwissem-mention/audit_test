@@ -1,0 +1,38 @@
+{% trans_default_domain 'discover' %}
+<div class="notification-group">
+    <div class="notification-group__title underlined bold" style="margin: 20px 0 10px;">
+        {{ 'objects'|trans }}
+    </div>
+    {% for object in objects %}
+        <div style="margin-bottom: 10px;">
+            <a href="{{ object.path }}">{{ object.titre }}</a>
+            <div class="italic">
+                <small>
+                    {{ object.resume|striptags|slice(0,300)|replace({"\n":' ', "\r":' '}) ~ '...' }}
+                </small>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="notification-group">
+    <div class="notification-group__title underlined bold" style="margin: 20px 0 10px;">
+        Mon profil
+    </div>
+    <div>
+        <b>{{ 'profile'|trans }} : {{ profilCompletion }}%.</b>
+        {% if profilCompletion != 100 %}
+            <br />
+            <a href="{{ path('account_profile') }}">Compléter mon profil</a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ 'stats.url'|trans }}">{{ 'stats.title'|trans }} :</a>
+    {% for key, stat in stats %}
+        <div>
+            <b>{{ stat }} {{ ('stats.' ~ key)|trans }}</b>
+        </div>
+    {% endfor %}
+</div>

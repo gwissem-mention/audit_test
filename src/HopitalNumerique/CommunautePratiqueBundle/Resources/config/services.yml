@@ -55,6 +55,12 @@ services:
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche'
 
+    HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription'
+
     hopitalnumerique_communautepratique.widgets.cdp_widget:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Widget\DashboardWidget
         tags:
@@ -72,6 +78,90 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract:
+            class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+            abstract: true
+            arguments:
+                - '@event_dispatcher'
+                - '@security.token_storage'
+                - '@translator'
+                - '@hopitalnumerique_publication.twig.publication_extension'
+                - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
+            calls:
+                - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_group_comment_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\FormCommentCreatedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\FormCommentCreatedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_form_comment_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupDocumentCreatedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupDocumentCreatedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_group_document_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_group_user_joined }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_group_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\CommunityUserJoinedNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\CommunityUserJoinedNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_user_joined }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCommentCreatedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCommentCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.group_comment_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\FormCommentCreatedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\FormCommentCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.group_comment_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupDocumentCreatedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupDocumentCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.group_document_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.group_created }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\CommunityUserJoinedListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\CommunityUserJoinedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: communautepratique.enroll_user }
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv

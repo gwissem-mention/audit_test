@@ -3,10 +3,13 @@ parameters:
     hopitalnumerique_forum.manager.post.class: HopitalNumerique\ForumBundle\Manager\PostManager
     hopitalnumerique_forum.manager.topic.class: HopitalNumerique\ForumBundle\Manager\TopicManager
     hopitalnumerique_forum.manager.board.class: HopitalNumerique\ForumBundle\Manager\BoardManager
+
     #BBCode
     hopitalnumerique_forum.component.bb_code.tag_integrator.class: HopitalNumerique\ForumBundle\Component\BBCode\TagIntegrator
+
     #CronLogger
     hopitalnumerique_forum.service.logger.cronlogger.class: HopitalNumerique\ForumBundle\DependencyInjection\Logger\CronLogger
+
     #Listener
     hopitalnumerique_forum.listener.post.class: HopitalNumerique\ForumBundle\EventListener\PostEventListener
     hopitalnumerique_forum.bb_parser.tags:
@@ -30,19 +33,22 @@ services:
         class: HopitalNumerique\ForumBundle\DependencyInjection\PieceJointe
         scope: "request"
         arguments: ["@request", "@session", "@hopitalnumerique_forum.manager.post", "%nodevo_gestionnaire_media.moxie_manager.extensions_autorisees%"]
-    #Manager
+
     #--Forum
     hopitalnumerique_forum.manager.forum:
         class: 'HopitalNumerique\ForumBundle\Manager\ForumManager'
         arguments: ['@doctrine.orm.entity_manager']
+
     #--Board
     hopitalnumerique_forum.manager.board:
         class: %hopitalnumerique_forum.manager.board.class%
         arguments: ["@doctrine.orm.entity_manager", "@ccdn_forum_forum.model.topic", "@ccdn_forum_forum.model.post"]
+
     hopitalnumerique_forum.repository.board:
         class: HopitalNumerique\ForumBundle\Repository\BoardRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueForumBundle:Board']
+
     #--Topic
     hopitalnumerique_forum.manager.topic:
         class: %hopitalnumerique_forum.manager.topic.class%
@@ -52,10 +58,12 @@ services:
         class: HopitalNumerique\ForumBundle\Repository\TopicRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueForumBundle:Topic']
+
     #--Post
     hopitalnumerique_forum.manager.post:
         class: %hopitalnumerique_forum.manager.post.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_forum.manager.topic", "@hopitalnumerique_forum.manager.board"]
+
     hopitalnumerique_forum.repository.post:
         class: HopitalNumerique\ForumBundle\Repository\PostRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
@@ -72,10 +80,16 @@ services:
     hopitalnumerique_forum.manager.subscription:
         class: %hopitalnumerique_forum.manager.subscription.class%
         arguments: ["@doctrine.orm.entity_manager"]
+
+    HopitalNumerique\ForumBundle\Repository\SubscriptionRepository:
+        class: HopitalNumerique\ForumBundle\Repository\SubscriptionRepository
+        arguments: ['@ccdn_forum_forum.gateway.subscription']
+
     #Cronlogger
     hopitalnumerique_forum.service.logger.cronlogger:
         class: "%hopitalnumerique_forum.service.logger.cronlogger.class%"
         arguments: ["@logger", "@session"]
+
     #BBCode
     hopitalnumerique_forum.component.bb_code.tag_integrator:
         class: %hopitalnumerique_forum.component.bb_code.tag_integrator.class%
@@ -83,6 +97,7 @@ services:
             - %hopitalnumerique_forum.bb_parser.tags%
         tags:
             - { name: ccdn_component_bb_code.tag }
+
     #EventListener
     #--Post
     hopitalnumerique_forum.listener.post:
@@ -95,6 +110,7 @@ services:
             - "@security.token_storage"
             - "@ccdn_forum_forum.model.subscription"
             - "@ccdn_forum_forum.repository.post"
+            - "@event_dispatcher"
         tags:
             - { name: 'kernel.event_subscriber' }
 
@@ -117,3 +133,38 @@ services:
             - '@form.factory'
             - '@ccdn_forum_forum.form.type.post_update'
             - '@ccdn_forum_forum.model.post'
+
+    HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract:
+        class: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@ccdn_component_bb_code.component.twig_extension.parse_bb'
+            - '@hopitalnumerique\forumbundle\repository\subscriptionrepository'
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider:
+        class: HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider
+        parent: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: forum_post_created }
+
+    HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider:
+        class: HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider
+        parent: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: forum_topic_created }
+
+    HopitalNumerique\ForumBundle\EventListener\PostCreatedListener:
+        class: HopitalNumerique\ForumBundle\EventListener\PostCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener:
+        class: HopitalNumerique\ForumBundle\EventListener\TopicCreatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: ccdn_forum.user.topic.create.complete }

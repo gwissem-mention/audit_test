@@ -71,7 +71,7 @@ class AutodiagFileImport
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function getNotifyUpdate()
     {
@@ -85,7 +85,7 @@ class AutodiagFileImport
      */
     public function setNotifyUpdate($notifyUpdate)
     {
-        $this->notifyUpdate = $notifyUpdate;
+        $this->notifyUpdate = (bool)$notifyUpdate;
 
         return $this;
     }

@@ -124,8 +124,28 @@ class Tree
             );
         }
 
+        $referencesTree = $this->getOrderedReferencesTreePart($references, $referenceRoot);
+
+        // If root reference defined, select shared references too
+        if ($referenceRoot) {
+            $referencesTree = array_merge(
+                $referencesTree,
+                $this->getOrderedReferencesTreePart($references, $this->referenceManager->findOneById(Reference::SHARED_REFERENCES_ID))
+            );
+
+            $referencesTree = array_unique($referencesTree, SORT_REGULAR);
+
+            usort($referencesTree, function ($a, $b) {
+                if ($a['reference']['order'] === $b['reference']['order']) {
+                    return 0;
+                }
+
+                return $a['reference']['order'] > $b['reference']['order'] ? 1 : -1;
+            });
+        }
+
         // 3 - 30
-        return $this->getOrderedReferencesTreePart($references, $referenceRoot);
+        return $referencesTree;
     }
 
     /**

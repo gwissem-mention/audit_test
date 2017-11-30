@@ -2,13 +2,13 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Contrôleur des utilisateurs.
@@ -90,7 +90,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
             $ajoutMembreForm->handleRequest($request);
 
             if ($ajoutMembreForm->isValid()) {
-                $groupe->addUser($ajoutMembreForm->get('user')->getData());
+                $inscription = $groupe->addUser($ajoutMembreForm->get('user')->getData());
                 $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->save($groupe);
                 $this->container->get('session')->getFlashBag()->add('success', 'L\'utilisateur a bien été ajouté au groupe.');
 
@@ -185,6 +185,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $etat = null;
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
+
+            $event = new UserJoinedEvent($inscription->getGroupe(), $inscription);
+            $this->get('event_dispatcher')->dispatch(Events::GROUP_USER_JOINED, $event);
 
             $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
 
