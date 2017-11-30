@@ -44,6 +44,7 @@ discussion:
 
             download:
                 label: Télécharger la discussion
+                full: Télécharger une archive des documents
             public:
                 label:
                     up: Rendre cette discussion publique

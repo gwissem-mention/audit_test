@@ -409,9 +409,9 @@ class DiscussionController extends Controller
      * @param Discussion $discussion
      * @param Groupe $group
      *
+     * @return Response
      * @Security("is_granted('download', discussion)")
      *
-     * @return Response
      */
     public function downloadDiscussionAction(Discussion $discussion, Groupe $group = null)
     {
@@ -429,6 +429,36 @@ class DiscussionController extends Controller
         );
 
         return $response;
+    }
+
+    /**
+     * @param Discussion $discussion
+     *
+     * @return Response
+     * @Security("is_granted('download', discussion)")
+     *
+     */
+    public function downloadFullDocumentDiscussionAction(Discussion $discussion)
+    {
+        $zipName = $discussion->getTitle();
+        $zip = new \ZipArchive();
+
+        $zip->open($zipName, $zip::CREATE);
+        foreach ($discussion->getMessages() as $message) {
+            foreach ($message->getFiles() as $file) {
+                $filePath = $this->get(FilePathFinder::class)->getFilePath($file);
+                $zip->addFromString(basename($file->getClientName()), file_get_contents($filePath));
+            }
+        }
+
+        $zip->close();
+        header('Content-Type', 'application/zip');
+        header('Content-disposition: attachment; filename="' . $zipName . '.zip"');
+        header('Content-Length: ' . filesize($zipName));
+
+        readfile($zipName);
+
+        unlink($zipName);
     }
 
     /**

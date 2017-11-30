@@ -37,6 +37,12 @@ hopitalnumerique_communautepratique_discussions_download_discussion:
     requirements:
         discussion: \d+
 
+hopitalnumerique_communautepratique_discussions_download_document_discussion:
+    path: /{discussion}/download/document/
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadFullDocumentDiscussion }
+    requirements:
+        discussion: \d+
+
 hopitalnumerique_communautepratique_discussions_copy_discussion:
     path: /{discussion}/copy
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:copyToGroup }
