@@ -1,0 +1,34 @@
+<div class="file-dropzone">
+
+    <div class="files">
+        <div class="prototype hidden" data-prototype="{{ form_widget(files.vars.prototype)|e }}">
+            <div class="file">
+                <span class="filename"></span>
+
+                <div class="btn-group">
+                    <a href="#" class="btn btn-sm btn-danger remove"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+
+        {% if message is defined and message and message.files.count %}
+            {% for file in message.files %}
+                <div class="file">
+                    <span class="filename">{{ file.clientName }}</span>
+
+                    {% for fileInput in files if fileInput.vars.value == file.id %}
+                        {{ form_widget(fileInput) }}
+                    {% endfor %}
+
+                    <div class="btn-group">
+                        <a href="{{ path('hopitalnumerique_fichier_remove', {file: file.id}) }}" class="btn btn-sm btn-danger remove"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="area" data-upload-uri="{{ path('hopitalnumerique_fichier_upload') }}">
+        <i class="fa fa-upload"></i>
+    </div>
+</div>

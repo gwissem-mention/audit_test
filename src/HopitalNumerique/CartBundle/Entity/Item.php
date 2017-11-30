@@ -16,6 +16,7 @@ class Item
     const FORUM_TOPIC_TYPE = 'forum_topic';
     const AUTODIAG_CHAPTER_TYPE = 'autodiag_chapter';
     const CDP_GROUP_TYPE = 'cdp_group';
+    const CDP_DISCUSSION_TYPE = 'cdp_discussion';
     const PERSON_TYPE = 'person';
     const GUIDED_SEARCH_TYPE = 'guided_search';
 

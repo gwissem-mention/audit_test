@@ -73,6 +73,7 @@ abstract class AbstractProvider implements ProviderInterface
             ;
 
             $results = $queryBuilder->getQuery()->getResult();
+
             if (count($results) > 0) {
                 yield $results;
             }

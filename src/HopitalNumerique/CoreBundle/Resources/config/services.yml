@@ -1,7 +1,8 @@
 imports:
     - { resource: events.yml }
-
-parameters:
+    - { resource: services/repository.yml }
+    - { resource: services/handler.yml }
+    - { resource: services/twig.yml }
 
 services:
     hopitalnumerique_core.dependency_injection.entity:
@@ -29,6 +30,7 @@ services:
         - '@hopitalnumerique_reference.repository.entity_has_reference'
         - '@hopitalnumerique_forum.repository.board'
         - '@autodiag.repository.autodiag'
+        - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
         - '@hopitalnumerique_objet.repository.risk'
 
     hopitalnumerique_core.pagerfanta.view:
@@ -51,3 +53,16 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -10 }
         arguments: [ '@controller_resolver', '@request_stack', '@http_kernel' ]
+
+    HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator:
+        class: HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator
+        arguments:
+            - '@router'
+            - '%object_identity_routing%'
+
+    HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription:
+        class: HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@doctrine.orm.entity_manager'

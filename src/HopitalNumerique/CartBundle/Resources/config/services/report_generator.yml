@@ -30,6 +30,14 @@ services:
         arguments:
             - '@hopitalnumerique_reference.dependency_injection.referencement'
 
+    hopitalnumerique_cart.report_generator.cdp_discussion:
+        public: false
+        class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\CDPDiscussionGenerator
+        tags:
+            - { name: cart_bundle.report_generator }
+        arguments:
+            - '@hopitalnumerique_reference.dependency_injection.referencement'
+
     hopitalnumerique_cart.report_generator.publication:
         public: false
         class: HopitalNumerique\CartBundle\Service\ReportGenerator\Generator\PublicationGenerator

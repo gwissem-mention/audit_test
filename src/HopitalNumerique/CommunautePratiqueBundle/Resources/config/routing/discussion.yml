@@ -1,0 +1,134 @@
+hopitalnumerique_communautepratique_discussions_public:
+    path: /
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+
+hopitalnumerique_communautepratique_discussions_public_object_redirect:
+    path: /object/{object}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:publicationDiscussion }
+    methods:
+        - GET
+
+hopitalnumerique_communautepratique_discussions_group:
+    path: /groupe/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+
+hopitalnumerique_communautepratique_discussions_group_default_discussion:
+    path: /groupe/{group}/{discussion}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+    requirements:
+        group: \d+
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_public_create_from_object:
+    path: /create-from-object/{object}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+    requirements:
+        object: \d+
+
+hopitalnumerique_communautepratique_discussions_public_desfult_discussion:
+    path: /{discussion}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:list }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_download_discussion:
+    path: /{discussion}/download/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadDiscussion, group: null }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_download_document_discussion:
+    path: /{discussion}/download/document/
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:downloadFullDocumentDiscussion }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_copy_discussion:
+    path: /{discussion}/copy
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:copyToGroup }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_public_discussion:
+    path: /{discussion}/toggle-public/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:setDiscussionPublic, group: null }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_subscribe:
+    path: /{discussion}/subscribe/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:subscribe, group: null }
+    requirements:
+        discussion: \d+
+
+hopitalnumerique_communautepratique_discussions_discussion_read_message:
+    path: /reading-message
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:read }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_discussion_reorder:
+    path: /reorder
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reorderDiscussion }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_discussion_message_file:
+    path: /message/{message}/file/{file}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:visualizeFile }
+    methods:
+        - GET
+
+hopitalnumerique_communautepratique_discussions_create_discussion:
+    path: /create/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
+    methods:
+        - GET
+        - POST
+
+hopitalnumerique_communautepratique_discussions_create_related_discussion:
+    path: /create-related/{object}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:createDiscussion, group: null }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_reply_discussion:
+    path: /{discussion}/reply/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply, group: null }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_discussion_domains:
+    path: /{discussion}/update-domains
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:updateDiscussionDomains }
+    methods:
+        - POST
+
+hopitalnumerique_communautepratique_discussions_edit_reply_discussion:
+    path: /{discussion}/edit/{message}/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply, group: null }
+    methods:
+        - POST
+        - GET
+
+hopitalnumerique_communautepratique_discussions_discussion:
+    path: /{discussion}/lire/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:discussion, group: null }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_helpful:
+    path: /message/{message}/helpful/toggle
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:toggleHelpfulMessage }
+
+hopitalnumerique_communautepratique_discussions_discussion_recommendation:
+    path: /{discussion}/recommendation/toggle/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:toggleRecommendation, group: null }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_delete:
+    path: /message/{message}/delete/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:deleteMessage, group: null }
+
+hopitalnumerique_communautepratique_discussions_discussion_message_validate:
+    path: /message/{message}/validate/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:validateMessage, group: null }
+    methods:
+        - GET

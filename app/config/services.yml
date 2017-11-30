@@ -5,3 +5,8 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    twig.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: 'twig.extension' }

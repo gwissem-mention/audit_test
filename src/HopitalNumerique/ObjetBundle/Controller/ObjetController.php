@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Gedmo\Loggable\Entity\LogEntry;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\LinkGenerator;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -10,14 +11,15 @@ use HopitalNumerique\ObjetBundle\Model\Report;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\RelatedBoard;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateCommand;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 
 /**
  * Objet controller.
@@ -171,6 +173,8 @@ class ObjetController extends Controller
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
 
+        $this->get(LinkGenerator::class)->getLink(ObjectIdentity::createFromDomainObject($objet), 'admin_edit');
+
         $user = $this->getUser();
 
         // l'objet est locked, on redirige vers la home page
@@ -192,29 +196,16 @@ class ObjetController extends Controller
         );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($id, $objet->getDomainesId());
 
-        //build Productions liées
-        $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees(
-            $objet->getObjets()
-        );
-
-        $relatedObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjectRelationships($objet);
-
         $options = [
             'contenus' => $contenus,
             'infra' => $infra,
             'toRef' => $toRef,
-            'productions' => $productions,
-            'relatedBoards' => $this
-                ->get('doctrine.orm.default_entity_manager')
-                ->getRepository(RelatedBoard::class)
-                ->findBy(['object' => $objet->getId()], ['position' => 'ASC'])
-            ,
-            'relatedObjects' => $relatedObjects,
+            'objectsRelated' => $this->get(ObjectIdentityRepository::class)->getRelatedObjects(ObjectIdentity::createFromDomainObject($objet)),
+            'relatedObjects' => $this->get(ObjectIdentityRepository::class)->getRelatedByObjects(ObjectIdentity::createFromDomainObject($objet)),
             'domainesCommunsWithUser' => $this
                 ->get('hopitalnumerique_core.dependency_injection.entity')
                 ->getEntityDomainesCommunsWithUser($objet, $user)
             ,
-            'relatedRisks' => $objet->getRelatedRisks(),
         ];
 
         return $this->renderForm(
@@ -510,10 +501,8 @@ class ObjetController extends Controller
                     'infra' => isset($options['infra']) ? $options['infra'] : false,
                     'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                     'note' => isset($options['note']) ? $options['note'] : 0,
-                    'productions' => isset($options['productions']) ? $options['productions'] : [],
+                    'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                     'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
-                    'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
-                    'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
                 ]);
@@ -539,9 +528,7 @@ class ObjetController extends Controller
                         'infra' => isset($options['infra']) ? $options['infra'] : false,
                         'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                         'note' => isset($options['note']) ? $options['note'] : 0,
-                        'productions' => isset($options['productions']) ? $options['productions'] : [],
-                        'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
-                        'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
+                        'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                         'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
@@ -621,9 +608,7 @@ class ObjetController extends Controller
                 'infra' => isset($options['infra']) ? $options['infra'] : false,
                 'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
                 'note' => isset($options['note']) ? $options['note'] : 0,
-                'productions' => isset($options['productions']) ? $options['productions'] : [],
-                'relatedBoards' => isset($options['relatedBoards']) ? $options['relatedBoards'] : [],
-                'relatedRisks' => isset($options['relatedRisks']) ? $options['relatedRisks'] : [],
+                'objectsRelated' => isset($options['objectsRelated']) ? $options['objectsRelated'] : [],
                 'relatedObjects' => isset($options['relatedObjects']) ? $options['relatedObjects'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],

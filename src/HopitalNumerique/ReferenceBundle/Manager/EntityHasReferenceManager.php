@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
@@ -131,6 +132,31 @@ class EntityHasReferenceManager extends BaseManager
                     // Vérifier si filtre primary
                     && (!array_key_exists('primary', $resultFilters) || (($resultFilters['primary'] && $entityHaveReferenceWithoutRoles['primarySum'] >= 1) || (!$resultFilters['primary'] && $entityHaveReferenceWithoutRoles['primarySum'] < 1)))
                 ;
+
+            if ($entityHaveReferenceWithoutRoles['entityType'] === Entity::ENTITY_TYPE_CDP_DISCUSSION && $entityHaveReferenceWithoutRoles['isDiscussionPublic'] == 0) {
+                $userIsInCdpGroup = function ($groups, $roles) use ($user) {
+                    if (!$user instanceof User || !$user->getCommunautePratiqueGroupes()) {
+                        return false;
+                    }
+
+                    if ($roles) {
+                        return false;
+                    }
+
+                    foreach ($user->getCommunautePratiqueGroupes() as $userGroup) {
+                        foreach (explode(',', $groups) as $group) {
+                            if (intVal($group) == $userGroup->getId()) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                };
+
+                $entityValid = $entityValid && $userIsInCdpGroup($entityHaveReferenceWithoutRoles['discussionGroupsIds'], $entityHaveReferenceWithoutRoles['discussionGroupsRequiredRolesIds']);
+            }
+
             if ($entityValid) {
                 $entityHaveReferenceWithoutRoles['objetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['objetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['objetTypeIds']))) : []);
                 $entityHaveReferenceWithoutRoles['contenuTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuTypeIds']))) : []);

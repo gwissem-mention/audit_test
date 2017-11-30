@@ -2,14 +2,20 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\ForumBundle\Entity\Board;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use Pagerfanta\Adapter\ArrayAdapter;
+use HopitalNumerique\CommunautePratiqueBundle\Service\News\WallItemRetriever;
 use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\ForumBundle\Entity\Board;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
+use HopitalNumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 
 /**
  * Contrôleur des actualités de la communauté de pratique.
@@ -17,76 +23,33 @@ use Symfony\Component\HttpFoundation\Response;
 class ActualiteController extends Controller
 {
     /**
-     * Liste des actualités.
-     *
-     * @param         $page
-     * @param Request $request
-     *
-     * @return RedirectResponse|Response
+     * @return Response
      */
-    public function listAction($page, Request $request)
+    public function indexAction(Request $request)
     {
-        $categorie = $this->container->get('hopitalnumerique_reference.manager.reference')
-            ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID);
+        $discussionRepository = $this->get(DiscussionRepository::class);
+        $messageRepository = $this->get(MessageRepository::class);
+        $userRepository = $this->get('hopitalnumerique_user.repository.user');
+        $cdpGroupRepository = $this->get('hopitalnumerique_communautepratique.repository.group');
 
-        return $this->renderList($categorie, $page, $request);
-    }
+        $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
+        $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
-    /**
-     * Liste les actualités d'une catégorie.
-     *
-     * @param Reference $categorie
-     * @param           $page
-     * @param Request   $request
-     *
-     * @return RedirectResponse|Response
-     */
-    public function listByCategorieAction(Reference $categorie, $page, Request $request)
-    {
-        return $this->renderList($categorie, $page, $request);
-    }
+        $cdpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
 
-    /**
-     * Affiche la liste des articles d'une catégorie.
-     *
-     * @param Reference $categorie Catégorie
-     * @param int       $page      Numéro de page
-     * @param Request   $request
-     *
-     * @return RedirectResponse|Response
-     */
-    private function renderList(Reference $categorie, $page, Request $request)
-    {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAccessCommunautePratique()) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
-        }
-
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
-            ->findOneById($request->getSession()->get('domaineId'));
-
-        if ($domaine->getId() === 1) {
-            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
-                Board::BOARD_MHN_ID
-            );
-        } elseif ($domaine->getId() === 7) {
-            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
-                Board::BOARD_RSE_ID
-            );
-        } else {
-            $actualites = [];
-        }
-
-        $actualitesAdapter = new ArrayAdapter($actualites);
-        $actualitesPager = new Pagerfanta($actualitesAdapter);
-        $actualitesPager->setMaxPerPage(5);
-        $actualitesPager->setCurrentPage($page);
-
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Actualite:list.html.twig', [
-            'categorieActualites' => $this->container->get('hopitalnumerique_reference.manager.reference')
-                ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID),
-            'categorie' => $categorie,
-            'actualitesPager' => $actualitesPager,
+        return $this->render('@HopitalNumeriqueCommunautePratique/Actualite/index.html.twig', [
+            'currentUri' => str_replace('=', '', base64_encode($request->getUri())),
+            'publicDiscussionCount' => $discussionRepository->getPublicDiscussionCount($selectedDomain),
+            'publicMessageCount' => $messageRepository->getPublicMessageCount($selectedDomain),
+            'groupMessageCount' => $messageRepository->getGroupMessageCount($selectedDomain, $this->getUser()),
+            'groupMessageFileCount' => $messageRepository->getMessageFileCount($selectedDomain, $this->getUser()),
+            'runningGroupCount' => $cdpGroupRepository->countActiveGroups($domains, $this->getUser()),
+            'cdpUserCount' => $userRepository->countCDPUsers($domains),
+            'contributorsCount' => $userRepository->getCDPContributorCount($domains, $this->getUser()),
+            'cdpOrganizationCount' => $userRepository->getCDPOrganizationsCount($domains),
+            'userRecentGroups' => $this->getUser() ? $cdpGroupRepository->getUsersRecentGroups($this->getUser(), 4, $domains) : [],
+            'wallItems' => $this->get(WallItemRetriever::class)->retrieve($selectedDomain),
+            'cdpArticle' => $cdpArticle,
         ]);
     }
 }

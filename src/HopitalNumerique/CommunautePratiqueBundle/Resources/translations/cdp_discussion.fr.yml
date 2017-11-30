@@ -1,0 +1,135 @@
+block:
+    title: Discussion
+
+discussion:
+    group:
+        animator: Animateur du groupe
+    public:
+        title: Espace de discussion
+        animator: Animateur de groupes
+        discussion:
+            from_group: "Discussion issue du groupe %groups% | Discussion issue des groupes %groups%"
+            from_public: ATTENTION : discussion affichée dans l'espace public de discussion
+            subscribed: Vous suivez cette discussion
+    list:
+        item:
+            message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
+            last_message: Dernier le %date% à %time% par %author%
+            created_at: Discussion créée le %date%
+            new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"
+        presentation:
+            message_infos: "]0,1] %count% message (le dernier le %date%)|]1, Inf[ %count% messages (le dernier le %date% à %time%)"
+        load_more: Voir plus
+    new_discussion:
+        text: Créer une nouvelle discussion
+        form:
+            title:
+                label: Titre de la discussion
+            content:
+                label: Message
+            submit:
+                text: Publier
+        success: Nouvelle discussion créée avec succés.
+    discussion:
+        actions:
+            title:
+                label: Sélectionnez une action
+            up:
+                label:
+                    up: Recommander pour la communauté
+                    down: Ne plus recommander pour la communauté
+                success:
+                    up: La discussion est désormais recommandée.
+                    down: La discussion n'est plus recommandée.
+
+            download:
+                label: Télécharger la discussion
+                full: Télécharger une archive des documents
+            public:
+                label:
+                    up: Rendre cette discussion publique
+                    down: Retirer cette discussion de l'espace public
+                confirm:
+                    up: Êtes vous sûr de vouloir rendre cette discussion publique ?
+                    down: Êtes vous sûr de vouloir rendre cette discussion privée ?
+                success: Discussion copiée dans l'espace public.
+            private:
+                success: Discussion rendu dans l'espace privée.
+            group_copy:
+                label: Copier dans un groupe
+                success: Discussion copiée dans le groupe.
+                modal:
+                    title: Copier la discussion dans le groupe "%groupName%"
+                    empty: Aucun groupe disponible
+            cart:
+                label: Ajouter au panier
+            subscription:
+                sub:
+                    label: Suivre cette discussion
+                    success: Vous êtes désormais abonné à cette discussion.
+                un:
+                    label: Ne plus suivre cette discussion
+                    success: Vous n'êtes plus abonné à cette discussion.
+
+        files:
+            title: Documents
+            new_document_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
+            new_document_highlight: "nouveau document | nouveaux documents"
+            author: Déposé par %author% le %date% à %time%
+            is_new: NEW
+    message:
+        title: "Message | Messages"
+        new_message_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
+        new_message_highlight: "nouveau message | nouveaux messages"
+        item:
+            infos: Par %author% le %date% à %time%
+            is_new: NEW
+        actions:
+            publish:
+                text: Ce message est en attente de modération par administrateur.
+                btn: Valider ce message
+            delete:
+                confirm: Voulez-vous vraiment supprimer ce message ?
+                success: Message supprimé avec succés.
+        reply:
+            validate:
+                success: Message publié avec succès.
+            add:
+                title: Répondre à une discussion
+                success: Message publié avec succès.
+                moderate: Votre message contient un lien, un animateur doit le valider avant publication.
+            edit:
+                title: Modifier un message
+                success: Message modifié avec succès.
+            form:
+                biography:
+                    label: Vous ne vous êtes pas présenté. Complétez votre biographie
+                    link:
+                        text: Voir mon profil
+                submit:
+                    text: Envoyer
+        presentation:
+            title: Présentation des membres du groupe
+            content:
+                prefix: |
+                    Bonjour
+
+                    Voici ma présentation:
+                suffix: |
+                    Cordialement
+                    %author%
+    author_tooltip:
+        organization: "Etablissement :"
+        presentation: "Présentation :"
+        hobbies: "Centre d'intérêts :"
+        computer_skills: "Logiciels maitrisés :"
+    export:
+        header:
+            author: Auteur
+            creation_date: Date de création
+            message: Message
+    icon_tooltip:
+        helpfulMessage: Contribution d'intérêt
+        recommended: Discussion recommandée par la communauté
+        new: Nouvelle discussion
+        newMessage: Nouveaux messages

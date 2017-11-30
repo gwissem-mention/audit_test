@@ -1,0 +1,6 @@
+types:
+    risk: Risque
+    board: Board
+    object: Production
+    infradoc: Infradoc
+    discussion: Discussion

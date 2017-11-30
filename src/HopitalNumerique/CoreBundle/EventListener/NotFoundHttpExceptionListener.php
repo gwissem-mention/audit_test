@@ -70,7 +70,7 @@ class NotFoundHttpExceptionListener
             $subRequest          = $this->request_stack->getCurrentRequest()->duplicate([], null, $path);
 
             $event->setResponse(
-                $this->http_kernel->handle($subRequest, HttpKernelInterface::MASTER_REQUEST)
+                $this->http_kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST)
             );
         }
     }

@@ -2,7 +2,7 @@
 
 {% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
 
-{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratique</a></li>{% endblock %}
+{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}">Communauté de pratique</a></li>{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ communaute_pratique.display_action_groupes_with_publications(groupes) }}
@@ -27,7 +27,7 @@
 <div class="communaute-de-pratiques-sommaire">
     <div class="row">
         <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}"><em class="icon icon-download105"></em> Tableau de bord</a>
+            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-download105"></em> Tableau de bord</a>
         </div>
         <div class="col-md-3">
             <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon-group2"></em> Membres de la communauté</a>

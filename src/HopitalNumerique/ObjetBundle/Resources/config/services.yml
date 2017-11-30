@@ -48,7 +48,14 @@ services:
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.manager.note"
+            - "@session"
+            - "@hopitalnumerique_user.manager.user"
+            - "@hopitalnumerique_reference.manager.reference"
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
 
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
@@ -137,7 +144,7 @@ services:
 
     hopitalnumerique_objet.dependency_injection.production_liee:
         class: 'HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee'
-        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity']
 
     hopitalnumerique_objet.doctrine.note_reader:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'
@@ -171,40 +178,6 @@ services:
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Risk'
 
-    hopitalnumerique_objet.link_board_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\LinkBoardToObjectHandler
-        arguments:
-            - "@hopitalnumerique_objet.repository.objet"
-            - "@hopitalnumerique_objet.manager.objet"
-            - "@hopitalnumerique_forum.repository.board"
-
-    hopitalnumerique_objet.unlink_board_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\UnlinkBoardToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
-    hopitalnumerique_objet.reorder_related_board_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\ReorderRelatedBoardsHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@hopitalnumerique_objet.repository.related_board"
-
-    hopitalnumerique_objet.reorder_related_risks_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\ReorderRelatedRisksHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
-    hopitalnumerique_objet.add_related_risks_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\LinkRisksToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@hopitalnumerique_objet.repository.risk"
-
-    hopitalnumerique_objet.unlink_risk_to_object_handler:
-        class: HopitalNumerique\ObjetBundle\Domain\Command\RelatedRisk\UnlinkRiskToObjectHandler
-        arguments:
-            - "@doctrine.orm.entity_manager"
-
     hopitalnumerique_objet.handler.edit_risk:
         class: HopitalNumerique\ObjetBundle\Domain\Command\EditRiskHandler
         arguments:
@@ -231,6 +204,8 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@hopitalnumerique_rechercheparcours.repository.risk_analysis"
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository'
 
     hopitalnumerique_objet.widgets.updated_objects:
         class: HopitalNumerique\ObjetBundle\Service\Widget\ObjectUpdatedWidget
@@ -363,3 +338,4 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+

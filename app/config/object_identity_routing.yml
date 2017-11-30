@@ -1,0 +1,26 @@
+parameters:
+    object_identity_routing:
+        view:
+            HopitalNumerique\ObjetBundle\Entity\Objet:
+                route: hopital_numerique_publication_publication_objet
+                parameters:
+                    id: objectId
+            HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion:
+                route: hopitalnumerique_communautepratique_discussions_public_desfult_discussion
+                parameters:
+                    discussion: objectId
+            HopitalNumerique\ObjetBundle\Entity\Contenu:
+                route: hopital_numerique_publication_publication_contenu_without_alias
+                parameters:
+                    id: object.objet.id
+                    idc: objectId
+            HopitalNumerique\ForumBundle\Entity\Board:
+                route: ccdn_forum_user_board_show
+                parameters:
+                    forumName: object.category.forum.name
+                    boardId: objectId
+        admin_edit:
+            HopitalNumerique\ObjetBundle\Entity\Objet:
+                route: hopitalnumerique_objet_objet_edit
+                parameters:
+                    id: objectId

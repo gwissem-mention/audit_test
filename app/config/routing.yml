@@ -2,6 +2,10 @@ hopital_numerique_contextual_navigation:
     resource: "@HopitalNumeriqueContextualNavigationBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_fichier:
+    resource: "@HopitalNumeriqueFichierBundle/Resources/config/routing.yml"
+    prefix:   /file
+
 hopital_numerique_cart:
     resource: "@HopitalNumeriqueCartBundle/Resources/config/routing.yml"
     prefix:   /cart

@@ -1,0 +1,31 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{{ user.prenomNom }}<br />
+{% if user.organization is not null %}
+    <b>{{ 'discussion.author_tooltip.organization'|trans }}</b>
+    {{ user.organization.nom }}<br />
+{% endif %}
+{% if user.presentation is not empty %}
+    <b>{{ 'discussion.author_tooltip.presentation'|trans }}</b>
+    {{ user.presentation|raw }}<br />
+{% endif %}
+
+{% if user.hobbies|length %}
+    {% set hobbies = [] %}
+    {% for hobby in user.hobbies %}
+        {% set hobbies = hobbies|merge([hobby.label]) %}
+    {% endfor %}
+
+    <b>{{ 'discussion.author_tooltip.hobbies'|trans }}</b>
+    {{ hobbies|join(', ') }}<br />
+{% endif %}
+
+{% if user.computerSkills|length %}
+    {% set computerSkills = [] %}
+    {% for computerSkill in user.computerSkills %}
+        {% set computerSkills = computerSkills|merge([computerSkill.libelle]) %}
+    {% endfor %}
+
+    <b>{{ 'discussion.author_tooltip.computer_skills'|trans }}</b>
+    {{ computerSkills|join(', ') }}<br />
+{% endif %}

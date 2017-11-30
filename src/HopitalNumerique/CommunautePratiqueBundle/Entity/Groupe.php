@@ -4,9 +4,11 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -105,13 +107,17 @@ class Groupe
     private $actif;
 
     /**
-     * @var Domaine
+     * @var Domaine[]
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
-     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
+     * @ORM\JoinTable(
+     *     name="hn_communautepratique_groupe_domain",
+     *     joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", onDelete="CASCADE")},
+     *     inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
      * @Assert\NotNull()
      */
-    private $domaine;
+    protected $domains;
 
     /**
      * @var Questionnaire
@@ -173,6 +179,31 @@ class Groupe
     private $commentaires;
 
     /**
+     * @var Role[]
+     *
+     * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
+     * @ORM\JoinTable(name="hn_communautepratique_groupe_role",
+     *      joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
+     * )
+     */
+    protected $requiredRoles;
+
+    /**
+     * @var Discussion|null
+     *
+     * @ORM\OneToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion")
+     */
+    protected $presentationDiscussion;
+
+    /**
+     * @var Discussion[]
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion", mappedBy="groups")
+     */
+    protected $discussions;
+
+    /**
      * @ORM\Column(name="group_new", type="boolean", nullable=false, options={"default"=false})
      */
     protected $isNew;
@@ -189,6 +220,9 @@ class Groupe
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->domains = new ArrayCollection();
+        $this->requiredRoles = new ArrayCollection();
+        $this->discussions = new ArrayCollection();
     }
 
     /**
@@ -418,15 +452,17 @@ class Groupe
     }
 
     /**
-     * Set domaine.
+     * Add domain
      *
-     * @param Domaine $domaine
+     * @param Domaine $domain
      *
      * @return Groupe
      */
-    public function setDomaine(Domaine $domaine)
+    public function addDomain(Domaine $domain)
     {
-        $this->domaine = $domaine;
+        if (!$this->domains->contains($domain)) {
+            $this->domains->add($domain);
+        }
 
         return $this;
     }
@@ -434,11 +470,11 @@ class Groupe
     /**
      * Get domaine.
      *
-     * @return Domaine
+     * @return Domaine[]
      */
-    public function getDomaine()
+    public function getDomains()
     {
-        return $this->domaine;
+        return $this->domains;
     }
 
     /**
@@ -554,7 +590,7 @@ class Groupe
     /**
      * Get animateurs.
      *
-     * @return Collection
+     * @return Collection|User[]
      */
     public function getAnimateurs()
     {
@@ -564,14 +600,14 @@ class Groupe
     /**
      * Adds a user to practice community group and returns new 'Inscription' object.
      *
-     * @param User $user
+     * @param User $users
+     * @param boolean $autoValidate
      *
      * @return Inscription
      */
-    public function addUser(User $user)
+    public function addUser(User $users, $autoValidate = false)
     {
-        $register = new Inscription($this, $user);
-        $this->addInscription($register);
+        $this->addInscription(new Inscription($this, $users, $autoValidate));
 
         return $register;
     }
@@ -615,7 +651,14 @@ class Groupe
      */
     public function addInscription(Inscription $inscription)
     {
-        $this->inscriptions[] = $inscription;
+        if ($this->inscriptions->filter(function (Inscription $registration) use ($inscription) {
+            return
+                $registration->getUser()->getId() === $inscription->getUser()->getId() &&
+                $registration->getGroupe()->getId() === $inscription->getGroupe()->getId()
+            ;
+        })->count() === 0) {
+            $this->inscriptions[] = $inscription;
+        }
 
         return $this;
     }
@@ -638,6 +681,26 @@ class Groupe
     public function getInscriptions()
     {
         return $this->inscriptions;
+    }
+
+    /**
+     * @return Inscription[]|Collection
+     */
+    public function getValidatedInscriptions()
+    {
+        return $this->getInscriptions()->filter(function (Inscription $registration) {
+            return $registration->isActif();
+        });
+    }
+
+    /**
+     * @return Inscription[]|Collection
+     */
+    public function getInscriptionsToValidate()
+    {
+        return $this->getInscriptions()->filter(function (Inscription $registration) {
+            return !$registration->isActif();
+        });
     }
 
     /**
@@ -888,19 +951,11 @@ class Groupe
     {
         $dateDerniereActivite = $this->dateCreation;
 
-        foreach ($this->commentaires as $commentaire) {
-            if (null === $dateDerniereActivite || $commentaire->getDateCreation() > $dateDerniereActivite) {
-                $dateDerniereActivite = $commentaire->getDateCreation();
-            }
-        }
-
-        foreach ($this->fiches as $fiche) {
-            if (null === $dateDerniereActivite || $fiche->getDateCreation() > $dateDerniereActivite) {
-                $dateDerniereActivite = $fiche->getDateCreation();
-            }
-            if (null !== $fiche->getDateDerniereActivite()
-                    && $fiche->getDateDerniereActivite() > $dateDerniereActivite) {
-                $dateDerniereActivite = $fiche->getDateDerniereActivite();
+        foreach ($this->getDiscussions() as $discussion) {
+            foreach ($discussion->getMessages() as $message) {
+                if (null === $dateDerniereActivite || $message->getCreatedAt() > $dateDerniereActivite) {
+                    $dateDerniereActivite = $message->getCreatedAt();
+                }
             }
         }
 
@@ -1006,6 +1061,84 @@ class Groupe
         }
 
         return str_replace('"', '\'', json_encode($animateurs));
+    }
+
+    /**
+     * @return Role[]|ArrayCollection
+     */
+    public function getRequiredRoles()
+    {
+        return $this->requiredRoles;
+    }
+
+    /**
+     * @return Discussion[]
+     */
+    public function getDiscussions()
+    {
+        return $this->discussions;
+    }
+
+    /**
+     * @param Role $role
+     *
+     * @return Groupe
+     */
+    public function addRequiredRole(Role $role)
+    {
+        if (!$this->requiredRoles->contains($role)) {
+            $this->requiredRoles->add($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Discussion|null
+     */
+    public function getPresentationDiscussion()
+    {
+        return $this->presentationDiscussion;
+    }
+
+    /**
+     * @param Discussion|null $presentationDiscussion
+     *
+     * @return Groupe
+     */
+    public function setPresentationDiscussion(Discussion $presentationDiscussion = null)
+    {
+        $this->presentationDiscussion = $presentationDiscussion;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMessagesCount()
+    {
+        $count = 0;
+
+        foreach ($this->getDiscussions() as $discussion) {
+            $count += $discussion->getMessages()->count();
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMessageFilesCount()
+    {
+        $count = 0;
+
+        foreach ($this->getDiscussions() as $discussion) {
+            $count += $discussion->getMessagesFiles()->count();
+        }
+
+        return $count;
     }
 
     /**

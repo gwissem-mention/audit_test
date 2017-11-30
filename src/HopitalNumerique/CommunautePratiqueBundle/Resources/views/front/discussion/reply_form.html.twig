@@ -1,0 +1,42 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% if app.user is not null and form is not null %}
+
+    {% set user = app.user %}
+
+    {% if message is defined and message %}
+        {% set user = message.user %}
+    {% endif %}
+
+    <div class="message reply">
+        <div class="message-avatar">
+            <div class="avatar" style="background-image: url('{{ user.avatarWebPath }}')"></div>
+        </div>
+        <div class="message-content">
+            <div class="message-infos">
+                <b>{{ user.prenomNom }}</b>
+            </div>
+            <div class="message-body">
+                {{ form_start(form) }}
+
+                    {{ form_widget(form.content, {'attr': {'class': 'validate[required] content'}}) }}
+                    {{ form_errors(form.content) }}
+
+                    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/message_file_zone.html.twig', {'files': form.files, 'message': message is defined ? message : null}) }}
+
+                    {% if form.biography is defined %}
+                        <div class="reply-biography">
+                            <a href="{{ path('account_profile') }}" class="profile-link" target="_blank">{{ 'discussion.message.reply.form.biography.link.text'|trans }}</a>
+                            {{ form_label(form.biography) }}
+                            {{ form_widget(form.biography) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="save">
+                        <input type="submit" class="btn btn-success pull-right" value="{{ 'discussion.message.reply.form.submit.text'|trans|e }}">
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endif %}

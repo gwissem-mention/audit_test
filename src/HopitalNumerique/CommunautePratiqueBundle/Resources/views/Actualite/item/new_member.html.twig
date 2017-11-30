@@ -1,0 +1,49 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            <i class="fa fa-info-circle"></i>
+            {{ 'wall.item.new_member.title'|trans }}
+        </span>
+        <span class="date">
+               - {{ item.date|date('d/m/Y H:i') }}
+        </span>
+    </div>
+
+    <div class="content">
+        <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: item.user.id, group: null}) }}"
+           class="link item-modal"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.new_member.link'|trans }}"
+        >
+            {% set organization = null %}
+            {% if item.user.organization %}
+                {% set organization = item.user.organization.nom %}
+            {% else %}
+                {% set organization = item.user.organizationLabel %}
+            {% endif %}
+            {% if not app.user or app.user.inscritCommunautePratique == false %}
+                {% if organization %}
+                    {{ 'wall.item.new_member.content.public.organization'|trans({'%organization%': organization}) }}
+                {% else %}
+                    {{ 'wall.item.new_member.content.public.without_organization'|trans({'%organization%': organization}) }}
+                {% endif %}
+            {% else %}
+                {% if item.user.jobLabel and organization %}
+                    {{ 'wall.item.new_member.content.private.both'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+                {% elseif item.user.jobLabel %}
+                    {{ 'wall.item.new_member.content.private.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel}) }}
+                {% elseif organization %}
+                    {{ 'wall.item.new_member.content.private.organization'|trans({'%user%': item.user.prenomNom, '%organization%': organization}) }}
+                {% else %}
+                    {{ 'wall.item.new_member.content.private.none'|trans }}
+                {% endif %}
+            {% endif %}
+        </a>
+    </div>
+
+</div>

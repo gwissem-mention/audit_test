@@ -9,6 +9,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\EnrollUserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Contrôleur gérant l'inscription à la communauté de pratique.
@@ -17,8 +18,10 @@ class InscriptionController extends Controller
 {
     /**
      * Inscrit l'utilisateur connecté.
+     *
+     * @param Request $request
      */
-    public function ajaxInscritAction()
+    public function ajaxInscritAction(Request $request)
     {
         $user = $this->getUser();
 
@@ -35,7 +38,7 @@ class InscriptionController extends Controller
             }
 
             return new JsonResponse([
-                'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index'),
+                'url' => $request->getSession()->get('urlToRedirectAfterCDPRegistration') ?: $this->generateUrl('hopitalnumerique_communautepratique_news_index'),
             ]);
         } else {
             $this->addFlash(
@@ -65,7 +68,7 @@ class InscriptionController extends Controller
                 $this->addFlash('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
 
-            return $this->redirectToRoute('hopitalnumerique_communautepratique_accueil_index');
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_news_index');
         } else {
             $this->addFlash(
                 'danger',

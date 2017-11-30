@@ -1,0 +1,224 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% if group is not defined %}
+    {% set group = null %}
+{% endif %}
+
+<div class="discussion-title">
+    <h2>{{ discussion.title }}</h2>
+
+    {% if isDiscussionSubscribed %}
+        <span class="group">
+            <b>({{ 'discussion.public.discussion.subscribed'|trans }})</b>
+        </span>
+    {% endif %}
+
+    {% if discussion.creationPosition is constant('CREATED_IN_GROUP', discussion) and discussion.groups|length and scope == 'public' %}
+        <div class="group">
+            {% set groupsLabel = [] %}
+            {% for group in discussion.groups %}
+                {% set groupsLabel = groupsLabel|merge(['<b>'~group.titre~'</b>']) %}
+            {% endfor %}
+            {{ 'discussion.public.discussion.from_group'|transchoice(groupsLabel|length, {'%groups%': groupsLabel|join(', ')})|raw }}
+        </div>
+    {% elseif discussion.creationPosition is constant('CREATED_AS_PUBLIC', discussion) and discussion.public and scope == 'group' %}
+        <div class="group">
+            {{ 'discussion.public.discussion.from_public'|trans }}
+        </div>
+    {% endif %}
+</div>
+
+{% if discussion.getMessagesFiles.count %}
+    <div class="discussion-files">
+        <a href="#files" data-toggle="collapse" class="more"><i class="fa fa-chevron-down"></i></a>
+
+        <h3>
+            {{ 'discussion.discussion.files.title'|trans }}
+            {% if app.user and discussion.getNewMessageFileCount(app.user) %}
+                <span class="new-document">
+                    {{ 'discussion.discussion.files.new_document_count'|transchoice(discussion.getNewMessageFileCount(app.user), {'%highlight%': '<a href="#" class="goto-new-file">'~('discussion.discussion.files.new_document_highlight'|transchoice(discussion.getNewMessageFileCount(app.user)))~'</a>'})|raw }}
+                    <span class="new-message-badge">{{ discussion.getNewMessageFileCount(app.user) }}</span>
+                </span>
+            {% endif %}
+        </h3>
+
+        <div id="files" class="collapse">
+            {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', {'messages': discussion.messages}) }}
+        </div>
+    </div>
+{% endif %}
+
+<div class="messages" data-read-message-uri="{{ path('hopitalnumerique_communautepratique_discussions_discussion_read_message') }}">
+    <h3 class="title">
+        {{ 'discussion.message.title'|transchoice(discussion.messages.count) }}
+        {% if app.user and discussion.newMessageCount(app.user) %}
+            <span class="new-message">
+                {{ 'discussion.message.new_message_count'|transchoice(discussion.newMessageCount(app.user), {'%highlight%': '<a href="#new-message">'~('discussion.message.new_message_highlight'|transchoice(discussion.newMessageCount(app.user)))~'</a>'})|raw }}
+                <span class="new-message-badge">{{ discussion.newMessageCount(app.user) }}</span>
+            </span>
+        {% endif %}
+    </h3>
+
+    <div class="actions">
+        <div class="actions-block">
+            {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MANAGE_DOMAINS'), discussion) and discussionDomainsForm is not null%}
+                {{ form_start(discussionDomainsForm, {'attr': {'class': 'discussion-domains'}}) }}
+                    {{ form_widget(discussionDomainsForm.domains, {'attr': {'class': 'select2'}}) }}
+
+                    {% spaceless %}
+                        <a
+                            href="{{ path('hopitalnumerique_reference_referencement_popin', { 'entityType': constant('HopitalNumerique\\CoreBundle\\DependencyInjection\\Entity::ENTITY_TYPE_CDP_DISCUSSION'), 'entityId': discussion.id, 'redirect': 'false' }) }}"
+                            class="open-popin-referencement fancybox.ajax btn btn-link"
+                        >
+                            <i class="fa fa-cog"></i>
+                        </a>
+                    {% endspaceless %}
+                {{ form_end(discussionDomainsForm) }}
+            {% endif %}
+        </div>
+
+        <div class="actions-block">
+            <select class="discussion-actions">
+                <option value="">{{ 'discussion.discussion.actions.title.label'|trans }}</option>
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
+                {% endif %}
+                {% if scope == 'public' and discussion.groups.count == 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                {% endif %}
+                {% if discussion.groups.count > 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::SET_AS_PUBLIC'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto" data-confirm="{{ ('discussion.discussion.actions.public.confirm.'~(discussion.public ? 'down' : 'up'))|trans }}">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
+                {% endif %}
+                <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
+
+                <option value="{{ path('hopitalnumerique_communautepratique_discussions_subscribe', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.subscription.'~(isDiscussionSubscribed ? 'un' : 'sub')~'.label')|trans }}</option>
+
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">
+                        {{ ('discussion.discussion.actions.up.label.'~(discussion.recommended ? 'down' : 'up'))|trans }}
+                    </option>
+                {% endif %}
+                {% if discussion.getMessagesFiles.count > 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
+                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_document_discussion', {'discussion': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.full'|trans }}</option>
+                {% endif %}
+            </select>
+        </div>
+    </div>
+
+    {% set firstNewMessage = false %}
+    {% for message in discussion.messages %}
+        {% set isNewMessageId = false %}
+        {% set isNewMessage = false %}
+        {% if app.user and discussion.isNewMessage(app.user, message) %}
+            {% if firstNewMessage == false%}
+                {% set firstNewMessage = true %}
+                {% set isNewMessageId = true %}
+            {% endif %}
+
+            {% set isNewMessage = true %}
+        {% endif %}
+
+        <div class="message{{ not message.published ? ' need-moderation' }}{{ message.helpful  ? ' message--helpful' }}{{ isNewMessage ? ' new' }}{{ isNewMessage and message.files|length ? ' newFile' }}"{{ isNewMessageId ? ' id="new-message"' }} data-message-id="{{ message.id }}">
+            <div class="message-avatar">
+                <div class="avatar" style="background-image: url('{{ message.user.avatarWebPath }}')"></div>
+            </div>
+            <div class="message-content" id="{{ 'message-'~message.id }}">
+                <div class="message-infos">
+                    <div class="actions">
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::MARK_AS_HELPFUL'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_helpful', {'message': message.id}) }}" class="helpful{{ message.helpful ? ' active' }}">
+                                <span data-toggle="tooltip"
+                                      data-placement="top"
+                                      data-html="true"
+                                      title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans }}"
+                                >
+                                    <i class="fa fa-star-o inactive"></i>
+                                    <i class="fa fa-star active"></i>
+                                </span>
+                            </a>
+                        {% endif %}
+
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_edit_reply_discussion', {'discussion': discussion.id, 'message': message.id, 'group': group ? group.id : null}) }}">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        {% endif %}
+
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::DELETE'), message) %}
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_delete', {'message': message.id, 'group': group ? group.id : null}) }}" onclick="return confirm('{{ 'discussion.message.actions.delete.confirm'|trans|e }}');">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <a class="discussion-user" href="{{ path('hopitalnumerique_communautepratique_user_details', {user: message.user.id, group: group ? group.id : null}) }}">
+                        {% if app.user and app.user.inscritCommunautePratique %}
+                            {{ 'discussion.message.item.infos'|trans({'%author%': '<b data-toggle="tooltip" data-html="true" title="'~include('@HopitalNumeriqueCommunautePratique/front/discussion/author_tooltip.html.twig', {'user': message.user})|e~'">'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')})|raw }}
+                        {% else %}
+                            {{ 'discussion.message.item.infos'|trans({'%author%': '<b>'~message.user.prenomNom~'</b>', '%date%': message.createdAt|date('d/m/Y'), '%time%': message.createdAt|date('H:i')})|raw }}
+                        {% endif %}
+                    </a>
+
+                    {% if message.user.communautePratiqueAnimateurGroupes.count > 0 %}
+                        <span class="animator">
+                            <i class="fa fa-bullhorn"></i>
+                            {% if 'group' == scope %}
+                                {% if message.user in group.animateurs %}
+                                    {{ 'discussion.group.animator'|trans }}
+                                {% endif %}
+                            {% else %}
+                                {{ 'discussion.public.animator'|trans }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+
+                    {% if isNewMessage %}
+                        <span class="is-new"
+                              data-toggle="tooltip"
+                              data-placement="top"
+                              data-html="true"
+                              title="{{ 'discussion.icon_tooltip.new'|trans }}"
+                        >
+                            {{ 'discussion.message.item.is_new'|trans }}
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="message-body">
+                    {% if not message.published %}
+
+                        <div class="moderate">
+                            <div class="label label-danger center-block">{{ 'discussion.message.actions.publish.text'|trans }}</div>
+                            <div class="content bg-danger">
+                                <div class="bb_wrapper">
+                                    {{ message.content|raw }}
+                                </div>
+                            </div>
+
+                            {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::VALIDATE'), message) %}
+                                <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion_message_validate', {'message': message.id, 'group': group ? group.id : null}) }}" class="btn btn-primary pull-right">
+                                    <i class="fa fa-check"></i>
+                                    {{ 'discussion.message.actions.publish.btn'|trans }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {{ message.content|parsePublication|unescape }}
+                    {% endif %}
+                </div>
+                <div class="message-documents discussion-files">
+                    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion/documents.html.twig', { 'messages': [message], scrollTo: false }) }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if answerDiscussionForm is not null %}
+        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/reply_form.html.twig', {'form': answerDiscussionForm}) }}
+    {% endif %}
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="action-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>

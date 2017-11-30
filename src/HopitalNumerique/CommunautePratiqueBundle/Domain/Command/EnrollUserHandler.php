@@ -38,7 +38,10 @@ class EnrollUserHandler
      */
     public function handle(EnrollUserCommand $command)
     {
-        $command->user->setInscritCommunautePratique(true);
+        $command->user
+            ->setInscritCommunautePratique(true)
+            ->setCommunautePratiqueEnrollmentDate(new \DateTime())
+        ;
         $this->entityManager->flush($command->user);
 
         $this->eventDispatcher->dispatch(Events::ENROLL_USER, new EnrolmentEvent($command->user));

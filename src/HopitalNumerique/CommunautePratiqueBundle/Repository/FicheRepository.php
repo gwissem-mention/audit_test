@@ -23,7 +23,7 @@ class FicheRepository extends \Doctrine\ORM\EntityRepository
             ->select('COUNT(f.id)')
             ->join('f.groupe', 'g')
             ->join(
-                'g.domaine',
+                'g.domains',
                 'domaine',
                 Join::WITH,
                 $qb->expr()->in(

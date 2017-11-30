@@ -18,11 +18,11 @@
                 <li>
                 <span class="spaced">
                     {{ riskAnalysis.risk.nature.libelle }} - {{ riskAnalysis.risk.label }} : {{ riskAnalysis.skillsRate|default(0) }}%
-                    {% if riskAnalysis.risk.relatedRisks|length %}
-                        {{ 'step.synthesis.highest_critical_risks.related'|transchoice(riskAnalysis.risk.relatedRisks|length) }}
+                    {% if riskSynthesis.global.riskRelatedObjects[riskAnalysis.risk.id] is defined and riskSynthesis.global.riskRelatedObjects[riskAnalysis.risk.id]|length %}
+                        {{ 'step.synthesis.highest_critical_risks.related'|transchoice(riskSynthesis.global.riskRelatedObjects[riskAnalysis.risk.id]|length) }}
 
                         {% set types = [] %}
-                        {% for label, count in riskAnalysis.risk.countRelatedRisksObjectType %}
+                        {% for label, count in riskSynthesis.global.riskRelatedObjects[riskAnalysis.risk.id] %}
                             {% set types = types|merge([count~' '~label]) %}
                         {% endfor %}
 

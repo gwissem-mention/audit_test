@@ -1,0 +1,8 @@
+services:
+    HopitalNumerique\ForumBundle\Security\BoardVoter:
+        class: HopitalNumerique\ForumBundle\Security\BoardVoter
+        arguments:
+            - '@security.role_hierarchy'
+        tags:
+            - { name: security.voter }
+        public: false

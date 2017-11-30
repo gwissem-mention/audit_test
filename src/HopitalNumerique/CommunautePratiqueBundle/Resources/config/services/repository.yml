@@ -1,0 +1,25 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Discussion']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Read']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Message']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Member\ViewedMember']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Activity']

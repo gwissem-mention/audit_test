@@ -608,14 +608,6 @@ class User extends BaseUser implements SettingsOwnerInterface
     protected $domaines;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="usr_biographie", nullable=true, type="text")
-     * @Gedmo\Versioned
-     */
-    protected $biographie;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean")
@@ -652,6 +644,13 @@ class User extends BaseUser implements SettingsOwnerInterface
      * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false})
      */
     private $inscritCommunautePratique;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $communautePratiqueEnrollmentDate;
 
     /**
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist", "remove"})
@@ -1895,6 +1894,24 @@ class User extends BaseUser implements SettingsOwnerInterface
     /**
      * @return bool
      */
+    public function hasRoleCDPAdmin()
+    {
+        foreach ($this->getRoles() as $role) {
+            if (in_array($role, [
+                Role::$ROLE_ADMIN_LABEL,
+                Role::$ROLE_ADMIN_HN_LABEL,
+                Role::$ROLE_ADMIN_DOMAINE,
+            ])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function hasRoleAdminHn()
     {
         return $this->hasRole(Role::$ROLE_ADMIN_HN_LABEL);
@@ -2160,30 +2177,6 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
-     * Get biographie.
-     *
-     * @return string $biographie
-     */
-    public function getBiographie()
-    {
-        return $this->biographie;
-    }
-
-    /**
-     * Set biographie.
-     *
-     * @param string $biographie
-     *
-     * @return User
-     */
-    public function setBiographie($biographie)
-    {
-        $this->biographie = $biographie;
-
-        return $this;
-    }
-
-    /**
      * Get dateLastUpdate.
      *
      * @return \DateTime $dateLastUpdate
@@ -2430,6 +2423,26 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCommunautePratiqueEnrollmentDate()
+    {
+        return $this->communautePratiqueEnrollmentDate;
+    }
+
+    /**
+     * @param \DateTime $communautePratiqueEnrollmentDate
+     *
+     * @return User
+     */
+    public function setCommunautePratiqueEnrollmentDate($communautePratiqueEnrollmentDate = null)
+    {
+        $this->communautePratiqueEnrollmentDate = $communautePratiqueEnrollmentDate;
+
+        return $this;
+    }
+
+    /**
      * Add communautePratiqueGroupe.
      *
      * @param Groupe $communautePratiqueGroupe
@@ -2498,18 +2511,17 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
-     * Adds a practice community group to user and returns the new 'Inscription' object.
+     * Add communautePratiqueGroupe.
      *
-     * @param Groupe $group
+     * @param Groupe $communautePratiqueGroupe
      *
-     * @return Inscription
+     * @return User
      */
-    public function addCommunautePratiqueGroupe(Groupe $group)
+    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe, $autoValidate = false)
     {
-        $register = new Inscription($group, $this);
-        $this->addCommunautePratiqueGroupeInscription($register);
+        $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this, $autoValidate));
 
-        return $register;
+        return $this;
     }
 
     /**
@@ -2591,6 +2603,22 @@ class User extends BaseUser implements SettingsOwnerInterface
     }
 
     /**
+     * @param Groupe $group
+     *
+     * @return bool
+     */
+    public function isRegisteredInCDPGroup(Groupe $group)
+    {
+        foreach ($this->getGroupeInscription() as $registration) {
+            if ($registration->isActif() && $registration->getGroupe()->getId() == $group->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Has $groupeInscription ?
      *
      * @param Inscription $groupeInscription
@@ -2626,7 +2654,7 @@ class User extends BaseUser implements SettingsOwnerInterface
     /**
      * Get groupeInscription.
      *
-     * @return Collection
+     * @return Collection|Inscription[]
      */
     public function getGroupeInscription()
     {

@@ -1,9 +1,19 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title_communaute_pratique %}Groupes thématiques{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-groups.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/TableauDeBord.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block title_communaute_pratique %}Groupes d'entre-aide{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
+    {{ selectedDomainSelector() }}
     {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
@@ -16,9 +26,12 @@
 
             <div>
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes thématique à venir</a></li>
-                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes thématique en cours</a></li>
-                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-social20"></em> &nbsp; Groupes terminés</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes à venir</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes en cours</a></li>
+                    <li role="presentation"><a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-social20"></em> &nbsp; Groupes terminés</a></li>
+                    {% if groupes|length %}
+                        <li role="presentation"><a href="#dashboard" role="tab" data-toggle="tab"><em class="icon-download105"></em> &nbsp; Tableau de bord</a></li>
+                    {% endif %}
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' active' : '' }}" id="a-venir">
@@ -39,6 +52,12 @@
                         {% endfor %}
 
                     </div>
+
+                    {% if groupes|length %}
+                        <div id="dashboard" class="tab-pane">
+                            {{ include('@HopitalNumeriqueCommunautePratique/Groupe/dashboard.html.twig') }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -55,22 +74,3 @@
     </div>
 
 {% endblock body_communaute_pratique %}
-
-{% block communaute_pratique_sommaire %}
-<div class="communaute-de-pratiques-sommaire">
-    <div class="row">
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}"><em class="icon icon-download105"></em> Tableau de bord</a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon-group2"></em> Membres de la communauté</a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': 'public' }) -}}"><em class="icon-chat27"></em> Forum de la communauté de pratique</a>
-        </div>
-    </div>
-</div>
-{% endblock %}

@@ -1,0 +1,21 @@
+group:
+    tabs:
+        description:
+            title: Description
+            long_title: Description du groupe
+            animators: "Animateur du groupe : | Animateurs du groupe :"
+        discussion:
+            title: Échanges
+            nothing_new: Aucun nouvel événement depuis votre dernière visite
+            new_comments: "%countTxt% nouveau commentaire | %countTxt% nouveaux commentaires"
+            new_documents: "%countTxt% nouveau document | %countTxt% nouveaux documents"
+            new_discussions: "%countTxt% nouvelle discussion | %countTxt% nouvelles discussions"
+        members:
+            title: Annuaire des membres
+            members_count: "%countTxt% membre | %countTxt% membres"
+            members_to_validate_count: "%countTxt% membre à valider | %countTxt% membres à valider"
+            animators_count: "%countTxt% animateur | %countTxt% animateurs"
+    icon_tooltip:
+        return: Retour à la liste des groupes.
+    description:
+        load_more: > Lire la suite

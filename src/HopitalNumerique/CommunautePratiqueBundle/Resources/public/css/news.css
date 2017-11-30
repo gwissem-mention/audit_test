@@ -1,0 +1,86 @@
+.news .blocks {
+    display: flex;
+    overflow: hidden;
+    background: #fff;
+}
+
+.news .blocks .block {
+    display: block;
+    color: #777;
+    width: 25%;
+    background: #eee;
+    border-top: 5px solid #eee;
+    border-bottom: 1px solid #e6e6e6;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: 3px 8px 18px #ddd, -3px 8px 18px #ddd;
+    padding: 8px 20px;
+    height: 160px;
+    overflow-x: auto;
+}
+
+.news .blocks a.block:hover {
+    border-top-color: #ec0034;
+    border-bottom-color: #fff;
+    background: #fff;
+}
+
+.news .blocks .block .block-title {
+    color: #ec0034;
+    display: block;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.news .blocks .block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.news .blocks .block .btn {
+    margin-top: 25px;
+}
+
+.news-wall {
+    border: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 16px 16px;
+}
+
+.news-wall .item {
+    width: 100%;
+    padding: 16px 8px 0 0;
+    box-sizing: border-box;
+}
+
+.news-wall .item .infos {
+    padding: 8px 8px 0;
+}
+
+.news-wall .item .infos .title {
+    font-weight: bold;
+}
+
+.news-wall .item .infos .author {
+    display: block;
+}
+
+.news-wall .item .infos .date {
+    color: #777;
+    font-size: 11px;
+}
+
+.news-wall .item .content {
+    padding: 0 8px;
+    font-size: 14px;
+    color: #d60030;
+    font-style: italic;
+}
+
+.news-wall .item .link {
+    font-style: italic;
+    font-size: 14px;
+}

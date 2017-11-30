@@ -1,0 +1,7 @@
+services:
+    HopitalNumerique\RechercheParcoursBundle\Form\Type\RiskAnalysis\EditRiskAnalysisType:
+        class: HopitalNumerique\RechercheParcoursBundle\Form\Type\RiskAnalysis\EditRiskAnalysisType
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+        tags:
+            - { name: form.type }

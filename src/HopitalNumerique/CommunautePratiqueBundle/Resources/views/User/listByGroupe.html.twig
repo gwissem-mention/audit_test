@@ -1,70 +1,38 @@
-{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+{% trans_default_domain 'cdp_user' %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-communautepratique-user-listbygroupe.js"
-        'bundles/hopitalnumeriquecommunautepratique/js/User.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        new Directory();
+    });
+</script>
 
-{% block title_communaute_pratique %}Annuaire du groupe{% endblock %}
+<h2>{{ 'group.tabs.members.title'|trans({}, 'cdp_group') }}</h2>
 
-{% block communaute_pratique_actions %}
-    {{ parent() }}
-    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-    <div class="contact">
-        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">
-            <em class="icon icon-settings48"></em>
-            Mise à jour de mes </br> informations personnelles
-        </a>
-    </div>
-    {{ communaute_pratique.display_action_contact_invitation(groupe.id) }}
-{% endblock %}
+<div class="communaute-de-pratiques-annuaire cdp-directory">
 
-{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe thématique {{ groupe }}</a></li>{% endblock %}
-
-{% block communaute_pratique_sommaire %}{% endblock %}
-
-{% block body_communaute_pratique %}
-
-    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
-
-    {% if ajoutMembreForm is not null %}
-        <div class="communaute-de-pratiques-user-add">
-            <div class="row">
-                {{ form_start(ajoutMembreForm) }}
-                    <div class="column col-md-4 text-xs-center text-md-right">
-                        Ajouter un membre : &nbsp;
-                    </div>
-                    <div class="column col-md-4">
-                        {{ form_widget(ajoutMembreForm.user) }}
-                    </div>
-                    <div class="column col-md-4 text-xs-center text-md-left">
-                        &nbsp; <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
-                    </div>
-                {{ form_end(ajoutMembreForm) }}
+    <div class="user-details modal fade" id="directory-user-details-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
             </div>
+        </div>
+    </div>
+
+    <div class="directory">
+        {% for user in members if user.isActifInGroupe(groupe) or canDeleteMembre or groupe.hasAnimateur(user) %}
+            {{ include('@HopitalNumeriqueCommunautePratique/User/member_line.html.twig') }}
+        {% endfor %}
+    </div>
+
+    {% if members|length > 0 %}
+        <div class="text-center">
+            <span class="resultats-nombre">
+                {{ 'directory.count.member'|transchoice(members|length) }}<br />
+                {% if newMembersCount > 0 %}
+                    {{ 'directory.count.new_member'|transchoice(newMembersCount) }}
+                {% endif %}
+            </span>
+            <div class="clearfix"></div>
         </div>
     {% endif %}
 
-    <div class="communaute-de-pratiques-annuaire">
-
-        <div class="row">
-            {% for membre in pagerFantaMembres.currentPageResults %}
-                {% if membre.isActifInGroupe(groupe) or canDeleteMembre or groupe.hasAnimateur(membre) %}
-                    <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) }}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-
-        {% if pagerFantaMembres.nbPages > 1 %}
-            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} membres</span></div>
-        {% endif %}
-
-    </div>
-
-{% endblock body_communaute_pratique %}
+</div>

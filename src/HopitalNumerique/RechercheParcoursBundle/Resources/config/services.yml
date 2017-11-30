@@ -1,3 +1,6 @@
+imports:
+    - { resource: services/form.yml }
+
 parameters:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursDetailsManager
@@ -180,6 +183,7 @@ services:
         arguments:
             - '@hopitalnumerique_objet.repository.risk'
             - '@security.token_storage'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
 
     hopitalnumerique_rechercheparcours.helper.step_url_generator:
         class: HopitalNumerique\RechercheParcoursBundle\Service\GuidedSearchStepUrlGenerator
@@ -231,6 +235,7 @@ services:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\RiskSynthesisFactory
         arguments:
             - '@hopitalnumerique_rechercheparcours.helper.step_url_generator'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
 
     hopitalnumerique_rechercheparcours.factory.send_synthesis_command:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Risk\SendSynthesisCommandFactory
@@ -250,6 +255,7 @@ services:
             - '@hopitalnumerique_objet.repository.objet'
             - '@router'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
 
     hopitalnumeriquerechercheparcours.search.hot_point:
         class: HopitalNumerique\RechercheParcoursBundle\Service\Object\ProductionSearch
@@ -257,6 +263,7 @@ services:
             - '@hopitalnumerique_objet.repository.objet'
             - '@router'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
             - true
 
     hopitalnumerique_recherche.widget.guided_search:

@@ -1,0 +1,32 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            <i class="fa fa-info-circle"></i>
+            {{ 'wall.item.opened_group.title'|trans }}
+        </span>
+        <span class="date">
+               - {{ item.date|date('d/m/Y') }}
+        </span>
+    </div>
+
+    <div class="content">
+        {% set link = 'hopitalnumerique_communautepratique_groupe_inscrit' %}
+        {% if item.registered %}
+            {% set link = 'hopitalnumerique_communautepratique_groupe_view' %}
+        {% endif %}
+
+        <a href="{{ path(link, {groupe: item.group.id}) }}"
+           class="link"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.opened_group.link'|trans }}"
+        >
+            {{ 'wall.item.opened_group.content'|trans({'%groupName%': item.group.titre}) }}
+        </a>
+    </div>
+
+</div>

@@ -1,0 +1,18 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+<div>
+    <div class="category">
+        {{ 'block.title'|trans }}
+    </div>
+    <h3 class="title">
+        <a href="{{ objectIdentityLink(objectRelation, 'view') }}" target="_blank">
+            {{ objectRelation.object.objectIdentityTitle }}
+        </a>
+    </h3>
+
+    {% if objectRelation.object.objectIdentityDescription|striptags|length %}
+        <p class="description">
+            {{ objectRelation.object.objectIdentityDescription|striptags|truncate(255) }}
+        </p>
+    {% endif %}
+</div>

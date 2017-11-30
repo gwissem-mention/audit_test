@@ -1,0 +1,5 @@
+services:
+    HopitalNumerique\FichierBundle\Repository\FileRepository:
+        class: HopitalNumerique\FichierBundle\Repository\FileRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueFichierBundle:File']

@@ -5,6 +5,8 @@ namespace HopitalNumerique\UserBundle\Repository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Member\ViewedMember;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -661,6 +663,19 @@ class UserRepository extends EntityRepository
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function getCDPNewMembersCount(User $user, Groupe $groupe = null, Domaine $domaine = null)
+    {
+        return count($this->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine)
+            ->andWhere('user.communautePratiqueEnrollmentDate > :userEnrollmentDate')
+            ->setParameter('userEnrollmentDate', $user->getCommunautePratiqueEnrollmentDate())
+            ->leftJoin(ViewedMember::class, 'view', Join::WITH, 'view.viewer = :user AND view.member = user')
+            ->setParameter('user', $user)
+            ->andWhere('view.viewedAt IS NULL')
+
+            ->getQuery()->getResult())
+        ;
+    }
+
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
@@ -722,6 +737,22 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param Domaine[] $domains
+     *
+     * @return User[]
+     */
+    public function getCommunautePratiqueMembersInDomains($domains)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.domaines', 'domains', Join::WITH, 'domains.id IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * Retourne la QueryBuilder avec les membres d'un groupe de la communauté de pratique.
      *
      * @param Groupe $groupe Groupe des membres
@@ -748,20 +779,16 @@ class UserRepository extends EntityRepository
     /**
      * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
      *
+     * @param Domaine $domain
      * @param Groupe $groupe Groupe
      *
      * @return User[] Utilisateurs
      */
-    public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe = null)
+    public function findCommunautePratiqueMembresNotInGroupe(Domaine $domaine, Groupe $groupe = null)
     {
         $query = $this->createQueryBuilder('user');
 
         $groupeUsers = $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult();
-
-        /** @var Domaine $domaine */
-        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')
-            ->getDomaineFromHttpHost($_SERVER['SERVER_NAME'])->getQuery()->getOneOrNullResult()
-        ;
 
         $query
             ->leftJoin('user.groupeInscription', 'groupeInscription')
@@ -849,6 +876,28 @@ class UserRepository extends EntityRepository
     /**
      * @param Domaine[] $domains
      *
+     * @return integer|null
+     */
+    public function getCDPOrganizationsCount(array $domains)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('user')
+            ->select('COUNT(DISTINCT organization.id)')
+            ->join('user.organization','organization')
+            ->join('user.domaines', 'domaines', Join::WITH, 'domaines IN (:domains)')
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     *
      * @return integer
      */
     public function countCDPUsers($domains)
@@ -874,6 +923,56 @@ class UserRepository extends EntityRepository
             )
             ->andWhere('user.inscritCommunautePratique = TRUE')
 
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Domaine[] $domains
+     * @param User|null $user
+     *
+     * @return null|integer
+     */
+    public function getCDPContributorCount(array $domains, User $user = null)
+    {
+        if (empty($domains)) {
+            return null;
+        }
+
+        $qb = $this->createQueryBuilder('user');
+
+        $qb
+            ->select('COUNT(DISTINCT user.id)')
+            ->join(Message::class,'message', Join::WITH, 'message.user = user')
+            ->join('message.discussion', 'discussion')
+            ->join('discussion.domains', 'discussion_domain', Join::WITH, 'discussion_domain IN (:domains)')
+            ->join(
+                'user.domaines',
+                'domain',
+                Join::WITH,
+                'domain.id IN (:domains)'
+            )
+            ->leftJoin('discussion.groups', 'groups')
+            ->setParameter('domains', $domains)
+            ->andWhere('user.inscritCommunautePratique = TRUE')
+        ;
+
+        if ($user) {
+            if (!$user->hasRoleCDPAdmin()) {
+                $qb
+                    ->leftJoin('groups.requiredRoles', 'requiredRole')
+                    ->andWhere('requiredRole.role IN (:userRoles) OR groups.requiredRoles is empty')
+                    ->setParameter('userRoles', $user->getRoles())
+                ;
+            }
+        } else {
+            $qb
+                ->andWhere('discussion.groups is empty OR groups.requiredRoles is empty')
+            ;
+        }
+
+        return $qb
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -1025,104 +1124,56 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Returns query builder with all active users query builder.
+     * @param Domaine|null $domain
+     * @param int $limit
      *
-     * @return QueryBuilder
+     * @return User[]
      */
-    public function getActiveUsersQueryBuilder()
+    public function getLastUserEnrolledInCDP(Domaine $domain = null, $limit = 20)
     {
-        return $this->createQueryBuilder('user')
-            ->select('user.id')
-            ->where('user.enabled = 1')
-            ->andWhere('user.etat = :etat')
-            ->setParameter('etat', Reference::STATUT_ACTIF_ID)
-        ;
-    }
-
-    /**
-     * Returns query builder with a single user.
-     *
-     * @param $userId
-     *
-     * @return QueryBuilder
-     */
-    public function getOneUserQueryBuilder($userId)
-    {
-        return $this->createQueryBuilder('user')
-            ->select('user.id')
-            ->where('user.id = :userId')
-            ->setParameter('userId', $userId)
-        ;
-    }
-
-    /**
-     * Returns query builder with active user ids by region.
-     *
-     * @param integer $regionId Region id.
-     * @param array|null $domainIds Filter users that are in at least one of the given domains
-     *
-     * @return QueryBuilder
-     */
-    public function createUsersByRegionQueryBuilder($regionId, $domainIds = null)
-    {
-        $qb = $this->createQueryBuilder('user')
-            ->select('user.id')
-            ->where('user.region = :regionId')
-            ->andWhere('user.enabled = :enabledState')
-            ->setParameters([
-                'regionId' => (int)$regionId,
-                'enabledState' => 1,
-            ])
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
         ;
 
-        if (is_array($domainIds)) {
-            $qb
-                ->join('user.domaines', 'domain')
-                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+        if ($domain) {
+            $queryBuilder
+                ->join('user.domaines', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain->getId())
             ;
         }
 
-        return $qb;
+        return $queryBuilder
+            ->addOrderBy('user.communautePratiqueEnrollmentDate', 'DESC')
+            ->setMaxResults($limit)
+
+            ->getQuery()->getResult()
+        ;
     }
 
     /**
-     * Returns query builder with active user ids by role(s).
+     * @param Domaine|null $domain
+     * @param int $limit
      *
-     * @param array $roles List of role ids.
-     * @param array|null $domainIds Filter users that are in at least one of the given domains
-     *
-     * @return QueryBuilder
+     * @return User[]
      */
-    public function createUsersByRolesQueryBuilder(array $roles, array $domainIds = null)
+    public function getLastUpdatedUser(Domaine $domain = null, $limit = 20)
     {
-        $parameters = ['enabledState' => 1];
-        $where = 'user.enabled = :enabledState ';
-
-        if (count($roles)) {
-            $where .= 'AND (';
-            $i = 0;
-            foreach ($roles as $role) {
-                $where .= 'user.roles LIKE :role' . ++$i . ' OR ';
-                $parameters['role'.$i] = "%$role%";
-            }
-            $where = substr($where, 0, -4) . ')';
-        } else {
-            $where .= ' AND 1=0 ';
-        }
-
-        $qb = $this->createQueryBuilder('user')
-            ->select('user.id')
-            ->where($where)
-            ->setParameters($parameters)
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->andWhere('user.inscritCommunautePratique = TRUE')
         ;
 
-        if (is_array($domainIds)) {
-            $qb
-                ->join('user.domaines', 'domain')
-                ->andWhere($qb->expr()->in('domain.id', $domainIds))
+        if ($domain) {
+            $queryBuilder
+                ->join('user.domaines', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain->getId())
             ;
         }
 
-        return $qb;
+        return $queryBuilder
+            ->addOrderBy('user.dateLastUpdate', 'DESC')
+            ->setMaxResults($limit)
+
+            ->getQuery()->getResult()
+        ;
     }
 }

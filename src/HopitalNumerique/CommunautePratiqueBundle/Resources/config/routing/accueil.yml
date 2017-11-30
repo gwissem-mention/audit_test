@@ -1,4 +1,0 @@
-hopitalnumerique_communautepratique_accueil_index:
-    pattern: /
-    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Accueil:index" }
-    methods: GET

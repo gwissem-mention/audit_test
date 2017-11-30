@@ -1,0 +1,108 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-discussion-group.js"
+    'bundles/hopitalnumeriquecommunautepratique/js/Directory.js'
+    %}
+
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Discussion('{{ scope }}', {{ is_granted('REORDER_DISCUSSION') ? 'true' : 'false' }}, {{ preopenNewDiscussionModal ? 'true' : 'false' }});
+        });
+    </script>
+{% endblock %}
+
+{% if newDiscussionForm is not null %}
+    <div id="new-discussion-modal" class="modal fade">
+        {{ form_start(newDiscussionForm) }}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'discussion.new_discussion.text'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_row(newDiscussionForm.title, {'attr': {'class': 'validate[required,maxSize[255]]'}}) }}
+                    {{ form_row(newDiscussionForm.content, {'attr': {'class': 'content validate[required]'}}) }}
+                    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/message_file_zone.html.twig', {'files': newDiscussionForm.files}) }}
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" value="{{ 'discussion.new_discussion.form.submit.text'|trans|e }}">
+                </div>
+            </div>
+        </div>
+        {{ form_end(newDiscussionForm) }}
+    </div>
+{% endif %}
+
+<div class="discussions" data-base-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public') : path('hopitalnumerique_communautepratique_groupe_view', {'groupe': group.id})~'#discussion' }}">
+
+    <div class="add">
+        {% if newDiscussionForm is not null %}
+            <a href="#" class="add-btn" data-toggle="modal" data-target="#new-discussion-modal">
+                <i class="icon fa fa-plus-circle"></i>
+                {{ 'discussion.new_discussion.text'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('hopitalnumerique_communautepratique_discussions_create_discussion') }}" class="add-btn">
+                <i class="icon fa fa-plus-circle"></i>
+                {{ 'discussion.new_discussion.text'|trans }}
+            </a>
+        {% endif %}
+    </div>
+    <div class="wrapper">
+        {% set lazyLoadStep = 10 %}
+        <div class="list" data-lazyload-step="{{ lazyLoadStep }}" data-reorder-uri="{{ path('hopitalnumerique_communautepratique_discussions_discussion_reorder') }}">
+            {% set displayedItemsCount = 10 %}
+            {% set currentDiscussionToShow = currentDiscussion is not null and (scope != 'group' or group.presentationDiscussion is not null and group.presentationDiscussion.id != currentDiscussion.id) %}
+
+            {% for type in ['presentation', 'basic'] %}
+
+                {{ type == 'basic' ? '<div class="items">' }}
+
+                {% for position, discussion in discussions %}
+                    {% set isStaredItem = discussion.hasHelpfulMessage or discussion.recommended %}
+                    {% set hidden = false %}
+                    {% if loop.index > displayedItemsCount %}
+                        {% set hidden = true %}
+                        {% if currentDiscussionToShow == true %}
+                            {% set displayedItemsCount = displayedItemsCount + lazyLoadStep %}
+                            {% set hidden = false %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if not currentDiscussion or currentDiscussion.id == discussion.id %}
+                        {% set currentDiscussionToShow = false %}
+                    {% endif %}
+
+
+                    {% if type == 'presentation' and (scope == 'group' and group.presentationDiscussion is not null and group.presentationDiscussion.id == discussion.id) %}
+                        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/presentation_discussion_title.html.twig', {level: 1}) }}
+                    {% elseif type == 'basic' and (scope == 'public' or (scope == 'group' and discussion.parent == null and (group.presentationDiscussion is null or group.presentationDiscussion.id != discussion.id))) %}
+                        {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion_title.html.twig', {level: 1}) }}
+                    {% endif %}
+                {% endfor %}
+
+                {{ type == 'basic' ? '</div>' }}
+
+            {% endfor %}
+
+            <div class="load-more">
+                <a href="#" class="btn btn-sm btn-default">{{ 'discussion.list.load_more'|trans }}</a>
+            </div>
+        </div>
+
+        <div class="discussion">
+            <div class="droppable-layer">
+                <i class="fa fa-undo"></i>
+            </div>
+            {% if currentDiscussion is not null %}
+                {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussion.html.twig', {'discussion': currentDiscussion}) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

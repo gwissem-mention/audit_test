@@ -342,13 +342,6 @@ class UserType extends AbstractType
                 'required' => false,
                 'label' => 'Remarque pour la gestion',
             ])
-            ->add('biographie', TextareaType::class, [
-                'required' => false,
-                'label' => 'Biographie',
-                'attr' => [
-                    'rows' => 8,
-                ],
-            ])
             ->add('raisonDesinscription', TextareaType::class, [
                 'required' => false,
                 'label' => 'Raison de la désinscription',

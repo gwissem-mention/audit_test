@@ -1,5 +1,6 @@
 <?php
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -120,6 +121,54 @@ $container->loadFromExtension('fos_elastica', [
                 ],
             ],
             'types' => [
+                'cdp_discussion' => [
+                    'mappings' => [
+                        'discussionId' => [
+                            'type' => 'keyword',
+                            'property_path' => 'id',
+                        ],
+                        'title' => [
+                            'type' => 'text',
+                            'property_path' => 'title',
+                            'analyzer' => 'title_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "title_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ],
+                            ],
+                        ],
+                        'content' => [
+                            'type' => 'text',
+                            'property_path' => 'firstMessageContent',
+                            'analyzer' => 'content_analyzer',
+                            'term_vector' => 'with_positions_offsets',
+                            'fields' => [
+                                'exact' => [
+                                    "type" => "text",
+                                    "analyzer" => "content_exact_analyzer",
+                                    'term_vector' => 'with_positions_offsets',
+                                ],
+                            ],
+                        ],
+                        'domaines' => [
+                            'property_path' => 'domains',
+                            'type' => 'nested',
+                            'properties' => [
+                                'nom' => null,
+                            ],
+                        ],
+                    ],
+                    'persistence' => [
+                        'driver' => 'orm',
+                        'model' => Discussion::class,
+                        'provider' => [
+                            'service' => "hopital_numerique_search.provider.cdp_discussion.$serviceIdentifier",
+                        ],
+                    ],
+                ],
                 'object' => [
                     'mappings' => [
                         'title' => [
@@ -463,7 +512,7 @@ $container->loadFromExtension('fos_elastica', [
                             'analyzer' => 'name_analyzer',
                         ],
                         'biography' => [
-                            'property_path' => 'biographie',
+                            'property_path' => 'presentation',
                             'analyzer' => 'content_analyzer',
                             'fields' => [
                                 'exact' => [

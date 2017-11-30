@@ -65,20 +65,22 @@ CommunautePratique_TableauDeBord.fixeHauteurBlocs = function()
 /**
  * Ouvre / ferme le bloc d'un groupe.
  * 
- * @param integer groupeId ID du groupe
+ * @param groupeId ID du groupe
+ * @param callback Callback function
  */
-CommunautePratique_TableauDeBord.toggleOuvertureGroupe = function(groupeId)
+CommunautePratique_TableauDeBord.toggleOuvertureGroupe = function(groupeId, callback)
 {
     $('[data-groupe-id=' + groupeId + '] .body').toggle({
         done: function() {
-            if ($('[data-groupe-id=' + groupeId + '] .body').css('display') != 'block') {
-                $('[data-groupe-id=' + groupeId + '] .interrupteur').removeClass('on');
-                $('[data-groupe-id=' + groupeId + '] .interrupteur').addClass('off');
+            if ($('[data-groupe-id=' + groupeId + '] .body').css('display') !== 'block') {
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').removeClass('on').addClass('off');
             } else {
-                $('[data-groupe-id=' + groupeId + '] .interrupteur').addClass('on');
-                $('[data-groupe-id=' + groupeId + '] .interrupteur').removeClass('off');
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').addClass('on').removeClass('off');
             }
-            
+
+            if (callback !== undefined) {
+                callback();
+            }
         }
     });
 };

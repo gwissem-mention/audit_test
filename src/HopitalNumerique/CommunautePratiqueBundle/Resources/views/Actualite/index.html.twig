@@ -1,0 +1,148 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'cdpNews' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Item();
+        });
+    </script>
+{% endblock %}
+
+{% block title_communaute_pratique %}Actualités de la communauté{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ selectedDomainSelector() }}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    <div class="news">
+        <div class="blocks">
+
+            <a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}"
+               class="block"
+               data-toggle="tooltip"
+               data-placement="top"
+               data-html="true"
+               title="{{ 'news.brick.chat_room.tooltip'|trans }}"
+            >
+                <h2 class="block-title">{{ 'news.brick.chat_room.title'|trans }}</h2>
+                <ul>
+                    {% if publicDiscussionCount > 0 %}
+                        <li>{{ 'news.brick.chat_room.topic_count'|transchoice(publicDiscussionCount) }}</li>
+                    {% endif %}
+
+                    {% if publicMessageCount > 0 %}
+                        <li>{{ 'news.brick.chat_room.message_count'|transchoice(publicMessageCount) }}</li>
+                    {% endif %}
+                </ul>
+            </a>
+
+            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"
+               class="block"
+               data-toggle="tooltip"
+               data-placement="top"
+               data-html="true"
+               title="{{ 'news.brick.help_groups.tooltip'|trans }}"
+            >
+                <h2 class="block-title">{{ 'news.brick.help_groups.title'|trans }}</h2>
+                <ul>
+                    {% if runningGroupCount > 0 %}
+                        <li>{{ 'news.brick.help_groups.group_count'|transchoice(runningGroupCount) }}</li>
+                    {% endif %}
+
+                    {% if contributorsCount > 0 %}
+                        <li>{{ 'news.brick.help_groups.contributor_count'|transchoice(contributorsCount) }}</li>
+                    {% endif %}
+
+                    {% if groupMessageCount > 0 %}
+                        <li>{{ 'news.brick.help_groups.message_count'|transchoice(groupMessageCount) }}</li>
+                    {% endif %}
+
+                    {% if groupMessageFileCount > 0 %}
+                        <li>{{ 'news.brick.help_groups.file_count'|transchoice(groupMessageFileCount) }}</li>
+                    {% endif %}
+                </ul>
+            </a>
+
+            <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"
+               class="block"
+               data-toggle="tooltip"
+               data-placement="top"
+               data-html="true"
+               title="{{ 'news.brick.community.tooltip'|trans }}"
+            >
+                <h2 class="block-title">{{ 'news.brick.community.title'|trans }}</h2>
+                <ul>
+                    {% if cdpUserCount > 0 %}
+                        <li>{{ 'news.brick.community.member_count'|transchoice(cdpUserCount) }}</li>
+                    {% endif %}
+
+                    {% if cdpOrganizationCount > 0 %}
+                        <li>{{ 'news.brick.community.organization_count'|transchoice(cdpOrganizationCount) }}</li>
+                    {% endif %}
+                </ul>
+            </a>
+
+            {% if not app.user %}
+                {% set groupLink = path('account_login', {urlToRedirect: currentUri}) %}
+                <a href="{{ groupLink }}" class="block">
+            {% elseif not app.user.inscritCommunautePratique %}
+                {% set groupLink = path('hopital_numerique_publication_publication_article', {id: cdpArticle.id, categorie: 'article', alias: cdpArticle.alias}) %}
+                <a href="{{ groupLink }}" class="block">
+            {% else %}
+                <div class="block">
+            {% endif %}
+
+                {% if app.user is null %}
+                    <h2 class="block-title">{{ 'news.brick.my_groups.title_not_member'|trans }}</h2>
+                    {{ 'news.brick.my_groups.not_logged'|trans|nl2br }}
+                {% elseif app.user.inscritCommunautePratique == false %}
+                    <h2 class="block-title">{{ 'news.brick.my_groups.title_not_member'|trans }}</h2>
+                    {{ 'news.brick.my_groups.not_member'|trans|nl2br }}
+                {% else %}
+                    <h2 class="block-title">{{ 'news.brick.my_groups.title'|trans|nl2br }}</h2>
+
+                    {% if userRecentGroups|length > 0 %}
+                        <ul>
+                            {% for group in userRecentGroups %}
+                                <li>
+                                    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {groupe: group.id}) }}">
+                                        {{ group.titre }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ 'news.brick.my_groups.list.empty'|trans }}
+
+                        <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}" class="btn btn-primary btn-sm btn-block" title="{{ 'news.brick.my_groups.list.link.title'|trans|e }}">
+                            {{ 'news.brick.my_groups.list.link.text'|trans }}
+                        </a>
+                    {% endif %}
+
+                {% endif %}
+            </{{ groupLink is defined ? 'a' : 'div' }}>
+        </div>
+    </div>
+
+    <div class="news-wall">
+
+        {% for item in wallItems %}
+            {{ include('@HopitalNumeriqueCommunautePratique/Actualite/item/'~item.type~'.html.twig') }}
+        {% endfor %}
+
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="item-modal">
+        <div class="modal-dialog" role="item">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+{% endblock body_communaute_pratique %}
+

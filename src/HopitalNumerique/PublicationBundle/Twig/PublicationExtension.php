@@ -45,7 +45,7 @@ class PublicationExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function parsePublication($content)
+    public function parsePublication($content, $glossaires = false)
     {
         $content = $this->replaceInvalidCharacters($content);
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;((.*?)*)\;([a-zA-Z0-9]*)\]/';

@@ -3,7 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle;
 
 /**
- * Contain all events thrown in the autodiag bundle.
+ * Contain all events throwns in the communaute pratique bundle.
  */
 final class Events
 {
@@ -16,6 +16,29 @@ final class Events
      * This event occurs when a user quit the Communaute de pratique
      */
     const DISENROLL_USER = 'communautepratique.disenroll_user';
+
+    /**
+     * Ocurs when a user submit/valid group registration form
+     */
+    const GROUP_REGISTRATION = 'communautepratique.group_registration';
+
+    /**
+     * Occurs when a message is posted into a cdp discussion
+     */
+    const DISCUSSION_MESSAGE_POSTED = 'communautepratique.discussion.message_posted';
+
+    /**
+     * Occurs when a discussion is created
+     */
+    const DISCUSSION_CREATED = 'communautepratique.discussion.discussion_created';
+
+    /**
+     * Occurs when a discussion was set in public
+     */
+    const DISCUSSION_PUBLIC = 'communautepratique.discussion.discussion_public';
+
+
+    // Legacy :
 
     /**
      * This event occurs when a comment is left on a group.
