@@ -37,6 +37,10 @@ final class Events
      */
     const DISCUSSION_PUBLIC = 'communautepratique.discussion.discussion_public';
 
+    /**
+     * Occurs when a discussion was viewed
+     */
+    const DISCUSSION_VIEWED = 'communautepratique.discussion.discussion_viewed';
 
     // Legacy :
 

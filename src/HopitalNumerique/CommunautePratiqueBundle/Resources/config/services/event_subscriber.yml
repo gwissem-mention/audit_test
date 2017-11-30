@@ -28,3 +28,10 @@ services:
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
         tags:
             - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionViewSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionViewSubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_subscriber }

@@ -5,8 +5,10 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionViewedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ViewedRepository;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Service\FilePathFinder;
@@ -121,6 +123,7 @@ class DiscussionController extends Controller
             'newDiscussionForm' => isset($newDiscussionForm) ? $newDiscussionForm : null,
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
             'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
+            'mostViewed' => $this->get(ViewedRepository::class)->getMostViewed((new \DateTime())->modify('-6 month'), 20, $group),
         ];
 
         if ($group) {
@@ -295,9 +298,12 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        if ($this->getUser()) {
+        $user = $this->getUser();
+        if ($user) {
             $this->get(ReadMessageHandler::class)->handle(new ReadMessageCommand($this->getUser(), $discussion->getMessages()->last()->getId()));
         }
+
+        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_VIEWED, new DiscussionViewedEvent($discussion, $user));
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/discussion.html.twig', [
             'group' => $group,

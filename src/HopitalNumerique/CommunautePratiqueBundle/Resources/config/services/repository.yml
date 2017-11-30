@@ -23,3 +23,8 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Activity']
+
+    HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ViewedRepository:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ViewedRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueCommunautePratiqueBundle:Discussion\Viewed']
