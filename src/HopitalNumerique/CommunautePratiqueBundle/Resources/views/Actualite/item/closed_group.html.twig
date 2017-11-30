@@ -4,15 +4,15 @@
 
     <div class="infos">
         <span class="title">
+            <i class="fa fa-info-circle"></i>
             {{ 'wall.item.closed_group.title'|trans }}
         </span>
-        <span class="author">
-            ({{ item.date|date('d/m/Y') }})
+        <span class="date">
+               - {{ item.date|date('d/m/Y') }}
         </span>
-    </div>
-
-    <div class="content">
-        {{ 'wall.item.closed_group.content'|trans({'%groupName%': item.groupName})|nl2br }}
+        <span class="author">
+            {{ 'wall.item.closed_group.content'|trans({'%groupName%': item.groupName}) }}
+        </span>
     </div>
 
 </div>

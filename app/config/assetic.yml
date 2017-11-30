@@ -221,7 +221,7 @@ assetic:
                 - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/css/default.css'
         font_awesome_css:
             inputs:
-                - "bundles/nodevotools/fonts/font-awesome/css/font-awesome.min.css"
+                - "%kernel.root_dir%/Resources/components/fontawesome/css/font-awesome.min.css"
         select2_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/select2/dist/css/select2.css"

@@ -4,10 +4,14 @@
 
     <div class="infos">
         <span class="title">
+            <i class="fa fa-commenting-o"></i>
             {{ 'wall.item.public.title'|trans }}
         </span>
+        <span class="date">
+               - {{ item.date|date('d/m/Y H:i') }}
+        </span>
         <span class="author">
-            {{ 'wall.item.public.authored'|trans({'%discussion%': item.title, '%date%': item.date|date('d/m/Y'), '%time%': item.date|date('H:i')}) }}
+            {{ 'wall.item.public.authored'|trans({'%discussion%': item.title}) }}
         </span>
     </div>
 
@@ -19,7 +23,7 @@
            data-html="true"
            title="{{ 'wall.item.public.link'|trans }}"
         >
-            {{ item.content|parsePublication|striptags|unescape|truncate(200) }}
+            "{{ item.content|parsePublication|striptags|unescape|truncate(300) }}"
         </a>
     </div>
 

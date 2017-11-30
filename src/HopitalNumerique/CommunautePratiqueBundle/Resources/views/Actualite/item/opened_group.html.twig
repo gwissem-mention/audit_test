@@ -4,10 +4,11 @@
 
     <div class="infos">
         <span class="title">
+            <i class="fa fa-info-circle"></i>
             {{ 'wall.item.opened_group.title'|trans }}
         </span>
-        <span class="author">
-            ({{ item.date|date('d/m/Y H:i') }})
+        <span class="date">
+               - {{ item.date|date('d/m/Y') }}
         </span>
     </div>
 
