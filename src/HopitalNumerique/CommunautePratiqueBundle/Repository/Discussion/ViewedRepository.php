@@ -26,7 +26,6 @@ class ViewedRepository extends \Doctrine\ORM\EntityRepository
             ->select('count(view.id) as views', 'discussion.id')
             ->from(Discussion::class, 'discussion')
             ->leftJoin(Viewed::class, 'view', Join::WITH, 'view.discussion = discussion.id')
-//            ->join('view.discussion', 'discussion')
             ->andWhere(
                 $qb->expr()->orX(
                     'view.viewDate >= :since',
@@ -37,13 +36,16 @@ class ViewedRepository extends \Doctrine\ORM\EntityRepository
         ;
 
         if ($group) {
-            $qb->join('discussion.groups', 'cdpGroup', Join::WITH, 'cdpGroup.id = :group')
-                ->setParameter('group', $group);
+            $qb
+                ->join('discussion.groups', 'cdpGroup', Join::WITH, 'cdpGroup.id = :group')
+                ->setParameter('group', $group)
+            ;
         } else {
             $qb->andWhere('discussion.public = TRUE');
         }
 
-        $views = $qb->groupBy('discussion.id')
+        $views = $qb
+            ->groupBy('discussion.id')
             ->orderBy('views', 'DESC')
             ->getQuery()
             ->getResult()
