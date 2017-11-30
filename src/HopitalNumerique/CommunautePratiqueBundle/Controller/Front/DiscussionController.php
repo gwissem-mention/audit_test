@@ -61,7 +61,7 @@ class DiscussionController extends Controller
 
         $discussions = $discussionRepository->queryForDiscussionList(DiscussionListQuery::createPublicDiscussionQuery($domains, $group, $this->getUser()));
         $this->getDoctrine()->getManager()->clear();
-        $discussion = $discussion ?: ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
+        $discussion = $discussion && $this->isGranted('ACCESS', $discussion) ? $discussion : ($group && $group->getPresentationDiscussion() ? $group->getPresentationDiscussion() : current($discussions));
         if ($discussion instanceof Discussion) {
             $discussion = $discussionRepository->queryForDiscussionDisplayQuery(
                 DiscussionDisplayQuery::createPublicDiscussionQuery(
@@ -92,7 +92,7 @@ class DiscussionController extends Controller
             ])->createView();
         }
 
-        if ($this->isGranted(DiscussionVoter::REPLY) && $discussion) {
+        if ($discussion && $this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, new PostDiscussionMessageCommand($discussion, $this->getUser()), [
                 'action' => $this->generateUrl(
                     'hopitalnumerique_communautepratique_discussions_reply_discussion',
@@ -279,6 +279,8 @@ class DiscussionController extends Controller
         $domains = $selectedDomain ? [$selectedDomain] : $this->get(AvailableDomainsRetriever::class)->getAvailableDomains();
 
         $discussion = $this->get(DiscussionRepository::class)->queryForDiscussionDisplayQuery(DiscussionDisplayQuery::createPublicDiscussionQuery($discussion, $domains, $group, $this->getUser()));
+
+        $this->denyAccessUnlessGranted('ACCESS', $discussion);
 
         if ($this->isGranted(DiscussionVoter::REPLY, $discussion)) {
             $answerDiscussionForm = $this->createForm(DiscussionMessageType::class, null, [
@@ -511,8 +513,8 @@ class DiscussionController extends Controller
             foreach ($subscribers as $subscriber) {
                 $user = $subscriber->getUser();
                 $hasGroup = false;
-                if (!empty($user)) {
-                    foreach ($user->getCommunautePratiqueGroupes() as $group) {
+                if (!empty($user) && !empty($groups = $user->getCommunautePratiqueGroupes())) {
+                    foreach ($groups as $group) {
                         $hasGroup = $discussion->getGroups()->contains($group);
                     }
                 }
