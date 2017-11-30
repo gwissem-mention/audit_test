@@ -22,6 +22,7 @@ class DiscussionVoter extends Voter
     const MANAGE_DOMAINS = 'manage_domains';
     const REORDER = 'reorder_discussion';
     const SET_AS_PUBLIC = 'set_as_public';
+    const MOST_VIEWED = 'VIEW_THE_MOST_VIEWED';
 
     /**
      * @param string $attribute
@@ -39,6 +40,7 @@ class DiscussionVoter extends Voter
             self::DOWNLOAD,
             self::MARK_AS_RECOMMENDED,
             self::COPY_TO_GROUP,
+            self::MOST_VIEWED,
             self::CREATE,
             self::REPLY])
         ) {
@@ -78,6 +80,7 @@ class DiscussionVoter extends Voter
             case self::REORDER:
             case self::MARK_AS_RECOMMENDED:
             case self::MANAGE_DOMAINS:
+            case self::MOST_VIEWED:
                 return $this->canManage($user);
             case self::CREATE:
             case self::DOWNLOAD:
