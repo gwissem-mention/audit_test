@@ -29,6 +29,7 @@ class Role implements RoleInterface
     public static $ROLE_ADMIN_HN_LABEL = 'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107';
     public static $ROLE_ADMIN_DOMAINE = 'ROLE_ADMINISTRATEUR_DE_DOMAINE_106';
     public static $ROLE_ADMIN_AUTODIAG = 'ROLE_ADMINISTRATEUR_AUTODIAGS_108';
+    public static $ROLE_ANAP_MEMBRE = 'ROLE_ANAP_MEMBRES_2';
 
     /**
      * @var int

@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -190,12 +192,12 @@ class ReferencementController extends Controller
                 $subtitle = $dependencyInjectionEntity->getSubtitleByEntity($entity);
 
                 $objetId = null;
-                $objet = $this->get('hopitalnumerique_objet.repository.objet')->find($entityId);
-                $objetContenu = $this->get('hopitalnumerique_objet.repository.contenu')->find($entityId);
+                $objet = $entity instanceof Objet ? $this->get('hopitalnumerique_objet.repository.objet')->find($entityId) : null;
+                $objetContenu = $entity instanceof Contenu ? $this->get('hopitalnumerique_objet.repository.contenu')->find($entityId) : null;
 
-                if (null !== $objetContenu && null !== $objetContenu->getObjet()->getSynthese() && null !== $subtitle) {
-                    $objetId = $objetContenu->getObjet()->getId();
-                } elseif (null !== $objet && null !== $objet->getSynthese()) {
+                if (null !== $objetContenu && !empty($objetContenu->getObjet()->getSynthese()) && null !== $subtitle) {
+                        $objetId = $objetContenu->getObjet()->getId();
+                } elseif (null !== $objet && !empty($objet->getSynthese())) {
                     $objetId = $objet->getId();
                 }
 

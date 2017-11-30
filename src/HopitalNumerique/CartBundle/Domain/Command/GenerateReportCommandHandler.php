@@ -4,8 +4,11 @@ namespace HopitalNumerique\CartBundle\Domain\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CartBundle\Entity\Report;
+use HopitalNumerique\CartBundle\Event\ReportEvent;
+use HopitalNumerique\CartBundle\Events;
 use HopitalNumerique\CartBundle\Repository\ReportItemRepository;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ReportGenerator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class GenerateReportCommandHandler
 {
@@ -25,17 +28,28 @@ class GenerateReportCommandHandler
     protected $reportGenerator;
 
     /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * AddCartItemsToReportCommandHandler constructor.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param $reportItemRepository $reportItemRepository
-     * @param ReportGenerator $reportGeneratorAggregator
+     * @param EntityManagerInterface   $entityManager
+     * @param $reportItemRepository    $reportItemRepository
+     * @param ReportGenerator          $reportGeneratorAggregator
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EntityManagerInterface $entityManager, ReportItemRepository $reportItemRepository, ReportGenerator $reportGeneratorAggregator)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ReportItemRepository $reportItemRepository,
+        ReportGenerator $reportGeneratorAggregator,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->entityManager = $entityManager;
         $this->reportItemRepository = $reportItemRepository;
         $this->reportGenerator = $reportGeneratorAggregator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -77,6 +91,14 @@ class GenerateReportCommandHandler
         $this->entityManager->flush();
 
         $this->generateReport($report);
+
+        if ($report) {
+            /**
+             * Fire 'REPORT_UPDATED' event
+             */
+            $event = new ReportEvent($report, $command->owner);
+            $this->eventDispatcher->dispatch(Events::REPORT_UPDATED, $event);
+        }
     }
 
     /**

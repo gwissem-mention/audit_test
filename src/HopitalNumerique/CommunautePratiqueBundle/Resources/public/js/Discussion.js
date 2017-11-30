@@ -496,6 +496,10 @@ var Discussion;
         },
 
         setActiveDiscussion: function ($element) {
+            if ($element.length === 0) {
+                return;
+            }
+
             undefined !== this.activeDiscussion.element && this.resetActiveTabPosition(this.activeDiscussion.element);
             this.activeDiscussion = {
                 element: $element,

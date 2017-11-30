@@ -79,6 +79,11 @@ class Reference
     const PARCOURS_GUIDE = 1997;
 
     /**
+     * @var int Shared references parent ID
+     */
+    const SHARED_REFERENCES_ID = 1963;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", options = {"comment" = "ID de la référence"})
@@ -583,11 +588,24 @@ class Reference
     /**
      * Get enfants.
      *
-     * @return Collection
+     * @return Collection|Reference[]
      */
     public function getEnfants()
     {
         return $this->enfants;
+    }
+
+    public function getAllChildrenId()
+    {
+        $ids = [];
+
+        foreach ($this->getEnfants() as $child) {
+            $ids[] = $child->getId();
+
+            $ids = array_merge($ids, $child->getAllChildrenId());
+        }
+
+        return $ids;
     }
 
     /**

@@ -4,6 +4,8 @@ namespace HopitalNumerique\ObjetBundle\Service\Widget;
 
 use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Subscription;
+use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -51,16 +53,22 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
     protected $currentDomainService;
 
     /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
      * ViewedObjectWidget constructor.
      *
-     * @param \Twig_Environment     $twig
+     * @param \Twig_Environment $twig
      * @param TokenStorageInterface $tokenStorage
-     * @param TranslatorInterface   $translator
-     * @param ObjectRepository      $objectRepository
-     * @param ContenuRepository     $contentRepository
-     * @param RouterInterface       $router
-     * @param BaseUrlProvider       $baseUrlProvider
+     * @param TranslatorInterface $translator
+     * @param ObjectRepository $objectRepository
+     * @param ContenuRepository $contentRepository
+     * @param RouterInterface $router
+     * @param BaseUrlProvider $baseUrlProvider
      * @param CurrentDomaine $currentDomainService
+     * @param SubscriptionRepository $subscriptionRepository
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -70,7 +78,8 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         ContenuRepository $contentRepository,
         RouterInterface $router,
         BaseUrlProvider $baseUrlProvider,
-        CurrentDomaine $currentDomainService
+        CurrentDomaine $currentDomainService,
+        SubscriptionRepository $subscriptionRepository
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
         $this->objectRepository = $objectRepository;
@@ -78,6 +87,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
         $this->router = $router;
         $this->baseUrlProvider = $baseUrlProvider;
         $this->currentDomainService = $currentDomainService;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
 
     /**
@@ -85,8 +95,10 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
      */
     public function getWidget()
     {
+        $user = $this->tokenStorage->getToken()->getUser();
+
         $objects = $this->objectRepository->getViewedObjects(
-            $this->tokenStorage->getToken()->getUser(),
+            $user,
             $this->domains
         );
 
@@ -97,8 +109,7 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
 
         $currentDomainUrl = $this->currentDomainService->get()->getUrl();
 
-        $data = [];
-
+        $objectsData = [];
         /** @var Objet $object */
         foreach ($objects as $object) {
             $baseUrl = $this->baseUrlProvider->getBaseUrl(
@@ -106,12 +117,12 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 $this->domains
             );
 
-            $data[] = [
+            $objectsData[$object->getId()] = [
                 'shortTitle' => $object->getTitre(),
                 'fullTitle' => $object->getTitre(),
                 'modificationDate' => $object->getDateModification(),
                 'consultationId' => $object->getConsultations()->first()->getId(),
-                'consultationDate' => $object->getConsultations()->first()->getDateLastConsulted(),
+                'consultationDate' => $object->getConsultations()->first()->getConsultationDate(),
                 'showLink' => $baseUrl . $this->router->generate(
                     'hopital_numerique_publication_publication_objet',
                     ['id' => $object->getId(), 'alias' => $object->getAlias()]
@@ -121,8 +132,15 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     ['object' => $object->getId()]
                 ),
                 'sameDomain' => $baseUrl === $currentDomainUrl,
+                'subscription' => [
+                    'objectId' => $object->getId(),
+                    'contentId' => null,
+                    'subscribed' => false,
+                ],
             ];
         }
+
+        $contentData = [];
 
         /** @var Contenu $content */
         foreach ($contents as $content) {
@@ -131,12 +149,12 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                 $this->domains
             );
 
-            $data[] = [
+            $contentData[$content->getId()] = [
                 'shortTitle' => $content->getShortTitle(),
                 'fullTitle' => $content->getFullTitle(),
                 'modificationDate' => $content->getDateModification(),
                 'consultationId' => $content->getConsultations()->first()->getId(),
-                'consultationDate' => $content->getConsultations()->first()->getDateLastConsulted(),
+                'consultationDate' => $content->getConsultations()->first()->getConsultationDate(),
                 'showLink' => $baseUrl . $this->router->generate(
                     'hopital_numerique_publication_publication_contenu',
                     [
@@ -151,8 +169,25 @@ class ViewedObjectWidget extends WidgetAbstract implements DomainAwareInterface
                     ['content' => $content->getId()]
                 ),
                 'sameDomain' => $baseUrl === $currentDomainUrl,
+                'subscription' => [
+                    'objectId' => $content->getObjet()->getId(),
+                    'contentId' => $content->getId(),
+                    'subscribed' => false,
+                ],
             ];
         }
+
+        $subscriptions = $this->subscriptionRepository->findByUser($user);
+        foreach ($subscriptions as $subscription) {
+            /* @var Subscription $subscription */
+            if (null !== $subscription->getContenu()) {
+                $contentData[$subscription->getContenu()->getId()]['subscription']['subscribed'] = true;
+            } elseif (null !== $subscription->getObjet()) {
+                $objectsData[$subscription->getObjet()->getId()]['subscription']['subscribed'] = true;
+            }
+        }
+
+        $data = array_merge($objectsData, $contentData);
 
         usort($data, function ($a, $b) {
             return $a['consultationDate'] < $b['consultationDate'];

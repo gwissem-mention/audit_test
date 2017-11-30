@@ -210,8 +210,10 @@ class Synthesis
      */
     public function setName($name)
     {
-        if ($this->entries->count() === 1) {
-            $this->entries->first()->setName($name);
+        foreach ($this->getEntries() as $entry) {
+            if (!$entry->isCopy()) {
+                $entry->setName($name);
+            }
         }
 
         $this->name = $name;

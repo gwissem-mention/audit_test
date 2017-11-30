@@ -47,7 +47,8 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content, $glossaires = false)
     {
-        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ|\&\'\`\’\«\»\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
+        $content = $this->replaceInvalidCharacters($content);
+        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;((.*?)*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
 
         // matches[0] tableau des chaines completes trouvée
@@ -283,5 +284,19 @@ class PublicationExtension extends \Twig_Extension
     public function getName()
     {
         return 'publication_extension';
+    }
+
+    /**
+     * @param $text
+     *
+     * @return string
+     */
+    private function replaceInvalidCharacters($text)
+    {
+        $invalid = [
+            '–' => '-',
+        ];
+
+        return str_replace(array_keys($invalid), array_values($invalid), $text);
     }
 }

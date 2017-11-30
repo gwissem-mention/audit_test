@@ -104,6 +104,12 @@ hopitalnumerique_user_front_organizations:
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxLoadOrganizations }
 
 #Contractualisation
+hopitalnumerique_user_contract_download:
+    path:  /mon-compte/mes-services/contract/{contract}/download
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Front/Contract:download" }
+    requirements:
+        contract: \d+
+
 hopitalnumerique_user_contractualisation:
     path:  /admin/user/contractualisation/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:index", id: 1 }

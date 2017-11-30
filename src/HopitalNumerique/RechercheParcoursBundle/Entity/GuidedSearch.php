@@ -74,6 +74,13 @@ class GuidedSearch
     protected $createdAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true, options={"comment":"Keeps last user risk update date for guided search."})
+     */
+    protected $updatedAt;
+
+    /**
      * GuidedSearch constructor.
      */
     public function __construct()
@@ -286,6 +293,19 @@ class GuidedSearch
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Set updatedAt.
+     *
+     * @ORM\PreUpdate
+     * @ORM\PrePersist
+     */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }

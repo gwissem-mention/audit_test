@@ -42,6 +42,7 @@
     "gauge.js": "^1.2.1",
     "handlebars": "^4.0.8",
     "datatables": "^1.10.15",
+    "jRange": "*",
     "enyo/dropzone": "5.1.1"
   }
 }

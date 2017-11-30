@@ -125,6 +125,7 @@ class AutodiagEntryController extends Controller
 
         return $this->render('HopitalNumeriqueAutodiagBundle:AutodiagEntry:edit.html.twig', [
             'autodiag' => $autodiag,
+            'reason' => $this->get('autodiag.history.reader')->getHistoryByAutodiag($autodiag)[0]->getReason(),
             'entry' => $entry,
             'forms' => $forms,
             'synthesisCreateForm' => $synthesisCreateForm,

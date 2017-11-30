@@ -3,6 +3,13 @@
 namespace Nodevo\MailBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\CartBundle\Model\Item\GuidedSearch;
+use HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever;
+use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
+use HopitalNumerique\NewAccountBundle\Service\ProfileCompletionCalculator;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\ObjetBundle\Entity\Note;
+use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -94,22 +101,50 @@ class MailManager extends BaseManager
     protected $bbcodeEngine;
 
     /**
+     * @var Domaine
+     */
+    protected $currentDomain;
+
+    /**
+     * @var string
+     */
+    protected $basePath;
+
+    /**
+     * @var ObjetRepository
+     */
+    protected $objectRepository;
+
+    /**
+     * @var ProfileCompletionCalculator
+     */
+    protected $profilecompletionCalculator;
+
+    /**
+     * @var StatsInformationsRetriever
+     */
+    protected $statsInformationsRetriever;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
-     * @param EntityManager            $em      Entity      Manager de Doctrine
-     * @param \Swift_Mailer            $mailer
-     * @param \Twig_Environment        $twig
-     * @param                          $router
+     * @param EntityManager $em Entity      Manager de Doctrine
+     * @param \Swift_Mailer $mailer
+     * @param \Twig_Environment $twig
+     * @param $router
      * @param SecurityContextInterface $securityContext
-     * @param RequestStack             $requestStack
-     * @param                          $session
-     * @param DomaineManager           $domaineManager
-     * @param UserManager              $userManager
-     * @param ReferenceManager         $referenceManager
-     * @param ActiviteExpertManager    $activiteExpertManager
-     * @param CourrielRegistreManager  $courrielRegistreManager
-     * @param array                    $options Tableau d'options
-     * @param BBCodeEngine             $BBCodeEngine
+     * @param RequestStack $requestStack
+     * @param $session
+     * @param DomaineManager $domaineManager
+     * @param UserManager $userManager
+     * @param ReferenceManager $referenceManager
+     * @param ActiviteExpertManager $activiteExpertManager
+     * @param CourrielRegistreManager $courrielRegistreManager
+     * @param array $options Tableau d'options
+     * @param BBCodeEngine $BBCodeEngine
+     * @param ObjetRepository $objectRepository
+     * @param ProfileCompletionCalculator $calculator
+     * @param StatsInformationsRetriever $statsInformationsRetriever
      */
     public function __construct(
         EntityManager $em,
@@ -125,8 +160,12 @@ class MailManager extends BaseManager
         ActiviteExpertManager $activiteExpertManager,
         CourrielRegistreManager $courrielRegistreManager,
         $options = [],
-        BBCodeEngine $BBCodeEngine
-    ) {
+        BBCodeEngine $BBCodeEngine,
+        ObjetRepository $objectRepository,
+        ProfileCompletionCalculator $calculator,
+        StatsInformationsRetriever $statsInformationsRetriever
+    )
+    {
         parent::__construct($em);
 
         $this->mailer = $mailer;
@@ -148,6 +187,9 @@ class MailManager extends BaseManager
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
         $this->bbcodeEngine = $BBCodeEngine;
+        $this->objectRepository = $objectRepository;
+        $this->profilecompletionCalculator = $calculator;
+        $this->statsInformationsRetriever = $statsInformationsRetriever;
 
         $this->setOptions();
 
@@ -223,7 +265,7 @@ class MailManager extends BaseManager
 
         $this->mailer->send($this->generationMail(
             $user,
-            $this->findOneById(81),
+            $this->findOneById(100),
             [
                 'nomUtilisateur' => $message->getUser()->getLastname(),
                 'prenomUtilisateur' => $message->getUser()->getFirstname(),
@@ -267,7 +309,7 @@ class MailManager extends BaseManager
 
         $this->mailer->send($this->generationMail(
             $user,
-            $this->findOneById(82),
+            $this->findOneById(101),
             [
                 'nomUtilisateur' => $message->getUser()->getLastname(),
                 'prenomUtilisateur' => $message->getUser()->getFirstname(),
@@ -280,14 +322,16 @@ class MailManager extends BaseManager
     /**
      * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoie à l'user.
      *
-     * @param User  $user
-     * @param Mail  $mail
+     * @param User $user
+     * @param Mail $mail
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
-     * @param int   $check
+     * @param int $check
+     * @param bool $setCopy
+     * @param bool $convertBodyLineEndings If true, body is converted with nl2br
      *
      * @return \Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail($user, $mail, $options = [], $check = 0)
+    private function generationMail($user, $mail, $options = [], $check = 0, $setCopy = true, $convertBodyLineEndings = true)
     {
         $options = $this->getAllOptions($options);
 
@@ -302,7 +346,7 @@ class MailManager extends BaseManager
         $body = $this->replaceContent($mail->getBody(), $user, $options);
         $from = [$mailExpediteur => $nameExpediteur];
 
-        if ($mail->getId() !== 1 && $mail->getId() !== 2) {
+        if ($mail->getId() !== 1 && $mail->getId() !== 2 && $setCopy) {
             $cci = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from) : [$this->getMailDomaine()];
 
             if (null !== $user && $user instanceof User) {
@@ -317,24 +361,29 @@ class MailManager extends BaseManager
 
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail($subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check);
+        return $this->sendMail($subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check, $convertBodyLineEndings);
     }
 
     /**
      * Envoi un mail.
      *
-     * @param string            $subject      Sujet du mail
-     * @param string            $from         Expéditeur
-     * @param string            $destinataire Destinataire
-     * @param string            $body         Contenu du mail
-     * @param array|bool|string $bcc          Copie(s) cachée(s)
-     * @param int               $check
+     * @param string $subject Sujet du mail
+     * @param string $from Expéditeur
+     * @param string $destinataire Destinataire
+     * @param string $body Contenu du mail
+     * @param array|bool|string $bcc Copie(s) cachée(s)
+     * @param int $check
+     * @param bool $convertBodyLineEndings If true, body is converted with nl2br
      *
      * @return \Swift_Message
      */
-    public function sendMail($subject, $from, $destinataire = null, $body, $bcc = false, $check = 0)
+    public function sendMail($subject, $from, $destinataire = null, $body, $bcc = false, $check = 0, $convertBodyLineEndings = true)
     {
         $body = quoted_printable_decode($body);
+        $currentDomain = $this->currentDomain
+            ? $this->currentDomain
+            : $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+        $basePath = $this->basePath ? $this->basePath : null;
 
         if (null !== $destinataire) {
             $user_mail = $this->_userManager->findOneBy(['email' => $destinataire]);
@@ -345,9 +394,13 @@ class MailManager extends BaseManager
         }
 
         //prepare content HTML
-        $bodyHtml = str_replace(["\r\n", "\n"], '<br />', $body);
+        $bodyHtml = $convertBodyLineEndings ? nl2br($body) : $body;
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig');
-        $bodyHtml = $template->render(['content' => $bodyHtml]);
+        $bodyHtml = $template->render([
+            'content' => $bodyHtml,
+            'currentDomain' => $currentDomain,
+            'basePath' => $basePath,
+        ]);
 
         //prepare content TEXT
         $pattern = '/<a[^>]+href=([\'"])(.+?)\1[^>]*>(.*)<\/a>/i';
@@ -357,7 +410,11 @@ class MailManager extends BaseManager
             }
         }
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig');
-        $bodyTxt = $template->render(['content' => strip_tags($body)]);
+        $bodyTxt = $template->render([
+            'content' => strip_tags($body),
+            'currentDomain' => $currentDomain,
+            'basePath' => $basePath,
+        ]);
 
         //prepare Mail
         $mail = \Swift_Message::newInstance();
@@ -396,10 +453,8 @@ class MailManager extends BaseManager
             foreach ($options as $key => $option) {
                 //Récupération de la variable du template
                 $variableARemplacer = '%' . $key;
-                //Remplacement de la mise en forme
-                $message = nl2br($option);
                 //Mise à jour du contenu passé en arg
-                $content = str_replace($variableARemplacer, $message, $content);
+                $content = str_replace($variableARemplacer, $option, $content);
             }
         }
 
@@ -408,7 +463,9 @@ class MailManager extends BaseManager
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
 
-        $content = str_replace('%s', '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) . '" target="_blank" >' . $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() . '</a>', $content);
+        if (false !== strstr('%s', $content)) {
+            $content = str_replace('%s', '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) . '" target="_blank" >' . $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() . '</a>', $content);
+        }
 
         return $content;
     }
@@ -443,11 +500,13 @@ class MailManager extends BaseManager
     {
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
 
-        $this->_optionsMail = [
-            'subjectDomaine' => $this->getDomaineSubjet(),
-            'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
-            'nomContactDomaineCurrent' => $domaine->getNom(),
-        ];
+        if (null !== $domaine) {
+            $this->_optionsMail = [
+                'subjectDomaine' => $this->getDomaineSubjet(),
+                'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
+                'nomContactDomaineCurrent' => $domaine->getNom(),
+            ];
+        }
 
         return $this;
     }
@@ -541,6 +600,11 @@ class MailManager extends BaseManager
         $check = 0;
 
         return $this->generationMail($user, $mail, $options, $check);
+    }
+
+    public function sendUserRoleUpdateNotification(User $user, $options)
+    {
+        $this->sendNotification($user, $options, Mail::MAIL_USER_ROLE_UPDATED);
     }
 
     /**
@@ -905,6 +969,11 @@ class MailManager extends BaseManager
         return $toSend;
     }
 
+    public function sendNextSessionsNotification(User $user, $options)
+    {
+        $this->sendNotification($user, $options, Mail::MAIL_SUGGESTION_ANAP_NEXT_SESSIONS);
+    }
+
     /**
      * Envoie un courriel concernant les demandes d'intervention.
      *
@@ -952,29 +1021,27 @@ class MailManager extends BaseManager
     }
 
     /**
-     * @param $user
-     * @param $options
-     * @param $topicId
-     *
-     * @return \Swift_Message
+     * @param User $user
+     * @param array $options
      */
-    public function sendNouveauMessageForumMail($user, $options, $topicId)
+    public function sendForumPostCreatedNotification(User $user, $options)
     {
-        //Création du lien dans le mail
-        $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
-                'forumName' => $options['forum'],
-                'topicId' => $topicId,
-            ])) . '" target="_blank" >%s</a>';
+        $options['urlMessage'] = $this->_router->generate('ccdn_forum_user_topic_show', [
+            'topicId' => $options['topicId'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_FORUM_POST_CREATED);
+    }
 
-        $options['lienversmessage'] = sprintf(
-            $options['lienversmessage'],
-            $this->truncatePostBody($options['shortMessage'])
-        );
-
-        /** @var Mail $mail */
-        $mail = $this->findOneById(36);
-
-        return $this->generationMail($user, $mail, $options);
+    /**
+     * @param User $user
+     * @param array $options
+     */
+    public function sendForumTopicCreatedNotification(User $user, $options)
+    {
+        $options['urlMessage'] = $this->_router->generate('ccdn_forum_user_topic_show', [
+            'topicId' => $options['topicId'],
+        ]);
+        $this->sendNotification($user, $options, Mail::MAIL_FORUM_TOPIC_CREATED);
     }
 
     /**
@@ -1128,6 +1195,16 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendGuidedSearchNotification(User $user, $options)
+    {
+        $options['urlParcoursGuides'] = $this->_router->generate('account_service') . '#' . GuidedSearch::URI_FRAGMENT;
+        $this->sendNotification($user, $options, Mail::MAIL_GUIDED_SEARCH_NOTIF);
+    }
+
+    /**
      * @return object
      */
     public function getCartReportMail()
@@ -1150,6 +1227,51 @@ class MailManager extends BaseManager
         $mail->attach(\Swift_Attachment::fromPath($filepath));
 
         return $mail;
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportSharedForMe(User $user, $options)
+    {
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_ME);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportSharedForOther(User $user, $options)
+    {
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_SHARED_FOR_OTHER);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendReportCopiedForMe(User $user, $options)
+    {
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_COPIED_FOR_ME);
+    }
+
+    public function sendReportUpdated(User $user, $options)
+    {
+        $this->buildReportMail($user, $options, Mail::MAIL_REPORT_UPDATED);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     *
+     * @return \Swift_Message
+     */
+    public function buildReportMail(User $user, $options, $mailId)
+    {
+        $options['urlMonPanier'] = $this->_router->generate('account_cart');
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1366,35 +1488,69 @@ class MailManager extends BaseManager
     }
 
     /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendAutodiagUpdateNotification(User $user, $options)
+    {
+        $options['urlAutodiagnostics'] = $this->_router->generate('account_service') . '#autodiagnostic-widget';
+        $this->sendNotification($user, $options, Mail::MAIL_AUTODIAG_UPDATE);
+    }
+
+    /**
      * @param Objet $objet
      * @param $url
      */
     public function sendAlertePublicationCommentaireMail(Objet $objet, $url)
     {
-        $courriel = $this->findOneById(Mail::MAIL_ALERTE_PUBLICATION_COMMENTAIRE);
+        $mail = $this->findOneById(Mail::MAIL_PUBLICATION_COMMENTED);
 
-        /** @var Domaine $domaine */
-        foreach ($objet->getDomaines() as $domaine) {
-            /** @var Mail $courriel */
-            $currentCourriel = clone $courriel;
-
-            $destinataire = $domaine->getAdresseMailContact();
+        /** @var Domaine $domain */
+        foreach ($objet->getDomaines() as $domain) {
+            /** @var Mail $mail */
+            $currentMail = clone $mail;
 
             $content = $this->replaceContent(
-                $currentCourriel->getBody(),
+                $currentMail->getBody(),
                 null,
                 [
-                    'nomPublication' => $objet->getTitre(),
-                    'urlPublication' => $domaine->getUrl() . $url,
+                    'titrePublication' => $objet->getTitre(),
+                    'urlPublication' => $domain->getUrl() . $url,
+                    'commentaire' => $objet->getListeCommentaires()->last()->getTexte(),
+                    'prenomUtilisateur' => '',
                 ]
             );
 
-            $currentCourriel->setBody($content);
-            $message = $this->generationMail(null, $currentCourriel);
-            $message->setTo($destinataire);
+            $currentMail->setBody($content);
+            $mailToSend = $this->generationMail(null, $currentMail);
+            $mailToSend->setTo($domain->getAdresseMailContact());
 
-            $this->mailer->send($message);
+            $this->mailer->send($mailToSend);
         }
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendPublicationCommentNotification(User $user, $options)
+    {
+        $this->sendPublicationNotification($user, $options, Mail::MAIL_PUBLICATION_COMMENTED);
+    }
+
+    /**
+     * @param User $user
+     * @param array $options
+     */
+    public function sendPublicationNotifiedNotification(User $user, $options)
+    {
+        $this->sendPublicationNotification($user, $options, Mail::MAIL_PUBLICATION_NOTIFIED);
+    }
+
+    public function sendPublicationNotification(User $user, $options, $mailId)
+    {
+        $options['urlPublication'] = $this->getEncodedPath('publication', $options['idPublication'], $user);
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1413,6 +1569,7 @@ class MailManager extends BaseManager
             $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_GROUPE);
             $parameters = [
                 'nomGroupe' => $group->getTitre(),
+                'commentaire' => $commentaire->getMessage(),
                 'urlGroupe' => $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
                     'groupe' => $group->getId(),
                 ], RouterInterface::ABSOLUTE_URL),
@@ -1423,7 +1580,9 @@ class MailManager extends BaseManager
             $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_FICHE);
             $group = $commentaire->getFiche()->getGroupe();
             $parameters = [
+                'nomGroupe' => $fiche->getGroupe()->getTitre(),
                 'nomFiche' => $fiche->getQuestionPosee(),
+                'commentaire' => $commentaire->getMessage(),
                 'urlFiche' => $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
                     'fiche' => $fiche->getId(),
                 ], RouterInterface::ABSOLUTE_URL),
@@ -1432,12 +1591,9 @@ class MailManager extends BaseManager
             return false;
         }
 
+        /** @var User $recipient */
         foreach ($group->getUsers() as $recipient) {
-            $concerned = $recipient->isActifInGroupe($group)
-                || $group->hasAnimateur($recipient)
-                || $recipient->hasRoleAdmin()
-                || $recipient->hasRoleAdminHn()
-            ;
+            $concerned = $recipient->hasRoleAdmin() || $recipient->hasRoleAdminHn();
 
             if (!$concerned) {
                 continue;
@@ -1450,8 +1606,9 @@ class MailManager extends BaseManager
                 $currentCourriel->getBody(),
                 null,
                 array_merge($parameters, [
-                    'nomUtilisateur' => $commentaire->getUser()->getLastname(),
-                    'prenomUtilisateur' => $commentaire->getUser()->getFirstname(),
+                    'nomUtilisateurDist' => $commentaire->getUser()->getLastname(),
+                    'prenomUtilisateurDist' => $commentaire->getUser()->getFirstname(),
+                    'prenomUtilisateur' => $recipient->getFirstname(),
                 ])
             );
 
@@ -1461,6 +1618,80 @@ class MailManager extends BaseManager
 
             $this->mailer->send($message);
         }
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupCommentNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_GROUPE);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupDocumentNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_DOCUMENT);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupCreatedNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_CREATED);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpGroupUserJoinedNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpUserJoinedNotification(User $user, $options)
+    {
+        $this->sendNotification($user, $options, Mail::MAIL_CDP_USER_JOINED);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpFormCommentNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CM_COMMENTAIRE_FICHE, true);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     * @param bool $isFiche
+     */
+    public function sendCdpNotification(User $user, $options, $mailId, $isFiche = false)
+    {
+        if ($isFiche) {
+            $options['urlFiche'] = $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
+                'fiche' => $options['ficheId'],
+            ]);
+        } else {
+            $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+                'groupe' => $options['groupId'],
+            ]);
+        }
+        $this->sendNotification($user, $options, $mailId);
     }
 
     /**
@@ -1492,5 +1723,110 @@ class MailManager extends BaseManager
         $email = $this->sendMail($objet, $expediteur, $destinataire, $message);
 
         $this->mailer->send($email);
+    }
+
+    /**
+     * @param Note $note
+     */
+    public function sendNoteCommentaire(Note $note)
+    {
+        /** @var Mail $mail */
+        $mail = $this->findOneById(Mail::MAIL_NOTED_COMMENT);
+        $options = [
+            'urlDocument' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                'id' => $note->getObjet()->getId(),
+            ], RouterInterface::ABSOLUTE_URL),
+            'note' => $note->getNote(),
+            'comment' => $note->getComment(),
+            'nomUtilisateur' => $note->getUser()->getLastname(),
+            'prenomUtilisateur' => $note->getUser()->getFirstname(),
+            'subjectdomain' => $this->getDomaineSubjet(),
+        ];
+
+        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
+        $from = [$expediteurMail => $expediteurName];
+
+        $mailsToSend = $this->sendMail(
+            $mail->getObjet(),
+            $from,
+            $this->getMailDomaine(),
+            $content
+        );
+
+        $this->mailer->send($mailsToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     * @param $mailId
+     */
+    public function sendNotification(User $user, $options, $mailId)
+    {
+        $domains = $user->getDomainesId();
+        $domain = array_shift($domains);
+        $this->_session->set('domaineId', $domain);
+        $this->setOptions();
+        $this->currentDomain = $this->_domaineManager->findOneById($domain);
+        $this->basePath = $this->currentDomain->getUrl();
+        /** @var Mail $mail */
+        $mail = $this->findOneById($mailId);
+
+        $options['prenomUtilisateur'] = $user->getFirstname();
+
+        $mailToSend = $this->generationMail($user, $mail, $options, 0, false, false);
+        $mailToSend->setTo($user->getEmail());
+
+        $this->mailer->send($mailToSend);
+    }
+
+    /**
+     * @param User $user
+     * @param Notification[] $groupedNotifications
+     */
+    public function sendGroupedNotification(User $user, $groupedNotifications)
+    {
+        array_multisort($groupedNotifications);
+
+        $content = $this->_twig->render('@NodevoMail/Notifications/grouped_layout.html.twig', [
+            'notifications' => $groupedNotifications,
+        ]);
+
+        $objects = $this->objectRepository->getRandomNotviewedObjects($user);
+        foreach ($objects as $object) {
+            $object->setPath(
+                $this->getEncodedPath('publication', $object->getId(), $user)
+            );
+        }
+
+        $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
+            'objects' => $objects,
+            'profilCompletion' => $this->profilecompletionCalculator->calculateForUser($user),
+            'stats' => $this->statsInformationsRetriever->getStats(),
+        ]);
+
+        $options['message'] = $content;
+
+        $this->sendNotification($user, $options, Mail::MAIL_GROUPED_NOTIFS);
+    }
+
+    /**
+     * @param $type
+     * @param $entityId
+     * @param User $user
+     *
+     * @return string
+     */
+    public function getEncodedPath($type, $entityId, User $user)
+    {
+        return $this->_router->generate('nodevo_mail_redirect', [
+            'pathEncoded' => base64_encode(implode('/', [
+                $type,
+                $entityId,
+                $user->getId(),
+            ])),
+        ]);
     }
 }

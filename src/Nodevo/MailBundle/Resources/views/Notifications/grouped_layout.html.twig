@@ -1,0 +1,16 @@
+{% spaceless %}
+{% for section, groups in notifications %}
+    <div class="notification-group">
+        <div class="notification-group__title underlined bold" style="margin: 20px 0 10px;">
+            {{ ('notification.section.title.' ~ section )|trans([], 'notification') }}
+        </div>
+        <div class="notification-group__detail">
+            {% for code, notification in groups %}
+                <div style="margin-bottom: 10px;">
+                    {% include notification['template'] with {"notifications": notification['notification']} %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+{% endspaceless %}

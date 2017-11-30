@@ -7,6 +7,8 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CartBundle\Entity\Item\CartItem;
 use HopitalNumerique\CartBundle\Entity\Item\ReportItem;
+use HopitalNumerique\CartBundle\Event\ReportSharedEvent;
+use HopitalNumerique\CartBundle\Events;
 use HopitalNumerique\CartBundle\Exception\ReportAlreadySharedToUserException;
 use HopitalNumerique\CartBundle\Repository\CartItemRepository;
 use HopitalNumerique\CartBundle\Service\ReportGenerator\ReportGenerator;
@@ -14,6 +16,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CartBundle\Entity\Report;
 use HopitalNumerique\CartBundle\Entity\ReportSharing;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ShareReportCommandHandler
 {
@@ -38,19 +41,31 @@ class ShareReportCommandHandler
     protected $reportGenerator;
 
     /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * ShareReportCommandHandler constructor.
      *
-     * @param UserRepository $userRepository
-     * @param CartItemRepository $cartItemRepository
-     * @param EntityManagerInterface $entityManager
-     * @param ReportGenerator $reportGenerator
+     * @param UserRepository           $userRepository
+     * @param CartItemRepository       $cartItemRepository
+     * @param EntityManagerInterface   $entityManager
+     * @param ReportGenerator          $reportGenerator
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(UserRepository $userRepository, CartItemRepository $cartItemRepository, EntityManagerInterface $entityManager, ReportGenerator $reportGenerator)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        CartItemRepository $cartItemRepository,
+        EntityManagerInterface $entityManager,
+        ReportGenerator $reportGenerator,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->cartItemRepository = $cartItemRepository;
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
         $this->reportGenerator = $reportGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -85,6 +100,18 @@ class ShareReportCommandHandler
         if ($command->type === ReportSharing::TYPE_COPY) {
             $this->reportGenerator->generate($copiedReport);
         }
+
+        /**
+         * Fire REPORT_SHARED or REPORT_COPIED event.
+         */
+        if (ReportSharing::TYPE_SHARE === $command->type) {
+            $eventCode = Events::REPORT_SHARED;
+        } else {
+            $eventCode = Events::REPORT_COPIED;
+        }
+
+        $event = new ReportSharedEvent($command->report, $command->user, $user);
+        $this->eventDispatcher->dispatch($eventCode, $event);
     }
 
     /**

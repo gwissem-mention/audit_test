@@ -17,11 +17,15 @@ TabErrorHandler.prototype = {
         var instance = this;
 
         $('.tab-pane').each(function() {
-            instance.tabs.push({
-                tab: $('a[href="#' + $(this).attr('id') + '"]'),
-                selector: $(this),
-                errors: false
-            });
+            var tab = $('a[data-target="#' + $(this).attr('id') + '"]');
+
+            if (tab.length > 0) {
+                instance.tabs.push({
+                    tab: tab,
+                    selector: $(this),
+                    errors: false
+                });
+            }
         });
     },
 
@@ -68,7 +72,6 @@ TabErrorHandler.prototype = {
 
         for (i = 0; i < this.tabs.length; i++) {
             var tab = this.tabs[i];
-
             if (tab.errors && !show) {
                 tab.tab.tab('show');
                 show = true;

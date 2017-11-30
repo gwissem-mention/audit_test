@@ -30,6 +30,7 @@ services:
             - '@security.token_storage'
             - '@validator'
             - '@translator.default'
+            - '@event_dispatcher'
 
     autodiag.form.autodiagentry.value:
         class: HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType
@@ -119,6 +120,12 @@ services:
 
     autodiag.twig_restitution_extension:
         class: HopitalNumerique\AutodiagBundle\Twig\RestitutionExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    HopitalNumerique\AutodiagBundle\Twig\AutodiagToStringExtension:
+        class: HopitalNumerique\AutodiagBundle\Twig\AutodiagToStringExtension
         public: false
         tags:
             - { name: twig.extension }
@@ -266,3 +273,21 @@ services:
             - '@hopitalnumerique\userbundle\service\sharemessagegenerator'
             - '%publication_autodiag_unpublished_id%'
         public: false
+
+    HopitalNumerique\AutodiagBundle\Service\Notification\AutodiagUpdatedNotificationProvider:
+        class: HopitalNumerique\AutodiagBundle\Service\Notification\AutodiagUpdatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@autodiag.repository.autodiagentry'
+        tags:
+            - { name: notification.aggregator, key: autodiag_update_published }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener:
+        class: HopitalNumerique\AutodiagBundle\EventListener\AutodiagUpdatePublishedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: autodiag_update_published }

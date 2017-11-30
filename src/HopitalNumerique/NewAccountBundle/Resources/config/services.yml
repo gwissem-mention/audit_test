@@ -25,3 +25,55 @@ services:
         class: HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardHandler
         arguments:
             - '@dmishh.settings.settings_manager'
+
+    HopitalNumerique\NewAccountBundle\Security\InformationsAccessVoter:
+        class: HopitalNumerique\NewAccountBundle\Security\InformationsAccessVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    HopitalNumerique\NewAccountBundle\Service\UserData\ContractWidget:
+        class: HopitalNumerique\NewAccountBundle\Service\UserData\ContractWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: user_informations, priority: 10 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@security.authorization_checker'
+            - '@translator'
+            - '@hopitalnumerique_user.repository.contractualisation'
+        public: false
+
+    HopitalNumerique\NewAccountBundle\Service\UserData\PaymentWidget:
+        class: HopitalNumerique\NewAccountBundle\Service\UserData\PaymentWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: user_informations, priority: 30 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@security.authorization_checker'
+            - '@translator'
+            - '@hopitalnumerique_paiement.manager.remboursement'
+            - '@hopitalnumerique_intervention.manager.intervention_demande'
+            - '@hopitalnumerique_module.manager.inscription'
+            - '@hopitalnumerique_paiement.manager.facture'
+        public: false
+
+    HopitalNumerique\NewAccountBundle\Service\UserData\ActivityMonitoringWidget:
+        class: HopitalNumerique\NewAccountBundle\Service\UserData\ActivityMonitoringWidget
+        tags:
+            - { name: new_account.dashboard_widget, type: user_informations, priority: 20 }
+        arguments:
+            - '@twig'
+            - '@security.token_storage'
+            - '@security.authorization_checker'
+            - '@translator'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_expert.manager.activiteexpert'
+        public: false
+
+    HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings:
+        class: HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings
+        arguments:
+            - '@hopitalnumerique\notificationbundle\repository\settingsrepository'
+            - '@hopitalnumerique\notificationbundle\service\notifications'

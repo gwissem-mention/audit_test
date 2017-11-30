@@ -2,38 +2,47 @@
 
 namespace HopitalNumerique\ObjetBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use HopitalNumerique\ObjetBundle\Repository\ConsultationRepository;
 
 /**
  * Manager de l'entité Consultation.
+ * @method ConsultationRepository getRepository
  */
 class ConsultationManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ObjetBundle\Entity\Consultation';
-    protected $securityContext;
+
+    /**
+     * @var TokenStorageInterface
+     */
+    protected $tokenStorage;
 
     /**
      * Construct.
      *
      * @param EntityManager   $em
-     * @param SecurityContext $securityContext
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(EntityManager $em, $securityContext)
+    public function __construct(EntityManager $em, TokenStorageInterface $tokenStorage)
     {
         parent::__construct($em);
-        $this->securityContext = $securityContext;
+
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
      * Retourne les dernières consultations de l'user $user.
      *
      * @param User $user L'user connecté
+     * @param integer $domaineId
      *
      * @return array
      */
@@ -45,81 +54,56 @@ class ConsultationManager extends BaseManager
     /**
      * On met l'objet en consulté (création si première visite, ou update de la date).
      *
+     * @param Domaine $domaine
      * @param Objet|Contenu $objet     La publication visitée
      * @param bool          $isContenu Is contenu ?
      */
     public function consulted($domaine, $objet, $isContenu = false)
     {
-        $user = $this->securityContext->getToken()->getUser();
+        $user = $this->tokenStorage->getToken()->getUser();
 
-        if ($user instanceof User) {
-            $consultation = $isContenu ? $this->findOneBy(
-                ['objet' => $objet->getObjet(), 'contenu' => $objet, 'user' => $user, 'domaine' => $domaine]
-            ) : $this->findOneBy(['objet' => $objet, 'user' => $user, 'contenu' => null, 'domaine' => $domaine]);
-
-            //new
-            /** @var Consultation $consultation */
-            if (is_null($consultation)) {
-                $consultation = $this->createEmpty();
-
-                $consultation->setDomaine($domaine);
-
-                if ($isContenu) {
-                    $consultation->setContenu($objet);
-                    $consultation->setObjet($objet->getObjet());
-                } else {
-                    $consultation->setObjet($objet);
-                }
-
-                $consultation->setUser($user);
-                //update
-            } else {
-                $consultation->setDateLastConsulted(new \DateTime());
-                $consultation->setViewsCount($consultation->getViewsCount()+1);
-            }
+        if ($isContenu) {
+            $queryParameters = [
+                'objet' => $objet->getObjet(),
+                'contenu' => $objet,
+                'domaine' => $domaine,
+            ];
         } else {
-            /** @var Consultation $consultation */
-            $consultation = $isContenu
-                ? $this->findOneBy(
-                    [
-                        'objet' => $objet->getObjet(),
-                        'contenu' => $objet,
-                        'user' => null,
-                        'domaine' => $domaine,
-                        'sessionId' => session_id(),
-                    ]
-                )
-                : $this->findOneBy(
-                    [
-                        'objet' => $objet,
-                        'user' => null,
-                        'contenu' => null,
-                        'domaine' => $domaine,
-                        'sessionId' => session_id(),
-                    ]
-                )
-            ;
-
-            if (is_null($consultation)) {
-                $consultation = $this->createEmpty();
-
-                $consultation->setDomaine($domaine);
-
-                if ($isContenu) {
-                    $consultation->setContenu($objet);
-                    $consultation->setObjet($objet->getObjet());
-                } else {
-                    $consultation->setObjet($objet);
-                }
-
-                $consultation->setSessionId(session_id());
-            } else {
-                $consultation->setDateLastConsulted(new \DateTime());
-                $consultation->setViewsCount($consultation->getViewsCount()+1);
-            }
+            $queryParameters = [
+                'objet' => $objet,
+                'contenu' => null,
+                'domaine' => $domaine,
+            ];
         }
 
-        $this->save($consultation);
+        if ($user instanceof User) {
+            $queryParameters['user'] = $user;
+            $consultation = $this->getRepository()->findCurrentConsultation($queryParameters);
+        } else {
+            $queryParameters['user'] = null;
+            $queryParameters['sessionId'] = session_id();
+            $consultation = $this->getRepository()->findCurrentConsultation($queryParameters);
+        }
+
+        if (null === $consultation) {
+            $consultation = $this->createEmpty();
+            $consultation->setDomaine($domaine);
+
+            if ($isContenu) {
+                $consultation->setContenu($objet);
+                $consultation->setObjet($objet->getObjet());
+            } else {
+                $consultation->setObjet($objet);
+            }
+
+            if ($user instanceof User) {
+                $consultation->setUser($user);
+            } else {
+                $consultation->setSessionId(session_id());
+            }
+
+            $this->save($consultation);
+        }
     }
 
     /**
@@ -161,13 +145,13 @@ class ConsultationManager extends BaseManager
                     // Si la date de dernière mise à jour de l'objet est
                     // postérieure à la dernière consultation de l'objet : Notif updated
                     $consulted['objets'][$one->getObjet()->getId()] = $one->getObjet()->getDateModification()
-                                                                      > $one->getDateLastConsulted();
+                                                                      > $one->getConsultationDate();
                     // Cas contenu
                 } else {
                     // Si la date de dernière mise à jour du contenu est
                     // postérieure à la dernière consultation du contenu : Notif updated
                     $consulted['contenus'][$one->getContenu()->getId()] = $one->getContenu()->getDateModification()
-                                                                          > $one->getDateLastConsulted();
+                                                                          > $one->getConsultationDate();
                 }
             }
 

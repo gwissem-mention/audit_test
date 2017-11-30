@@ -16,3 +16,11 @@ links:
         form:
             list:
                 label: Liste des discussions
+
+popin:
+    comment:
+        title: Commentaire notation
+        error: Veuillez vous connecter pour attribuer une note
+        input: Commentaire
+        submit: Valider
+        cancel: Annuler

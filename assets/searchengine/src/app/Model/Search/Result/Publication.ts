@@ -83,6 +83,16 @@ export default class Publication extends Result {
     }
 
     getSynthese(): string {
-        return undefined !== this.synthesis ? Routing.generate('hopital_numerique_publication_synthese', {'id': this.parent ? this.parent.id : this.id}) : null;
+        if (undefined === this.parent) {
+            if (null !== this.synthesis && '' !== this.synthesis) {
+                return Routing.generate('hopital_numerique_publication_synthese', {'id': this.id});
+            }
+        } else {
+            if (null !== this.parent.synthesis && '' !== this.parent.synthesis) {
+                return Routing.generate('hopital_numerique_publication_synthese', {'id': this.parent.id});
+            }
+        }
+
+        return null;
     }
 }

@@ -31,6 +31,7 @@ services:
         - '@hopitalnumerique_forum.repository.board'
         - '@autodiag.repository.autodiag'
         - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
+        - '@hopitalnumerique_objet.repository.risk'
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView

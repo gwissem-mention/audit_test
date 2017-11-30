@@ -23,3 +23,9 @@ account_cart:
 account_parameter:
     path:     /mes-parametres
     defaults: { _controller: NewAccountBundle:Front\Parameter:parameter }
+
+account_parameter_notifications_settings_save:
+    path:     /mes-parametres/save-notifications-settings
+    defaults: { _controller: NewAccountBundle:Front\Parameter:saveNotificationsSettings }
+    methods:
+        - POST

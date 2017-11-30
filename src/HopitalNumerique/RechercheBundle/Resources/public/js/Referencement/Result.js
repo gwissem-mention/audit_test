@@ -216,6 +216,11 @@ Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
 
                 $(document).trigger('search-results-updated');
                 ajaxLoader.finished();
+
+                $('#results-' + resultsGroup + '-bloc .open-popin-referencement').on('click', function (e) {
+                    e.preventDefault();
+                    Hn_Reference_Referencement_Popin.open($('.open-popin-referencement').attr('href'));
+                });
             }
         });
     } else {

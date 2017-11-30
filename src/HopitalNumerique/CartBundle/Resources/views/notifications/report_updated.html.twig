@@ -1,0 +1,33 @@
+{% extends "NodevoMailBundle:Notifications:template.html.twig" %}
+{% import "HopitalNumeriqueCartBundle:notifications:report_layout.html.twig" as layout %}
+{% set notifications = notifications %}
+{% trans_default_domain 'notification' %}
+{% block single %}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single_undetail')|trans({
+            '%reportName%' : layout.link(notif.title),
+        })|raw  }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
+            '%reportName%' : layout.link(notif.title),
+            '%userName%' : notif.detail
+        })|raw  }}
+    {% endif %}
+{% endblock %}
+{% block header %}
+    {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
+        '%number%' : notifications|length
+    }) }}
+{% endblock %}
+{% block content %}
+    {% if notif.detailLevel == 0 %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.undetail')|trans({
+            '%reportName%' : layout.link(notif.title),
+        })|raw  }}
+    {% else %}
+        {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.detail')|trans({
+            '%reportName%' : layout.link(notif.title),
+            '%userName%' : notif.detail
+        })|raw  }}
+    {% endif %}
+{% endblock %}

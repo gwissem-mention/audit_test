@@ -3,6 +3,8 @@
 namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectCommand;
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -20,6 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
@@ -43,6 +46,12 @@ class PublicationController extends Controller
      */
     public function objetAction(Request $request, Objet $objet)
     {
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, null);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
+
         $rolesAllowedToAccessFrontReferencement = [
             'ROLE_ADMINISTRATEUR_1',
             'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
@@ -173,6 +182,12 @@ class PublicationController extends Controller
             ]
         );
 
+        $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
+            'user' => $this->getUser(),
+            'objet' => $objet,
+            'contenu' => null
+        ]);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -195,6 +210,7 @@ class PublicationController extends Controller
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
+            'subscribed' => $subscribed,
         ]);
     }
 
@@ -439,6 +455,17 @@ class PublicationController extends Controller
             $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($contenu), $relationAcceptedClasses)
         );
 
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, $contenu);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
+
+        $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
+            'user' => $this->getUser(),
+            'contenu' => $contenu,
+        ]);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -466,6 +493,7 @@ class PublicationController extends Controller
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
+            'subscribed' => $subscribed,
         ]);
     }
 

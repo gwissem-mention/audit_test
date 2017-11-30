@@ -1,0 +1,15 @@
+notification_config:
+    guided_search:
+        section_title: PARCOURS GUIDE
+        guided_search_updated:
+            description: Mise à jour d'un parcours guidé
+            title: Nom du parcours guidé
+            detail: Contenu de la mise à jour
+    grouped:
+        guided_search_updated:
+            single: Le parcours guidé %guidedName% a été mis à jour : %textMaj%
+            single_undetail: Le parcours guidé %guidedName% a été mis à jour
+            multiple:
+                header: %number% parcours guidés ont été mis à jour
+                detail: %guidedName% : %textMaj%
+                undetail: %guidedName%

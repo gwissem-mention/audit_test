@@ -4,15 +4,15 @@ namespace HopitalNumerique\RechercheParcoursBundle\Domain\Command;
 
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use Symfony\Component\Validator\Constraints as ASsert;
+use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
 
 class AddPrivateRiskCommand
 {
     /**
-     * @var GuidedSearch $guidedSearch
+     * @var GuidedSearchStep $guidedSearchStep
      */
-    public $guidedSearch;
+    public $guidedSearchStep;
 
     /**
      * @var User|null $user
@@ -34,12 +34,12 @@ class AddPrivateRiskCommand
     /**
      * AddPrivateRiskCommand constructor.
      *
-     * @param GuidedSearch $guidedSearch
+     * @param GuidedSearchStep $guidedSearchStep
      * @param User|null $user
      */
-    public function __construct(GuidedSearch $guidedSearch, User $user = null)
+    public function __construct(GuidedSearchStep $guidedSearchStep, User $user = null)
     {
-        $this->guidedSearch = $guidedSearch;
+        $this->guidedSearchStep = $guidedSearchStep;
         $this->user = $user;
     }
 }

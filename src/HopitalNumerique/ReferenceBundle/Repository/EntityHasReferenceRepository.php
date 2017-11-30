@@ -381,6 +381,11 @@ class EntityHasReferenceRepository extends EntityRepository
             ;
         }
 
+        $qb
+            ->andWhere('entityHasReference.entityType != :riskType')
+            ->setParameter('riskType', Entity::ENTITY_TYPE_RISK)
+        ;
+
         return $qb->getQuery()->getResult();
     }
 

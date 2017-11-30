@@ -177,6 +177,42 @@ class GuidedSearchStep
     }
 
     /**
+     * @return integer
+     */
+    public function getThinnestReferenceId()
+    {
+        $referenceId = $this
+            ->getGuidedSearch()
+            ->getGuidedSearchReference()
+            ->getRecherchesParcoursDetails()
+            ->filter(
+                function (RechercheParcoursDetails $guidedSearchParent) {
+                    return $guidedSearchParent->getId() === $this->getGuidedSearchParentReferenceId();
+                }
+            )
+            ->first()
+            ->getReference()
+            ->getId()
+        ;
+
+        return $this->getGuidedSearchSubReferenceId() ?: $referenceId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReferencesId()
+    {
+        return [
+            array_merge(
+                [$this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getId()],
+                $this->getGuidedSearch()->getGuidedSearchReference()->getReference()->getAllChildrenId()
+            ),
+            $this->getThinnestReferenceId(),
+        ];
+    }
+
+    /**
      * @return ArrayCollection|RiskAnalysis[]
      */
     public function getRisksAnalysis()

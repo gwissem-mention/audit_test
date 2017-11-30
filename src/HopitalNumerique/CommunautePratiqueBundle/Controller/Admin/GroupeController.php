@@ -36,6 +36,7 @@ class GroupeController extends Controller
     {
         /** @var Groupe $nouveauGroupe */
         $nouveauGroupe = $this->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
+        $nouveauGroupe->setIsNew(true);
 
         if ($request->query->has('domains')) {
 

@@ -2,8 +2,13 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Event\GroupEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Manager de Document.
@@ -11,6 +16,23 @@ use HopitalNumerique\UserBundle\Entity\User;
 class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
     protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe';
+
+    /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
+     * GroupeManager constructor.
+     *
+     * @param EntityManager            $em
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+        parent::__construct($em);
+    }
 
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
@@ -121,5 +143,24 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     public function getGridData(\StdClass $filtre)
     {
         return $this->getRepository()->getGridData($filtre->value['domaines']);
+    }
+
+    /**
+     * @param Groupe $entity
+     */
+    public function save($entity)
+    {
+        parent::save($entity);
+
+        if ($entity->getActif() && $entity->isNew()) {
+            /**
+             * Fire 'GROUP_CREATED' event if group is active
+             */
+            $event = new GroupEvent($entity);
+            $this->eventDispatcher->dispatch(Events::GROUP_CREATED, $event);
+            $entity->setIsNew(false);
+
+            parent::save($entity);
+        }
     }
 }

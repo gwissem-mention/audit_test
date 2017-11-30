@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\UserBundle\Domain\Command;
 
+use HopitalNumerique\NotificationBundle\Entity\Settings;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
@@ -24,24 +25,4 @@ class UpdateUserParametersCommand
      */
     public $newPassword;
 
-    /**
-     * @var boolean
-     */
-    public $publicationNotification;
-
-    /**
-     * @var boolean
-     */
-    public $activityNewsletter;
-
-    /**
-     * UserParametersCommand constructor.
-     *
-     * @param User $user
-     */
-    public function __construct(User $user)
-    {
-        $this->publicationNotification = $user->getNotficationRequete();
-        $this->activityNewsletter = $user->isActivityNewsletterEnabled();
-    }
 }

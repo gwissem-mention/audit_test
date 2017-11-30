@@ -4,6 +4,7 @@ namespace HopitalNumerique\NewAccountBundle\Controller\Front;
 
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Form\Type\UserAccountType;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,11 +40,14 @@ class ProfileController extends Controller
             return $this->redirectToRoute('account_profile');
         }
 
+        $widgets =$this->get('new_account.dashboard.widgets_aggregator')->getWidgets('user_informations');
+
         return $this->render('NewAccountBundle:profile:profile.html.twig', [
-            'form'               => $form->createView(),
-            'user'               => $user,
+            'form' => $form->createView(),
+            'user' => $user,
             'missingInformation' => $missingInformation,
-            'page'               => 'profile-page',
+            'page' => 'profile-page',
+            'widgets' => $widgets,
         ]);
     }
 }

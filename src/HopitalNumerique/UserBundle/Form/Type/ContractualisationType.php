@@ -2,12 +2,12 @@
 
 namespace HopitalNumerique\UserBundle\Form\Type;
 
+use Nodevo\FormBundle\Form\JQuery\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use HopitalNumerique\UserBundle\Entity\Contractualisation;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;

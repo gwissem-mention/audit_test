@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * EntityHasReference.
@@ -18,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository")
+ * @UniqueEntity(fields={"entityId","entityType","reference"}, groups={"insert"})
  */
 class EntityHasReference
 {

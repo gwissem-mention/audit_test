@@ -102,6 +102,7 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+    port:      "%mailer_port%"
     spool:     { type: memory }
 
 # Gestion des users via FOSUserBundle
@@ -314,3 +315,9 @@ dmishh_settings:
     settings:
         account_dashboard_order:
             type: array
+
+ccdn_component_bb_code:
+    component:
+        engine:
+            parser:
+                class: CCDNComponent\BBCodeBundle\Engine\Parser

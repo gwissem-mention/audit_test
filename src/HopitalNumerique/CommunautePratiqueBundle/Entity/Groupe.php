@@ -204,6 +204,11 @@ class Groupe
     protected $discussions;
 
     /**
+     * @ORM\Column(name="group_new", type="boolean", nullable=false, options={"default"=false})
+     */
+    protected $isNew;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -593,18 +598,18 @@ class Groupe
     }
 
     /**
-     * Add users.
+     * Adds a user to practice community group and returns new 'Inscription' object.
      *
      * @param User $users
      * @param boolean $autoValidate
      *
-     * @return Groupe
+     * @return Inscription
      */
     public function addUser(User $users, $autoValidate = false)
     {
         $this->addInscription(new Inscription($this, $users, $autoValidate));
 
-        return $this;
+        return $register;
     }
 
     /**
@@ -1134,5 +1139,25 @@ class Groupe
         }
 
         return $count;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * @param bool $isNew
+     *
+     * @return $this
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+
+        return $this;
     }
 }

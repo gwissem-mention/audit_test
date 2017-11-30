@@ -1,0 +1,100 @@
+notification-config:
+    choose:
+        day: Je choisis le jour
+        hour: Je choisis l'heure
+    information: Vous recevrez le
+    also: Vous pouvez également recevoir en complément
+    report:
+        section: RAPPORTS
+        report_updated:
+            description: Modification d'un rapport partagé par ou avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a modifié le rapport
+        report_shared_for_me:
+            description: Partage d'un nouveau rapport avec moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé son rapport avec moi
+        report_shared_for_other:
+            description: Partage d'un rapport avec d'autres utilisateurs
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a partagé le rapport, nom de l'utilisateur avec qui il a été partagé
+        report_copied_for_me:
+            description: Copie d'un nouveau rapport pour moi
+            title: Nom du rapport
+            detail: Nom de l'utilisateur qui a copié son rapport pour moi
+    autodiag:
+        section: AUTODIAGNOSTICS
+        autodiag_update_published:
+            description: Mise à jour d'un autodiagnostic
+            title: Titre de l'autodiag
+            detail: Contenu de la mise à jour
+    practice_community:
+        section: COMMUNAUTE DE PRATIQUE
+        practice_community_group_comment_created:
+            description: Nouveau commentaire dans un de mes groupes
+            title: Nom du groupe + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_form_comment_created:
+            description: Nouveau commentaire sur une fiche d'un de mes groupes
+            title: Nom du groupe + nom de la fiche + nom de l'auteur du commentaire
+            detail: Début du commentaire
+        practice_community_group_document_created:
+            description: Nouveau document dans un de mes groupes
+            title: Nom du groupe + nom du fichier + auteur
+            detail: -
+        practice_community_group_user_joined:
+            description: Nouvelle personne dans un de mes groupes
+            title: Nom du groupe + nom de la personne
+            detail: -
+        practice_community_group_created:
+            description: Nouveau groupe dans la communauté
+            title: Nom du groupe
+            detail: Description du groupe + date de démarrage
+        practice_community_user_joined:
+            description: Nouvelles personnes dans la commuauté
+            title: Nom de la personne + nom du/des groupe/s de la personne
+            detail: -
+    forum:
+        section: FORUM
+        forum_post_created:
+            description: Nouveau message dans une discussion
+            title: Nom du fil + début du message
+            detail: -
+        forum_topic_created:
+            description: Nouvelle discussion
+            title: Nom du thème + nom du fil + début du premier message
+            detail: -
+    anap_suggestion:
+        section: SUGGESTIONS DE L'ANAP
+        coming_training_sessions:
+            description: Prochaines sessions de montée en compétence dans les 3 mois à venir
+            title: Nom du module + date de la session
+            detail: Description de la session + nom du formateur
+    publication:
+        section: RESSOURCES
+        publication_notified:
+            description: Mise à jour d'une publication
+            title: Titre de la publication
+            detail: Contenu de la mise à jour
+        publication_commented:
+            description: Nouveau commentaire sur une publication
+            title: Nom de la ressource
+            detail: Début du commentaire
+    guided_search:
+      section: PARCOURS GUIDE
+      guided_search_updated:
+          description: Mise à jour d'un parcours guidé
+          title: Nom du parcours guidé
+          detail: Contenu de la mise à jour
+    resource_user:
+        section: PERSONNES RESSOURCES
+        user_role_updated:
+            description: Nouvelle personne ressource dans ma région
+            title: Prénom + nom de la personne
+            detail: -
+
+form:
+    choose: Je choisis ma fréquence
+    daily: Quotidien
+    weekly: Hebdomadaire
+    straight: A chaque évènement

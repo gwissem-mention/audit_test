@@ -93,12 +93,14 @@
 
             <div class="panel-body">
 
-                <div class="row">
-                    <div class="col-md-12 text-right">
-                        <span class="text-muted"><strong>Note référencement :</strong> : {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(user, domaineCommunWithUser) }}{% endfor %}</span>
-                        &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':4, 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
+                {% if user.id is not null %}
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <span class="text-muted"><strong>Note référencement :</strong> : {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(user, domaineCommunWithUser) }}{% endfor %}</span>
+                            &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':4, 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
 
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}

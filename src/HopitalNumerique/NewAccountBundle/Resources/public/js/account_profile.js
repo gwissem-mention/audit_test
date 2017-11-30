@@ -8,15 +8,24 @@ $(function() {
         $('.profile-tab-nav').first().tab('show');
     }
 
-    $('.profile-tab-nav').on('shown.bs.tab', function(event){
+    $('.profile-tab-nav').on('show.bs.tab', function(event) {
         window.location.hash = '?' + event.target.dataset.target.substring(1);
+        $('.panel .profile-tab').removeClass('active');
     });
 
     var tabErrorHandler = new TabErrorHandler();
 
-    $('#save-my-account').on('click', function () {
-        tabErrorHandler.checkErrors();
-        tabErrorHandler.showFirstErrorTab();
+
+
+    $('#my-profile-form').submit(function(e) {
+        if (!$(this).validationEngine('validate')) {
+            e.preventDefault();
+
+            tabErrorHandler.checkErrors();
+            tabErrorHandler.showFirstErrorTab();
+
+            return false;
+        }
     });
 
     initSelect2($('select.select2'));
@@ -75,7 +84,7 @@ function initSelect2($select) {
 function updateTabCompletionRate() {
 
     $('.profile-tab-nav').each(function(k,e) {
-        var targetTab = $($(e).attr('href'));
+        var targetTab = $($(e).attr('data-target'));
         var navTab = $(e);
 
         var tabCompletionRate = getCompletionRate(targetTab);

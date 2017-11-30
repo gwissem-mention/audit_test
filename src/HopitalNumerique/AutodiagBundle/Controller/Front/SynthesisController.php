@@ -89,7 +89,7 @@ class SynthesisController extends Controller
         ]);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('doctrine.orm.entity_manager')->flush($synthesis);
+            $this->get('doctrine.orm.entity_manager')->flush();
         }
 
         return new JsonResponse();

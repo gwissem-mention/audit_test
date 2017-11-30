@@ -9,8 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * User.
- *
  * @ORM\Table("core_user_contractualisation")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\ContractualisationRepository")
  * @ORM\HasLifecycleCallbacks

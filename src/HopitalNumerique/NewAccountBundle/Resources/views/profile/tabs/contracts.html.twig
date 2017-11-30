@@ -1,0 +1,41 @@
+<div class="tabs">
+
+    {{ 'Module_moncompte_contracts'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}
+
+    <div class="content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ 'account.user.contracts.name'|trans }}</th>
+                    <th>{{ 'account.user.contracts.archived'|trans }}</th>
+                    <th>{{ 'account.user.contracts.renewalDate'|trans }}</th>
+                    <th>{{ 'account.user.contracts.type'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contract in contracts %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('hopitalnumerique_user_contract_download', {contract: contract.id}) }}" target="_blank">
+                                {{ contract.nomDocument }}
+                            </a>
+                        </td>
+                        <td class="archive">
+                            {% if contract.archiver %}
+                                <i class="fa fa-check yes-archived" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-times no-archived" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ contract.dateRenouvellement|date("d/m/Y") }}</td>
+                        <td>{{ contract.typeDocument.libelle }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" align="center">{{ 'account.user.contracts.noFile'|trans }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

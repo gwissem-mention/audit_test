@@ -1,0 +1,26 @@
+notification_config:
+    publication:
+        section_title: RESSOURCES
+        publication_notified:
+            description: Mise à jour d'une publication
+            title: Titre de la publication
+            detail: Contenu de la mise à jour
+        publication_commented:
+            description: Nouveau commentaire sur une publication
+            title: Nom de la ressource
+            detail: Début du commentaire
+    grouped:
+        publication_notified:
+            single: La publication %publicationTitle% a été mise à jour : %textMaj%
+            single_undetail: La publication %publicationTitle% a été mise à jour
+            multiple:
+                header: %number% publications ont été mises à jour
+                detail: %publicationTitle% : %textMaj%
+                undetail: %publicationTitle%
+        publication_commented:
+            single: Un nouveau commentaire a été déposé concernant %publicationTitle% : %comment%
+            single_undetail: Un nouveau commentaire a été déposé concernant %publicationTitle%
+            multiple:
+                header: %number% nouveaux commentaires ont été déposés
+                detail: %publicationTitle% : %comment%
+                undetail: %publicationTitle%

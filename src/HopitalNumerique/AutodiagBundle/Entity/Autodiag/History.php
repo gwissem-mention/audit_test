@@ -4,7 +4,6 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -83,6 +82,8 @@ class History
      *
      * @param Autodiag $autodiag
      * @param User     $user
+     * @param bool     $notify
+     * @param string   $updateReason
      */
     private function __construct(Autodiag $autodiag, User $user, $notify, $updateReason = '')
     {
@@ -124,8 +125,6 @@ class History
 
         return $history;
     }
-
-
 
     /**
      * Get model.

@@ -206,6 +206,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
 
+            $event = new UserJoinedEvent($inscription->getGroupe(), $inscription);
+            $this->get('event_dispatcher')->dispatch(Events::GROUP_USER_JOINED, $event);
+
             $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
 
             $urlGroupe = $currentDomaine->getUrl() . $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $groupe->getId()]);

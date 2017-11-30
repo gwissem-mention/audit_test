@@ -5,6 +5,7 @@
     {% javascripts output="compiled/hopitalnumerique-account-service.js"
         "bundles/hopitalnumeriqueobjet/js/widget/ViewedObjectsWidget.js"
         'bundles/hopitalnumeriquerecherche/js/Requete/PopinDetail.js'
+        '@jquery_toggles_js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
 
@@ -35,6 +36,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-account-service.css" filter="cssrewrite, ?yui_css"
         'bundles/newaccount/css/service.css'
+        '@jquery_toggles_css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}

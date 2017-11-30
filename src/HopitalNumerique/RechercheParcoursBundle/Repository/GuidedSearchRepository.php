@@ -2,9 +2,12 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
@@ -80,6 +83,56 @@ class GuidedSearchRepository extends EntityRepository
         return $queryBuilder
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    /**
+     * Updates guided search update date.
+     *
+     * @param GuidedSearch $guidedSearch
+     *
+     * @return GuidedSearchRepository
+     */
+    public function touch(GuidedSearch $guidedSearch)
+    {
+        $guidedSearch->setUpdatedAt();
+        $this->_em->persist($guidedSearch);
+        $this->_em->flush($guidedSearch);
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the users whose last guided search ($parcoursGestionId) update was before $maxUpdateDate.
+     *
+     * @param integer   $parcoursGestionId
+     * @param \DateTime $maxUpdateDate
+     *
+     * @return QueryBuilder Users
+     */
+    public function getUpdatersBeforeQueryBuilder($parcoursGestionId, \DateTime $maxUpdateDate)
+    {
+        return $this->createQueryBuilder('guidedSearch')
+            ->select('user.id')
+            ->innerJoin(
+                RechercheParcours::class,
+                'rech_parcours',
+                Join::WITH,
+                'rech_parcours.id = guidedSearch.guidedSearchReference'
+            )
+            ->innerJoin(
+                RechercheParcoursGestion::class,
+                'rech_parcours_gest',
+                Join::WITH,
+                'rech_parcours.recherchesParcoursGestion = rech_parcours_gest.id AND rech_parcours_gest.id = :parcGest'
+            )
+            ->innerJoin('guidedSearch.owner', 'user')
+            ->groupBy('user.id')
+            ->having('MAX(guidedSearch.updatedAt) < :maxUpdateDate')
+            ->setParameters([
+                'parcGest' => (int)$parcoursGestionId,
+                'maxUpdateDate' => $maxUpdateDate
+            ])
         ;
     }
 }

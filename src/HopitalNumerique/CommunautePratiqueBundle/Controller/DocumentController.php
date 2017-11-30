@@ -4,6 +4,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Event\GroupDocumentCreatedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nodevo\ToolsBundle\Tools\Fichier;

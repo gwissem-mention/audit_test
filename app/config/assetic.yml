@@ -211,6 +211,10 @@ assetic:
         jstree_js:
             inputs:
                 - '%kernel.root_dir%/Resources/components/jstree/dist/jstree.min.js'
+
+        jRange_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jRange/jquery.range-min.js'
         #CSS
         dropzone_css:
             inputs:
@@ -291,3 +295,7 @@ assetic:
         datatables_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/datatables/media/css/dataTables.bootstrap.css"
+
+        jRange_css:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jRange/jquery.range.css'

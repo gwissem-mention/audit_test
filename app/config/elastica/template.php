@@ -571,6 +571,9 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                             ],
                         ],
+                        'autodiag_title' => [
+                            'type' => 'text',
+                        ],
                         'chapter_code' => [
                             'type' => 'keyword',
                             'property_path' => false,

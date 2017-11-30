@@ -28,16 +28,16 @@ services:
             - 'HopitalNumeriqueObjetBundle:Objet'
 
     hopitalnumerique_objet.repository.contenu:
-            class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumeriqueObjetBundle:Contenu'
+        class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueObjetBundle:Contenu'
 
     hopitalnumerique_objet.repository.consultation:
-            class: HopitalNumerique\ObjetBundle\Repository\ConsultationRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumeriqueObjetBundle:Consultation'
+        class: HopitalNumerique\ObjetBundle\Repository\ConsultationRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueObjetBundle:Consultation'
 
     hopitalnumerique_objet.repository.related_board:
         class: HopitalNumerique\ObjetBundle\Repository\RelatedBoardRepository
@@ -63,7 +63,9 @@ services:
 
     hopitalnumerique_objet.manager.consultation:
         class: %hopitalnumerique_objet.manager.consultation.class%
-        arguments: ["@doctrine.orm.entity_manager","@security.context"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
 
     hopitalnumerique_objet.manager.fichiermodifiable:
         class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
@@ -72,6 +74,7 @@ services:
     hopitalnumerique_objet.manager.form.objetmanagerform:
         class: %hopitalnumerique_objet.manager.form.Objetmanagerform.class%
         arguments: ["@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_user.manager.user" ]
+
     #forms
     hopitalnumerique_objet.form.objet:
         class: %hopitalnumerique_objet.form.objet.class%
@@ -117,11 +120,15 @@ services:
     #--Manager
     hopitalnumerique_objet.manager.commentaire:
         class: %hopitalnumerique_objet.manager.commentaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
     #--Grid
     hopitalnumerique_objet.grid.commentaire:
         class: %hopitalnumerique_objet.grid.commentaire.class%
         arguments: ["@service_container"]
+
     #--Form
     hopitalnumerique_objet.form.commentaire:
         class: %hopitalnumerique_objet.form.commentaire.class%
@@ -145,13 +152,19 @@ services:
 
     hopitalnumerique_objet.doctrine.note_saver:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
-        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']
+        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note', '@event_dispatcher']
 
     hopitalnumerique_objet.repository.commentaire:
         class: HopitalNumerique\ObjetBundle\Repository\CommentaireRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\Commentaire'
+
+    HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository:
+        class: HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\ObjetBundle\Entity\Subscription'
 
     hopitalnumerique_objet.repository.note:
         class: HopitalNumerique\ObjetBundle\Repository\NoteRepository
@@ -255,15 +268,74 @@ services:
             - '@router'
             - '@hopitalnumerique_domaine.service.base_url_provider'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
         public: false
 
     HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler:
         class: HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
     HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository:
         class: HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\ObjetBundle\Entity\ObjectUpdate'
+
+
+    HopitalNumerique\ObjetBundle\EventListener\NotedSubscriber:
+        class: HopitalNumerique\ObjetBundle\EventListener\NotedSubscriber
+        arguments:
+            - '@nodevo_mail.manager.mail'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract:
+        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_objet.repository.consultation'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider:
+        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotifiedNotificationProvider
+        parent: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: publication_notified }
+
+
+    HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider:
+        class: HopitalNumerique\ObjetBundle\Service\Notification\PublicationCommentedNotificationProvider
+        parent: HopitalNumerique\ObjetBundle\Service\Notification\PublicationNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: publication_commented }
+
+    HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener:
+        class: HopitalNumerique\ObjetBundle\EventListener\PublicationNotifiedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: publication_notified }
+
+    HopitalNumerique\ObjetBundle\EventListener\PublicationCommentedListener:
+        class: HopitalNumerique\ObjetBundle\EventListener\PublicationCommentedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: publication_commented }
+
+    HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+
+    HopitalNumerique\ObjetBundle\Domain\Command\UnsubscribeToObjectHandler:
+        class: HopitalNumerique\ObjetBundle\Domain\Command\UnsubscribeToObjectHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository'
+

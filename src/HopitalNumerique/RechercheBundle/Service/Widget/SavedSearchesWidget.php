@@ -91,7 +91,7 @@ class SavedSearchesWidget extends WidgetAbstract implements DomainAwareInterface
                         [
                             'refs' => implode($search->getRefs(), ','),
                             'q'    => $search->getRechercheTextuelle(),
-                            'type' => $resourceTypes,
+                            'type' => $resourceTypes ?: 'null',
                         ]
                     ),
                     'send' => $this->router->generate(

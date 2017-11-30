@@ -3,9 +3,12 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Event\EnrolmentEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
+use HopitalNumerique\UserBundle\Event\UserRoleUpdatedEvent;
 use HopitalNumerique\UserBundle\UserEvents;
 use Nodevo\ToolsBundle\Tools\Password;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1104,6 +1107,8 @@ class UserController extends Controller
                 //test ajout ou edition
                 $new = is_null($user->getId());
 
+                $roleHasChanged = false;
+
                 //Generate password for new users
                 if ($new) {
                     $user->setRegistrationDate(new \DateTime());
@@ -1122,6 +1127,7 @@ class UserController extends Controller
                     }
                 } else {
                     if ($form->has('roles') && $oldUser->getRoles()[0] != $form->get('roles')->getData()->getRole()) {
+                        $roleHasChanged = true;
                         $action = 'update';
                         $class = 'HopitalNumerique\UserBundle\Entity\User';
 
@@ -1225,6 +1231,23 @@ class UserController extends Controller
                     $this->container->get(
                         'hopitalnumerique_recherche.dependency_injection.referencement.requete_session'
                     )->saveAsNewRequete($user);
+                }
+
+                if ($new || $roleHasChanged) {
+                    /**
+                     * Fire 'USER_ROLE_UPDATED' event
+                     */
+                    $oldRole = $new ? '' : $oldUser->getRoles()[0];
+                    $event = new UserRoleUpdatedEvent($user, $oldRole);
+                    $this->get('event_dispatcher')->dispatch(UserEvents::USER_ROLE_UPDATED, $event);
+                }
+
+                if ($user->isInscritCommunautePratique() && ($new || !$oldUser->isInscritCommunautePratique())) {
+                    /**
+                     * Fire 'ENROLL_USER' event
+                     */
+                    $event = new EnrolmentEvent($user);
+                    $this->get('event_dispatcher')->dispatch(Events::ENROLL_USER, $event);
                 }
 
                 $do = $request->request->get('do');

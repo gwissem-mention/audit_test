@@ -142,13 +142,19 @@ $(document).ready(function() {
         calculMoyenne();
 
         //Initialisation du vote
+        $('#note-moyenne-etoile')
+            .rateit({
+                step: 0.5,
+                max: 5,
+                ispreset: true,
+                readonly: $('#bloc-notation-objet').length === 0,
+                resetable: false
+            })
+        ;
         $('#note-etoile').rateit({ max: 5, step: 1 });
 
-        //Mise à jour des
-        $("#note-etoile").bind('rated', function (event, value) {
-            $('#note-valeur').val(value);
-            $('#note-valeur-show').text(value);
-            sauvegardeNote();
+        $("#note-moyenne-etoile, #note-etoile").bind('rated', function (event, value) {
+            tryRate(value);
         });
         $("#note-etoile").bind('reset', function () {
             $('#note-valeur').val(0);
@@ -168,20 +174,26 @@ $(document).ready(function() {
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
     });
 
-    $('#note-moyenne-etoile')
-        .rateit({
-            step: 0.5,
-            max: 5,
-            ispreset: true,
-            readonly: $('#bloc-notation-objet').length === 0
+    Array.prototype.forEach.call(document.querySelectorAll('.toggle'), function (elem) {
+        $(elem).toggles({
+            on: elem.dataset.active === 'true',
+            drag: false,
+            text: {on: 'OUI', off: 'NON'},
+        }).on('toggle', function (e, active) {
+            $.ajax({
+                url: this.dataset.path,
+                method: 'POST',
+                data: {
+                    'wanted': active
+                },
+                complete: function(data) {
+                    console.log(data);
+                    if (data.status === 301) {
+                        window.location = data.responseJSON.redirect;
+                    }
+                }
+            });
         })
-        .rateit('resetable', false)
-    ;
-    $("#note-moyenne-etoile").bind('rated', function (event, value) {
-        $('#note-valeur').val(value);
-        $('#note-valeur-show').text(value);
-        $('#note-etoile').rateit('value', value);
-        sauvegardeNote();
     });
 
 });
@@ -244,9 +256,58 @@ function ajoutCommentaire(path)
     }
 }
 
+/**
+ * Show popin if rate is under 3
+ * @param int rate
+ */
+function tryRate(rate) {
+    $('#note-valeur').val(rate);
+    $('#note-valeur-show').text(rate);
+    $('#note-etoile').rateit('value', rate);
+    if (parseFloat(rate) < 3) {
+        var averageRateStar = document.getElementById('note-moyenne-etoile');
+        $.ajax({
+            url  : averageRateStar.dataset.url,
+            type     : 'POST',
+            success  : function( data ){
+                $.fancybox({
+                    content: data,
+                    autoSize: false,
+                    autoHeight: true,
+                    width: 600,
+                    title: averageRateStar.dataset.title,
+                    afterShow:function() {
+                        $('form[name="note_commentaire"]').validationEngine({
+                            promptPosition: 'bottomLeft',
+                            scroll: false
+                        });
+                        document.querySelector('form[name="note_commentaire"]').addEventListener('submit', function (ev) {
+                            if ($('form[name="note_commentaire"]').validationEngine('validate')) {
+                                sauvegardeNote(document.getElementById('note_commentaire_comment').value);
+                                $.fancybox.close(true);
+                            }
+                        });
+                        document.querySelector('button[name="note_commentaire[cancel]"]').addEventListener('click', function (ev) {
+                            $.fancybox.close(true);
+                            calculMoyenne();
+                        })
+                    }
+                });
+            },
+            error   : function (xhr, textStatus, error) {
+                alert(averageRateStar.dataset.error);
+            }
+        });
+    } else {
+        sauvegardeNote();
+    }
+}
+
 //Sauvegarde ajax de la note
-function sauvegardeNote()
+function sauvegardeNote(commentaire)
 {
+    commentaire = typeof commentaire !== 'undefined' ? commentaire : null;
+
     //Mise en place d'un loader le temps de la sauvegarde
     var loader = $("#bloc-notation-objet .wrapper").nodevoLoader();
     loader.start();
@@ -256,7 +317,8 @@ function sauvegardeNote()
         data : {
             objetId   : $('#objetId').val(),
             note      : $('#note-valeur').val(),
-            isContenu : $('#isContenu').val()
+            isContenu : $('#isContenu').val(),
+            comment: commentaire
         },
         type     : 'POST',
         dataType : 'json',
@@ -268,6 +330,11 @@ function sauvegardeNote()
             setTimeout(function(){
                 $("#bloc-notation-objet .message-notation").html('');
             }, 3000);
+
+            loader.finished();
+        },
+        error   : function (xhr, textStatus, error) {
+            alert('Veuillez vous connecter pour attribuer une note');
 
             loader.finished();
         }
