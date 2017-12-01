@@ -3,6 +3,10 @@
     padding: 0 15px;
 }
 
+.body-communaute-pratique .previous-btn {
+    margin-right: 5px;
+}
+
 .body-communaute-pratique a {
     cursor: pointer;
 }
