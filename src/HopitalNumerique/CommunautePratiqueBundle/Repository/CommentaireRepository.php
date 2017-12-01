@@ -47,7 +47,7 @@ class CommentaireRepository extends EntityRepository
             ->select('COUNT(c.id)')
             ->join('c.groupe', 'g')
             ->join(
-                'g.domaine',
+                'g.domains',
                 'domaine',
                 Join::WITH,
                 $qb->expr()->in(

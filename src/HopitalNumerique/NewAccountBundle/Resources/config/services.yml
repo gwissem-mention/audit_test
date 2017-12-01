@@ -71,3 +71,9 @@ services:
             - '@hopitalnumerique_reference.manager.reference'
             - '@hopitalnumerique_expert.manager.activiteexpert'
         public: false
+
+    HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings:
+        class: HopitalNumerique\NewAccountBundle\Service\UserNotificationsSettings
+        arguments:
+            - '@hopitalnumerique\notificationbundle\repository\settingsrepository'
+            - '@hopitalnumerique\notificationbundle\service\notifications'

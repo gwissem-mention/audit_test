@@ -99,6 +99,13 @@ class Category
             ];
         }
 
+        $categoriesProperties[] = [
+            'id' => 't-' . Entity::ENTITY_TYPE_CDP_DISCUSSION,
+            'entityType' => Entity::ENTITY_TYPE_CDP_DISCUSSION,
+            'libelle' => $this->referenceManager->findOneById(4000)->getLibelle(),
+            'order' => $this->referenceManager->findOneById(4000)->getOrder(),
+        ];
+
         usort($categoriesProperties, function ($a, $b) {
             return $a['order'] > $b['order'];
         });

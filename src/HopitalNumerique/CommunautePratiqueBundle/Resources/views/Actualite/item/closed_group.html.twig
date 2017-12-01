@@ -1,0 +1,18 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            <i class="fa fa-info-circle"></i>
+            {{ 'wall.item.closed_group.title'|trans }}
+        </span>
+        <span class="date">
+               - {{ item.date|date('d/m/Y') }}
+        </span>
+        <span class="author">
+            {{ 'wall.item.closed_group.content'|trans({'%groupName%': item.groupName}) }}
+        </span>
+    </div>
+
+</div>

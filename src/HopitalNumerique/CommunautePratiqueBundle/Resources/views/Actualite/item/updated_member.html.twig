@@ -1,0 +1,43 @@
+{% trans_default_domain 'cdpNews' %}
+
+<div class="item">
+
+    <div class="infos">
+        <span class="title">
+            <i class="fa fa-info-circle"></i>
+            {{ 'wall.item.updated_member.title'|trans }}
+        </span>
+        <span class="date">
+               - {{ item.date|date('d/m/Y H:i') }}
+        </span>
+    </div>
+
+    <div class="content">
+        {% set organization = null %}
+        {% if item.user.organization %}
+            {% set organization = item.user.organization.nom %}
+        {% else %}
+            {% set organization = item.user.organizationLabel %}
+        {% endif %}
+
+        <a href="{{ path('hopitalnumerique_communautepratique_user_details', {user: item.user.id, group: null}) }}"
+           class="link item-modal"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'wall.item.updated_member.link'|trans }}"
+        >
+            {% if item.user.jobLabel and organization %}
+                {{ 'wall.item.updated_member.content'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel, '%organization%': organization}) }}
+            {% elseif item.user.jobLabel %}
+                {{ 'wall.item.updated_member.job'|trans({'%user%': item.user.prenomNom, '%job%': item.user.jobLabel}) }}
+            {% elseif organization %}
+                {{ 'wall.item.updated_member.organization'|trans({'%user%': item.user.prenomNom, '%organization%': organization}) }}
+            {% else %}
+                {{ 'wall.item.updated_member.none'|trans }}
+            {% endif %}
+
+        </a>
+    </div>
+
+</div>

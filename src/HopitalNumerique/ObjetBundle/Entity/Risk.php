@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableInterface;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearch;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -13,7 +14,7 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\RiskRepository")
  * @ORM\Table(name="hn_objet_risk")
  */
-class Risk
+class Risk implements ObjectIdentityDisplayableInterface
 {
     /**
      * @var int
@@ -86,6 +87,8 @@ class Risk
 
     /**
      * @var ArrayCollection|RelatedRisk[]
+     *
+     * @deprecated Use object identity relation instead
      *
      * @ORM\OneToMany(targetEntity="RelatedRisk", mappedBy="risk", cascade={"remove"}, orphanRemoval=true)
      * @ORM\OrderBy({"position": "ASC"})
@@ -307,32 +310,13 @@ class Risk
     /**
      * Return Entity between Object and Risk
      *
+     * @deprecated Use object identity relation instead
+     *
      * @return ArrayCollection|RelatedRisk[]
      */
     public function getRelatedRisks()
     {
         return $this->relatedRisks;
-    }
-
-    /**
-     * Count related risks object type
-     *
-     * @return array
-     */
-    public function countRelatedRisksObjectType()
-    {
-        $result = [];
-        foreach ($this->getRelatedRisks() as $relatedRisk) {
-            foreach ($relatedRisk->getObject()->getTypeLabels() as $typeLabel) {
-                if (!isset($result[$typeLabel])) {
-                    $result[$typeLabel] = 0;
-                }
-
-                $result[$typeLabel]++;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -356,5 +340,37 @@ class Risk
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityTitle()
+    {
+        return $this->getLabel();
+    }
+
+    /**
+     * @return array
+     */
+    public function getObjectIdentityCategories()
+    {
+        return [$this->getNature()->getLibelle()];
+    }
+
+    /**
+     * @return null
+     */
+    public function getObjectIdentityDescription()
+    {
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectIdentityType()
+    {
+        return 'risk';
     }
 }

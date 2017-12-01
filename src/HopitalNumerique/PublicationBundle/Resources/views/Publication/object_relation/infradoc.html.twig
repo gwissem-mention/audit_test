@@ -1,0 +1,17 @@
+<div>
+    <div class="category">
+        {{ objectRelation.object.objectIdentityCategories|join(', ') }}
+    </div>
+    <h3 class="title">
+        <a href="{{ objectIdentityLink(objectRelation, 'view') }}" target="_blank">
+            {{ objectRelation.object.objectIdentityTitle }}
+
+            {% if objectRelation.object.objet is not null %}
+                <br />
+                <span class="subtitle">
+                    <em class="fa fa-share fa-flip-vertical"></em> {{ objectRelation.object.objet.titre }}
+                </span>
+            {% endif %}
+        </a>
+    </h3>
+</div>

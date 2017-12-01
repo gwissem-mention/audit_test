@@ -1,0 +1,4 @@
+upload:
+    error:
+        type: 'Le fichier doit posséder une de ces extensions : %ext%'
+        size: Le fichier doit avoir un poids maximum de 10Mo

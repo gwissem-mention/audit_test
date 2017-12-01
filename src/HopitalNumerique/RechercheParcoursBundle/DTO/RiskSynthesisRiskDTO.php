@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\DTO;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RiskAnalysis;
 use HopitalNumerique\RechercheParcoursBundle\Entity\GuidedSearchStep;
@@ -32,6 +33,11 @@ class RiskSynthesisRiskDTO
      * @var array $highestCriticalRisksAnalysis
      */
     public $highestCriticalRisksAnalysis = [];
+
+    /**
+     * @var Objet[] $riskRelatedObjects
+     */
+    public $riskRelatedObjects = [];
 
     /**
      * @var string $directLink

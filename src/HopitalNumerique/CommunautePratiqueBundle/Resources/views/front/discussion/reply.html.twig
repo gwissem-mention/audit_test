@@ -1,0 +1,29 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'cdp_discussion' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Discussion('editReply');
+        });
+    </script>
+{% endblock %}
+
+{% block title_communaute_pratique %}
+    {{ (message is defined ? 'discussion.message.reply.edit.title' : 'discussion.message.reply.add.title')|trans }}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    <div class="discussions reply">
+        <div class="discussion">
+            <div class="messages">
+                {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:reply_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+{% endblock body_communaute_pratique %}
+

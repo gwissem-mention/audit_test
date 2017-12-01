@@ -19,7 +19,7 @@ CommunautePratique_User.desinscritGroupe = function(groupeId, userId)
             dataType: 'json'
         }).done(function(data) {
             if (data.success) {
-                window.location = Routing.generate('hopitalnumerique_communautepratique_user_listbygroupe', { groupe: groupeId });
+                window.location = Routing.generate('hopitalnumerique_communautepratique_groupe_view', { groupe: groupeId });
             } else {
                 alert('L\'utilisateur n\'a pu être désinscrit.');
             }
@@ -43,7 +43,7 @@ CommunautePratique_User.ActiveInscriptionGroupe = function(groupeId, userId)
             dataType: 'json'
         }).done(function(data) {
             if (data.success) {
-                window.location = Routing.generate('hopitalnumerique_communautepratique_user_listbygroupe', { groupe: groupeId });
+                window.location = Routing.generate('hopitalnumerique_communautepratique_groupe_view', { groupe: groupeId });
             } else {
                 alert('L\'utilisateur n\'a pu être activé \ désactivé.');
             }

@@ -1,0 +1,37 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\MessagePostedSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\MessagePostedSubscriber
+        arguments:
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository'
+            - '@doctrine.orm.entity_manager'
+            - '@security.authorization_checker'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@nodevo_mail.manager.mail'
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
+        tags:
+            - { name: kernel.event_subscriber }
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@translator'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@twig'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Activity\ActivitySubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Activity\ActivitySubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\ActivityRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionViewSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionViewSubscriber
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_subscriber }

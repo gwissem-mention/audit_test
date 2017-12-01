@@ -141,3 +141,23 @@ services:
             - '@nodevo_acl.manager.acl'
             - '@router'
             - '@translator'
+
+    HopitalNumerique\ModuleBundle\Service\Notification\ComingTrainingSessionsNotificationProvider:
+        class: HopitalNumerique\ModuleBundle\Service\Notification\ComingTrainingSessionsNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_user.repository.user'
+            - '@nodevo_acl.manager.acl'
+            - '@nodevo_acl.manager.ressource'
+        tags:
+            - { name: notification.aggregator, key: coming_training_sessions }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener:
+        class: HopitalNumerique\ModuleBundle\EventListener\ComingTrainingSessionsListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: coming_training_sessions }

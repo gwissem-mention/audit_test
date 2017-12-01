@@ -62,10 +62,27 @@ class PopupController extends Controller
             'idGroupe' => $request->request->get('idGroupe'),
         ]);
 
+        $ajoutMembreForm = null;
+        if ($request->request->get('idGroupe')) {
+            $groupe = $this->get('hopitalnumerique_communautepratique.repository.groupe')->find($request->request->get('idGroupe'));
+
+            if ($this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAddMembre($groupe)) {
+                $ajoutMembreForm = $this->createForm(
+                    'hopitalnumerique_communautepratiquebundle_user_ajout',
+                    null,
+                    [
+                        'groupe' => $groupe,
+                        'action' => $this->generateUrl('hopitalnumerique_communautepratique_user_add', ['group' => $groupe->getId()]),
+                    ]
+                );
+            }
+        }
+
         return $this->render(
             'HopitalNumeriqueContactBundle:Popup:invite.html.twig',
             [
                 'inviteForm' => $inviteForm->createView(),
+                'ajoutMembreForm' => $ajoutMembreForm ? $ajoutMembreForm->createView() : null,
             ]
         );
     }

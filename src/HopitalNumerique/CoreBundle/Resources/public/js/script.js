@@ -1,4 +1,27 @@
 $(document).ready(function() {
+
+    if ($('.go-to-top').length) {
+
+        $(window).trigger('scroll');
+
+        $(window).on('scroll', function () {
+            if ($(this).scrollTop() > 100) {
+                $('.go-to-top').addClass('active');
+            } else {
+                $('.go-to-top').removeClass('active');
+            }
+        });
+
+        $('.go-to-top').on('click', function (e) {
+            e.preventDefault();
+
+            $('html, body').animate({
+                scrollTop: 0
+            });
+        });
+    }
+
+
     $('[data-toggle="popover"]').popover({
         html: true,
         trigger: 'manual',

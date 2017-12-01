@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -92,6 +94,11 @@ class Entity
      * @var int Autodiag
      */
     const ENTITY_TYPE_AUTODIAG = 10;
+
+    /**
+     * @var int
+     */
+    const ENTITY_TYPE_CDP_DISCUSSION = 11;
 
     /**
      * @var int Autodiag
@@ -191,6 +198,11 @@ class Entity
     protected $autodiagRepository;
 
     /**
+     * @var DiscussionRepository $discussionRepository
+     */
+    protected $discussionRepository;
+
+    /**
      * @var RiskRepository
      */
     protected $riskRepository;
@@ -220,6 +232,7 @@ class Entity
      * @param EntityHasReferenceRepository $entityHasReferenceRepository
      * @param BoardRepository $boardRepository
      * @param AutodiagRepository $communautePratiqueGroupeManager
+     * @param DiscussionRepository $discussionRepository
      * @param RiskRepository $riskRepository
      */
     public function __construct(
@@ -245,6 +258,7 @@ class Entity
         $entityHasReferenceRepository,
         BoardRepository $boardRepository,
         AutodiagRepository $autodiagRepository,
+        DiscussionRepository $discussionRepository,
         RiskRepository $riskRepository
     ) {
         $this->router = $router;
@@ -269,6 +283,7 @@ class Entity
         $this->entityHasReferenceRepository = $entityHasReferenceRepository;
         $this->forumBoardRepository = $boardRepository;
         $this->autodiagRepository = $autodiagRepository;
+        $this->discussionRepository = $discussionRepository;
         $this->riskRepository = $riskRepository;
     }
 
@@ -305,6 +320,8 @@ class Entity
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
             case $entity instanceof Groupe:
                 return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
+            case $entity instanceof Discussion:
+                return self::ENTITY_TYPE_CDP_DISCUSSION;
             case $entity instanceof ExpBesoinReponses:
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
             case $entity instanceof Suggestion:
@@ -392,6 +409,8 @@ class Entity
                 return $this->forumBoardRepository->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_AUTODIAG:
                 return $this->autodiagRepository->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                return $this->discussionRepository->findById($ids);
             case self::ENTITY_TYPE_RISK:
                 return $this->riskRepository->findBy(['id' => $ids]);
         }
@@ -420,6 +439,11 @@ class Entity
 
             return $entity->getDomaines();
         }
+
+        if (method_exists($entity, 'getDomains')) {
+            return $entity->getDomains();
+        }
+
         if (method_exists($entity, 'getDomaine')) {
             if (null === $entity->getDomaine()) {
                 return [];
@@ -573,6 +597,9 @@ class Entity
         $title = null;
 
         switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                $title = $entity->getTitle();
+                break;
             case self::ENTITY_TYPE_OBJET:
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 $title = $entity->getTitre();
@@ -687,6 +714,8 @@ class Entity
                 return $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle();
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle();
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                return $this->referenceManager->findOneById(4000)->getLibelle();
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->referenceManager->findOneById($this->refExpressionBesoinReponseId)->getLibelle();
             case self::ENTITY_TYPE_FORUM_BOARD:
@@ -737,6 +766,9 @@ class Entity
                 break;
             case self::ENTITY_TYPE_FORUM_BOARD:
                 $description = $entity->getDescription();
+                break;
+            case self::ENTITY_TYPE_CDP_DISCUSSION;
+                $description = $entity->getMessages()->first()->getContent();
                 break;
         }
 
@@ -823,6 +855,28 @@ class Entity
                 return $this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
             case self::ENTITY_TYPE_FORUM_BOARD:
                 return $this->router->generate('ccdn_forum_user_board_show', ['boardId' => $entityId]);
+            case self::ENTITY_TYPE_CDP_DISCUSSION:
+                if (!$entity->isPublic()) {
+                    $group = $entity->getGroups()->first();
+
+                    if ($group) {
+                        return $this->router->generate(
+                            'hopitalnumerique_communautepratique_groupe_view_default_discussion',
+                            [
+                                'groupe' => $group->getId(),
+                                'discussion' => $entityId,
+                            ]
+                        );
+                    }
+                }
+
+                return $this->router->generate(
+                    'hopitalnumerique_communautepratique_discussions_public_desfult_discussion',
+                    [
+                        'discussion' => $entityId,
+                    ],
+                    RouterInterface::ABSOLUTE_URL
+                );
         }
 
         return null;

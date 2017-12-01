@@ -49,6 +49,7 @@ services:
             - "@hopitalnumerique_domaine.manager.domaine"
             - '@hopitalnumerique_paiement.manager.remboursement'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@event_dispatcher'
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
@@ -230,16 +231,16 @@ services:
             - { name: form.type }
 
     hopitalnumerique_user.repository.user:
-            class: HopitalNumerique\UserBundle\Repository\UserRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\UserBundle\Entity\User'
+        class: HopitalNumerique\UserBundle\Repository\UserRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\User'
 
     hopitalnumerique_user.repository.token:
-            class: HopitalNumerique\UserBundle\Repository\TokenRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumerique\UserBundle\Entity\Token'
+        class: HopitalNumerique\UserBundle\Repository\TokenRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\UserBundle\Entity\Token'
 
     hopitalnumerique_user.repository.contractualisation:
         class: HopitalNumerique\UserBundle\Repository\ContractualisationRepository
@@ -248,17 +249,24 @@ services:
             - 'HopitalNumerique\UserBundle\Entity\Contractualisation'
 
     hopitalnumerique_user.token.token_storage:
-            class: HopitalNumerique\UserBundle\Service\TokenStorage
-            arguments:
-                - '@hopitalnumerique_user.repository.token'
-                - '@doctrine.orm.entity_manager'
-                - '@event_dispatcher'
+        class: HopitalNumerique\UserBundle\Service\TokenStorage
+        arguments:
+            - '@hopitalnumerique_user.repository.token'
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
-    hopitalnumerique_user.update_user_parameters.command_handler:
+    HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler:
         class: HopitalNumerique\UserBundle\Domain\Command\UpdateUserParametersCommandHandler
         arguments:
             - '@security.token_storage'
             - '@fos_user.user_manager.default'
+            - '@hopitalnumerique\notificationbundle\domain\command\updatenotificationsettingshandler'
+
+    HopitalNumerique\UserBundle\Domain\Command\UpdateNotificationsSettingsHandler:
+        class: HopitalNumerique\UserBundle\Domain\Command\UpdateNotificationsSettingsHandler
+        arguments:
+            - '@fos_user.user_manager.default'
+            - '@hopitalnumerique\notificationbundle\domain\command\updatenotificationsettingshandler'
 
     hopitalnumerique_user.widgets.activity:
         class: HopitalNumerique\UserBundle\Service\Widget\ActivityWidget
@@ -289,3 +297,22 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    HopitalNumerique\UserBundle\Service\Notification\UserRoleUpdatedNotificationProvider:
+        class: HopitalNumerique\UserBundle\Service\Notification\UserRoleUpdatedNotificationProvider
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_user.repository.user'
+            - '@nodevo_role.manager.role'
+        tags:
+            - { name: notification.aggregator, key: user_role_updated }
+        calls:
+            - [setMailManager, ['@nodevo_mail.manager.mail']]
+
+    HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener:
+        class: HopitalNumerique\UserBundle\EventListener\UserRoleUpdatedListener
+        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        tags:
+            - { name: kernel.event_subscriber, event: user.role_updated }

@@ -33,6 +33,19 @@ CommunautePratique.init = function()
         'width'     : '80%',
         'scrolling' : 'no'
     });
+
+    CommunautePratique.selectedDomainSelectorEvent();
+};
+
+CommunautePratique.selectedDomainSelectorEvent = function () {
+    $('#cdpSelectedDomain').on('change', function (e) {
+
+        $(this).parents('.domain_selector_wrapper').nodevoLoader().start();
+
+        $.post($(this).data('uri'), {'selected_domain': $(this).val()}, function (response, code) {
+            location.reload();
+        });
+    });
 };
 
 

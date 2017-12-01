@@ -84,6 +84,7 @@ class AppKernel extends Kernel
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new HopitalNumerique\SearchBundle\HopitalNumeriqueSearchBundle(),
             new HopitalNumerique\ContextualNavigationBundle\HopitalNumeriqueContextualNavigationBundle(),
+            new HopitalNumerique\NotificationBundle\NotificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

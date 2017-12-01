@@ -1,15 +1,23 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
+{% trans_default_domain 'cdp_group' %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-groupe-user.js"
         'bundles/hopitalnumeriquecommunautepratique/js/TableauDeBord.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Directory.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Group.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/User.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            CommunautePratique_Commentaire.initTinyMce({{ groupe.id }});
+            var group = new Group();
+            {% if discussion is not null %}
+                group.preOpenDiscussionTab();
+            {% endif %}
         });
     </script>
 {% endblock %}
@@ -18,6 +26,15 @@
 
 {% block communaute_pratique_actions_before %}
     <div class="clearfix"></div>
+    <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"
+       class="btn btn-default btn-sm pull-left"
+       data-toggle="tooltip"
+       data-placement="top"
+       data-html="true"
+       title="{{ 'group.icon_tooltip.return'|trans }}"
+    >
+        <i class="fa fa-reply"></i>
+    </a>
     {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
 {% endblock %}
 
@@ -33,78 +50,97 @@
 
 {% block body_communaute_pratique %}
 
-    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
-    <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-tableau-de-bord">
-        <div class="groupe" data-groupe-id="{{ groupe.id }}" >
-            <div class="header">
-                <strong style="font-size:14px">Description du groupe</strong>
-                <a style="margin:-6px;" class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
-            </div>
-            <div class="body">
-            {%- if groupe.animateurs|length > 0 -%}
-                <p style="font-size:13px;">
-                    <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
-                    {% for animateur in groupe.animateurs %}
-                        {{ animateur.firstname }} {{ animateur.lastname }}{{ loop.last ? '' : ', ' }}
-                    {% endfor -%}
-                </p>
-            {%- endif -%}
-            {{ groupe.descriptionHtml|raw }}
-            </div>
+    <div class="group">
+        <div class="tabs">
+
+            <a href="#description" class="tab">
+                <span class="tab-title">{{ 'group.tabs.description.title'|trans }}</span>
+                {{ groupe.descriptionCourte|parsePublication|striptags|unescape|truncate(140) }}
+                <span data-toggle="modal" data-target="#description-details-modal" class="load-more-link">{{ 'group.description.load_more'|trans }}</span>
+            </a>
+
+            <a href="#discussion" class="tab discussion ajax active">
+                <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
+
+                {% if (discussionCounter.message + discussionCounter.document + discussionCounter.discussion) > 0%}
+                    <ul>
+                        <li>{{ 'group.tabs.discussion.new_comments'|transchoice(discussionCounter.message, {'%countTxt%': '<b>'~discussionCounter.message~'</b>'})|raw }}</li>
+                        <li>{{ 'group.tabs.discussion.new_documents'|transchoice(discussionCounter.document, {'%countTxt%': '<b>'~discussionCounter.document~'</b>'})|raw }}</li>
+                        <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(discussionCounter.discussion, {'%countTxt%': '<b>'~discussionCounter.discussion~'</b>'})|raw }}</li>
+                    </ul>
+                {% else %}
+                    <span class="nothing">{{ 'group.tabs.discussion.nothing_new'|trans }}</span>
+                {% endif %}
+            </a>
+
+            <a href="#members" class="tab ajax">
+                <span class="tab-title">{{ 'group.tabs.members.title'|trans }}</span>
+
+                <ul>
+                    <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.validatedInscriptions|length, {'%countTxt%': '<b>'~groupe.validatedInscriptions|length~'</b>'})|raw }}</li>
+                    {% if is_granted('validate_registration', groupe) %}
+                        <li class="members-to-validate">{{ 'group.tabs.members.members_to_validate_count'|transchoice(groupe.inscriptionsToValidate|length, {'%countTxt%': '<b>'~groupe.inscriptionsToValidate|length~'</b>'})|raw }}</li>
+                    {% endif %}
+                    <li>{{ 'group.tabs.members.animators_count'|transchoice(groupe.animateurs|length, {'%countTxt%': '<b>'~groupe.animateurs|length~'</b>'})|raw }}</li>
+                </ul>
+            </a>
+
         </div>
-     </div>
-    {%- if groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user)) -%}
-        <div class="text-right">
-            <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
-        </div>
-    {%- endif -%}
-    {%- if groupe.fiches|length > 0 -%}
-        <div class="communaute-de-pratiques-groupe-fiches">
-            <p><strong>Fiches de problématique du groupe</strong></p>
-            <div class="row">
-                {%- for fiche in groupe.fiches -%}
-                    <div class="col-md-6">
-                        {{ communaute_pratique.display_bloc_fiche(fiche) }}
+
+        <div class="tab-container">
+            <div id="description" class="tab-content active">
+                <h2>{{ 'group.tabs.description.long_title'|trans }}</h2>
+
+                {% if groupe.animateurs|length > 0 %}
+                    <div class="animators">
+                        <b>{{ 'group.tabs.description.animators'|transchoice(groupe.animateurs|length) }}</b>
+                        {% for animateur in groupe.animateurs %}
+                            {{ animateur.prenomNom }}{{ loop.last ? '' : ', ' }}
+                        {% endfor -%}
                     </div>
-                {%- endfor -%}
-            </div>
-        </div>
-    {%- endif -%}
-        <div class="communaute-de-pratiques-commentaires">
-            <div class="panel-header"></div>
-            <div class="panel panel-communaute-de-pratiques">
-                <div class="panel-heading">
-                    <h2>Discussion entre les membres du groupe</h2>
-                </div>
-                <div class="panel-body">
-
-                    <div class="commentaire">
-                        <p>Ajouter un commentaire :</p>
-                        <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}">Mes documents</a>".</p>
-                        <div class="illustration">
-                            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
-                        </div>
-                        <div class="contenu">
-                            <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
-
-                            <div class="message">
-                                {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/GroupeCommentaire:add', { groupe:groupe.id })) }}
-                            {% if canExportCsv %}
-                                <a href="{{ path('hopitalnumerique_communautepratique_groupe_export_comments', {'group': groupe.id}) }}" class="btn btn-info" id="export-csv">Exporter la discussion</a>
-                            {% endif %}
-                            </div>
-                        </div>
-                    </div>
-
-                {% if groupe.commentaires|length > 0 %}
-                    {% for commentaire in groupe.commentaires %}
-                        {{ communaute_pratique.display_commentaire(commentaire) }}
-                    {% endfor %}
                 {% endif %}
 
+                {{ groupe.descriptionHtml|raw }}
+            </div>
+
+
+            {% spaceless %}
+                <div
+                    id="discussion"
+                    data-init="false"
+                    data-content-uri="{{ discussion is not null ? path('hopitalnumerique_communautepratique_discussions_group_default_discussion', {'group': groupe.id, 'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_discussions_group', {'group': groupe.id}) }}"
+                >
+                </div>
+            {% endspaceless %}
+
+            <div
+                id="members"
+                class="tab-content"
+                data-init="false"
+                data-cache="disabled"
+                data-content-uri="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', {'groupe': groupe.id}) }}"
+                data-content-uri-to-validate="{{ path('hopitalnumerique_communautepratique_user_listbygroupe_filtered', {'groupe': groupe.id}) }}"
+            >
+                <h2>{{ 'group.tabs.members.title'|trans }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="description-details modal fade" id="description-details-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="group">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'group.tabs.description.title'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ groupe.descriptionCourte }}
                 </div>
             </div>
         </div>
+    </div>
 {% endblock body_communaute_pratique %}
 
 {% block helpBlock %}

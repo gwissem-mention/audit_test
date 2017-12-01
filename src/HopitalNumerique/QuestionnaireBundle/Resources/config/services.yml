@@ -83,6 +83,12 @@ services:
         arguments:
             - 'HopitalNumeriqueQuestionnaireBundle:Reponse'
 
+    HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository:
+        class: HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueQuestionnaireBundle:Questionnaire'
+
 
     hopitalnumerique_questionnaire.widget.survey:
         class: HopitalNumerique\QuestionnaireBundle\Service\Widget\SurveyWidget

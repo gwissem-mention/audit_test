@@ -1,0 +1,27 @@
+.file-dropzone {
+    margin: 15px 0;
+}
+
+.file-dropzone .files .file {
+    background: #e5e5e5;
+    margin: 1px 0;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-dropzone .files .file .btn-group i {
+    font-size: 16px;
+}
+
+.file-dropzone .area {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    border: 5px dashed #e5e5e5;
+}
+
+.file-dropzone .area i {
+    font-size: 45px;
+}

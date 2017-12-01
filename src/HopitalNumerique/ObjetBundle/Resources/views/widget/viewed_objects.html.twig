@@ -9,6 +9,7 @@
             <thead>
             <tr>
                 <th>{{ 'viewed_objects.publications'|trans }}</th>
+                <th>{{ 'viewed_objects.subscribe'|trans }}</th>
                 <th width="140">{{ 'viewed_objects.actions'|trans }}</th>
             </tr>
             </thead>
@@ -23,6 +24,19 @@
                         <a href="{{ item.showLink }}" title="{{ item.fullTitle }}"{{ not item.sameDomain ? " target='_blank'" }}>
                             {{ item.shortTitle }}
                         </a>
+                    </td>
+                    <td class="actions-column">
+                        {% spaceless %}
+                            <div
+                                    class="toggle toggle-success"
+                                    data-path="{{ path('hopitalnumerique_objet_subscribe', {
+                                        'object': item.subscription.objectId,
+                                        'content': item.subscription.contentId,
+                                    }) }}"
+                                    data-active="{{ item.subscription.subscribed ? 'true' : 'false' }}"
+                                    title="{{ (item.subscription.subscribed ? 'viewed_objects.subscribe' : 'viewed_objects.unsubscribe')|trans }}"
+                            ></div>
+                        {% endspaceless %}
                     </td>
                     <td class="actions-column">
                         <div class="btn-group">

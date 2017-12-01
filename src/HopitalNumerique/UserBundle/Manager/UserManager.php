@@ -2,7 +2,10 @@
 
 namespace HopitalNumerique\UserBundle\Manager;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
@@ -11,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class UserManager extends BaseManager
@@ -37,6 +41,11 @@ class UserManager extends BaseManager
 
     protected $options;
 
+    /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
     public function __construct(
         $managerUser,
         $securityContext,
@@ -44,7 +53,8 @@ class UserManager extends BaseManager
         $managerRefusCandidature,
         DomaineManager $managerDomaine,
         RemboursementManager $remboursementManager,
-        CurrentDomaine $currentDomaine
+        CurrentDomaine $currentDomaine,
+        EventDispatcherInterface $eventDispatcher
     ) {
         parent::__construct($managerUser);
         $this->securityContext = $securityContext;
@@ -55,6 +65,7 @@ class UserManager extends BaseManager
         $this->remboursementManager = $remboursementManager;
         $this->currentDomaine = $currentDomaine;
         $this->options = [];
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -404,18 +415,6 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne des membres de la communauté de pratique.
-     *
-     * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
-     *
-     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
-     */
-    public function findCommunautePratiqueMembres(Domaine $domaine)
-    {
-        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult();
-    }
-
-    /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
      * @param Groupe $groupe (optionnel) Groupe des membres
@@ -436,7 +435,7 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe)
     {
-        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
+        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($this->currentDomaine->get(), $groupe);
     }
 
     /**

@@ -137,8 +137,8 @@
                             <tr>
                                 <td>
                                     <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': objectRelated.object.id}) }}" target="_blank">
-                                        {{ objectRelated.object.typeLabels|join(', ') }} -
-                                        {{ objectRelated.object.titre }}
+                                        {{ attribute(objectRelated.object, 'typeLabels') ? objectRelated.object.typeLabels|join(', ')~' - ' }}
+                                        {{ objectRelated.object.objectIdentityTitle }}
                                     </a>
                                 </td>
                                 <td>

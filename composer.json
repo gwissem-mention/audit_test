@@ -31,7 +31,7 @@
         "symfony/symfony"                              : "2.8.*",
         "doctrine/orm"                                 : "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle"                     : "~1.2",
-        "twig/extensions"                              : "~1.0",
+        "twig/extensions"                              : "^1.2",
         "symfony/assetic-bundle"                       : "~2.3",
         "symfony/swiftmailer-bundle"                   : "~2.3",
         "symfony/monolog-bundle"                       : "~2.4",
@@ -65,9 +65,10 @@
         "egeloen/google-map-bundle"                    : "2.2.*",
         "symfony/var-dumper"                           : "3.0.*",
         "egeloen/ckeditor-bundle"                      : "^4.0",
-        "box/spout": "^2.6",
-        "dmishh/settings-bundle": "2.0.*@dev",
-        "friendsofsymfony/elastica-bundle": "^4.0"
+        "box/spout"                                    : "^2.6",
+        "dmishh/settings-bundle"                       : "2.0.*@dev",
+        "friendsofsymfony/elastica-bundle"             : "^4.0",
+        "html2text/html2text"                          : "^4.1"
     },
     "scripts": {
         "post-install-cmd": [

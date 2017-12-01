@@ -5,6 +5,7 @@ imports:
     - { resource: forum.yml }
     - { resource: services.yml }
     - { resource: elastica.yml }
+    - { resource: object_identity_routing.yml }
 
 framework:
     translator:      { fallback: "%locale%" }
@@ -101,6 +102,7 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+    port:      "%mailer_port%"
     spool:     { type: memory }
 
 # Gestion des users via FOSUserBundle
@@ -222,6 +224,9 @@ white_october_pagerfanta:
 
 fos_js_routing:
     routes_to_expose:
+        - hopitalnumerique_communautepratique_discussions_public_desfult_discussion
+        - hopitalnumerique_fichier_view
+        - hopitalnumerique_fichier_remove
         - hopitalnumerique_account_contexte_save
         - hopitalnumerique_communautepratique_commentaire_blockview
         - hopitalnumerique_communautepratique_commentaire_delete
@@ -230,9 +235,6 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_document_download
         - hopitalnumerique_communautepratique_document_listbygroupe
         - hopitalnumerique_communautepratique_document_upload
-        - hopitalnumerique_communautepratique_fiche_close
-        - hopitalnumerique_communautepratique_fiche_open
-        - hopitalnumerique_communautepratique_fiche_view
         - hopitalnumerique_communautepratique_tinymce_documents
         - hopitalnumerique_communautepratique_user_desinscritgroupe
         - hopitalnumerique_communautepratique_user_activegroupe
@@ -313,3 +315,9 @@ dmishh_settings:
     settings:
         account_dashboard_order:
             type: array
+
+ccdn_component_bb_code:
+    component:
+        engine:
+            parser:
+                class: CCDNComponent\BBCodeBundle\Engine\Parser

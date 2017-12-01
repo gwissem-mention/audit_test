@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ObjetBundle\Manager;
 
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader;
@@ -14,6 +16,7 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Symfony\Component\HttpFoundation\Session\Session;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 
 /**
  * Manager de l'entité Objet.
@@ -32,6 +35,11 @@ class ObjetManager extends BaseManager
     private $session;
 
     /**
+     * @var ObjectIdentityRepository $objectIdentityRepository
+     */
+    protected $objectIdentityRepository;
+
+    /**
      * Construct.
      *
      * @param EntityManager    $em               Entity Mangager de doctrine
@@ -47,7 +55,8 @@ class ObjetManager extends BaseManager
         NoteManager $noteManager,
         Session $session,
         UserManager $userManager,
-        ReferenceManager $referenceManager
+        ReferenceManager $referenceManager,
+        ObjectIdentityRepository $objectIdentityRepository
     ) {
         parent::__construct($em);
 
@@ -56,6 +65,7 @@ class ObjetManager extends BaseManager
         $this->session = $session;
         $this->userManager = $userManager;
         $this->referenceManager = $referenceManager;
+        $this->objectIdentityRepository = $objectIdentityRepository;
     }
 
     /**
@@ -185,7 +195,7 @@ class ObjetManager extends BaseManager
             ;
 
             //handle Productions liées
-            $row['objets'] = json_encode($objet->getObjets());
+            $row['objets'] = json_encode($this->getRelationForObjectExport($objet));
 
             //handle Roles
             $roles = $objet->getRoles();
@@ -361,6 +371,34 @@ class ObjetManager extends BaseManager
         }
 
         return $results;
+    }
+
+    /**
+     * @param Objet $object
+     *
+     * @return array
+     */
+    private function getRelationForObjectExport(Objet $object)
+    {
+        $relations = $this->objectIdentityRepository->getRelatedObjects(ObjectIdentity::createFromDomainObject($object), [
+            Objet::class,
+            Contenu::class,
+        ]);
+
+        $list = [];
+        foreach ($relations as $relation) {
+            if ($relation->getObject() instanceof Contenu) {
+                $list[] = sprintf('INFRADOC:%s', $relation->getObjectId());
+            } else {
+                if ($relation->getObject()->isArticle()) {
+                    $list[] = sprintf('ARTICLE:%s', $relation->getObjectId());
+                } else {
+                    $list[] = sprintf('PUBLICATION:%s', $relation->getObjectId());
+                }
+            }
+        }
+
+        return $list;
     }
 
     /**
@@ -674,7 +712,18 @@ class ObjetManager extends BaseManager
         $objetsAndContenuArbo = $this->getObjetsAndContenuArbo();
 
         foreach ($objetsAndContenuArbo as $objetOrContenu) {
-            $objetsAndContenuForFormTypeChoices[$objetOrContenu['value']] = $objetOrContenu['text'];
+
+            if (false !== strpos($objetOrContenu['value'], 'INFRADOC')) {
+                $class = Contenu::class;
+            } else {
+                $class = Objet::class;
+            }
+
+            $objetsAndContenuForFormTypeChoices[(new ObjectIdentity($class, explode(':', $objetOrContenu['value'])[1]))->getId()] = [
+                'text' => $objetOrContenu['text'],
+                'class' => $class,
+                'id' => explode(':', $objetOrContenu['value'])[1],
+            ];
         }
 
         return $objetsAndContenuForFormTypeChoices;

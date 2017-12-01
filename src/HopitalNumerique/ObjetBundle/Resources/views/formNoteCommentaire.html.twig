@@ -1,0 +1,12 @@
+<form action="#" name="note_commentaire">
+    <div class="col-md-12">
+        <label for="comment" class="control-label required">{{ 'popin.comment.input'|trans }}<span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 15px">
+        <input type="text" name="comment" id="note_commentaire_comment" class="validate[required,minSize[3]] form-control">
+    </div>
+    <div class="col-md-12">
+        <button type="submit" id="note_commentaire_submit" name="note_commentaire[submit]" class="btn btn-success pull-right">{{ 'popin.comment.submit'|trans }}</button>
+        <button type="button" id="note_commentaire_cancel" name="note_commentaire[cancel]" class="btn btn-danger pull-left">{{ 'popin.comment.cancel'|trans }}</button>
+    </div>
+</form>

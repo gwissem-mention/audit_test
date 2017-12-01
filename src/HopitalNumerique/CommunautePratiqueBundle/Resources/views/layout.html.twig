@@ -5,10 +5,17 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
+        '@jquery_toggles_css'
+        '@dropzone_css'
+        'bundles/hopitalnumeriquefichier/css/dropzone.css'
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Commentaire.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Popup.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Annuaire.css'
+        'bundles/hopitalnumeriquecommunautepratique/css/discussion.css'
+        'bundles/hopitalnumeriquecommunautepratique/css/group.css'
+        'bundles/hopitalnumeriquecommunautepratique/css/news.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
@@ -18,6 +25,9 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
         '@tinymce_js'
+        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
+        '@jquery_toggles_js'
+        '@dropzone_js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
@@ -26,6 +36,8 @@
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/DateProgression.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/PlaceProgression.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Document.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Discussion.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Item.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -40,7 +52,7 @@
         {% block communaute_pratique_breadcrumbs %}
             <ol class="breadcrumb">
                 <li><a href="{{ path('hopital_numerique_homepage') }}">Accueil</a></li>
-                {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratique</a></li>{% endblock %}
+                {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}">Communauté de pratique</a></li>{% endblock %}
                 {% block communaute_pratique_breadcrumbs_parent %}{% endblock %}
                 <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
             </ol>
@@ -53,19 +65,21 @@
         {% block communaute_pratique_actions_before %}{% endblock %}
         <div class="communaute-pratique-actions pull-right">
             {% block communaute_pratique_actions %}
-                <div class="contact">
-                    <a onclick="Contact_Popup.display({ '{{ domaineCurrent.adresseMailContact }}':'ANAP' }, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
-                        <em class="icon-help9"></em>
-                        Un problème ?<br><strong>Contacter l'administrateur</strong>
-                    </a>
-                </div>
+                {% if app.user and app.user.inscritCommunautePratique %}
+                    <div class="contact">
+                        <a onclick="Contact_Popup.display({ '{{ domaineCurrent.adresseMailContact }}':'ANAP' }, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+                            <em class="icon-help9"></em>
+                            Un problème ?<br><strong>Contacter l'administrateur</strong>
+                        </a>
+                    </div>
+                {% endif %}
             {% endblock %}
         </div>
         <div class="clearfix"></div>
 
         {% block body_communaute_pratique %}{% endblock body_communaute_pratique %}
 
-        {% block communaute_pratique_sommaire %}{% include 'HopitalNumeriqueCommunautePratiqueBundle:include:sommaire.html.twig' %}{% endblock %}
+        {% block communaute_pratique_sommaire %}{% endblock %}
 
     </div>
 

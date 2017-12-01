@@ -1,0 +1,83 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+{% spaceless %}
+    <div
+        class="item-block"
+        data-level="{{ level }}"
+        data-global-position="{{ position }}"
+    >
+        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}"
+           data-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussion.id}) : path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {'groupe': group.id, 'discussion': discussion.id}) }}"
+           data-discussion-id="{{ discussion.id }}"
+           class="item{{ hidden ? ' hidden' }}{{ currentDiscussion and discussion.id == currentDiscussion.id ? ' active'}}{{ isStaredItem ? ' stared' }}"
+        >
+
+            {% if app.user is not null and discussion.newMessageCount(app.user) > 0 %}
+                <span class="icon new-message-badge"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="{{ 'discussion.list.item.new_message_count'|transchoice(discussion.newMessageCount(app.user))|e }}">
+                    {{ discussion.newMessageCount(app.user) }}
+                </span>
+            {% endif %}
+
+            {% if discussion.hasHelpfulMessage %}
+            <span class="target-highlight icon fa fa-star"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  data-html="true"
+                  title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans }}"
+            ></span>
+            {% endif %}
+
+            {% if discussion.recommended %}
+                <span class="icon fa fa-thumbs-o-up"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="{{ 'discussion.icon_tooltip.recommended'|trans }}"
+                ></span>
+            {% endif %}
+
+            {% if app.user is not null and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MOST_VIEWED'), discussion) and discussion.id in mostViewed|keys %}
+                <span class="icon fa fa-thermometer-full"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="{{ 'discussion.icon_tooltip.top'|trans }}"
+                ></span>
+            {% endif %}
+
+            <span class="title">
+                {{ discussion.title }}
+
+                {% if app.user is not null and discussion.newDiscussion(app.user) > 0 %}
+                    <span class="new-flag"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          data-html="true"
+                          title="{{ 'discussion.icon_tooltip.new'|trans }}"
+                    >
+                        NEW
+                    </span>
+                {% endif %}
+            </span>
+
+            <span class="infos">
+                {{ 'discussion.list.item.message_count'|transchoice(discussion.messages|length, {'%messageCount%': '<b>'~discussion.messages|length~'</b>'})|raw }} -
+                {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|date('d/m/Y')~'</b>', '%time%': '<b>'~discussion.messages.first.createdAt|date('H:i')~'</b>', '%author%': '<b>'~discussion.messages.last.user.prenomNom~'</b>'})|raw }}<br />
+                {{ 'discussion.list.item.created_at'|trans({'%date%': '<b>'~discussion.createdAt|date('d/m/Y')~'</b>'})|raw }}<br />
+            </span>
+        </a>
+
+        <div class="push children">
+            {% if scope == 'group' %}
+                {% for childrenKey, children in discussions if children.parent == discussion %}
+                    {{ include('@HopitalNumeriqueCommunautePratique/front/discussion/discussion_title.html.twig', {position: childrenKey, discussion: children, level: level+1}) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+{% endspaceless %}

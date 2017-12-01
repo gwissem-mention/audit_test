@@ -36,11 +36,13 @@ class BaseUrlProvider
     public function getBaseUrl($entityDomains = [], $selectedDomains = [])
     {
         // Returns the current domain base url if it is in the entity domains list and in the selected domains list
-        foreach ($entityDomains as $entityDomain) {
-            foreach ($selectedDomains as $selectedDomain) {
-                if ($entityDomain->getId() === $selectedDomain->getId()) {
-                    if ($entityDomain->getId() === $this->currentDomain->getId()) {
-                        return $entityDomain->getUrl();
+        if (null !== $this->currentDomain) {
+            foreach ($entityDomains as $entityDomain) {
+                foreach ($selectedDomains as $selectedDomain) {
+                    if ($entityDomain->getId() === $selectedDomain->getId()) {
+                        if ($entityDomain->getId() === $this->currentDomain->getId()) {
+                            return $entityDomain->getUrl();
+                        }
                     }
                 }
             }
@@ -56,9 +58,11 @@ class BaseUrlProvider
         }
 
         // Returns the domain base url of the current domain if it is in the entity domains list
-        foreach ($entityDomains as $entityDomain) {
-            if ($entityDomain->getId() === $this->currentDomain->getId()) {
-                return $entityDomain->getUrl();
+        if (null !== $this->currentDomain) {
+            foreach ($entityDomains as $entityDomain) {
+                if ($entityDomain->getId() === $this->currentDomain->getId()) {
+                    return $entityDomain->getUrl();
+                }
             }
         }
 
@@ -68,6 +72,6 @@ class BaseUrlProvider
         }
 
         // Returns the current domain base url
-        return $this->currentDomain->getUrl();
+        return null !== $this->currentDomain ? $this->currentDomain->getUrl() : '';
     }
 }

@@ -60,6 +60,13 @@ class Note
     protected $user;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="note_commentaire", type="string", nullable=true)
+     */
+    protected $comment;
+
+    /**
      * Get id.
      *
      * @return int
@@ -179,5 +186,28 @@ class Note
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return Note
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 }

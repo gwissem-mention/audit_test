@@ -1,0 +1,73 @@
+news:
+    brick:
+        chat_room:
+            title: Espace de discussion
+            topic_count: "[0,1] %count% discussion |]1,Inf[ %count% discussions"
+            message_count: "[0,1] %count% message |]1,Inf[ %count% messages"
+            tooltip: Voir toutes les discussions
+        help_groups:
+            title: Groupes d'entre-aide
+            group_count: "[0,1] %count% groupe en cours |]1,Inf[ %count% groupes en cours"
+            contributor_count: "[0,1] %count% contributeur |]1,Inf[ %count% contributeurs"
+            message_count: "[0,1] %count% message |]1,Inf[ %count% messages"
+            file_count: "[0,1] %count% document |]1,Inf[ %count% documents"
+            tooltip: Voir tous les groupes
+        community:
+            title: Annuaire de la communauté
+            member_count: "[0,1] %count% membre |]1,Inf[ %count% membres"
+            organization_count: "[0,1] %count% structure |]1,Inf[ %count% structures différentes"
+            tooltip: Voir tous les membres
+        my_groups:
+            title: Mes groupes
+            title_not_member: Rejoindre la communauté
+            list:
+                empty: Vous ne participez actuellement à aucun groupe
+                link:
+                    text: Groupes d'entre-aide
+                    title: Groupes d'entre-aide
+            not_logged: |
+                Vous n'êtes pas connecté.
+                Créez votre compte et connectez-vous pour voir toutes les actualités de la communauté
+            not_member: |
+                Vous n'avez pas encore rejoint la communauté.
+                Rejoignez la communauté pour entrer en relation avec tous les membres
+wall:
+    item:
+        public:
+            title: Nouvelle discussion
+            authored: 'La discussion "%discussion%" à été rendu publique.'
+            link: Aller à la discussion
+        message:
+            title: Nouveau message
+            authored: %author% a participé à la discussion "%discussion%".
+            link: Aller à la discussion
+        discussion:
+            title: Nouvelle discussion
+            authored: %author% a créé une nouvelle discussion "%discussion%".
+            link: Aller à la discussion
+        closed_group:
+            title: Fin d'un groupe
+            content: Le groupe thématique "%groupName%" a terminé ses travaux. Retrouvez dans quelques semaines ses publications sur le Centre de ressources.
+        opened_group:
+            title: Nouveau groupe
+            content: Un nouveau groupe d'entre-aide démarre sur "%groupName%".
+            link: Rejoignez ce groupe
+        new_member:
+            title: Nouveau membre
+            content:
+                public:
+                    organization: La structure %organization% a rejoint la communauté.
+                    without_organization: Une nouvelle structure a rejoint la communauté.
+                private:
+                    both: %user% (%job%, %organization%) a rejoint la communauté.
+                    organization: %user% (%organization%) a rejoint la communauté.
+                    job: %user% (%job%) a rejoint la communauté.
+                    none: %user% a rejoint la communauté.
+            link: Consulter la fiche de l'utilisateur
+        updated_member:
+            title: Mise à jour de profil
+            content: %user% (%job%, %organization%) a mis à jour son profil.
+            job: %user% (%job%) a mis à jour son profil.
+            organization: %user% (%organization%) a mis à jour son profil.
+            none: %user% a mis à jour son profil.
+            link: Consulter la fiche de l'utilisateur

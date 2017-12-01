@@ -78,7 +78,7 @@ class InformationsManquantesController extends Controller
                         $this->addFlash('success', 'L\'inscription à la communauté de pratique a été confirmée.');
                     }
 
-                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
+                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_news_index'));
                 } else {
                     $this->addFlash('danger', 'L\'inscription à la communauté de pratique a échoué.');
 

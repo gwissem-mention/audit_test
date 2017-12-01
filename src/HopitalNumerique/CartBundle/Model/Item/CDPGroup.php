@@ -77,6 +77,6 @@ class CDPGroup extends Item
      */
     public function getDomains()
     {
-        return [$this->group->getDomaine()];
+        return $this->group->getDomains();
     }
 }

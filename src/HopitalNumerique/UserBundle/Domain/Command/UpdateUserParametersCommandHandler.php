@@ -8,9 +8,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UpdateUserParametersCommandHandler
 {
-    /** @var TokenStorage $tokenStorage */
+    /**
+     * @var TokenStorage $tokenStorage
+     */
     protected $tokenStorage;
-    /** @var UserManagerInterface $userManager */
+
+    /**
+     * @var UserManagerInterface $userManager
+     */
     protected $userManager;
 
     /**
@@ -29,9 +34,6 @@ class UpdateUserParametersCommandHandler
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
-
-        $user->setNotficationRequete($userParametersCommand->publicationNotification);
-        $user->setActivityNewsletterEnabled($userParametersCommand->activityNewsletter);
 
         if (!is_null($userParametersCommand->newPassword)) {
             $user->setPlainPassword($userParametersCommand->newPassword);

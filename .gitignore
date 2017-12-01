@@ -18,6 +18,8 @@
 /bin/
 .php_cs.cache
 
+/files/fichiers
+
 node_modules
 .npm
 

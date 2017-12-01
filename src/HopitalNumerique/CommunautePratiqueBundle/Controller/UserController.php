@@ -2,13 +2,15 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Member\ViewedMemberRepository;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Routing\RouterInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Service\ViewMember;
+use HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Contrôleur des utilisateurs.
@@ -20,109 +22,127 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      */
     public function listAction(Request $request, $page = 1, $membreId = null)
     {
-        if (!$this->container
-            ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()
-        ) {
-            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_user_list'));
+        if ($this->getUser()) {
+            if (!$this->getUser()->isInscritCommunautePratique()) {
+                $cpArticle = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getCommunautePratiqueArticle();
+                $request->getSession()->set('urlToRedirectAfterCDPRegistration', $request->getUri());
 
-            return $this->redirectToRoute('account_login');
+                return $this->redirectToRoute(
+                    'hopital_numerique_publication_publication_article',
+                    [
+                        'id' => $cpArticle->getId(),
+                        'categorie' => 'article',
+                        'alias' => $cpArticle->getAlias(),
+                    ]
+                );
+            }
+        } else {
+            $request->getSession()->set('urlToRedirect', $request->getUri());
+
+            return $this->redirect($this->generateUrl('account_login'));
         }
+
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
 
         if ($request->request->has('resetFiltres')) {
-            $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
+            $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->removeFiltres()
             ;
 
             return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_user_list'));
         } else {
-            $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
+            $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->setFiltres($request)
             ;
             $rechercheForm->handleRequest($request);
         }
 
         /** @var Domaine $domaine */
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
-            ->findOneById($request->getSession()->get('domaineId'))
-        ;
-
-        $usersCDP = $this
-            ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
-            ->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult()
-        ;
+        $domaine = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
+            'newMembersCount' => $this->get('hopitalnumerique_user.repository.user')->getCDPNewMembersCount($this->getUser(), null, $domaine),
             'rechercheForm' => $rechercheForm->createView(),
-            'pagerFantaMembres' => $this->container
-                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
-            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findTermines($domaine),
-            'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findNonDemarres($domaine),
-            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findEnCours($domaine),
-            'forumCategory' => $domaine->getCommunautePratiqueForumCategories()->first(),
-            'activeMembers' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
+            'pagerFantaMembres' => $this->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
+            'membersViewed' => $this->getUser() ? $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser()) : [],
+        ]);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function userDetailsAction(User $user, Groupe $group = null)
+    {
+        if ($this->getUser()) {
+            $this->get(ViewMember::class)->viewMember($user, $this->getUser());
+        }
+
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:details.html.twig', [
+            'group' => $group,
+            'user' => $user,
+            'memberActivity' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getMemberActivity($user),
         ]);
     }
 
     /**
      * Affiche tous les membres d'un groupe.
      */
-    public function listByGroupeAction(Groupe $groupe, Request $request, $page = 1)
+    public function listByGroupeAction(Groupe $groupe, $filtered = false)
     {
-        if (!$this->container
-            ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)
-        ) {
+        if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $ajoutMembreForm = null;
-        if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAddMembre($groupe)
-        ) {
+        $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
+        $membersQueryBuilder = $this->get('hopitalnumerique_user.repository.user')->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
+        $membersQueryBuilder
+            ->andWhere('groupeInscription.actif = :filter')
+            ->setParameter('filter', !$filtered)
+        ;
+
+        $members = $membersQueryBuilder->getQuery()->getResult();
+
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', [
+            'groupe' => $groupe,
+            'canDeleteMembre' => $this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe),
+            'members' => $members,
+            'membersViewed' => $this->get(ViewedMemberRepository::class)->findByViewer($this->getUser(), $members),
+            'newMembersCount' => $this->get('hopitalnumerique_user.repository.user')->getCDPNewMembersCount($this->getUser(), $groupe, $domaine),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Groupe $group
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addUserAction(Request $request, Groupe $group)
+    {
+        if ($this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAddMembre($group)) {
             $ajoutMembreForm = $this->createForm(
                 'hopitalnumerique_communautepratiquebundle_user_ajout',
                 null,
-                ['groupe' => $groupe]
+                [
+                    'groupe' => $group,
+                    'action' => $this->generateUrl('hopitalnumerique_communautepratique_user_add', ['group' => $group->getId()]),
+                ]
             );
             $ajoutMembreForm->handleRequest($request);
 
             if ($ajoutMembreForm->isValid()) {
-                $groupe->addUser($ajoutMembreForm->get('user')->getData());
-                $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->save($groupe);
-                $this->container->get('session')->getFlashBag()->add('success', 'L\'utilisateur a bien été ajouté au groupe.');
+                $group->addUser($ajoutMembreForm->get('user')->getData(), true);
+                $this->get('hopitalnumerique_communautepratique.manager.groupe')->save($group);
+                $this->get('session')->getFlashBag()->add('success', 'L\'utilisateur a bien été ajouté au groupe.');
 
-                return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_user_listbygroupe', ['groupe' => $groupe->getId()]));
+                return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $group->getId()]));
             }
         }
 
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
-            ->findOneById($request->getSession()->get('domaineId'))
-        ;
-
-        $usersCDP = $this
-            ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
-            ->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult()
-        ;
-
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', [
-            'groupe' => $groupe,
-            'canDeleteMembre' => $this->container
-                ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe),
-            'ajoutMembreForm' => (null !== $ajoutMembreForm ? $ajoutMembreForm->createView() : null),
-            'pagerFantaMembres' => $this->container
-                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
-                ->getPagerfantaUsersByGroupe($groupe, $page),
-            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findTermines($domaine),
-            'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findNonDemarres($domaine),
-            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                ->findEnCours($domaine),
-            'activeMembers' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
-        ]);
+        throw new AccessDeniedHttpException();
     }
 
     /**
@@ -185,6 +205,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $etat = null;
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
+
+            $event = new UserJoinedEvent($inscription->getGroupe(), $inscription);
+            $this->get('event_dispatcher')->dispatch(Events::GROUP_USER_JOINED, $event);
 
             $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
 

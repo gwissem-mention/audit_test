@@ -1,0 +1,16 @@
+{% trans_default_domain 'cdp_discussion' %}
+
+<p>
+    {{ 'discussion.message.presentation.content.prefix'|trans|nl2br }}
+</p>
+
+{% for question, answer in answers %}
+    <p>
+        <b>{{ question }}</b><br />
+        {{ answer|nl2br }}
+    </p>
+{% endfor %}
+
+<p>
+    {{ 'discussion.message.presentation.content.suffix'|trans({'%author%': user.prenomNom})|nl2br }}
+</p>

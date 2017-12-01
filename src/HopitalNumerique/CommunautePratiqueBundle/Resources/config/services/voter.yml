@@ -1,0 +1,19 @@
+services:
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\MessageVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\DiscussionVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+
+    HopitalNumerique\CommunautePratiqueBundle\Security\Discussion\GroupVoter:
+        class: HopitalNumerique\CommunautePratiqueBundle\Security\GroupVoter
+        tags:
+            - { name: security.voter }
+        public: false

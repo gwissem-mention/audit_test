@@ -7,8 +7,8 @@ import ForumTopic from "../Model/Search/Result/ForumTopic";
 import Person from "../Model/Search/Result/Person";
 import Group from "../Model/Search/Result/Group";
 
-declare let Routing: any;
 declare let $ : any;
+declare let Routing: any;
 
 @Injectable()
 export default class Cart {

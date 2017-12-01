@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -124,6 +125,9 @@ class EntityHasReferenceRepository extends EntityRepository
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
                 'GROUP_CONCAT(contenuType.id) AS contenuTypeIds',
                 'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds',
+                'GROUP_CONCAT(discussionGroups.id) as discussionGroupsIds',
+                'GROUP_CONCAT(discussionGroupsRequiredRoles.id) as discussionGroupsRequiredRolesIds',
+                'discussion.public as isDiscussionPublic',
                 'objet.id as objetId',
                 'AVG(objetNote.note) AS avgObjetNote'
             )
@@ -294,12 +298,20 @@ class EntityHasReferenceRepository extends EntityRepository
                 Expr\Join::WITH,
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeCommunautePratiqueGroupe'),
-                    $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId'),
-                    $qb->expr()->eq('communautePratiqueGroupe.domaine', ':domaine')
+                    $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId')
                 )
             )
             ->setParameter('entityTypeCommunautePratiqueGroupe', Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE)
+            ->leftJoin('communautePratiqueGroupe.domains', 'cdpGroupDomain', Expr\Join::WITH, $qb->expr()->eq('cdpGroupDomain.id', ':domaine'))
             //-->
+
+            // CDP discussion
+            ->leftJoin(Discussion::class, 'discussion', Expr\Join::WITH, 'entityHasReference.entityId = discussion.id AND entityHasReference.entityType = :entityTypeDiscussion')
+            ->leftJoin('discussion.groups', 'discussionGroups')
+            ->leftJoin('discussionGroups.requiredRoles', 'discussionGroupsRequiredRoles')
+            ->setParameter('entityTypeDiscussion', Entity::ENTITY_TYPE_CDP_DISCUSSION)
+            // END CDP discussion
+
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameter('domaine', $domaine)
         ;

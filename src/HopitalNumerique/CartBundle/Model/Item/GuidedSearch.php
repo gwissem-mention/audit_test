@@ -6,6 +6,7 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 
 class GuidedSearch extends Item
 {
+    const URI_FRAGMENT = 'guided-search-widget';
     /**
      * @var RechercheParcours $guidedSearchReference
      */
@@ -68,7 +69,7 @@ class GuidedSearch extends Item
 
     public function getUriFragment()
     {
-        return 'guided-search-widget';
+        return self::URI_FRAGMENT;
     }
 
     /**

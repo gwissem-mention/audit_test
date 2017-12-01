@@ -9,8 +9,8 @@
 
             <h2>{{user.getPrenomNom()}}</h2>
             <div class="biographie-user">
-                {% if user.biographie is not null %}
-                    {{user.biographie|raw}}
+                {% if user.presentation is not null %}
+                    {{user.presentation|raw}}
                 {% else %}
                     <span class="text-muted">Biographie en cours de rédaction...</span>
                 {% endif %}

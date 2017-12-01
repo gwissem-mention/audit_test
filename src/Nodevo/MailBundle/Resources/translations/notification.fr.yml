@@ -1,0 +1,11 @@
+notification:
+    section:
+        title:
+            resource_user: Personnes ressources
+            guided_search: Parcours guidé
+            autodiag: Autodiagnostics
+            publication: Ressources
+            forum: Forum
+            report: Rapports
+            practice_community: Communauté de pratique
+            anap_suggestion: Suggestions de l'ANAP

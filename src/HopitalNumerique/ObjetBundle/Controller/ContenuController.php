@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\RelationRepository;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateHandler;
 use HopitalNumerique\ObjetBundle\Domain\Command\AddObjectUpdateCommand;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -266,10 +269,13 @@ class ContenuController extends Controller
      */
     private function renderForm($formName, $contenu, $view)
     {
+        $relatedObjects = $this->get(ObjectIdentityRepository::class)->getRelatedObjects(ObjectIdentity::createFromDomainObject($contenu));
         $user = $this->getUser();
         $formOptions = [
             'user' => $this->getUser(),
+            'relatedObjects' => $relatedObjects,
         ];
+
         if ('hopitalnumerique_objet_contenu' === $formName) {
             $formOptions['domaine'] = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
                 $this->get('request')->getSession()->get('domaineId')
@@ -297,13 +303,20 @@ class ContenuController extends Controller
                 }
             }
 
+            $availableObjects = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuForFormTypeChoices();
+
+            $contentObjectIdentity = $this->get(ObjectIdentityRepository::class)->findOrCreate(ObjectIdentity::createFromDomainObject($contenu));
             $objets = $this->get('request')->request->get('objets');
-            $contenu->removeObjets();
-            if ('' != $objets) {
-                foreach ($objets as $objet) {
-                    $contenu->addObjet($objet);
-                }
+
+            $this->get(RelationRepository::class)->removeFrom($contentObjectIdentity, $objets);
+            foreach ($objets as $objet) {
+
+                $this->get(RelationRepository::class)->addRelation(
+                    $contentObjectIdentity,
+                    $this->get(ObjectIdentityRepository::class)->findOrCreate(new ObjectIdentity($availableObjects[$objet]['class'], $availableObjects[$objet]['id']))
+                );
             }
+
 
             $domaines = $this->get('request')->request->get('domaines');
             if ('' != $domaines) {
@@ -382,6 +395,9 @@ class ContenuController extends Controller
             [
                 'form' => $form->createView(),
                 'contenu' => $contenu,
+                'preselectedValues' => array_map(function (ObjectIdentity $relatedObjects) {
+                    return true;
+                }, $relatedObjects),
             ]
         );
     }

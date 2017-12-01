@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectCommand;
+use HopitalNumerique\ObjetBundle\Domain\Command\SubscribeToObjectHandler;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -12,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -19,9 +22,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use HopitalNumerique\ObjetBundle\Repository\SubscriptionRepository;
 use HopitalNumerique\ObjetBundle\Repository\ObjectUpdateRepository;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
 
 /**
  * Class PublicationController
@@ -40,6 +46,12 @@ class PublicationController extends Controller
      */
     public function objetAction(Request $request, Objet $objet)
     {
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, null);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
+
         $rolesAllowedToAccessFrontReferencement = [
             'ROLE_ADMINISTRATEUR_1',
             'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
@@ -61,8 +73,6 @@ class PublicationController extends Controller
         ) {
             $showCog = true;
         }
-
-        $productionsLiees = $this->get('hopitalnumerique_publication.service.relation_finder')->findRelations($objet);
 
         $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
         /** @var Domaine $domaine */
@@ -162,10 +172,21 @@ class PublicationController extends Controller
         );
         shuffle($topicRelated);
 
-        $relatedBoards = $this->get('hopitalnumerique_objet.repository.related_board')->findBy(
-            ['object' => $objet->getId()],
-            ['position' => 'ASC']
+        $objectRelations = $this->get(ObjectIdentityRepository::class)->getBidirectionalRelationsObjects(
+            ObjectIdentity::createFromDomainObject($objet),
+            [
+                Discussion::class,
+                Objet::class,
+                Contenu::class,
+                Board::class,
+            ]
         );
+
+        $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
+            'user' => $this->getUser(),
+            'objet' => $objet,
+            'contenu' => null
+        ]);
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
@@ -181,15 +202,15 @@ class PublicationController extends Controller
                 $objet->getResume()
             ),
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
-            'productionsLiees' => $productionsLiees,
             'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
                 ->getFormattedParcoursGuidesLies($objet),
-            'relatedBoards' => $reader->formateRelatedBoards($relatedBoards),
             'topicRelated' => array_slice($topicRelated, 0, 3),
             'userRelated' => array_slice($userRelated, 0, 3),
             'is_pdf' => $isPdf,
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
+            'objectRelations' => $objectRelations,
+            'subscribed' => $subscribed,
         ]);
     }
 
@@ -422,10 +443,28 @@ class PublicationController extends Controller
         $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
         shuffle($topicRelated);
 
-        $relatedBoards = $this->get('hopitalnumerique_objet.repository.related_board')->findBy(
-            ['object' => $objet->getId()],
-            ['position' => 'ASC']
+        $objectIdentityRepository = $this->get(ObjectIdentityRepository::class);
+        $relationAcceptedClasses = [
+            Objet::class,
+            Contenu::class,
+            Board::class,
+        ];
+
+        $objectRelations = array_merge(
+            $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($objet), $relationAcceptedClasses),
+            $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($contenu), $relationAcceptedClasses)
         );
+
+        if ($request->getSession()->has('subscribeWanted')) {
+            $command = new SubscribeToObjectCommand($this->getUser(), $objet, $contenu);
+            $this->get(SubscribeToObjectHandler::class)->handle($command);
+            $request->getSession()->remove('subscribeWanted');
+        }
+
+        $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
+            'user' => $this->getUser(),
+            'contenu' => $contenu,
+        ]);
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
@@ -453,7 +492,8 @@ class PublicationController extends Controller
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
-            'relatedBoards' => $reader->formateRelatedBoards($relatedBoards),
+            'objectRelations' => $objectRelations,
+            'subscribed' => $subscribed,
         ]);
     }
 
@@ -523,7 +563,7 @@ class PublicationController extends Controller
         if ($isCommunautePratiqueArticle) {
             $request->getSession()->set(
                 'urlToRedirect',
-                $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
+                $this->generateUrl('hopitalnumerique_communautepratique_groupe_list')
             );
         } else {
             $request->getSession()->remove('urlToRedirect');

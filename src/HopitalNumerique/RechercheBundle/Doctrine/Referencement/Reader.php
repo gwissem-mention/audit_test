@@ -396,6 +396,11 @@ class Reader
                 $relatedAttributes['entityType'],
                 $relatedAttributes['entityId']
             );
+
+            if (!$current) {
+                continue;
+            }
+
             $related[] = [
                 'title' => $this->entity->getTitleByEntity($current),
                 'subtitle' => $this->entity->getSubtitleByEntity($current),

@@ -65,8 +65,8 @@ class ConfigFactory
             'aggregation' => $this->aggregationParameter,
             'texts' => $this->getTexts(),
             'options' => [
-                'showCart' => is_object($this->tokenStorage->getToken()->getUser())
-            ]
+                'showCart' => is_object($this->tokenStorage->getToken()->getUser()),
+            ],
         ];
     }
 
@@ -91,6 +91,7 @@ class ConfigFactory
                 'forum_post' => 'Message du forum',
                 'forum_topic' => $labels[1995],
                 'cdp_groups' => $labels[1998],
+                'cdp_discussion' => $labels[4000],
                 'person' => $labels[1996],
                 'autodiag' => $labels[671],
             ],

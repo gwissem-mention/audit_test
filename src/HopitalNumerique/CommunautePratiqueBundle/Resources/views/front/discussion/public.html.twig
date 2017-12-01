@@ -1,0 +1,22 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'cdp_discussion' %}
+
+{% block title_communaute_pratique %}
+    {{ 'discussion.public.title'|trans }}
+{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ selectedDomainSelector() }}
+    {{ parent() }}
+    {% if app.user and app.user.inscritCommunautePratique %}
+        {{ communaute_pratique.display_action_contact_invitation() }}
+    {% endif %}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ include('HopitalNumeriqueCommunautePratiqueBundle:front/discussion:discussions.html.twig') }}
+
+{% endblock body_communaute_pratique %}
+

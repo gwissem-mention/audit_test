@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -63,7 +64,9 @@ class ContenuType extends AbstractType
             ],
         ];
         if (null !== $builder->getData()->getObjets()) {
-            $objetsOptions['data'] = $builder->getData()->getObjets()->toArray();
+            $objetsOptions['data'] = array_map(function (ObjectIdentity $objectIdentity) {
+                return $objectIdentity->getId();
+            }, $options['relatedObjects']);
         }
 
         $builder
@@ -143,7 +146,7 @@ class ContenuType extends AbstractType
             ->setDefaults([
                 'data_class' => Contenu::class,
             ])
-            ->setRequired(['domaine', 'user'])->setAllowedTypes([
+            ->setRequired(['domaine', 'user', 'relatedObjects'])->setAllowedTypes([
                 'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
                 'user' => 'HopitalNumerique\UserBundle\Entity\User',
             ])

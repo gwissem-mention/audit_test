@@ -1,21 +1,41 @@
 hopitalnumerique_communautepratique_user_list:
-    pattern: /list/{page}/{membreId}
+    path: /list/{page}/{membreId}
     defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:list", page:1, membreId:null}
     methods: GET|POST
     requirements:
         page: \d+
         membreId: \d+
 
+hopitalnumerique_communautepratique_user_details:
+    path: /details/{user}/{group}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:userDetails", group: null}
+    methods: GET
+    requirements:
+        user: \d+
+
 hopitalnumerique_communautepratique_user_listbygroupe:
-    pattern: '/list/groupe/{groupe}/{page}'
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', page:1 }
-    methods: 'GET|POST'
+    path: '/list/groupe/{groupe}/'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', filtered: false }
+    methods: GET
     requirements:
         groupe: '\d+'
-        page: '\d+'
+
+hopitalnumerique_communautepratique_user_listbygroupe_filtered:
+    path: '/list/groupe/{groupe}/filtered'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', filtered: true }
+    methods: GET
+    requirements:
+        groupe: '\d+'
+
+hopitalnumerique_communautepratique_user_add:
+    path: '/group/{group}/add-user'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:addUser' }
+    methods: POST
+    requirements:
+        group: '\d+'
 
 hopitalnumerique_communautepratique_user_viewforgroupe:
-    pattern: '/view/{user}/groupe/{groupe}'
+    path: '/view/{user}/groupe/{groupe}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe' }
     methods: 'GET'
     requirements:
@@ -23,7 +43,7 @@ hopitalnumerique_communautepratique_user_viewforgroupe:
         groupe: '\d+'
 
 hopitalnumerique_communautepratique_user_desinscritgroupe:
-    pattern: '/groupe/{groupe}/desinscrit/{user}'
+    path: '/groupe/{groupe}/desinscrit/{user}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:desinscritGroupe' }
     methods: 'POST'
     requirements:
@@ -31,7 +51,7 @@ hopitalnumerique_communautepratique_user_desinscritgroupe:
         user: '\d+'
 
 hopitalnumerique_communautepratique_user_activegroupe:
-    pattern: '/groupe/{groupe}/activegroupe/{user}'
+    path: '/groupe/{groupe}/activegroupe/{user}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:activeGroupe' }
     methods: 'POST'
     requirements:

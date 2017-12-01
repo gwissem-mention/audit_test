@@ -4,3 +4,13 @@ services:
         arguments: ['@hopitalnumerique_communautepratique.dependency_injection.inscription', '@hopitalnumerique_communautepratique.dependency_injection.security', '@communautepratique_router']
         tags:
             - { name: twig.extension }
+
+    HopitalNumerique\CommunautePratiqueBundle\Twig\SelectedDomainSelectorExtension:
+        class: HopitalNumerique\CommunautePratiqueBundle\Twig\SelectedDomainSelectorExtension
+        arguments:
+            - '@twig'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Service\SelectedDomainStorage'
+            - '@security.authorization_checker'
+            - '@Hopitalnumerique\CommunautePratiqueBundle\Service\AvailableDomainsRetriever'
+        tags:
+            - { name: twig.extension }

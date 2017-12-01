@@ -18,8 +18,8 @@
                     <tbody>
                     {% for relatedRisk in object.relatedRisks %}
                         <tr>
-                            <td>{{ relatedRisk.risk.nature.libelle }}</td>
-                            <td>{{ relatedRisk.risk.label }}</td>
+                            <td>{{ relatedRisk.object.nature.libelle }}</td>
+                            <td>{{ relatedRisk.object.label }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

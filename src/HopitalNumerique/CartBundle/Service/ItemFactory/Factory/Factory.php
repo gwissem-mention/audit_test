@@ -22,7 +22,11 @@ abstract class Factory
             return $this->items[$itemId];
         }
 
-        return $this->items[$itemId] = $this->build($this->get($itemId));
+        if (null === ($obj = $this->get($itemId))) {
+            return null;
+        }
+
+        return $this->items[$itemId] = $this->build($obj);
     }
 
     /**

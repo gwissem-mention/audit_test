@@ -2,11 +2,15 @@
 
 namespace HopitalNumerique\ObjetBundle\Doctrine;
 
-use HopitalNumerique\ObjetBundle\Entity\Contenu;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\ObjetBundle\Manager\NoteManager;
+use HopitalNumerique\ObjetBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ObjetBundle\Entity\Note;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Event\NoteEvent;
+use HopitalNumerique\ObjetBundle\Manager\NoteManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Service enregistrant les notes.
@@ -34,26 +38,39 @@ class NoteSaver
     private $noteManager;
 
     /**
-     * Constructeur.
+     * @var EventDispatcherInterface
      */
-    public function __construct(SessionInterface $session, NoteReader $noteReader, NoteManager $noteManager)
+    private $dispatcher;
+
+    /**
+     * Constructeur.
+     *
+     * @param SessionInterface $session
+     * @param NoteReader $noteReader
+     * @param NoteManager $noteManager
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function __construct(SessionInterface $session, NoteReader $noteReader, NoteManager $noteManager, EventDispatcherInterface $dispatcher)
     {
         $this->session = $session;
         $this->noteReader = $noteReader;
         $this->noteManager = $noteManager;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
      * Enregistre la note d'un objet.
      *
-     * @param int                                           $note  Note
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
-     * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur
+     * @param int $note Note
+     * @param Objet $objet Objet
+     * @param User|null $user Utilisateur
+     * @param string|null $commentaire
      */
-    public function saveNoteForObjet($note, Objet $objet, User $user = null)
+    public function saveNoteForObjet($note, Objet $objet, User $user = null, $commentaire = null)
     {
         $noteEntity = null;
         if (null !== $user) {
+            /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['objet' => $objet, 'user' => $user]);
         } elseif ($this->noteReader->hasNoteForObjetAndUser($objet, $user)) { // Si non connecté, pas d'update
             return;
@@ -66,22 +83,26 @@ class NoteSaver
         }
         $noteEntity->setDateNote(new \DateTime());
         $noteEntity->setNote($note);
+        $noteEntity->setComment($commentaire);
 
         $this->noteManager->save($noteEntity);
+        $this->dispatcher->dispatch(Events::OBJECT_NOTED, new NoteEvent($noteEntity));
         $this->saveNoteSessionForObjet($note, $objet);
     }
 
     /**
      * Enregistre la note d'un contenu.
      *
-     * @param int                                           $note    Note
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
-     * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur
+     * @param int $note Note
+     * @param Contenu $contenu Contenu
+     * @param User|null $user Utilisateur
+     * @param string|null $commentaire
      */
-    public function saveNoteForContenu($note, Contenu $contenu, User $user = null)
+    public function saveNoteForContenu($note, Contenu $contenu, User $user = null, $commentaire = null)
     {
         $noteEntity = null;
         if (null !== $user) {
+            /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['contenu' => $contenu, 'user' => $user]);
         } elseif ($this->noteReader->hasNoteForContenuAndUser($contenu, $user)) { // Si non connecté, pas d'update
             return;
@@ -95,8 +116,10 @@ class NoteSaver
         $noteEntity->setDateNote(new \DateTime());
         $noteEntity->setNote($note);
         $noteEntity->setObjet($contenu->getObjet());
+        $noteEntity->setComment($commentaire);
 
         $this->noteManager->save($noteEntity);
+        $this->dispatcher->dispatch(Events::OBJECT_NOTED, new NoteEvent($noteEntity));
         $this->saveNoteSessionForContenu($note, $contenu);
     }
 
@@ -104,8 +127,8 @@ class NoteSaver
      * Enregistre la note d'un objet en session.
      *
      * @param int                                           $note  Note
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
-     * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur
+     * @param Objet $objet Objet
+     * @param User|null $user  Utilisateur
      */
     private function saveNoteSessionForObjet($note, Objet $objet)
     {
@@ -116,8 +139,8 @@ class NoteSaver
      * Enregistre la note d'un contenu en session.
      *
      * @param int                                           $note    Note
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
-     * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur
+     * @param Contenu $contenu Contenu
+     * @param User|null $user    Utilisateur
      */
     private function saveNoteSessionForContenu($note, Contenu $contenu)
     {

@@ -40,12 +40,30 @@
 
     <div id="publication">
         <div class="hidden-pdf">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="text-right">
+                    {% if objet.isArticle == false %}
+                        <span title="{{
+                            (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans ~ ' ' ~ 'subscribe_where'|trans
+                        }}">{{ 'subscribe'|trans }}</span>
+                        {% spaceless %}
+                            <div
+                                class="toggle toggle-success"
+                                data-path="{{ path('hopitalnumerique_objet_subscribe', {
+                                    'object': objet.id,
+                                    'content': contenu is defined ? contenu.id : null
+                                }) }}"
+                                data-active="{{ subscribed is not null ? 'true' : 'false' }}"
+                                title="{{
+                                    (subscribed is not null ? 'unsubscribe_to' : 'subscribe_to')|trans ~ ' ' ~ 'subscribe_where'|trans
+                                }}"
+                            ></div>
+                        {% endspaceless %}
+                    {% endif %}
                     {% if contenu is defined %}
                         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'contenu', objectId: contenu.id}) }}
                     {% else %}
@@ -214,7 +232,7 @@
                             <div id="bloc-notation-moyenne-objet" class="hidden-pdf">
                                 <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                                 <div class="bloc-star">
-                                    <div class="" id="note-moyenne-etoile"></div>
+                                    <div class="" id="note-moyenne-etoile" data-rateit-readonly="{{ is_granted('IS_AUTHENTICATED_FULLY') ? 'false' : 'true' }}" data-url="{{ path('hopital_numerique_publication_note_add_comment') }}" data-title="{{ 'popin.comment.title'|trans }}" data-error="{{ 'popin.comment.error'|trans }}" ></div>
                                 </div>
                                 <div id="info-note-moyenne"></div>
                             </div>

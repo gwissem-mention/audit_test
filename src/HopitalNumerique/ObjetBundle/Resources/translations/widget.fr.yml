@@ -17,6 +17,8 @@ viewed_objects:
     send: Envoyer la publication
     delete: Retirer cette publication de ma liste
     update: La publication a été mise à jour depuis votre dernière consultation
+    subscribe: S'abonner
+    unsubscribe: Se désabonner
 
 most_viewed_object:
     title: Les 5 publications que vous avez le plus vues

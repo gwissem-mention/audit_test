@@ -65,12 +65,11 @@ class RechercheParcoursGestionController extends Controller
             return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') : $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit', ['rechercheParcoursGestion' => $rechercheParcoursGestion->getId()])));
         }
 
-        $serviceHistoryReader = $this->get('hopitalnumerique_rechercheparcours.guided_search_history_reader');
-
         if ($rechercheParcoursGestion) {
-            $updates = $serviceHistoryReader->getHistory($rechercheParcoursGestion);
-        }
-        else {
+            $updates = $this->get(
+                'hopitalnumerique\rechercheparcoursbundle\service\guidedsearchhistoryreader'
+            )->getHistory($rechercheParcoursGestion);
+        } else {
             $updates = array();
         }
 
