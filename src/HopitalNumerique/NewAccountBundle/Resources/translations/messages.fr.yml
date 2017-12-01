@@ -69,13 +69,13 @@ account:
             type: Type de document
             noFile: '- Aucun fichier de contractualisation à afficher -'
         payments:
-            title: Interventions / Modules thématiques
+            title: Interventions / Montée en compétence
             date: Date
             referentIntervention: Référent intervention
             referentEstablishment: Établissement du référent
             type: Type
             total: Total
-            noIntervention: '- Aucune intervention ou module disponible -'
+            noIntervention: '- Aucune intervention ou montée en compétence disponible -'
             totalInvoice: Total Facture
             generateInvoice: Générer ma facture
             invoices: Factures
