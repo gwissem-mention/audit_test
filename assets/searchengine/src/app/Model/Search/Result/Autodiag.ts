@@ -4,7 +4,7 @@ declare let Routing: any;
 
 export default class Autodiag extends Result {
 
-    constructor(id: number, score: number, public title: string) {
+    constructor(id: number, score: number, public title: string, public attributes: any[]) {
         super(id, score);
     }
 
@@ -20,7 +20,9 @@ export default class Autodiag extends Result {
 
     getContent(): string
     {
-        return null;
+        return this.attributes.map(function (attribute: any) {
+            return attribute.label;
+        }).slice(0, 3).join('<br />');
     }
 
     getLink() : string

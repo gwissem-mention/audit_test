@@ -1,5 +1,4 @@
 import Result from "./Result";
-import AutodiagAttribute from "./Result/AutodiagAttribute";
 import Publication from "./Result/Publication";
 import ForumPost from "./Result/ForumPost";
 import ForumTopic from "./Result/ForumTopic";
@@ -31,20 +30,7 @@ export default class ResultFactory {
 
         switch (resultData._type) {
             case 'autodiag':
-                let chapterLabel = resultData._source.chapter_label;
-                if (undefined !== resultData.highlight) {
-                    chapterLabel = resultData.highlight['chapter_label.exact']
-                        ? resultData.highlight['chapter_label.exact']
-                        : resultData.highlight['chapter_label']
-                            ? resultData.highlight['chapter_label']
-                            : chapterLabel;
-                }
-
-                result = new AutodiagAttribute(resultData._id, resultData._score, title, resultData._source.chapter_id, chapterLabel, resultData._source.chapter_code, resultData._source.autodiag_id);
-                let simpleParent = new Autodiag(resultData._source.autodiag_id, 0, resultData._source.autodiag_title);
-                result.setParent(simpleParent);
-
-                return result;
+                return new Autodiag(resultData._source.id, 0, resultData._source.title, resultData._source.attributes);
             case "object":
                 result = new Publication(
                     resultData._id,
