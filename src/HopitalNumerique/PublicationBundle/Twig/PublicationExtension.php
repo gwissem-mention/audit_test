@@ -133,10 +133,13 @@ class PublicationExtension extends \Twig_Extension
                         } else {
                             $target = '';
                         }
+
+                        $title = $matches[3][$key] ? $matches[3][$key] : ($outil ? $outil->getTitle() : 'Autodiag'); // Last condition if autodiag is deleted
+
                         if ($outil) {
-                            $replacement = '<a href="/autodiagnostic/' . $outil->getId() . '" ' . $target . '>' . $matches[3][$key] . '</a>';
+                            $replacement = '<a href="/autodiagnostic/' . $outil->getId() . '" ' . $target . '>' . $title . '</a>';
                         } else {
-                            $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" " . $target . '>' . $matches[3][$key] . ' </a>';
+                            $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" " . $target . '>' . $title . ' </a>';
                         }
 
                         $pattern = $matches[0][$key];
