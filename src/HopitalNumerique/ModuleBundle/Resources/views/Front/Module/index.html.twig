@@ -3,6 +3,8 @@
 {# Importation de la librairie de maccro de modules #}
 {% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
 
+{% set hideDashboardLink = true %}
+
 {% block menu_modules %}
     <div id="module-menu">
         {# Render de la vue de récupérations des différentes modules #}
