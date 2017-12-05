@@ -65,6 +65,6 @@ class ReadMessageHandler
             $read->setLastMessageDate($message->getCreatedAt());
         }
 
-        $this->entityManager->flush();
+        $this->entityManager->flush($read);
     }
 }
