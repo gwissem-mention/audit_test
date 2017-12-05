@@ -20,7 +20,7 @@ class AutodiagTypeFactory extends ConfigurableFactory
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
                     'title.exact',
-                    sprintf('chapter_label.exact^%f', $this->config->get('boost.title', self::TYPE)),
+                    sprintf('chaptersTitle.exact^%f', $this->config->get('boost.title', self::TYPE)),
                 ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
@@ -37,7 +37,7 @@ class AutodiagTypeFactory extends ConfigurableFactory
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
                     'title.exact',
-                    sprintf('chapter_label.exact^%f', $this->config->get('boost.title', self::TYPE)),
+                    sprintf('chaptersTitle.exact^%f', $this->config->get('boost.title', self::TYPE)),
                 ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())
@@ -53,7 +53,7 @@ class AutodiagTypeFactory extends ConfigurableFactory
             $subQuery = (new \Elastica\Query\MultiMatch())
                 ->setFields([
                     'title',
-                    sprintf('chapter_label^%f', $this->config->get('boost.title')),
+                    sprintf('chaptersTitle^%f', $this->config->get('boost.title')),
                 ])
                 ->setType(\Elastica\Query\MultiMatch::TYPE_BEST_FIELDS)
                 ->setQuery($source->getTerm())

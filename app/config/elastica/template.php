@@ -7,7 +7,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ForumBundle\Entity\Post;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 require 'template/indexables.php';
 require 'template/providers.php';
@@ -559,10 +559,7 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                             ],
                         ],
-                        'chapter_label' => [
-                            'type' => 'text',
-                            'analyzer' => 'title_analyzer',
-                            'term_vector' => 'with_positions_offsets',
+                        'chaptersTitle' => [
                             'fields' => [
                                 'exact' => [
                                     "type" => "text",
@@ -571,16 +568,15 @@ $container->loadFromExtension('fos_elastica', [
                                 ],
                             ],
                         ],
-                        'autodiag_title' => [
-                            'type' => 'text',
-                        ],
-                        'chapter_code' => [
-                            'type' => 'keyword',
-                            'property_path' => false,
-                        ],
+                        'attributes' => [
+                            'type' => 'nested',
+                            'properties' => [
+                                'label' => null,
+                            ]
+                        ]
                     ],
                     'persistence' => [
-                        'model' => Chapter::class,
+                        'model' => Autodiag::class,
                         'listener' => [
                             'insert' => false,
                             'update' => false,

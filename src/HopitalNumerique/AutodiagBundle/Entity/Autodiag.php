@@ -488,6 +488,20 @@ class Autodiag
     }
 
     /**
+     * Get all chapters (not only first level)
+     *
+     * @return Collection
+     */
+    public function getChaptersTitle()
+    {
+        return $this->containers->filter(function (Container $container) {
+            return $container instanceof Chapter;
+        })->map(function (Chapter $chapter) {
+            return $chapter->getLabel();
+        });
+    }
+
+    /**
      * Add chapter.
      *
      * @param Chapter $chapter
