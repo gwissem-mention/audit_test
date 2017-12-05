@@ -24,3 +24,7 @@ parameters:
                 route: hopitalnumerique_objet_objet_edit
                 parameters:
                     id: objectId
+            HopitalNumerique\ObjetBundle\Entity\Contenu:
+                route: hopitalnumerique_objet_contenu_edit
+                parameters:
+                    id: objectId
