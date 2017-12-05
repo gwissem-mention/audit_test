@@ -15,10 +15,8 @@ $container
         AutodiagProvider::class,
         [
             $slug,
-            new Reference('autodiag.repository.attribute'),
+            new Reference('autodiag.repository.autodiag'),
             new Reference(sprintf('fos_elastica.object_persister.%s.%s', $index, 'autodiag')),
-            new Reference('fos_elastica.index_manager'),
-            new Reference('autodiag.repository.container'),
         ]
     ))
     ->addTag('fos_elastica.provider', [
