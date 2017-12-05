@@ -5,6 +5,13 @@ hopitalnumerique_questionnaire_list:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:list"}
     methods: GET
 
+
+hopitalnumerique_survey_show:
+    path:  /admin/questionnaire/{survey}/show/{user}/{entry}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Back\Survey:show", entry: null}
+    requirements:
+        _method: GET|POST
+
 #---Index - grid
 hopitalnumerique_questionnaire_index:
     path:  /admin/questionnaire/gestion/index

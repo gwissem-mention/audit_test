@@ -151,6 +151,10 @@
                         </tbody>
                     </table>
                 {% endif %}
+
+                {% if survey is not empty %}
+                    {{ include('@HopitalNumeriqueUser/User/history-survey.html.twig') }}
+                {% endif %}
             </div>
         </div>
     </div>

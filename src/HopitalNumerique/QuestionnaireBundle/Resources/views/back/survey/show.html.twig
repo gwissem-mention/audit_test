@@ -1,0 +1,27 @@
+{% trans_default_domain 'survey' %}
+
+<h1>{{ survey.nom }}</h1>
+
+{% if form.occurrence is defined %}
+    <b>{{ 'survey.occurence'|trans }}</b><br />{{ form.occurrence.vars.data }}<br /><br />
+{% endif %}
+{% for item in form.vars.order %}
+
+    <b>{{ form[item].vars.label }} :</b><br />
+
+    {% if form[item].vars.attr['data-template-link'] is defined %}
+        {% form_theme form[item] '@HopitalNumeriqueQuestionnaire/Questionnaire/Theme/theme.download_template_label.html.twig' %}
+    {% endif %}
+
+    {% if form[item].vars.data is iterable %}
+        <ul>
+            {% for response in form[item].vars.data %}
+                <li>{{ response.libelle is defined ? response.libelle : response.appellation }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {{ form[item].vars.data|nl2br }}<br />
+    {% endif %}
+    <br />
+
+{% endfor %}

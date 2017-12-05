@@ -103,3 +103,8 @@ services:
             - '@hopitalnumerique_domaine.service.base_url_provider'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         public: false
+
+    HopitalNumerique\QuestionnaireBundle\Service\SurveyRetriever:
+        class: HopitalNumerique\QuestionnaireBundle\Service\SurveyRetriever
+        arguments:
+            - '@hopitalnumerique_questionnaire.repository.response'
