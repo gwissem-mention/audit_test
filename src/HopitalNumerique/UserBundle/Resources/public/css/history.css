@@ -1,0 +1,7 @@
+table.history-survey tr.parent-row {
+    background: #ddd;
+}
+
+table.history-survey tr.child-row > td:first-child {
+    padding-left: 20px;
+}

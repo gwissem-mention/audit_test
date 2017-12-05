@@ -1,0 +1,42 @@
+{% trans_default_domain 'history' %}
+
+<table class="table history-survey">
+    <thead>
+    <tr>
+        <th>{{ 'survey.table.title'|trans }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in survey %}
+        <tr class="parent-row">
+            <td>
+                {% if item.responses is empty %}
+                    {{ item.survey.update|date('d/m/y') }}
+                    -
+                {% endif %}
+                <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id}) }}" class="survey-details">{{ item.survey.name }}</a>
+            </td>
+            <td class="actions-column">
+                <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id}) }}" class="survey-details btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                    <i class="fa fa-eye"></i>
+                </a>
+            </td>
+        </tr>
+        {% for response in item.responses %}
+            <tr class="child-row">
+                <td>
+                    {{ response.update|date('d/m/y') }}
+                    -
+                    <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id, entry: response.id}) }}" class="survey-details">{{ response.name }}</a>
+                </td>
+                <td class="actions-column">
+                    <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id, entry: response.id}) }}" class="survey-details btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>

@@ -6,6 +6,7 @@ use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Event\EnrolmentEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\QuestionnaireBundle\Service\SurveyRetriever;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
 use HopitalNumerique\UserBundle\Event\UserRoleUpdatedEvent;
@@ -374,12 +375,14 @@ class UserController extends Controller
         ]);
 
         return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', [
+            'user' => $user,
             'logs' => $logs,
             'logsSynthesis' => $logsSynthesis,
             'logsModule' => $logsModule,
             'logsIntervention' => $logsIntervention,
             'logsFacturation' => $logsFacturation,
             'logsQuestionnaire' => $logsQuestionnaire,
+            'survey' => $this->get(SurveyRetriever::class)->getUserResponsesGroupedBySurvey($user),
         ]);
     }
 
