@@ -10,7 +10,7 @@ export default class Autodiag extends Result {
 
     getType(): string
     {
-        return null;
+        return 'autodiag';
     }
 
     getTitle(): string

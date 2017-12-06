@@ -30,7 +30,7 @@ export default class ResultFactory {
 
         switch (resultData._type) {
             case 'autodiag':
-                return new Autodiag(resultData._source.id, 0, resultData._source.title, resultData._source.attributes);
+                return new Autodiag(resultData._source.id, resultData._score, resultData._source.title, resultData._source.attributes);
             case "object":
                 result = new Publication(
                     resultData._id,
