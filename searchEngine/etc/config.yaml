@@ -25,3 +25,7 @@ global:
                 value: AUTO
                 prefix: 2
                 expansion: 5
+
+autodiag:
+    boost:
+        title: 3
