@@ -32,6 +32,7 @@ class Viewed
      * @var Discussion
      *
      * @ORM\ManyToOne(targetEntity="Discussion")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $discussion;
 
