@@ -134,6 +134,14 @@ class Etablissement
     private $usersRattachement;
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getNom();
+    }
+
+    /**
      * Set usersRattachement.
      *
      * @param User $usersRattachement
