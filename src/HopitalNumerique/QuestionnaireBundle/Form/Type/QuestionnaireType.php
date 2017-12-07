@@ -741,7 +741,7 @@ class QuestionnaireType extends AbstractType
                             );
                         } else {
                             $fieldOptions['choices'] =
-                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                                is_null($reponseCourante) || is_null($reponseCourante->getEtablissementMulitple())
                                 ? []
                                 : $reponseCourante->getEtablissementMulitple()
                             ;

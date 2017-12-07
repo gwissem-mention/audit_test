@@ -11,7 +11,7 @@
 
 
     {% if form[item].vars.data.lib is defined %}
-        <a href="{{ path('hopitalnumerique_reponse_download', {reponse: form[item].vars.data.id}) }}" target="_blank">{{ form[item].vars.data.lib }}</a>
+        <a href="{{ path('hopitalnumerique_reponse_download', {reponse: form[item].vars.data.id}) }}" target="_blank">{{ form[item].vars.data.lib }}</a><br />
     {% elseif form[item].vars.data is iterable %}
         <ul>
             {% for response in form[item].vars.data %}
@@ -21,8 +21,10 @@
     {% else %}
         {% if 'wysiwyg_' in item %}
             {{ form[item].vars.data|raw }}
+        {% elseif form[item].vars.data.id is defined %}
+            {{ form[item].vars.data.libelle is defined ? form[item].vars.data.libelle : form[item].vars.data }}
         {% else %}
-            {{ form[item].vars.data|nl2br }}
+            {{ form[item].vars.data }}
         {% endif %}
         <br/>
     {% endif %}
