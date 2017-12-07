@@ -14,8 +14,10 @@
                 {% if item.responses is empty %}
                     {{ item.survey.update|date('d/m/y') }}
                     -
+                    <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id}) }}" class="survey-details">{{ item.survey.name }}</a>
+                {% else %}
+                    {{ item.survey.name }}
                 {% endif %}
-                <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id}) }}" class="survey-details">{{ item.survey.name }}</a>
             </td>
             <td class="actions-column">
                 <a href="{{ path('hopitalnumerique_survey_show', {survey: item.survey.id, user: user.id}) }}" class="survey-details btn btn-sm btn-success" title="{{ 'survey.action.show'|trans }}">
