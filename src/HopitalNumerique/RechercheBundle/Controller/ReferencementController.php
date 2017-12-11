@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\CartBundle\Service\GetCartableType;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
@@ -178,8 +179,7 @@ class ReferencementController extends Controller
         $entitiesByType = $request->request->get('entitiesByType');
 
         foreach ($entitiesByType as $entityType => $entitiesPropertiesById) {
-            $cartItemType = $this->get('hopitalnumerique\cartbundle\service\getcartabletype')
-                ->getCartableType($entityType);
+            $cartItemType = $this->get(GetCartableType::class)->getCartableType($entityType);
 
             $entityIds = array_keys($entitiesPropertiesById);
 

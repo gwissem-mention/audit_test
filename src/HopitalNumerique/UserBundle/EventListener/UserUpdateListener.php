@@ -49,7 +49,6 @@ class UserUpdateListener implements EventSubscriberInterface
     public function update(UserEvent $event)
     {
         $this->checkDomaineOnUpdate($event);
-        $this->removeAmbassadeurReferences($event->getUser());
     }
 
     private function checkDomaineOnUpdate(UserEvent $event)
@@ -73,13 +72,5 @@ class UserUpdateListener implements EventSubscriberInterface
             $mail = $this->_managerMail->sendDomaineChanged($user, ['domaines' => $domainesString]);
             $this->_mailer->send($mail);
         }
-    }
-
-    /**
-     * Supprime les éventuelles références de l'ambassadeur si l'utilisateur ne l'est plus.
-     */
-    private function removeAmbassadeurReferences(User $user)
-    {
-        $this->referencementDeleter->removeAmbassadeurReferences($user);
     }
 }
