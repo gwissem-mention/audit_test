@@ -402,6 +402,7 @@ class Entity
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->forumTopicManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 return $this->userManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->rechercheParcoursManager->findBy(['id' => $ids]);
