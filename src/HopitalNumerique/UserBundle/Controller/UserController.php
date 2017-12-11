@@ -1312,6 +1312,8 @@ class UserController extends Controller
      */
     private function customRenderView($view, $form, $user, $options = [])
     {
+        $options['entityType'] = $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($user);
+
         return $this->render($view, [
             'form' => $form->createView(),
             'user' => $user,
