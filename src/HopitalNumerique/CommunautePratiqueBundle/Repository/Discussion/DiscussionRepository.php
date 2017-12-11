@@ -239,6 +239,35 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param Domaine|null $domain
+     * @param int $limit
+     *
+     * @return Discussion[]
+     */
+    public function getRecentPublicDiscussionActivity(Domaine $domain = null, $limit = 20)
+    {
+        $queryBuilder = $this->createQueryBuilder('discussion')
+            ->join('discussion.messages', 'message')->addSelect('message')
+            ->join('discussion.user', 'user')
+            ->andWhere('discussion.public = TRUE')
+        ;
+
+        if ($domain) {
+            $queryBuilder
+                ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $queryBuilder
+            ->addOrderBy('message.createdAt', 'DESC')
+            ->setMaxResults($limit)
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
      * @param Objet $object
      * @param Domaine|null $domain
      *
