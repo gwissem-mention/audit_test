@@ -70,6 +70,7 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
         $group = $event->getGroup();
         $user = $event->getUser();
         $answers = $event->getAnswers();
+        $domains = $event->getDomains() ? $event->getDomains() : [$this->currentDomain->get()];
 
         if (null === ($discussion = $group->getPresentationDiscussion())) {
             $discussion = new Discussion(
@@ -78,7 +79,7 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
                     'cdp_discussion'
                 ),
                 null,
-                [$this->currentDomain->get()]
+                $domains
             );
             $discussion
                 ->addGroup($group)
