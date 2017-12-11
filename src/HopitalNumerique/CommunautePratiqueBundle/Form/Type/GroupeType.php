@@ -10,6 +10,9 @@ use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
@@ -55,7 +58,6 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $isCreation = (null === $builder->getData()->getId());
         $hasDomaine = $builder->getData()->getDomains()->count() > 0;
 
         $builder
@@ -68,7 +70,6 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                     ;
                 },
                 'multiple' => true,
-                'disabled' => (!$isCreation),
             ])
         ;
         if ($hasDomaine) {
@@ -119,15 +120,6 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                         'class' => 'validate[required]',
                     ],
                 ])
-                ->add('questionnaire', 'entity', [
-                    'class' => 'HopitalNumeriqueQuestionnaireBundle:Questionnaire',
-                    'choices' => $this->questionnaireRepository->findByDomains($builder->getData()->getDomains()),
-                    'required' => true,
-                    'empty_value' => ' ',
-                    'attr' => [
-                        'class' => 'validate[required]',
-                    ],
-                ])
                 ->add('animateurs', 'genemu_jqueryselect2_entity', [
                     'class' => 'HopitalNumeriqueUserBundle:User',
                     'choices' => $this->userRepository->getCommunautePratiqueMembersInDomains($builder->getData()->getDomains()),
@@ -152,6 +144,27 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 ])
             ;
         }
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $this->addSurveyField($event->getData()->getDomains(), $event->getForm());
+        });
+
+        $builder->get('domains')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $this->addSurveyField($event->getForm()->getData(), $event->getForm()->getParent());
+        });
+    }
+
+    private function addSurveyField($domains, FormInterface $form)
+    {
+        $form->add('questionnaire', 'entity', [
+            'class' => 'HopitalNumeriqueQuestionnaireBundle:Questionnaire',
+            'choices' => $this->questionnaireRepository->findByDomains($domains),
+            'required' => true,
+            'empty_value' => ' ',
+            'attr' => [
+                'class' => 'validate[required]',
+            ],
+        ]);
     }
 
     /**
