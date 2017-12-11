@@ -105,6 +105,11 @@ class Entity
      */
     const ENTITY_TYPE_RISK = 12;
 
+    /**
+     * @var int Type Ambassadeur
+     */
+    const ENTITY_TYPE_USER = 13;
+
     private $refForumTopicId;
 
     private $refAmbassadeurId;
@@ -314,8 +319,9 @@ class Entity
             case $entity instanceof User:
                 if ($entity->hasRoleAmbassadeur()) {
                     return self::ENTITY_TYPE_AMBASSADEUR;
+                } else {
+                    return self::ENTITY_TYPE_USER;
                 }
-                break;
             case $entity instanceof RechercheParcours:
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
             case $entity instanceof Groupe:
@@ -396,6 +402,7 @@ class Entity
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->forumTopicManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 return $this->userManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->rechercheParcoursManager->findBy(['id' => $ids]);
@@ -615,6 +622,7 @@ class Entity
                 $title = $entity->getTitle();
                 break;
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 $title = $entity->getPrenomNom();
                 break;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
@@ -709,6 +717,7 @@ class Entity
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle();
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 return $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle();
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle();
@@ -750,6 +759,7 @@ class Entity
                 $description = $entity->getContenu();
                 break;
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 $texteDynamique = $this->texteDynamiqueCodeManager->findOneByCodeAndDomaine('Module_recherche_ambassadeur', $this->currentDomaine->get());
                 if (null !== $texteDynamique) {
                     $description = $texteDynamique->getTexte();
@@ -836,6 +846,7 @@ class Entity
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
             case self::ENTITY_TYPE_AMBASSADEUR:
+            case self::ENTITY_TYPE_USER:
                 $parameters = json_encode([
                     $entity->getEmail() => $entity->getFirstname() . ' ' . $entity->getLastname(),
                 ]);

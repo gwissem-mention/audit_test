@@ -14,7 +14,7 @@
 </div>
 <h3 class="title">
     {% if showCog is defined and showCog == true and type is defined and id is defined %}
-        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':type, 'entityId':id, 'redirect':'false' })}}" class="open-popin-referencement fancybox.ajax pull-left" style="margin-right: 5px;" title="Référencer cette publication"><i class="fa fa-cog"></i></a>
+        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':type, 'entityId':id, 'redirect':'false' })}}" class="open-popin-referencement pull-left" style="margin-right: 5px;" title="Référencer cette publication"><i class="fa fa-cog"></i></a>
     {% endif %}
     <a href="{{ url }}">
         {%- if pertinenceNiveau is defined -%}
