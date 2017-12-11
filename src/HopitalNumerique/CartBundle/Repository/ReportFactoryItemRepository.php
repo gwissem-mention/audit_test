@@ -21,6 +21,10 @@ class ReportFactoryItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('rfi')
             ->join('rfi.item', 'ri')->addSelect('ri')
             ->join('rfi.reportFactory', 'rf', Join::WITH, 'rf.report IS NULL')->addSelect('rf')
+            ->andWhere('rfi.owner = :owner')
+            ->setParameters([
+                'owner' => $user,
+            ])
 
             ->addOrderBy('rfi.position', 'ASC')
         ;
