@@ -484,7 +484,7 @@ class Groupe
      *
      * @return Groupe
      */
-    public function setQuestionnaire(Questionnaire $questionnaire)
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
 
