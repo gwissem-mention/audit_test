@@ -9,8 +9,6 @@ use HopitalNumerique\NotificationBundle\EventListener\NotificationListenerAbstra
 
 /**
  * Class GroupUserJoinedListener.
- *
- * @method GroupUserJoinedNotificationProvider getProvider()
  */
 class GroupUserJoinedListener extends NotificationListenerAbstract
 {
