@@ -27,7 +27,8 @@ var Discussion;
         this.$list = this.$container.find('.list');
         this.$discussion = this.$container.find('.discussion');
         this.$messages = this.$container.find('.message');
-        this.$lazyLoadBtn = this.$list.find('.load-more');
+        this.$lazyLoadBtn = this.$list.find('.load-more .more');
+        this.$lazyLoadAllBtn = this.$list.find('.load-more .all');
 
         this.activeDiscussion = {
             element: undefined,
@@ -298,11 +299,20 @@ var Discussion;
 
                 that.lazyLoadBtnVisibility();
             });
+
+            that.$lazyLoadAllBtn.on('click', function (e) {
+                e.preventDefault();
+
+                that.$list.find('.item.hidden').removeClass('hidden');
+
+                that.lazyLoadBtnVisibility();
+            });
         },
 
         lazyLoadBtnVisibility: function () {
             if (this.$list.find('.item.hidden').length === 0) {
                 this.$lazyLoadBtn.addClass('hidden');
+                this.$lazyLoadAllBtn.addClass('hidden');
             }
         },
 

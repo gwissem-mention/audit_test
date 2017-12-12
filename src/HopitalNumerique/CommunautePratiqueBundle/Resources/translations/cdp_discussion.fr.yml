@@ -20,6 +20,7 @@ discussion:
         presentation:
             message_infos: "]0,1] %count% message (le dernier le %date%)|]1, Inf[ %count% messages (le dernier le %date% à %time%)"
         load_more: Voir plus
+        load_all: Afficher tout
     new_discussion:
         text: Créer une nouvelle discussion
         form:
