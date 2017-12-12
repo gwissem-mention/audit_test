@@ -221,17 +221,21 @@
                         </div>
                     {% endif %}
                     <div class="clearfix"></div>
-                    {% if topics %}
+                    {% if cdpDiscussions %}
                         <div id="block-fil-discussion">
-                            <h2><a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}">Discussions en cours</h2>
+                            <h2><a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}">Discussions en cours</a></h2>
                             <ul>
-                        {% for topic in topics %}
-                            <li><a href="{{ path('ccdn_forum_user_topic_show', {'forumName': forumName,'topicId': topic.id}) }}" title="{{ topic.title }}">
-                                {{- topic.title -}}
-                            </a></li>
-                        {% endfor %}
+                                {% for discussion in cdpDiscussions %}
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: discussion.id}) }}">
+                                            {{- discussion.title -}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             </ul>
-                            <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="btn btn-link lire-suite">> Accéder au forum</a>
+                            <a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}" class="btn btn-link lire-suite">
+                                {{ 'homepage.cdpBlock.btn.text'|trans }}
+                            </a>
                         </div>
                     {% endif %}
                     <div class="clearfix"></div>

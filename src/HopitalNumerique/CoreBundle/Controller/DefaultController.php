@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CoreBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,7 +75,7 @@ class DefaultController extends Controller
             $forumName = 'Public';
         }
 
-        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum, 3, $role);
+        $cdpDiscussions = $this->get(DiscussionRepository::class)->getRecentPublicDiscussionActivity($domaine, 3);
 
         // Get Article à la une
         $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();
@@ -95,7 +96,7 @@ class DefaultController extends Controller
                 'articlesALaUne' => $articlesALaUne,
                 'nb_eta' => $nb_eta,
                 'nb_fils' => $this->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
-                'topics' => $topics,
+                'cdpDiscussions' => $cdpDiscussions,
                 'forumName' => $forumName,
                 'alaune' => $alaune,
                 'nb_consultations' => $nb_pub_consultees,

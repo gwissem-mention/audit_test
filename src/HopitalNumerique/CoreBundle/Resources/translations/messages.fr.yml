@@ -14,3 +14,8 @@ search_professional: Vous cherchez un
 search_professional_after: professionnel du réseau dans votre région ?
 go_to_top:
     text: Haut de page
+
+homepage:
+    cdpBlock:
+        btn:
+            text: "> Accéder à l'espace de discussion"

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Event\Group;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
@@ -25,17 +26,24 @@ class GroupRegistrationEvent extends Event
     protected $answers;
 
     /**
+     * @var array
+     */
+    protected $domains;
+
+    /**
      * GroupRegistrationEvent constructor.
      *
      * @param User $user
      * @param Groupe $group
      * @param Reponse[] $answers
+     * @param Domaine[]|null $domains
      */
-    public function __construct(User $user, Groupe $group, array $answers)
+    public function __construct(User $user, Groupe $group, array $answers, array $domains = null)
     {
         $this->user = $user;
         $this->group = $group;
         $this->answers = $answers;
+        $this->domains = $domains;
     }
 
     /**
@@ -60,5 +68,13 @@ class GroupRegistrationEvent extends Event
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDomains()
+    {
+        return $this->domains;
     }
 }
