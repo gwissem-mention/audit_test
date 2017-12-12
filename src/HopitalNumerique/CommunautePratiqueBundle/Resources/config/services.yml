@@ -116,8 +116,8 @@ services:
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider
         parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
-#        tags:
-#            - { name: notification.aggregator, key: practice_community_group_user_joined }
+        tags:
+            - { name: notification.aggregator, key: practice_community_group_user_joined }
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider
@@ -151,7 +151,8 @@ services:
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener
-        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        arguments:
+            - '@hopitalnumerique\notificationbundle\service\notifications'
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
 
