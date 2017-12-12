@@ -100,7 +100,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         $options = [
             'groupId' => $group->getId(),
             'nomGroupe' => $group->getTitre(),
-            'domainId' => $group->getDomaine()->getId(),
+            'domainId' => $group->getDomains()->first()->getId(),
         ];
         if (null !== $user) {
             $options = array_merge($options, [
