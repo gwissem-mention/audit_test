@@ -11,7 +11,7 @@ hopitalnumerique_communautepratique_admin_groupe_add:
 hopitalnumerique_communautepratique_admin_groupe_edit:
     path:  /groupe/edit/{id}/{toRef}
     defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:edit", id: null, toRef: 0 }
-    methods: GET|POST
+    methods: GET|POST|PATCH
     requirements:
         id: \d+
 

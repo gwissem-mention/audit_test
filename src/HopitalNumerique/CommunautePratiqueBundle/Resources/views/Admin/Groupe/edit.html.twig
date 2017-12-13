@@ -20,6 +20,16 @@
             if ($('#toRef').val() == 1) {
                 Hn_Reference_Referencement_Popin.open($('.open-popin-referencement').attr('href'));
             }
+
+            $('form.group-form select.group-domains').on('change', function () {
+                $.ajax({
+                    url: $('.form.group-form').attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize()
+                }).done(function (response) {
+                    $('form.group-form .survey').replaceWith($(response).find('.survey'));
+                });
+            })
         });
     </script>
 {% endblock %}
@@ -50,9 +60,9 @@
                 {%- endif -%}
 
                 {% form_theme groupeForm 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
-                {{ form_start(groupeForm, { attr:{ class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
+                {{ form_start(groupeForm, { attr:{ class:'group-form form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     
-                    {{ form_row(groupeForm.domains, {'attr': {'class': 'select2'}}) }}
+                    {{ form_row(groupeForm.domains, {'attr': {'class': 'group-domains select2'}}) }}
                     
                     {% if groupe.domains.count > 0 %}
                         {{ form_row(groupeForm.titre) }}
@@ -62,7 +72,9 @@
                         {{ form_row(groupeForm.dateInscriptionOuverture) }}
                         {{ form_row(groupeForm.dateDemarrage) }}
                         {{ form_row(groupeForm.dateFin) }}
-                        {{ form_row(groupeForm.questionnaire) }}
+                        <div class="survey">
+                            {{ form_row(groupeForm.questionnaire) }}
+                        </div>
                         {{ form_row(groupeForm.animateurs) }}
                         {{ form_row(groupeForm.requiredRoles, {'attr': {'class': 'select2'}}) }}
 

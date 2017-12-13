@@ -11,6 +11,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Event\UserEvent;
 use HopitalNumerique\UserBundle\Event\UserRoleUpdatedEvent;
 use HopitalNumerique\UserBundle\UserEvents;
+use Nodevo\RoleBundle\Entity\Role;
 use Nodevo\ToolsBundle\Tools\Password;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
@@ -1220,6 +1221,10 @@ class UserController extends Controller
 
                         $this->customRenderView($view, $form, $user, $options);
                     }
+                }
+
+                if (null !== $user->getOrganization() && Role::$ROLE_ENREGISTRE_LABEL === $role->getRole()) {
+                    $user->setRoles([Role::$ROLE_ES_LABEL]);
                 }
 
                 $user->setDateLastUpdate(new \DateTime());
