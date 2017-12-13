@@ -1,5 +1,11 @@
 $(document).ready(function() {
 
+    $( document ).ajaxError(function(event, response) {
+        if (401 == response.status) {
+            window.location.reload();
+        }
+    });
+
     if ($('.go-to-top').length) {
 
         $(window).trigger('scroll');
