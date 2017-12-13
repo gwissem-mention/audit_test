@@ -339,6 +339,8 @@ var Discussion;
                 $(this).parents('.area').trigger('click');
             });
 
+            var fileUploadingCounter = 0;
+
             $(element + ' .file-dropzone .area').dropzone({
                 url : $(element + ' .file-dropzone .area').data('upload-uri'),
                 createImageThumbnails: false,
@@ -365,10 +367,24 @@ var Discussion;
                         that.bindFileEvent($prototype);
                     })
                 },
+                sending: function () {
+                    fileUploadingCounter++;
+
+                    that.updateDropzoneState($(this.element), fileUploadingCounter);
+                },
+                complete: function () {
+                    fileUploadingCounter--;
+
+                    that.updateDropzoneState($(this.element), fileUploadingCounter);
+                },
                 error: function (file, errorMessage) {
                     alert(errorMessage);
                 }
             });
+        },
+
+        updateDropzoneState: function (dropzone, fileCounter) {
+            dropzone.toggleClass('processing', fileCounter > 0);
         },
 
         bindFileEvent: function ($element) {
