@@ -156,8 +156,8 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
             /**
              * Fire 'GROUP_CREATED' event if group is active
              */
-            $event = new GroupEvent($entity);
-            $this->eventDispatcher->dispatch(Events::GROUP_CREATED, $event);
+            //$event = new GroupEvent($entity);
+            //$this->eventDispatcher->dispatch(Events::GROUP_CREATED, $event);
             $entity->setIsNew(false);
 
             parent::save($entity);
