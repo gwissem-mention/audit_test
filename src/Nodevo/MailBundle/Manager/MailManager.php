@@ -1223,7 +1223,7 @@ class MailManager extends BaseManager
      */
     public function sendCartReport($subject, $sender, $recipient, $content, $filepath)
     {
-        $mail = $this->sendMail($subject, $sender, $recipient, $content);
+        $mail = $this->sendMail($subject, $sender, $recipient, $content, $sender);
         $mail->attach(\Swift_Attachment::fromPath($filepath));
 
         return $mail;
