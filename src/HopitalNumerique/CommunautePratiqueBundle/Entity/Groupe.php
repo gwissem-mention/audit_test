@@ -690,7 +690,7 @@ class Groupe
     public function getValidatedInscriptions()
     {
         return $this->getInscriptions()->filter(function (Inscription $registration) {
-            return $registration->isActif();
+            return $registration->isActif() && User::ETAT_ACTIF_ID === $registration->getUser()->getEtat()->getId();
         });
     }
 
