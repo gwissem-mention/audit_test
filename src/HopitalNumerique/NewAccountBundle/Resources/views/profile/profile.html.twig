@@ -85,32 +85,33 @@
                 </div>
                 <div class="panel-body">
                     {{ form_start(form, {"attr": {"id": "my-profile-form", "novalidate": "novalidate"}}) }}
-                    <div class="tab-content">
-                        <div class="profile-tab tab-pane fade in" id="tab1">
-                            {% include 'NewAccountBundle:profile/tabs:personal_information.html.twig' %}
+                        <div class="tab-content">
+                            <div class="profile-tab tab-pane fade in" id="tab1">
+                                {% include 'NewAccountBundle:profile/tabs:personal_information.html.twig' %}
+                            </div>
+                            <div class="profile-tab tab-pane fade" id="tab2">
+                                {% include 'NewAccountBundle:profile/tabs:contact_information.html.twig' %}
+                            </div>
+                            <div class="profile-tab tab-pane fade" id="tab3">
+                                {% include 'NewAccountBundle:profile/tabs:profile.html.twig' %}
+                            </div>
+                            <div class="profile-tab tab-pane fade" id="tab4">
+                                {% include 'NewAccountBundle:profile/tabs:structure.html.twig' %}
+                            </div>
+                            <div class="profile-tab tab-pane fade" id="tab5">
+                                {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
+                            </div>
                         </div>
-                        <div class="profile-tab tab-pane fade" id="tab2">
-                            {% include 'NewAccountBundle:profile/tabs:contact_information.html.twig' %}
-                        </div>
-                        <div class="profile-tab tab-pane fade" id="tab3">
-                            {% include 'NewAccountBundle:profile/tabs:profile.html.twig' %}
-                        </div>
-                        <div class="profile-tab tab-pane fade" id="tab4">
-                            {% include 'NewAccountBundle:profile/tabs:structure.html.twig' %}
-                        </div>
-                        <div class="profile-tab tab-pane fade" id="tab5">
-                            {% include 'NewAccountBundle:profile/tabs:skills.html.twig' %}
-                        </div>
+                        {{ form_widget(form._token) }}
+                    {{ form_end(form, {'render_rest': false}) }}
 
+                    <div class="tab-content">
                         {% for widget in widgets %}
                             <div class="profile-tab profile-activity-tab tab-pane fade" id="{{ widget.name }}">
                                 {{ widget.content|raw }}
                             </div>
                         {% endfor %}
-
-                        {{ form_widget(form._token) }}
                     </div>
-                    {{ form_end(form, {'render_rest': false}) }}
                 </div>
             </div>
         </div>
