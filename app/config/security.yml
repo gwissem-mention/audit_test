@@ -75,6 +75,7 @@ security:
         main:
             switch_user:  { role: ROLE_ADMINISTRATEUR_1}
             pattern: ^/
+            entry_point: login_entry_point
             form_login:
                 login_path: account_login
                 check_path: account_login_check

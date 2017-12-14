@@ -99,7 +99,7 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
             return $a->getQuestion()->getOrdre() < $b->getQuestion()->getOrdre() ? -1 : 1;
         });
         foreach ($answers as $answer) {
-            $questions[$answer->getQuestion()->getLibelle()] = $answer->getReponse();
+            $questions[$answer->getQuestion()->getLibelle()] = $answer->getReference() ? $answer->getReference()->getLibelle() : $answer->getReponse();
         }
 
         $message = new Message(
