@@ -99,7 +99,7 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
             return $a->getQuestion()->getOrdre() < $b->getQuestion()->getOrdre() ? -1 : 1;
         });
         foreach ($answers as $answer) {
-            $questions[$answer->getQuestion()->getLibelle()] = $answer->getReference() ? $answer->getReference()->getLibelle() : $answer->getReponse();
+            $questions[$answer->getQuestion()->getLibelle()] = $this->answerToString($answer);
         }
 
         $message = new Message(
@@ -118,5 +118,37 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
         $this->entityManager->flush($discussion);
         $this->entityManager->flush($message);
         $this->entityManager->flush($group);
+    }
+
+    /**
+     * @param Reponse $answer
+     *
+     * @return string
+     */
+    protected function answerToString(Reponse $answer)
+    {
+        if ($answer->getReferenceMulitple()->count()) {
+            $values = [];
+
+            foreach ($answer->getReferenceMulitple() as $reference) {
+                $values[] = $reference->getLibelle();
+            }
+
+            return implode(', ', $values);
+        } elseif ($answer->getReference()) {
+            return $answer->getReference()->getLibelle();
+        } elseif ($answer->getEtablissement()) {
+            return $answer->getEtablissement()->getNom();
+        } elseif ($answer->getEtablissementMulitple()->count()) {
+            $values = [];
+
+            foreach ($answer->getEtablissementMulitple() as $reference) {
+                $values[] = $reference->getNom();
+            }
+
+            return implode(', ', $values);
+        }
+
+        return $answer->getReponse();
     }
 }
