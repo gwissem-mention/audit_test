@@ -193,6 +193,7 @@ class Groupe
      * @var Discussion|null
      *
      * @ORM\OneToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     protected $presentationDiscussion;
 
