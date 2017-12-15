@@ -127,7 +127,9 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
      */
     protected function answerToString(Reponse $answer)
     {
-        if ($answer->getReferenceMulitple()->count()) {
+        if ($answer->getQuestion()->getTypeQuestion()->getId() === 4) {
+            return (bool) $answer->getReponse() ? 'Oui' : 'Non';
+        } elseif ($answer->getReferenceMulitple()->count()) {
             $values = [];
 
             foreach ($answer->getReferenceMulitple() as $reference) {
