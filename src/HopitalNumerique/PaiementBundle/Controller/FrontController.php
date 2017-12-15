@@ -68,13 +68,13 @@ class FrontController extends Controller
         if (!$this->get('hopitalnumerique_module.manager.inscription')->allInscriptionsIsOk($user)) {
             $this->addFlash('warning', 'Merci d\'évaluer l\'ensemble de vos formations avant de générer votre facture.');
 
-            return $this->redirectToRoute('account_profile');
+            return new RedirectResponse($this->generateUrl('account_profile').'#?payment');
         }
 
         if (is_null($interventions) && is_null($formations)) {
             $this->addFlash('warning', 'Merci de sélectioner au moins 1 ligne');
 
-            return $this->redirectToRoute('account_profile');
+            return new RedirectResponse($this->generateUrl('account_profile').'#?payment');
         }
 
         $remboursement = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy(['region' => $user->getRegion()]);
@@ -103,7 +103,7 @@ class FrontController extends Controller
 
         $this->addFlash('success', 'Facture générée avec succès');
 
-        return $this->redirectToRoute('account_profile');
+        return new RedirectResponse($this->generateUrl('account_profile').'#?payment');
     }
 
     /**
@@ -129,7 +129,7 @@ class FrontController extends Controller
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add(('danger'), 'Le document n\'existe plus sur le serveur.');
 
-            return $this->redirectToRoute('account_profile');
+            return new RedirectResponse($this->generateUrl('account_profile').'#?payment');
         }
     }
 }
