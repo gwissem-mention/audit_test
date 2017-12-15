@@ -30,7 +30,7 @@ class DeleteMessageHandler
 
         $this->entityManager->remove($message);
 
-        if ($discussion->getMessages()->first()->getId() === $message->getId()) {
+        if (1 === $discussion->getMessages()->count()) {
             $this->entityManager->remove($discussion);
         }
 
