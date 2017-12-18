@@ -45,7 +45,7 @@
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_show', { 'id': objet.id }) }}" title="{{ 'object.card'|trans }}"><i class="fa fa-clipboard"></i></a>
         <a class="btn btn-default btn-report fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank"><i class="fa fa-search"></i></a>
         {% if objet.etat.id != constant('HopitalNumerique\\ReferenceBundle\\Entity\\Reference::STATUT_INACTIF_ID') %}
-            <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
+            <a class="btn btn-default" href="{{ (objet.domaines.first ? objet.domaines.first.url : '') ~ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
         {% endif %}
     {% elseif objet.isArticle %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_filtre', { 'filtre': 'Article' }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
