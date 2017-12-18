@@ -40,7 +40,7 @@
                 ></span>
             {% endif %}
 
-            {% if app.user is not null and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MOST_VIEWED'), discussion) and discussion.id in mostViewed|keys %}
+            {% if 'public' == scope and app.user is not null and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MOST_VIEWED'), discussion) and discussion.id in mostViewed|keys %}
                 <span class="icon fa fa-thermometer-full"
                       data-toggle="tooltip"
                       data-placement="top"
