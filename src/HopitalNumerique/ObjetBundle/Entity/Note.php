@@ -67,6 +67,13 @@ class Note
     protected $comment;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true, length=15)
+     */
+    protected $ip;
+
+    /**
      * Get id.
      *
      * @return int
@@ -158,10 +165,14 @@ class Note
      * Set contenu.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     *
+     * @return Note
      */
     public function setContenu(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenu)
     {
         $this->contenu = $contenu;
+
+        return $this;
     }
 
     /**
@@ -207,6 +218,26 @@ class Note
     public function setComment($comment)
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param string $ip
+     *
+     * @return Note
+     */
+    public function setIp($ip = null)
+    {
+        $this->ip = $ip;
 
         return $this;
     }

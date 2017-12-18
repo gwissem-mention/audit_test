@@ -23,9 +23,6 @@ class NoteController extends Controller
      */
     public function addAction(Request $request)
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new Response(null, 403);
-        }
         $entityId = $request->request->getInt('objetId');
         $noteValeur = $request->request->getInt('note');
         $commentValue = $request->request->get('comment');
@@ -35,14 +32,16 @@ class NoteController extends Controller
                 $noteValeur,
                 $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId),
                 $this->getUser(),
-                $commentValue
+                $commentValue,
+                $request->getClientIp()
             );
         } else { // Objet
             $this->container->get('hopitalnumerique_objet.doctrine.note_saver')->saveNoteForObjet(
                 $noteValeur,
                 $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId),
                 $this->getUser(),
-                $commentValue
+                $commentValue,
+                $request->getClientIp()
             );
         }
 
