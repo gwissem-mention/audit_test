@@ -65,21 +65,26 @@ class NoteSaver
      * @param Objet $objet Objet
      * @param User|null $user Utilisateur
      * @param string|null $commentaire
+     * @param string|null $ip
      */
-    public function saveNoteForObjet($note, Objet $objet, User $user = null, $commentaire = null)
+    public function saveNoteForObjet($note, Objet $objet, User $user = null, $commentaire = null, $ip = null)
     {
         $noteEntity = null;
         if (null !== $user) {
             /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['objet' => $objet, 'user' => $user]);
-        } elseif ($this->noteReader->hasNoteForObjetAndUser($objet, $user)) { // Si non connecté, pas d'update
-            return;
         }
 
         if (null === $noteEntity) {
             $noteEntity = $this->noteManager->createEmpty();
             $noteEntity->setObjet($objet);
-            $noteEntity->setUser($user);
+            $noteEntity
+                ->setIp($ip)
+            ;
+
+            if ($user) {
+                $noteEntity->setUser($user);
+            }
         }
         $noteEntity->setDateNote(new \DateTime());
         $noteEntity->setNote($note);
@@ -97,21 +102,26 @@ class NoteSaver
      * @param Contenu $contenu Contenu
      * @param User|null $user Utilisateur
      * @param string|null $commentaire
+     * @param string|null $ip
      */
-    public function saveNoteForContenu($note, Contenu $contenu, User $user = null, $commentaire = null)
+    public function saveNoteForContenu($note, Contenu $contenu, User $user = null, $commentaire = null, $ip = null)
     {
         $noteEntity = null;
         if (null !== $user) {
             /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['contenu' => $contenu, 'user' => $user]);
-        } elseif ($this->noteReader->hasNoteForContenuAndUser($contenu, $user)) { // Si non connecté, pas d'update
-            return;
         }
 
         if (null === $noteEntity) {
             $noteEntity = $this->noteManager->createEmpty();
-            $noteEntity->setContenu($contenu);
-            $noteEntity->setUser($user);
+            $noteEntity
+                ->setContenu($contenu)
+                ->setIp($ip)
+            ;
+
+            if ($user) {
+                $noteEntity->setUser($user);
+            }
         }
         $noteEntity->setDateNote(new \DateTime());
         $noteEntity->setNote($note);

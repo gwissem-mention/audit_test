@@ -1738,8 +1738,8 @@ class MailManager extends BaseManager
             ], RouterInterface::ABSOLUTE_URL),
             'note' => $note->getNote(),
             'comment' => $note->getComment(),
-            'nomUtilisateur' => $note->getUser()->getLastname(),
-            'prenomUtilisateur' => $note->getUser()->getFirstname(),
+            'nomUtilisateur' => $note->getUser() ? $note->getUser()->getLastname() : 'Invité',
+            'prenomUtilisateur' => $note->getUser() ? $note->getUser()->getFirstname() : sprintf('(%s)', $note->getIp()),
             'subjectdomain' => $this->getDomaineSubjet(),
         ];
 
