@@ -309,6 +309,8 @@ class UserController extends Controller
             $options['isAllowedToSwitch'] = true;
         }
 
+        $options['updateUserUpdateDate'] = false;
+
         return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig', $options);
     }
 
@@ -1227,7 +1229,9 @@ class UserController extends Controller
                     $user->setRoles([Role::$ROLE_ES_LABEL]);
                 }
 
-                $user->setDateLastUpdate(new \DateTime());
+                if (!isset($options['updateUserUpdateDate']) || true === $options['updateUserUpdateDate']) {
+                    $user->setDateLastUpdate(new \DateTime());
+                }
 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser($user);

@@ -193,7 +193,8 @@ class PublicationController extends Controller
             'objet' => $objet,
             'note' => $this->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser(
                 $objet,
-                $this->getUser()
+                $this->getUser(),
+                $request->getClientIp()
             ),
             'types' => $types,
             'contenus' => $contenus,

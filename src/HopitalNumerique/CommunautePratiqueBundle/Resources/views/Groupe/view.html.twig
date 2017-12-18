@@ -79,7 +79,7 @@
                 <ul>
                     <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.validatedInscriptions|length, {'%countTxt%': '<b>'~groupe.validatedInscriptions|length~'</b>'})|raw }}</li>
                     {% if is_granted('validate_registration', groupe) %}
-                        <li class="members-to-validate">{{ 'group.tabs.members.members_to_validate_count'|transchoice(groupe.inscriptionsToValidate|length, {'%countTxt%': '<b>'~groupe.inscriptionsToValidate|length~'</b>'})|raw }}</li>
+                        <li>{{ 'group.tabs.members.members_to_validate_count'|transchoice(groupe.inscriptionsToValidate|length, {'%countTxt%': '<b>'~groupe.inscriptionsToValidate|length~'</b>'})|raw }}</li>
                     {% endif %}
                     <li>{{ 'group.tabs.members.animators_count'|transchoice(groupe.animateurs|length, {'%countTxt%': '<b>'~groupe.animateurs|length~'</b>'})|raw }}</li>
                 </ul>
@@ -119,7 +119,6 @@
                 data-init="false"
                 data-cache="disabled"
                 data-content-uri="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', {'groupe': groupe.id}) }}"
-                data-content-uri-to-validate="{{ path('hopitalnumerique_communautepratique_user_listbygroupe_filtered', {'groupe': groupe.id}) }}"
             >
                 <h2>{{ 'group.tabs.members.title'|trans }}</h2>
             </div>

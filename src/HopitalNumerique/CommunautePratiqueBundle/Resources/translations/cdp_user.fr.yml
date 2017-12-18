@@ -7,6 +7,7 @@ directory:
         new_member: "Dont %count% nouveau membre | Dont %count% nouveaux membres"
     member:
         is_new: NEW
+        to_validate: A VALIDER
 details:
     groups_registration: Participations aux groupes
     action:

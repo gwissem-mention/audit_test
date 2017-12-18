@@ -32,15 +32,23 @@
     background: rgba(240, 232, 174, 0.3);
 }
 
-.cdp-directory .directory .directory-user.directory-user--new .new-flag {
-    display: block;
+.cdp-directory .directory .directory-user .new-flag,
+.cdp-directory .directory .directory-user .to-validate-flag {
     margin-left: auto;
     color: #fff;
-    background: #ec0034;
     border-radius: 2px;
     font-size: 10px;
     padding: 1px 2px;
     margin-right: 10px;
+}
+
+.cdp-directory .directory .directory-user .to-validate-flag {
+    background: #439943;
+}
+
+.cdp-directory .directory .directory-user.directory-user--new .new-flag {
+    display: block;
+    background: #ec0034;
 }
 
 .cdp-directory .directory .directory-user .avatar {

@@ -7,7 +7,7 @@
     <div class="communaute-de-pratiques-groupe">
         <div class="row">
             <div class="col-sm-9">
-                {% if (app.user and app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                {% if (app.user and (app.user.hasCommunautePratiqueGroupe(groupe) or app.user.hasRoleCDPAdmin)) %}
                     <h2><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a></h2>
                 {% else %}
                     <h2>{{ groupe.titre }}</h2>

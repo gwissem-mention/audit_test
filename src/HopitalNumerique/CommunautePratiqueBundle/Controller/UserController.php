@@ -91,7 +91,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
     /**
      * Affiche tous les membres d'un groupe.
      */
-    public function listByGroupeAction(Groupe $groupe, $filtered = false)
+    public function listByGroupeAction(Groupe $groupe)
     {
         if (!$this->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
@@ -99,11 +99,12 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 
         $domaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
 
-        $membersQueryBuilder = $this->get('hopitalnumerique_user.repository.user')->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
-        $membersQueryBuilder
-            ->andWhere('groupeInscription.actif = :filter')
-            ->setParameter('filter', !$filtered)
-        ;
+        $membersQueryBuilder = $this->get('hopitalnumerique_user.repository.user')->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine, null, false);
+        if (!$this->getUser()->hasRoleCDPAdmin()) {
+            $membersQueryBuilder
+                ->andWhere('groupeInscription.actif = TRUE')
+            ;
+        }
 
         $members = $membersQueryBuilder->getQuery()->getResult();
 

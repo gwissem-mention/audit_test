@@ -682,13 +682,15 @@ class UserRepository extends EntityRepository
      * @param Groupe|null  $groupe
      * @param Domaine|null $domaine
      * @param null         $membreId
+     * @param bool $onlyRegisteredUser
      *
      * @return QueryBuilder
      */
     public function getCommunautePratiqueMembresQueryBuilder(
         Groupe $groupe = null,
         Domaine $domaine = null,
-        $membreId = null
+        $membreId = null,
+        $onlyRegisteredUser = true
     ) {
         $query = $this->createQueryBuilder('user');
 
@@ -698,14 +700,19 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.region', 'region')
             ->leftJoin('user.organizationType', 'esStatut')
             ->leftJoin('user.activities', 'activities')
-            ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
-            ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')
             ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->addOrderBy('user.lastname', 'ASC')
             ->addOrderBy('user.firstname', 'ASC')
             ->addOrderBy('user.id', 'ASC')
         ;
+
+        if ($onlyRegisteredUser) {
+            $query
+                ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
+                ->setParameter('inscritCommunautePratique', true)
+            ;
+        }
 
         if (null !== $groupe) {
             $query
