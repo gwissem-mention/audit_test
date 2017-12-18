@@ -18,12 +18,6 @@ var Group;
                 $(this).tab('show').addClass('active');
             });
 
-            that.$tabs.find('.members-to-validate').on('click', function (e) {
-                e.stopPropagation();
-
-                $(this).parents('a.tab').data('filter', 'to-validate').trigger('click');
-            });
-
             that.$tabs.on('show.bs.tab', function (e) {
                 var $block = $('.group').find($(e.target).attr('href'));
 
@@ -55,6 +49,6 @@ var Group;
 
         preOpenDiscussionTab: function () {
             $('.group .tabs a.tab.discussion').trigger('click');
-        },
+        }
     }
 })();

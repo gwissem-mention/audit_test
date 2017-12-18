@@ -18,7 +18,7 @@
     </div>
 
     <div class="directory">
-        {% for user in members if user.isActifInGroupe(groupe) or canDeleteMembre or groupe.hasAnimateur(user) %}
+        {% for user in members if canDeleteMembre or groupe.hasAnimateur(user) %}
             {{ include('@HopitalNumeriqueCommunautePratique/User/member_line.html.twig') }}
         {% endfor %}
     </div>
