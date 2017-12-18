@@ -20,13 +20,6 @@ hopitalnumerique_communautepratique_user_listbygroupe:
     requirements:
         groupe: '\d+'
 
-hopitalnumerique_communautepratique_user_listbygroupe_filtered:
-    path: '/list/groupe/{groupe}/filtered'
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', filtered: true }
-    methods: GET
-    requirements:
-        groupe: '\d+'
-
 hopitalnumerique_communautepratique_user_add:
     path: '/group/{group}/add-user'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:addUser' }

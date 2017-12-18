@@ -13,6 +13,10 @@
         </span>
     {% endif %}
 
+    {% if not user.isActifInGroupe(groupe) %}
+        <div class="to-validate-flag">{{ 'directory.member.to_validate'|trans }}</div>
+    {% endif %}
+
 
     <div class="new-flag">{{ 'directory.member.is_new'|trans }}</div>
 </a>
