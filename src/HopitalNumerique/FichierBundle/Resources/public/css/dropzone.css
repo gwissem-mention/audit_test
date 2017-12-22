@@ -25,3 +25,15 @@
 .file-dropzone .area i {
     font-size: 45px;
 }
+
+.file-dropzone .area .loading {
+    display: none;
+}
+
+.file-dropzone .area.processing .loading {
+    display: block;
+}
+
+.file-dropzone .area.processing .waiting {
+    display: none;
+}
