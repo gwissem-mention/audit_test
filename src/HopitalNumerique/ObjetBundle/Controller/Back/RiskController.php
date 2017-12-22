@@ -50,9 +50,10 @@ class RiskController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:back:risk\edit.html.twig', [
             'form' => $form->createView(),
             'risk' => $risk,
-            'domainesCommunsWithUser' => $this
+            'domainesCommunsWithUser' => $risk ? $this
                 ->get('hopitalnumerique_core.dependency_injection.entity')
                 ->getEntityDomainesCommunsWithUser($risk, $this->getUser())
+                : null
             ,
         ]);
     }
