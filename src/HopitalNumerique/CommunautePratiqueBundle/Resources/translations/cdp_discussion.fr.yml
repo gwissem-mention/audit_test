@@ -110,7 +110,7 @@ discussion:
                 submit:
                     text: Envoyer
         presentation:
-            title: Présentation des membres du groupe
+            title: Présentation des membres
             content:
                 prefix: |
                     Bonjour
