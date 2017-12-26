@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ContextualNavigationBundle\Service;
 
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
@@ -58,6 +59,11 @@ class LostInformationRetriever
     protected $resourceDomainId;
 
     /**
+     * @var DiscussionRepository
+     */
+    protected $discussionRepository;
+
+    /**
      * LostInformationRetriever constructor.
      *
      * @param Entity $entityService
@@ -68,6 +74,7 @@ class LostInformationRetriever
      * @param ReferenceRepository $referenceRepository
      * @param UserRepository $userRepository
      * @param CurrentDomaine $currentDomaine
+     * @param DiscussionRepository $discussionRepository
      */
     public function __construct(
         Entity $entityService,
@@ -77,7 +84,8 @@ class LostInformationRetriever
         AutodiagRepository $autodiagRepository,
         ReferenceRepository $referenceRepository,
         UserRepository $userRepository,
-        CurrentDomaine $currentDomaine
+        CurrentDomaine $currentDomaine,
+        DiscussionRepository $discussionRepository
     ) {
         $this->entityService = $entityService;
         $this->objectRepository = $objetRepository;
@@ -87,6 +95,7 @@ class LostInformationRetriever
         $this->referenceRepository = $referenceRepository;
         $this->userRepository = $userRepository;
         $this->resourceDomainId = $currentDomaine->get()->getId();
+        $this->discussionRepository = $discussionRepository;
     }
 
     /**
@@ -123,7 +132,7 @@ class LostInformationRetriever
             'bestRatedObjects' => $bestRatedObjects,
             'mostViewedObjects' => $mostViewedObjects,
             'mostCommentedObjects' => $this->objectRepository->getMostCommentedObject($resourceDomain, 3),
-            'lastTopics' => $this->topicRepository->getLastTopic(3),
+            'lastTopics' => $this->discussionRepository->getRecentPublicDiscussionActivity($resourceDomain, 3),
         ];
 
         $stats = [

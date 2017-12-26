@@ -18,6 +18,7 @@ services:
             - '@hopitalnumerique_reference.repository.reference'
             - '@hopitalnumerique_user.repository.user'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
 
     HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever:
         class: HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever

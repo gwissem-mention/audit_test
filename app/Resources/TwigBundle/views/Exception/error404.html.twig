@@ -30,8 +30,8 @@
                         <a href="{{ path('hopital_numerique_publication_publication_objet', {'id': item.id}) }}">
                             {{ item.titre }}
                         </a>
-                    {% elseif type == 'topic' %}
-                        <a href="{{ path('ccdn_forum_user_topic_show', {'forumName': item.board.category.forum.name, 'topicId': item.id}) }}">
+                    {% elseif type == 'discussion' %}
+                        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {discussion: item.id}) }}">
                             {{ item.title }}
                         </a>
                     {% endif %}
