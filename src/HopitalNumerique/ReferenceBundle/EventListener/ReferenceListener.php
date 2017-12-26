@@ -28,7 +28,7 @@ class ReferenceListener
 
         /** @var StatRecherche $statRecherche */
         foreach ($toBeRemoved as $statRecherche) {
-            $referenceIds = json_decode($statRecherche->getRequete());
+            $referenceIds = json_decode($statRecherche->getRequete(), true);
 
             if (($key = array_search($reference->getId(), $referenceIds)) !== false) {
                 unset($referenceIds[$key]);
