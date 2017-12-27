@@ -1,3 +1,0 @@
-INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`, `mail_notification_region_referent`)
-VALUES
-(77, 'Nouvelle notation d\'objet', 'Nouveau commentaire et note d\'un objet', '%mailContactDomaineCurrent', 'ANAP - %nomContactDomaineCurrent', 'Bonjour,\n\n%nomUtilisateur %prenomUtilisateur vient de mettre la note de %note sur <a href=\"%urlDocument\">ce document</a> en laissant ce commentaire :\n\n%comment', '{\"%nomUtilisateur\":\"Nom de l\'utilisateur\", \"%prenomUtilisateur\":\"Prénom de l\'utilisateur\", \"%urlDocument\":\"URL du document\", \"%note\":\"Note de l\'utilisateur\", %comment:\"Commentiare de l\'utilissateur\"}', 0);
