@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionDisplayQuery;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Query\Discussion\DiscussionListQuery;
@@ -242,7 +243,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
      * @param Domaine|null $domain
      * @param int $limit
      *
-     * @return Discussion[]
+     * @return Discussion[]|Paginator
      */
     public function getRecentPublicDiscussionActivity(Domaine $domain = null, $limit = 20)
     {
@@ -259,12 +260,12 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
 
-        return $queryBuilder
+        $queryBuilder
             ->addOrderBy('message.createdAt', 'DESC')
             ->setMaxResults($limit)
-
-            ->getQuery()->getResult()
         ;
+
+        return new Paginator($queryBuilder, true);
     }
 
     /**
