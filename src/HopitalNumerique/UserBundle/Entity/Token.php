@@ -46,7 +46,7 @@ class Token
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="usr_id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
 

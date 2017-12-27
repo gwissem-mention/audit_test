@@ -24,7 +24,7 @@ class Viewed
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(referencedColumnName="usr_id", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 

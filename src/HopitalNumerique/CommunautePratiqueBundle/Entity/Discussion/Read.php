@@ -24,7 +24,7 @@ class Read
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(referencedColumnName="usr_id")
+     * @ORM\JoinColumn(referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
 
