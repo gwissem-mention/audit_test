@@ -691,7 +691,7 @@ class ObjetRepository extends EntityRepository
     public function getMostViewedObjectsForUser(User $user)
     {
         return $this->createQueryBuilder('o')
-            ->addSelect('o.id, o.titre, COUNT(c) as viewsCount')
+            ->addSelect('o.id, o.titre, COUNT(DISTINCT c.id) as viewsCount')
             ->join('o.consultations', 'c', Expr\Join::WITH, 'c.user = :userId AND c.contenu IS NULL')
             ->addSelect('c')
             ->setParameter('userId', $user->getId())
@@ -904,7 +904,7 @@ class ObjetRepository extends EntityRepository
     {
 
         $queryBuilder = $this->createQueryBuilder('object')
-            ->select('object.id', 'object.alias', 'object.titre', 'COUNT(view.id) as viewsCount')
+            ->select('object.id', 'object.alias', 'object.titre', 'COUNT(DISTINCT view.id) as viewsCount')
 
             ->join('object.domaines', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
             ->setParameter('domains', $domains)

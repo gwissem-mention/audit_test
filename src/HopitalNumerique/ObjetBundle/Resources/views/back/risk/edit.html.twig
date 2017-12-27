@@ -26,7 +26,7 @@
 {% block body %}
     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
 
-    {%- if risk.id is not null -%}
+    {%- if risk and risk.id is not null -%}
         <a
             href="{{ path('hopitalnumerique_reference_referencement_popin', { entityType: constant('HopitalNumerique\\CoreBundle\\DependencyInjection\\Entity::ENTITY_TYPE_RISK'), entityId: risk.id }) }}"
             class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"

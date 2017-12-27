@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Popup de contact.
@@ -119,7 +120,24 @@ class PopupController extends Controller
                 $nomGroupe = '';
             }
 
-            $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->getUser(), $destinataires, $nomGroupe);
+            $domain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
+            $cdpArticleUrl = $this->generateUrl('hopital_numerique_publication_publication_article', [
+                'id' => $domain->getCommunautePratiqueArticle()->getId(),
+                'alias' => $domain->getCommunautePratiqueArticle()->getAlias(),
+                'categorie' => 'article',
+            ], RouterInterface::ABSOLUTE_URL);
+
+            $this
+                ->get('nodevo_mail.manager.mail')
+                ->sendInvitationMail(
+                    $this->getUser(),
+                    $destinataires,
+                    $nomGroupe,
+                    $domain->getAdresseMailContact(),
+                    $cdpArticleUrl
+                )
+            ;
 
             $this->addFlash('success', 'Votre invitation a été envoyée.');
         } else {

@@ -1412,8 +1412,10 @@ class MailManager extends BaseManager
      * @param User $expediteur
      * @param      $destinataires
      * @param      $nomGroupe
+     * @param string $domainContactMail
+     * @param string $cdpArticleUrl
      */
-    public function sendInvitationMail(User $expediteur, $destinataires, $nomGroupe)
+    public function sendInvitationMail(User $expediteur, $destinataires, $nomGroupe, $domainContactMail, $cdpArticleUrl)
     {
         /** @var Mail $courriel */
         $courriel = $this->findOneById(67);
@@ -1421,6 +1423,8 @@ class MailManager extends BaseManager
         $message = $this->generationMail(null, $courriel, [
             'nomGroupe' => $nomGroupe,
             'u' => $expediteur->getNomPrenom(),
+            'contactMail' => $domainContactMail,
+            'cdpArticleUrl' => $cdpArticleUrl
         ]);
 
         foreach ($destinataires as $destinataire) {

@@ -33,6 +33,7 @@ class ProfileController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setDateLastUpdate(new \DateTime());
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', $this->get('translator')->trans('account.message.save.success'));
