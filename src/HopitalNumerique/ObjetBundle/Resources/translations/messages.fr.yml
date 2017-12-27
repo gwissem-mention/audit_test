@@ -21,6 +21,6 @@ popin:
     comment:
         title: Commentaire notation
         error: Veuillez vous connecter pour attribuer une note
-        input: Commentaire
+        input: Pouvez-vous préciser le motif de votre insatisfaction ?
         submit: Valider
         cancel: Annuler
