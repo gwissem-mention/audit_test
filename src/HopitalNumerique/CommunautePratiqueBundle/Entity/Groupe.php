@@ -572,7 +572,7 @@ class Groupe
         $this->animateurs[] = $animateur;
 
         if (!$this->hasUser($animateur) && !$this->isRegister($animateur)) {
-            $this->addUser($animateur);
+            $this->addUser($animateur, true);
         }
 
         return $this;
