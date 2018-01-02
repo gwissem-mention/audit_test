@@ -5,8 +5,14 @@
 {% endif %}
 
 <div class="discussion-title">
-    <h2>{{ discussion.title }}</h2>
+    <h2>
+        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), discussion.messages.first) %}
+            <a href="{{ path('hopitalnumerique_communautepratique_discussions_edit_reply_discussion', {'discussion': discussion.id, 'message': discussion.messages.first.id, 'group': group ? group.id : null}) }}" class="pull-right">
+                <i class="fa fa-pencil-square-o"></i>
+            </a>
+        {% endif %}
 
+        {{ discussion.title }}</h2>
     {% if isDiscussionSubscribed %}
         <span class="group">
             <b>({{ 'discussion.public.discussion.subscribed'|trans }})</b>

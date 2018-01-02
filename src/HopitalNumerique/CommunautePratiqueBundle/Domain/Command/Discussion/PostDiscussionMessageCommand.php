@@ -12,6 +12,7 @@ class PostDiscussionMessageCommand
 {
     /**
      * @var Discussion $discussion
+     * @Assert\Valid
      */
     public $discussion;
 
@@ -47,6 +48,11 @@ class PostDiscussionMessageCommand
     public $createdAt = null;
 
     /**
+     * @var bool
+     */
+    public $isFirstMessage = false;
+
+    /**
      * PostDiscussionMessageCommand constructor.
      *
      * @param Discussion $discussion
@@ -65,5 +71,7 @@ class PostDiscussionMessageCommand
                 return $file->getId();
             })->toArray();
         }
+
+        $this->isFirstMessage = $message && $discussion->getMessages()->first()->getId() === $message->getId();
     }
 }

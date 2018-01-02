@@ -9,6 +9,7 @@ use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentityDisplayableI
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository")
@@ -40,6 +41,8 @@ class Discussion implements ObjectIdentityDisplayableInterface
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255, min=5)
      */
     protected $title;
 
