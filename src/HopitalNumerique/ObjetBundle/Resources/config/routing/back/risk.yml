@@ -13,3 +13,7 @@ hopitalnumerique_objet_risk_edit:
 hopitalnumerique_objet_risk_delete:
     path:  /delete/{risk}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Risk:delete" }
+
+hopitalnumerique_objet_risk_mass_delete:
+    path:  /mass-delete/{risk}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Back/Risk:deleteMass" }

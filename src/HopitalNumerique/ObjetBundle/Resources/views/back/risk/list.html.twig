@@ -2,6 +2,16 @@
 
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
 {% block grid_column_boolean_cell %}
     <span class="grid_boolean_{{ row.getField(column.id)|default('0') }}" >{{ ('list.archived.value.'~row.getField(column.id)|default('0'))|trans({}, 'risk') }}</span>
 {% endblock grid_column_boolean_cell %}

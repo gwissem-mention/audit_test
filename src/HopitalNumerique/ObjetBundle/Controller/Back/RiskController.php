@@ -2,9 +2,11 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller\Back;
 
+use Doctrine\ORM\ORMException;
 use HopitalNumerique\ObjetBundle\Domain\Command\DeleteRiskCommand;
 use HopitalNumerique\ObjetBundle\Domain\Command\EditRiskCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Form\RiskType;
@@ -75,5 +77,43 @@ class RiskController extends Controller
             'success' => $success,
             'url' => $this->generateUrl('hopitalnumerique_objet_risk_list')
         ]);
+    }
+
+    /**
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return RedirectResponse
+     */
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if ($allPrimaryKeys == 1) {
+            $risks = $this->get('hopitalnumerique_objet.repository.risk')->findAll();
+        } else {
+            $risks = $this->get('hopitalnumerique_objet.repository.risk')->findBy(['id' => $primaryKeys]);
+        }
+
+        $risksCount = count($risks);
+        $riskDeleted = 0;
+        foreach ($risks as $risk) {
+            $em = $this->getDoctrine()->getManager();
+            $risk = $em->getRepository(Risk::class)->find($risk->getId());
+            
+            try {
+                $em->remove($risk);
+                $em->flush($risk);
+                $riskDeleted++;
+            } catch (ORMException $e) {
+                $this->getDoctrine()->resetManager();
+            }
+        }
+
+        if (0 === $riskDeleted) {
+            $this->addFlash('danger', $this->get('translator')->trans('massDelete.notifications.error', [], 'risk'));
+        } else {
+            $this->addFlash('info', $this->get('translator')->trans('massDelete.notifications.success', ['%total%' => $risksCount, '%deleted%' => $riskDeleted], 'risk'));
+        }
+
+        return $this->redirect($this->generateUrl('hopitalnumerique_objet_risk_list'));
     }
 }

@@ -13,6 +13,11 @@ delete:
         success: Risque supprimé
         error: Impossible de supprimer ce risque. D'autres ressources doivent dépendre de ce risque.
 
+massDelete:
+    notifications:
+        error: La suppression a échoué. Tous les risques semblent liés à d'autres ressources.
+        success: %deleted% risques supprimés sur %total%.
+
 edit:
     title: Gestion des risques
 
