@@ -19,6 +19,11 @@
             <div class="message-body">
                 {{ form_start(form) }}
 
+                    {% if form.discussionTitle is defined %}
+                        {{ form_widget(form.discussionTitle) }}
+                        {{ form_errors(form.discussionTitle) }}
+                    {% endif %}
+
                     {{ form_widget(form.content, {'attr': {'class': 'validate[required] content'}}) }}
                     {{ form_errors(form.content) }}
 

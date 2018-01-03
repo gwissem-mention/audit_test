@@ -75,6 +75,10 @@ class PostDiscussionMessageHandler
             $message->addFile($file);
         }
 
+        if ($command->isFirstMessage) {
+            $this->entityManager->flush($command->discussion);
+        }
+
         $this->entityManager->flush($message);
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
