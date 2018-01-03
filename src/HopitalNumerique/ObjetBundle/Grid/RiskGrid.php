@@ -79,7 +79,7 @@ class RiskGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction(new ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Export:exportCsv'));
+        $this->addMassAction(new ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Back\Risk:exportCsv'));
         $this->addMassAction(new ActionMass('Supprimer', 'HopitalNumeriqueObjetBundle:Back\Risk:deleteMass'));
     }
 }

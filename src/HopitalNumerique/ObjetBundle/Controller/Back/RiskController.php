@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Controller\Back;
 
 use Doctrine\ORM\ORMException;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Domain\Command\DeleteRiskCommand;
 use HopitalNumerique\ObjetBundle\Domain\Command\EditRiskCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ObjetBundle\Entity\Risk;
 use HopitalNumerique\ObjetBundle\Form\RiskType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class RiskController extends Controller
 {
@@ -115,5 +117,55 @@ class RiskController extends Controller
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_objet_risk_list'));
+    }
+
+    /**
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
+     *
+     * @return Response
+     */
+    public function exportCsvAction($primaryKeys, $allPrimaryKeys)
+    {
+        $translator = $this->get('translator');
+
+        if ($allPrimaryKeys == 1) {
+            $risks = $this->get('hopitalnumerique_objet.repository.risk')->findAll();
+        } else {
+            $risks = $this->get('hopitalnumerique_objet.repository.risk')->findById($primaryKeys);
+        }
+
+        $colonnes = [
+            'id' => $translator->trans('export.columns.id', [], 'risk'),
+            'label' => $translator->trans('export.columns.label', [], 'risk'),
+            'nature' => $translator->trans('export.columns.nature', [], 'risk'),
+            'private' => $translator->trans('export.columns.private', [], 'risk'),
+            'archived' => $translator->trans('export.columns.archived', [], 'risk'),
+            'domains' => $translator->trans('export.columns.domains', [], 'risk'),
+        ];
+
+        $lines = [];
+        /** @var Risk $risk */
+        foreach ($risks as $risk) {
+            $lines[] = [
+                'id' => $risk->getId(),
+                'label' => $risk->getLabel(),
+                'nature' => $risk->getNature(),
+                'private' => $translator->trans('export.boolean.'.($risk->isPrivate() ? 'yes' : 'no'), [], 'risk'),
+                'archived' => $translator->trans('export.boolean.'.($risk->isArchived() ? 'yes' : 'no'), [], 'risk'),
+                'domains' => implode(',', array_map(function (Domaine $domain) {
+                    return $domain->getNom();
+                    }, $risk->getDomains()->toArray())),
+            ];
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_objet.manager.objet')->exportCsv(
+            $colonnes,
+            $lines,
+            'export-risques.csv',
+            $kernelCharset
+        );
     }
 }

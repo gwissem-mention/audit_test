@@ -18,6 +18,18 @@ massDelete:
         error: La suppression a échoué. Tous les risques semblent liés à d'autres ressources.
         success: %deleted% risques supprimés sur %total%.
 
+export:
+    columns:
+        id: ID
+        label: Titre
+        nature: Nature
+        private: Risque privé
+        archived: Archivé
+        domains: Domaines
+    boolean:
+        yes: Oui
+        no: Non
+
 edit:
     title: Gestion des risques
 
