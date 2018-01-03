@@ -473,7 +473,7 @@ class DiscussionController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function copyToGroupAction(Request $request, Discussion $discussion)
+    public function copyToGroupAction(Request $request, Discussion $discussion, $type = 'copy')
     {
         $groupRepository = $this->get('hopitalnumerique_communautepratique.repository.groupe');
         /** @var User $user */
@@ -509,18 +509,23 @@ class DiscussionController extends Controller
 
         if ($groupId = $request->request->get('group', null)) {
             if ($group = $groupRepository->find($groupId)) {
+                if ('move' === $type) {
+                    $discussion->resetGroups();
+                }
+
                 $discussion->addGroup($group);
                 $this->getDoctrine()->getManager()->flush();
 
-                $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.group_copy.success', [], 'cdp_discussion'));
+                $this->addFlash('success', $this->get('translator')->trans(sprintf('discussion.discussion.actions.group_%s.success', $type), [], 'cdp_discussion'));
 
-                return $this->redirectResponse(null, $discussion);
+                return $this->redirectResponse('move' === $type ? $group : null, $discussion);
             }
         }
 
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/copy.html.twig', [
             'groups' => $groupsAvailable,
             'discussion' => $discussion,
+            'type' => $type,
         ]);
     }
 

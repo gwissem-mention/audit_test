@@ -322,6 +322,16 @@ class Discussion implements ObjectIdentityDisplayableInterface
     }
 
     /**
+     * @return Discussion
+     */
+    public function resetGroups()
+    {
+        $this->groups = new ArrayCollection();
+
+        return $this;
+    }
+
+    /**
      * @param Groupe $group
      *
      * @return Discussion
