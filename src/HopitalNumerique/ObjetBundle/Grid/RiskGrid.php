@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Grid;
 
+use Nodevo\GridBundle\Grid\Action\ActionMass;
 use Nodevo\GridBundle\Grid\Action\DeleteButton;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
@@ -71,6 +72,14 @@ class RiskGrid extends Grid implements GridInterface
         $this->addActionButton($deleteBtn);
     }
 
+
+
+    /**
+     * Ajoute les actions de masses.
+     */
     public function setMassActions()
-    {}
+    {
+        $this->addMassAction(new ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Back\Risk:exportCsv'));
+        $this->addMassAction(new ActionMass('Supprimer', 'HopitalNumeriqueObjetBundle:Back\Risk:deleteMass'));
+    }
 }

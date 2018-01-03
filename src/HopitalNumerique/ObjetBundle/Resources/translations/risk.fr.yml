@@ -13,6 +13,23 @@ delete:
         success: Risque supprimé
         error: Impossible de supprimer ce risque. D'autres ressources doivent dépendre de ce risque.
 
+massDelete:
+    notifications:
+        error: La suppression a échoué. Tous les risques semblent liés à d'autres ressources.
+        success: %deleted% risques supprimés sur %total%.
+
+export:
+    columns:
+        id: ID
+        label: Titre
+        nature: Nature
+        private: Risque privé
+        archived: Archivé
+        domains: Domaines
+    boolean:
+        yes: Oui
+        no: Non
+
 edit:
     title: Gestion des risques
 
