@@ -24,13 +24,9 @@
 
 {% block headerDesc %}
     {% if app.user.hasRoleCmsi %}
-        <p>
-            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par l'ambassadeur de votre région, ce dernier contactera le ou les établissements pour planifier son intervention. Un mail vous parviendra lorsque l'évaluation de l'intervention sera disponible sur la plateforme.
-        </p>
+        {{ 'Module_intervention_nouveau_description_cmsi'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
     {% else %}
-        <p>
-            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par le CMSI et l'ambassadeur de votre région, ce dernier vous contactera afin d'organiser son intervention. Une fois l'intervention réalisée, vous serez sollicités par mail pour l'évaluer.
-        </p>
+        {{ 'Module_intervention_nouveau_description'|nodevoTexteDynamique(domaineCurrent.id)|raw }}
     {% endif %}
 {% endblock %}
 
