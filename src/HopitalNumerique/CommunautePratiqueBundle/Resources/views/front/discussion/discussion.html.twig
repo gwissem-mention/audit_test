@@ -89,8 +89,12 @@
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::DOWNLOAD'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_download_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ 'discussion.discussion.actions.download.label'|trans }}</option>
                 {% endif %}
-                {% if scope == 'public' and discussion.groups.count == 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
-                    <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
+                    {% if scope == 'public' and discussion.groups.count == 0 %}
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                    {% elseif scope == 'group' %}
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_move_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_move.label'|trans }}</option>
+                    {% endif %}
                 {% endif %}
                 {% if discussion.groups.count > 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::SET_AS_PUBLIC'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_public_discussion', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto" data-confirm="{{ ('discussion.discussion.actions.public.confirm.'~(discussion.public ? 'down' : 'up'))|trans }}">{{ ('discussion.discussion.actions.public.label.'~(discussion.public ? 'down' : 'up'))|trans }}</option>
