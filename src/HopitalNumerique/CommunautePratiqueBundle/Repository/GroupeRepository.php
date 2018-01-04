@@ -341,11 +341,12 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Retourne la QueryBuilder des groupes ayant des publications.
      *
+     * @parap Domaine|null $domain
      * @param bool $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
      *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function findWithPublicationsQueryBuilder($isActif = null)
+    public function findWithPublicationsQueryBuilder(Domaine $domain = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
 
@@ -354,6 +355,14 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('publication')
             ->orderBy('groupe.dateDemarrage')
         ;
+
+        if ($domain) {
+            $query
+                ->join('groupe.domains', 'domain', Expr\Join::WITH, 'domain.id = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
         if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
