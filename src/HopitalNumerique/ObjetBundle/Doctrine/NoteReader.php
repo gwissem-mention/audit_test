@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Doctrine;
 
+use HopitalNumerique\ObjetBundle\Entity\Note;
 use HopitalNumerique\ObjetBundle\Manager\NoteManager;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -44,12 +45,11 @@ class NoteReader
     {
         if (null !== $user) {
             $note = $this->noteManager->findOneBy(['objet' => $objet, 'user' => $user]);
-            if (null !== $note) {
-                return $note->getNote();
-            }
+        } else {
+            $note = $this->getNoteSessionForObjet($objet);
         }
 
-        return $this->getNoteSessionForObjet($objet);
+        return $note ? $note->getNote() : null;
     }
 
     /**
@@ -64,12 +64,11 @@ class NoteReader
     {
         if (null !== $user) {
             $note = $this->noteManager->findOneBy(['contenu' => $contenu, 'user' => $user]);
-            if (null !== $note) {
-                return $note->getNote();
-            }
+        } else {
+            $note = $this->getNoteSessionForContenu($contenu);
         }
 
-        return $this->getNoteSessionForContenu($contenu);
+        return $note ? $note->getNote() : null;
     }
 
     /**
@@ -108,18 +107,7 @@ class NoteReader
      */
     public function userCanVote($entity, User $user = null)
     {
-        if (null !== $user) { // Un utilisateur connecté peut toujours modifier son vote
-            return true;
-        }
-
-        if ($entity instanceof Objet) {
-            return !$this->hasNoteForObjetAndUser($entity, $user);
-        }
-        if ($entity instanceof Contenu) {
-            return !$this->hasNoteForContenuAndUser($entity, $user);
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -127,9 +115,9 @@ class NoteReader
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet Objet
      *
-     * @return int|null Note
+     * @return Note|null
      */
-    private function getNoteSessionForObjet(Objet $objet)
+    public function getNoteSessionForObjet(Objet $objet)
     {
         return $this->getNoteSessionForEntity('objet', $objet->getId());
     }
@@ -139,9 +127,9 @@ class NoteReader
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
      *
-     * @return int|null Note
+     * @return Note|null
      */
-    private function getNoteSessionForContenu(Contenu $contenu)
+    public function getNoteSessionForContenu(Contenu $contenu)
     {
         return $this->getNoteSessionForEntity('contenu', $contenu->getId());
     }
@@ -152,13 +140,13 @@ class NoteReader
      * @param int $entityType Type d'entité
      * @param int $entityId   ID de l'entité
      *
-     * @return int|null Note
+     * @return Note|null
      */
     private function getNoteSessionForEntity($entityType, $entityId)
     {
         $notesSession = $this->session->get(NoteSaver::NOTE_SESSION, null);
         $hasNote = (null !== $notesSession && array_key_exists($entityType, $notesSession) && array_key_exists($entityId, $notesSession[$entityType]));
 
-        return $hasNote ? intval($notesSession[$entityType][$entityId]) : null;
+        return $hasNote ? $this->noteManager->findOneById($notesSession[$entityType][$entityId]) : null;
     }
 }
