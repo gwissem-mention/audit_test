@@ -5,6 +5,8 @@ var NewAccountCart;
         this.reportEditComponent = reportEditComponent;
 
         this.init();
+
+        this.changeAddButtonState();
     };
 
     NewAccountCart.prototype = {
