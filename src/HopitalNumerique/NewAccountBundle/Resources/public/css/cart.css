@@ -19,7 +19,7 @@ table.dataTable thead .cart-items-all::after {
 }
 
 #my-account .icon.cart-items-icon::before {
-    content: "\f07a";
+    content: "\f291";
 }
 
 #my-account .icon.report-settings::before {
