@@ -128,11 +128,13 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     /**
      * Retourne la QueryBuilder des groupes ayant des publications.
      *
+     * @param Domaine|null $domain
+     *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function findWithPublications()
+    public function findWithPublications(Domaine $domain = null)
     {
-        return $this->getRepository()->findWithPublicationsQueryBuilder(true)->getQuery()->getResult();
+        return $this->getRepository()->findWithPublicationsQueryBuilder($domain, true)->getQuery()->getResult();
     }
 
     /**

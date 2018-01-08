@@ -62,6 +62,12 @@ discussion:
                 modal:
                     title: Copier la discussion dans le groupe "%groupName%"
                     empty: Aucun groupe disponible
+            group_move:
+                label: Déplacer dans un autre groupe
+                success: Discussion déplacée dans le groupe.
+                modal:
+                    title: Déplacer la discussion dans le groupe "%groupName%"
+                    empty: Aucun groupe disponible
             cart:
                 label: Ajouter au panier
             subscription:

@@ -182,6 +182,10 @@ class PublicationController extends Controller
             ]
         );
 
+        $objectRelations = array_filter($objectRelations, function (ObjectIdentity $objectIdentity) {
+            return !$objectIdentity->getObject() instanceof Objet || !$objectIdentity->getObject()->isArticle();
+        });
+
         $subscribed = $this->get(SubscriptionRepository::class)->findOneBy([
             'user' => $this->getUser(),
             'objet' => $objet,
@@ -455,6 +459,10 @@ class PublicationController extends Controller
             $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($objet), $relationAcceptedClasses),
             $objectIdentityRepository->getBidirectionalRelationsObjects(ObjectIdentity::createFromDomainObject($contenu), $relationAcceptedClasses)
         );
+
+        $objectRelations = array_filter($objectRelations, function (ObjectIdentity $objectIdentity) {
+            return !$objectIdentity->getObject() instanceof Objet || !$objectIdentity->getObject()->isArticle();
+        });
 
         if ($request->getSession()->has('subscribeWanted')) {
             $command = new SubscribeToObjectCommand($this->getUser(), $objet, $contenu);

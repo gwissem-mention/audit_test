@@ -163,3 +163,15 @@
     padding-left: 0;
     color: #d60030;
 }
+
+.add-to-cart-btn {
+    padding: 0;
+}
+
+.add-to-cart-btn.flat img {
+    width: 22px;
+}
+
+.add-to-cart-btn img {
+    margin: 0 !important;
+}

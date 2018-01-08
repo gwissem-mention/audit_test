@@ -24,7 +24,7 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         }
 
         $groupes = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-            ->findWithPublications();
+            ->findWithPublications($this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
         $groupesAdapter = new ArrayAdapter($groupes);
         $groupesPager = new Pagerfanta($groupesAdapter);
         $groupesPager->setMaxPerPage(2);
@@ -50,7 +50,7 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
                 'communautePratiqueUrl' => $this->get('communautepratique_router')->getUrl(),
                 'groupe' => $groupe,
                 'groupes' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findWithPublications(),
+                    ->findWithPublications($this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()),
             ]
         );
     }

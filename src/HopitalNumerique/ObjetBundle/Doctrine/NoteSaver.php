@@ -73,6 +73,8 @@ class NoteSaver
         if (null !== $user) {
             /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['objet' => $objet, 'user' => $user]);
+        } else {
+            $noteEntity = $this->noteReader->getNoteSessionForObjet($objet);
         }
 
         if (null === $noteEntity) {
@@ -92,7 +94,7 @@ class NoteSaver
 
         $this->noteManager->save($noteEntity);
         $this->dispatcher->dispatch(Events::OBJECT_NOTED, new NoteEvent($noteEntity));
-        $this->saveNoteSessionForObjet($note, $objet);
+        $this->saveNoteSessionForObjet($noteEntity, $objet);
     }
 
     /**
@@ -110,6 +112,8 @@ class NoteSaver
         if (null !== $user) {
             /** @var Note $noteEntity */
             $noteEntity = $this->noteManager->findOneBy(['contenu' => $contenu, 'user' => $user]);
+        } else {
+            $noteEntity = $this->noteReader->getNoteSessionForContenu($contenu);
         }
 
         if (null === $noteEntity) {
@@ -130,17 +134,17 @@ class NoteSaver
 
         $this->noteManager->save($noteEntity);
         $this->dispatcher->dispatch(Events::OBJECT_NOTED, new NoteEvent($noteEntity));
-        $this->saveNoteSessionForContenu($note, $contenu);
+        $this->saveNoteSessionForContenu($noteEntity, $contenu);
     }
 
     /**
      * Enregistre la note d'un objet en session.
      *
-     * @param int                                           $note  Note
+     * @param Note $note
      * @param Objet $objet Objet
      * @param User|null $user  Utilisateur
      */
-    private function saveNoteSessionForObjet($note, Objet $objet)
+    private function saveNoteSessionForObjet(Note $note, Objet $objet)
     {
         $this->saveNoteSessionForEntity($note, 'objet', $objet->getId());
     }
@@ -148,11 +152,11 @@ class NoteSaver
     /**
      * Enregistre la note d'un contenu en session.
      *
-     * @param int                                           $note    Note
+     * @param Note $note
      * @param Contenu $contenu Contenu
      * @param User|null $user    Utilisateur
      */
-    private function saveNoteSessionForContenu($note, Contenu $contenu)
+    private function saveNoteSessionForContenu(Note $note, Contenu $contenu)
     {
         $this->saveNoteSessionForEntity($note, 'contenu', $contenu->getId());
     }
@@ -160,11 +164,11 @@ class NoteSaver
     /**
      * Enregistre la note d'une entité en session.
      *
-     * @param int $note       Note
+     * @param Note $note
      * @param int $entityType Type d'entité
      * @param int $entityId   ID de l'entité
      */
-    private function saveNoteSessionForEntity($note, $entityType, $entityId)
+    private function saveNoteSessionForEntity(Note $note, $entityType, $entityId)
     {
         $noteSession = $this->session->get(self::NOTE_SESSION, []);
 
@@ -173,7 +177,7 @@ class NoteSaver
         }
 
         if (!array_key_exists($entityId, $noteSession[$entityType])) {
-            $noteSession[$entityType][$entityId] = $note;
+            $noteSession[$entityType][$entityId] = $note->getId();
         }
 
         $this->session->set(self::NOTE_SESSION, $noteSession);
