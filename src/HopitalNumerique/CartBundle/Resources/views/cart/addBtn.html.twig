@@ -1,6 +1,6 @@
-{% set cssClasses = "btn btn-link " ~ btnSize|default('btn-sm') %}
-{% if flatStyle is defined and flatStyle %}
-    {% set cssClasses = cssClasses ~ " flat" %}
+{% set cssClasses = '' %}
+{% if flatStyle is not defined or flatStyle != true %}
+    {% set cssClasses = "btn btn-default " ~ btnSize|default('btn-sm') %}
 {% endif %}
 {% if  cssClass is defined and cssClass is not null %}
     {% set cssClasses = cssClasses ~ ' ' ~ cssClass %}
@@ -10,9 +10,9 @@
         objectType: objectType,
         objectId: objectId
     }) }}"
-    class="add-to-cart-btn {{ cssClasses }}"
+    class="{{ cssClasses }}"
     title="{{ 'addToCart.title'|trans({}, 'cart') }}"
     data-toggle="tooltip"
 >
-    <img src="{{ asset('bundles/hopitalnumeriquecart/images/cart.png') }}" alt="">
+    <i class="fa fa-shopping-cart"></i>
 </a>
