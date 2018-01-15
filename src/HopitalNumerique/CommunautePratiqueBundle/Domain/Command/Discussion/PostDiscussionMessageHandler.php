@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageCreatedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\FichierBundle\Entity\File;
@@ -46,17 +47,21 @@ class PostDiscussionMessageHandler
 
     /**
      * @param PostDiscussionMessageCommand $command
+     *
+     * @return Message|null
      */
     public function handle(PostDiscussionMessageCommand $command)
     {
         if (null !== $command->message) {
             $message = $command->message;
             $message->setContent($command->content);
+            $isNew = false;
         } else {
             $message = new Message($command->discussion, $command->content, $command->author);
             if ($command->createdAt) {
                 $message->setCreatedAt($command->createdAt);
             }
+            $isNew = true;
             $this->entityManager->persist($message);
         }
 
@@ -81,7 +86,11 @@ class PostDiscussionMessageHandler
 
         $this->entityManager->flush($message);
 
-        $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
+        if ($isNew) {
+            $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
+        } else {
+            $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
+        }
 
         $this->entityManager->flush($message);
 
