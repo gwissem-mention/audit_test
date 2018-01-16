@@ -11,7 +11,7 @@
     </search-engine>
 
     <script>
-        sessionStorage.setItem('searchengine', '{{ config|raw }}');
+        sessionStorage.setItem('searchengine', JSON.stringify({{ config|raw }}));
         sessionStorage.setItem('authentication_token', '{{ token|raw }}');
     </script>
 
