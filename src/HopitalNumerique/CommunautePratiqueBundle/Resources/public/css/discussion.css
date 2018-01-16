@@ -38,13 +38,25 @@
     color: #ec0034;
 }
 
-.discussions .wrapper {
-    display: flex;
-    align-items: flex-start;
+@media screen and (min-width: 768px) {
+    .discussions .wrapper {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .discussions .wrapper .list {
+        width: 500px;
+    }
 }
 
-.discussions .wrapper .list {
-    width: 500px;
+@media screen and (max-width: 767px) {
+    .discussions .wrapper {
+        margin: 0 -30px;
+    }
+
+    .discussions .wrapper .list {
+        width: 100%;
+    }
 }
 
 .discussions .wrapper .list .push {
@@ -64,6 +76,10 @@
     box-shadow: 0 3px 2px 0 #ddd;
     cursor: hand;
     box-sizing: border-box !important;
+}
+
+.discussions .wrapper .list .items .item {
+    border-left: 3px solid #ec0034;
 }
 
 .discussions .wrapper .list .item.droppable-over {
