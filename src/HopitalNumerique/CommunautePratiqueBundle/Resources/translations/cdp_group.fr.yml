@@ -1,4 +1,5 @@
 group:
+    help_group: Groupe d'entre-aide
     tabs:
         description:
             title: Description

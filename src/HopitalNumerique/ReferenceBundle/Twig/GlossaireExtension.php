@@ -35,6 +35,8 @@ class GlossaireExtension extends \Twig_Extension
 
     private $badPortionsConverted = [];
 
+    protected $wordsFound = [];
+
     /**
      * Constructeur.
      *
@@ -90,17 +92,18 @@ class GlossaireExtension extends \Twig_Extension
      *
      * @param $text
      * @param $entity
+     * @param string|null $group -> Add only one time the glossary words for a particular group
      *
      * @return bool
      */
-    public function add($text, $entity)
+    public function add($text, $entity, $group = null)
     {
         $glossaireReferences = $this->glossaireReader->getGlossaireReferencesByEntityAndDomaine(
             $entity,
             $this->currentDomaine->get()
         );
         if (count($glossaireReferences) > 0) {
-            return $this->parseTextWithReferences($text, $glossaireReferences);
+            return $this->parseTextWithReferences($text, $glossaireReferences, $group);
         }
 
         return $text;
@@ -111,20 +114,27 @@ class GlossaireExtension extends \Twig_Extension
      *
      * @param string $text
      * @param Reference[] $references
+     * @param string|null $group -> Add only one time the glossary words for a particular group
      *
      * @return string
      */
-    private function parseTextWithReferences($text, $references)
+    private function parseTextWithReferences($text, $references, $group = null)
     {
         $testString = [];
         $text = $this->convertBadPortionsToAsciiHtml($text);
+
         foreach ($references as $glossaireReference) {
             $wordSearchPattern = '/([\;\<\>\,\"\(\)\'’\& ]{1,1}|^)(' .preg_quote($glossaireReference->getSigleHtmlForGlossaire(), '/').
                 ')([\;\<\>\,\"\(\)\'’\.\& ]{1,1}|$)/' .($glossaireReference->isCasseSensible() ? '' : 'i');
             preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
             foreach ($wordSearchPatternMatches[0] as $key => $wordSearchPatternMatch) {
-                if (!in_array($glossaireReference->getLibelle(), $testString)) {
+                if (null === $group && !in_array($glossaireReference->getLibelle(), $testString) ||
+                    (
+                        $group && (!isset($this->wordsFound[$group]) ||
+                        !in_array($glossaireReference->getLibelle(), $this->wordsFound[$group]))
+                    )
+                ) {
                     $html =
                         '<a class="acronym fancybox fancybox.ajax" href="' . $this->router->generate(
                             'hopitalnumerique_reference_glossaire_popin',
@@ -138,6 +148,12 @@ class GlossaireExtension extends \Twig_Extension
                     $html = $wordSearchPatternMatches[1][$key] . $html . $wordSearchPatternMatches[3][$key];
                     $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
                     $testString[] = $glossaireReference->getLibelle();
+                    if ($group) {
+                        if (!isset($this->wordsFound[$group])) {
+                            $this->wordsFound[$group] = [];
+                        }
+                        $this->wordsFound[$group][] = $glossaireReference->getLibelle();
+                    }
                 }
             }
         }

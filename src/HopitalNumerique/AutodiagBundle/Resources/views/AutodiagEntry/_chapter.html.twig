@@ -1,17 +1,17 @@
 <div class="chapter" data-chapter="{{ chapter.id }}">
     <div class="chapter-title">
         {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'autodiag_chapter', objectId: chapter.id, cssClass: 'pull-right'}) }}
-        {{ chapter.title|glossaire_add(autodiag)|raw }}
+        {{ chapter.title|glossaire_add(autodiag, 'autodiag')|raw }}
     </div>
 
     <div class="chapter-desc">
         <p>
-            {{ chapter.description|glossaire_add(autodiag)|raw }}
+            {{ chapter.description|glossaire_add(autodiag, 'autodiag')|raw }}
         </p>
     </div>
 
     <div class="chapter-label">
-        <span>{{ chapter.extendedLabel|glossaire_add(autodiag)|raw }}</span>
+        <span>{{ chapter.extendedLabel|glossaire_add(autodiag, 'autodiag')|raw }}</span>
         <div class="not-concerned pull-right" title="{{ 'ad.front.chapter.not_concerned_title'|trans }}">
             <i class="fa fa-ban"></i>
             {{ "ad.front.chapter.not_concerned"|trans }}
@@ -20,7 +20,7 @@
 
     <div class="chapter-additionnal">
         <p>
-            {{ chapter.additionalDescription|glossaire_add(autodiag)|raw }}
+            {{ chapter.additionalDescription|glossaire_add(autodiag, 'autodiag')|raw }}
         </p>
     </div>
 
