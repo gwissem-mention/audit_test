@@ -43,7 +43,7 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block title %}{{ block('title_communaute_pratique')|striptags }} - Communauté de pratique - {{ parent() }}{% endblock %}
+{% block title %}{{ block('title_communaute_pratique') }} - Communauté de pratique - {{ parent() }}{% endblock %}
 
 {% block body %}
 
@@ -54,7 +54,7 @@
                 <li><a href="{{ path('hopital_numerique_homepage') }}">Accueil</a></li>
                 {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}">Communauté de pratique</a></li>{% endblock %}
                 {% block communaute_pratique_breadcrumbs_parent %}{% endblock %}
-                <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
+                <li class="active">{{ block('title_communaute_pratique') }}</li>
             </ol>
         {% endblock %}
 
