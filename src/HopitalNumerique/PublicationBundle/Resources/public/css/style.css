@@ -141,6 +141,9 @@
     #publication #publication-resume h2 acronym {
         color: #d60030;
     }
+    #publication #publication-resume table {
+        width: auto;
+    }
 
     /* Bloc Ressources associées */
     #publication #productions-associes{ margin-top: 30px; }
