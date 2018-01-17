@@ -53,7 +53,9 @@ var Discussion;
         },
 
         init: function () {
-            var that = this;
+            var that = this,
+                loader,
+                discussion = document.querySelector('.discussions');
 
             that.discussionEvents();
             that.initLazyLoad();
@@ -70,12 +72,14 @@ var Discussion;
                     return;
                 }
 
-                var loader = that.$discussion.nodevoLoader().start();
+                loader = that.$container.nodevoLoader().start();
 
                 that.setActiveDiscussion($(this));
                 window.history.pushState("", "", $(this).data('url'));
 
                 $.get($(this).attr('href'), function (response) {
+                    discussion.dataset.search = 'visualization';
+
                     loader.finished();
                     that.$discussion.html(response);
                     that.$list.find('.item').removeClass('active');
@@ -96,24 +100,32 @@ var Discussion;
                 })
             });
 
+            document.querySelector('.back-btn').addEventListener('click', function (e) {
+                e.preventDefault();
+                window.history.pushState("", "", $(this).attr('href'));
+                discussion.dataset.search = 'browsing';
+            });
+
             that.setActiveDiscussion(that.$list.find('.item.active'));
 
             this.initEditor('#new-discussion-modal');
             this.discussionReading();
             this.dragDropEvent();
 
-            $(window).scroll(function() {
-                if ($(this).scrollTop() >= that.activeDiscussion.top) {
-                    if (!that.activeDiscussion.pinned) {
-                        that.activeDiscussion.pinned = true;
+            $(window).scroll(function (e) {
+                if (e.currentTarget.innerWidth > 767) {
+                    if ($(this).scrollTop() >= that.activeDiscussion.top) {
+                        if (!that.activeDiscussion.pinned) {
+                            that.activeDiscussion.pinned = true;
 
-                        that.activeDiscussion.element.css({
-                            position: 'fixed',
-                            left: that.activeDiscussion.left,
-                            top: 0,
-                            width: that.activeDiscussion.width,
-                            zIndex: 100
-                        });
+                            that.activeDiscussion.element.css({
+                                position: 'fixed',
+                                left: that.activeDiscussion.left,
+                                top: 0,
+                                width: that.activeDiscussion.width,
+                                zIndex: 100
+                            });
+                        }
                     }
                 }
 

@@ -115,7 +115,10 @@
         border-bottom: 3px solid #ec0034;
     }
 
-    .group .tab-container .discussions .add, .discussions .add {
+    .group .tab-container .discussions .add,
+    .discussions .add,
+    .group .tab-container .discussions .back,
+    .discussions .back {
         border-top: 0;
         border-left: 0;
         border-right: 0;

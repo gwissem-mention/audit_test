@@ -39,8 +39,9 @@
     </div>
 {% endif %}
 
-<div class="discussions" data-base-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public') : path('hopitalnumerique_communautepratique_groupe_view', {'groupe': group.id})~'#discussion' }}">
-
+<div class="discussions" data-search="{{ discussionPreSelected ? 'visualization' : 'browsing' }}"
+     data-base-url="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public') : path('hopitalnumerique_communautepratique_groupe_view', {'groupe': group.id})~'#discussion' }}"
+>
     <div class="add">
         {% if newDiscussionForm is not null %}
             <a href="#" class="add-btn" data-toggle="modal" data-target="#new-discussion-modal">
@@ -53,6 +54,14 @@
                 {{ 'discussion.new_discussion.text'|trans }}
             </a>
         {% endif %}
+    </div>
+    <div class="back">
+        <a href="{{ scope == 'public' ? path('hopitalnumerique_communautepratique_discussions_public') : path('hopitalnumerique_communautepratique_groupe_view', {'groupe': group.id}) }}"
+           class="back-btn"
+        >
+            <i class="icon fa fa-chevron-circle-left"></i>
+            {{ 'discussion.back'|trans }}
+        </a>
     </div>
     <div class="wrapper">
         {% set lazyLoadStep = 10 %}
