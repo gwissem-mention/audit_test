@@ -56,6 +56,7 @@ class DiscussionController extends Controller
      */
     public function listAction(Groupe $group = null, Discussion $discussion = null, Objet $object = null)
     {
+        $discussionPreSelected = $discussion != null;
         $discussionRepository = $this->get(DiscussionRepository::class);
 
         $selectedDomain = $this->get(SelectedDomainStorage::class)->getSelectedDomain();
@@ -114,6 +115,7 @@ class DiscussionController extends Controller
         }
 
         $options = [
+            'discussionPreSelected' => $discussionPreSelected,
             'isDiscussionSubscribed' => isset($discussionSubscribed) ? $discussionSubscribed : false,
             'preopenNewDiscussionModal' => isset($newDiscussionForm) && $object,
             'group' => $group,

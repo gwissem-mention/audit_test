@@ -22,28 +22,30 @@
     </script>
 {% endblock %}
 
-{% block title_communaute_pratique %}{{ 'group.help_group'|trans }} "{{ groupe }}"{% endblock %}
+{% block title_communaute_pratique %} {{ 'group.help_group'|trans }} {% endblock %}
+
+{% block add_suggestion %}"{{ groupe }}"{% endblock %}
 
 {% block communaute_pratique_actions_before %}
     <div class="clearfix"></div>
-    <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"
-       class="previous-btn btn btn-default btn-sm pull-left"
-       data-toggle="tooltip"
-       data-placement="top"
-       data-html="true"
-       title="{{ 'group.icon_tooltip.return'|trans }}"
-    >
-        <i class="fa fa-reply"></i>
-    </a>
-    {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
+    <div class="cdp-actions-before">
+        <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"
+           class="previous-btn btn btn-default btn-sm pull-left"
+           data-toggle="tooltip"
+           data-placement="top"
+           data-html="true"
+           title="{{ 'group.icon_tooltip.return'|trans }}"
+        >
+            <i class="fa fa-reply"></i>
+        </a>
+        {{ include('@HopitalNumeriqueCart/cart/addBtn.html.twig', {objectType: 'cdp_group', objectId: groupe.id, cssClass: 'pull-left'}) }}
+    </div>
 {% endblock %}
 
 {% block communaute_pratique_actions %}
-    <div style= "float:right">
-        {{ parent() }}
-        {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-        {{ communaute_pratique.display_action_contact_invitation(groupe.id) }}
-    </div>
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+    {{ communaute_pratique.display_action_contact_invitation(groupe.id) }}
 {% endblock %}
 
 {% block communaute_pratique_sommaire %}{% endblock %}
@@ -55,28 +57,32 @@
 
             <a href="#description" class="tab">
                 <span class="tab-title">{{ 'group.tabs.description.title'|trans }}</span>
-                {{ groupe.descriptionCourte|parsePublication|striptags|unescape|truncate(140) }}
-                <span data-toggle="modal" data-target="#description-details-modal" class="load-more-link">{{ 'group.description.load_more'|trans }}</span>
+                <div class="hidden-xs">
+                    {{ groupe.descriptionCourte|parsePublication|striptags|unescape|truncate(140) }}
+                    <span data-toggle="modal" data-target="#description-details-modal" class="load-more-link">{{ 'group.description.load_more'|trans }}</span>
+                </div>
             </a>
 
             <a href="#discussion" class="tab discussion ajax active">
                 <span class="tab-title">{{ 'group.tabs.discussion.title'|trans }}</span>
 
-                {% if (discussionCounter.message + discussionCounter.document + discussionCounter.discussion) > 0%}
-                    <ul>
-                        <li>{{ 'group.tabs.discussion.new_comments'|transchoice(discussionCounter.message, {'%countTxt%': '<b>'~discussionCounter.message~'</b>'})|raw }}</li>
-                        <li>{{ 'group.tabs.discussion.new_documents'|transchoice(discussionCounter.document, {'%countTxt%': '<b>'~discussionCounter.document~'</b>'})|raw }}</li>
-                        <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(discussionCounter.discussion, {'%countTxt%': '<b>'~discussionCounter.discussion~'</b>'})|raw }}</li>
-                    </ul>
-                {% else %}
-                    <span class="nothing">{{ 'group.tabs.discussion.nothing_new'|trans }}</span>
-                {% endif %}
+                <div class="hidden-xs">
+                    {% if (discussionCounter.message + discussionCounter.document + discussionCounter.discussion) > 0%}
+                        <ul>
+                            <li>{{ 'group.tabs.discussion.new_comments'|transchoice(discussionCounter.message, {'%countTxt%': '<b>'~discussionCounter.message~'</b>'})|raw }}</li>
+                            <li>{{ 'group.tabs.discussion.new_documents'|transchoice(discussionCounter.document, {'%countTxt%': '<b>'~discussionCounter.document~'</b>'})|raw }}</li>
+                            <li>{{ 'group.tabs.discussion.new_discussions'|transchoice(discussionCounter.discussion, {'%countTxt%': '<b>'~discussionCounter.discussion~'</b>'})|raw }}</li>
+                        </ul>
+                    {% else %}
+                        <span class="nothing">{{ 'group.tabs.discussion.nothing_new'|trans }}</span>
+                    {% endif %}
+                </div>
             </a>
 
             <a href="#members" class="tab ajax">
                 <span class="tab-title">{{ 'group.tabs.members.title'|trans }}</span>
 
-                <ul>
+                <ul class="hidden-xs">
                     <li>{{ 'group.tabs.members.members_count'|transchoice(groupe.validatedInscriptions|length, {'%countTxt%': '<b>'~groupe.validatedInscriptions|length~'</b>'})|raw }}</li>
                     {% if is_granted('validate_registration', groupe) %}
                         <li>{{ 'group.tabs.members.members_to_validate_count'|transchoice(groupe.inscriptionsToValidate|length, {'%countTxt%': '<b>'~groupe.inscriptionsToValidate|length~'</b>'})|raw }}</li>

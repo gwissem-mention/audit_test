@@ -60,7 +60,12 @@
 
         <div class="clearfix"></div>
 
-        <h1>{% block title_communaute_pratique %}{% endblock %}</h1> {% block add_suggestion %}{% endblock %}
+        <div class="cdp-titles">
+            <h1>
+                {% block title_communaute_pratique %}{% endblock %}
+                <span class="cdp-group">{% block add_suggestion %}{% endblock %}</span>
+            </h1>
+        </div>
 
         {% block communaute_pratique_actions_before %}{% endblock %}
         <div class="communaute-pratique-actions pull-right">
