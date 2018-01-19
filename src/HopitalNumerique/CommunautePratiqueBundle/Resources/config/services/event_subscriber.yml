@@ -8,6 +8,7 @@ services:
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
             - '@nodevo_mail.manager.mail'
             - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
+            - '@hopitalnumerique_user.repository.user'
         tags:
             - { name: kernel.event_subscriber }
     HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber:
@@ -17,6 +18,7 @@ services:
             - '@translator'
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@twig'
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
         tags:
             - { name: kernel.event_subscriber }
 

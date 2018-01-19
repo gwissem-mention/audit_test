@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\EventListener\Group;
 
 use Doctrine\ORM\EntityManagerInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -35,19 +36,31 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
     protected $twig;
 
     /**
+     * @var UserSubscription
+     */
+    protected $userSubscription;
+
+    /**
      * GroupRegistrationSubscriber constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param TranslatorInterface $translator
      * @param CurrentDomaine $currentDomain
      * @param \Twig_Environment $twig
+     * @param UserSubscription $userSubscription
      */
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, CurrentDomaine $currentDomain, \Twig_Environment $twig)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
+        CurrentDomaine $currentDomain,
+        \Twig_Environment $twig,
+        UserSubscription $userSubscription
+    ) {
         $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->currentDomain = $currentDomain;
         $this->twig = $twig;
+        $this->userSubscription = $userSubscription;
     }
 
     /**
@@ -58,8 +71,19 @@ class GroupRegistrationSubscriber implements EventSubscriberInterface
         return [
             Events::GROUP_REGISTRATION => [
                 ['generatePresentationMessage', 0],
+                ['autoSubscribe', 0],
             ],
         ];
+    }
+
+    /**
+     * @param GroupRegistrationEvent $event
+     */
+    public function autoSubscribe(GroupRegistrationEvent $event)
+    {
+        foreach ($event->getGroup()->getDiscussions() as $discussion) {
+            $this->userSubscription->subscribe($discussion, $event->getUser());
+        }
     }
 
     /**

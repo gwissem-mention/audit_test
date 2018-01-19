@@ -211,6 +211,22 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param Domaine|null $domain
+     *
+     * @return array
+     */
+    public function getPublicDiscussionForDomain(Domaine $domain)
+    {
+        return $this->createQueryBuilder('discussion')
+            ->andWhere('discussion.public = TRUE')
+            ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
+            ->setParameter('domain', $domain->getId())
+
+            ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Domaine|null $domain
      * @param int $limit
      *
      * @return Discussion[]
