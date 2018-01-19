@@ -11,6 +11,7 @@ use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -48,6 +49,11 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     protected $userSubscription;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * MessagePostedSubscriber constructor.
      *
      * @param ReadRepository $readRepository
@@ -56,6 +62,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
      * @param SubscriptionRepository $subscriptionRepository
      * @param MailManager $mailManager
      * @param UserSubscription $userSubscription
+     * @param UserRepository $userRepository
      */
     public function __construct(
         ReadRepository $readRepository,
@@ -63,7 +70,8 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         AuthorizationCheckerInterface $authorizationChecker,
         SubscriptionRepository $subscriptionRepository,
         MailManager $mailManager,
-        UserSubscription $userSubscription
+        UserSubscription $userSubscription,
+        UserRepository $userRepository
     ) {
         $this->readRepository = $readRepository;
         $this->entityManager = $entityManager;
@@ -71,6 +79,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         $this->subscriptionRepository = $subscriptionRepository;
         $this->mailManager = $mailManager;
         $this->userSubscription = $userSubscription;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -96,6 +105,24 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     public function autoSubscribe(MessagePostedEvent $event)
     {
         $this->userSubscription->subscribe($event->getMessage()->getDiscussion(), $event->getMessage()->getUser());
+
+        if ($event->getMessage()->getDiscussion()->getMessages()->count() > 1) {
+            return;
+        }
+
+        if ($event->getMessage()->getDiscussion()->isPublic()) {
+            foreach ($event->getMessage()->getDiscussion()->getDomains() as $domain) {
+                foreach ($this->userRepository->getCommunautePratiqueMembresQueryBuilder(null, $domain)->getQuery()->getResult() as $user) {
+                    $this->userSubscription->subscribe($event->getMessage()->getDiscussion(), $user);
+                }
+            }
+        } else {
+            foreach ($event->getMessage()->getDiscussion()->getGroups() as $group) {
+                foreach ($group->getUsers() as $user) {
+                    $this->userSubscription->subscribe($event->getMessage()->getDiscussion(), $user);
+                }
+            }
+        }
     }
 
     /**
