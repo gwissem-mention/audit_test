@@ -105,10 +105,15 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (null !== $user) {
+            $query
+                ->addSelect('CASE WHEN (inscription.user IS NOT NULL) THEN 1 ELSE 0 as HIDDEN userInGroup')
+                ->leftJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
+                ->setParameter('user', $user)
+            ;
+
             if ($checkRegistration) {
                 $query
-                    ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
-                    ->setParameter('user', $user)
+                    ->andWhere('inscription.user IS NOT NULL')
                 ;
             }
 
@@ -120,7 +125,10 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ;
             }
         } else {
-            $query->andWhere('groupe.requiredRoles is empty');
+            $query
+                ->addSelect('0 as HIDDEN userInGroup')
+                ->andWhere('groupe.requiredRoles is empty')
+            ;
         }
 
         if (null !== $isActif) {
@@ -131,8 +139,12 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         }
 
         $query
-            ->orderBy('groupe.dateDemarrage')
-            ->orderBy('groupe.dateFin')
+            ->leftJoin('groupe.discussions', 'discussion')
+            ->leftJoin('discussion.messages', 'message', Expr\Join::WITH, 'message.published = TRUE')
+            ->addOrderBy('userInGroup', 'DESC')
+            ->addOrderBy('message.createdAt', 'DESC')
+            ->addOrderBy('groupe.dateDemarrage')
+            ->addOrderBy('groupe.dateFin')
         ;
 
         return $query->getQuery()->getResult();

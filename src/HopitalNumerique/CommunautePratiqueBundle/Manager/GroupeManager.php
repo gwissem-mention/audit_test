@@ -4,14 +4,14 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Event\GroupEvent;
-use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Manager de Document.
+ * @method GroupeRepository getRepository()
  */
 class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
