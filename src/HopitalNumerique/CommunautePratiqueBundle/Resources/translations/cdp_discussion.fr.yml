@@ -139,7 +139,7 @@ discussion:
             creation_date: Date de création
             message: Message
     icon_tooltip:
-        helpfulMessage: Contribution d'intérêt
+        helpfulMessage: Met le message en fond jaune pour être plus visible des utilisateurs – Fonction réservée aux administrateurs et animateurs
         recommended: Discussion recommandée par la communauté
         new: Nouvelle discussion
         newMessage: Nouveaux messages
