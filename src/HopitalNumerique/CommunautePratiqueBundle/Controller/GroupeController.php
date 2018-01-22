@@ -197,7 +197,15 @@ class GroupeController extends Controller
         }
 
         $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        if (!$groupe->getDomains()->contains($currentDomain)) {
+
+        $userHasCommonDomain = false;
+        foreach ($this->getUser()->getDomaines() as $domain) {
+            if ($groupe->getDomains()->contains($domain)) {
+                $userHasCommonDomain = true;
+            }
+        }
+
+        if (!$groupe->getDomains()->contains($currentDomain) || !$userHasCommonDomain) {
             return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_list');
         }
 
