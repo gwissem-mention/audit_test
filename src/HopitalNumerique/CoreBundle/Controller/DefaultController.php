@@ -76,6 +76,7 @@ class DefaultController extends Controller
         }
 
         $cdpDiscussions = $this->get(DiscussionRepository::class)->getRecentPublicDiscussionActivity($domaine, 3);
+        $nbDiscussions = $this->get(DiscussionRepository::class)->getPublicDiscussionCount();
 
         // Get Article à la une
         $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();
@@ -95,7 +96,7 @@ class DefaultController extends Controller
                 'publications' => $publications,
                 'articlesALaUne' => $articlesALaUne,
                 'nb_eta' => $nb_eta,
-                'nb_fils' => $this->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
+                'nb_discussions' => $nbDiscussions,
                 'cdpDiscussions' => $cdpDiscussions,
                 'forumName' => $forumName,
                 'alaune' => $alaune,
