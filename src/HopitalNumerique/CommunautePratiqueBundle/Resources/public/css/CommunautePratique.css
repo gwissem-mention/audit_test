@@ -19,12 +19,123 @@
     text-decoration: none;
 }
 
-.body-communaute-pratique h1 {
-    color: #dd3157;
-    float: left;
-    font-size: 23px;
-    font-weight: bold;
-    margin-bottom: 30px;
+/* Responsive group CDP */
+@media screen and (min-width: 768px) {
+    .body-communaute-pratique h1 {
+        color: #dd3157;
+        float: left;
+        font-size: 23px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    /* Liens en haut de page */
+    .communaute-pratique-actions {
+        font-size: 10px;
+        margin: 20px 0 0;
+        text-align: right;
+    }
+
+    .communaute-pratique-actions .contact {
+        float: right;
+        margin-bottom: 15px;
+        width: 200px;
+    }
+
+    .communaute-pratique-actions .contact a {
+        color: #2e2e2e;
+        cursor: pointer;
+        display: block;
+    }
+
+    .communaute-pratique-actions .contact em {
+        color: #777;
+        float: right;
+        font-size: 26px;
+        margin: -3px 0 0 6px;
+    }
+
+    .communaute-pratique-actions .invite {
+        float: right;
+        margin-bottom: 15px;
+        width: 145px;
+    }
+
+    .communaute-pratique-actions .invite a {
+        color: #2e2e2e;
+        cursor: pointer;
+        display: block;
+        font-weight: bold
+    }
+
+    .communaute-pratique-actions .invite em {
+        color: #439943;
+        float: right;
+        font-size: 26px;
+        margin: -3px 0 0 6px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .body-communaute-pratique .cdp-actions-before {
+        text-align: center;
+    }
+
+    .body-communaute-pratique .cdp-actions-before a {
+        float: none !important;
+    }
+
+    .body-communaute-pratique h1 {
+        color: #dd3157;
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .body-communaute-pratique h1 .cdp-group {
+        color: #767676;
+        font-size: 18px;
+        font-weight: normal;
+        margin-top: 25px;
+        display: inherit;
+    }
+
+    /* Liens en haut de page */
+    .communaute-pratique-actions {
+        font-size: 10px;
+        margin: 30px 0 0;
+        text-align: center;
+        float: none !important;
+        display: flex;
+    }
+
+    .communaute-pratique-actions .cdp-list {
+        display: inherit;
+        width: 100%;
+    }
+
+    .communaute-pratique-actions .cdp-list .contact, .communaute-pratique-actions .cdp-list .invite {
+        width: 50%;
+    }
+
+    .communaute-pratique-actions .contact, .communaute-pratique-actions .invite {
+        width: 33%;
+        margin: 0 10px 15px 10px;
+    }
+
+    .communaute-pratique-actions .contact em, .communaute-pratique-actions .invite em {
+        color: #777;
+        font-size: 26px;
+        margin: -3px 0 0 6px;
+        display: block;
+    }
+
+    .communaute-pratique-actions .contact a, .communaute-pratique-actions .invite a {
+        color: #767676;
+        cursor: pointer;
+        display: block;
+    }
 }
 
 .body-communaute-pratique h1 .subtitle {
@@ -174,52 +285,6 @@
     background-repeat: no-repeat;
     color: #fff;
     padding: 0 6px 3px 6px;
-}
-
-/* Liens en haut de page */
-.communaute-pratique-actions {
-    font-size: 10px;
-    margin: 20px 0 0;
-    text-align: right;
-}
-
-.communaute-pratique-actions .contact {
-    float: right;
-    margin-bottom: 15px;
-    width: 200px;
-}
-
-.communaute-pratique-actions .contact a {
-    color: #2e2e2e;
-    cursor: pointer;
-    display: block;
-}
-
-.communaute-pratique-actions .contact em {
-    color: #777;
-    float: right;
-    font-size: 26px;
-    margin: -3px 0 0 6px;
-}
-
-.communaute-pratique-actions .invite {
-    float: right;
-    margin-bottom: 15px;
-    width: 145px;
-}
-
-.communaute-pratique-actions .invite a {
-    color: #2e2e2e;
-    cursor: pointer;
-    display: block;
-    font-weight: bold
-}
-
-.communaute-pratique-actions .invite em {
-    color: #439943;
-    float: right;
-    font-size: 26px;
-    margin: -3px 0 0 6px;
 }
 
 .communaute-pratique-actions .lien {

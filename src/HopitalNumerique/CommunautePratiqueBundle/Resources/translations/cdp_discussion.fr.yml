@@ -30,7 +30,8 @@ discussion:
                 label: Message
             submit:
                 text: Publier
-        success: Nouvelle discussion créée avec succés.
+        success: Nouvelle discussion créée avec succès.
+    back: Retour discussions
     discussion:
         actions:
             title:
@@ -80,16 +81,18 @@ discussion:
 
         files:
             title: Documents
-            new_document_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
+            new_document_count: "Un %highlight% a été déposé depuis votre dernière visite | De nouveaux %highlight% ont été déposés depuis votre dernière visite"
             new_document_highlight: "nouveau document | nouveaux documents"
             author: Déposé par %author% le %date% à %time%
             is_new: NEW
     message:
         title: "Message | Messages"
-        new_message_count: "Un %highlight% a été posté depuis votre dernière visite | De %highlight% ont été postés depuis votre dernière visite"
+        new_message_count: "Un %highlight% a été posté depuis votre dernière visite | De nouveaux %highlight% ont été postés depuis votre dernière visite"
         new_message_highlight: "nouveau message | nouveaux messages"
         item:
-            infos: Par %author% le %date% à %time%
+            infos:
+                author: Par %author%
+                date: le %date% à %time%
             is_new: NEW
         actions:
             publish:

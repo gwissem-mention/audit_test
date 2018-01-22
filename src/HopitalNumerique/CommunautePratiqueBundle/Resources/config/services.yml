@@ -164,7 +164,11 @@ services:
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\CommunityUserJoinedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\CommunityUserJoinedListener
-        arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
+        arguments:
+            - '@HopitalNumerique\NotificationBundle\Service\Notifications'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.enroll_user }
 

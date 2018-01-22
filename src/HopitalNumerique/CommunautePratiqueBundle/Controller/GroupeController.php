@@ -104,6 +104,8 @@ class GroupeController extends Controller
      */
     public function viewAction(Request $request, Groupe $groupe, Discussion $discussion = null)
     {
+        $discussionPreSelected = $discussion != null;
+
         /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -165,6 +167,7 @@ class GroupeController extends Controller
         $discussionActivityCounter = $this->get(NewDiscussionActivityCounter::class);
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
+            'discussionPreSelected' => $discussionPreSelected,
             'discussionCounter' => [
                 'discussion' => $discussionActivityCounter->getNewDiscussionCount($groupe, $this->getUser()),
                 'message' => $discussionActivityCounter->getNewMessageCount($groupe, $this->getUser()),

@@ -39,7 +39,7 @@ class DiscussionMessageType extends AbstractType
         }
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            if ($event->getData()->isFirstMessage) {
+            if ($event->getData() && $event->getData()->isFirstMessage) {
                 $event->getForm()->add('discussionTitle', TextType::class, [
                     'property_path' => 'discussion.title'
                 ]);

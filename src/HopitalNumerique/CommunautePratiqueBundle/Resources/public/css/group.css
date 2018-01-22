@@ -13,28 +13,6 @@
     cursor: pointer;
 }
 
-.group .tabs .tab {
-    display: block;
-    color: #777;
-    width: 33%;
-    background: #eee;
-    border-top: 5px solid #eee;
-    border-bottom: 1px solid #e6e6e6;
-    margin-left: 10px;
-    margin-right: 10px;
-    box-shadow: 3px 8px 18px #ddd, -3px 8px 18px #ddd;
-    padding: 8px 20px;
-    height: 150px;
-    overflow-x: auto;
-}
-
-.group .tabs .tab.active,
-.group .tabs .tab:hover {
-    border-top-color: #ec0034;
-    border-bottom-color: #fff;
-    background: #fff;
-}
-
 .group .tabs .tab.active {
     cursor: default;
 }
@@ -96,6 +74,53 @@
     margin-bottom: 10px;
 }
 
-.group .tab-container .discussions .add {
-    border-top: 0;
+/** Responsive tabs */
+@media screen and (min-width: 768px) {
+    .group .tabs .tab {
+        display: block;
+        color: #777;
+        width: 33%;
+        background: #eee;
+        border-top: 5px solid #eee;
+        border-bottom: 5px solid #eee;
+        margin-left: 10px;
+        margin-right: 10px;
+        box-shadow: 3px 8px 18px #ddd, -3px 8px 18px #ddd;
+        padding: 8px 20px;
+        height: 150px;
+        overflow-x: auto;
+    }
+
+    .group .tabs .tab.active,
+    .group .tabs .tab:hover {
+        border-top-color: #ec0034;
+        border-bottom-color: #fff;
+        background: #fff;
+    }
+
+    .group .tab-container .discussions .add {
+        border-top: 0;
+    }
+}
+@media screen and (max-width: 767px) {
+    .group .tabs .tab {
+        width: 33%;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    .group .tabs .tab.active,
+    .group .tabs .tab:hover {
+        border-bottom: 3px solid #ec0034;
+    }
+
+    .group .tab-container .discussions .add,
+    .discussions .add,
+    .group .tab-container .discussions .back,
+    .discussions .back {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
 }

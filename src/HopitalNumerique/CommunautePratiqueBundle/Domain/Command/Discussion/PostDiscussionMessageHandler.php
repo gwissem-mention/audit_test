@@ -88,9 +88,8 @@ class PostDiscussionMessageHandler
 
         if ($isNew) {
             $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
-        } else {
-            $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
         }
+        $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
 
         $this->entityManager->flush($message);
 

@@ -15,19 +15,15 @@
     text-align: center;
     font-weight: bold;
     font-size: 13px;
+    margin-left: 6px;
 }
 
-.discussions .add {
-    border: 1px solid #ddd;
-    border-bottom: 0;
-    background: #fff;
-    font-size: 15px;
-    padding: 15px 10px;
+.discussions .back {
+    display: none;
 }
 
-.discussions .add .add-btn {
+.discussions .add .add-btn, .discussions .back .back-btn {
     color: #777;
-    font-weight: bold;
 }
 
 .discussions .add .add-btn .icon {
@@ -38,13 +34,256 @@
     color: #ec0034;
 }
 
-.discussions .wrapper {
-    display: flex;
-    align-items: flex-start;
+.discussions .back .back-btn .icon {
+    margin-right: 7px;
+    font-size: 20px;
+    position: relative;
+    top: 1px;
+    color: #777;
 }
 
-.discussions .wrapper .list {
-    width: 500px;
+@media screen and (min-width: 768px) {
+    .discussions .add, .discussions .back {
+        border: 1px solid #ddd;
+        border-bottom: 0;
+        background: #fff;
+        font-size: 15px;
+        padding: 15px 10px;
+    }
+
+    .discussions .wrapper {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .discussions .wrapper .list {
+        width: 500px;
+    }
+
+    .discussions .discussion {
+        background: #fff;
+        border: 1px solid #ddd;
+        width: 100%;
+        min-height: 300px;
+        position: relative;
+    }
+
+    .discussions .discussion .discussion-title {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 25px;
+    }
+
+    .discussions .discussion .discussion-title h2 {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .discussions .discussion .discussion-files {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 25px;
+    }
+
+    .discussions .discussion .discussion-files h3 {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 0 0 15px;
+    }
+
+    .discussions .discussion .discussion-files h3 .new-document {
+        font-weight: normal;
+        font-size: 0.9em;
+        margin-left: 10px;
+        color: #8b8b8b;
+    }
+
+    .discussions .discussion .discussion-files .more {
+        float: right;
+        color: #7b7b7b;
+        font-size: 18px;
+    }
+
+    .discussions .discussion .discussion-files .file .author {
+        color: #8b8b8b;
+        font-size: 0.9em;
+        margin-right: 5px;
+    }
+
+    .discussions .discussion .messages .title {
+        font-weight: bold;
+        font-size: 15px;
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+
+    .discussions .discussion .messages .title .new-message {
+        font-weight: normal;
+        font-size: 0.9em;
+        margin-left: 10px;
+        color: #8b8b8b;
+    }
+
+    .discussions .discussion .messages .message {
+        display: flex;
+        padding: 15px 0;
+    }
+
+    .discussions .discussion .messages .message .message-avatar {
+        width: 70px;
+        min-height: 70px;
+        text-align: center;
+        padding-top: 8px;
+    }
+
+    .discussions .discussion .messages .message .message-infos {
+        margin-bottom: 3px;
+        margin-left: 20px;
+    }
+
+    .discussions .discussion .messages .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #discussion {
+        margin: 0 -30px;
+    }
+
+    .discussions .add, .discussions .back {
+        border: 1px solid #ddd;
+        border-bottom: 0;
+        background: #fff;
+        font-size: 15px;
+        padding: 15px 25px;
+    }
+
+    .discussions .wrapper .list {
+        width: 100%;
+    }
+
+    .discussions .discussion {
+        background: #fff;
+        width: 100%;
+        min-height: 300px;
+        position: relative;
+    }
+
+    .discussions .discussion .discussion-title {
+        padding: 15px 25px;
+    }
+
+    .discussions .discussion .discussion-title h2 {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .discussions .discussion .discussion-files {
+        padding: 15px 25px;
+    }
+
+    .discussions .discussion .discussion-files h3 {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 0 0 25px;
+    }
+
+    .discussions .discussion .discussion-files h3 .new-document {
+        font-weight: normal;
+        font-size: 0.9em;
+        color: #8b8b8b;
+        display: inherit;
+        font-style: italic;
+        margin-top: 10px;
+    }
+
+    .discussions .discussion .discussion-files .more {
+        display: none;
+    }
+
+    .discussions .discussion .discussion-files #files {
+        display: block;
+        height: auto !important;
+    }
+
+    .discussions .discussion .discussion-files .file .author {
+        color: #8b8b8b;
+        font-size: 0.9em;
+        margin-right: 5px;
+        display: inherit;
+        margin-top: 5px;
+        margin-left: 15px;
+        font-style: italic;
+    }
+
+    .discussions .discussion .messages .title {
+        font-weight: bold;
+        font-size: 15px;
+        margin-bottom: 25px;
+        margin-top: 5px;
+    }
+
+    .discussions .discussion .messages .title .new-message {
+        font-weight: normal;
+        font-size: 0.9em;
+        color: #8b8b8b;
+        display: inherit;
+        margin-top: 10px;
+        font-style: italic;
+    }
+
+    .discussions .discussion .messages .message {
+        padding: 15px 0;
+    }
+
+    .discussions .discussion .messages .message .message-avatar {
+        width: 70px;
+        min-height: 70px;
+        text-align: center;
+        padding-top: 8px;
+        margin-left: 10px;
+    }
+
+    .discussions .discussion .messages .message .message-infos {
+        margin: 5px 0 15px 20px;
+    }
+    
+    .discussions .discussion .messages .message .message-infos .discussion-user {
+        font-size: 16px;
+        color: #000;
+    }
+
+    .discussions .discussion .messages .message .message-infos .discussion-user-date {
+        display: block;
+        font-size: 12px;
+    }
+
+    .discussions .discussion .messages .message.reply .save input {
+        width: 100%;
+    }
+
+    .discussions[data-search=visualization] .wrapper .list,
+    .discussions[data-search=visualization] .add {
+        display: none;
+    }
+
+    .discussions[data-search=visualization] .wrapper .discussion,
+    .discussions[data-search=visualization] .back {
+        display: block;
+    }
+
+    .discussions[data-search=browsing] .wrapper .discussion {
+        display: none;
+    }
+
+    .discussions[data-search=browsing] .wrapper .list .item.active {
+        background-color: #eee;
+    }
+
+    .discussions[data-search=browsing] .wrapper .list .item.active:hover {
+        background-color: #fff;
+    }
 }
 
 .discussions .wrapper .list .push {
@@ -64,6 +303,10 @@
     box-shadow: 0 3px 2px 0 #ddd;
     cursor: hand;
     box-sizing: border-box !important;
+}
+
+.discussions .wrapper .list .items .item {
+    border-left: 3px solid #ec0034;
 }
 
 .discussions .wrapper .list .item.droppable-over {
@@ -123,14 +366,6 @@
     margin-top: 25px;
 }
 
-.discussions .discussion {
-    background: #fff;
-    border: 1px solid #ddd;
-    width: 100%;
-    min-height: 300px;
-    position: relative;
-}
-
 .discussions .discussion .droppable-layer {
     display: none;
     position: absolute;
@@ -150,37 +385,8 @@
     display: block;
 }
 
-.discussions .discussion .discussion-title {
-    border-bottom: 1px solid #ddd;
-    padding: 15px 25px;
-}
-
-.discussions .discussion .discussion-files {
-    border-bottom: 1px solid #ddd;
-    padding: 15px 25px;
-}
-
-.discussions .discussion .discussion-files h3 {
-    font-size: 15px;
-    font-weight: bold;
-    margin: 0 0 15px;
-}
-
-.discussions .discussion .discussion-files .more {
-    float: right;
-    color: #7b7b7b;
-    font-size: 18px;
-}
-
 .discussions .discussion .discussion-files .more[aria-expanded=true] {
     transform: rotate(180deg);
-}
-
-.discussions .discussion .discussion-files h3 .new-document {
-    font-weight: normal;
-    font-size: 0.9em;
-    margin-left: 10px;
-    color: #8b8b8b;
 }
 
 .discussions .discussion .discussion-files .file {
@@ -207,18 +413,6 @@
     margin: 0 5px;
 }
 
-.discussions .discussion .discussion-files .file .author {
-    color: #8b8b8b;
-    font-size: 0.9em;
-    margin-right: 5px;
-}
-
-.discussions .discussion .discussion-title h2 {
-    font-size: 15px;
-    font-weight: bold;
-    margin: 0;
-}
-
 .discussions .discussion .discussion-title .group {
     font-size: 10px;
     margin-top: 3px;
@@ -232,13 +426,6 @@
     padding: 15px 25px;
 }
 
-.discussions .discussion .messages .title {
-    font-weight: bold;
-    font-size: 15px;
-    margin-bottom: 15px;
-    margin-top: 5px;
-}
-
 .discussions .discussion .messages .title a,
 .discussions .discussion .discussion-files a {
     color: #777;
@@ -249,36 +436,8 @@
     color: #333;
 }
 
-.discussions .discussion .messages .title .new-message {
-    font-weight: normal;
-    font-size: 0.9em;
-    margin-left: 10px;
-    color: #8b8b8b;
-}
-
-.discussions .discussion .messages .title .new-message .new-message-badge {
-    margin-left: 6px;
-}
-
-.discussions .discussion .messages .actions {
-    display: flex;
-    justify-content: space-between;
-}
-
-.discussions .discussion .messages .message {
-    display: flex;
-    padding: 15px 0;
-}
-
 .discussions .discussion .messages .message.message--helpful:not(.need-moderation) .message-content .message-body {
     background: rgba(240, 232, 174, 0.5);
-}
-
-.discussions .discussion .messages .message .message-avatar {
-    width: 70px;
-    min-height: 70px;
-    text-align: center;
-    padding-top: 8px;
 }
 
 .discussions .discussion .messages .message .message-avatar .avatar {
@@ -287,11 +446,6 @@
 
 .discussions .discussion .messages .message .message-content {
     width: 100%;
-}
-
-.discussions .discussion .messages .message .message-infos {
-    margin-bottom: 3px;
-    margin-left: 20px;
 }
 
 .discussions .discussion .messages .message .message-body a {

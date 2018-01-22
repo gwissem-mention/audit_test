@@ -7,11 +7,13 @@
 {% endblock %}
 
 {% block communaute_pratique_actions %}
-    {{ selectedDomainSelector() }}
-    {{ parent() }}
-    {% if app.user and app.user.inscritCommunautePratique %}
-        {{ communaute_pratique.display_action_contact_invitation() }}
-    {% endif %}
+    <div class="cdp-list">
+        {{ selectedDomainSelector() }}
+        {{ parent() }}
+        {% if app.user and app.user.inscritCommunautePratique %}
+            {{ communaute_pratique.display_action_contact_invitation() }}
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block body_communaute_pratique %}
