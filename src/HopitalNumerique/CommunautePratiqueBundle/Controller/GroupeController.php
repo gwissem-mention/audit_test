@@ -196,6 +196,11 @@ class GroupeController extends Controller
             );
         }
 
+        $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        if (!$groupe->getDomains()->contains($currentDomain)) {
+            return $this->redirectToRoute('hopitalnumerique_communautepratique_groupe_list');
+        }
+
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', [
             'groupe' => $groupe,
             'questionnaireOptions' => [
