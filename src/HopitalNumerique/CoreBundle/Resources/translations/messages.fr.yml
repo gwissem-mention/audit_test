@@ -16,6 +16,10 @@ go_to_top:
     text: Haut de page
 
 homepage:
+    statsBlock:
+        institutions: Établissements inscrits
+        consultations: Vues de publications
+        discussions: Discussions dans la communauté de pratique
     cdpBlock:
         btn:
             text: "> Accéder à l'espace de discussion"
