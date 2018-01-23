@@ -344,8 +344,18 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification())
                             ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $rowInfradoc['nbVueC'] = $contenu->getNbVue();
-                        $rowInfradoc['noteC']
-                                                          = null;
+
+                        // Handle note referencement infradoc
+                        $rowInfradoc['noteC'] = [];
+                        foreach ($domaines as $domaine) {
+                            $rowInfradoc['noteC'][] =
+                                $domaine->getNom()
+                                . ':'
+                                .$noteReader->getNoteByEntityAndDomaineForAffichage($contenu, $domaine)
+                            ;
+                        }
+                        $rowInfradoc['noteC'] = implode('|', $rowInfradoc['noteC']);
+
                         $rowInfradoc['noteMoyenneC'] = number_format(
                             $this->noteManager->getMoyenneNoteByObjet($contenu->getId(), true),
                             2
