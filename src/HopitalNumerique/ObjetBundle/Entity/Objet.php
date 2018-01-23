@@ -375,7 +375,7 @@ class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
      * @var FichierModifiable
      *
      * @ORM\OneToOne(targetEntity="FichierModifiable", mappedBy="objet")
-     * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
+     * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id", onDelete="CASCADE")
      */
     protected $fichierModifiable;
 
