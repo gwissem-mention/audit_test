@@ -29,6 +29,7 @@ services:
             class: HopitalNumerique\StatBundle\Service\ErrorUrlExporter
             arguments:
                 - "@stat.repository.error"
+                - "@translator"
 
     stat.repository.search:
         class: 'HopitalNumerique\StatBundle\Repository\StatRechercheRepository'

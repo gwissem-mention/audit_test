@@ -7,17 +7,22 @@ use HopitalNumerique\StatBundle\Repository\ErrorUrlRepository;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ErrorUrlExporter
 {
     /** @var ErrorUrlRepository $errorUrlRepository */
     private $errorUrlRepository;
 
+    /** @var TranslatorInterface $translator */
+    private $translator;
+
     protected $row = 1;
 
-    public function __construct(ErrorUrlRepository $errorUrlRepository)
+    public function __construct(ErrorUrlRepository $errorUrlRepository, TranslatorInterface $translator)
     {
         $this->errorUrlRepository = $errorUrlRepository;
+        $this->translator = $translator;
     }
 
     /**
@@ -114,15 +119,16 @@ class ErrorUrlExporter
     private function writeErrorUrlHeaders(\PHPExcel_Worksheet $sheet)
     {
         $columns = [
-            'Domaine',
-            'Id de l\'objet',
-            'Titre de l\'objet',
-            'Id du contenu',
-            'Titre du contenu',
-            'URL de l\'objet ou du contenu',
-            'URL testée',
-            'Statut',
-            'Code',
+            $this->translator->trans('errors_url.export.headers.domain'),
+            $this->translator->trans('errors_url.export.headers.object_id'),
+            $this->translator->trans('errors_url.export.headers.object_title'),
+            $this->translator->trans('errors_url.export.headers.content_id'),
+            $this->translator->trans('errors_url.export.headers.content_title'),
+            $this->translator->trans('errors_url.export.headers.url_object_content'),
+            $this->translator->trans('errors_url.export.headers.tested_url'),
+            $this->translator->trans('errors_url.export.headers.state'),
+            $this->translator->trans('errors_url.export.headers.code'),
+            $this->translator->trans('errors_url.export.headers.last_checked_date'),
         ];
 
         $this->addRow($sheet, $columns);
@@ -212,6 +218,7 @@ class ErrorUrlExporter
         $errorUrlData[] = $errorUrl->getCheckedUrl();
         $errorUrlData[] = $errorUrl->getState() ? 'Valide' : 'Non valide';
         $errorUrlData[] = $http_codes[$errorUrl->getCode()];
+        $errorUrlData[] = $errorUrl->getLastCheckDate()->format('d-m-Y H:i:s');
 
         $this->addRow($sheet, $errorUrlData);
     }

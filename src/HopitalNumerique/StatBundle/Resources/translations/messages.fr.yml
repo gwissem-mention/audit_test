@@ -1,0 +1,16 @@
+errors_url:
+    front:
+        title_errors: Erreurs dans les URL
+        description_state_url: L'état des URL de la plateforme est contrôlé tous les dimanches.
+    export:
+        headers:
+            domain: Domaine
+            object_id: Id de l'objet
+            object_title: Titre de l'objet
+            content_id: Id du contenu
+            content_title: Titre du contenu
+            url_object_content: URL de l'objet ou du contenu
+            tested_url: URL testée
+            state: Statut
+            code: Code
+            last_checked_date: Date de dernière vérification
