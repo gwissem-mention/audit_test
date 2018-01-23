@@ -42,6 +42,9 @@
                             -
                             {{ synthesis.isValid ? 'autodiagnostic.synthesis.state.valid'|trans : 'autodiagnostic.synthesis.state.invalid'|trans }}
                             -
+                            {% if synthesis.entryId is null %}
+                                {{ 'autodiagnostic.synthesis.text'|trans }} :
+                            {% endif %}
                             <span class="inplace-edit-text" data-url="{{ path('hopitalnumerique_autodiag_synthesis_change_name', {'synthesis': synthesis.id}) }}" {% if synthesis.showUrl is not null %}data-field-link="{{ synthesis.showUrl }}" data-field-link-target="{{ not synthesis.sameDomain ? "_blank" }}"{% endif %}>{{ synthesis.name }}</span>
                         </td>
                         <td class="actions-column">
@@ -54,7 +57,7 @@
                                 <a href="{{ synthesis.sendUrl }}" class="btn btn-sm btn-primary fancybox fancybox.ajax {{ synthesis.isValid == false ? 'disabled' }}" title="{{ 'autodiagnostic.action.send'|trans }}">
                                     <i class="fa fa-envelope"></i>
                                 </a>
-                                {% if synthesis.isOwner %}
+                                {% if synthesis.isOwner and synthesis.entryId is not null %}
                                     {% if synthesis.isValid %}
                                         <a href="{{ synthesis.validationUrl }}" class="btn btn-sm btn-warning" title="{{ 'autodiagnostic.action.open'|trans }}">
                                             <i class="fa fa-unlock"></i>
