@@ -25,7 +25,7 @@
             </span>
         {% endif %}
 
-        {% if group %}
+        {% if group and (app.user.hasRoleCDPAdmin or group.hasAnimateur(app.user)) %}
             <a onclick="CommunautePratique_User.desinscritGroupe({{ group.id }}, {{ user.id }});" title="Désinscrire l'utilisateur"><em class="fa fa-times-circle"></em></a>
 
             {% if not group.hasAnimateur(user) and not user.hasRoleAdmin %}
