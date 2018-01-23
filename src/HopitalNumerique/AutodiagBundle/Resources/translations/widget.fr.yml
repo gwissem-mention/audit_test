@@ -16,6 +16,7 @@ autodiagnostic:
     delete:
         confirm: Supprimer cet autodiagnostic ?
     synthesis:
+        text: Synthèse
         updated: L'autodiagnostic a été mis à jour depuis votre dernier enregistrement
         state:
             valid: Validé
