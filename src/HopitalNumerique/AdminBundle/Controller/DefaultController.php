@@ -141,6 +141,7 @@ class DefaultController extends Controller
         $noteRepository = $this->get('hopitalnumerique_objet.repository.note');
         $commentRepository = $this->get('hopitalnumerique_objet.repository.commentaire');
         $objectRepository = $this->get('hopitalnumerique_objet.repository.objet');
+        $errorUrlRepository = $this->get('stat.repository.error');
 
         $blocObjets = [
             'points-durs' => 0,
@@ -149,6 +150,7 @@ class DefaultController extends Controller
             'nb-notes' => 0,
             'nb-commentaires' => 0,
             'pourcent-note-publication' => 0,
+            'dead-links' => 0,
             'top5-points-dur' => [],
             'bottom5-points-dur' => [],
             'top5-productions' => [],
@@ -193,6 +195,11 @@ class DefaultController extends Controller
         $blocObjets['nb-notes'] = $noteRepository->countByDomains($this->domains, 3.5);
         $blocObjets['nb-commentaires'] = $commentRepository->countByDomains($this->domains);
         $blocObjets['pourcent-note-publication'] = round($noteRepository->computeAverageByDomains($this->domains, 3.5));
+
+        // Get dead links for current domain
+        $blocObjets['dead-links'] = $errorUrlRepository->nbErrorsByDomain(
+            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+        );
 
         $blocObjets['top5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC');
         $blocObjets['bottom5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC');
