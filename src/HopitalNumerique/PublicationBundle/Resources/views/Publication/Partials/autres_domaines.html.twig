@@ -3,16 +3,12 @@
 {% if contenu is defined and contenu is not sameas(false) %}
     {% if contenu.realDomaines|length > 1 and referencesStringByDomaine|length > 0 %}
         <div class="col-md-12" style="margin-top: 15px;">
-            {% set loopCount = 0 %}
-            {% for domaine in contenu.realDomaines -%}
-                {% if not domaineCurrent.equals(domaine) and referencesStringByDomaine[domaine.id] is defined %}
-                    {% set loopCount = loopCount + 1 %}
-                    {% if loopCount == 1 %}
-                        Autres ressources sur :
-                    {% endif %}
-                    {{- loop.first ? ', ' : '' -}}
-                    <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
-                {%- endif -%}
+            {% for domaine in contenu.realDomaines if not domaineCurrent.equals(domaine) and referencesStringByDomaine[domaine.id] is defined -%}
+                {% if loop.first %}
+                    Autres ressources sur :
+                {% endif %}
+                {{- loop.first ? ', ' : '' -}}
+                <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
             {%- endfor -%}
         </div>
     {% endif %}
@@ -20,7 +16,6 @@
 {% else %}
     {% if objet.domaines|length > 1 and referencesStringByDomaine|length > 0 %}
         <div class="col-md-12" style="margin-top: 15px;">
-            {% set loopCount = 0 %}
             {% for domaine in objet.domaines if not domaineCurrent.equals(domaine) and referencesStringByDomaine[domaine.id] is defined -%}
                 {% if loop.first %}
                     Autres ressources sur :
