@@ -302,7 +302,6 @@ Hn_Reference_Referencement_Popin.setReference = function(referenceId)
 
     if (!$(referenceCheckbox).is(':checked')) {
         referenceCheckbox.checked = true;
-        Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), true);
         Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId, $(referenceCheckbox).attr('data-reference-parent'));
     }
 };
