@@ -4,9 +4,9 @@
         {# Points durs #}
         <div id="erreurs-curl-filtres">
             <div class="row">
-                {# Boutton de génération du tableau #}
+                {# Bouton de génération du tableau #}
                 <div class="col-md-12 button-generation">
-                    <p>L'état des URL de la plateforme est contrôlé tous les dimanches.</p>
+                    <p>{{ 'errors_url.front.description_state_url'|trans }}</p>
                     <a href="{{ path('hopital_numerique_stat_erreurs_export') }}" id="export-csv-erreurs-urls" class="finish btn btn-primary" title="Export CSV" ><i class="fa fa-download"></i> Télécharger l'état des URL</a>
                 </div>
             </div>
