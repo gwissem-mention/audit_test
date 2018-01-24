@@ -144,7 +144,7 @@ class PublicationController extends Controller
                 $displayedDomains = $reference->getDomainesDisplayId()->toArray();
 
                 if (in_array($domaine->getId(), $displayedDomains)
-                    && in_array(
+                    || in_array(
                         $currentDomainId,
                         $reference->getDomainesId()
                     )
