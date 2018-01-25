@@ -51,7 +51,7 @@ $(function() {
         addBlockToPopulateSelect(blocks[id]);
     };
 
-    var showBlock = function (block, persist = true) {
+    var showBlock = function (block, persist) {
         gridster.add_widget(block.html, 1, 1, block.col, block.row);
         if (persist) {
             savePositions();
@@ -127,6 +127,6 @@ $(function() {
     $('#populate-block button').on('click', function () {
         var option = $(this).parent().find('select option:selected');
         var block = blocks[option.data('id')];
-        showBlock(block);
+        showBlock(block, true);
     });
 });
