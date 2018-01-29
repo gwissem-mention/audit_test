@@ -509,6 +509,10 @@ class DiscussionController extends Controller
             return !$discussion->getGroups()->contains($group) && $group->getDateDemarrage() < new \DateTime();
         });
 
+        usort($groupsAvailable, function ($a, $b) {
+            return strcmp($a->getTitre(), $b->getTitre());
+        });
+
         if ($groupId = $request->request->get('group', null)) {
             if ($group = $groupRepository->find($groupId)) {
                 if ('move' === $type) {
