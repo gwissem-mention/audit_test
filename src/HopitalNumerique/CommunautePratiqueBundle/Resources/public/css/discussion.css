@@ -181,6 +181,7 @@
 
     .discussions .discussion .discussion-files {
         padding: 15px 25px;
+        border-bottom: 1px solid #ddd;
     }
 
     .discussions .discussion .discussion-files h3 {
