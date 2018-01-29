@@ -20,7 +20,7 @@ massDelete:
 
 export:
     columns:
-        id: ID
+        id: Id
         label: Titre
         nature: Nature
         private: Risque privé
