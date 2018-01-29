@@ -94,7 +94,8 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 ['autoSubscribe', 0],
             ],
             Events::DISCUSSION_MESSAGE_CREATED => [
-                'notifySubscriber',
+                ['autoSubscribe', 0],
+                ['notifySubscriber', 0],
             ]
         ];
     }
