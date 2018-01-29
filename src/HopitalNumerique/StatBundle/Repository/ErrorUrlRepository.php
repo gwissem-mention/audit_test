@@ -3,6 +3,7 @@
 namespace HopitalNumerique\StatBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
@@ -21,16 +22,16 @@ class ErrorUrlRepository extends EntityRepository
     /**
      * Get number of errors by domain
      *
-     * @param Domaine $domain
+     * @param $domains
      *
      * @return mixed
      */
-    public function nbErrorsByDomain(Domaine $domain)
+    public function nbErrorsByDomain($domains)
     {
         return $this->createQueryBuilder('e')
             ->select('count(e) as nbErrorsUrl')
-            ->where('e.domain = :domain')
-            ->setParameter('domain', $domain)
+            ->join('e.domain', 'domain', Join::WITH, 'domain.id IN (:domains)')
+            ->setParameter('domains', $domains)
             ->getQuery()
             ->getSingleScalarResult()
         ;
