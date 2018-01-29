@@ -113,12 +113,9 @@
     }
 
     .communaute-pratique-actions .cdp-list {
-        display: inherit;
-        width: 100%;
-    }
-
-    .communaute-pratique-actions .cdp-list .contact, .communaute-pratique-actions .cdp-list .invite {
-        width: 50%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
     }
 
     .communaute-pratique-actions .contact, .communaute-pratique-actions .invite {
