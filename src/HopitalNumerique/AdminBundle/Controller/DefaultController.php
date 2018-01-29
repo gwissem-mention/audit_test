@@ -197,9 +197,7 @@ class DefaultController extends Controller
         $blocObjets['pourcent-note-publication'] = round($noteRepository->computeAverageByDomains($this->domains, 3.5));
 
         // Get dead links for current domain
-        $blocObjets['dead-links'] = $errorUrlRepository->nbErrorsByDomain(
-            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
-        );
+        $blocObjets['dead-links'] = $errorUrlRepository->nbErrorsByDomain($this->domains);
 
         $blocObjets['top5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC');
         $blocObjets['bottom5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC');
