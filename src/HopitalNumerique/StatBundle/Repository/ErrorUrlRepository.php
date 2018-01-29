@@ -31,6 +31,7 @@ class ErrorUrlRepository extends EntityRepository
         return $this->createQueryBuilder('e')
             ->select('count(e) as nbErrorsUrl')
             ->join('e.domain', 'domain', Join::WITH, 'domain.id IN (:domains)')
+            ->where('e.state = false')
             ->setParameter('domains', $domains)
             ->getQuery()
             ->getSingleScalarResult()
