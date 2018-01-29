@@ -72,8 +72,6 @@ class RiskGrid extends Grid implements GridInterface
         $this->addActionButton($deleteBtn);
     }
 
-
-
     /**
      * Ajoute les actions de masses.
      */

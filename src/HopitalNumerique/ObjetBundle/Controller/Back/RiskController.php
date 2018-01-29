@@ -155,7 +155,7 @@ class RiskController extends Controller
                 'archived' => $translator->trans('export.boolean.'.($risk->isArchived() ? 'yes' : 'no'), [], 'risk'),
                 'domains' => implode(',', array_map(function (Domaine $domain) {
                     return $domain->getNom();
-                    }, $risk->getDomains()->toArray())),
+                }, $risk->getDomains()->toArray())),
             ];
         }
 
