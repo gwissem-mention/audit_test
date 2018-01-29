@@ -6,6 +6,7 @@ directory:
         member: "%count% personne trouvée | %count% personnes trouvées"
         new_member: "Dont %count% nouveau membre | Dont %count% nouveaux membres"
     member:
+        animator: Animateur
         is_new: NEW
         to_validate: A VALIDER
 details:
