@@ -108,6 +108,8 @@
         text-align: center;
         float: none !important;
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
     }
 
     .communaute-pratique-actions .cdp-list {
@@ -121,7 +123,21 @@
 
     .communaute-pratique-actions .contact, .communaute-pratique-actions .invite {
         width: 33%;
-        margin: 0 10px 15px 10px;
+        margin: 0 0 15px 0;
+    }
+
+    .communaute-pratique-actions .contact {
+        order: 1;
+    }
+
+    .communaute-pratique-actions .invite {
+        order: 2;
+    }
+
+    .communaute-pratique-actions .domain_selector_wrapper {
+        order: 3;
+        width: 100%;
+        margin: 0 0 15px 0;
     }
 
     .communaute-pratique-actions .contact em, .communaute-pratique-actions .invite em {
