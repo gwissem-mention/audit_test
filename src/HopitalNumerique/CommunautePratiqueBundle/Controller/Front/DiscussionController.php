@@ -6,6 +6,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderD
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionViewedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageValidatedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Form\Type\Discussion\DiscussionDomainType;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ViewedRepository;
@@ -408,6 +409,8 @@ class DiscussionController extends Controller
     public function validateMessageAction(Message $message, Groupe $group = null)
     {
         $message->setPublished(true);
+
+        $this->get('event_dispatcher')->dispatch(Events::DISCUSSION_MESSAGE_VALIDATED, new MessageValidatedEvent($message));
 
         $this->getDoctrine()->getManager()->flush();
 
