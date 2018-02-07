@@ -3,18 +3,18 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Read;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEvent;
-use HopitalNumerique\CommunautePratiqueBundle\Events;
-use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository;
-use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
-use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
-use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
-use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Manager\MailManager;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Read;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\ReadRepository;
 
 class MessagePostedSubscriber implements EventSubscriberInterface
 {
@@ -94,15 +94,18 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 ['autoSubscribe', 0],
             ],
             Events::DISCUSSION_MESSAGE_CREATED => [
-                'notifySubscriber',
-            ]
+                ['notifySubscriber', 0],
+            ],
+            Events::DISCUSSION_MESSAGE_VALIDATED => [
+                ['notifySubscriber', 0],
+            ],
         ];
     }
 
     /**
-     * @param MessagePostedEvent $event
+     * @param MessageEvent $event
      */
-    public function autoSubscribe(MessagePostedEvent $event)
+    public function autoSubscribe(MessageEvent $event)
     {
         $this->userSubscription->subscribe($event->getMessage()->getDiscussion(), $event->getMessage()->getUser());
 
@@ -126,9 +129,9 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param MessagePostedEvent $event
+     * @param MessageEvent $event
      */
-    public function readDiscussion(MessagePostedEvent $event)
+    public function readDiscussion(MessageEvent $event)
     {
         $message = $event->getMessage();
         $author = $message->getUser();
@@ -145,9 +148,9 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param MessagePostedEvent $event
+     * @param MessageEvent $event
      */
-    public function moderateMessage(MessagePostedEvent $event)
+    public function moderateMessage(MessageEvent $event)
     {
         $message = $event->getMessage();
         $discussion = $message->getDiscussion();
@@ -182,9 +185,9 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param MessagePostedEvent $event
+     * @param MessageEvent $event
      */
-    public function notifySubscriber(MessagePostedEvent $event)
+    public function notifySubscriber(MessageEvent $event)
     {
         $message = $event->getMessage();
 

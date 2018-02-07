@@ -2,6 +2,6 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Event\Discussion;
 
-class MessageCreatedEvent extends MessageEvent
+class MessageValidatedEvent extends MessageEvent
 {
 }

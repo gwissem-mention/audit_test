@@ -33,6 +33,11 @@ final class Events
     const DISCUSSION_MESSAGE_CREATED = 'communautepratique.discussion.message_created';
 
     /**
+     * Occurs when a message is validated by a moderator into a cdp discussion
+     */
+    const DISCUSSION_MESSAGE_VALIDATED = 'communautepratique.discussion.message_validated';
+
+    /**
      * Occurs when a discussion is created
      */
     const DISCUSSION_CREATED = 'communautepratique.discussion.discussion_created';
