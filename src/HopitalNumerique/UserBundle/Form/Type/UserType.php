@@ -156,8 +156,20 @@ class UserType extends AbstractType
                 'type' => 'password',
                 'invalid_message' => 'Ces deux champs doivent être identiques.',
                 'required' => true,
-                'first_options' => ['label' => 'Mot de passe', 'attr' => ['autocomplete' => 'off']],
-                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['autocomplete' => 'off']],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'attr' => [
+                        'autocomplete' => 'off',
+                        'class' => null === $datas->getId() ? $this->constraints['plainPassword']['class'] : '',
+                    ]
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe',
+                    'attr' => [
+                        'autocomplete' => 'off',
+                        'class' => null === $datas->getId() ? $this->constraints['plainPassword']['class'] : '',
+                    ]
+                ],
             ])
             ->add('phoneNumber', TextType::class, [
                 'max_length' => $this->constraints['phoneNumber']['maxlength'],
@@ -329,7 +341,6 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'label' => 'Domaine(s) concerné(s)',
                 'empty_value' => ' - ',
-                'attr' => ['class' => 'validate[required]'],
                 'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     if ($this->securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
                         return $er->createQueryBuilder('dom')->orderBy('dom.nom');
