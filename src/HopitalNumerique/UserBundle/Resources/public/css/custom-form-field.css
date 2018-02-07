@@ -1,1 +1,4 @@
 #reference_hobbies_form .hobby-item { float: left; position: relative; min-height: 1px; padding: 0 15px; }
+select#nodevo_user_user_domaines {
+    right: 15px;
+}

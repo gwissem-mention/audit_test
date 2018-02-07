@@ -725,6 +725,7 @@ class User extends BaseUser implements SettingsOwnerInterface
      * @var string
      *
      * @Assert\Regex(pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,})", message="Le mot de passe doit comporter au moins 6 caractères et être composé d'au moins une lettre minuscule, d'une lettre majuscule et d'un chiffre.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     protected $plainPassword;
 
