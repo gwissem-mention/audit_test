@@ -46,3 +46,12 @@ services:
         arguments: ['@hopitalnumerique_stat.manager.stattelechargement']
         tags:
             - { name: kernel.event_listener, event: objet_download_success, method: objetDownloadSuccess }
+
+    HopitalNumerique\StatBundle\EventListener\LoginStatSubscriber:
+        class: HopitalNumerique\StatBundle\EventListener\LoginStatSubscriber
+        arguments:
+            - '@security.token_storage'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+        tags:
+            - { name: kernel.event_subscriber }
