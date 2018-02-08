@@ -614,7 +614,6 @@ class PublicationController extends Controller
         return $this->render('HopitalNumeriquePublicationBundle:Publication:synthese.html.twig', $params);
     }
 
-
     /**
      * Retourne la liste des ambassadeurs concernés par la production.
      *

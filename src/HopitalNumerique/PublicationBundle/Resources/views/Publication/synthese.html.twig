@@ -39,6 +39,19 @@
                     <link rel="stylesheet" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
+
+            {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-base.css" filter="cssrewrite, ?yui_css"
+                "@bootstrap_css"
+                '@validationEngine_css'
+                "@fancybox_css"
+                '@fonts_css'
+                '@select2_css'
+                '@bootstrap_multiselect_css'
+                '@front_css'
+                '@font_awesome_css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
         {% endblock %}
 
         {% block javascripts %}
@@ -80,8 +93,12 @@
 
     <body>
         <div style="position: absolute; top: 20px; right: 20px;">
-            <div style="margin-right: 5px;" onclick="print();" class="btn btn-sm btn-default" title="Imprimer cette page"><i class="fa fa-print"></i></div>
-            <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss" title="Flux RSS"><i class="fa fa-rss"></i></a>
+            <div onclick="print();" class="btn btn-sm btn-default" title="Imprimer cette page">
+                <i class="fa fa-print"></i>
+            </div>
+            <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="btn btn-sm btn-default btnrss" title="Flux RSS">
+                <i class="fa fa-rss"></i>
+            </a>
         </div>
     
         <div id="synthese-ajax" >
@@ -107,4 +124,4 @@
         </div>
 
     </body>
-</head>
+</html>
