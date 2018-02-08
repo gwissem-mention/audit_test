@@ -22,15 +22,6 @@
                 </span>
             {% endif %}
 
-            {% if discussion.hasHelpfulMessage %}
-            <span class="target-highlight icon fa fa-star"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  data-html="true"
-                  title="{{ 'discussion.icon_tooltip.helpfulMessage'|trans }}"
-            ></span>
-            {% endif %}
-
             {% if discussion.recommended %}
                 <span class="icon fa fa-thumbs-o-up"
                       data-toggle="tooltip"
