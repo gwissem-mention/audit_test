@@ -72,12 +72,18 @@ export class SearchComponent implements OnInit {
      * Update primary query.
      * Update hot query with primary query terms
      *
-     * @param query
+     * @param {Query} query
+     * @param {boolean} isFirstLoad
      */
-    refreshQuery(query: Query) {
+    refreshQuery(query: Query, isFirstLoad: boolean = false) {
         this.searchStream.next(query);
 
+        if (!isFirstLoad) {
+            query.findByPopin = false;
+        }
+
         this.hotQuery.setTerm(query.term);
+        this.hotQuery.setFindByPopin(query.findByPopin);
         this.refreshHotQuery(this.hotQuery);
     }
 
@@ -124,8 +130,11 @@ export class SearchComponent implements OnInit {
 
         let urlQuery = queryString.parse(location.search);
         if (undefined !== urlQuery.q) {
+            if (undefined !== urlQuery.findByPopin) {
+                this.query.setFindByPopin(!!urlQuery.findByPopin);
+            }
             this.query.setTerm(urlQuery.q);
-            this.refreshQuery(this.query);
+            this.refreshQuery(this.query, true);
         }
     }
 }

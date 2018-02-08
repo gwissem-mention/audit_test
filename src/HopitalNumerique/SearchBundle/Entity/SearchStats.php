@@ -82,6 +82,13 @@ class SearchStats
     /**
      * @var bool
      *
+     * @ORM\Column(name="search_popin", type="boolean")
+     */
+    protected $findByPopin;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="search_is_production", type="boolean")
      */
     protected $isProduction;
@@ -192,6 +199,14 @@ class SearchStats
     public function getFrom()
     {
         return $this->from;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFindByPopin()
+    {
+        return $this->findByPopin;
     }
 
     /**

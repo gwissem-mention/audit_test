@@ -2,6 +2,7 @@ import Filter from "./Filter";
 
 export default class Query {
     term: string = '';
+    findByPopin: boolean;
 
     offset: number = 0;
     from: number = 0;
@@ -20,6 +21,10 @@ export default class Query {
     setTerm(term: string) {
         this.term = term.trim();
         this.offset = 0;
+    }
+
+    setFindByPopin(findBypopin: boolean) {
+        this.findByPopin = findBypopin;
     }
 
     /**

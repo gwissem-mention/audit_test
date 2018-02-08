@@ -35,6 +35,11 @@ class Query
     protected $filters;
 
     /**
+     * @var bool
+     */
+    protected $findByPopin;
+
+    /**
      * Query constructor.
      *
      * @param $index
@@ -132,6 +137,26 @@ class Query
         }
 
         $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFindByPopin()
+    {
+        return $this->findByPopin;
+    }
+
+    /**
+     * @param bool $findByPopin
+     *
+     * @return $this
+     */
+    public function setFindByPopin($findByPopin)
+    {
+        $this->findByPopin = $findByPopin;
 
         return $this;
     }
