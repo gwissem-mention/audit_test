@@ -35,9 +35,9 @@ class Query
     protected $filters;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $findByPopin;
+    protected $source;
 
     /**
      * Query constructor.
@@ -142,21 +142,21 @@ class Query
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isFindByPopin()
+    public function getSource()
     {
-        return $this->findByPopin;
+        return $this->source;
     }
 
     /**
-     * @param bool $findByPopin
+     * @param string $source
      *
      * @return $this
      */
-    public function setFindByPopin($findByPopin)
+    public function setSource($source)
     {
-        $this->findByPopin = $findByPopin;
+        $this->source = $source;
 
         return $this;
     }

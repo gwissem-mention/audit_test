@@ -2,7 +2,7 @@ import Filter from "./Filter";
 
 export default class Query {
     term: string = '';
-    findByPopin: boolean;
+    source: string = '';
 
     offset: number = 0;
     from: number = 0;
@@ -23,8 +23,8 @@ export default class Query {
         this.offset = 0;
     }
 
-    setFindByPopin(findBypopin: boolean) {
-        this.findByPopin = findBypopin;
+    setSource(source: string) {
+        this.source = source;
     }
 
     /**

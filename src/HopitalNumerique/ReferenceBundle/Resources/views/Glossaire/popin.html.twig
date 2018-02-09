@@ -23,7 +23,7 @@
         </p>
     {% endif %}
 
-    <a href="{{ path('hopital_numerique_search', {'q':glossaireReference.libelle, 'findByPopin': true }) }}">
+    <a href="{{ path('hopital_numerique_search', {'q':glossaireReference.libelle, 'source': 'popin' }) }}">
         Rechercher les résultats correspondants
     </a>
 {% endblock %}

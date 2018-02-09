@@ -80,11 +80,11 @@ class SearchStats
     protected $from;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="search_popin", type="boolean")
+     * @ORM\Column(name="search_source", type="string", length=255)
      */
-    protected $findByPopin;
+    protected $source;
 
     /**
      * @var bool
@@ -202,11 +202,11 @@ class SearchStats
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isFindByPopin()
+    public function getSource()
     {
-        return $this->findByPopin;
+        return $this->source;
     }
 
     /**

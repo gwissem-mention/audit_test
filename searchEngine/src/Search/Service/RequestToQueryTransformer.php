@@ -29,7 +29,7 @@ class RequestToQueryTransformer
             ->setTerm($requestQuery->get('term'))
             ->setFrom((int) $requestQuery->get('from', 0))
             ->setSize((int) $requestQuery->get('size', 10))
-            ->setFindByPopin((bool) $requestQuery->get('findByPopin'))
+            ->setSource($requestQuery->get('source'))
         ;
 
         foreach ($this->getFilters($request) as $filter) {
