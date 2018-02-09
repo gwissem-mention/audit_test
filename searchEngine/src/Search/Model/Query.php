@@ -35,6 +35,11 @@ class Query
     protected $filters;
 
     /**
+     * @var string
+     */
+    protected $source;
+
+    /**
      * Query constructor.
      *
      * @param $index
@@ -132,6 +137,26 @@ class Query
         }
 
         $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param string $source
+     *
+     * @return $this
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
 
         return $this;
     }

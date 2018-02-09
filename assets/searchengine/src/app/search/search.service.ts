@@ -76,6 +76,7 @@ export class SearchService {
         params.set('term', query.term);
         params.set('size', query.getSize().toString());
         params.set('from', query.from.toString());
+        params.set('source', query.source);
 
         for (let filterKey in query.getFilters()) {
             let filter = query.getFilters()[filterKey];

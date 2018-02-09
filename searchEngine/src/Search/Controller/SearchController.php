@@ -41,8 +41,12 @@ class SearchController
      * @param RequestToQueryTransformer $transformer
      * @param SearchStatsRepository $statsRepository
      */
-    public function __construct(SearchRepository $repository, UserRepository $userRepository, RequestToQueryTransformer $transformer, SearchStatsRepository $statsRepository)
-    {
+    public function __construct(
+        SearchRepository $repository,
+        UserRepository $userRepository,
+        RequestToQueryTransformer $transformer,
+        SearchStatsRepository $statsRepository
+    ) {
         $this->searchRepository = $repository;
         $this->userRepository = $userRepository;
         $this->transformer = $transformer;
