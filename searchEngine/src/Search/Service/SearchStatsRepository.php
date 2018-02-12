@@ -32,15 +32,16 @@ class SearchStatsRepository
      */
     public function insertSearch(Query $query, $token, $nbResults, $isProduction)
     {
-        $index        = $query->getIndex();
-        $term         = $query->getTerm();
-        $size         = $query->getSize();
-        $from         = $query->getFrom();
+        $index = $query->getIndex();
+        $term = $query->getTerm();
+        $size = $query->getSize();
+        $from = $query->getFrom();
+        $source = $query->getSource();
         $isProduction = $isProduction ? 1 : 0;
 
         $sql = $this->connexion->prepare(
-            'INSERT INTO hn_search_stats(search_token, user_id, search_date, search_results, search_index, search_term, search_size, search_from, search_is_production)
-            (SELECT token, user_id, NOW(), :nbResults, :index, :term, :size, :from, :isProduction FROM core_user_token WHERE token = :token);'
+            'INSERT INTO hn_search_stats(search_token, user_id, search_date, search_results, search_index, search_term, search_size, search_from, search_source, search_is_production)
+            (SELECT token, user_id, NOW(), :nbResults, :index, :term, :size, :from, :source, :isProduction FROM core_user_token WHERE token = :token);'
         );
         $sql->bindParam(':token', $token);
         $sql->bindParam(':nbResults', $nbResults);
@@ -48,6 +49,7 @@ class SearchStatsRepository
         $sql->bindParam(':term', $term);
         $sql->bindParam(':size', $size);
         $sql->bindParam(':from', $from);
+        $sql->bindParam(':source', $source);
         $sql->bindParam(':isProduction', $isProduction);
         $sql->execute();
     }

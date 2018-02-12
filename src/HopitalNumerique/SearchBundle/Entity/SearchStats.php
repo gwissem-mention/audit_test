@@ -80,6 +80,13 @@ class SearchStats
     protected $from;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="search_source", type="string", length=255)
+     */
+    protected $source;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="search_is_production", type="boolean")
@@ -192,6 +199,14 @@ class SearchStats
     public function getFrom()
     {
         return $this->from;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
