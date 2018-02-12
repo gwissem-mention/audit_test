@@ -63,7 +63,8 @@
                 {{ form_start(groupeForm, { attr:{ class:'group-form form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     
                     {{ form_row(groupeForm.domains, {'attr': {'class': 'group-domains select2'}}) }}
-                    
+                    {{ form_row(groupeForm.questionnaire) }}
+
                     {% if groupe.domains.count > 0 %}
                         {{ form_row(groupeForm.titre) }}
                         {{ form_row(groupeForm.descriptionCourte) }}
@@ -72,9 +73,6 @@
                         {{ form_row(groupeForm.dateInscriptionOuverture) }}
                         {{ form_row(groupeForm.dateDemarrage) }}
                         {{ form_row(groupeForm.dateFin) }}
-                        <div class="survey">
-                            {{ form_row(groupeForm.questionnaire) }}
-                        </div>
                         {{ form_row(groupeForm.animateurs) }}
                         {{ form_row(groupeForm.requiredRoles, {'attr': {'class': 'select2'}}) }}
 
