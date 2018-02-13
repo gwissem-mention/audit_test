@@ -90,11 +90,13 @@ var Discussion;
                         $('html, body').animate({
                             scrollTop: that.$discussion.find('.message--helpful').slice(0, 1).position().top
                         });
-                    }
-
-                    if (scrollToNewMessage && that.$discussion.find('#new-message').length) {
+                    } else if (scrollToNewMessage && that.$discussion.find('#new-message').length) {
                         $('html, body').animate({
                             scrollTop: that.$discussion.find('#new-message').position().top
+                        });
+                    } else {
+                        $('html, body').animate({
+                            scrollTop: 0
                         });
                     }
                 })

@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Security\GroupVoter;
 use HopitalNumerique\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -97,15 +99,16 @@ class GroupeController extends Controller
      * Visualisation d'un groupe.
      *
      * @param Request $request
-     * @param Groupe  $groupe
+     * @param Groupe $groupe
      * @param Discussion|null $discussion
+     * @param Message|null $message
+     *
+     * @ParamConverter("message", class="HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message", options={"mapping": {"message": "id"}})
      *
      * @return RedirectResponse|Response
      */
-    public function viewAction(Request $request, Groupe $groupe, Discussion $discussion = null)
+    public function viewAction(Request $request, Groupe $groupe, Discussion $discussion = null, Message $message = null)
     {
-        $discussionPreSelected = $discussion != null;
-
         /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -155,9 +158,7 @@ class GroupeController extends Controller
                 $this->denyAccessUnlessGranted(GroupVoter::ACCESS, $groupe);
             }
         } else {
-            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', [
-                'groupe' => $groupe->getId(),
-            ]));
+            $request->getSession()->set('urlToRedirect', $request->getRequestUri());
 
             return $this->redirect(
                 $this->generateUrl('account_login')
@@ -167,13 +168,13 @@ class GroupeController extends Controller
         $discussionActivityCounter = $this->get(NewDiscussionActivityCounter::class);
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig', [
-            'discussionPreSelected' => $discussionPreSelected,
             'discussionCounter' => [
                 'discussion' => $discussionActivityCounter->getNewDiscussionCount($groupe, $this->getUser()),
                 'message' => $discussionActivityCounter->getNewMessageCount($groupe, $this->getUser()),
                 'document' => $discussionActivityCounter->getNewDocumentCount($groupe, $this->getUser()),
             ],
             'discussion' => $discussion,
+            'message' => $message,
             'groupe' => $groupe,
             'canExportCsv' => $this->container->get(Csv::class)->canExportCsv($user, $groupe),
         ]);

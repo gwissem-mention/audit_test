@@ -11,8 +11,8 @@ hopitalnumerique_communautepratique_groupe_view:
         groupe: \d+
 
 hopitalnumerique_communautepratique_groupe_view_default_discussion:
-    path: /{groupe}/discussion/{discussion}
-    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view' }
+    path: /{groupe}/discussion/{discussion}/{message}
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view', message: null }
     methods: GET
     requirements:
         discussion: \d+

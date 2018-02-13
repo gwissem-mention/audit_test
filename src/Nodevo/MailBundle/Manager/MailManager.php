@@ -257,6 +257,7 @@ class MailManager extends BaseManager
                     [
                         'groupe' => $group->getId(),
                         'discussion' => $message->getDiscussion()->getId(),
+                        'message' => $message->getId(),
                     ],
                     RouterInterface::ABSOLUTE_URL
                 );
@@ -301,6 +302,7 @@ class MailManager extends BaseManager
                     [
                         'groupe' => $group->getId(),
                         'discussion' => $message->getDiscussion()->getId(),
+                        'message' => $message->getId(),
                     ],
                     RouterInterface::ABSOLUTE_URL
                 );
