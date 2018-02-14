@@ -79,3 +79,5 @@ parameters:
 
     resource_domain_id: 17
     publication_autodiag_unpublished_id: ~
+
+    autodiag_documents_path: '%kernel.root_dir%/../files/autodiag/documents/'
