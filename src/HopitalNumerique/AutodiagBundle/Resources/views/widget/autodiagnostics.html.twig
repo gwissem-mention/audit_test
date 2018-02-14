@@ -116,7 +116,7 @@
                     <td>{{ document.name }}</td>
                     <td>{{ document.title }}</td>
                     <td>{{ document.date|date('d/m/Y') }}</td>
-                    <td><a href="{{ autodiagDocumentsPath }}{{ document.filename }}">{{ document.filename }}</a></td>
+                    <td><a href="{{ path('document_view', { id: document.id }) }}">{{ document.filename }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>

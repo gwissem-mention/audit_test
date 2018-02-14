@@ -4,6 +4,7 @@ namespace HopitalNumerique\DocumentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="HopitalNumerique\DocumentBundle\Repository\DocumentRepository")
@@ -64,6 +65,11 @@ class Document
     protected $type;
 
     /**
+     * @var File
+     */
+    protected $file;
+
+    /**
      * @return int
      */
     public function getId()
@@ -117,5 +123,21 @@ class Document
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return File
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
     }
 }

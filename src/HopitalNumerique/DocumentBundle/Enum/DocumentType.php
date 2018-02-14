@@ -5,7 +5,7 @@ namespace HopitalNumerique\DocumentBundle\Enum;
 /**
  * Class DocumentTypeEnum
  */
-abstract class DocumentTypeEnum
+abstract class DocumentType
 {
     /**
      * Document type 'Autodiag'

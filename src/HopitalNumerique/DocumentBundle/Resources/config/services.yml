@@ -4,3 +4,10 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\DocumentBundle\Entity\Document'
+
+    HopitalNumerique\DocumentBundle\EventSubscriber\FileSubscriber:
+        class: HopitalNumerique\DocumentBundle\EventSubscriber\FileSubscriber
+        arguments:
+            - "%document_directory%"
+        tags:
+            - { name: doctrine.event_subscriber }

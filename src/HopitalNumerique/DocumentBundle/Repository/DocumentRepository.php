@@ -5,11 +5,14 @@ namespace HopitalNumerique\DocumentBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 
-/**
- * Class DocumentRepository
- */
 class DocumentRepository extends EntityRepository
 {
+    /**
+     * @param User $user
+     * @param $type
+     *
+     * @return array
+     */
     public function getDocumentsByUserAndType(User $user, $type)
     {
         return $this->createQueryBuilder('document')

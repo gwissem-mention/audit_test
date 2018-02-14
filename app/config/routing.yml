@@ -1,4 +1,4 @@
-document:
+hopital_numerique_document:
     resource: "@DocumentBundle/Resources/config/routing.yml"
     prefix:   /
 

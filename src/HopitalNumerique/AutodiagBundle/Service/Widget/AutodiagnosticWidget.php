@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
-use HopitalNumerique\DocumentBundle\Enum\DocumentTypeEnum;
+use HopitalNumerique\DocumentBundle\Enum\DocumentType;
 use HopitalNumerique\DocumentBundle\Repository\DocumentRepository;
 use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
@@ -109,7 +109,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $this->domains
         );
 
-        $documents = $this->documentRepository->getDocumentsByUserAndType($user, DocumentTypeEnum::DOCUMENT_TYPE_AUTODIAG);
+        $documents = $this->documentRepository->getDocumentsByUserAndType($user, DocumentType::DOCUMENT_TYPE_AUTODIAG);
 
         $data = [];
 
