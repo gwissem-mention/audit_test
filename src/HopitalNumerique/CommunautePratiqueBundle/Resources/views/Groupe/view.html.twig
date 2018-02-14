@@ -52,7 +52,7 @@
 
 {% block body_communaute_pratique %}
 
-    <div class="group">
+    <div class="group" data-load-last-message="{{ message is not null ? 'true' : 'false' }}" data-message="{{ message is not null ? message.id : '' }}">
         <div class="tabs">
 
             <a href="#description" class="tab">

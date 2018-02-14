@@ -38,6 +38,8 @@ var Group;
                         if ($block.data('cache') === undefined || $block.data('cache') === 'enabled') {
                             $block.data('init', true);
                         }
+
+                        that.loadLastMessage();
                     })
                 }
             });
@@ -49,6 +51,19 @@ var Group;
 
         preOpenDiscussionTab: function () {
             $('.group .tabs a.tab.discussion').trigger('click');
+        },
+
+        loadLastMessage: function () {
+            var groupDatas = document.querySelector('.group').dataset,
+                loadLastMessage = groupDatas.loadLastMessage === 'true';
+
+            if (loadLastMessage) {
+                var message = groupDatas.message;
+
+                $('html, body').animate({
+                    scrollTop: $('#' + message).offset().top
+                }, 'slow');
+            }
         }
     }
 })();

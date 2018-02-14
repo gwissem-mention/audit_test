@@ -314,13 +314,14 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des objets selon le/les types et trié par nombre de vues.
+     * Retourne la liste des objets selon le/les types et trié par id.
      *
+     * @param $domain
      * @param int $limit
      *
-     * @return QueryBuilder
+     * @return array
      */
-    public function getObjetsByNbVue($domaine, $limit = 0)
+    public function getObjetsByNbVue($domain, $limit = 0)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
@@ -332,9 +333,9 @@ class ObjetRepository extends EntityRepository
             ->andWhere('obj.isArticle = FALSE')
             ->andWhere('domaines.slug = :slug')
             ->setParameters([
-                'slug' => $domaine->getSlug(),
+                'slug' => $domain->getSlug(),
             ])
-            ->orderBy('obj.nbVue', 'DESC')
+            ->orderBy('obj.id', 'DESC')
         ;
 
         if ($limit !== 0) {

@@ -242,8 +242,8 @@ class MailManager extends BaseManager
         );
 
 
+        $group = null;
         if (!$message->getDiscussion()->isPublic()) {
-            $group = null;
             foreach ($user->getCommunautePratiqueGroupes() as $userGroup) {
                 if ($message->getDiscussion()->getGroups()->contains($userGroup)) {
                     $group = $userGroup;
@@ -257,11 +257,21 @@ class MailManager extends BaseManager
                     [
                         'groupe' => $group->getId(),
                         'discussion' => $message->getDiscussion()->getId(),
+                        'message' => $message->getId(),
                     ],
                     RouterInterface::ABSOLUTE_URL
                 );
             }
         }
+
+        $uriUnfollow = $this->_router->generate(
+            'hopitalnumerique_communautepratique_discussions_subscribe',
+            [
+                'discussion' => $message->getDiscussion()->getId(),
+                'group' => $group ? $group->getId() : null,
+            ],
+            RouterInterface::ABSOLUTE_URL
+        );
 
         $this->mailer->send($this->generationMail(
             $user,
@@ -271,6 +281,8 @@ class MailManager extends BaseManager
                 'prenomUtilisateur' => $message->getUser()->getFirstname(),
                 'discussionName' => $message->getDiscussion()->getTitle(),
                 'urlDiscussion' => $uri,
+                'urlUnfollow' => $uriUnfollow,
+                'manageAlerts' => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
             ]
         ));
     }
@@ -286,8 +298,8 @@ class MailManager extends BaseManager
         );
 
 
+        $group = null;
         if (!$message->getDiscussion()->isPublic()) {
-            $group = null;
             foreach ($user->getCommunautePratiqueGroupes() as $userGroup) {
                 if ($message->getDiscussion()->getGroups()->contains($userGroup)) {
                     $group = $userGroup;
@@ -301,11 +313,21 @@ class MailManager extends BaseManager
                     [
                         'groupe' => $group->getId(),
                         'discussion' => $message->getDiscussion()->getId(),
+                        'message' => $message->getId(),
                     ],
                     RouterInterface::ABSOLUTE_URL
                 );
             }
         }
+
+        $uriUnfollow = $this->_router->generate(
+            'hopitalnumerique_communautepratique_discussions_subscribe',
+            [
+                'discussion' => $message->getDiscussion()->getId(),
+                'group'      => $group ? $group->getId() : null,
+            ],
+            RouterInterface::ABSOLUTE_URL
+        );
 
         $this->mailer->send($this->generationMail(
             $user,
@@ -315,6 +337,8 @@ class MailManager extends BaseManager
                 'prenomUtilisateur' => $message->getUser()->getFirstname(),
                 'discussionName' => $message->getDiscussion()->getTitle(),
                 'urlDiscussion' => $uri,
+                'urlUnfollow' => $uriUnfollow,
+                'manageAlerts' => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
             ]
         ));
     }
