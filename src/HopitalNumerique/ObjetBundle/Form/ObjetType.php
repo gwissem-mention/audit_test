@@ -232,7 +232,7 @@ class ObjetType extends AbstractType
             ])
             ->add('publicationPlusConsulte', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Afficher dans les plus consultées',
+                'label' => 'Afficher dans les publications les plus vues',
                 'label_attr' => [
                     'class' => 'col-md-7 control-label',
                 ],
