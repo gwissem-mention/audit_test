@@ -20,6 +20,11 @@ homepage:
         institutions: Établissements inscrits
         consultations: Vues de publications
         discussions: Discussions dans la communauté de pratique
+    lastPublicationsBlock:
+        title: Publications à la une
+        btn:
+            text: "> Rechercher une publication"
     cdpBlock:
+        title: Discussions en cours
         btn:
             text: "> Accéder à l'espace de discussion"

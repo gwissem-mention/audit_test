@@ -209,21 +209,23 @@
 
                     {% if publications %}
                         <div id="block-last-publications">
-                            <h2><a href="{{path('hopital_numerique_recherche_homepage')}}">Publications les plus consultées</a></h2>
+                            <h2><a href="{{path('hopital_numerique_recherche_homepage')}}">{{ 'homepage.lastPublicationsBlock.title'|trans }}</a></h2>
                             <ul>
-                        {% for publication in publications %}
-                            <li>
-                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':publication.id,'alias':publication.alias})}}">{{ publication.titre }}</a>
-                            </li>
-                        {% endfor %}
+                                {% for publication in publications %}
+                                    <li>
+                                        <a href="{{path('hopital_numerique_publication_publication_objet', {'id':publication.id,'alias':publication.alias})}}">{{ publication.titre }}</a>
+                                    </li>
+                                {% endfor %}
                             </ul>
-                            <a href="{{path('hopital_numerique_recherche_homepage')}}" class="btn btn-link lire-suite" style="margin-top:10px;">> Rechercher une publication</a>
+                            <a href="{{path('hopital_numerique_recherche_homepage')}}" class="btn btn-link lire-suite" style="margin-top:10px;">
+                                {{ 'homepage.lastPublicationsBlock.btn.text'|trans }}
+                            </a>
                         </div>
                     {% endif %}
                     <div class="clearfix"></div>
                     {% if cdpDiscussions %}
                         <div id="block-fil-discussion">
-                            <h2><a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}">Discussions en cours</a></h2>
+                            <h2><a href="{{ path('hopitalnumerique_communautepratique_discussions_public') }}">{{ 'homepage.cdpBlock.title'|trans }}</a></h2>
                             <ul>
                                 {% for discussion in cdpDiscussions %}
                                     <li>
