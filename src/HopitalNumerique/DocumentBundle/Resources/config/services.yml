@@ -1,0 +1,6 @@
+services:
+    HopitalNumerique\DocumentBundle\Repository\DocumentRepository:
+        class: HopitalNumerique\DocumentBundle\Repository\DocumentRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\DocumentBundle\Entity\Document'

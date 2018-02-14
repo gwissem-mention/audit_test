@@ -85,6 +85,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\SearchBundle\HopitalNumeriqueSearchBundle(),
             new HopitalNumerique\ContextualNavigationBundle\HopitalNumeriqueContextualNavigationBundle(),
             new HopitalNumerique\NotificationBundle\NotificationBundle(),
+            new HopitalNumerique\DocumentBundle\DocumentBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
