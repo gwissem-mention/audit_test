@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ViewController extends Controller
 {
+    /**
+     * @param Document $document
+     *
+     * @return BinaryFileResponse
+     */
     public function viewAction(Document $document)
     {
         if (!$this->getUser() || $document->getUser()->getId() !== $this->getUser()->getId()) {
