@@ -104,16 +104,16 @@
     <table class="widget-table account-table table default">
         <thead>
             <tr>
-                <th>Autodiag</th>
-                <th>Titre</th>
-                <th>Date</th>
-                <th>Fichier</th>
+                <th>{{ 'autodiagnostic.table.autodiag'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.title'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.date'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.file'|trans }}</th>
             </tr>
         </thead>
         <tbody>
             {% for document in documents %}
                 <tr>
-                    <td>{{ document.name }}</td>
+                    <td>{{ document.target }}</td>
                     <td>{{ document.title }}</td>
                     <td>{{ document.date|date('d/m/Y') }}</td>
                     <td><a href="{{ path('document_view', { id: document.id }) }}">{{ document.filename }}</a></td>

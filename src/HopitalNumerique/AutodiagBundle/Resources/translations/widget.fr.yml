@@ -5,6 +5,9 @@ autodiagnostic:
     table:
         autodiag: Autodiagnostics
         actions: Actions
+        title: Titre
+        date: Date
+        file: Fichier
     action:
         new: Commencer un nouvel autodiagnostic
         show: Aller à l'autodiagnostic

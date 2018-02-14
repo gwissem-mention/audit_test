@@ -41,7 +41,7 @@ class Document
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $name;
+    protected $target;
 
     /**
      * @var string
@@ -96,9 +96,9 @@ class Document
     /**
      * @return string
      */
-    public function getName()
+    public function getTarget()
     {
-        return $this->name;
+        return $this->target;
     }
 
     /**
