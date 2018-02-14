@@ -29,8 +29,7 @@ class UploadController extends Controller
 
         $acceptedFilesExtension = explode(',', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
 
-        if (!in_array($uploadedFile->getClientOriginalExtension(), $acceptedFilesExtension)
-        ) {
+        if (!in_array($uploadedFile->getClientOriginalExtension(), $acceptedFilesExtension)) {
             return new JsonResponse(
                 $this->get('translator')->trans('upload.error.type', ['%ext%' => $this->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees')]),
                 418
