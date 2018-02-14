@@ -391,8 +391,18 @@ var Discussion;
 
                     that.updateDropzoneState($(this.element), fileUploadingCounter);
                 },
-                error: function (file, errorMessage) {
-                    alert(errorMessage);
+                error: function (file, errorMessage, xhr) {
+                    if (typeof xhr === 'object' && xhr.hasOwnProperty('status') && -1 !== [401, 403].indexOf(xhr.status)) {
+                        window.location.reload();
+                        return;
+                    }
+
+                    if (typeof errorMessage === 'string') {
+                        alert(errorMessage);
+                    } else {
+                        alert('Une erreur est survenue');
+                        console.log(errorMessage);
+                    }
                 }
             });
         },
