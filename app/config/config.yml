@@ -7,6 +7,9 @@ imports:
     - { resource: elastica.yml }
     - { resource: object_identity_routing.yml }
 
+parameters:
+    document_directory: "%kernel.root_dir%/../files/documents"
+
 framework:
     translator:      { fallback: "%locale%" }
     secret:          "%secret%"
