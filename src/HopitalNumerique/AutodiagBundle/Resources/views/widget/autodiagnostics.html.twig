@@ -94,6 +94,35 @@
             return confirm('{{ 'autodiagnostic.delete.confirm'|trans }}');
         });
     </script>
-{% else %}
+{% endif %}
+
+{% if documents is not empty %}
+    <div class="widget-description">
+        <p>{{ 'autodiagnostic.results'|trans }}</p>
+    </div>
+
+    <table class="widget-table account-table table default">
+        <thead>
+            <tr>
+                <th>{{ 'autodiagnostic.table.autodiag'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.title'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.date'|trans }}</th>
+                <th>{{ 'autodiagnostic.table.file'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in documents %}
+                <tr>
+                    <td>{{ document.target }}</td>
+                    <td>{{ document.title }}</td>
+                    <td>{{ document.date|date('d/m/Y') }}</td>
+                    <td><a href="{{ path('document_view', { id: document.id }) }}">{{ document.filename }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if documents is empty and data is empty %}
     {{ 'autodiagnostic.not_found'|trans }}
 {% endif %}

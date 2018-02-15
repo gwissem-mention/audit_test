@@ -1,0 +1,4 @@
+document_view:
+    path: /document/{id}
+    defaults: { _controller: DocumentBundle:View:view }
+    methods: ['GET']

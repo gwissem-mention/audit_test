@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Widget;
 
+use HopitalNumerique\DocumentBundle\Enum\DocumentType;
+use HopitalNumerique\DocumentBundle\Repository\DocumentRepository;
 use HopitalNumerique\NewAccountBundle\Model\Widget\WidgetExtension;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
@@ -54,6 +56,11 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
     protected $publicationUnpublished;
 
     /**
+     * @var DocumentRepository
+     */
+    protected $documentRepository;
+
+    /**
      * AutodiagnosticWidget constructor.
      *
      * @param \Twig_Environment $twig
@@ -65,6 +72,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
      * @param CurrentDomaine $currentDomainService
      * @param ShareMessageGenerator $shareMessageGenerator
      * @param $publicationUnpublished
+     * @param DocumentRepository $documentRepository
      */
     public function __construct(
         \Twig_Environment $twig,
@@ -75,7 +83,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         BaseUrlProvider $baseUrlProvider,
         CurrentDomaine $currentDomainService,
         ShareMessageGenerator $shareMessageGenerator,
-        $publicationUnpublished
+        $publicationUnpublished,
+        DocumentRepository $documentRepository
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
@@ -85,6 +94,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
         $this->currentDomainService = $currentDomainService;
         $this->shareMessageGenerator = $shareMessageGenerator;
         $this->publicationUnpublished = $publicationUnpublished;
+        $this->documentRepository = $documentRepository;
     }
 
     /**
@@ -98,6 +108,8 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
             $user,
             $this->domains
         );
+
+        $documents = $this->documentRepository->getDocumentsByUserAndType($user, DocumentType::DOCUMENT_TYPE_AUTODIAG);
 
         $data = [];
 
@@ -193,6 +205,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
 
         $html = $this->twig->render('HopitalNumeriqueAutodiagBundle:widget:autodiagnostics.html.twig', [
             'data' => $data,
+            'documents' => $documents,
         ]);
 
         $title = $this->translator->trans('autodiagnostic.title', [], 'widget');

@@ -272,6 +272,7 @@ services:
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@hopitalnumerique\userbundle\service\sharemessagegenerator'
             - '%publication_autodiag_unpublished_id%'
+            - '@HopitalNumerique\DocumentBundle\Repository\DocumentRepository'
         public: false
 
     HopitalNumerique\AutodiagBundle\Service\Notification\AutodiagUpdatedNotificationProvider:
