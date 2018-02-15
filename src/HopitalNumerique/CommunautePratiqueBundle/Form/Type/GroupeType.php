@@ -14,8 +14,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use HopitalNumerique\UserBundle\Manager\UserManager;
-use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -70,6 +68,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                     ;
                 },
                 'multiple' => true,
+                'label' => 'Domaines'
             ])
         ;
         if ($hasDomaine) {
@@ -156,13 +155,15 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
 
     private function addSurveyField($domains, FormInterface $form)
     {
-        $form->add('questionnaire', 'entity', [
+        $form->add('questionnaire', EntityType::class, [
             'class' => 'HopitalNumeriqueQuestionnaireBundle:Questionnaire',
-            'choices' => $this->questionnaireRepository->findByDomains($domains),
+            'choices' => $this->questionnaireRepository->findByDomains(
+                count($domains) ? $domains : $this->user->getDomaines()
+            ),
             'required' => true,
             'empty_value' => ' ',
             'attr' => [
-                'class' => 'validate[required]',
+                'class' => 'validate[required] survey',
             ],
         ]);
     }

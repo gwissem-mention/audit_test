@@ -134,23 +134,30 @@ class QuestionnaireRepository extends EntityRepository
 
     /**
      * @param Domaine[] $domains
+     * @param bool $strict
      *
      * @return Questionnaire[]
      */
-    public function findByDomains($domains)
+    public function findByDomains($domains, $strict = false)
     {
         $queryBuilder = $this->createQueryBuilder('questionnaire');
 
-        foreach ($domains as $domain) {
+        if ($strict) {
+            foreach ($domains as $domain) {
+                $queryBuilder
+                    ->join(
+                        'questionnaire.domaines',
+                        sprintf('domain%d', $domain->getId()),
+                        Expr\Join::WITH,
+                        sprintf('domain%d = :domain%d', $domain->getId(), $domain->getId())
+                    )
+                    ->setParameter(sprintf('domain%d', $domain->getId()), $domain)
+                ;
+            }
+        } else {
             $queryBuilder
-                ->join(
-                    'questionnaire.domaines',
-                    sprintf('domain%d', $domain->getId()),
-                    Expr\Join::WITH,
-                    sprintf('domain%d = :domain%d', $domain->getId(), $domain->getId())
-                )
-                ->setParameter(sprintf('domain%d', $domain->getId()), $domain)
-            ;
+                ->join('questionnaire.domaines', 'domains', Expr\Join::WITH, 'domains.id IN (:domains)')
+                ->setParameter('domains', $domains);
         }
 
         return $queryBuilder->getQuery()->getResult();
