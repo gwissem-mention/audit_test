@@ -17,6 +17,7 @@
                 </thead>
                 <tbody>
                 {% set total = 0 %}
+                {% set discrValue = '' %}
                 {% for data in datas if data.total.prix is not null %}
                     {% if data.total.hasSupplement is defined and data.total.hasSupplement is not null and data.total.hasSupplement %}
                         {% set discrValue = data.total.prix ~ '_supp' %}
