@@ -244,7 +244,7 @@ class FactureManager extends BaseManager
     public function canGenererFacture(array $interventionDemandes)
     {
         foreach ($interventionDemandes as $interventionDemande) {
-            if (null !== $interventionDemande->getReferent() && null === $interventionDemande->getReferent()->getOrganizationSante()) {
+            if (null !== $interventionDemande->getReferent()) {
                 return false;
             }
         }
