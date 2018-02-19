@@ -17,13 +17,15 @@
                 </thead>
                 <tbody>
                 {% set total = 0 %}
-                {% set discrValue = '' %}
                 {% for data in datas if data.total.prix is not null %}
+                    {% set discrValue = data.total.prix %}
+
                     {% if data.total.hasSupplement is defined and data.total.hasSupplement is not null and data.total.hasSupplement %}
                         {% set discrValue = data.total.prix ~ '_supp' %}
                     {% elseif data.total.hasSupplement is defined and data.total.hasSupplement is not null and not data.total.hasSupplement %}
                         {% set discrValue = data.total.prix ~ '_noSupp' %}
                     {% endif %}
+
                     <tr>
                         <td class="hide" align="center hide">
                             <input type="checkbox" class="checkbox" name="{{ data.discr }}[{{ data.id }}]" checked="checked"

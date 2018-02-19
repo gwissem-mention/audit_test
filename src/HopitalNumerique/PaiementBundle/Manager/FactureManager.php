@@ -243,11 +243,12 @@ class FactureManager extends BaseManager
      */
     public function canGenererFacture(array $interventionDemandes)
     {
-        foreach ($interventionDemandes as $interventionDemande) {
-            if (null !== $interventionDemande->getReferent()) {
-                return false;
-            }
-        }
+        // Problème de génération en attente de l'ANAP.
+//        foreach ($interventionDemandes as $interventionDemande) {
+//            if (null !== $interventionDemande->getReferent()) {
+//                return false;
+//            }
+//        }
 
         return true;
     }
