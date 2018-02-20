@@ -97,4 +97,19 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb;
     }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return array
+     */
+    public function getUsersInGroup(Groupe $group)
+    {
+        return $this->createQueryBuilder('groupe_inscription')
+            ->where('groupe_inscription.groupe = :groupe')
+            ->setParameter('groupe', $group)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
