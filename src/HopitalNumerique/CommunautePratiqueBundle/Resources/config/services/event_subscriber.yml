@@ -37,3 +37,12 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: kernel.event_subscriber }
+
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionMovedSubscriber:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion\DiscussionMovedSubscriber
+        arguments:
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository'
+            - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
+        tags:
+            - { name: kernel.event_subscriber }
