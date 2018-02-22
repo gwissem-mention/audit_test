@@ -37,7 +37,7 @@ services:
 
     nodevo_menu.loader.node:
         class: Nodevo\MenuBundle\Provider\NodeLoader
-        arguments: ["@knp_menu.factory", "@security.context", "@service_container"]
+        arguments: ["@knp_menu.factory", "@security.context", "@service_container", "@security.token_storage"]
 
     nodevo_menu.loader.breadcrumb.node:
         class: Nodevo\MenuBundle\Provider\BreadcrumbNodeLoader

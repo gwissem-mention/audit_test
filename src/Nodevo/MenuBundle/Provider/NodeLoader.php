@@ -8,6 +8,7 @@ use Knp\Menu\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * NodeLoader aware of security context.
@@ -19,14 +20,29 @@ class NodeLoader implements LoaderInterface
     private $container;
     private $class = '';
 
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
+     * NodeLoader constructor.
+     *
+     * @param FactoryInterface $factory
+     * @param SecurityContextInterface $security
+     * @param ContainerInterface $container
+     * @param TokenStorageInterface $tokenStorage
+     */
     public function __construct(
         FactoryInterface $factory,
         SecurityContextInterface $security,
-        ContainerInterface $container
+        ContainerInterface $container,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->factory = $factory;
         $this->security = $security;
         $this->container = $container;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function load($data)
@@ -56,7 +72,7 @@ class NodeLoader implements LoaderInterface
         //parcours des enfants
         $haveChilds = false;
         foreach ($data->getChildren() as $childNode) {
-            if ($this->security->isGranted($childNode->getRole())) {
+            if (null !== $this->tokenStorage->getToken() && $this->security->isGranted($childNode->getRole())) {
                 if (!is_null($element = $this->load($childNode))) {
                     //set class for childrens ( if  set )
                     $element->setChildrenAttribute('class', $this->class);
