@@ -5,8 +5,10 @@ namespace HopitalNumerique\StatBundle\EventListener;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\StatBundle\Entity\StatConnections;
+use HopitalNumerique\UserBundle\Entity\User;
 use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 class LoginStatSubscriber implements EventSubscriberInterface
@@ -56,14 +58,16 @@ class LoginStatSubscriber implements EventSubscriberInterface
     /**
      * Add connection statistic
      */
-    public function onSecurityInteractiveLogin()
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-        $statConnection = new StatConnections(
-            $this->currentDomaine->get(),
-            $this->tokenStorage->getToken()->getUser()
-        );
+        $user = $event->getAuthenticationToken()->getUser();
+        $domain = $this->currentDomaine->get();
 
-        $this->entityManager->persist($statConnection);
-        $this->entityManager->flush();
+        if ($user instanceof User && null !== $domain) {
+            $statConnection = new StatConnections($domain, $user);
+
+            $this->entityManager->persist($statConnection);
+            $this->entityManager->flush();
+        }
     }
 }
