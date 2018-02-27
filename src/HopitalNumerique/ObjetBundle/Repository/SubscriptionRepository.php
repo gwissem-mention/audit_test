@@ -38,7 +38,7 @@ class SubscriptionRepository extends EntityRepository
                 'clt.objet = subscription.objet AND clt.user = user.id' .
                 ($infradocId ? ' AND clt.contenu = subscription.contenu' : '')
             )
-            ->addSelect('clt.dateLastConsulted as HIDDEN maxDate')
+            ->addSelect('clt.consultationDate as HIDDEN maxDate')
             ->groupBy('user.id')
             ->having('maxDate < :maxViewDate')
             ->setParameter('maxViewDate', $maxViewDate)
