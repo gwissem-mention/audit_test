@@ -146,7 +146,7 @@ class Consultation
     }
 
     /**
-     * @return \DateTime $dateLastConsulted
+     * @return \DateTime
      */
     public function getConsultationDate()
     {

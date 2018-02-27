@@ -1535,25 +1535,16 @@ class MailManager extends BaseManager
 
         /** @var Domaine $domain */
         foreach ($objet->getDomaines() as $domain) {
-            /** @var Mail $mail */
-            $currentMail = clone $mail;
+            $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain);
+        }
 
-            $content = $this->replaceContent(
-                $currentMail->getBody(),
-                null,
-                [
-                    'titrePublication' => $objet->getTitre(),
-                    'urlPublication' => $domain->getUrl() . $url,
-                    'commentaire' => $objet->getListeCommentaires()->last()->getTexte(),
-                    'prenomUtilisateur' => '',
-                ]
-            );
-
-            $currentMail->setBody($content);
-            $mailToSend = $this->generationMail(null, $currentMail);
-            $mailToSend->setTo($domain->getAdresseMailContact());
-
-            $this->mailer->send($mailToSend);
+        foreach ($this->_userManager->getAdmins() as $admin) {
+            foreach ($admin->getDomaines() as $domain) {
+                if (in_array($domain, $objet->getDomaines()->getValues())) {
+                    $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain, $admin);
+                    break;
+                }
+            }
         }
     }
 
@@ -1856,5 +1847,26 @@ class MailManager extends BaseManager
                 $user->getId(),
             ])),
         ]);
+    }
+
+    /**
+     * @param $mail
+     * @param Objet $objet
+     * @param $url
+     * @param $domain
+     * @param User $admin
+     */
+    public function templatePublicationCommentaireMail($mail, Objet $objet, $url, $domain, User $admin = null)
+    {
+        $mailToSend = $this->generationMail(null, $mail, [
+            'titrePublication'  => $objet->getTitre(),
+            'urlPublication'    => $domain->getUrl().$url,
+            'commentaire'       => $objet->getListeCommentaires()->last()->getTexte(),
+            'prenomUtilisateur' => '',
+        ]);
+
+        $mailToSend->setTo($admin ? $admin->getEmail() : $domain->getAdresseMailContact());
+
+        $this->mailer->send($mailToSend);
     }
 }
