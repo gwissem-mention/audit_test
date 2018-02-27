@@ -115,7 +115,9 @@
                     {{ form_row(form.firstname) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.pseudonym) }}
-                    {{ form_row(form.plainPassword) }}
+                    {% if not removePassword %}
+                        {{ form_row(form.plainPassword) }}
+                    {% endif %}
                     {{ form_row(form.phoneNumber) }}
                     {{ form_row(form.cellPhoneNumber) }}
                     {{ form_row(form.otherContact) }}
