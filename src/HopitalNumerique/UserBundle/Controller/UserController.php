@@ -288,7 +288,9 @@ class UserController extends Controller
 
         $user->setRoles([$role]);
 
-        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig');
+        $options['isNew'] = true;
+
+        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig', $options);
     }
 
     /**
@@ -304,6 +306,7 @@ class UserController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
 
         $options['isAllowedToSwitch'] = false;
+        $options['isNew'] = false;
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_1')) {
             $options['isAllowedToSwitch'] = true;
@@ -1052,6 +1055,14 @@ class UserController extends Controller
         //Création du formulaire via le service
         $form = $this->createForm($formName, $user);
 
+        // Remove password field in BO
+        if ($this->getUser() && $options['isNew']) {
+            $options['removePassword'] = true;
+            $form->remove('plainPassword');
+        } else {
+            $options['removePassword'] = false;
+        }
+
         //Si on est en FO dans informations personelles, on affiche pas le mot de passe.
         //Il est géré dans un autre formulaire
         if ($this->informationsPersonnelles) {
@@ -1121,7 +1132,15 @@ class UserController extends Controller
 
                     //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
                     if ($this->isGranted('ROLE_USER')) {
-                        //--BO--
+                        if ($options['removePassword']) {
+                            $passwordTool = new Password();
+                            $user->setPlainPassword(str_shuffle(
+                                $passwordTool->generate(3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') .
+                                $passwordTool->generate(3, 'abcdefghijklmnopqrstuvwyyz') .
+                                $passwordTool->generate(2, '1234567890')
+                            ));
+                        }
+
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user, []);
                         $this->get('mailer')->send($mail);
                     } else {
@@ -1324,6 +1343,7 @@ class UserController extends Controller
         $options['entityType'] = $this->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($user);
 
         return $this->render($view, [
+            'removePassword' => $options['removePassword'],
             'form' => $form->createView(),
             'user' => $user,
             'twigOptions' => $options,
