@@ -21,7 +21,7 @@
         {{ form_start(newDiscussionForm) }}
             {{ form_row(newDiscussionForm.title, {'attr': {'class': 'validate[required,maxSize[255]]'}}) }}
             {{ form_row(newDiscussionForm.content, {'attr': {'class': 'content validate[required]'}}) }}
-            <input type="submit" class="btn btn-success" value="{{ 'discussion.new_discussion.form.submit.text'|trans|e }}">
+            <input type="submit" class="btn btn-success publish" value="{{ 'discussion.new_discussion.form.submit.text'|trans|e }}">
         {{ form_end(newDiscussionForm) }}
     </div>
 

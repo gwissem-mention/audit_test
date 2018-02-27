@@ -11,6 +11,8 @@ var Discussion;
 
         tinyMCE.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
 
+        this.createDiscussionMessage();
+
         if (scope === "editReply") {
             this.initEditReplyForm();
 
@@ -567,6 +569,26 @@ var Discussion;
                 width: 'auto'
             });
             this.activeDiscussion.pinned = false;
+        },
+
+        createDiscussionMessage: function () {
+            var createMessageButton = document.querySelector('.save .send'),
+                createDiscussionButton = document.querySelector('input.publish')
+            ;
+
+            if (createMessageButton) {
+                createMessageButton.addEventListener('click', function (event) {
+                    event.target.disabled = true;
+                    event.target.form.submit();
+                });
+            }
+
+            if (createDiscussionButton) {
+                createDiscussionButton.addEventListener('click', function (event) {
+                    event.target.disabled = true;
+                    event.target.form.submit();
+                });
+            }
         }
     }
 })();

@@ -223,6 +223,12 @@ services:
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
             - '@doctrine.orm.entity_manager'
 
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter
         arguments:

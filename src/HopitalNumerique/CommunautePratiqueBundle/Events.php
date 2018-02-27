@@ -52,6 +52,11 @@ final class Events
      */
     const DISCUSSION_VIEWED = 'communautepratique.discussion.discussion_viewed';
 
+    /**
+     * Occurs when a discussion was moved
+     */
+    const DISCUSSION_MOVED = 'communautepratique.discussion.discussion_moved';
+
     // Legacy :
 
     /**

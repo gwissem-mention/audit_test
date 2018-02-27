@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
@@ -519,11 +521,12 @@ class DiscussionController extends Controller
         if ($groupId = $request->request->get('group', null)) {
             if ($group = $groupRepository->find($groupId)) {
                 if ('move' === $type) {
-                    $discussion->resetGroups();
+                    $command = new MoveDiscussionCommand($discussion, $group);
+                    $this->get(MoveDiscussionHandler::class)->handle($command);
+                } else {
+                    $discussion->addGroup($group);
+                    $this->getDoctrine()->getManager()->flush();
                 }
-
-                $discussion->addGroup($group);
-                $this->getDoctrine()->getManager()->flush();
 
                 $this->addFlash('success', $this->get('translator')->trans(sprintf('discussion.discussion.actions.group_%s.success', $type), [], 'cdp_discussion'));
 
