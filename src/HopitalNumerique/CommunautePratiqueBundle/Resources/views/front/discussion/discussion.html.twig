@@ -101,7 +101,15 @@
                 {% endif %}
                 <option value="{{ path('hopital_numerique_cart_add', {'objectType': 'cdp_discussion', 'objectId': discussion.id}) }}" data-action="goto">{{ 'discussion.discussion.actions.cart.label'|trans }}</option>
 
-                <option value="{{ path('hopitalnumerique_communautepratique_discussions_subscribe', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">{{ ('discussion.discussion.actions.subscription.'~(isDiscussionSubscribed ? 'un' : 'sub')~'.label')|trans }}</option>
+                <option value="{{ path('hopitalnumerique_communautepratique_discussions_subscribe', {
+                    'discussion': discussion.id,
+                    'type': isDiscussionSubscribed ?
+                        constant('HopitalNumerique\\CoreBundle\\Service\\ObjectIdentity\\UserSubscription::UNSUBSCRIBE') :
+                        constant('HopitalNumerique\\CoreBundle\\Service\\ObjectIdentity\\UserSubscription::SUBSCRIBE'),
+                    'group': group ? group.id : null,
+                }) }}" data-action="goto">
+                    {{ ('discussion.discussion.actions.subscription.'~(isDiscussionSubscribed ? 'un' : 'sub')~'.label')|trans }}
+                </option>
 
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::MARK_AS_RECOMMENDED'), discussion) %}
                     <option value="{{ path('hopitalnumerique_communautepratique_discussions_discussion_recommendation', {'discussion': discussion.id, 'group': group ? group.id : null}) }}" data-action="goto">

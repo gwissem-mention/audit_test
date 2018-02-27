@@ -5,6 +5,7 @@ namespace Nodevo\MailBundle\Manager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\CartBundle\Model\Item\GuidedSearch;
 use HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever;
+use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
 use HopitalNumerique\NewAccountBundle\Service\ProfileCompletionCalculator;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
@@ -268,6 +269,7 @@ class MailManager extends BaseManager
             'hopitalnumerique_communautepratique_discussions_subscribe',
             [
                 'discussion' => $message->getDiscussion()->getId(),
+                'type' => UserSubscription::UNSUBSCRIBE,
                 'group' => $group ? $group->getId() : null,
             ],
             RouterInterface::ABSOLUTE_URL
@@ -324,7 +326,8 @@ class MailManager extends BaseManager
             'hopitalnumerique_communautepratique_discussions_subscribe',
             [
                 'discussion' => $message->getDiscussion()->getId(),
-                'group'      => $group ? $group->getId() : null,
+                'type' => UserSubscription::UNSUBSCRIBE,
+                'group' => $group ? $group->getId() : null,
             ],
             RouterInterface::ABSOLUTE_URL
         );

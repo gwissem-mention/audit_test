@@ -15,6 +15,9 @@ use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityReposito
  */
 class UserSubscription
 {
+    const SUBSCRIBE = 'subscribe';
+    const UNSUBSCRIBE = 'unsubscribe';
+
     /**
      * @var ObjectIdentityRepository
      */

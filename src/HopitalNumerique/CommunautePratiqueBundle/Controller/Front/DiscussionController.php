@@ -568,12 +568,14 @@ class DiscussionController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param Discussion $discussion
+     * @param $type
      * @param Groupe|null $group
      *
      * @return RedirectResponse
      */
-    public function subscribeAction(Request $request, Discussion $discussion, Groupe $group = null)
+    public function subscribeAction(Request $request, Discussion $discussion, $type, Groupe $group = null)
     {
         if (!$this->isGranted('subscribe', $discussion)) {
             $request->getSession()->set('urlToRedirect', $request->getUri());
@@ -589,9 +591,11 @@ class DiscussionController extends Controller
 
             $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.subscription.un.success', [], 'cdp_discussion'));
         } else {
-            $subscriptionService->subscribe($discussion, $this->getUser());
+            if (UserSubscription::UNSUBSCRIBE !== $type) {
+                $subscriptionService->subscribe($discussion, $this->getUser());
 
-            $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.subscription.sub.success', [], 'cdp_discussion'));
+                $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.subscription.sub.success', [], 'cdp_discussion'));
+            }
         }
 
         return $this->redirectResponse($group, $discussion);

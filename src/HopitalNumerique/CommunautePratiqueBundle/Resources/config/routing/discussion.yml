@@ -61,12 +61,6 @@ hopitalnumerique_communautepratique_discussions_public_discussion:
     requirements:
         discussion: \d+
 
-hopitalnumerique_communautepratique_discussions_subscribe:
-    path: /{discussion}/subscribe/{group}
-    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:subscribe, group: null }
-    requirements:
-        discussion: \d+
-
 hopitalnumerique_communautepratique_discussions_discussion_read_message:
     path: /reading-message
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:read }
@@ -138,3 +132,9 @@ hopitalnumerique_communautepratique_discussions_discussion_message_validate:
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:validateMessage, group: null }
     methods:
         - GET
+
+hopitalnumerique_communautepratique_discussions_subscribe:
+    path: /{discussion}/{type}/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:subscribe, group: null }
+    requirements:
+        discussion: \d+
