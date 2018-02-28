@@ -31,14 +31,6 @@ class GroupDocumentCreatedNotificationProvider extends PracticeCommunityNotifica
     }
 
     /**
-     * @return string
-     */
-    public static function getSectionParent()
-    {
-        return '';
-    }
-
-    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Groupe $group

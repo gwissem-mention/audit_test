@@ -96,14 +96,6 @@ class ComingTrainingSessionsNotificationProvider extends NotificationProviderAbs
     }
 
     /**
-     * @return string
-     */
-    public static function getSectionParent()
-    {
-        return '';
-    }
-
-    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Session $session
