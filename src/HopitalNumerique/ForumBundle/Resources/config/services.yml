@@ -137,29 +137,6 @@ services:
             - '@ccdn_forum_forum.form.type.post_update'
             - '@ccdn_forum_forum.model.post'
 
-    HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract:
-        class: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
-        arguments:
-            - '@event_dispatcher'
-            - '@security.token_storage'
-            - '@translator'
-            - '@ccdn_component_bb_code.component.twig_extension.parse_bb'
-            - '@hopitalnumerique\forumbundle\repository\subscriptionrepository'
-        calls:
-            - [setMailManager, ['@nodevo_mail.manager.mail']]
-
-    HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider:
-        class: HopitalNumerique\ForumBundle\Service\Notification\ForumPostCreatedNotificationProvider
-        parent: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
-        tags:
-            - { name: notification.aggregator, key: forum_post_created }
-
-    HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider:
-        class: HopitalNumerique\ForumBundle\Service\Notification\ForumTopicCreatedNotificationProvider
-        parent: HopitalNumerique\ForumBundle\Service\Notification\ForumNotificationProviderAbstract
-        tags:
-            - { name: notification.aggregator, key: forum_topic_created }
-
     HopitalNumerique\ForumBundle\EventListener\PostCreatedListener:
         class: HopitalNumerique\ForumBundle\EventListener\PostCreatedListener
         arguments: [ '@hopitalnumerique\notificationbundle\service\notifications' ]
