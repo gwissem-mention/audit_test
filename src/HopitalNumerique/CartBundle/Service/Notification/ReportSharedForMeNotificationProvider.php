@@ -32,6 +32,14 @@ class ReportSharedForMeNotificationProvider extends ReportNotificationProviderAb
     }
 
     /**
+     * @return string
+     */
+    public static function getSectionParent()
+    {
+        return '';
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
      * @param Report $report

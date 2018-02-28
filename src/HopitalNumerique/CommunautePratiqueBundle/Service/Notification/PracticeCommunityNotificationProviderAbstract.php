@@ -73,6 +73,14 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     }
 
     /**
+     * @return string
+     */
+    public static function getSectionParent()
+    {
+        return '';
+    }
+
+    /**
      * @param $comment
      *
      * @return string

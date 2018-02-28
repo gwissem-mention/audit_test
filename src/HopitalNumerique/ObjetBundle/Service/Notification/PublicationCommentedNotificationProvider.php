@@ -35,6 +35,14 @@ class PublicationCommentedNotificationProvider extends PublicationNotificationPr
     }
 
     /**
+     * @return string
+     */
+    public static function getSectionParent()
+    {
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSubscribers(Notification $notification)

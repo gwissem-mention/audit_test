@@ -68,6 +68,14 @@ class UserRoleUpdatedNotificationProvider extends NotificationProviderAbstract
     /**
      * @return string
      */
+    public static function getSectionParent()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     */
     public static function getSectionCode()
     {
         return self::SECTION_CODE;

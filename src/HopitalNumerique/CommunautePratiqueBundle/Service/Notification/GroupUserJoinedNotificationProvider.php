@@ -5,7 +5,6 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class GroupUserJoinedNotificationProvider.
@@ -28,6 +27,14 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
     public static function getNotifPosition()
     {
         return 6;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getSectionParent()
+    {
+        return '';
     }
 
     /**
