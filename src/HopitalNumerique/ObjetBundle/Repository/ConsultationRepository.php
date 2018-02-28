@@ -53,7 +53,7 @@ class ConsultationRepository extends EntityRepository
     public function getUserLatestViewDate(User $user, Objet $object = null, Contenu $infradoc = null)
     {
         $query = $this->_em->createQueryBuilder()
-            ->select('MAX(clt.dateLastConsulted)')
+            ->select('MAX(clt.consultationDate)')
             ->from('\HopitalNumerique\ObjetBundle\Entity\Consultation', 'clt')
             ->andWhere('clt.user = :user')
             ->setParameter('user', $user);
@@ -69,7 +69,7 @@ class ConsultationRepository extends EntityRepository
         }
 
         return $query
-            ->orderBy('clt.dateLastConsulted', 'DESC')
+            ->orderBy('clt.consultationDate', 'DESC')
             ->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
     }
 
