@@ -27,7 +27,7 @@ class EtatController extends Controller
      */
     public function ajaxChangeAction(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
-        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $messageJustificationChangementEtat = ($this->get('request')->query->get('message') != '' ? $this->get('request')->query->get('message') : null);
 
             if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat)) {
