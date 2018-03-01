@@ -75,7 +75,7 @@ class GuidedSearchRetriever
     public function retrieve(RechercheParcours $guidedSearchReference)
     {
         if (
-            $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') &&
+            $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') &&
             !is_null($guidedSearch = $this->guidedSearchRepository->findLatestByOwnerAndGuidedSearchReference($this->tokenStorage->getToken()->getUser(), $guidedSearchReference))
         ) {
             return $guidedSearch;
@@ -101,7 +101,7 @@ class GuidedSearchRetriever
         $guidedSearch = new GuidedSearch();
         $guidedSearch->setGuidedSearchReference($guidedSearchReference);
 
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $guidedSearch->setOwner($this->tokenStorage->getToken()->getUser());
         }
 
