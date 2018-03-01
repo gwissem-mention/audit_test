@@ -95,6 +95,26 @@ services:
         calls:
             - [setMailManager, ['@nodevo_mail.manager.mail']]
 
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract
+        abstract: true
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_publication.twig.publication_extension'
+            - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract
+        abstract: true
+        arguments:
+            - '@event_dispatcher'
+            - '@security.token_storage'
+            - '@translator'
+            - '@hopitalnumerique_publication.twig.publication_extension'
+            - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCommentCreatedNotificationProvider
         parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
@@ -113,11 +133,35 @@ services:
 #        tags:
 #            - { name: notification.aggregator, key: practice_community_group_document_created }
 
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionInGroupNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionInGroupNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_new_discussion_in_group }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionGroupNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionGroupNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_new_message_in_discussion_group }
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider
-        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract
         tags:
             - { name: notification.aggregator, key: practice_community_group_user_joined }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_new_discussion }
+
+    HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionNotificationProvider:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionNotificationProvider
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract
+        tags:
+            - { name: notification.aggregator, key: practice_community_new_message_in_discussion }
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupCreatedNotificationProvider

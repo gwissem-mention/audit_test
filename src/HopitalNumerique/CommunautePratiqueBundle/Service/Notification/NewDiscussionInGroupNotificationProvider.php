@@ -7,11 +7,11 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 
 /**
- * Class GroupUserJoinedNotificationProvider.
+ * Class NewDiscussionInGroupNotificationProvider.
  */
-class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
+class NewDiscussionInGroupNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
-    const NOTIFICATION_CODE = 'practice_community_group_user_joined';
+    const NOTIFICATION_CODE = 'practice_community_new_discussion_in_group';
 
     /**
      * @return string
@@ -26,7 +26,7 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNot
      */
     public static function getNotifPosition()
     {
-        return 3;
+        return 1;
     }
 
     /**
@@ -37,15 +37,15 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNot
      */
     public function fire(Groupe $group, Inscription $registration)
     {
-        $this->processNotification(
-            [
-                $group->getId(),
-                $registration->getUser()->getId()
-            ],
-            $group->getTitre(),
-            $registration->getUser()->getPrenomNom(),
-            parent::generateOptions($group, $registration->getUser())
-        );
+//        $this->processNotification(
+//            [
+//                $group->getId(),
+//                $registration->getUser()->getId()
+//            ],
+//            $group->getTitre(),
+//            $registration->getUser()->getPrenomNom(),
+//            parent::generateOptions($group, $registration->getUser())
+//        );
     }
 
     /**
@@ -53,6 +53,6 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNot
      */
     public function notify(Notification $notification)
     {
-        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
+//        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
     }
 }

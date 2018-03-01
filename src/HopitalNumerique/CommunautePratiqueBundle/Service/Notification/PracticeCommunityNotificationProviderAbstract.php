@@ -22,8 +22,6 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 {
     use MailManagerAwareTrait;
 
-    const SECTION_CODE = 'practice_community';
-
     /**
      * @var PublicationExtension $publicationExtension
      */
@@ -54,22 +52,6 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
         $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getSectionCode()
-    {
-        return self::SECTION_CODE;
-    }
-
-    /**
-     * @return integer
-     */
-    public static function getSectionPosition()
-    {
-        return 2;
     }
 
     /**
