@@ -49,7 +49,7 @@ class DefaultController extends Controller
         );
 
         // Définition du forum en fonction de l'utilisateur connecté
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // authenticated (NON anonymous)
             $usr = $this->getUser();
             switch ($usr->getRole()) {
