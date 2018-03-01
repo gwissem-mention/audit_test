@@ -18,7 +18,7 @@ class UploadController extends Controller
     /**
      * @param Request $request
      *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @Security("is_granted('IS_AUTHENTICATED_REMEMBERED')")
      *
      * @return JsonResponse
      */
