@@ -193,8 +193,8 @@ services:
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.group_document_created }
 
-    HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener:
-        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupUserJoinedListener
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\NotificationsListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\NotificationsListener
         arguments:
             - '@hopitalnumerique\notificationbundle\service\notifications'
         tags:
