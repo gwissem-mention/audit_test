@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CoreBundle\Repository\ObjectIdentity;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -40,6 +41,22 @@ class SubscriptionRepository extends EntityRepository
             ->setParameter('objectIdentity', $objectIdentity)
 
             ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param ObjectIdentity $objectIdentity
+     *
+     * @return QueryBuilder
+     */
+    public function findSubscribersQueryBuilder(ObjectIdentity $objectIdentity)
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('user.id')
+            ->from(User::class, 'user')
+            ->join(Subscription::class, 'subscription', Join::WITH, 'subscription.user = user.id')
+            ->join('subscription.objectIdentity', 'objectIdentity', Join::WITH, 'objectIdentity.id = :objectIdentity')
+            ->setParameter('objectIdentity', $objectIdentity)
         ;
     }
 }

@@ -3,11 +3,13 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\EventListener;
 
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionCreatedEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionInGroupNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionNotificationProvider;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionNotificationProvider;
 use HopitalNumerique\NotificationBundle\Service\Notifications;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -38,8 +40,11 @@ class NotificationsListener implements EventSubscriberInterface
     {
         return [
             Events::DISCUSSION_CREATED => 'onDiscussionCreated',
+            Events::DISCUSSION_MESSAGE_CREATED => 'onDiscussionMessageCreated',
             Events::DISCUSSION_CREATED_IN_GROUP => 'onDiscussionCreatedInGroup',
+//            Events::DISCUSSION_MESSAGE_CREATED_IN_GROUP => 'onDiscussionMessageCreatedInGroup',
             Events::GROUP_USER_JOINED => 'onGroupUserJoined',
+//            Events::DISCUSSION_MESSAGE_VALIDATED => 'onDiscussionMessageValidated',
         ];
     }
 
@@ -50,6 +55,16 @@ class NotificationsListener implements EventSubscriberInterface
     {
         $this->notificationService->getProvider(NewDiscussionNotificationProvider::getNotificationCode())->fire(
             $event->getDiscussion()
+        );
+    }
+
+    /**
+     * @param MessageEvent $event
+     */
+    public function onDiscussionMessageCreated(MessageEvent $event)
+    {
+        $this->notificationService->getProvider(NewMessageInDiscussionNotificationProvider::getNotificationCode())->fire(
+            $event->getMessage()
         );
     }
 

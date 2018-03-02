@@ -3,6 +3,8 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Html2Text\Html2Text;
@@ -39,6 +41,16 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     protected $userRepository;
 
     /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
+     * @var MessageRepository $messageRepository
+     */
+    protected $messageRepository;
+
+    /**
      * PracticeCommunityNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -47,6 +59,8 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
      * @param PublicationExtension $publicationExtension
      * @param GroupeInscriptionRepository $groupeInscriptionRepository
      * @param UserRepository $userRepository
+     * @param SubscriptionRepository $subscriptionRepository
+     * @param MessageRepository $messageRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
@@ -54,12 +68,16 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         TranslatorInterface $translator,
         PublicationExtension $publicationExtension,
         GroupeInscriptionRepository $groupeInscriptionRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        SubscriptionRepository $subscriptionRepository,
+        MessageRepository $messageRepository
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
         $this->userRepository = $userRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
+        $this->messageRepository = $messageRepository;
         $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
@@ -99,6 +117,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 
         if (null !== $discussion) {
             $options = array_merge($options, [
+                'discussion' => $discussion,
                 'discussionId' => $discussion->getId(),
                 'nomDiscussion' => $discussion->getTitle(),
             ]);

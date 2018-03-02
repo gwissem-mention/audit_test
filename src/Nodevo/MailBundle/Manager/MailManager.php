@@ -275,18 +275,18 @@ class MailManager extends BaseManager
             RouterInterface::ABSOLUTE_URL
         );
 
-        $this->mailer->send($this->generationMail(
+        $this->sendNotification(
             $user,
-            $this->findOneById(100),
             [
-                'nomUtilisateur' => $message->getUser()->getLastname(),
-                'prenomUtilisateur' => $message->getUser()->getFirstname(),
-                'discussionName' => $message->getDiscussion()->getTitle(),
-                'urlDiscussion' => $uri,
-                'urlUnfollow' => $uriUnfollow,
-                'manageAlerts' => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
-            ]
-        ));
+                'nomUtilisateur2'    => $message->getUser()->getLastname(),
+                'prenomUtilisateur2' => $message->getUser()->getFirstname(),
+                'discussionName'    => $message->getDiscussion()->getTitle(),
+                'urlDiscussion'     => $uri,
+                'urlUnfollow'       => $uriUnfollow,
+                'manageAlerts'      => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
+            ],
+            Mail::NEW_MESSAGE
+        );
     }
 
     public function sendCDPNeedModerationMail(Message $message, User $user)
@@ -1675,7 +1675,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupUserJoinedNotification(User $user, $options)
     {
-        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
     }
 
     /**
@@ -1685,6 +1685,24 @@ class MailManager extends BaseManager
     public function sendCdpNewDiscussionInGroupNotification(User $user, $options)
     {
         $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION_IN_GROUP);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpNewDiscussionNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION);
+    }
+
+    /**
+     * @param Message $message
+     * @param User $user
+     */
+    public function sendCdpNewMessageInDiscussionNotification(Message $message, User $user)
+    {
+        $this->sendCDPSubscriptionMail($message, $user);
     }
 
     /**

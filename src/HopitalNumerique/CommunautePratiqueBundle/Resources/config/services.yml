@@ -93,6 +93,8 @@ services:
             - '@hopitalnumerique_publication.twig.publication_extension'
             - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
             - '@hopitalnumerique_user.repository.user'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
         calls:
             - [setMailManager, ['@nodevo_mail.manager.mail']]
 
@@ -204,6 +206,9 @@ services:
             - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
             - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created_in_group }
             - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created }
+            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_created }
+            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_created_in_group }
+            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_validated }
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener
@@ -260,6 +265,7 @@ services:
             - '@event_dispatcher'
             - '@doctrine.orm.entity_manager'
             - '@HopitalNumerique\FichierBundle\Repository\FileRepository'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
 
     HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler:
         class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReadMessageHandler

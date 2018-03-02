@@ -28,6 +28,11 @@ final class Events
     const DISCUSSION_MESSAGE_POSTED = 'communautepratique.discussion.message_posted';
 
     /**
+     * Occurs when a message is created into a cdp discussion in group
+     */
+    const DISCUSSION_MESSAGE_CREATED_IN_GROUP = 'communautepratique.discussion.message_created_in_group';
+
+    /**
      * Occurs when a message is created into a cdp discussion
      */
     const DISCUSSION_MESSAGE_CREATED = 'communautepratique.discussion.message_created';

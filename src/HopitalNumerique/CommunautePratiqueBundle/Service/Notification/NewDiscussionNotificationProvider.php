@@ -64,6 +64,6 @@ class NewDiscussionNotificationProvider extends PracticeCommunityPublicGroupsNot
      */
     public function notify(Notification $notification)
     {
-        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
+        $this->mailManager->sendCdpNewDiscussionNotification($notification->getUser(), $notification->getData());
     }
 }

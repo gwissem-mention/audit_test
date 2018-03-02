@@ -102,12 +102,6 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 ['readDiscussion', 0],
                 ['autoSubscribe', 0],
             ],
-            Events::DISCUSSION_MESSAGE_CREATED => [
-                ['notifySubscriber', 0],
-            ],
-            Events::DISCUSSION_MESSAGE_VALIDATED => [
-                ['notifySubscriber', 0],
-            ],
         ];
     }
 
@@ -190,29 +184,6 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 $this->mailManager->sendCDPNeedModerationMail($message, $animator);
             }
 
-        }
-    }
-
-    /**
-     * @param MessageEvent $event
-     */
-    public function notifySubscriber(MessageEvent $event)
-    {
-        $message = $event->getMessage();
-
-        if (!$message->isPublished()) {
-            return;
-        }
-
-        if (1 !== (int)$this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
-            $subscribers = $this->subscriptionRepository->findSubscribers(ObjectIdentity::createFromDomainObject($message->getDiscussion()));
-            $subscribers = array_filter($subscribers, function (User $user) use ($message) {
-                return $user->getId() !== $message->getuser()->getId();
-            });
-
-            foreach ($subscribers as $subscriber) {
-                $this->mailManager->sendCDPSubscriptionMail($message, $subscriber);
-            }
         }
     }
 }
