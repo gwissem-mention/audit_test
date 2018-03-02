@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use Html2Text\Html2Text;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -77,17 +78,29 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
     }
 
-    public function generateOptions(Groupe $group, User $user = null)
+    public function generateOptions(Groupe $group = null, User $user = null, Discussion $discussion = null)
     {
-        $options = [
-            'groupId' => $group->getId(),
-            'nomGroupe' => $group->getTitre(),
-            'domainId' => $group->getDomains()->first()->getId(),
-        ];
+        $options = [];
+
+        if (null !== $group) {
+            $options = array_merge($options, [
+                'groupId' => $group->getId(),
+                'nomGroupe' => $group->getTitre(),
+                'domainId' => $group->getDomains()->first()->getId(),
+            ]);
+        }
+
         if (null !== $user) {
             $options = array_merge($options, [
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
+            ]);
+        }
+
+        if (null !== $discussion) {
+            $options = array_merge($options, [
+                'discussionId' => $discussion->getId(),
+                'nomDiscussion' => $discussion->getTitle(),
             ]);
         }
 

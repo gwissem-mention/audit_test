@@ -2,8 +2,8 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 
 /**
@@ -32,20 +32,20 @@ class NewDiscussionInGroupNotificationProvider extends PracticeCommunityHelpGrou
     /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
+     * @param Discussion $discussion
      * @param Groupe $group
-     * @param Inscription $registration
      */
-    public function fire(Groupe $group, Inscription $registration)
+    public function fire(Discussion $discussion, Groupe $group)
     {
-//        $this->processNotification(
-//            [
-//                $group->getId(),
-//                $registration->getUser()->getId()
-//            ],
-//            $group->getTitre(),
-//            $registration->getUser()->getPrenomNom(),
-//            parent::generateOptions($group, $registration->getUser())
-//        );
+        $this->processNotification(
+            [
+                $discussion->getId(),
+                $group->getId(),
+            ],
+            $discussion->getTitle(),
+            null,
+            parent::generateOptions($group, null, $discussion)
+        );
     }
 
     /**
@@ -53,6 +53,6 @@ class NewDiscussionInGroupNotificationProvider extends PracticeCommunityHelpGrou
      */
     public function notify(Notification $notification)
     {
-//        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
+        $this->mailManager->sendCdpNewDiscussionInGroupNotification($notification->getUser(), $notification->getData());
     }
 }

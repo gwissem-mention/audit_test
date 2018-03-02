@@ -97,6 +97,7 @@ services:
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityHelpGroupsNotificationProviderAbstract
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
         abstract: true
         arguments:
             - '@event_dispatcher'
@@ -107,6 +108,7 @@ services:
 
     HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityPublicGroupsNotificationProviderAbstract
+        parent: HopitalNumerique\CommunautePratiqueBundle\Service\Notification\PracticeCommunityNotificationProviderAbstract
         abstract: true
         arguments:
             - '@event_dispatcher'
@@ -199,6 +201,7 @@ services:
             - '@hopitalnumerique\notificationbundle\service\notifications'
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
+            - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created_in_group }
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener
@@ -246,6 +249,8 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler'
             - '@event_dispatcher'
+            - '@hopitalnumerique_user.repository.user'
+            - '@security.token_storage'
 
     HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler:
         class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\PostDiscussionMessageHandler

@@ -29,7 +29,7 @@ notification-config:
             title: Titre de l'autodiag
             detail: Contenu de la mise à jour
     practice_community_public_groups:
-        section: COMMUNAUTE DE PRATIQUE - DISCUSSION PUBLIQUES
+        section: COMMUNAUTE DE PRATIQUE - DISCUSSIONS PUBLIQUES
         practice_community_new_discussion:
             description: Une nouvelle discussion est créée
             title: Nom du groupe + nom de la personne

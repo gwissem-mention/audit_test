@@ -1183,4 +1183,19 @@ class UserRepository extends EntityRepository
             ->getQuery()->getResult()
         ;
     }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return array
+     */
+    public function getCommunautePratiqueUsersInGroup(Groupe $group)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.groupeInscription', 'groupeInscription', Join::WITH, 'groupeInscription.groupe = :groupe')
+            ->setParameter('groupe', $group)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

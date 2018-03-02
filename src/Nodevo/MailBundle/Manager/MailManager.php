@@ -1682,6 +1682,15 @@ class MailManager extends BaseManager
      * @param User $user
      * @param $options
      */
+    public function sendCdpNewDiscussionInGroupNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION_IN_GROUP);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
     public function sendCdpUserJoinedNotification(User $user, $options)
     {
         $this->sendNotification($user, $options, Mail::MAIL_CDP_USER_JOINED);
@@ -1709,10 +1718,19 @@ class MailManager extends BaseManager
                 'fiche' => $options['ficheId'],
             ]);
         } else {
-            $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-                'groupe' => $options['groupId'],
-            ]);
+            if (array_key_exists('groupId', $options)) {
+                $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+                    'groupe' => $options['groupId'],
+                ]);
+            }
+            if (array_key_exists('discussionId', $options)) {
+                $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
+                    'discussion' => $options['discussionId'],
+                    'group' => array_key_exists('groupId', $options) ? $options['groupId'] : null,
+                ]);
+            }
         }
+
         $this->sendNotification($user, $options, $mailId);
     }
 

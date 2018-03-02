@@ -103,7 +103,7 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array
      */
-    public function getUsersInGroup(Groupe $group)
+    public function getInscriptionsInGroup(Groupe $group)
     {
         return $this->createQueryBuilder('groupe_inscription')
             ->where('groupe_inscription.groupe = :groupe')

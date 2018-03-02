@@ -43,6 +43,11 @@ final class Events
     const DISCUSSION_CREATED = 'communautepratique.discussion.discussion_created';
 
     /**
+     * Occurs when a discussion is created in group
+     */
+    const DISCUSSION_CREATED_IN_GROUP = 'communautepratique.discussion.discussion_created_in_group';
+
+    /**
      * Occurs when a discussion was set in public
      */
     const DISCUSSION_PUBLIC = 'communautepratique.discussion.discussion_public';
