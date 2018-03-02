@@ -92,6 +92,7 @@ services:
             - '@translator'
             - '@hopitalnumerique_publication.twig.publication_extension'
             - '@hopitalnumerique\communautepratiquebundle\repository\groupeinscriptionrepository'
+            - '@hopitalnumerique_user.repository.user'
         calls:
             - [setMailManager, ['@nodevo_mail.manager.mail']]
 
@@ -202,6 +203,7 @@ services:
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
             - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created_in_group }
+            - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created }
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener

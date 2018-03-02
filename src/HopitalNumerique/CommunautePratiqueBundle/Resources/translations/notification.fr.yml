@@ -29,6 +29,10 @@ notification_config:
             description: Nouvelle discussion dans un de mes groupes
             title: Nom de la discussion + nom du groupe
             detail: -
+        practice_community_new_discussion:
+            description: Nouvelle discussion
+            title: Nom de la discussion
+            detail: -
     grouped:
         practice_community_group_comment_created:
             single: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName% : %commentaire%
@@ -71,6 +75,11 @@ notification_config:
             mutliple:
                 header: %number% nouvelles discussions ont été créées
                 content: %groupeName% : %discussionName%
+        practice_community_new_discussion:
+            single: La discussion "%discussionName%" a été créée
+            mutliple:
+                header: %number% nouvelles discussions ont été créées
+                content: %discussionName%
 
 notification:
     section:

@@ -1675,7 +1675,7 @@ class MailManager extends BaseManager
      */
     public function sendCdpGroupUserJoinedNotification(User $user, $options)
     {
-        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_GROUP_USER_JOINED);
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION);
     }
 
     /**
@@ -1724,10 +1724,17 @@ class MailManager extends BaseManager
                 ]);
             }
             if (array_key_exists('discussionId', $options)) {
-                $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
-                    'discussion' => $options['discussionId'],
-                    'group' => array_key_exists('groupId', $options) ? $options['groupId'] : null,
-                ]);
+                if (array_key_exists('groupId', $options)) {
+                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
+                        'discussion' => $options['discussionId'],
+                        'group'      => array_key_exists('groupId', $options) ? $options['groupId'] : null,
+                    ]);
+                } else {
+                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+                        'discussion' => $options['discussionId'],
+                        'group'      => array_key_exists('groupId', $options) ? $options['groupId'] : null,
+                    ]);
+                }
             }
         }
 

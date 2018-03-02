@@ -84,6 +84,8 @@ class Mail
 
     const MAIL_CDP_NEW_DISCUSSION_IN_GROUP = 102;
 
+    const MAIL_CDP_NEW_DISCUSSION = 103;
+
     /**
      * @var int
      *

@@ -3,12 +3,12 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Html2Text\Html2Text;
-use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
@@ -34,6 +34,11 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     protected $groupeInscriptionRepository;
 
     /**
+     * @var UserRepository $userRepository
+     */
+    protected $userRepository;
+
+    /**
      * PracticeCommunityNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -41,17 +46,20 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
      * @param TranslatorInterface $translator
      * @param PublicationExtension $publicationExtension
      * @param GroupeInscriptionRepository $groupeInscriptionRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
         PublicationExtension $publicationExtension,
-        GroupeInscriptionRepository $groupeInscriptionRepository
+        GroupeInscriptionRepository $groupeInscriptionRepository,
+        UserRepository $userRepository
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
+        $this->userRepository = $userRepository;
         $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
     }
 
@@ -65,17 +73,9 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         return $this->publicationExtension->parsePublication($comment);
     }
 
-    /**
-     * Returns users concerned by notification, in this case users who are active members of group.
-     * notification date.
-     *
-     * @param Notification $notification
-     *
-     * @return QueryBuilder
-     */
     public function getSubscribers(Notification $notification)
     {
-        return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
+        return $this->userRepository->getCommunautePratiqueUsersQueryBuilder();
     }
 
     public function generateOptions(Groupe $group = null, User $user = null, Discussion $discussion = null)

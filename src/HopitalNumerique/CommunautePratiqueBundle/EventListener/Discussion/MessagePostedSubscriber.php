@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use Nodevo\MailBundle\Manager\MailManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
@@ -54,6 +55,11 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     protected $userRepository;
 
     /**
+     * @var MessageRepository
+     */
+    protected $messageRepository;
+
+    /**
      * MessagePostedSubscriber constructor.
      *
      * @param ReadRepository $readRepository
@@ -63,6 +69,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
      * @param MailManager $mailManager
      * @param UserSubscription $userSubscription
      * @param UserRepository $userRepository
+     * @param MessageRepository $messageRepository
      */
     public function __construct(
         ReadRepository $readRepository,
@@ -71,7 +78,8 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         SubscriptionRepository $subscriptionRepository,
         MailManager $mailManager,
         UserSubscription $userSubscription,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        MessageRepository $messageRepository
     ) {
         $this->readRepository = $readRepository;
         $this->entityManager = $entityManager;
@@ -80,6 +88,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         $this->mailManager = $mailManager;
         $this->userSubscription = $userSubscription;
         $this->userRepository = $userRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
@@ -195,13 +204,15 @@ class MessagePostedSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $subscribers = $this->subscriptionRepository->findSubscribers(ObjectIdentity::createFromDomainObject($message->getDiscussion()));
-        $subscribers = array_filter($subscribers, function (User $user) use ($message) {
-            return $user->getId() !== $message->getuser()->getId();
-        });
+        if (1 !== (int)$this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
+            $subscribers = $this->subscriptionRepository->findSubscribers(ObjectIdentity::createFromDomainObject($message->getDiscussion()));
+            $subscribers = array_filter($subscribers, function (User $user) use ($message) {
+                return $user->getId() !== $message->getuser()->getId();
+            });
 
-        foreach ($subscribers as $subscriber) {
-            $this->mailManager->sendCDPSubscriptionMail($message, $subscriber);
+            foreach ($subscribers as $subscriber) {
+                $this->mailManager->sendCDPSubscriptionMail($message, $subscriber);
+            }
         }
     }
 }

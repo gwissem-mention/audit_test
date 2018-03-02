@@ -4,16 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
 use Html2Text\Html2Text;
 use Doctrine\ORM\QueryBuilder;
-use HopitalNumerique\UserBundle\Entity\User;
-use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
-use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
-use HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class PracticeCommunityHelpGroupsNotificationProviderAbstract.
@@ -36,5 +27,18 @@ abstract class PracticeCommunityHelpGroupsNotificationProviderAbstract extends P
     public static function getSectionPosition()
     {
         return 3;
+    }
+
+    /**
+     * Returns users concerned by notification, in this case users who are active members of group.
+     * notification date.
+     *
+     * @param Notification $notification
+     *
+     * @return QueryBuilder
+     */
+    public function getSubscribers(Notification $notification)
+    {
+        return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
     }
 }

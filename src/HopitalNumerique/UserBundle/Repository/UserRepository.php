@@ -1198,4 +1198,15 @@ class UserRepository extends EntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getCommunautePratiqueUsersQueryBuilder()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.inscritCommunautePratique = TRUE')
+        ;
+    }
 }
