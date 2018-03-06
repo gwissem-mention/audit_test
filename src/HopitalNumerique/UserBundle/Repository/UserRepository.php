@@ -457,6 +457,14 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @return User[]
+     */
+    public function getAdminsAndDomainAdmins()
+    {
+        return $this->findByRole([Role::$ROLE_ADMIN_LABEL, Role::$ROLE_ADMIN_DOMAINE, Role::$ROLE_ADMIN_HN_LABEL], []);
+    }
+
+    /**
      * Retourne une liste d'utilisateurs Cmsi.
      *
      * @param array $criteres Filtres à appliquer sur la liste

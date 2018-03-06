@@ -27,6 +27,7 @@ services:
             - "@hopitalnumerique_objet.repository.objet"
             - "@new_account.profile.completion_calculator"
             - '@HopitalNumerique\ContextualNavigationBundle\Service\StatsInformationsRetriever'
+            - '@hopitalnumerique_user.repository.user'
 
     nodevo_mail.grid.mail:
         class: %nodevo_mail.grid.mail.class%
