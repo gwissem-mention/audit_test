@@ -74,6 +74,13 @@ class Message
     protected $files;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $active = true;
+
+    /**
      * Message constructor.
      *
      * @param Discussion $discussion
@@ -259,6 +266,26 @@ class Message
         if (!$this->files->contains($file)) {
             $this->files->add($file);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     *
+     * @return $this
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
 
         return $this;
     }

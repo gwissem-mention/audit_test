@@ -28,10 +28,10 @@ class DeleteMessageHandler
         $message = $command->message;
         $discussion = $message->getDiscussion();
 
-        $this->entityManager->remove($message);
+        $message->setActive(false);
 
         if (1 === $discussion->getMessages()->count()) {
-            $this->entityManager->remove($discussion);
+            $discussion->setActive(false);
         }
 
         $this->entityManager->flush();

@@ -30,6 +30,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('user', $user)
 
             ->andWhere('message.createdAt > reading.lastMessageDate')
+            ->andWhere('message.active = TRUE')
 
             ->getQuery()->getResult()
         ;
@@ -47,6 +48,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -73,6 +75,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.groups', 'groups')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -112,6 +115,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.groups', 'groups')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -149,6 +153,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE AND discussion.createdAt != message.createdAt')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -179,6 +184,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.domains', 'domain', Join::WITH, 'domain.id IN (:domains)')
             ->setParameter('domains', $domains)
             ->andWhere('message.createdAt >= :date')
+            ->andWhere('message.active = TRUE')
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
 
             ->getQuery()->getSingleScalarResult()
