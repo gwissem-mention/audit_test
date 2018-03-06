@@ -1,31 +1,31 @@
 -- Template mails
 UPDATE core_mail
 SET mail_body =
-'Bonjour,
+'Bonjour %prenomUtilisateur,<br /><br />
 
-%nomUtilisateur %prenomUtilisateur vient de poster une réponse dans la discussion "%discussionName" :
-<a href="%urlDiscussion">%urlDiscussion</a>
+%prenomUtilisateur2 %nomUtilisateur2 vient de poster une réponse dans la discussion "%discussionName" :
+<a href="%urlDiscussion">%urlDiscussion</a><br /><br />
 
-<a href="%urlUnfollow">Ne plus suivre cette discussion</a> ; <a href="%manageAlerts">Changer la fréquence de mes alertes</a>
+<a href="%urlUnfollow">Ne plus suivre cette discussion</a> ; <a href="%manageAlerts">Changer la fréquence de mes alertes</a><br /><br />
 
 Cordialement,',
 mail_params =
-'{"%nomUtilisateur":"Nom de l''utilisateur", "%prenomUtilisateur":"Prénom de l''utilisateur", "%discussionName":"Nom de la discussion", "%urlDiscussion":"URL de la discussion", "%urlUnfollow":"URL pour ne plus suivre la discussion", "%manageAlerts":"Gérer les alertes"}'
+'{"%prenomUtilisateur2":"Prénom du rédacteur", "%nomUtilisateur2":"Nom du rédacteur", "%nomUtilisateur":"Nom de l''utilisateur", "%prenomUtilisateur":"Prénom de l''utilisateur", "%discussionName":"Nom de la discussion", "%urlDiscussion":"URL de la discussion", "%urlUnfollow":"URL pour ne plus suivre la discussion", "%manageAlerts":"Gérer les alertes"}'
 WHERE mail_id = 100;
 
 
 UPDATE core_mail
 SET mail_body =
-'Bonjour,
+'Bonjour, <br /><br />
 
 %nomUtilisateur %prenomUtilisateur vient de poster une réponse nécessitant une modération dans la discussion "%discussionName" :
-<a href="%urlDiscussion">%urlDiscussion</a>
+<a href="%urlDiscussion">%urlDiscussion</a><br /><br />
 
-<a href="%urlUnfollow">Ne plus suivre cette discussion</a> ; <a href="%manageAlerts">Changer la fréquence de mes alertes</a>
+<a href="%urlUnfollow">Ne plus suivre cette discussion</a> ; <a href="%manageAlerts">Changer la fréquence de mes alertes</a><br /><br />
 
 Cordialement,',
 mail_params =
-'{"%nomUtilisateur":"Nom de l''utilisateur", "%prenomUtilisateur":"Prénom de l''utilisateur", "%discussionName":"Nom de la discussion", "%urlDiscussion":"URL de la discussion", "%urlUnfollow":"URL pour ne plus suivre la discussion", "%manageAlerts":"Gérer les alertes"}'
+'{"%prenomUtilisateur2":"Prénom du rédacteur", "%nomUtilisateur2":"Nom du rédacteur", "%nomUtilisateur":"Nom de l''utilisateur", "%prenomUtilisateur":"Prénom de l''utilisateur", "%discussionName":"Nom de la discussion", "%urlDiscussion":"URL de la discussion", "%urlUnfollow":"URL pour ne plus suivre la discussion", "%manageAlerts":"Gérer les alertes"}'
 WHERE mail_id = 101;
 
 -- Delete forum parameter

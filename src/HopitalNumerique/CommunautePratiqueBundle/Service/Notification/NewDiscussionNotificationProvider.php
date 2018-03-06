@@ -50,9 +50,7 @@ class NewDiscussionNotificationProvider extends PracticeCommunityPublicGroupsNot
     public function fire(Discussion $discussion)
     {
         $this->processNotification(
-            [
-                $discussion->getId(),
-            ],
+            $discussion->getId(),
             $discussion->getTitle(),
             null,
             parent::generateOptions(null, null, $discussion)

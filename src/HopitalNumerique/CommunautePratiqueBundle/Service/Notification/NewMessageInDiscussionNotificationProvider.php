@@ -32,7 +32,6 @@ class NewMessageInDiscussionNotificationProvider extends PracticeCommunityPublic
 
     /**
      * Returns users concerned by notification, in this case users who are subs to discussion.
-     * notification date.
      *
      * @param Notification $notification
      *

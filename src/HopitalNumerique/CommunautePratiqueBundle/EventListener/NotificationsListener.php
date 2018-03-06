@@ -9,6 +9,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionInGroupNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionNotificationProvider;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionGroupNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionNotificationProvider;
 use HopitalNumerique\NotificationBundle\Service\Notifications;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -42,7 +43,7 @@ class NotificationsListener implements EventSubscriberInterface
             Events::DISCUSSION_CREATED => 'onDiscussionCreated',
             Events::DISCUSSION_MESSAGE_CREATED => 'onDiscussionMessageCreated',
             Events::DISCUSSION_CREATED_IN_GROUP => 'onDiscussionCreatedInGroup',
-//            Events::DISCUSSION_MESSAGE_CREATED_IN_GROUP => 'onDiscussionMessageCreatedInGroup',
+            Events::DISCUSSION_MESSAGE_CREATED_IN_GROUP => 'onDiscussionMessageCreatedInGroup',
             Events::GROUP_USER_JOINED => 'onGroupUserJoined',
 //            Events::DISCUSSION_MESSAGE_VALIDATED => 'onDiscussionMessageValidated',
         ];
@@ -76,6 +77,16 @@ class NotificationsListener implements EventSubscriberInterface
         $this->notificationService->getProvider(NewDiscussionInGroupNotificationProvider::getNotificationCode())->fire(
             $event->getDiscussion(),
             $event->getGroup()
+        );
+    }
+
+    /**
+     * @param MessageEvent $event
+     */
+    public function onDiscussionMessageCreatedInGroup(MessageEvent $event)
+    {
+        $this->notificationService->getProvider(NewMessageInDiscussionGroupNotificationProvider::getNotificationCode())->fire(
+            $event->getMessage()
         );
     }
 

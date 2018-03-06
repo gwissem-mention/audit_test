@@ -91,11 +91,6 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         return $this->publicationExtension->parsePublication($comment);
     }
 
-    public function getSubscribers(Notification $notification)
-    {
-        return $this->userRepository->getCommunautePratiqueUsersQueryBuilder();
-    }
-
     public function generateOptions(Groupe $group = null, User $user = null, Discussion $discussion = null)
     {
         $options = [];

@@ -85,6 +85,11 @@ notification_config:
             multiple:
                 header: %number% nouveaux messages ont été créés
                 content: %discussionName%
+        practice_community_new_message_in_discussion_group:
+            single: Un nouveau message a été créé dans la discussion "%discussionName%" du groupe %groupeName%
+            multiple:
+                header: %number% nouveaux messages ont été créés
+                content: %groupeName% : %discussionName%
 
 notification:
     section:

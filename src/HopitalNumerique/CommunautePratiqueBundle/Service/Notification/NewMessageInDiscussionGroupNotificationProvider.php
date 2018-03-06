@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
+use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 
 /**
@@ -30,22 +31,34 @@ class NewMessageInDiscussionGroupNotificationProvider extends PracticeCommunityH
     }
 
     /**
+     * Returns users concerned by notification, in this case users who are subs to discussion.
+     *
+     * @param Notification $notification
+     *
+     * @return QueryBuilder
+     */
+    public function getSubscribers(Notification $notification)
+    {
+        return $this->subscriptionRepository->findSubscribersQueryBuilder(
+            ObjectIdentity::createFromDomainObject($notification->getData('discussion'))
+        );
+    }
+
+    /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
-     * @param Groupe $group
-     * @param Inscription $registration
+     * @param Message $message
      */
-    public function fire(Groupe $group, Inscription $registration)
+    public function fire(Message $message)
     {
-//        $this->processNotification(
-//            [
-//                $group->getId(),
-//                $registration->getUser()->getId()
-//            ],
-//            $group->getTitre(),
-//            $registration->getUser()->getPrenomNom(),
-//            parent::generateOptions($group, $registration->getUser())
-//        );
+        $this->processNotification(
+            $message->getId(),
+            $message->getDiscussion()->getTitle(),
+            null,
+            array_merge(parent::generateOptions($message->getDiscussion()->getGroups()->first(), null, $message->getDiscussion()), [
+                'messageId' => $message->getId(),
+            ])
+        );
     }
 
     /**
@@ -53,6 +66,13 @@ class NewMessageInDiscussionGroupNotificationProvider extends PracticeCommunityH
      */
     public function notify(Notification $notification)
     {
-//        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
+        /** @var Message $message */
+        $message = $this->messageRepository->findOneById($notification->getData('messageId'));
+
+        if (!$message->isPublished()) {
+            return;
+        }
+
+        $this->mailManager->sendCdpNewMessageInDiscussionNotification($message, $notification->getUser());
     }
 }
