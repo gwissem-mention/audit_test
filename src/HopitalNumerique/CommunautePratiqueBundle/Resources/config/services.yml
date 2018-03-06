@@ -202,13 +202,11 @@ services:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\NotificationsListener
         arguments:
             - '@hopitalnumerique\notificationbundle\service\notifications'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
+            - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
+            - '@nodevo_mail.manager.mail'
         tags:
-            - { name: kernel.event_subscriber, event: communautepratique.group_user_joined }
-            - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created_in_group }
-            - { name: kernel.event_subscriber, event: communautepratique.discussion.discussion_created }
-            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_created }
-            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_created_in_group }
-            - { name: kernel.event_subscriber, event: communautepratique.discussion.message_validated }
+            - { name: kernel.event_subscriber }
 
     HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener:
         class: HopitalNumerique\CommunautePratiqueBundle\EventListener\GroupCreatedListener

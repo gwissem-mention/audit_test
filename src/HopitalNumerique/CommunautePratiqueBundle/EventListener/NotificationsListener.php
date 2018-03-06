@@ -4,14 +4,20 @@ namespace HopitalNumerique\CommunautePratiqueBundle\EventListener;
 
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionCreatedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageEvent;
+use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageValidatedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\GroupUserJoinedNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionInGroupNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewDiscussionNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionGroupNotificationProvider;
 use HopitalNumerique\CommunautePratiqueBundle\Service\Notification\NewMessageInDiscussionNotificationProvider;
+use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
 use HopitalNumerique\NotificationBundle\Service\Notifications;
+use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,13 +31,38 @@ class NotificationsListener implements EventSubscriberInterface
     protected $notificationService;
 
     /**
+     * @var MessageRepository $messageRepository
+     */
+    protected $messageRepository;
+
+    /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
+     * @var MailManager $mailManager
+     */
+    protected $mailManager;
+
+    /**
      * NotificationsListener constructor.
      *
      * @param Notifications $notificationService
+     * @param MessageRepository $messageRepository
+     * @param SubscriptionRepository $subscriptionRepository
+     * @param MailManager $mailManager
      */
-    public function __construct(Notifications $notificationService)
-    {
+    public function __construct(
+        Notifications $notificationService,
+        MessageRepository $messageRepository,
+        SubscriptionRepository $subscriptionRepository,
+        MailManager $mailManager
+    ) {
         $this->notificationService = $notificationService;
+        $this->messageRepository = $messageRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
+        $this->mailManager = $mailManager;
     }
 
     /**
@@ -42,10 +73,8 @@ class NotificationsListener implements EventSubscriberInterface
         return [
             Events::DISCUSSION_CREATED => 'onDiscussionCreated',
             Events::DISCUSSION_MESSAGE_CREATED => 'onDiscussionMessageCreated',
-            Events::DISCUSSION_CREATED_IN_GROUP => 'onDiscussionCreatedInGroup',
-            Events::DISCUSSION_MESSAGE_CREATED_IN_GROUP => 'onDiscussionMessageCreatedInGroup',
             Events::GROUP_USER_JOINED => 'onGroupUserJoined',
-//            Events::DISCUSSION_MESSAGE_VALIDATED => 'onDiscussionMessageValidated',
+            Events::DISCUSSION_MESSAGE_VALIDATED => 'onDiscussionMessageValidated',
         ];
     }
 
@@ -54,9 +83,16 @@ class NotificationsListener implements EventSubscriberInterface
      */
     public function onDiscussionCreated(DiscussionCreatedEvent $event)
     {
-        $this->notificationService->getProvider(NewDiscussionNotificationProvider::getNotificationCode())->fire(
-            $event->getDiscussion()
-        );
+        if ($event->getGroup()) {
+            $this->notificationService->getProvider(NewDiscussionInGroupNotificationProvider::getNotificationCode())->fire(
+                $event->getDiscussion(),
+                $event->getGroup()
+            );
+        } else {
+            $this->notificationService->getProvider(NewDiscussionNotificationProvider::getNotificationCode())->fire(
+                $event->getDiscussion()
+            );
+        }
     }
 
     /**
@@ -64,30 +100,15 @@ class NotificationsListener implements EventSubscriberInterface
      */
     public function onDiscussionMessageCreated(MessageEvent $event)
     {
-        $this->notificationService->getProvider(NewMessageInDiscussionNotificationProvider::getNotificationCode())->fire(
-            $event->getMessage()
-        );
-    }
-
-    /**
-     * @param DiscussionCreatedEvent $event
-     */
-    public function onDiscussionCreatedInGroup(DiscussionCreatedEvent $event)
-    {
-        $this->notificationService->getProvider(NewDiscussionInGroupNotificationProvider::getNotificationCode())->fire(
-            $event->getDiscussion(),
-            $event->getGroup()
-        );
-    }
-
-    /**
-     * @param MessageEvent $event
-     */
-    public function onDiscussionMessageCreatedInGroup(MessageEvent $event)
-    {
-        $this->notificationService->getProvider(NewMessageInDiscussionGroupNotificationProvider::getNotificationCode())->fire(
-            $event->getMessage()
-        );
+        if (0 !== count($event->getMessage()->getDiscussion()->getGroups())) {
+            $this->notificationService->getProvider(NewMessageInDiscussionGroupNotificationProvider::getNotificationCode())->fire(
+                $event->getMessage()
+            );
+        } else {
+            $this->notificationService->getProvider(NewMessageInDiscussionNotificationProvider::getNotificationCode())->fire(
+                $event->getMessage()
+            );
+        }
     }
 
     /**
@@ -99,5 +120,28 @@ class NotificationsListener implements EventSubscriberInterface
             $event->getGroup(),
             $event->getRegistration()
         );
+    }
+
+    /**
+     * @param MessageValidatedEvent $event
+     */
+    public function onDiscussionMessageValidated(MessageValidatedEvent $event)
+    {
+        $message = $event->getMessage();
+
+        if (!$message->isPublished()) {
+            return;
+        }
+
+        if (1 !== $this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
+            $subscribers = $this->subscriptionRepository->findSubscribers(ObjectIdentity::createFromDomainObject($message->getDiscussion()));
+            $subscribers = array_filter($subscribers, function (User $user) use ($message) {
+               return $user->getId() !== $message->getUser()->getId();
+            });
+
+            foreach ($subscribers as $subscriber) {
+                $this->mailManager->sendCDPSubscriptionMail($message, $subscriber);
+            }
+        }
     }
 }

@@ -82,17 +82,10 @@ class CreateDiscussionHandler
         $this->entityManager->persist($discussion);
         $this->entityManager->flush($discussion);
 
-        $this->eventDispatcher->dispatch(Events::DISCUSSION_CREATED, new DiscussionCreatedEvent($discussion));
-
-        if (
-            null !== $command->group &&
-            in_array($this->tokenStorage->getToken()->getUser(), $this->userRepository->getCommunautePratiqueUsersInGroup($command->group))
-        ) {
-            $this->eventDispatcher->dispatch(
-                Events::DISCUSSION_CREATED_IN_GROUP,
-                new DiscussionCreatedEvent($discussion, $command->group)
-            );
-        }
+        $this->eventDispatcher->dispatch(Events::DISCUSSION_CREATED, new DiscussionCreatedEvent(
+            $discussion,
+            $command->group
+        ));
 
         $messageCommand = new PostDiscussionMessageCommand($discussion, $command->author);
         $messageCommand->content = $command->content;

@@ -2,8 +2,6 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
-use Html2Text\Html2Text;
-
 /**
  * Class PracticeCommunityPublicGroupsNotificationProviderAbstract.
  */

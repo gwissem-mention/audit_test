@@ -5,7 +5,6 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
-use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Html2Text\Html2Text;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -96,11 +95,11 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         $options = [];
 
         if (null !== $group) {
-            $options = array_merge($options, [
+            $options = [
                 'groupId' => $group->getId(),
                 'nomGroupe' => $group->getTitre(),
                 'domainId' => $group->getDomains()->first()->getId(),
-            ]);
+            ];
         }
 
         if (null !== $user) {

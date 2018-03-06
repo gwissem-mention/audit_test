@@ -97,12 +97,8 @@ class PostDiscussionMessageHandler
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
         if ($isNew) {
-            if (1 !== (int)$this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
-                if (0 !== count($message->getDiscussion()->getGroups())) {
-                    $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED_IN_GROUP, new MessageCreatedEvent($message));
-                } else {
-                    $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
-                }
+            if (!$command->isFirstMessage) {
+                $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
             }
         }
 

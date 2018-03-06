@@ -285,7 +285,7 @@ class MailManager extends BaseManager
                 'urlUnfollow'       => $uriUnfollow,
                 'manageAlerts'      => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
             ],
-            Mail::NEW_MESSAGE
+            Mail::MAIL_CDP_NEW_MESSAGE_IN_DISCUSSION
         );
     }
 
@@ -1736,21 +1736,22 @@ class MailManager extends BaseManager
                 'fiche' => $options['ficheId'],
             ]);
         } else {
-            if (array_key_exists('groupId', $options)) {
+            $isGroupIdExist = array_key_exists('groupId', $options);
+            if ($isGroupIdExist) {
                 $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
                     'groupe' => $options['groupId'],
                 ]);
             }
             if (array_key_exists('discussionId', $options)) {
-                if (array_key_exists('groupId', $options)) {
+                if ($isGroupIdExist) {
                     $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
                         'discussion' => $options['discussionId'],
-                        'group'      => array_key_exists('groupId', $options) ? $options['groupId'] : null,
+                        'group' => $isGroupIdExist ? $options['groupId'] : null,
                     ]);
                 } else {
                     $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
                         'discussion' => $options['discussionId'],
-                        'group'      => array_key_exists('groupId', $options) ? $options['groupId'] : null,
+                        'group' => $isGroupIdExist ? $options['groupId'] : null,
                     ]);
                 }
             }

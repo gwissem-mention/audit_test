@@ -2,17 +2,20 @@
 {% import '@HopitalNumeriqueCommunautePratique/notifications/practice_community_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
+
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId')),
         '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
     })|raw }}
 {% endblock %}
+
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
         '%number%' : notifications|length
     }) }}
 {% endblock %}
+
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
         '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),

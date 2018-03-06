@@ -9,7 +9,6 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Read;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageEvent;

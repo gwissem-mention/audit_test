@@ -189,16 +189,16 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param Discussion $discussion
      *
-     * @return array
+     * @return int
      */
     public function countMessagesByDiscussion(Discussion $discussion)
     {
-        return $this->createQueryBuilder('message')
+        return intval($this->createQueryBuilder('message')
             ->select('COUNT(message.id)')
             ->where('message.discussion = :discussion')
             ->setParameter('discussion', $discussion)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult())
         ;
     }
 }

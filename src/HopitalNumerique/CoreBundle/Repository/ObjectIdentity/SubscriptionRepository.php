@@ -49,7 +49,7 @@ class SubscriptionRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function findSubscribersQueryBuilder(ObjectIdentity $objectIdentity)
+    public function createSubscribersQueryBuilder(ObjectIdentity $objectIdentity)
     {
         return $this->_em->createQueryBuilder()
             ->select('user.id')

@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
@@ -101,7 +102,7 @@ class GroupeInscriptionRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @param Groupe $group
      *
-     * @return array
+     * @return Inscription[]
      */
     public function getInscriptionsInGroup(Groupe $group)
     {

@@ -5,7 +5,7 @@ VALUES (
 	'Nouvelle discussion dans un de mes groupes',
 	'%mailContactDomaineCurrent',
 	'ANAP - %nomContactDomaineCurrent',
-	'Bonjour,<br /><br />La discussion <a href="%urlDiscussion">&quot;%nomDiscussion&quot;</a> vient d''être créée dans le groupe <a href="%urlGroupe">&quot;%nomGroupe&quot;</a>.<br /><br />Cordialement,<br /><br />L''équipe ANAP',
+	'Bonjour,<br /><br />La discussion <a href="%urlDiscussion">%nomDiscussion</a> vient d''être créée dans le groupe <a href="%urlGroupe">%nomGroupe</a>.<br /><br />Cordialement,<br /><br />L''équipe ANAP',
 	'{"%nomDiscussion":"Titre de la discussion", "%urlDiscussion":"Lien vers la discussion", "%nomGroupe":"Titre du groupe", "%urlGroupe":"Lien vers le groupe"}',
 	0
 );
@@ -17,7 +17,7 @@ VALUES (
 	'Nouvelle discussion',
 	'%mailContactDomaineCurrent',
 	'ANAP - %nomContactDomaineCurrent',
-	'Bonjour,<br /><br />La discussion <a href="%urlDiscussion">&quot;%nomDiscussion&quot;</a> vient d''être créée.<br /><br />Cordialement,<br /><br />L''équipe ANAP',
+	'Bonjour,<br /><br />La discussion <a href="%urlDiscussion">%nomDiscussion</a> vient d''être créée.<br /><br />Cordialement,<br /><br />L''équipe ANAP',
 	'{"%nomDiscussion":"Titre de la discussion", "%urlDiscussion":"Lien vers la discussion"}',
 	0
 );

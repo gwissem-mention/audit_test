@@ -39,7 +39,7 @@ class NewDiscussionNotificationProvider extends PracticeCommunityPublicGroupsNot
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->userRepository->getCommunautePratiqueUsersQueryBuilder();
+        return $this->userRepository->createCommunautePratiqueUsersQueryBuilder();
     }
 
     /**

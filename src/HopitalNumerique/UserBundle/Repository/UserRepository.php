@@ -1202,7 +1202,7 @@ class UserRepository extends EntityRepository
     /**
      * @return QueryBuilder
      */
-    public function getCommunautePratiqueUsersQueryBuilder()
+    public function createCommunautePratiqueUsersQueryBuilder()
     {
         return $this->createQueryBuilder('user')
             ->select('user.id')

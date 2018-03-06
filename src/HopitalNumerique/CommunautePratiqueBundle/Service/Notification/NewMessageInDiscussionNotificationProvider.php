@@ -39,7 +39,7 @@ class NewMessageInDiscussionNotificationProvider extends PracticeCommunityPublic
      */
     public function getSubscribers(Notification $notification)
     {
-        return $this->subscriptionRepository->findSubscribersQueryBuilder(
+        return $this->subscriptionRepository->createSubscribersQueryBuilder(
             ObjectIdentity::createFromDomainObject($notification->getData('discussion'))
         );
     }
