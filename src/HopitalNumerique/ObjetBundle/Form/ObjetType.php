@@ -252,6 +252,7 @@ class ObjetType extends AbstractType
                 'label_attr' => [
                     'class' => 'col-md-3 control-label',
                 ],
+                'empty_data' => (new \DateTime())->format('dd/mm/YY'),
             ])
             ->add('releaseDate', 'genemu_jquerydate', [
                 'label' => 'Date de parution',
