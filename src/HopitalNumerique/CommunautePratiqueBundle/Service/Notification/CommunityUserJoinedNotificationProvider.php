@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Class CommunityUserJoinedNotificationProvider.
  */
-class CommunityUserJoinedNotificationProvider extends PracticeCommunityNotificationProviderAbstract
+class CommunityUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
     /**
     * Default frequency of this notification provider.

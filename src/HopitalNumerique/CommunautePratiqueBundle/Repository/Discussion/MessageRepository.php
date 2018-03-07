@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion;
 
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -182,6 +183,22 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
 
             ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Discussion $discussion
+     *
+     * @return int
+     */
+    public function countMessagesByDiscussion(Discussion $discussion)
+    {
+        return intval($this->createQueryBuilder('message')
+            ->select('COUNT(message.id)')
+            ->where('message.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
+            ->getQuery()
+            ->getSingleScalarResult())
         ;
     }
 }

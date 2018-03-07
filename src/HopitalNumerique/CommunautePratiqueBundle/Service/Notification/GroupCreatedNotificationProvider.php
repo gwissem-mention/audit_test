@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Class GroupCreatedNotificationProvider.
  */
-class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProviderAbstract
+class GroupCreatedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
     const NOTIFICATION_CODE = 'practice_community_group_created';
 
@@ -27,7 +27,7 @@ class GroupCreatedNotificationProvider extends PracticeCommunityNotificationProv
      */
     public static function getNotifPosition()
     {
-        return 4;
+        return 6;
     }
 
     /**

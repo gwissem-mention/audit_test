@@ -25,6 +25,14 @@ notification_config:
             description: Nouvelles personnes dans la commuauté
             title: Nom de la personne + nom du/des groupe/s de la personne
             detail: -
+        practice_community_new_discussion_in_group:
+            description: Nouvelle discussion dans un de mes groupes
+            title: Nom de la discussion + nom du groupe
+            detail: -
+        practice_community_new_discussion:
+            description: Nouvelle discussion
+            title: Nom de la discussion
+            detail: -
     grouped:
         practice_community_group_comment_created:
             single: Un nouveau commentaire a été déposé par %auteur% concernant %groupeName% : %commentaire%
@@ -62,3 +70,29 @@ notification_config:
             multiple:
                 header: %number% nouvelles personnes ont rejoint la communauté
                 content: %userName%
+        practice_community_new_discussion_in_group:
+            single: La discussion "%discussionName%" a été créée dans le groupe "%groupeName%"
+            mutliple:
+                header: %number% nouvelles discussions ont été créées
+                content: %groupeName% : %discussionName%
+        practice_community_new_discussion:
+            single: La discussion "%discussionName%" a été créée
+            mutliple:
+                header: %number% nouvelles discussions ont été créées
+                content: %groupeName% : %discussionName%
+        practice_community_new_message_in_discussion:
+            single: Un nouveau message a été créé dans la discussion "%discussionName%"
+            multiple:
+                header: %number% nouveaux messages ont été créés
+                content: %discussionName%
+        practice_community_new_message_in_discussion_group:
+            single: Un nouveau message a été créé dans la discussion "%discussionName%" du groupe %groupeName%
+            multiple:
+                header: %number% nouveaux messages ont été créés
+                content: %groupeName% : %discussionName%
+
+notification:
+    section:
+        title:
+            practice_community_help_groups: Communaute de pratique - Groupes d'entre-aide
+            practice_community_public_groups: Communaute de pratique - Discussions publiques

@@ -28,8 +28,18 @@ notification-config:
             description: Mise à jour d'un autodiagnostic
             title: Titre de l'autodiag
             detail: Contenu de la mise à jour
-    practice_community:
-        section: COMMUNAUTE DE PRATIQUE
+    practice_community_public_groups:
+        section: COMMUNAUTE DE PRATIQUE - DISCUSSIONS PUBLIQUES
+        practice_community_new_discussion:
+            description: Une nouvelle discussion est créée
+            title: Nom du groupe + nom de la personne
+            detail: -
+        practice_community_new_message_in_discussion:
+            description: Nouveau commentaire dans une discussion où je suis abonné
+            title: Nom de la discussion + nom de l'auteur du commentaire
+            detail: Début du commentaire
+    practice_community_help_groups:
+        section: COMMUNAUTE DE PRATIQUE - GROUPES D'ENTRE-AIDE
         practice_community_group_comment_created:
             description: Nouveau commentaire dans un de mes groupes
             title: Nom du groupe + nom de l'auteur du commentaire
@@ -42,6 +52,10 @@ notification-config:
             description: Nouveau document dans un de mes groupes
             title: Nom du groupe + nom du fichier + auteur
             detail: -
+        practice_community_new_discussion_in_group:
+            description: Nouvelle discussion dans un de mes groupes
+            title: Nom de la discussion + nom du groupe
+            detail: -
         practice_community_group_user_joined:
             description: Nouvelle personne dans un de mes groupes
             title: Nom du groupe + nom de la personne
@@ -50,19 +64,13 @@ notification-config:
             description: Nouveau groupe dans la communauté
             title: Nom du groupe
             detail: Description du groupe + date de démarrage
+        practice_community_new_message_in_discussion_group:
+            description: Nouveau commentaire dans une discussion où je suis abonné
+            title: Nom de la discussion + nom de l'auteur du commentaire
+            detail: Début du commentaire
         practice_community_user_joined:
             description: Nouvelles personnes dans la commuauté
             title: Nom de la personne + nom du/des groupe/s de la personne
-            detail: -
-    forum:
-        section: FORUM
-        forum_post_created:
-            description: Nouveau message dans une discussion
-            title: Nom du fil + début du message
-            detail: -
-        forum_topic_created:
-            description: Nouvelle discussion
-            title: Nom du thème + nom du fil + début du premier message
             detail: -
     anap_suggestion:
         section: SUGGESTIONS DE L'ANAP

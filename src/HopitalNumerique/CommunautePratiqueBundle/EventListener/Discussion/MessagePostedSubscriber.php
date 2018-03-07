@@ -3,12 +3,12 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\EventListener\Discussion;
 
 use Doctrine\ORM\EntityManagerInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use Nodevo\MailBundle\Manager\MailManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Read;
 use HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageEvent;
@@ -54,6 +54,11 @@ class MessagePostedSubscriber implements EventSubscriberInterface
     protected $userRepository;
 
     /**
+     * @var MessageRepository
+     */
+    protected $messageRepository;
+
+    /**
      * MessagePostedSubscriber constructor.
      *
      * @param ReadRepository $readRepository
@@ -63,6 +68,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
      * @param MailManager $mailManager
      * @param UserSubscription $userSubscription
      * @param UserRepository $userRepository
+     * @param MessageRepository $messageRepository
      */
     public function __construct(
         ReadRepository $readRepository,
@@ -71,7 +77,8 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         SubscriptionRepository $subscriptionRepository,
         MailManager $mailManager,
         UserSubscription $userSubscription,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        MessageRepository $messageRepository
     ) {
         $this->readRepository = $readRepository;
         $this->entityManager = $entityManager;
@@ -80,6 +87,7 @@ class MessagePostedSubscriber implements EventSubscriberInterface
         $this->mailManager = $mailManager;
         $this->userSubscription = $userSubscription;
         $this->userRepository = $userRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
@@ -92,12 +100,6 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 ['moderateMessage', 0],
                 ['readDiscussion', 0],
                 ['autoSubscribe', 0],
-            ],
-            Events::DISCUSSION_MESSAGE_CREATED => [
-                ['notifySubscriber', 0],
-            ],
-            Events::DISCUSSION_MESSAGE_VALIDATED => [
-                ['notifySubscriber', 0],
             ],
         ];
     }
@@ -181,27 +183,6 @@ class MessagePostedSubscriber implements EventSubscriberInterface
                 $this->mailManager->sendCDPNeedModerationMail($message, $animator);
             }
 
-        }
-    }
-
-    /**
-     * @param MessageEvent $event
-     */
-    public function notifySubscriber(MessageEvent $event)
-    {
-        $message = $event->getMessage();
-
-        if (!$message->isPublished()) {
-            return;
-        }
-
-        $subscribers = $this->subscriptionRepository->findSubscribers(ObjectIdentity::createFromDomainObject($message->getDiscussion()));
-        $subscribers = array_filter($subscribers, function (User $user) use ($message) {
-            return $user->getId() !== $message->getuser()->getId();
-        });
-
-        foreach ($subscribers as $subscriber) {
-            $this->mailManager->sendCDPSubscriptionMail($message, $subscriber);
         }
     }
 }

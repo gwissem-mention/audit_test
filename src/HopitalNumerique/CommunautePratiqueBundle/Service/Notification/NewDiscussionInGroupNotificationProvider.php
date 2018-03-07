@@ -2,16 +2,16 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 
 /**
- * Class GroupUserJoinedNotificationProvider.
+ * Class NewDiscussionInGroupNotificationProvider.
  */
-class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
+class NewDiscussionInGroupNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
-    const NOTIFICATION_CODE = 'practice_community_group_user_joined';
+    const NOTIFICATION_CODE = 'practice_community_new_discussion_in_group';
 
     /**
      * @return string
@@ -26,25 +26,25 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNot
      */
     public static function getNotifPosition()
     {
-        return 3;
+        return 1;
     }
 
     /**
      * Submits notification to Notification manager service via FIRE_NOTIFICATION event.
      *
+     * @param Discussion $discussion
      * @param Groupe $group
-     * @param Inscription $registration
      */
-    public function fire(Groupe $group, Inscription $registration)
+    public function fire(Discussion $discussion, Groupe $group)
     {
         $this->processNotification(
             [
+                $discussion->getId(),
                 $group->getId(),
-                $registration->getUser()->getId()
             ],
-            $group->getTitre(),
-            $registration->getUser()->getPrenomNom(),
-            parent::generateOptions($group, $registration->getUser())
+            $discussion->getTitle(),
+            null,
+            parent::generateOptions($group, null, $discussion)
         );
     }
 
@@ -53,6 +53,6 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNot
      */
     public function notify(Notification $notification)
     {
-        $this->mailManager->sendCdpGroupUserJoinedNotification($notification->getUser(), $notification->getData());
+        $this->mailManager->sendCdpNewDiscussionInGroupNotification($notification->getUser(), $notification->getData());
     }
 }

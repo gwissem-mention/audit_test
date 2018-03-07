@@ -1,23 +1,22 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
-{% import '@HopitalNumeriqueForum/notifications/forum_macro.html.twig' as macro %}
+{% import '@HopitalNumeriqueCommunautePratique/notifications/practice_community_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
+
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.getData('id')),
-        '%message%' : notif.detail,
-        '%auteur%' : notif.getData('pseudoAuteur')
-    })|raw  }}
+        '%discussionName%' : macro.linkDiscussion(notif.getData('nomDiscussion'), notif.getData('discussionId'))
+    })|raw }}
 {% endblock %}
+
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
         '%number%' : notifications|length
     }) }}
 {% endblock %}
+
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.getData('id')),
-        '%message%' : notif.detail,
-        '%auteur%' : notif.getData('pseudoAuteur')
-    })|raw  }}
+        '%discussionName%' : macro.linkDiscussion(notif.getData('nomDiscussion'), notif.getData('discussionId'))
+    })|raw }}
 {% endblock %}

@@ -61,7 +61,7 @@ class DiscussionMovedSubscriber implements EventSubscriberInterface
      */
     public function subscribeUsers(DiscussionMovedEvent $event)
     {
-        $inscriptions = $this->groupeInscriptionRepository->getUsersInGroup($event->getGroup());
+        $inscriptions = $this->groupeInscriptionRepository->getInscriptionsInGroup($event->getGroup());
         $subscribersDiscussion = $this->subscriptionRepository->findSubscribers(
             ObjectIdentity::createFromDomainObject($event->getDiscussion())
         );
