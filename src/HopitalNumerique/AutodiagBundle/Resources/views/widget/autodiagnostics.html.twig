@@ -9,7 +9,7 @@
             <thead>
             <tr>
                 <th>{{ 'autodiagnostic.table.autodiag'|trans }}</th>
-                <th width="200">{{ 'autodiagnostic.table.actions'|trans }}</th>
+                <th width="215">{{ 'autodiagnostic.table.actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -54,6 +54,9 @@
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 {% endif %}
+                                <a class="btn btn-sm btn-info" href="{{ path("hopitalnumerique_autodiag_restitution_pdf", {"synthesis": synthesis.id}) }}" target="_blank" title="{{ 'autodiagnostic.action.export'|trans }}">
+                                    <i class="fa fa-download"></i>
+                                </a>
                                 <a href="{{ synthesis.sendUrl }}" class="btn btn-sm btn-primary fancybox fancybox.ajax {{ synthesis.isValid == false ? 'disabled' }}" title="{{ 'autodiagnostic.action.send'|trans }}">
                                     <i class="fa fa-envelope"></i>
                                 </a>
