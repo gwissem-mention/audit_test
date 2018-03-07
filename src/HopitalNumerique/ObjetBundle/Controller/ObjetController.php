@@ -596,6 +596,8 @@ class ObjetController extends Controller
                             ]
                         ))
                 );
+            } else {
+                $this->addFlash('danger', 'Une erreur est survenue pendant la mise à jour de l\'objet');
             }
         }
 
