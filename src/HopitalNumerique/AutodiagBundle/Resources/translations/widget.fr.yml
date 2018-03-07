@@ -11,6 +11,7 @@ autodiagnostic:
     action:
         new: Commencer un nouvel autodiagnostic
         show: Aller à l'autodiagnostic
+        export: Télécharger mon résultat en PDF
         send: Envoyer mon résultat
         open: Rouvrir mon autodiagnostic
         validate: Valider mon autodiagnostic
