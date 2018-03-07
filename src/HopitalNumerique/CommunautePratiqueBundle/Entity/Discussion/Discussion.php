@@ -130,6 +130,13 @@ class Discussion implements ObjectIdentityDisplayableInterface
     protected $creationPosition = self::CREATED_AS_PUBLIC;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $active = true;
+
+    /**
      * Discussion constructor.
      *
      * @param $title
@@ -521,6 +528,26 @@ class Discussion implements ObjectIdentityDisplayableInterface
     public function setCreationPosition($creationPosition)
     {
         $this->creationPosition = $creationPosition;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     *
+     * @return $this
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
 
         return $this;
     }
