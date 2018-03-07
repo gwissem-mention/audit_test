@@ -57,6 +57,13 @@
 
             <span class="infos">
                 {{ 'discussion.list.item.message_count'|transchoice(discussion.messages|length, {'%messageCount%': '<b>'~discussion.messages|length~'</b>'})|raw }} -
+                {% if 0 == discussion.groups|length %}
+                    {% set viewedDiscussion = viewedDiscussion[discussion.id] is defined ? viewedDiscussion[discussion.id] : 0 %}
+                    {{ 'discussion.list.item.message_views'|transchoice(
+                        viewedDiscussion,
+                        {'%messageViews%': '<b>'~viewedDiscussion~'</b>'}
+                    )|raw }} -
+                {% endif %}
                 {{ 'discussion.list.item.last_message'|trans({'%date%': '<b>'~discussion.messages.first.createdAt|date('d/m/Y')~'</b>', '%time%': '<b>'~discussion.messages.first.createdAt|date('H:i')~'</b>', '%author%': '<b>'~discussion.messages.first.user.prenomNom~'</b>'})|raw }}<br />
                 {{ 'discussion.list.item.created_at'|trans({'%date%': '<b>'~discussion.createdAt|date('d/m/Y')~'</b>'})|raw }}<br />
             </span>

@@ -32,6 +32,7 @@ class ViewedRepository extends \Doctrine\ORM\EntityRepository
                     'view.id IS NULL'
                 )
             )
+            ->andWhere('discussion.active = TRUE')
             ->setParameter('since', $since)
         ;
 
@@ -63,5 +64,22 @@ class ViewedRepository extends \Doctrine\ORM\EntityRepository
         });
 
         return $results;
+    }
+
+    /**
+     * Count viewed discussion
+     * @return array
+     */
+    public function countViewedDiscussions()
+    {
+        $viewedDiscussions = $this->createQueryBuilder('viewed')
+            ->select('COUNT(viewed.id) as discussionViews, discussion.id as discussionId')
+            ->join('viewed.discussion', 'discussion', Join::WITH, 'discussion.active = TRUE')
+            ->groupBy('viewed.discussion')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_column($viewedDiscussions, 'discussionViews', 'discussionId');
     }
 }
