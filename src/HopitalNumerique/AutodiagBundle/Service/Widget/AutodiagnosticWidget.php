@@ -184,6 +184,11 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 ['synthesis' => $synthesis->getId()]
             );
 
+            $downloadUrl = $baseUrl . $this->router->generate(
+                'hopitalnumerique_autodiag_restitution_pdf',
+                ['synthesis' => $synthesis->getId()]
+            );
+
             $data[$autodiag->getId()]['syntheses'][$synthesis->getId()] = [
                 'id' => $synthesis->getId(),
                 'name' => $synthesis->getName(),
@@ -200,6 +205,7 @@ class AutodiagnosticWidget extends WidgetAbstract implements DomainAwareInterfac
                 'deleteUrl' => $deleteUrl,
                 'sharedMessage' => strlen($shareMessage) > 0 ? $shareMessage : null,
                 'isOwner' => $isOwner,
+                'downloadUrl' => $downloadUrl,
             ];
         }
 
