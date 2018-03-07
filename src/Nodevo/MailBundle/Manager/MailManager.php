@@ -12,6 +12,7 @@ use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Note;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -127,6 +128,11 @@ class MailManager extends BaseManager
     protected $statsInformationsRetriever;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -146,6 +152,7 @@ class MailManager extends BaseManager
      * @param ObjetRepository $objectRepository
      * @param ProfileCompletionCalculator $calculator
      * @param StatsInformationsRetriever $statsInformationsRetriever
+     * @param UserRepository $userRepository
      */
     public function __construct(
         EntityManager $em,
@@ -164,7 +171,8 @@ class MailManager extends BaseManager
         BBCodeEngine $BBCodeEngine,
         ObjetRepository $objectRepository,
         ProfileCompletionCalculator $calculator,
-        StatsInformationsRetriever $statsInformationsRetriever
+        StatsInformationsRetriever $statsInformationsRetriever,
+        UserRepository $userRepository
     )
     {
         parent::__construct($em);
@@ -191,6 +199,7 @@ class MailManager extends BaseManager
         $this->objectRepository = $objectRepository;
         $this->profilecompletionCalculator = $calculator;
         $this->statsInformationsRetriever = $statsInformationsRetriever;
+        $this->userRepository = $userRepository;
 
         $this->setOptions();
 
@@ -1541,7 +1550,7 @@ class MailManager extends BaseManager
             $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain);
         }
 
-        foreach ($this->_userManager->getAdmins() as $admin) {
+        foreach ($this->userRepository->getAdminsAndDomainAdmins() as $admin) {
             foreach ($admin->getDomaines() as $domain) {
                 if (in_array($domain, $objet->getDomaines()->getValues())) {
                     $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain, $admin);
