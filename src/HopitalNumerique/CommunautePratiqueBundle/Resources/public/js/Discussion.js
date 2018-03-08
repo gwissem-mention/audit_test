@@ -341,7 +341,7 @@ var Discussion;
                 theme        : "modern",
                 theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
                 skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-                plugins      : 'paste link publicationDomaine',
+                plugins      : 'link publicationDomaine',
                 height       : 120,
                 menubar      : false,
                 content_css  : '/bundles/nodevotools/css/wysiwyg.css',
