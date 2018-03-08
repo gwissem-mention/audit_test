@@ -1807,6 +1807,7 @@ class MailManager extends BaseManager
     {
         /** @var Mail $mail */
         $mail = $this->findOneById(Mail::MAIL_NOTED_COMMENT);
+
         $options = [
             'urlDocument' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
                 'id' => $note->getObjet()->getId(),
@@ -1818,19 +1819,18 @@ class MailManager extends BaseManager
             'subjectdomain' => $this->getDomaineSubjet(),
         ];
 
-        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
-        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-        $content = $this->replaceContent($mail->getBody(), null, $options);
-        $from = [$expediteurMail => $expediteurName];
+        foreach ($note->getObjet()->getDomaines() as $domain) {
+            $this->templateNoteCommentaireMail($mail, $options, $domain);
+        }
 
-        $mailsToSend = $this->sendMail(
-            $mail->getObjet(),
-            $from,
-            $this->getMailDomaine(),
-            $content
-        );
-
-        $this->mailer->send($mailsToSend);
+        foreach ($this->userRepository->getAdminsAndDomainAdmins() as $admin) {
+            foreach ($admin->getDomaines() as $domain) {
+                if (in_array($domain, $note->getObjet()->getDomaines()->getValues())) {
+                    $this->templateNoteCommentaireMail($mail, $options, $domain, $admin);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -1924,5 +1924,28 @@ class MailManager extends BaseManager
         $mailToSend->setTo($admin ? $admin->getEmail() : $domain->getAdresseMailContact());
 
         $this->mailer->send($mailToSend);
+    }
+
+    /**
+     * @param $mail
+     * @param $options
+     * @param $domain
+     * @param User|null $admin
+     */
+    public function templateNoteCommentaireMail($mail, $options, $domain, User $admin = null)
+    {
+        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
+        $from = [$expediteurMail => $expediteurName];
+
+        $mailsToSend = $this->sendMail(
+            $mail->getObjet(),
+            $from,
+            $admin ? $admin->getEmail() : $domain->getAdresseMailContact(),
+            $content
+        );
+
+        $this->mailer->send($mailsToSend);
     }
 }
