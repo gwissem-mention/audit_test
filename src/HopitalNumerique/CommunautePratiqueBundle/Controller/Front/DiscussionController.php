@@ -129,6 +129,7 @@ class DiscussionController extends Controller
             'answerDiscussionForm' => isset($answerDiscussionForm) ? $answerDiscussionForm : null,
             'discussionDomainsForm' => isset($discussionDomainsForm) ? $discussionDomainsForm : null,
             'mostViewed' => $this->get(ViewedRepository::class)->getMostViewed((new \DateTime())->modify('-6 month'), 20, $group),
+            'viewedDiscussion' => $this->get(ViewedRepository::class)->countViewedDiscussions(),
         ];
 
         if ($group) {
