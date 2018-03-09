@@ -5,12 +5,15 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 
 /**
  * Class NewDiscussionNotificationProvider
  */
 class NewDiscussionNotificationProvider extends PracticeCommunityPublicGroupsNotificationProviderAbstract
 {
+    const DEFAULT_FREQUENCY = NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY;
+
     const NOTIFICATION_CODE = 'practice_community_new_discussion';
 
     /**

@@ -5,12 +5,15 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 
 /**
  * Class GroupUserJoinedNotificationProvider.
  */
 class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
+    const DEFAULT_FREQUENCY = NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY;
+
     const NOTIFICATION_CODE = 'practice_community_group_user_joined';
 
     /**
