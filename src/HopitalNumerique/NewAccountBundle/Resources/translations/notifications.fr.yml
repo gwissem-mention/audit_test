@@ -37,7 +37,7 @@ notification-config:
         practice_community_new_message_in_discussion:
             description: Nouveau commentaire dans une discussion où je suis abonné
             title: Nom de la discussion + nom de l'auteur du commentaire
-            detail: Début du commentaire
+            detail: -
     practice_community_help_groups:
         section: COMMUNAUTE DE PRATIQUE - GROUPES D'ENTRE-AIDE
         practice_community_group_comment_created:
@@ -67,7 +67,7 @@ notification-config:
         practice_community_new_message_in_discussion_group:
             description: Nouveau commentaire dans une discussion où je suis abonné
             title: Nom de la discussion + nom de l'auteur du commentaire
-            detail: Début du commentaire
+            detail: -
         practice_community_user_joined:
             description: Nouvelles personnes dans la commuauté
             title: Nom de la personne + nom du/des groupe/s de la personne

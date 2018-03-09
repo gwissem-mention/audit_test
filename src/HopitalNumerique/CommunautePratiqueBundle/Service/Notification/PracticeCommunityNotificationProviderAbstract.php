@@ -111,7 +111,6 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 
         if (null !== $discussion) {
             $options = array_merge($options, [
-                'discussion' => $discussion,
                 'discussionId' => $discussion->getId(),
                 'nomDiscussion' => $discussion->getTitle(),
             ]);
