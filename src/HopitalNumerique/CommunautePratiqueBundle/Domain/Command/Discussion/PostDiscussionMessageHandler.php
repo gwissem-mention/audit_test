@@ -97,7 +97,7 @@ class PostDiscussionMessageHandler
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
         if ($isNew) {
-            if (!$command->isFirstMessage) {
+            if (1 !== $this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
                 $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
             }
         }
