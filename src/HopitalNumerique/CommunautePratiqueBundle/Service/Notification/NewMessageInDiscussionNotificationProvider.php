@@ -51,11 +51,13 @@ class NewMessageInDiscussionNotificationProvider extends PracticeCommunityPublic
      */
     public function fire(Message $message)
     {
+        $discussion = $message->getDiscussion();
         $this->processNotification(
             $message->getId(),
             $message->getDiscussion()->getTitle(),
             null,
-            array_merge(parent::generateOptions(null, null, $message->getDiscussion()), [
+            array_merge(parent::generateOptions(null, null, $discussion), [
+                'discussion' => $discussion,
                 'messageId' => $message->getId(),
             ])
         );
