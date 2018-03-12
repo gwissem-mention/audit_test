@@ -44,16 +44,22 @@ hopitalnumerique_communautepratique_discussions_download_document_discussion:
         discussion: \d+
 
 hopitalnumerique_communautepratique_discussions_copy_discussion:
-    path: /{discussion}/copy
+    path: /copy/discussion/{id}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:copyToGroup }
     requirements:
         discussion: \d+
 
+hopitalnumerique_communautepratique_move_message:
+    path: /move/message/{id}/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:moveMessageToDiscussion, group: null }
+    requirements:
+        id: \d+
+
 hopitalnumerique_communautepratique_discussions_move_discussion:
-    path: /{discussion}/move
+    path: /move/discussion/{id}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:copyToGroup, type: move }
     requirements:
-        discussion: \d+
+        id: \d+
 
 hopitalnumerique_communautepratique_discussions_public_discussion:
     path: /{discussion}/toggle-public/{group}

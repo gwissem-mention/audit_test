@@ -372,4 +372,19 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()->getScalarResult())
         ;
     }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return array
+     */
+    public function getDiscussionsByGroup(Groupe $group)
+    {
+        return $this->createQueryBuilder('discussion')
+            ->join('discussion.groups', 'groups', Join::WITH, 'groups.id = :group')
+            ->setParameter('group', $group)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

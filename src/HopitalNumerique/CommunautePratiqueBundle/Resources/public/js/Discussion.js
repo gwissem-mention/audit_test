@@ -545,6 +545,17 @@ var Discussion;
                     }
                 });
             }
+
+            $('.message .actions .move').on('click', function (e) {
+                var uri = e.target.parentNode.parentNode.dataset.uri,
+                    loader = $(this).parents('.message').nodevoLoader().start()
+                ;
+
+                $.get(uri, function (response) {
+                    $('#action-modal').modal().find('.modal-content').html(response);
+                    loader.finished();
+                });
+            });
         },
 
         setActiveDiscussion: function ($element) {
