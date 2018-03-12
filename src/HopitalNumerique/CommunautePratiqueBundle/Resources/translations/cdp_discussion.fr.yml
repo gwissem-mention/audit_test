@@ -14,6 +14,7 @@ discussion:
     list:
         item:
             message_count: "]0,1] %messageCount% message |]1, Inf[ %messageCount% messages"
+            message_views: "%messageViews% vue | %messageViews% vues"
             last_message: Dernier le %date% à %time% par %author%
             created_at: Discussion créée le %date%
             new_message_count: "]0,1] %count% nouveau message |]1, Inf[ %count% nouveaux messages"

@@ -82,6 +82,12 @@ class Mail
 
     const MAIL_GROUPED_NOTIFS = 90;
 
+    const MAIL_CDP_NEW_MESSAGE_IN_DISCUSSION = 100;
+
+    const MAIL_CDP_NEW_DISCUSSION_IN_GROUP = 102;
+
+    const MAIL_CDP_NEW_DISCUSSION = 103;
+
     /**
      * @var int
      *

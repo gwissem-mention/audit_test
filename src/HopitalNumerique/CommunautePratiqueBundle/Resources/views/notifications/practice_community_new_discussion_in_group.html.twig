@@ -1,25 +1,24 @@
 {% extends "NodevoMailBundle:Notifications:template.html.twig" %}
-{% import '@HopitalNumeriqueForum/notifications/forum_macro.html.twig' as macro %}
+{% import '@HopitalNumeriqueCommunautePratique/notifications/practice_community_macro.html.twig' as macro %}
 {% set notifications = notifications %}
 {% trans_default_domain 'notification' %}
+
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.getData('topicId')),
-        '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
-        '%firstPost%' : notif.detail,
-        '%auteur%' : notif.getData('pseudoAuteur')
+        '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId')),
+        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
     })|raw }}
 {% endblock %}
+
 {% block header %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.header')|trans({
         '%number%' : notifications|length
     }) }}
 {% endblock %}
+
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%filName%' : macro.linkTopic(notif.title, notif.getData('topicId')),
-        '%themeName%' : macro.linkTheme(notif.title, notif.getData('id')),
-        '%firstPost%' : notif.detail,
-        '%auteur%' : notif.getData('pseudoAuteur')
+        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
+        '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId'))
     })|raw }}
 {% endblock %}

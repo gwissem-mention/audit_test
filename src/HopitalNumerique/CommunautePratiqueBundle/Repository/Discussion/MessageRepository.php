@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion;
 
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -30,6 +31,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('user', $user)
 
             ->andWhere('message.createdAt > reading.lastMessageDate')
+            ->andWhere('message.active = TRUE')
 
             ->getQuery()->getResult()
         ;
@@ -47,6 +49,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -73,6 +76,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.groups', 'groups')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -112,6 +116,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.groups', 'groups')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -149,6 +154,7 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('message.discussion', 'discussion', Join::WITH, 'discussion.public = TRUE AND discussion.createdAt != message.createdAt')
 
             ->andWhere('message.published = TRUE')
+            ->andWhere('message.active = TRUE')
         ;
 
         if ($domain) {
@@ -179,9 +185,26 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.domains', 'domain', Join::WITH, 'domain.id IN (:domains)')
             ->setParameter('domains', $domains)
             ->andWhere('message.createdAt >= :date')
+            ->andWhere('message.active = TRUE')
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
 
             ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Discussion $discussion
+     *
+     * @return int
+     */
+    public function countMessagesByDiscussion(Discussion $discussion)
+    {
+        return intval($this->createQueryBuilder('message')
+            ->select('COUNT(message.id)')
+            ->where('message.discussion = :discussion')
+            ->setParameter('discussion', $discussion)
+            ->getQuery()
+            ->getSingleScalarResult())
         ;
     }
 }

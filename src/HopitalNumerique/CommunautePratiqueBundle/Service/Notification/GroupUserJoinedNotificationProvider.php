@@ -5,13 +5,15 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
-use Symfony\Component\Security\Core\User\UserInterface;
+use HopitalNumerique\NotificationBundle\Enum\NotificationFrequencyEnum;
 
 /**
  * Class GroupUserJoinedNotificationProvider.
  */
-class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationProviderAbstract
+class GroupUserJoinedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
+    const DEFAULT_FREQUENCY = NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_DAILY;
+
     const NOTIFICATION_CODE = 'practice_community_group_user_joined';
 
     /**
@@ -27,7 +29,7 @@ class GroupUserJoinedNotificationProvider extends PracticeCommunityNotificationP
      */
     public static function getNotifPosition()
     {
-        return 6;
+        return 3;
     }
 
     /**

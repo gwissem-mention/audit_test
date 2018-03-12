@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessageCreatedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\MessagePostedEvent;
 use HopitalNumerique\CommunautePratiqueBundle\Events;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use HopitalNumerique\FichierBundle\Entity\File;
 use HopitalNumerique\FichierBundle\Repository\FileRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -29,20 +30,28 @@ class PostDiscussionMessageHandler
     protected $fileRepository;
 
     /**
+     * @var MessageRepository $messageRepository
+     */
+    protected $messageRepository;
+
+    /**
      * PostDiscussionMessageHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param EntityManagerInterface $entityManager
      * @param FileRepository $fileRepository
+     * @param MessageRepository $messageRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface $entityManager,
-        FileRepository $fileRepository
+        FileRepository $fileRepository,
+        MessageRepository $messageRepository
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->entityManager = $entityManager;
         $this->fileRepository = $fileRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
@@ -88,7 +97,9 @@ class PostDiscussionMessageHandler
 
         $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_POSTED, new MessagePostedEvent($message));
         if ($isNew) {
-            $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
+            if (1 !== $this->messageRepository->countMessagesByDiscussion($message->getDiscussion())) {
+                $this->eventDispatcher->dispatch(Events::DISCUSSION_MESSAGE_CREATED, new MessageCreatedEvent($message));
+            }
         }
 
         $this->entityManager->flush($message);

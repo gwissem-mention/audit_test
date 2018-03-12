@@ -9,6 +9,7 @@ services:
             - '@nodevo_mail.manager.mail'
             - '@HopitalNumerique\CoreBundle\Service\ObjectIdentity\UserSubscription'
             - '@hopitalnumerique_user.repository.user'
+            - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
         tags:
             - { name: kernel.event_subscriber }
     HopitalNumerique\CommunautePratiqueBundle\EventListener\Group\GroupRegistrationSubscriber:

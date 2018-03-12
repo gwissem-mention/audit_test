@@ -1,3 +1,15 @@
 {% macro linkGroup(value, groupId) %}<a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {'groupe': groupId}) }}" target="_blank">{{ value }}</a>{% endmacro %}
 
 {% macro linkForm(value, formId) %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_view', {'fiche': formId}) }}" target="_blank">{{ value }}</a>{% endmacro %}
+
+{% macro linkDiscussionGroup(value, discussionId, groupId) %}
+    <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {'discussion': discussionId, 'group': groupId}) }}" target="_blank">
+        {{ value }}
+    </a>
+{% endmacro %}
+
+{% macro linkDiscussion(value, discussionId) %}
+    <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': discussionId}) }}" target="_blank">
+        {{ value }}
+    </a>
+{% endmacro %}

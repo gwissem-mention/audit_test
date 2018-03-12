@@ -51,7 +51,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('messageUser')
             ->addSelect('cdpGroup')
 
-            ->join('discussion.messages', 'message')
+            ->join('discussion.messages', 'message', Join::WITH, 'message.active = TRUE')
             ->join('message.user', 'messageUser')
         ;
 
@@ -125,6 +125,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('cdpGroup.animateurs', 'animators')
 
             ->andWhere('discussion = :discussion')
+            ->andWhere('message.active = TRUE')
             ->setParameter('discussion', $query->discussion)
         ;
 
@@ -182,6 +183,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('user', $user)
 
             ->andWhere('reading.id IS NULL')
+            ->andWhere('discussion.active = TRUE')
 
             ->getQuery()->getResult()
         ;
@@ -197,6 +199,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder = $this->createQueryBuilder('discussion')
             ->select('count(discussion)')
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
         ;
 
         if ($domain) {
@@ -218,6 +221,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->createQueryBuilder('discussion')
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
             ->join('discussion.domains', 'domain', Join::WITH, 'domain.id = :domain')
             ->setParameter('domain', $domain->getId())
 
@@ -237,6 +241,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.messages', 'message')->addSelect('message')
             ->join('discussion.user', 'user')
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
         ;
 
         if ($domain) {
@@ -267,6 +272,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.messages', 'message')->addSelect('message')
             ->join('discussion.user', 'user')
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
         ;
 
         if ($domain) {
@@ -296,6 +302,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->join('discussion.relatedObject', 'object', Join::WITH, 'object.id = :object')
             ->setParameter('object', $object)
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
         ;
 
         if ($domain) {
@@ -320,6 +327,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
         return $this->createQueryBuilder('discussion')
             ->select('discussion.title as text', 'discussion.id as value')
             ->andWhere('discussion.public = TRUE')
+            ->andWhere('discussion.active = TRUE')
 
             ->getQuery()->getResult()
         ;
@@ -338,6 +346,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('domains', $domains)
             ->join('discussion.messages', 'message', Join::WITH, 'message.createdAt >= :date')
             ->setParameter('date', (new \DateTime())->sub(new \DateInterval('P1M')))
+            ->andWhere('discussion.active = TRUE')
 
             ->getQuery()->getSingleScalarResult()
         ;
@@ -356,6 +365,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('domains', $domains)
             ->join('discussion.messages', 'message')
 
+            ->andWhere('discussion.active = TRUE')
             ->addGroupBy('discussion.id')
             ->andHaving('COUNT(message) = 1')
 

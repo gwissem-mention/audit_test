@@ -12,6 +12,7 @@ use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\ObjetBundle\Entity\Note;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Tools\Chaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -127,6 +128,11 @@ class MailManager extends BaseManager
     protected $statsInformationsRetriever;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails.
      *
      * @param EntityManager $em Entity      Manager de Doctrine
@@ -146,6 +152,7 @@ class MailManager extends BaseManager
      * @param ObjetRepository $objectRepository
      * @param ProfileCompletionCalculator $calculator
      * @param StatsInformationsRetriever $statsInformationsRetriever
+     * @param UserRepository $userRepository
      */
     public function __construct(
         EntityManager $em,
@@ -164,7 +171,8 @@ class MailManager extends BaseManager
         BBCodeEngine $BBCodeEngine,
         ObjetRepository $objectRepository,
         ProfileCompletionCalculator $calculator,
-        StatsInformationsRetriever $statsInformationsRetriever
+        StatsInformationsRetriever $statsInformationsRetriever,
+        UserRepository $userRepository
     )
     {
         parent::__construct($em);
@@ -191,6 +199,7 @@ class MailManager extends BaseManager
         $this->objectRepository = $objectRepository;
         $this->profilecompletionCalculator = $calculator;
         $this->statsInformationsRetriever = $statsInformationsRetriever;
+        $this->userRepository = $userRepository;
 
         $this->setOptions();
 
@@ -275,18 +284,18 @@ class MailManager extends BaseManager
             RouterInterface::ABSOLUTE_URL
         );
 
-        $this->mailer->send($this->generationMail(
+        $this->sendNotification(
             $user,
-            $this->findOneById(100),
             [
-                'nomUtilisateur' => $message->getUser()->getLastname(),
-                'prenomUtilisateur' => $message->getUser()->getFirstname(),
-                'discussionName' => $message->getDiscussion()->getTitle(),
-                'urlDiscussion' => $uri,
-                'urlUnfollow' => $uriUnfollow,
-                'manageAlerts' => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
-            ]
-        ));
+                'nomUtilisateur2'    => $message->getUser()->getLastname(),
+                'prenomUtilisateur2' => $message->getUser()->getFirstname(),
+                'discussionName'    => $message->getDiscussion()->getTitle(),
+                'urlDiscussion'     => $uri,
+                'urlUnfollow'       => $uriUnfollow,
+                'manageAlerts'      => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
+            ],
+            Mail::MAIL_CDP_NEW_MESSAGE_IN_DISCUSSION
+        );
     }
 
     public function sendCDPNeedModerationMail(Message $message, User $user)
@@ -1541,7 +1550,7 @@ class MailManager extends BaseManager
             $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain);
         }
 
-        foreach ($this->_userManager->getAdmins() as $admin) {
+        foreach ($this->userRepository->getAdminsAndDomainAdmins() as $admin) {
             foreach ($admin->getDomaines() as $domain) {
                 if (in_array($domain, $objet->getDomaines()->getValues())) {
                     $this->templatePublicationCommentaireMail($mail, $objet, $url, $domain, $admin);
@@ -1682,6 +1691,33 @@ class MailManager extends BaseManager
      * @param User $user
      * @param $options
      */
+    public function sendCdpNewDiscussionInGroupNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION_IN_GROUP);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
+    public function sendCdpNewDiscussionNotification(User $user, $options)
+    {
+        $this->sendCdpNotification($user, $options, Mail::MAIL_CDP_NEW_DISCUSSION);
+    }
+
+    /**
+     * @param Message $message
+     * @param User $user
+     */
+    public function sendCdpNewMessageInDiscussionNotification(Message $message, User $user)
+    {
+        $this->sendCDPSubscriptionMail($message, $user);
+    }
+
+    /**
+     * @param User $user
+     * @param $options
+     */
     public function sendCdpUserJoinedNotification(User $user, $options)
     {
         $this->sendNotification($user, $options, Mail::MAIL_CDP_USER_JOINED);
@@ -1709,10 +1745,27 @@ class MailManager extends BaseManager
                 'fiche' => $options['ficheId'],
             ]);
         } else {
-            $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
-                'groupe' => $options['groupId'],
-            ]);
+            $isGroupIdExist = array_key_exists('groupId', $options);
+            if ($isGroupIdExist) {
+                $options['urlGroupe'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+                    'groupe' => $options['groupId'],
+                ]);
+            }
+            if (array_key_exists('discussionId', $options)) {
+                if ($isGroupIdExist) {
+                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
+                        'discussion' => $options['discussionId'],
+                        'group' => $isGroupIdExist ? $options['groupId'] : null,
+                    ]);
+                } else {
+                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
+                        'discussion' => $options['discussionId'],
+                        'group' => $isGroupIdExist ? $options['groupId'] : null,
+                    ]);
+                }
+            }
         }
+
         $this->sendNotification($user, $options, $mailId);
     }
 
@@ -1754,6 +1807,7 @@ class MailManager extends BaseManager
     {
         /** @var Mail $mail */
         $mail = $this->findOneById(Mail::MAIL_NOTED_COMMENT);
+
         $options = [
             'urlDocument' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
                 'id' => $note->getObjet()->getId(),
@@ -1765,19 +1819,18 @@ class MailManager extends BaseManager
             'subjectdomain' => $this->getDomaineSubjet(),
         ];
 
-        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
-        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-        $content = $this->replaceContent($mail->getBody(), null, $options);
-        $from = [$expediteurMail => $expediteurName];
+        foreach ($note->getObjet()->getDomaines() as $domain) {
+            $this->templateNoteCommentaireMail($mail, $options, $domain);
+        }
 
-        $mailsToSend = $this->sendMail(
-            $mail->getObjet(),
-            $from,
-            $this->getMailDomaine(),
-            $content
-        );
-
-        $this->mailer->send($mailsToSend);
+        foreach ($this->userRepository->getAdminsAndDomainAdmins() as $admin) {
+            foreach ($admin->getDomaines() as $domain) {
+                if (in_array($domain, $note->getObjet()->getDomaines()->getValues())) {
+                    $this->templateNoteCommentaireMail($mail, $options, $domain, $admin);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -1871,5 +1924,28 @@ class MailManager extends BaseManager
         $mailToSend->setTo($admin ? $admin->getEmail() : $domain->getAdresseMailContact());
 
         $this->mailer->send($mailToSend);
+    }
+
+    /**
+     * @param $mail
+     * @param $options
+     * @param $domain
+     * @param User|null $admin
+     */
+    public function templateNoteCommentaireMail($mail, $options, $domain, User $admin = null)
+    {
+        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+        $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
+        $from = [$expediteurMail => $expediteurName];
+
+        $mailsToSend = $this->sendMail(
+            $mail->getObjet(),
+            $from,
+            $admin ? $admin->getEmail() : $domain->getAdresseMailContact(),
+            $content
+        );
+
+        $this->mailer->send($mailsToSend);
     }
 }

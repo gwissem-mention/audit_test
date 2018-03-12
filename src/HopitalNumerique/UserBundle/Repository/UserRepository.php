@@ -457,6 +457,14 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @return User[]
+     */
+    public function getAdminsAndDomainAdmins()
+    {
+        return $this->findByRole([Role::$ROLE_ADMIN_LABEL, Role::$ROLE_ADMIN_DOMAINE, Role::$ROLE_ADMIN_HN_LABEL], []);
+    }
+
+    /**
      * Retourne une liste d'utilisateurs Cmsi.
      *
      * @param array $criteres Filtres à appliquer sur la liste
@@ -1181,6 +1189,32 @@ class UserRepository extends EntityRepository
             ->setMaxResults($limit)
 
             ->getQuery()->getResult()
+        ;
+    }
+
+    /**
+     * @param Groupe $group
+     *
+     * @return array
+     */
+    public function getCommunautePratiqueUsersInGroup(Groupe $group)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.groupeInscription', 'groupeInscription', Join::WITH, 'groupeInscription.groupe = :groupe')
+            ->setParameter('groupe', $group)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function createCommunautePratiqueUsersQueryBuilder()
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->where('user.inscritCommunautePratique = TRUE')
         ;
     }
 }

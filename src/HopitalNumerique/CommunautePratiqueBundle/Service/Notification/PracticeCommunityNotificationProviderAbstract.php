@@ -2,12 +2,14 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
+use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
+use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Html2Text\Html2Text;
-use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\NotificationBundle\Entity\Notification;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use HopitalNumerique\PublicationBundle\Twig\PublicationExtension;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
@@ -22,8 +24,6 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
 {
     use MailManagerAwareTrait;
 
-    const SECTION_CODE = 'practice_community';
-
     /**
      * @var PublicationExtension $publicationExtension
      */
@@ -35,6 +35,21 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     protected $groupeInscriptionRepository;
 
     /**
+     * @var UserRepository $userRepository
+     */
+    protected $userRepository;
+
+    /**
+     * @var SubscriptionRepository $subscriptionRepository
+     */
+    protected $subscriptionRepository;
+
+    /**
+     * @var MessageRepository $messageRepository
+     */
+    protected $messageRepository;
+
+    /**
      * PracticeCommunityNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -42,34 +57,27 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
      * @param TranslatorInterface $translator
      * @param PublicationExtension $publicationExtension
      * @param GroupeInscriptionRepository $groupeInscriptionRepository
+     * @param UserRepository $userRepository
+     * @param SubscriptionRepository $subscriptionRepository
+     * @param MessageRepository $messageRepository
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
         PublicationExtension $publicationExtension,
-        GroupeInscriptionRepository $groupeInscriptionRepository
+        GroupeInscriptionRepository $groupeInscriptionRepository,
+        UserRepository $userRepository,
+        SubscriptionRepository $subscriptionRepository,
+        MessageRepository $messageRepository
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
         $this->groupeInscriptionRepository = $groupeInscriptionRepository;
+        $this->userRepository = $userRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
+        $this->messageRepository = $messageRepository;
         $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getSectionCode()
-    {
-        return self::SECTION_CODE;
-    }
-
-    /**
-     * @return integer
-     */
-    public static function getSectionPosition()
-    {
-        return 2;
     }
 
     /**
@@ -82,30 +90,29 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         return $this->publicationExtension->parsePublication($comment);
     }
 
-    /**
-     * Returns users concerned by notification, in this case users who are active members of group.
-     * notification date.
-     *
-     * @param Notification $notification
-     *
-     * @return QueryBuilder
-     */
-    public function getSubscribers(Notification $notification)
+    public function generateOptions(Groupe $group = null, User $user = null, Discussion $discussion = null)
     {
-        return $this->groupeInscriptionRepository->getUsersInGroupQueryBuilder($notification->getData('groupId'));
-    }
+        $options = [];
 
-    public function generateOptions(Groupe $group, User $user = null)
-    {
-        $options = [
-            'groupId' => $group->getId(),
-            'nomGroupe' => $group->getTitre(),
-            'domainId' => $group->getDomains()->first()->getId(),
-        ];
+        if (null !== $group) {
+            $options = [
+                'groupId' => $group->getId(),
+                'nomGroupe' => $group->getTitre(),
+                'domainId' => $group->getDomains()->first()->getId(),
+            ];
+        }
+
         if (null !== $user) {
             $options = array_merge($options, [
                 'prenomUtilisateurDist' => $user->getFirstname(),
                 'nomUtilisateurDist' => $user->getLastname(),
+            ]);
+        }
+
+        if (null !== $discussion) {
+            $options = array_merge($options, [
+                'discussionId' => $discussion->getId(),
+                'nomDiscussion' => $discussion->getTitle(),
             ]);
         }
 

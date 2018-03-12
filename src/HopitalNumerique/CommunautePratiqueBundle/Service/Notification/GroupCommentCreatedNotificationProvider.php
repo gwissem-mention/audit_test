@@ -5,12 +5,11 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 use HopitalNumerique\NotificationBundle\Entity\Notification;
 use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class GroupCommentCreatedNotificationProvider.
  */
-class GroupCommentCreatedNotificationProvider extends PracticeCommunityNotificationProviderAbstract
+class GroupCommentCreatedNotificationProvider extends PracticeCommunityHelpGroupsNotificationProviderAbstract
 {
     const NOTIFICATION_CODE = 'practice_community_group_comment_created';
 
@@ -27,7 +26,7 @@ class GroupCommentCreatedNotificationProvider extends PracticeCommunityNotificat
      */
     public static function getNotifPosition()
     {
-        return 1;
+        return 4;
     }
 
     /**
