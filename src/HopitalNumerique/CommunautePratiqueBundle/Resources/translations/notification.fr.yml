@@ -71,22 +71,22 @@ notification_config:
                 header: %number% nouvelles personnes ont rejoint la communauté
                 content: %userName%
         practice_community_new_discussion_in_group:
-            single: La discussion "%discussionName%" a été créée dans le groupe "%groupeName%"
+            single: La discussion %discussionName% a été créée dans le groupe %groupeName%
             mutliple:
                 header: %number% nouvelles discussions ont été créées
                 content: %groupeName% : %discussionName%
         practice_community_new_discussion:
-            single: La discussion "%discussionName%" a été créée
+            single: La discussion %discussionName% a été créée
             mutliple:
                 header: %number% nouvelles discussions ont été créées
                 content: %groupeName% : %discussionName%
         practice_community_new_message_in_discussion:
-            single: Un nouveau message a été créé dans la discussion "%discussionName%"
+            single: Un nouveau message a été créé dans la discussion %discussionName%
             multiple:
                 header: %number% nouveaux messages ont été créés
                 content: %discussionName%
         practice_community_new_message_in_discussion_group:
-            single: Un nouveau message a été créé dans la discussion "%discussionName%" du groupe %groupeName%
+            single: Un nouveau message a été créé dans la discussion %discussionName% du groupe %groupeName%
             multiple:
                 header: %number% nouveaux messages ont été créés
                 content: %groupeName% : %discussionName%
