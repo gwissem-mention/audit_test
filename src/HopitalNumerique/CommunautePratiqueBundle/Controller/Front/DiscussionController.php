@@ -559,6 +559,10 @@ class DiscussionController extends Controller
             $discussionRepository->findByPublic(true)
         ;
 
+        usort($discussions, function ($a, $b) {
+            return strcmp(strtolower($a->getTitle()), strtolower($b->getTitle()));
+        });
+
         if ($discussionId = $request->request->get('discussion', null)) {
             $oldDiscussion = $message->getDiscussion();
 
