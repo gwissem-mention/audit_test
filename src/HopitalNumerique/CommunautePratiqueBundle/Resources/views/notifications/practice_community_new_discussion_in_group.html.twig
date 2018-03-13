@@ -6,7 +6,7 @@
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
         '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId')),
-        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
+        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId'))
     })|raw }}
 {% endblock %}
 
