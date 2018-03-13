@@ -284,6 +284,12 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@event_dispatcher'
 
+    HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveMessageHandler:
+        class: HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveMessageHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Discussion\NewDiscussionActivityCounter
         arguments:

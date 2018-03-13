@@ -91,9 +91,9 @@
                 {% endif %}
                 {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::COPY_TO_GROUP'), discussion) %}
                     {% if scope == 'public' and discussion.groups.count == 0 %}
-                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_copy_discussion', {'id': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_copy.label'|trans }}</option>
                     {% elseif scope == 'group' %}
-                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_move_discussion', {'discussion': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_move.label'|trans }}</option>
+                        <option value="{{ path('hopitalnumerique_communautepratique_discussions_move_discussion', {'id': discussion.id}) }}" data-action="modal">{{ 'discussion.discussion.actions.group_move.label'|trans }}</option>
                     {% endif %}
                 {% endif %}
                 {% if discussion.groups.count > 0 and is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\DiscussionVoter::SET_AS_PUBLIC'), discussion) %}
@@ -154,6 +154,18 @@
                                     <i class="fa fa-star active"></i>
                                 </span>
                             </a>
+                        {% endif %}
+
+                        {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::MOVE_MESSAGE'), message) %}
+                            <button class="move" data-uri="{{ path('hopitalnumerique_communautepratique_move_message', {'id': message.id, 'group': group ? group.id : null}) }}">
+                                <span data-toggle="tooltip"
+                                      data-placement="top"
+                                      data-html="true"
+                                      title="{{ 'discussion.icon_tooltip.moveMessage'|trans }}"
+                                >
+                                    <i class="fa fa-share"></i>
+                                </span>
+                            </button>
                         {% endif %}
 
                         {% if is_granted(constant('HopitalNumerique\\CommunautePratiqueBundle\\Security\\Discussion\\MessageVoter::EDIT'), message) %}

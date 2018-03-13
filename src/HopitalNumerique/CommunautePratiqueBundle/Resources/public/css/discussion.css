@@ -489,11 +489,22 @@
     float: right;
 }
 
-.discussions .discussion .messages .message .message-infos .actions a {
+.discussions .discussion .messages .message .message-infos .actions a,
+.discussions .discussion .messages .message .message-infos .actions button {
     color: #777;
     font-size: 20px;
     margin-left: 10px;
     opacity: 0.6;
+    background-color: transparent;
+    border: none;
+}
+
+.discussions .discussion .messages .message .message-infos .actions button:hover {
+    opacity: 1;
+}
+
+.discussions .discussion .messages .message .message-infos .actions button:focus {
+    outline: 0;
 }
 
 .discussions .discussion .messages .message .message-infos .actions a.helpful {
