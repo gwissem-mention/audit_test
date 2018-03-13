@@ -1753,9 +1753,9 @@ class MailManager extends BaseManager
             }
             if (array_key_exists('discussionId', $options)) {
                 if ($isGroupIdExist) {
-                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_discussion', [
+                    $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_groupe_view_default_discussion', [
                         'discussion' => $options['discussionId'],
-                        'group' => $isGroupIdExist ? $options['groupId'] : null,
+                        'groupe' => $isGroupIdExist ? $options['groupId'] : null,
                     ]);
                 } else {
                     $options['urlDiscussion'] = $this->_router->generate('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', [
