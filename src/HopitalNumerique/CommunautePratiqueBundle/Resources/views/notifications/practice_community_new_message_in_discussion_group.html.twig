@@ -5,8 +5,8 @@
 
 {% block single %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.single')|trans({
-        '%groupeName%' : macro.linkDiscussion(notif.getData('nomGroupe'), notif.getData('groupId')),
-        '%discussionName%' : macro.linkDiscussion(notif.getData('nomDiscussion'), notif.getData('discussionId'))
+        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
+        '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId'))
     })|raw }}
 {% endblock %}
 
@@ -18,7 +18,7 @@
 
 {% block content %}
     {{ ('notification_config.grouped.' ~ notif.notificationCode ~ '.multiple.content')|trans({
-        '%groupeName%' : macro.linkDiscussion(notif.getData('nomGroupe'), notif.getData('groupId')),
-        '%discussionName%' : macro.linkDiscussion(notif.getData('nomDiscussion'), notif.getData('discussionId'))
+        '%groupeName%' : macro.linkGroup(notif.getData('nomGroupe'), notif.getData('groupId')),
+        '%discussionName%' : macro.linkDiscussionGroup(notif.getData('nomDiscussion'), notif.getData('discussionId'), notif.getData('groupId'))
     })|raw }}
 {% endblock %}
