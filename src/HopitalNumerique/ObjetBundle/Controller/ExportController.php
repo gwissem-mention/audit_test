@@ -86,6 +86,7 @@ class ExportController extends Controller
             'nombreNoteC' => 'Nombre de notes de l\'infra-doc',
             'objets' => 'Productions liées',
             'commentairesAssocies' => 'Commentaires frontoffice',
+            'notesCommentsObjet' => 'Notes et commentaires',
             'cibleDiffusion' => 'Cible de diffusion',
             'downloadCount1' => 'Nombre de téléchargements du fichier 1',
             'downloadCount2' => 'Nombre de téléchargements du fichier 2',
