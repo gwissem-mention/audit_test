@@ -70,6 +70,11 @@ discussion:
                 modal:
                     title: Déplacer la discussion dans le groupe "%groupName%"
                     empty: Aucun groupe disponible
+            move_message:
+                success: Message déplacé dans la discussion.
+                modal:
+                    title: Déplacer le message dans une discussion
+                    empty: Aucune discussion disponible
             cart:
                 label: Ajouter au panier
             subscription:
@@ -140,6 +145,7 @@ discussion:
             creation_date: Date de création
             message: Message
     icon_tooltip:
+        moveMessage: Déplacer le message dans une autre discussion
         helpfulMessage: Met le message en fond jaune pour être plus visible des utilisateurs – Fonction réservée aux administrateurs et animateurs
         recommended: Discussion recommandée par la communauté
         new: Nouvelle discussion

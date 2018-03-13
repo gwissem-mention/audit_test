@@ -298,6 +298,21 @@ class ObjetManager extends BaseManager
             }
             $row['commentairesAssocies'] = implode('|', $commentaires_associes);
 
+            // Get all notes with comments
+            $row['notesCommentsObjet'] = '';
+            $notes = [];
+            foreach ($objet->getListeNotes() as $note) {
+                $con = $note->getContenu();
+                if (empty($con)) {
+                    if ($note->getComment()) {
+                        $notes[] = $note->getNote(). ' - ' .$note->getComment();
+                    } else {
+                        $notes[] = $note->getNote();
+                    }
+                }
+            }
+            $row['notesCommentsObjet'] = implode('|', $notes);
+
             //add Object To Results
             $results[] = $row;
 
@@ -372,6 +387,18 @@ class ObjetManager extends BaseManager
                             $commentaires_associes[] = $com->getTexte();
                         }
                         $rowInfradoc['commentairesAssocies'] = implode('|', $commentaires_associes);
+
+                        // Get all notes with comments
+                        $rowInfradoc['notesCommentsObjet'] = '';
+                        $notes = [];
+                        foreach ($contenu->getListeNotes() as $note) {
+                            if ($note->getComment()) {
+                                $notes[] = $note->getNote().' - '.$note->getComment();
+                            } else {
+                                $notes[] = $note->getNote();
+                            }
+                        }
+                        $rowInfradoc['notesCommentsObjet'] = implode('|', $notes);
 
                         //add Infra-doc To Results
                         $results[] = $rowInfradoc;

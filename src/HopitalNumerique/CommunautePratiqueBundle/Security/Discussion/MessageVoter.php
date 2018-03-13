@@ -17,6 +17,7 @@ class MessageVoter extends Voter
     const EDIT = 'edit';
     const VALIDATE = 'validate';
     const VIEW_FILE = 'view_file';
+    const MOVE_MESSAGE = 'move_message';
 
     /**
      * @param string $attribute
@@ -26,7 +27,7 @@ class MessageVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::VIEW_FILE, self::VALIDATE, self::MARK_AS_HELPFUL, self::DELETE, self::EDIT])) {
+        if (!in_array($attribute, [self::VIEW_FILE, self::VALIDATE, self::MARK_AS_HELPFUL, self::DELETE, self::EDIT, self::MOVE_MESSAGE])) {
             return false;
         }
 
@@ -59,6 +60,7 @@ class MessageVoter extends Voter
         switch ($attribute) {
             case self::MARK_AS_HELPFUL:
             case self::VALIDATE:
+            case self::MOVE_MESSAGE:
                 return $this->canManage($subject, $user);
             case self::EDIT:
             case self::DELETE:

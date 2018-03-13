@@ -4,6 +4,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Front;
 
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveDiscussionHandler;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveMessageCommand;
+use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\MoveMessageHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionCommand;
 use HopitalNumerique\CommunautePratiqueBundle\Domain\Command\Discussion\ReorderDiscussionHandler;
 use HopitalNumerique\CommunautePratiqueBundle\Event\Discussion\DiscussionVisibilityEvent;
@@ -539,6 +541,42 @@ class DiscussionController extends Controller
             'groups' => $groupsAvailable,
             'discussion' => $discussion,
             'type' => $type,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Message $message
+     * @param Groupe|null $group
+     *
+     * @return RedirectResponse|Response
+     */
+    public function moveMessageToDiscussionAction(Request $request, Message $message, Groupe $group = null)
+    {
+        $discussionRepository = $this->get('HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository');
+        $discussions = $group ?
+            $discussionRepository->getDiscussionsByGroup($group) :
+            $discussionRepository->findByPublic(true)
+        ;
+
+        if ($discussionId = $request->request->get('discussion', null)) {
+            $oldDiscussion = $message->getDiscussion();
+
+            /** @var Discussion $discussion */
+            if ($discussion = $discussionRepository->find($discussionId)) {
+                $command = new MoveMessageCommand($message, $discussion);
+                $this->get(MoveMessageHandler::class)->handle($command);
+            }
+
+            $this->addFlash('success', $this->get('translator')->trans('discussion.discussion.actions.move_message.success', [], 'cdp_discussion'));
+
+            return $this->redirectResponse($group ? $group : null, $oldDiscussion);
+        }
+
+        return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/move.html.twig', [
+            'message' => $message,
+            'group' => $group,
+            'discussions' => $discussions,
         ]);
     }
 

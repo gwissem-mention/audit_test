@@ -1,6 +1,6 @@
 {% trans_default_domain 'cdp_discussion' %}
 
-<form method='post' action="{{ path('hopitalnumerique_communautepratique_discussions_%s_discussion'|format(type), {'discussion': discussion.id}) }}">
+<form method='post' action="{{ path('hopitalnumerique_communautepratique_discussions_%s_discussion'|format(type), {'id': discussion.id}) }}">
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
