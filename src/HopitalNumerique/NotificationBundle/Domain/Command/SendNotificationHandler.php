@@ -96,9 +96,12 @@ class SendNotificationHandler
                     return true;
                 }
                 $this->entityManager->remove($notification);
+
                 return false;
             }
         );
+
+        $this->entityManager->flush();
 
         foreach ($notifications as $key => $notification) {
             if ($notification->getFrequency() === NotificationFrequencyEnum::NOTIFICATION_FREQUENCY_STRAIGHT) {
@@ -107,6 +110,7 @@ class SendNotificationHandler
 
                 //Delete notification
                 $this->entityManager->remove($notification);
+                $this->entityManager->flush();
                 unset($notifications[$key]);
             }
         }
@@ -124,13 +128,11 @@ class SendNotificationHandler
                 Events::SEND_NOTIFICATION_GROUP,
                 $notificationEvent
             );
-        }
 
-        //Delete notifications
-        foreach ($notifications as $notification) {
-            $this->entityManager->remove($notification);
+            foreach ($userNotifications as $notification) {
+                $this->entityManager->remove($notification);
+            }
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
     }
 }
