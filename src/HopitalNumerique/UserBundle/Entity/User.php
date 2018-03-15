@@ -664,6 +664,9 @@ class User extends BaseUser implements SettingsOwnerInterface
      */
     private $groupeInscription;
 
+    /**
+     * @var ArrayCollection
+     */
     private $communautePratiqueGroupes;
 
     /**
@@ -2645,6 +2648,10 @@ class User extends BaseUser implements SettingsOwnerInterface
      */
     public function getCommunautePratiqueGroupes()
     {
+        if (null === $this->communautePratiqueGroupes) {
+            $this->communautePratiqueGroupes = new ArrayCollection();
+        }
+
         foreach ($this->getGroupeInscription() as $inscrit) {
             $this->communautePratiqueGroupes[$inscrit->getGroupe()->getId()] = $inscrit->getGroupe();
         }
