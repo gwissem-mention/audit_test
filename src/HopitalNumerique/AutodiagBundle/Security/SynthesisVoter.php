@@ -178,6 +178,10 @@ class SynthesisVoter extends Voter
             return true;
         }
 
+        if (in_array($user, $synthesis->getShares()->getValues())) {
+            return true;
+        }
+
         return false;
     }
 
