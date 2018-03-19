@@ -1871,6 +1871,7 @@ class MailManager extends BaseManager
 
         $objects = $this->objectRepository->getRandomNotviewedObjects($user);
         foreach ($objects as $object) {
+            $object = clone $object;
             $object->setPath(
                 $this->getEncodedPath('publication', $object->getId(), $user)
             );
