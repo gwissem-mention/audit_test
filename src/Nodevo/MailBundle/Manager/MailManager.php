@@ -287,12 +287,12 @@ class MailManager extends BaseManager
         $this->sendNotification(
             $user,
             [
-                'nomUtilisateur2'    => $message->getUser()->getLastname(),
+                'nomUtilisateur2' => $message->getUser()->getLastname(),
                 'prenomUtilisateur2' => $message->getUser()->getFirstname(),
-                'discussionName'    => $message->getDiscussion()->getTitle(),
-                'urlDiscussion'     => $uri,
-                'urlUnfollow'       => $uriUnfollow,
-                'manageAlerts'      => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
+                'discussionName' => $message->getDiscussion()->getTitle(),
+                'urlDiscussion' => $uri,
+                'urlUnfollow' => $uriUnfollow,
+                'manageAlerts' => $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL),
             ],
             Mail::MAIL_CDP_NEW_MESSAGE_IN_DISCUSSION
         );
@@ -1763,6 +1763,21 @@ class MailManager extends BaseManager
                         'group' => $isGroupIdExist ? $options['groupId'] : null,
                     ]);
                 }
+            }
+
+            if (in_array($mailId, [Mail::MAIL_CDP_NEW_DISCUSSION_IN_GROUP, Mail::MAIL_CDP_NEW_DISCUSSION])) {
+                $uriUnfollow = $this->_router->generate(
+                    'hopitalnumerique_communautepratique_discussions_subscribe',
+                    [
+                        'discussion' => $options['discussionId'],
+                        'type' => UserSubscription::UNSUBSCRIBE,
+                        'group' => $isGroupIdExist ? $options['groupId'] : null,
+                    ],
+                    RouterInterface::ABSOLUTE_URL
+                );
+
+                $options['urlUnfollow']  = $uriUnfollow;
+                $options['manageAlerts'] = $this->_router->generate('account_parameter', [], RouterInterface::ABSOLUTE_URL);
             }
         }
 
