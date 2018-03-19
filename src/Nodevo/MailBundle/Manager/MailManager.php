@@ -1869,12 +1869,13 @@ class MailManager extends BaseManager
             'notifications' => $groupedNotifications,
         ]);
 
-        $objects = $this->objectRepository->getRandomNotviewedObjects($user);
-        foreach ($objects as $object) {
+        $objects = [];
+        foreach ($this->objectRepository->getRandomNotviewedObjects($user) as $object) {
             $object = clone $object;
             $object->setPath(
                 $this->getEncodedPath('publication', $object->getId(), $user)
             );
+            array_push($objects, $object);
         }
 
         $content .= $this->_twig->render('@HopitalNumeriqueContextualNavigation/notifications/grouped_discover.html.twig', [
