@@ -97,7 +97,6 @@ class Pandoc implements ConverterInterface
         });
         $this->extractImages($currentNode);
 
-
         $root = $currentNode->getHighestParent();
 
         $this->handleFootnotes($root);
@@ -243,7 +242,7 @@ class Pandoc implements ConverterInterface
         $crawler = new Crawler($node->getContent());
         $crawler = $crawler->filter('img');
         $crawler->each(function (Crawler $crawler) use ($node) {
-            $file = new File($crawler->attr('src'));
+            $file = new File(urldecode($crawler->attr('src')));
             $node->addFile($file);
         });
     }
