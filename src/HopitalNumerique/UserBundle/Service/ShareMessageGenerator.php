@@ -60,7 +60,7 @@ class ShareMessageGenerator
 
         if (count($sharedWith) > 0) {
             $sharedWithString = implode(', ', array_map(function ($share) {
-                return $share->getPrenomNom();
+                return $share->getPrenomNom() . ' (' . $share->getNomEtablissement() . ')';
             }, $sharedWith));
 
             if (null !== $sharedBy) {
