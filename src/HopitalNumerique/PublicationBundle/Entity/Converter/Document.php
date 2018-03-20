@@ -4,11 +4,8 @@ namespace HopitalNumerique\PublicationBundle\Entity\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\PublicationBundle\Entity\Converter\Document\Media;
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class Document

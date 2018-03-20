@@ -78,6 +78,13 @@ class ContentGenerator
         $this->entityManager->flush($document);
     }
 
+    /**
+     * @param Document $document
+     * @param Document\NodeInterface $node
+     * @param int $order
+     *
+     * @return Contenu|null
+     */
     protected function handleNode(Document $document, Document\NodeInterface $node, $order = 1)
     {
         $this->nodeParser->parse($node);

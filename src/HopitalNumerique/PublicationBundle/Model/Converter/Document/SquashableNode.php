@@ -9,8 +9,8 @@ use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
  */
 class SquashableNode extends NodeDecorator
 {
-    private $identityMap = [];
-    private $squashMap = [];
+    private static $identityMap = [];
+    private static $squashMap = [];
 
     /**
      * @return NodeInterface
@@ -18,14 +18,22 @@ class SquashableNode extends NodeDecorator
     public function squash()
     {
         $this->buildMap($this);
-        $sources = array_diff(array_keys($this->squashMap), array_values($this->squashMap));
 
-        while (!empty($sources)) {
-            foreach ($sources as $source) {
-                $this->squashNode($this->identityMap[$source]);
-                unset($this->squashMap[$source]);
-            }
-            $sources = array_diff(array_keys($this->squashMap), array_values($this->squashMap));
+        foreach ($this->getChildrens() as $child) {
+            (new SquashableNode($child))->squash();
+        }
+
+        if (null !== $this->getSquashIn()) {
+            foreach (self::$squashMap as $source => $target) {
+                if ($this->getId() === $target) {
+                    self::$identityMap[$source]->setSquashIn($this->getSquashIn());
+                    self::$squashMap[$source] = $this->getSquashIn()->getId();
+                }
+            };
+
+            $this->squashNode($this);
+
+            unset(self::$squashMap[$this->getId()]);
         }
 
         return $this;
@@ -74,13 +82,13 @@ class SquashableNode extends NodeDecorator
      */
     private function buildMap(NodeInterface $node)
     {
-        if (null !== $node->getSquashIn()) {
-            $this->identityMap[$node->getId()] = $node;
-            $this->squashMap[$node->getId()] = $node->getSquashIn()->getId();
+        foreach ($node->getChildrens() as $child) {
+            $this->buildMap($child);
         }
 
-        foreach ($node->getChildrens() as $children) {
-            $this->buildMap($children);
+        if (null !== $node->getSquashIn()) {
+            self::$identityMap[$node->getId()] = $node;
+            self::$squashMap[$node->getId()] = $node->getSquashIn()->getId();
         }
     }
 }
