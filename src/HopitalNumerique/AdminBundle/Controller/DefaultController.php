@@ -271,7 +271,7 @@ class DefaultController extends Controller
             $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
 
             //Récupération des questionnaires et users
-            $questionnairesByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
+            $surveysAnswerByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
 
             //On récupère les candidatures refusées
             $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
@@ -289,15 +289,15 @@ class DefaultController extends Controller
                 }
 
                 //Récupération des questionnaires rempli par l'utilisateur courant
-                $questionnaireByUser = [];
-                if (array_key_exists($user->getId(), $questionnairesByUser)) {
-                    $questionnaireByUser = $questionnairesByUser[$user->getId()];
+                $questionnairesByUser = [];
+                if (array_key_exists($user->getId(), $surveysAnswerByUser)) {
+                    $questionnairesByUser = $surveysAnswerByUser[$user->getId()];
                 }
 
                 // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
                 // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
                 if ($domainNumeric
-                    && in_array($idExpert, $questionnaireByUser)
+                    && in_array($idExpert, $surveysAnswerByUser)
                     && !$user->hasRoleExpert()
                     && !$user->getAlreadyBeExpert()
                     && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
