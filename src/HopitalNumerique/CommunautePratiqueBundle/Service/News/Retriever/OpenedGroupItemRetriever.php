@@ -47,7 +47,7 @@ class OpenedGroupItemRetriever implements WallItemRetrieverInterface
         foreach ($this->groupRepository->getLastOpened($domain, 1, $user instanceof User ? $user : null) as $group) {
             $isRegistered = false;
             if ($user instanceof User) {
-                if ($user->getCommunautePratiqueGroupes() && (new ArrayCollection($user->getCommunautePratiqueGroupes()))->contains($group)) {
+                if ($user->getCommunautePratiqueGroupes() && (new ArrayCollection($user->getCommunautePratiqueGroupes()->toArray()))->contains($group)) {
                     $isRegistered = true;
                 }
             }
