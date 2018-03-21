@@ -5,6 +5,7 @@ namespace HopitalNumerique\AdminBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardCommand;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\Contractualisation;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -142,6 +143,7 @@ class DefaultController extends Controller
         $commentRepository = $this->get('hopitalnumerique_objet.repository.commentaire');
         $objectRepository = $this->get('hopitalnumerique_objet.repository.objet');
         $errorUrlRepository = $this->get('stat.repository.error');
+        $consultationRepository = $this->get('hopitalnumerique_objet.repository.consultation');
 
         $blocObjets = [
             'points-durs' => 0,
@@ -176,8 +178,7 @@ class DefaultController extends Controller
         }
 
         foreach ($publications as $publication) {
-
-            if ($publication['etat'] == 4) {
+            if (Reference::STATUT_INACTIF_ID === $publication['etat']) {
                 $blocObjets['publications-non-publiees']++;
             }
 
@@ -199,14 +200,35 @@ class DefaultController extends Controller
         // Get dead links for current domain
         $blocObjets['dead-links'] = $errorUrlRepository->nbErrorsByDomain($this->domains);
 
-        $blocObjets['top5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC');
-        $blocObjets['bottom5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC');
-        $blocObjets['top5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC');
-        $blocObjets['bottom5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC');
-        $blocObjets['top5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC', 3);
-        $blocObjets['bottom5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC', 3);
-        $blocObjets['top5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC', 3);
-        $blocObjets['bottom5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC', 3);
+        // Get top/bottom objects
+        $blocObjets['top5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC', false);
+        $blocObjets['bottom5-points-dur'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC', false);
+        $blocObjets['top5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC', false);
+        $blocObjets['bottom5-productions'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC', false);
+        $blocObjets['top5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'DESC');
+        $blocObjets['bottom5-productions-3mois'] = $objectRepository->getTopOrBottom($this->domains, 175, 'ASC');
+        $blocObjets['top5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'DESC');
+        $blocObjets['bottom5-points-dur-3mois'] = $objectRepository->getTopOrBottom($this->domains, 184, 'ASC');
+
+        $interval3months = (new \DateTimeImmutable())->sub(new \DateInterval(sprintf('P%dM', 3)));
+
+        // Add views when object need interval
+        foreach ($blocObjets as $index => $blocArray) {
+            if (is_array($blocArray)) {
+                foreach ($blocArray as $key => $object) {
+                    if (!array_key_exists('nbVue', $object)) {
+                        $object['nbVue'] = $consultationRepository->countConsultationsByObjectAndInterval($object['id'], $interval3months);
+                        $blocArray[$key] = $object;
+                    }
+                }
+                usort($blocArray, function ($a, $b) {
+                    if (is_string($a['nbVue']) && is_string($b['nbVue'])) {
+                        return strcmp($b['nbVue'], $a['nbVue']);
+                    }
+                });
+                $blocObjets[$index] = $blocArray;
+            }
+        }
 
         return $blocObjets;
     }

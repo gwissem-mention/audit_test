@@ -9,6 +9,7 @@ use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * ConsultationRepository.
@@ -148,5 +149,24 @@ class ConsultationRepository extends EntityRepository
         }
 
         return null;
+    }
+
+    /**
+     * @param $objetId
+     * @param \DateTimeImmutable $interval
+     *
+     * @return mixed
+     */
+    public function countConsultationsByObjectAndInterval($objetId, \DateTimeImmutable $interval)
+    {
+        return $this->createQueryBuilder('consultation')
+            ->select('COUNT(consultation.id) as viewsCount')
+            ->join('consultation.objet', 'objet', Expr\Join::WITH, 'objet.id = :objet')
+            ->setParameter('objet', $objetId)
+            ->andWhere('consultation.consultationDate >= :intervalDate')
+            ->setParameter('intervalDate', $interval)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 }
