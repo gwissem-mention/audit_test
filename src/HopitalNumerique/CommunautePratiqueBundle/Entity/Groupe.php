@@ -184,7 +184,7 @@ class Groupe
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_communautepratique_groupe_role",
      *      joinColumns={ @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id", onDelete="CASCADE")}
      * )
      */
     protected $requiredRoles;

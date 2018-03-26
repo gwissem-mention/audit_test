@@ -53,7 +53,7 @@ class Flash
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_flash_role",
      *      joinColumns={ @ORM\JoinColumn(name="fla_id", referencedColumnName="fla_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id", onDelete="CASCADE")}
      * )
      */
     protected $roles;
