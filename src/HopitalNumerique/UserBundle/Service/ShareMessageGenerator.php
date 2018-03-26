@@ -52,7 +52,10 @@ class ShareMessageGenerator
             if (null !== $sharedBy) {
                 $message = $this->translator->trans(
                     'guided_search.shared_by',
-                    ['%user%' => $sharedBy->getPrenomNom()],
+                    ['%user%' => $sharedBy->getNomEtablissement() ?
+                        sprintf('%s (%s)', $sharedBy->getPrenomNom(), $sharedBy->getNomEtablissement()) :
+                        $sharedBy->getPrenomNom()
+                    ],
                     'widget'
                 );
             }
@@ -60,7 +63,10 @@ class ShareMessageGenerator
 
         if (count($sharedWith) > 0) {
             $sharedWithString = implode(', ', array_map(function ($share) {
-                return $share->getPrenomNom() . ' (' . $share->getNomEtablissement() . ')';
+                return $share->getNomEtablissement() ?
+                    sprintf('%s (%s)', $share->getPrenomNom(), $share->getNomEtablissement()) :
+                    $share->getPrenomNom()
+                ;
             }, $sharedWith));
 
             if (null !== $sharedBy) {
