@@ -143,7 +143,7 @@ class Session
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_module_session_rolerestriction",
      *      joinColumns={ @ORM\JoinColumn(name="ses_id", referencedColumnName="ses_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id", onDelete="CASCADE")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})
      *
