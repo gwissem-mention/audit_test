@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Domain\Command;
 
 use HopitalNumerique\NotificationBundle\Entity\Settings;
+use HopitalNumerique\NotificationBundle\Service\NotificationProviderAbstract;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -53,10 +54,8 @@ class UpdateNotificationsSettingsCommand
         $this->publicationNotification = $user->getNotficationRequete();
         $this->activityNewsletter = $user->isActivityNewsletterEnabled();
         $this->notificationsSettings = $notificationsSettings;
-        if (null !== $schedules) {
-            $this->scheduleDay = $schedules['scheduleDay'];
-            $this->scheduleHour = $schedules['scheduleHour'];
-        }
+        $this->scheduleDay = $schedules ? $schedules['scheduleDay'] : NotificationProviderAbstract::DEFAULT_SCHEDULE_DAY;
+        $this->scheduleHour = $schedules ? $schedules['scheduleHour'] : NotificationProviderAbstract::DEFAULT_SCHEDULE_HOUR;
     }
 
 }

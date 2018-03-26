@@ -38,7 +38,7 @@ abstract class NotificationProviderAbstract implements NotificationProviderInter
     /**
      * Default schedule hour.
      */
-    const DEFAULT_SCHEDULE_HOUR = 0;
+    const DEFAULT_SCHEDULE_HOUR = 17;
 
     /**
      * Used to define text size limit for notification titles.
