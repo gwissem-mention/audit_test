@@ -1492,8 +1492,6 @@ class User extends BaseUser implements SettingsOwnerInterface
             return $this->getOrganizationString();
         } elseif ($this->getOrganizationLabel() != null) {
             return $this->getOrganizationLabel();
-        } else {
-            return 'Aucune structure de rattachement';
         }
     }
 
