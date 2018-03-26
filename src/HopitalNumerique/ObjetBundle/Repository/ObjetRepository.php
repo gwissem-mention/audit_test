@@ -894,18 +894,17 @@ class ObjetRepository extends EntityRepository
     /**
      * Get most or least viewed objects
      *
-     * @param array $domains
-     * @param integer $type Publication / Hot point
-     * @param string $sort ASC/DESC
-     * @param int|null $interval
+     * @param $domains
+     * @param $type
+     * @param string $sort
+     * @param bool $needInterval
      *
      * @return array
      */
-    public function getTopOrBottom($domains, $type, $sort = 'DESC', $interval = null)
+    public function getTopOrBottom($domains, $type, $sort = 'DESC', $needInterval = true)
     {
-
         $queryBuilder = $this->createQueryBuilder('object')
-            ->select('object.id', 'object.alias', 'object.titre', 'COUNT(DISTINCT view.id) as viewsCount')
+            ->select('object.id', 'object.alias', 'object.titre')
 
             ->join('object.domaines', 'domain', Expr\Join::WITH, 'domain.id IN (:domains)')
             ->setParameter('domains', $domains)
@@ -916,18 +915,15 @@ class ObjetRepository extends EntityRepository
             ->setParameter('type', $type)
 
             ->addGroupBy('object.id')
-            ->addOrderBy('viewsCount', $sort)
 
             ->setMaxResults(5)
         ;
 
-        if ($interval) {
+        if (!$needInterval) {
             $queryBuilder
-                ->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.consultationDate >= :intervalDate AND view.domaine IN (:domains)')
-                ->setParameter('intervalDate', (new \DateTimeImmutable())->sub(new \DateInterval(sprintf('P%dM', $interval))))
+                ->addSelect('object.nbVue')
+                ->addOrderBy('object.nbVue', $sort)
             ;
-        } else {
-            $queryBuilder->leftJoin('object.consultations', 'view', Expr\Join::WITH, 'view.domaine IN (:domains)');
         }
 
         return $queryBuilder->getQuery()->getResult();

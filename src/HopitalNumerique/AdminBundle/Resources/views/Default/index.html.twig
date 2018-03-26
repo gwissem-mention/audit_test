@@ -166,7 +166,9 @@
                         <div class="panel-body">
                             <ol>
                                 {% for pointDur in blocObjets['top5-points-dur'] %}
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['viewsCount'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}" title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    </li>
                                 {% else %}
                                     <li>Aucun point dur</li>
                                 {% endfor %}
@@ -188,7 +190,9 @@
                         <div class="panel-body">
                             <ol>
                                 {% for pointDur in blocObjets['bottom5-points-dur'] %}
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']})}}" title="{{pointDur['titre']}}" >{{ (pointDur['viewsCount'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a></li>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}" title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    </li>
                                 {% else %}
                                     <li>Aucun point dur</li>
                                 {% endfor %}
@@ -210,7 +214,9 @@
                         <div class="panel-body">
                             <ol>
                                 {% for production in blocObjets['top5-productions'] %}
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['viewsCount'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}" title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                    </li>
                                 {% else %}
                                     <li>Aucune production</li>
                                 {% endfor %}
@@ -232,7 +238,9 @@
                         <div class="panel-body">
                             <ol>
                                 {% for production in blocObjets['bottom5-productions'] %}
-                                    <li><a href="{{path('hopitalnumerique_objet_objet_show', {'id':production['id']})}}" title="{{production['titre']}}" >{{ (production['viewsCount'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a></li>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}" title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                    </li>
                                 {% else %}
                                     <li>Aucune production</li>
                                 {% endfor %}
@@ -414,8 +422,7 @@
                             <ol>
                                 {% for production in blocObjets['top5-productions-3mois'] %}
                                     <li>
-                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}"
-                                           title="{{ production['titre'] }}">{{ (production['viewsCount'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}" title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
                                     </li>
                                 {% else %}
                                     <li>Aucune production</li>
@@ -444,8 +451,7 @@
                             <ol>
                                 {% for production in blocObjets['bottom5-productions-3mois'] %}
                                     <li>
-                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}"
-                                           title="{{ production['titre'] }}">{{ (production['viewsCount'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':production['id']}) }}" title="{{ production['titre'] }}">{{ (production['nbVue'] ~ ' - ' ~ production['titre'])|truncate(42) }}</a>
                                     </li>
                                 {% else %}
                                     <li>Aucune production</li>
@@ -473,8 +479,8 @@
                         <div class="panel-body">
                             <ol>
                                 {% for pointDur in blocObjets['top5-points-dur-3mois'] %}
-                                    <li><a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}"
-                                           title="{{ pointDur['titre'] }}">{{ (pointDur['viewsCount'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}" title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
                                     </li>
                                 {% else %}
                                     <li>Aucun point dur</li>
@@ -502,8 +508,8 @@
                         <div class="panel-body">
                             <ol>
                                 {% for pointDur in blocObjets['bottom5-points-dur-3mois'] %}
-                                    <li><a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}"
-                                           title="{{ pointDur['titre'] }}">{{ (pointDur['viewsCount'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
+                                    <li>
+                                        <a href="{{ path('hopitalnumerique_objet_objet_show', {'id':pointDur['id']}) }}" title="{{ pointDur['titre'] }}">{{ (pointDur['nbVue'] ~ ' - ' ~ pointDur['titre'])|truncate(42) }}</a>
                                     </li>
                                 {% else %}
                                     <li>Aucun point dur</li>

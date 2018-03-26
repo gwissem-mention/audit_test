@@ -331,14 +331,13 @@ class UserRepository extends EntityRepository
      */
     public function findByDomaines(Collection $domaines)
     {
-        $query = $this->createQueryBuilder('user');
-
-        $query
-            ->innerJoin('user.domaines', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine.id', ':domaines'))
+        return $this->createQueryBuilder('user')
+            ->join('user.domaines', 'domaine', Expr\Join::WITH)
+            ->andWhere('domaine.id IN (:domaines)')
             ->setParameter('domaines', $domaines->toArray())
+            ->getQuery()
+            ->getResult()
         ;
-
-        return $query->getQuery()->getResult();
     }
 
     /**
