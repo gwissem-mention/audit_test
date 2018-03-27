@@ -35,3 +35,8 @@ services:
         arguments: ["@service_container"]
         tags:
             - { name: twig.extension }
+
+    Nodevo\TexteDynamiqueBundle\Repository\CodeRepository:
+        class: Nodevo\TexteDynamiqueBundle\Repository\CodeRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['Nodevo\TexteDynamiqueBundle\Entity\Code']

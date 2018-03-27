@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Code
 {
+    /** Inscription Warning constant */
+    const INSCRIPTION_WARNING = 'Module_inscription_warning';
+
     /**
      * @var int
      *
