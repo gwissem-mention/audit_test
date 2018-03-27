@@ -1823,10 +1823,23 @@ class MailManager extends BaseManager
         /** @var Mail $mail */
         $mail = $this->findOneById(Mail::MAIL_NOTED_COMMENT);
 
+        if ($note->getObjet()->isInfraDoc()) {
+            $urlDocument =
+                $this->_router->generate('hopital_numerique_publication_publication_contenu_without_alias', [
+                    'id' => $note->getObjet()->getId(),
+                    'idc' => $note->getContenu()->getId(),
+                ], RouterInterface::ABSOLUTE_URL)
+            ;
+        } else {
+            $urlDocument =
+                $this->_router->generate('hopital_numerique_publication_publication_objet', [
+                    'id' => $note->getObjet()->getId(),
+                ], RouterInterface::ABSOLUTE_URL)
+            ;
+        }
+
         $options = [
-            'urlDocument' => $this->_router->generate('hopital_numerique_publication_publication_objet', [
-                'id' => $note->getObjet()->getId(),
-            ], RouterInterface::ABSOLUTE_URL),
+            'urlDocument' => $urlDocument,
             'note' => $note->getNote(),
             'comment' => $note->getComment(),
             'nomUtilisateur' => $note->getUser() ? $note->getUser()->getLastname() : 'Invité',
