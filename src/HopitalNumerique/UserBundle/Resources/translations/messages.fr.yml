@@ -1,7 +1,6 @@
 yes: Oui
 no: Non
 register:
-    mail_warning: Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par le Centre de ressources de l'ANAP. Merci de vérifier auprès de votre service de informatique que les adresses <strong>@anap.fr</strong> ne sont pas considérées comme spam et sont autorisées sur le serveur mail de votre établissement.
     panel:
         registration: Inscription
         structure: Votre structure

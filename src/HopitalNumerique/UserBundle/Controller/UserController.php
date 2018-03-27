@@ -12,6 +12,7 @@ use HopitalNumerique\UserBundle\Event\UserEvent;
 use HopitalNumerique\UserBundle\Event\UserRoleUpdatedEvent;
 use HopitalNumerique\UserBundle\UserEvents;
 use Nodevo\RoleBundle\Entity\Role;
+use Nodevo\TexteDynamiqueBundle\Entity\Code;
 use Nodevo\ToolsBundle\Tools\Password;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
@@ -1302,7 +1303,15 @@ class UserController extends Controller
 
                 switch ($do) {
                     case 'inscription':
-                        $this->get('session')->getFlashBag()->add('success', strip_tags($this->get('translator')->trans('register.mail_warning')));
+                        $codeRepository = $this->get('Nodevo\TexteDynamiqueBundle\Repository\CodeRepository');
+                        $registerMessage = $codeRepository->findOneByCodeAndDomaine(
+                            Code::INSCRIPTION_WARNING,
+                            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+                        );
+
+                        if ($registerMessage) {
+                            $this->addFlash('success', strip_tags($registerMessage->getTexte()));
+                        }
                         $urlParameter = $request->getSession()->get('urlToRedirect');
                         $request->getSession()->remove('urlToRedirect');
 
