@@ -16,7 +16,10 @@
             <div class="message-infos">
                 <b>{{ user.prenomNom }}</b>
             </div>
-            <div class="message-body">
+            <div class="message-body"
+                {% if type is defined %}data-type="{{ type }}"{% endif %}
+                {% if app.user %}data-user-id="{{ app.user.id }}"{% endif %}
+            >
                 {{ form_start(form) }}
 
                     {% if form.discussionTitle is defined %}

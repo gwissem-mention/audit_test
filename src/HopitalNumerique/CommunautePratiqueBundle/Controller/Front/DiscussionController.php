@@ -238,6 +238,15 @@ class DiscussionController extends Controller
      */
     public function replyAction(Request $request, Discussion $discussion, Groupe $group = null, Message $message = null)
     {
+        if (!$this->getUser()) {
+            $request->getSession()->set('urlToRedirect', $this->generateUrl('hopitalnumerique_communautepratique_discussions_edit_unsave_message', [
+                'discussion' => $discussion->getId(),
+                'group' => $group ? $group->getId() : null,
+            ]));
+
+            return $this->redirectToRoute('account_login');
+        }
+
         if (null !== $message) {
             $this->denyAccessUnlessGranted(MessageVoter::EDIT, $message);
             $command = new PostDiscussionMessageCommand($discussion, $this->getUser(), $message);
@@ -276,6 +285,7 @@ class DiscussionController extends Controller
         return $this->render('@HopitalNumeriqueCommunautePratique/front/discussion/reply.html.twig', [
             'form' => $form->createView(),
             'message' => $message,
+            'type' => 'reply',
         ]);
     }
 

@@ -112,6 +112,13 @@ hopitalnumerique_communautepratique_discussions_discussion_domains:
 
 hopitalnumerique_communautepratique_discussions_edit_reply_discussion:
     path: /{discussion}/edit/{message}/{group}
+    defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply, message: null, group: null }
+    methods:
+        - POST
+        - GET
+
+hopitalnumerique_communautepratique_discussions_edit_unsave_message:
+    path: /{discussion}/edit/{group}
     defaults: { _controller: HopitalNumeriqueCommunautePratiqueBundle:Front/Discussion:reply, group: null }
     methods:
         - POST

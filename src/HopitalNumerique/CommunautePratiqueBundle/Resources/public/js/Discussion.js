@@ -333,22 +333,41 @@ var Discussion;
         },
 
         initEditor: function (element) {
-            var that = this;
+            var that = this,
+                messages = document.querySelectorAll('.message-body'),
+                userId = messages[messages.length - 1].dataset.userId,
+                cdp_discussion_new_message_key = 'cdp_discussion_new_message_' + userId
+            ;
 
             tinyMCE.init({
-                entity_encoding : 'raw',
-                selector     : element + ' textarea.content',
-                theme        : "modern",
-                theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
-                skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-                plugins      : 'link publicationDomaine',
-                height       : 120,
-                menubar      : false,
-                content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-                toolbar1     : 'bold | underline | italic | link | publicationDomaine',
+                entity_encoding: 'raw',
+                selector: element + ' textarea.content',
+                theme: "modern",
+                theme_url: '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+                skin_url: '/bundles/nodevotools/js/tinymce/skins/lightgray',
+                plugins: 'link publicationDomaine',
+                height: 120,
+                menubar: false,
+                content_css: '/bundles/nodevotools/css/wysiwyg.css',
+                toolbar1: 'bold | underline | italic | link | publicationDomaine',
                 relative_urls: false,
-                statusbar    : false,
-                paste_as_text: true
+                statusbar: false,
+                paste_as_text: true,
+                init_instance_callback: function (editor) {
+                    editor.on('KeyUp', function (e) {
+                        sessionStorage.setItem(cdp_discussion_new_message_key, e.target.innerText);
+                    });
+                },
+                setup: function (editor) {
+                    editor.on('init', function () {
+                        if (document.querySelector('.message-body').hasAttribute('data-type')) {
+                            tinyMCE.activeEditor.setContent(sessionStorage.getItem(cdp_discussion_new_message_key));
+                            sessionStorage.removeItem(cdp_discussion_new_message_key);
+                        } else {
+                            sessionStorage.removeItem(cdp_discussion_new_message_key);
+                        }
+                    });
+                }
             });
 
             $(element + ' .file-dropzone .area i').on('click', function (e) {
