@@ -16,17 +16,17 @@ $(document).ready(function() {
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
     
     tinyMCE.init({
-        entity_encoding : "raw",
-        selector     : "textarea.tinyMce",
-        theme        : "modern",
-        theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
-        skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication outil questionnaire rechercheAidee rechercheTexte media',
-        height       : 210,
-        menubar      : false,
-        content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | outil | questionnaire | rechercheAidee | rechercheTexte | insertfile image media ",
-        toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+        entity_encoding: "raw",
+        selector: "textarea.tinyMce",
+        theme: "modern",
+        theme_url: '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+        skin_url: '/bundles/nodevotools/js/tinymce/skins/lightgray',
+        plugins: 'moxiemanager image table code textcolor pagebreak importcss link publication outil questionnaire rechercheAidee rechercheTexte media',
+        height: 210,
+        menubar: false,
+        content_css: '/bundles/nodevotools/css/wysiwyg.css',
+        toolbar1: "code | undo redo cut copy paste | pagebreak | link | publication | outil | questionnaire | rechercheAidee | rechercheTexte | insertfile image media ",
+        toolbar2: "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
                 {title: 'Titre 2', block: 'h2'},
@@ -46,6 +46,7 @@ $(document).ready(function() {
         importcss_groups: [
             {title: 'Styles personnalisés'}
         ],
-        relative_urls:false
+        remove_script_host: false,
+        relative_urls: false
     });
 });
