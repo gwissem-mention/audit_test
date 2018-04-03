@@ -79,7 +79,7 @@ notification_config:
             single: La discussion %discussionName% a été créée
             mutliple:
                 header: %number% nouvelles discussions ont été créées
-                content: %groupeName% : %discussionName%
+                content: %discussionName%
         practice_community_new_message_in_discussion:
             single: Un nouveau message a été créé dans la discussion %discussionName%
             multiple:
