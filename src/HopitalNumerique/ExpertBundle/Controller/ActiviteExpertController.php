@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ExpertBundle\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +38,9 @@ class ActiviteExpertController extends Controller
     /**
      * Affiche le formulaire d'édition de ActiviteExpert.
      *
-     * @param int $id id de ActiviteExpert
+     * @param ActiviteExpert $activiteExpert
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction(ActiviteExpert $activiteExpert)
     {
@@ -46,8 +50,9 @@ class ActiviteExpertController extends Controller
     /**
      * Suppresion d'un ActiviteExpert.
      *
-     * @param int $id Id de ActiviteExpert.
-     *                METHOD = POST|DELETE
+     * @param ActiviteExpert $activiteExpert
+     *
+     * @return Response
      */
     public function deleteAction(ActiviteExpert $activiteExpert)
     {
@@ -78,9 +83,10 @@ class ActiviteExpertController extends Controller
     /**
      * [payerFactureAction description].
      *
+     * @param Request $request
      * @param ActiviteExpert $activiteExpert [description]
      *
-     * @return [type]
+     * @return RedirectResponse|Response
      */
     public function paiementAction(Request $request, ActiviteExpert $activiteExpert)
     {
@@ -112,6 +118,10 @@ class ActiviteExpertController extends Controller
 
     /**
      * Clic sur le bouton Contrat de la grid, affiche la fenêtre pour envoyer le modèle de contrat.
+     *
+     * @param ActiviteExpert $activiteExpert
+     *
+     * @return Response
      */
     public function contratAction(ActiviteExpert $activiteExpert)
     {
@@ -122,6 +132,11 @@ class ActiviteExpertController extends Controller
 
     /**
      * Envoie le modèle de contrat.
+     *
+     * @param Request $request
+     * @param ActiviteExpert $activiteExpert
+     *
+     * @return JsonResponse
      */
     public function sendContratAction(Request $request, ActiviteExpert $activiteExpert)
     {
@@ -139,13 +154,13 @@ class ActiviteExpertController extends Controller
     /**
      * Effectue le render du formulaire ActiviteExpert.
      *
-     * @param string         $formName Nom du service associé au formulaire
-     * @param ActiviteExpert $entity   Entité $activiteexpert
-     * @param string         $view     Chemin de la vue ou sera rendu le formulaire
+     * @param string $formName Nom du service associé au formulaire
+     * @param ActiviteExpert $activiteexpert
+     * @param string $view Chemin de la vue ou sera rendu le formulaire
      *
-     * @return Form | redirect
+     * @return RedirectResponse|Response
      */
-    private function renderForm($formName, $activiteexpert, $view)
+    private function renderForm($formName, ActiviteExpert $activiteexpert, $view)
     {
         //Création du formulaire via le service
         $form = $this->createForm($formName, $activiteexpert);
