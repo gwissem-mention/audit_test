@@ -34,7 +34,7 @@
             {{ form_start(rechercheForm) }}
                 <div class="row">
                     <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.nom) }}
+                        {{ form_widget(rechercheForm.nom, {'attr': {'placeholder': 'directory.search.nom.placeholder'|trans}}) }}
                     </div>
                     <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.profileType) }}

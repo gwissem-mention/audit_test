@@ -7,11 +7,13 @@
     text-align: center;
     transition-duration: 0.5s;
     opacity: 0;
+    visibility: hidden;
 }
 
 .go-to-top.active {
     transition-duration: 0.5s;
     opacity: 1;
+    visibility: visible;
 }
 
 .go-to-top:hover {
