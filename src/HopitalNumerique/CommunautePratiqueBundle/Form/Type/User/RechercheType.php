@@ -60,9 +60,6 @@ class RechercheType extends AbstractType
             ])
             ->add('nom', TextType::class, [
                 'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
-                'attr' => [
-                    'placeholder' => 'Rechercher un nom, un prénom',
-                ],
             ])
             ->add('profileType', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',

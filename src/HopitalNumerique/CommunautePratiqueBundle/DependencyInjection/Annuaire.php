@@ -136,11 +136,16 @@ class Annuaire
                 switch ($filtreLibelle) {
                     case self::FILTRE_NOMINATION_LABEL:
                         $queryBuilder
+                            ->leftJoin('user.computerSkills', 'computerSkills')
+                            ->leftJoin('user.hobbies', 'hobbies')
                             ->andWhere(
                                 $queryBuilder->expr()->orX(
                                     $queryBuilder->expr()->like('user.lastname', ':' . $filtreLibelle),
                                     $queryBuilder->expr()->like('user.firstname', ':' . $filtreLibelle),
-                                    $queryBuilder->expr()->like('user.email', ':' . $filtreLibelle)
+                                    $queryBuilder->expr()->like('user.email', ':' . $filtreLibelle),
+                                    $queryBuilder->expr()->like('user.presentation', ':' . $filtreLibelle),
+                                    $queryBuilder->expr()->like('computerSkills.libelle', ':' . $filtreLibelle),
+                                    $queryBuilder->expr()->like('hobbies.label', ':' . $filtreLibelle)
                                 )
                             )
                             ->setParameter($filtreLibelle, '%' . $filtreValeur . '%')

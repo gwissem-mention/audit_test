@@ -9,6 +9,9 @@ directory:
         animator: Animateur
         is_new: NEW
         to_validate: A VALIDER
+    search:
+        nom:
+            placeholder: Rechercher un nom, un prénom...
 details:
     groups_registration: Participations aux groupes
     action:
