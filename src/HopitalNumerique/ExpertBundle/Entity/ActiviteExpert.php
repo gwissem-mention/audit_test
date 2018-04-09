@@ -636,12 +636,4 @@ class ActiviteExpert
             }
         }
     }
-
-    /**
-     * @return bool
-     */
-    public function isNew()
-    {
-        return null === $this->id;
-    }
 }
