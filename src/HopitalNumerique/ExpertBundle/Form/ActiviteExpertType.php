@@ -63,7 +63,7 @@ class ActiviteExpertType extends AbstractType
                 'attr' => ['class' => 'validate[required] datepicker'],
             ])
             ->add('dateFin', 'genemu_jquerydate', [
-                'required' => $options['data']->isNew(),
+                'required' => false,
                 'label' => 'Date de fin',
                 'widget' => 'single_text',
                 'attr' => ['class' => 'validate[required] datepicker'],
