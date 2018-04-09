@@ -62,7 +62,7 @@ class ActiviteExpert
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="exp_date_fin", type="datetime")
+     * @ORM\Column(name="exp_date_fin", type="datetime", nullable=true)
      */
     protected $dateFin;
 
