@@ -66,3 +66,4 @@ services:
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository'
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
             - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'

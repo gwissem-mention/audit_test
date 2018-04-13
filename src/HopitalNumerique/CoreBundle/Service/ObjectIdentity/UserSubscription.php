@@ -3,10 +3,13 @@
 namespace HopitalNumerique\CoreBundle\Service\ObjectIdentity;
 
 use Doctrine\ORM\EntityManagerInterface;
+use HopitalNumerique\CoreBundle\Event\UserUnsubscribeEvent;
+use HopitalNumerique\CoreBundle\Event\UserSubscribeEvent;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CoreBundle\Entity\ObjectIdentity\ObjectIdentity;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class UserSubscription
@@ -34,20 +37,28 @@ class UserSubscription
     protected $entityManager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * UserSubscription constructor.
      *
      * @param ObjectIdentityRepository $objectIdentityRepository
      * @param SubscriptionRepository $subscriptionRepository
      * @param EntityManagerInterface $entityManager
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         ObjectIdentityRepository $objectIdentityRepository,
         SubscriptionRepository $subscriptionRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->objectIdentityRepository = $objectIdentityRepository;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -59,6 +70,9 @@ class UserSubscription
         $objectIdentity = $this->objectIdentityRepository->findOrCreate(ObjectIdentity::createFromDomainObject($object));
 
         $this->subscriptionRepository->subscribe($objectIdentity, $user);
+
+        $event = new UserSubscribeEvent($object, $user);
+        $this->eventDispatcher->dispatch(self::SUBSCRIBE, $event);
     }
 
     /**
@@ -73,6 +87,9 @@ class UserSubscription
             $this->entityManager->remove($subscription);
             $this->entityManager->flush();
         }
+
+        $event = new UserUnsubscribeEvent($object, $user);
+        $this->eventDispatcher->dispatch(self::UNSUBSCRIBE, $event);
     }
 
     /**
