@@ -381,6 +381,11 @@ class UserController extends Controller
             'objectClass' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire',
         ]);
 
+        $logsDiscussion = $repo->findBy([
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion',
+        ]);
+
         return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', [
             'user' => $user,
             'logs' => $logs,
@@ -389,6 +394,7 @@ class UserController extends Controller
             'logsIntervention' => $logsIntervention,
             'logsFacturation' => $logsFacturation,
             'logsQuestionnaire' => $logsQuestionnaire,
+            'logsDiscussion' => $logsDiscussion,
             'survey' => $this->get(SurveyRetriever::class)->getUserResponsesGroupedBySurvey($user),
         ]);
     }

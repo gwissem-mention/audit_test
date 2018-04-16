@@ -224,6 +224,13 @@ services:
         tags:
             - { name: kernel.event_subscriber, event: communautepratique.enroll_user }
 
+    HopitalNumerique\CommunautePratiqueBundle\EventListener\DiscussionEventListener:
+        class: HopitalNumerique\CommunautePratiqueBundle\EventListener\DiscussionEventListener
+        arguments:
+            - '@hopitalnumerique_core.log'
+        tags:
+            - { name: kernel.event_subscriber }
+
     HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv:
         class: HopitalNumerique\CommunautePratiqueBundle\Service\Export\Comment\Csv
 

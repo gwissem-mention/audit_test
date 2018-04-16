@@ -151,6 +151,27 @@
                         </tbody>
                     </table>
                 {% endif %}
+                {% if logsDiscussion is not empty %}
+                    <h5>Discussion</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">Titre de la discussion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logDiscussion in logsDiscussion if logDiscussion is not empty %}
+                            <tr>
+                                <td>{{ logDiscussion.action|getFrenchAction }}</td>
+                                <td>{{ logDiscussion.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logDiscussion.data.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
 
                 {% if survey is not empty %}
                     {{ include('@HopitalNumeriqueUser/User/history-survey.html.twig') }}
