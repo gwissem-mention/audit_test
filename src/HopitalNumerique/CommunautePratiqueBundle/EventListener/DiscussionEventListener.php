@@ -74,10 +74,9 @@ class DiscussionEventListener implements EventSubscriberInterface
         $titles = array_merge(
             array_map(function (Groupe $group) {
                 return sprintf('[%s]', $group->getTitre());
-            }, $discussion->getGroups()),
+            }, $discussion->getGroups()->toArray()),
             [$discussion->getTitle()]
         );
-
         return implode(' ', $titles);
     }
 }
