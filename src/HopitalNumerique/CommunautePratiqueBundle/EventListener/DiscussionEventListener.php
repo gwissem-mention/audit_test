@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\EventListener;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\Event\UserSubscribeEvent;
 use HopitalNumerique\CoreBundle\Event\UserUnsubscribeEvent;
 use HopitalNumerique\CoreBundle\Service\Log;
@@ -41,7 +42,7 @@ class DiscussionEventListener implements EventSubscriberInterface
             $this->logger->Logger(
                 'inscript',
                 $event->getObject(),
-                $event->getObject()->getTitle(),
+                $this->getDiscussionTitle($event->getObject()),
                 Discussion::class,
                 $event->getUser()
             );
@@ -54,10 +55,29 @@ class DiscussionEventListener implements EventSubscriberInterface
             $this->logger->Logger(
                 'desinscr',
                 $event->getObject(),
-                $event->getObject()->getTitle(),
+                $this->getDiscussionTitle($event->getObject()),
                 Discussion::class,
                 $event->getUser()
             );
         }
+    }
+
+    /**
+     * Generate log discussion title.
+     *
+     * @param Discussion $discussion
+     *
+     * @return string
+     */
+    protected function getDiscussionTitle(Discussion $discussion)
+    {
+        $titles = array_merge(
+            array_map(function (Groupe $group) {
+                return sprintf('[%s]', $group->getTitre());
+            }, $discussion->getGroups()),
+            [$discussion->getTitle()]
+        );
+
+        return implode(' ', $titles);
     }
 }
