@@ -127,7 +127,7 @@ columns:
     summary: Table des matières
 
 generator:
-    generationDate: "Raport généré le :"
+    generationDate: "Rapport généré le :"
     references:
         title: Référencement
     forumTopic:

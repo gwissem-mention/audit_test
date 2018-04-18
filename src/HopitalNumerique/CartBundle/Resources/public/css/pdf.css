@@ -77,7 +77,10 @@ fieldset legend small {
 }
 
 .truncate-height {
-    max-height: 102px;
+    max-height: 100px;
     overflow: hidden;
+}
 
+.truncate-height p {
+    margin-bottom: 15px;
 }
