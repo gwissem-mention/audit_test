@@ -27,10 +27,9 @@
 {% endblock %}
 
 {% block body_communaute_pratique %}
-
     <div class="communaute-de-pratiques-annuaire">
-
         <div class="communaute-de-pratiques-annuaire-filtres">
+            <span>{{ 'Module_communautedepratique_directory'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br }}</span>
             {{ form_start(rechercheForm) }}
                 <div class="row">
                     <div class="col-md-4 col-sm-6 filtre">
@@ -59,7 +58,6 @@
         </div>
 
         <div class="communaute-de-pratiques-annuaire-users cdp-directory">
-
             <div class="user-details modal fade" id="directory-user-details-modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -75,23 +73,19 @@
                 {% endfor %}
             </div>
 
+            <div class="text-center">
+                {% if pagerFantaMembres.nbPages > 1 %}
+                    {{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}
+                {% endif %}
 
-                <div class="text-center">
-                    {% if pagerFantaMembres.nbPages > 1 %}
-                        {{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}
+                <span class="resultats-nombre">
+                    {{ 'directory.count.member'|transchoice(pagerFantaMembres.count) }}<br />
+                    {% if newMembersCount > 0 %}
+                        {{ 'directory.count.new_member'|transchoice(newMembersCount) }}
                     {% endif %}
-
-                    <span class="resultats-nombre">
-                        {{ 'directory.count.member'|transchoice(pagerFantaMembres.count) }}<br />
-                        {% if newMembersCount > 0 %}
-                            {{ 'directory.count.new_member'|transchoice(newMembersCount) }}
-                        {% endif %}
-                    </span>
-                    <div class="clearfix"></div>
-                </div>
-
+                </span>
+                <div class="clearfix"></div>
+            </div>
         </div>
-
     </div>
-
 {% endblock body_communaute_pratique %}
