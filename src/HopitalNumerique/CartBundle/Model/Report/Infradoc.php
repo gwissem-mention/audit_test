@@ -29,6 +29,22 @@ class Infradoc implements ItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->content->getId();
+    }
+
+    /**
+     * @return int
+     */
+    public function getObjetId()
+    {
+        return $this->content->getObjet()->getId();
+    }
+
+    /**
      * @return string
      */
     public function getTitle()

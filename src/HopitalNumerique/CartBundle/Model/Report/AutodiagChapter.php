@@ -20,6 +20,22 @@ class AutodiagChapter implements ItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->chapter->getAutodiag()->getId();
+    }
+
+    /**
+     * @return int
+     */
+    public function getChapterId()
+    {
+        return $this->chapter->getId();
+    }
+
+    /**
      * @return string
      */
     public function getTitle()

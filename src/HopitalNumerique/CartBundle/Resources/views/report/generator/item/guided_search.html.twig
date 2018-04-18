@@ -4,7 +4,9 @@
 
 <h2>
     <small>{{ ('item.object_type.'~item.type)|trans }}</small>
-    {{ item.title }}
+    <a href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': item.id}) }}">
+        {{ item.title }}
+    </a>
 
     <span class="date">
         {{ 'generator.guided_search.publication_date'|trans }} {{ item.publicationDate|date('d/m/Y') }}

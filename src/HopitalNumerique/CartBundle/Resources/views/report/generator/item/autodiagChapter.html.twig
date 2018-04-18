@@ -3,7 +3,9 @@
 
 <h2>
     <small>{{ 'item.object_type.autodiag_chapter'|trans }}</small>
-    {{ item.autodiagTitle }} - {{ item.title }}
+    <a href="{{ path('hopitalnumerique_autodiag_entry_add', {'autodiag': item.id}) }}#{{ item.chapterId }}">
+        {{ item.autodiagTitle }} - {{ item.title }}
+    </a>
 
     <span class="date">
         {{ item.lastUpdateDate|date('d/m/Y') }}

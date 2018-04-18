@@ -38,6 +38,14 @@ class Publication implements ItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->object->getId();
+    }
+
+    /**
      * @return string
      */
     public function getTitle()

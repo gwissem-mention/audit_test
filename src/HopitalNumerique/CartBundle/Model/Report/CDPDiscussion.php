@@ -7,6 +7,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 class CDPDiscussion implements ItemInterface
 {
@@ -35,6 +36,22 @@ class CDPDiscussion implements ItemInterface
     {
         $this->discussion = $discussion;
         $this->references = $references;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->discussion->getId();
+    }
+
+    /**
+     * @return Groupe[]
+     */
+    public function getGroups()
+    {
+        return $this->discussion->getGroups();
     }
 
     /**
