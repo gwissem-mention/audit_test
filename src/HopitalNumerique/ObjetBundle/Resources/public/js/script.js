@@ -209,6 +209,12 @@ $(document).ready(function() {
     if(activeTab){
         $('#object-tab').find('a[href="' + activeTab + '"]').tab('show');
     }
+
+    $('#authors-wrapper img.authors-loader').hide();
+    // Define action when user update 'domains' field
+    $('#hopitalnumerique_objet_objet_domaines').on('change', function() {
+        refreshNetworkUsersForDomains($(this).closest('form'));
+    });
 });
 
 $(window).load(function(){
@@ -466,6 +472,49 @@ function addBoard(id)
         dataType : 'json',
         success  : function( data ){
             window.location = data.url;
+        }
+    });
+}
+
+function refreshNetworkUsersForDomains(form) {
+
+    // Hide authors area to avoid bad selection
+    $('#authors-wrapper div.authors-select').hide();
+    $('#authors-wrapper img.authors-loader').show();
+
+    // Disable select to not send authors values (not necessary valid with new domain)
+    // => to avoid validation errors when submitting form
+    $('#hopitalnumerique_objet_objet_authors').prop('disabled', true);
+    var dataToSend = form.serialize();
+
+    $('#hopitalnumerique_objet_objet_domaines').attr("disabled", true);
+    var previousSelectedAuthors = $('#authors-wrapper #hopitalnumerique_objet_objet_authors').val();
+
+    // Send AJAX request to update authors field
+    $.ajax({
+        type: form.attr('method'),
+        data : dataToSend,
+        success: function(html) {
+            // Clear select2 to avoid unbinded bloc 'no result'
+            $('#authors-wrapper #hopitalnumerique_objet_objet_authors.select2').select2('destroy');
+            $('#authors-wrapper #hopitalnumerique_objet_objet_authors.select2').off('select2:select');
+
+            $('#authors-wrapper').replaceWith(
+                $(html).find('#authors-wrapper')
+            );
+
+            // Restore previous authors if still here
+            $('#authors-wrapper #hopitalnumerique_objet_objet_authors option').each(function(index, elt) {
+                if ($.inArray($(elt).val(), previousSelectedAuthors) >= 0) {
+                    $(elt).attr('selected','selected');
+                }
+            });
+
+            $('#authors-wrapper img.authors-loader').hide();
+            $('#authors-wrapper .select2').select2();
+        },
+        complete: function() {
+            $('#hopitalnumerique_objet_objet_domaines').attr("disabled", false);
         }
     });
 }

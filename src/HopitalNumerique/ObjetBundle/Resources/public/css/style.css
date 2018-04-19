@@ -4,6 +4,7 @@ ul.list-unstyled{margin-bottom:0;}
 .toggleType{position: absolute;top: 30px; left:425px;}
 
     /* Tab Objet*/
+    #authors-wrapper .authors-loader {padding-top: 10px;}
     #objet .uploadedFile{display: block; margin-top: 7px}
     #objet .deleteUploadedFile{margin-top:7px;}
     #objet .open-popin-referencement {margin-left : 10px;}
