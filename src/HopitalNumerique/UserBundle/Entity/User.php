@@ -428,6 +428,15 @@ class User extends BaseUser implements SettingsOwnerInterface
     protected $jobType;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_user_network_job_type",
+     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $networkJobTypes;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_profil_etablissement_sante", referencedColumnName="ref_id")
      * @Gedmo\Versioned
@@ -757,6 +766,7 @@ class User extends BaseUser implements SettingsOwnerInterface
         $this->previousAdmin = false;
         $this->activities = new ArrayCollection();
         $this->computerSkills = new ArrayCollection();
+        $this->networkJobTypes = new ArrayCollection();
     }
 
     /**
@@ -1545,6 +1555,46 @@ class User extends BaseUser implements SettingsOwnerInterface
     public function getJobType()
     {
         return $this->jobType;
+    }
+
+    /**
+     * Add networkJobType.
+     *
+     * @param Reference $networkJobType
+     *
+     * @return $this
+     */
+    public function addNetworkJobType(Reference $networkJobType)
+    {
+        if (!$this->networkJobTypes->contains($networkJobType)) {
+            $this->networkJobTypes->add($networkJobType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add networkJobType.
+     *
+     * @param Reference $networkJobType
+     *
+     * @return $this
+     */
+    public function removeNetworkJobType(Reference $networkJobType)
+    {
+        $this->networkJobTypes->remove($networkJobType);
+
+        return $this;
+    }
+
+    /**
+     * Get networkJobTypes.
+     *
+     * @return ArrayCollection $networkJobTypes
+     */
+    public function getNetworkJobTypes()
+    {
+        return $this->networkJobTypes;
     }
 
     /**
