@@ -334,10 +334,29 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('user')
             ->join('user.domaines', 'domaine', Expr\Join::WITH)
             ->andWhere('domaine.id IN (:domaines)')
+            ->orderBy('user.lastname')
             ->setParameter('domaines', $domaines->toArray())
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    /**
+     * Return users linked to network and defining one of specified domains (i.e. users with at least one 'networkJobType').
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines Domains
+     *
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findNetworkUsersByDomaines(Collection $domains)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.domaines', 'domaine', Expr\Join::WITH)
+            ->join('user.networkJobTypes', 'networkJobType', Expr\Join::WITH)
+            ->andWhere('domaine.id IN (:domaines)')
+            ->orderBy('user.lastname')
+            ->setParameter('domaines', $domains->toArray())
+            ->getQuery()
+            ->getResult();
     }
 
     /**

@@ -328,6 +328,15 @@ class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
     protected $ambassadeurs;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
+     * @ORM\JoinTable(name="hn_objet_author",
+     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")}
+     * )
+     */
+    protected $authors;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
      */
     protected $modules;
@@ -452,6 +461,7 @@ class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
         $this->roles = [];
         $this->types = [];
         $this->ambassadeurs = [];
+        $this->authors = new ArrayCollection();
         $this->modules = [];
         $this->maitriseUsers = [];
         $this->domaines = new ArrayCollection();
@@ -980,6 +990,36 @@ class Objet implements RoutedItemInterface, ObjectIdentityDisplayableInterface
     public function getAmbassadeurs()
     {
         return $this->ambassadeurs;
+    }
+
+    /**
+     * @param User $author
+     *
+     * @return Objet
+     */
+    public function addAuthor(User $author)
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param User $author
+     */
+    public function removeAuthor(User $author)
+    {
+        $this->authors->remove($author);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
     }
 
     /**

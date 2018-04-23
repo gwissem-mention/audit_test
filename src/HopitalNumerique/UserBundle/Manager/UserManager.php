@@ -276,6 +276,17 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->findByDomaines($domaines);
     }
+    /**
+     * Return users linked to network and defining one of specified domains (i.e. users with at least one 'networkJobType').
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines Domains
+     *
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findNetworkUsersByDomaines(Collection $domains)
+    {
+        return $this->getRepository()->findNetworkUsersByDomaines($domains);
+    }
 
     /**
      * Retourne le premier utilisateur correspondant au role et à la région demandés.

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Form;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -20,6 +21,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -293,6 +295,35 @@ class ObjetType extends AbstractType
             ])
             ->add('article', HiddenType::class)
         ;
+
+        $formAuthorsUpdate = function (FormInterface $form, $domains = null) {
+            $authors = (null === $domains || 0 === count($domains)) ? [] : $this->_userManager->findNetworkUsersByDomaines($domains);
+
+            $form->add('authors', EntityType::class, [
+                'class' => 'HopitalNumeriqueUserBundle:User',
+                'property' => 'nomPrenom',
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Auteurs',
+                'choices' => $authors,
+            ]);
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($formAuthorsUpdate) {
+                $data = $event->getData();
+                $formAuthorsUpdate($event->getForm(), $data->getDomaines());
+            }
+        );
+
+        $builder->get('domaines')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($formAuthorsUpdate) {
+                $data = $event->getForm()->getData();
+                $formAuthorsUpdate($event->getForm()->getParent(), $data);
+            }
+        );
 
         $builder->get('domaines')->addEventListener(
             FormEvents::PRE_SUBMIT,
