@@ -36,6 +36,14 @@ class CDPGroup implements ItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->group->getId();
+    }
+
+    /**
      * @return string
      */
     public function getTitle()

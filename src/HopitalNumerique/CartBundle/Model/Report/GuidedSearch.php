@@ -30,6 +30,14 @@ class GuidedSearch implements ItemInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->guidedSearchReference->getId();
+    }
+    
+    /**
      * @return string
      */
     public function getTitle()

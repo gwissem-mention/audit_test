@@ -2,7 +2,19 @@
 
 <h2>
     <small>{{ 'item.object_type.cdp_discussion'|trans }}</small>
-    {{ item.title }}
+
+    {% if item.groups|length > 0 %}
+        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {
+            'discussion': item.id,
+            'group': item.groups[0].id
+        }) }}">
+            {{ item.title }}
+        </a>
+    {% else %}
+        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': item.id}) }}">
+            {{ item.title }}
+        </a>
+    {% endif %}
 
     <span class="date">
         {{ 'generator.cdp_discussion.creation_date'|trans }} {{ item.createdAt|date('d/m/Y') }}
