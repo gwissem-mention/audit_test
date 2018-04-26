@@ -5,7 +5,10 @@
 <h2>
     <small>{{ 'item.object_type.contenu'|trans }}</small>
     {{ item.parentsTitles|join(' > ') }} >
-    <a href="{{ path('hopital_numerique_publication_publication_contenu_without_alias', {'id': item.objetId, 'idc': item.id }) }}">
+    <a href="{{ getBaseUrl(item.domains) }}{{ path('hopital_numerique_publication_publication_contenu_without_alias', {
+        'id': item.objetId,
+        'idc': item.id
+    }) }}">
         {{ item.title }}
     </a>
 

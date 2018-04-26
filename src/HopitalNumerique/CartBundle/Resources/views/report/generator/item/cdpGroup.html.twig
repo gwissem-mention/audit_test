@@ -2,7 +2,7 @@
 
 <h2>
     <small>{{ 'item.object_type.cdp_group'|trans }}</small>
-    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', {'groupe': item.id}) }}">
+    <a href="{{ getBaseUrl(item.domains) }}{{ path('hopitalnumerique_communautepratique_groupe_view', {'groupe': item.id}) }}">
         {{ item.title }}
     </a>
 

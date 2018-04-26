@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\CartBundle\Model\Report;
 
+use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 
 class CDPGroup implements ItemInterface
@@ -96,7 +98,7 @@ class CDPGroup implements ItemInterface
     }
 
     /**
-     * @return array|\Doctrine\Common\Collections\Collection|Fiche[]
+     * @return array|Collection|Fiche[]
      */
     public function getSummary()
     {
@@ -119,4 +121,11 @@ class CDPGroup implements ItemInterface
         return 'cdpGroup';
     }
 
+    /**
+     * @return Domaine[]
+     */
+    public function getDomains()
+    {
+        return $this->group->getDomains();
+    }
 }

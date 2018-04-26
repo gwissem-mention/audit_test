@@ -4,14 +4,16 @@
     <small>{{ 'item.object_type.cdp_discussion'|trans }}</small>
 
     {% if item.groups|length > 0 %}
-        <a href="{{ path('hopitalnumerique_communautepratique_discussions_discussion', {
+        <a href="{{ getBaseUrl(item.domains) }}{{ path('hopitalnumerique_communautepratique_groupe_view_default_discussion', {
             'discussion': item.id,
-            'group': item.groups[0].id
+            'groupe': item.groups[0].id
         }) }}">
             {{ item.title }}
         </a>
     {% else %}
-        <a href="{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {'discussion': item.id}) }}">
+        <a href="{{ getBaseUrl(item.domains) }}{{ path('hopitalnumerique_communautepratique_discussions_public_desfult_discussion', {
+            'discussion': item.id
+        }) }}">
             {{ item.title }}
         </a>
     {% endif %}
