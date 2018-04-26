@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\CartBundle\Model\Report;
 
+use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 
 class Infradoc implements ItemInterface
@@ -115,7 +117,7 @@ class Infradoc implements ItemInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChildren()
     {
@@ -157,5 +159,13 @@ class Infradoc implements ItemInterface
     public function getReferences()
     {
         return $this->references;
+    }
+
+    /**
+     * @return Collection|Domaine[]
+     */
+    public function getDomains()
+    {
+        return 0 < count($this->content->getDomaines()) ? $this->content->getDomaines() : null;
     }
 }

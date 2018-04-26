@@ -32,7 +32,9 @@ services:
     #Extension Twig        
     hopitalnumerique_domaine.twig_extension.domaine:
         class: %hopitalnumerique_domaine.twig_extension.domaine.class%
-        arguments: ["@service_container"]
+        arguments:
+            - '@service_container'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         tags:
             - { name: twig.extension }
 

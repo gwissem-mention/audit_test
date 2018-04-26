@@ -2,15 +2,38 @@
 
 namespace HopitalNumerique\DomaineBundle\Twig;
 
-use Symfony\Component\HttpFoundation\Request;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
 
 class DomaineExtension extends \Twig_Extension
 {
     private $_container;
 
-    public function __construct($container)
+    /**
+     * @var CurrentDomaine
+     */
+    protected $currentDomaine;
+
+    /**
+     * DomaineExtension constructor.
+     *
+     * @param $container
+     * @param CurrentDomaine $currentDomaine
+     */
+    public function __construct($container, CurrentDomaine $currentDomaine)
     {
         $this->_container = $container;
+        $this->currentDomaine = $currentDomaine;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('getBaseUrl', [$this, 'getBaseUrl']),
+        ];
     }
 
     /**
@@ -119,5 +142,17 @@ class DomaineExtension extends \Twig_Extension
     public function getName()
     {
         return 'domaine_extension';
+    }
+
+    /**
+     * @param null $domains
+     *
+     * @return string
+     */
+    public function getBaseUrl($domains = null)
+    {
+        $baseUrlProvider = $this->_container->get('hopitalnumerique_domaine.service.base_url_provider');
+
+        return $baseUrlProvider->getBaseUrl($domains ? $domains : [$this->currentDomaine->get()]);
     }
 }

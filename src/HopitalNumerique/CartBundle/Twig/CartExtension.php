@@ -2,10 +2,12 @@
 
 namespace HopitalNumerique\CartBundle\Twig;
 
+use HopitalNumerique\CartBundle\Model\Item\Item;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Repository\DomaineRepository;
+use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
-use HopitalNumerique\CartBundle\Model\Item\Item;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -38,9 +40,15 @@ class CartExtension extends \Twig_Extension
      * @param TokenStorageInterface $tokenStorage
      * @param RouterInterface $router
      * @param DomaineRepository $domaineRepository
+     * @param BaseUrlProvider $baseUrlProvider
+     * @param CurrentDomaine $currentDomaine
      */
-    public function __construct(RequestStack $requestStack, TokenStorageInterface $tokenStorage, RouterInterface $router, DomaineRepository $domaineRepository)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        TokenStorageInterface $tokenStorage,
+        RouterInterface $router,
+        DomaineRepository $domaineRepository
+    ) {
         $this->requestStack = $requestStack;
         $this->tokenStorage = $tokenStorage;
         $this->router = $router;

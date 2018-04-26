@@ -2,7 +2,8 @@
 
 namespace HopitalNumerique\CartBundle\Model\Report;
 
-use HopitalNumerique\ObjetBundle\Entity\Commentaire;
+use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 
@@ -86,7 +87,7 @@ class Publication implements ItemInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getComments()
     {
@@ -135,5 +136,13 @@ class Publication implements ItemInterface
     public function getReferences()
     {
         return $this->references;
+    }
+
+    /**
+     * @return ArrayCollection|Domaine[]
+     */
+    public function getDomains()
+    {
+        return $this->object->getDomaines();
     }
 }

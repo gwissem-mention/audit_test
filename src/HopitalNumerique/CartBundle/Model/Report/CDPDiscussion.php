@@ -3,8 +3,10 @@
 namespace HopitalNumerique\CartBundle\Model\Report;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -91,7 +93,7 @@ class CDPDiscussion implements ItemInterface
     }
 
     /**
-     * @return array|\Doctrine\Common\Collections\Collection|Fiche[]
+     * @return array|Collection|Fiche[]
      */
     public function getSummary()
     {
@@ -112,5 +114,13 @@ class CDPDiscussion implements ItemInterface
     public function getType()
     {
         return 'cdpDiscussion';
+    }
+
+    /**
+     * @return ArrayCollection|Domaine[]
+     */
+    public function getDomains()
+    {
+        return $this->discussion->getDomains();
     }
 }
