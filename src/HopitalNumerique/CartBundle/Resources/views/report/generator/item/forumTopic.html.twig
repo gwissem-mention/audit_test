@@ -1,6 +1,6 @@
 {% trans_default_domain 'cart' %}
 
-<h2>
+<h1>
     <small>{{ 'item.object_type.forum_topic'|trans }}</small>
     {{ item.title }}
 
@@ -8,13 +8,13 @@
         {{ 'generator.forumTopic.firstPostDate'|trans }} {{ item.firstPostPublicationDate|date('d/m/Y') }}<br />
         {{ 'generator.forumTopic.lastPostDate'|trans }} {{ item.lastPostPublicationDate|date('d/m/Y') }}<br />
     </span>
-</h2>
+</h1>
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
     <fieldset>
-        <legend>
+        <h2>
             {{ item.firstPost.createdBy.pseudonym ?: item.firstPost.createdBy.username }}
-        </legend>
+        </h2>
         <p>
             {{ item.firstPost.body|raw|nl2br }}
         </p><br />
@@ -24,10 +24,10 @@
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
     {% for post in item.posts %}
         <fieldset>
-            <legend>
+            <h2>
                 {{ post.createdBy.pseudonym ?: post.createdBy.username }} -
                 <small>{{ post.createdDate|date('d/m/Y') }}</small>
-            </legend>
+            </h2>
             <p>
                 {{ post.body|raw|nl2br }}
             </p><br />

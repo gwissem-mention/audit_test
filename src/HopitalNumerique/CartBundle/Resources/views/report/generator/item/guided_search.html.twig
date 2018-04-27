@@ -2,7 +2,7 @@
 
 {% import _self as macro %}
 
-<h2>
+<h1>
     <small>{{ ('item.object_type.'~item.type)|trans }}</small>
     <a href="{{ getBaseUrl() }}{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': item.id}) }}">
         {{ item.title }}
@@ -11,11 +11,11 @@
     <span class="date">
         {{ 'generator.guided_search.publication_date'|trans }} {{ item.publicationDate|date('d/m/Y') }}
     </span>
-</h2>
+</h1>
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns and item.description %}
     <fieldset>
-        <legend>{{ 'generator.guided_search.description'|trans }}</legend>
+        <h2>{{ 'generator.guided_search.description'|trans }}</h2>
         <p>
             {{ item.description|nl2br }}
         </p><br />
@@ -25,7 +25,7 @@
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.children|length > 0%}
     <fieldset>
-        <legend>{{ 'generator.publication.summary'|trans }}</legend>
+        <h2>{{ 'generator.publication.summary'|trans }}</h2>
         <ul>
             {% for child in item.children %}
                 <li>
