@@ -3,10 +3,11 @@
 namespace HopitalNumerique\CartBundle\Model\Report;
 
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\CartBundle\Model\DomainInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 
-class Infradoc implements ItemInterface
+class Infradoc implements ItemInterface, DomainInterface
 {
     /**
      * @var Contenu $content

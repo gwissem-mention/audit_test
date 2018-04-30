@@ -27,7 +27,7 @@
         <h2>{{ 'generator.infradoc.short_resume'|trans }}</h2>
         <div class="truncate-height">
             <p>
-                {{ item.shortContent|sliceTitle(2, 1, 4)|raw }}
+                {{ item.shortContent|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
             </p><br />
         </div>
     </fieldset>
@@ -46,7 +46,7 @@
     <fieldset>
         <h2>{{ 'generator.infradoc.resume'|trans }}</h2>
         <p>
-            {{ item.content|sliceTitle(2, 1, 4)|raw }}
+            {{ item.content|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
         </p><br />
     </fieldset>
 {% endif %}
@@ -74,7 +74,7 @@
         {% for content in contents %}
             <li>
                 {% set name = chapter ~ content.order ~ '. ' ~ content.titre %}
-                {{ name|sliceTitle(2, 1, 4)|raw }}
+                {{ name|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
 
                 {% if content.children %}
                     <ul>

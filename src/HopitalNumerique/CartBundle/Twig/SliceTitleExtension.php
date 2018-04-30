@@ -2,15 +2,6 @@
 
 namespace HopitalNumerique\CartBundle\Twig;
 
-use HopitalNumerique\CartBundle\Model\Item\Item;
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
-use HopitalNumerique\DomaineBundle\Repository\DomaineRepository;
-use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 class SliceTitleExtension extends \Twig_Extension
 {
     /**

@@ -26,7 +26,7 @@
         <h2>{{ 'generator.publication.shortResume'|trans }}</h2>
         <div class="truncate-height">
             <p>
-                {{ item.resume|sliceTitle(2, 1, 4)|raw }}
+                {{ item.resume|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
             </p><br />
         </div>
     </fieldset>
@@ -36,7 +36,7 @@
     <fieldset>
         <h2>{{ 'generator.publication.synthesis'|trans }}</h2>
         <p>
-            {{ item.synthesis|sliceTitle(2, 1, 4)|raw }}
+            {{ item.synthesis|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
         </p><br />
     </fieldset>
 {% endif %}
@@ -56,7 +56,7 @@
     <fieldset>
         <h2>{{ 'generator.publication.resume'|trans }}</h2>
         <p>
-            {{ item.resume|sliceTitle(2, 1, 4)|raw }}
+            {{ item.resume|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
         </p><br />
     </fieldset>
 {% endif %}

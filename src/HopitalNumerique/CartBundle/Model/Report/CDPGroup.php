@@ -3,12 +3,13 @@
 namespace HopitalNumerique\CartBundle\Model\Report;
 
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\CartBundle\Model\DomainInterface;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 
-class CDPGroup implements ItemInterface
+class CDPGroup implements ItemInterface, DomainInterface
 {
     /**
      * @var Fiche[] $summary

@@ -3,11 +3,12 @@
 namespace HopitalNumerique\CartBundle\Model\Report;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\CartBundle\Model\DomainInterface;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 
-class Publication implements ItemInterface
+class Publication implements ItemInterface, DomainInterface
 {
     /**
      * @var Objet $object

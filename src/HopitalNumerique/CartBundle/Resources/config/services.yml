@@ -6,10 +6,8 @@ services:
     hopitalnumerique_cart.twig.extension:
         class: HopitalNumerique\CartBundle\Twig\CartExtension
         arguments:
-            - '@request_stack'
-            - '@security.token_storage'
-            - '@router'
-            - '@hopitalnumerique_domaine.repository.domaine'
+            - '@hopitalnumerique_cart.item_domain_resolver'
+            - '@hopitalnumerique_cart.item_domain_url_resolver'
         tags:
             - { name: twig.extension }
 
@@ -101,6 +99,19 @@ services:
             - '@hopitalnumerique_cart.repository.report_item'
             - '@hopitalnumerique_cart.repository.report_factory_item'
             - '@hopitalnumerique_cart.factory.item'
+
+    hopitalnumerique_cart.item_domain_resolver:
+        class: HopitalNumerique\CartBundle\Service\ItemDomainResolver
+        arguments:
+            - '@request_stack'
+            - '@security.token_storage'
+            - '@hopitalnumerique_domaine.repository.domaine'
+
+    hopitalnumerique_cart.item_domain_url_resolver:
+        class: HopitalNumerique\CartBundle\Service\ItemDomainUrlResolver
+        arguments:
+            - '@hopitalnumerique_cart.item_domain_resolver'
+            - '@router'
 
     hopitalnumerique_cart.repository.cart_item:
         class: HopitalNumerique\CartBundle\Repository\CartItemRepository
