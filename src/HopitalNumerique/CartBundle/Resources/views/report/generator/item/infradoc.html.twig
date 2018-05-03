@@ -2,7 +2,7 @@
 
 {% import _self as self %}
 
-<h2>
+<h1>
     <small>{{ 'item.object_type.contenu'|trans }}</small>
     {{ item.parentsTitles|join(' > ') }} >
     <a href="{{ getBaseUrl(item.domains) }}{{ path('hopital_numerique_publication_publication_contenu_without_alias', {
@@ -19,15 +19,15 @@
             {{ 'generator.infradoc.creationDate'|trans }} {{ item.creationDate|date('d/m/Y') }}
         {% endif %}
     </span>
-</h2>
+</h1>
 
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
     <fieldset>
-        <legend>{{ 'generator.infradoc.short_resume'|trans }}</legend>
+        <h2>{{ 'generator.infradoc.short_resume'|trans }}</h2>
         <div class="truncate-height">
             <p>
-                {{ item.shortContent|raw }}
+                {{ item.shortContent|sliceTitle(2, 1, 4)|raw }}
             </p><br />
         </div>
     </fieldset>
@@ -35,7 +35,7 @@
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SUMMARY_COLUMN') in report.columns and item.children|length > 0%}
     <fieldset>
-        <legend>{{ 'generator.infradoc.subChapters'|trans }}</legend>
+        <h2>{{ 'generator.infradoc.subChapters'|trans }}</h2>
         <p>
             {{ self.buildTree(item.children) }}
         </p><br />
@@ -44,16 +44,16 @@
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
     <fieldset>
-        <legend>{{ 'generator.infradoc.resume'|trans }}</legend>
+        <h2>{{ 'generator.infradoc.resume'|trans }}</h2>
         <p>
-            {{ item.content|raw }}
+            {{ item.content|sliceTitle(2, 1, 4)|raw }}
         </p><br />
     </fieldset>
 {% endif %}
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::COMMENT_COLUMN') in report.columns and item.comments|length > 0 %}
     <fieldset>
-        <legend>{{ 'generator.infradoc.comments'|trans }}</legend>
+        <h2>{{ 'generator.infradoc.comments'|trans }}</h2>
         {% for comment in item.comments %}
             <fieldset>
                 <legend>
@@ -74,7 +74,7 @@
         {% for content in contents %}
             <li>
                 {% set name = chapter ~ content.order ~ '. ' ~ content.titre %}
-                {{ name|raw }}
+                {{ name|sliceTitle(2, 1, 4)|raw }}
 
                 {% if content.children %}
                     <ul>

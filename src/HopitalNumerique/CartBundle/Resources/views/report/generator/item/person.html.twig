@@ -1,13 +1,13 @@
 {% trans_default_domain 'cart' %}
 
-<h2>
+<h1>
     <small>{{ 'item.object_type.person'|trans }}</small>
     {{ item.fullname }}
-</h2>
+</h1>
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::RESUME_COLUMN') in report.columns %}
     <fieldset>
-        <legend>{{ 'generator.person.userInfos.title'|trans }}</legend>
+        <h2>{{ 'generator.person.userInfos.title'|trans }}</h2>
 
         <table class="table person-info">
             <tr>
@@ -32,7 +32,7 @@
 
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::SYNTHESIS_COLUMN') in report.columns and item.biography%}
     <fieldset>
-        <legend>{{ 'generator.person.biography'|trans }}</legend>
+        <h2>{{ 'generator.person.biography'|trans }}</h2>
         <p>
             {{ item.biography|nl2br }}
         </p><br />
@@ -42,7 +42,7 @@
 {% if constant('HopitalNumerique\\CartBundle\\Enum\\ReportColumnsEnum::CONTENT_COLUMN') in report.columns %}
     {% if item.skills|length > 0 %}
         <fieldset>
-            <legend>{{ 'generator.person.skills'|trans }}</legend>
+            <h2>{{ 'generator.person.skills'|trans }}</h2>
             <ul>
                 {% for skill in item.skills if skill.connaissance is not null %}
                     <li>
@@ -56,7 +56,7 @@
 
     {% if item.hobbies|length > 0 %}
         <fieldset>
-            <legend>{{ 'generator.person.hobbies'|trans }}</legend>
+            <h2>{{ 'generator.person.hobbies'|trans }}</h2>
             <ul>
                 {% for hobby in item.hobbies %}
                     <li>{{ hobby.label }}</li>
@@ -67,7 +67,7 @@
 
     {% if item.computerSkills|length > 0 %}
         <fieldset>
-            <legend>{{ 'generator.person.computerSkills'|trans }}</legend>
+            <h2>{{ 'generator.person.computerSkills'|trans }}</h2>
             <ul>
                 {% for skill in item.computerSkills %}
                     <li>{{ skill.libelle }}</li>

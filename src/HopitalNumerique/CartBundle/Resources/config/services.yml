@@ -13,6 +13,11 @@ services:
         tags:
             - { name: twig.extension }
 
+    hopitalnumerique_cart.twig.extension.slice_title:
+        class: HopitalNumerique\CartBundle\Twig\SliceTitleExtension
+        tags:
+            - { name: twig.extension }
+
     hopitalnumerique_cart.item_to_report_factory_command_handler:
         class: HopitalNumerique\CartBundle\Domain\Command\AddCartItemsToReportFactoryCommandHandler
         arguments:
