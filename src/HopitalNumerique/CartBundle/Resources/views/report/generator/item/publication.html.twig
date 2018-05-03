@@ -4,7 +4,7 @@
 
 <h1>
     <small>{{ ('item.object_type.'~item.type)|trans }}</small>
-    <a href="{{ getBaseUrl(item.domains) }}{{ path('hopital_numerique_publication_synthese', {'id': item.id}) }}">
+    <a href="{{ getBaseUrl(item.domains) }}{{ path('hopital_numerique_publication_publication_objet', {'id': item.id}) }}">
         {{ item.title }}
     </a>
 
