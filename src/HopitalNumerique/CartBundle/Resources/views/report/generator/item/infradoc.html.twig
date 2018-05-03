@@ -74,7 +74,7 @@
         {% for content in contents %}
             <li>
                 {% set name = chapter ~ content.order ~ '. ' ~ content.titre %}
-                {{ name|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
+                {{ name|sliceTitle(2, 1, 4)|raw }}
 
                 {% if content.children %}
                     <ul>
