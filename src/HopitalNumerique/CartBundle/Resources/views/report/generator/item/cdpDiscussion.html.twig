@@ -30,7 +30,7 @@
         {% for message in item.messages %}
             <p>
                 {{ message.user.prenomNom }} ({{ message.createdAt|localizeddate('short', 'none') }}<br />
-                {{ message.content|sliceTitle(2, 1, 4)|raw }}
+                {{ message.content|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
             </p>
         {% endfor %}
 

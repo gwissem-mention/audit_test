@@ -3,9 +3,9 @@
 namespace HopitalNumerique\CartBundle\Model\Item;
 
 use HopitalNumerique\CartBundle\Entity\Item as ItemEntity;
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\CartBundle\Model\DomainInterface;
 
-abstract class Item implements \JsonSerializable
+abstract class Item implements \JsonSerializable, DomainInterface
 {
     /**
      * @var string $objectTypeName
@@ -107,11 +107,6 @@ abstract class Item implements \JsonSerializable
     {
         return null;
     }
-
-    /**
-     * @return Domaine[]
-     */
-    abstract function getDomains();
 
     /**
      * @return array

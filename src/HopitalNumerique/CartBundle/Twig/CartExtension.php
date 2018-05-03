@@ -3,56 +3,30 @@
 namespace HopitalNumerique\CartBundle\Twig;
 
 use HopitalNumerique\CartBundle\Model\Item\Item;
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
-use HopitalNumerique\DomaineBundle\Repository\DomaineRepository;
-use HopitalNumerique\DomaineBundle\Service\BaseUrlProvider;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use HopitalNumerique\CartBundle\Service\ItemDomainResolver;
+use HopitalNumerique\CartBundle\Service\ItemDomainUrlResolver;
 
 class CartExtension extends \Twig_Extension
 {
     /**
-     * @var RequestStack $requestStack
+     * @var ItemDomainResolver $itemDomainResolver
      */
-    protected $requestStack;
+    protected $itemDomainResolver;
 
     /**
-     * @var TokenStorageInterface $securityTokenStorage
+     * @var ItemDomainUrlResolver $itemDomainUrlResolver
      */
-    protected $tokenStorage;
-
-    /**
-     * @var RouterInterface $router
-     */
-    protected $router;
-
-    /**
-     * @var DomaineRepository $domainRepository
-     */
-    protected $domainRepository;
+    protected $itemDomainUrlResolver;
 
     /**
      * CartExtension constructor.
      *
-     * @param RequestStack $requestStack
-     * @param TokenStorageInterface $tokenStorage
-     * @param RouterInterface $router
-     * @param DomaineRepository $domaineRepository
-     * @param BaseUrlProvider $baseUrlProvider
-     * @param CurrentDomaine $currentDomaine
+     * @param ItemDomainResolver $itemDomainResolver
      */
-    public function __construct(
-        RequestStack $requestStack,
-        TokenStorageInterface $tokenStorage,
-        RouterInterface $router,
-        DomaineRepository $domaineRepository
-    ) {
-        $this->requestStack = $requestStack;
-        $this->tokenStorage = $tokenStorage;
-        $this->router = $router;
-        $this->domainRepository = $domaineRepository;
+    public function __construct(ItemDomainResolver $itemDomainResolver, ItemDomainUrlResolver $itemDomainUrlResolver)
+    {
+        $this->itemDomainResolver = $itemDomainResolver;
+        $this->itemDomainUrlResolver = $itemDomainUrlResolver;
     }
 
     /**
@@ -66,50 +40,35 @@ class CartExtension extends \Twig_Extension
     }
 
     /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('fixDomainLink', array($this, 'fixDomainLink')),
+        );
+    }
+
+    /**
      * @param Item $item
      *
      * @return string
      */
     public function getItemUrl(Item $item)
     {
-        $currentDomainId = $this->requestStack->getCurrentRequest()->getSession()->get('domaineId');
-
-        foreach ($item->getDomains() as $domain) {
-            if ($domain->getId() === $currentDomainId) {
-                return $this->buildUrl($item, $domain->getUrl());
-            }
-        }
-
-        /** @var User $currentUser */
-        $currentUser = $this->tokenStorage->getToken()->getUser();
-
-        foreach ($item->getDomains() as $domain) {
-            if ($currentUser->getDomaines()->contains($domain)) {
-                return $this->buildUrl($item, $domain->getUrl());
-            }
-        }
-
-        if ($item->getDomains()->first() !== false) {
-            return $this->buildUrl($item, $item->getDomains()->first()->getUrl());
-        }
-
-        return $this->buildUrl($item, $this->domainRepository->find($currentDomainId)->getUrl());
+        return $this->itemDomainUrlResolver->getItemUrl($item);
     }
 
     /**
-     * @param Item $item
-     * @param string $baseUrl
+     * @param $text
+     * @param $item
      *
-     * @return string
+     * @return null|string|string[]
      */
-    private function buildUrl(Item $item, $baseUrl)
+    public function fixDomainLink($text, $item)
     {
-        $fragment = null;
-        if (!is_null($item->getUriFragment())) {
-            $fragment = '#'.$item->getUriFragment();
-        }
-
-        return sprintf('%s%s%s', $baseUrl, $this->router->generate($item->getRoute(), $item->getRouteParameters()), $fragment);
+        $domainUrl = $this->itemDomainResolver->getItemDomain($item)->getUrl();
+        return preg_replace('/href="\//', 'href="' . $domainUrl . '/', $text);
     }
 
     /**

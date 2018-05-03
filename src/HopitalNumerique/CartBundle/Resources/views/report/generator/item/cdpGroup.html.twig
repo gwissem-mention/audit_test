@@ -27,7 +27,7 @@
     <fieldset>
         <h2>{{ 'generator.cdp_group.description'|trans }}</h2>
         <p>
-            {{ item.description|sliceTitle(2, 1, 4)|raw }}
+            {{ item.description|sliceTitle(2, 1, 4)|fixDomainLink(item)|raw }}
         </p><br />
     </fieldset>
 {% endif %}
