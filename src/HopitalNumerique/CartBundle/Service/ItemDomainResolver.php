@@ -70,7 +70,7 @@ class ItemDomainResolver
             }
         }
 
-        if ($item->getDomains()->first() !== false) {
+        if ($item->getDomains() !== null && $item->getDomains()->first() !== false) {
             return $item->getDomains()->first();
         }
 
