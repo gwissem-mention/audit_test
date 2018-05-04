@@ -220,16 +220,6 @@ class UserType extends AbstractType
                     'class' => $this->constraints['jobLabel']['class'] . ' etablissement_sante',
                 ],
             ])
-            ->add('networkJobTypes', EntityType::class, [
-                'class' => Reference::class,
-                'choices' => $this->referenceManager->findByCode('ROLE_RESEAU'),
-                'choice_label' => 'libelle',
-                'required' => false,
-                'expanded' => false,
-                'multiple' => true,
-                'label' => 'Rôles dans le réseau',
-                'empty_value' => ' - ',
-            ])
             ->add('activities', EntityType::class, [
                 'class' => Reference::class,
                 'choices' => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),

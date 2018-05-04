@@ -2,10 +2,7 @@
 
 namespace HopitalNumerique\UserBundle\Manager;
 
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use HopitalNumerique\CommunautePratiqueBundle\Event\Group\UserJoinedEvent;
-use HopitalNumerique\CommunautePratiqueBundle\Events;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
@@ -277,7 +274,7 @@ class UserManager extends BaseManager
         return $this->getRepository()->findByDomaines($domaines);
     }
     /**
-     * Return users linked to network and defining one of specified domains (i.e. users with at least one 'networkJobType').
+     * Return users linked to network and defining one of specified domains (i.e. users referenced with at least one 'networkJob').
      *
      * @param \Doctrine\Common\Collections\Collection $domaines Domains
      *
