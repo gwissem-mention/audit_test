@@ -7,10 +7,12 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Message;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Member\ViewedMember;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Nodevo\RoleBundle\Entity\Role;
 use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -341,7 +343,7 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Return users linked to network and defining one of specified domains (i.e. users with at least one 'networkJobType').
+     * Return users linked to network and defining one of specified domains (i.e. users referenced with at least one 'networkJob').
      *
      * @param \Doctrine\Common\Collections\Collection $domaines Domains
      *
@@ -351,9 +353,15 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('user')
             ->join('user.domaines', 'domaine', Expr\Join::WITH)
-            ->join('user.networkJobTypes', 'networkJobType', Expr\Join::WITH)
+            ->join(EntityHasReference::class, 'hasReference', Expr\Join::WITH,
+                'hasReference.entityId = user.id AND hasReference.entityType = :entityType')
+            ->join('hasReference.reference', 'reference')
+            ->join('reference.codes', 'referenceCode', Expr\Join::WITH,
+                'referenceCode.label = :referenceCode')
             ->andWhere('domaine.id IN (:domaines)')
             ->orderBy('user.lastname')
+            ->setParameter('entityType', Entity::ENTITY_TYPE_AMBASSADEUR)
+            ->setParameter('referenceCode', 'ROLE_RESEAU')
             ->setParameter('domaines', $domains->toArray())
             ->getQuery()
             ->getResult();
