@@ -184,14 +184,12 @@ class UserRepository extends EntityRepository
      */
     public function getAmbassadeursByRegionAndDomaine($region, $domaine)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('user')
-            ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.rattachementRegions', 'rattachementRegion')
-            ->andWhere('user.roles LIKE :role')
-            ->setParameter('role', '%ROLE_AMBASSADEUR_7%')
+        $qb = $this->createQueryBuilder('user');
+        $qb->leftJoin('user.rattachementRegions', 'rattachementRegion')
+            ->where('user.roles LIKE :role')
             ->andWhere('user.enabled = 1')
             ->andWhere($qb->expr()->orX('user.region = :region', 'rattachementRegion.id = :region'))
+            ->setParameter('role', '%ROLE_AMBASSADEUR_7%')
             ->setParameter('region', $region)
             ->orderBy('user.lastname', 'ASC')
         ;
@@ -497,7 +495,7 @@ class UserRepository extends EntityRepository
      *
      * @return User[] La liste des utilisateurs
      */
-    public function getcmsis(array $criteres = [])
+    public function getCMSIs(array $criteres = [])
     {
         return $this->findByRole([Role::$ROLE_CMSI_LABEL], $criteres);
     }
@@ -512,12 +510,7 @@ class UserRepository extends EntityRepository
      */
     private function findByRole($role, array $criteres)
     {
-        $requete = $this->_em->createQueryBuilder();
-
-        $requete
-            ->select('user')
-            ->from('HopitalNumeriqueUserBundle:User', 'user')
-        ;
+        $requete = $this->createQueryBuilder('user');
 
         if (!is_array($role)) {
             $requete

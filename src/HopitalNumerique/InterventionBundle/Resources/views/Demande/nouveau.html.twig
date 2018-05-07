@@ -33,51 +33,46 @@
 {% block barreActions %}{% endblock %}
 
 {% block content %}
+
     <div class="panel_form" id="intervention_demande_panel">
 
-        {% set informationsManquantes = app.user|informationsManquantes %}
+        {{ form_start(form, {"attr": {"id": "form_intervention_demande_nouveau", "class": "form-horizontal toValidate", "novalidate": "novalidate"}}) }}
 
-        {% if app.user.hasRoleCmsi == false and (not informationsManquantes.ok) %}
-            <div class="informations_manquantes col-md-12">
-                {% for key,informationManquante in informationsManquantes %}
-                    {# Affichage de la 'légende' #}
-                    {% if 'ok' == key %}
-                        <span class="legende rose">
-                            <strong>Certaines données sont nécessaires pour la création d'une demande d'intervention, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
-                        </span>
-                    {% endif %}
-                    {% if informationManquante is not empty %}
-                        <ul class="rose">
-                            {% if informationManquante is not null %}
-                                <li><span class="champ_manquant"><strong>{{ informationManquante.label }}</strong></span></li>
-                            {% endif %}
-                        </ul>
-                    {% endif %}
-                {% endfor %}
-                <div style="margin-top: 30px;">
-                    {{ render(controller('HopitalNumeriqueAccountBundle:InformationsManquantes:demandeIntervention')) }}
+            <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+
+            <div class="form-group">
+                <label class="col-md-4 label-custom"> Professionnel sollicité </label>
+                <div class="col-md-8">{{ ambassadeur.prenomNom }}</div>
+            </div>
+
+            {% form_theme form 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+            {{ form_javascript(form) }}
+            {{ form_row(form.interventionType) }}
+            <div class="form-group">
+                <label class="col-md-4 control-label">Lieu souhaité de l'intervention</label>
+                <div class="col-md-8">
+                    <div class ="form_vertical_row">
+                        {{ form_row(form.desiredLocationAddress) }}
+                        {{ form_row(form.desiredLocationZipCode) }}
+                        {{ form_row(form.desiredLocationCity) }}
+                    </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
-        {% endif %}
+            {{ form_row(form.email) }}
+            {{ form_row(form.telephone) }}
+            {{ form_row(form.motivationContext) }}
+            {{ form_row(form.requestTopics) }}
+            {{ form_row(form.etablissements) }}
+            {{ form_row(form.requestNeeds) }}
+            {{ form_row(form.rdvInformations) }}
 
-        {% if (informationsManquantes.ok or app.user.hasRoleCmsi) %}
-            <form method="post" id="form_intervention_demande_nouveau" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
-                <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-                <div class="form-group">
-                    <label class="col-md-4 label-custom"> Professionnel sollicité </label>
-                    <div class="col-md-8">{{ ambassadeur.prenomNom }}</div>
-                </div>
+            <div class="boutons">
+                <input type="submit" class="btn btn-success submit" value="Valider ma demande">
+            </div>
 
-                {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+        {{ form_end(form) }}
 
-                {{ form_javascript(interventionDemandeFormulaireNouveau) }}
-                {{ form_widget(interventionDemandeFormulaireNouveau) }}
-
-                <div class="boutons">
-                    <input type="submit" class="btn btn-success submit" value="Valider ma demande">
-                </div>
-            </form>
-        {% endif %}
     </div>
+
 {% endblock %}

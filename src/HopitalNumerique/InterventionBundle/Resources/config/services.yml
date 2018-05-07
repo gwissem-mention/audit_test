@@ -18,6 +18,12 @@ services:
         class: "%hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs.class%"
         arguments: ["@logger", "@session"]
 
+    HopitalNumerique\InterventionBundle\Service\InterventionDemandeBuilder:
+        class: HopitalNumerique\InterventionBundle\Service\InterventionDemandeBuilder
+
+    HopitalNumerique\InterventionBundle\Service\InterventionDemandeWorkflow:
+        class: HopitalNumerique\InterventionBundle\Service\InterventionDemandeWorkflow
+
     hopitalnumerique_intervention.dependency_injection.intervention.forfait_transport:
         class: 'HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport'
         arguments: ['@ivory_google_map.distance_matrix', '@hopitalnumerique_intervention.manager.intervention.forfait_transport']
@@ -51,3 +57,6 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'
+
+    hopitalnumerique_intervention.service.builder.intervention_demande:
+        class: HopitalNumerique\InterventionBundle\Service\InterventionDemandeBuilder

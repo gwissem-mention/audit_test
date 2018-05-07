@@ -6,11 +6,15 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition\CmsiType;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemande\EtablissementType;
+use HopitalNumerique\InterventionBundle\Form\InterventionDemande\RequiredUserDataType;
+use HopitalNumerique\InterventionBundle\Service\InterventionDemandeBuilder;
+use HopitalNumerique\InterventionBundle\Service\InterventionDemandeWorkflow;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -45,11 +49,16 @@ class DemandeController extends Controller
         }
 
         $this->utilisateurConnecte = $this->getUser();
-        $this->interventionDemande = new InterventionDemande();
-        $this->interventionDemande->setAmbassadeur($ambassadeur);
-        if ($prod != null) {
-            $this->interventionDemande->addObjet($prod);
+
+        // Check if user define enough data to ask intervention.
+        if (!$this->get(InterventionDemandeWorkflow::class)->userCanAskIntervention($this->utilisateurConnecte)) {
+            return $this->redirectToRoute('hopital_numerique_intervention_demande_missing_data', [
+                'ambassadeurId' => $ambassadeur->getId(),
+                'prodId' => (null === $prod) ? 0 : $prod->getId(),
+            ]);
         }
+
+        $this->interventionDemande = $this->get(InterventionDemandeBuilder::class)->buildFromUser($this->utilisateurConnecte, $ambassadeur, $prod);
 
         if ($this->utilisateurConnecte->hasRoleCmsi()) {
             $interventionDemandeFormulaire = $this->createForm(\HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType::class, $this->interventionDemande);
@@ -64,11 +73,39 @@ class DemandeController extends Controller
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:nouveau.html.twig',
             [
-                'interventionDemandeFormulaireNouveau' => $interventionDemandeFormulaire->createView(),
+                'form' => $interventionDemandeFormulaire->createView(),
                 'interventionDemande' => $this->interventionDemande,
                 'ambassadeur' => $ambassadeur,
             ]
         );
+    }
+
+    public function missingDataAction(Request $request, $ambassadeurId, $prodId)
+    {
+        $loggedUser = $this->getUser();
+        $form = $this->createForm(RequiredUserDataType::class, $loggedUser);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->isValid() && $this->get(InterventionDemandeWorkflow::class)->userCanAskIntervention($loggedUser)) {
+                $loggedUser->setDateLastUpdate(new \DateTime());
+                $this->getDoctrine()->getManager()->flush();
+
+                if (0 === $prodId) {
+                    return $this->redirectToRoute('hopital_numerique_intervention_demande_nouveau', ['ambassadeur' => $ambassadeurId]);
+                } else {
+                    return $this->redirectToRoute('hopital_numerique_intervention_demande_nouveau_avec_objet', [
+                        'ambassadeur' => $ambassadeurId,
+                        'prod' => $prodId
+                    ]);
+                }
+            } else {
+                $this->get('session')->getFlashBag()->add('danger', 'Veuillez renseigner les champs demandés.');
+            }
+        }
+
+        return $this->render('HopitalNumeriqueInterventionBundle:Demande:missing-data.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -81,7 +118,7 @@ class DemandeController extends Controller
     private function gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)
     {
         if ($this->get('request')->isMethod('POST')) {
-            $interventionDemandeFormulaire->bind($this->get('request'));
+            $interventionDemandeFormulaire->handleRequest($this->get('request'));
 
             if ($interventionDemandeFormulaire->isValid()) {
                 if (!$this->enregistreNouvelleDemande()) {

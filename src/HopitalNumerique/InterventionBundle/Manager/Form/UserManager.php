@@ -146,7 +146,7 @@ class UserManager
     {
         $referents = [];
         $referents['Administrateur'] = $this->userManager->getAdmins();
-        $referents['CMSI'] = $this->userManager->getCmsis();
+        $referents['CMSI'] = $this->userManager->getCMSIs();
         $referents['ES et Enregistrés'] = $this->userManager->getESAndEnregistres();
         asort($referents);
 

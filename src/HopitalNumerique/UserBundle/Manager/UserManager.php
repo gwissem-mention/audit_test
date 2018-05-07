@@ -379,7 +379,7 @@ class UserManager extends BaseManager
      */
     public function getCMSIs(array $criteres = [])
     {
-        return $this->getRepository()->getCmsis($criteres);
+        return $this->getRepository()->getCMSIs($criteres);
     }
 
     /**

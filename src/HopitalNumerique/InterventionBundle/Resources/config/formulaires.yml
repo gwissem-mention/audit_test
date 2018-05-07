@@ -39,4 +39,12 @@ services:
         tags:
             - { name: form.type }
         arguments: ["@security.context", "@validator", '@hopitalnumerique_user.manager.user', "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_initiateur", "@hopitalnumerique_intervention.manager.form_user", "@hopitalnumerique_intervention.manager.form_etablissement"]
+
+    HopitalNumerique\InterventionBundle\Form\InterventionDemande\RequiredUserDataType:
+        class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\RequiredUserDataType
+        arguments:
+            - '@hopitalnumerique_user.manager.user'
+            - '@validator'
+        tags:
+            - { name: form.type }
     #-->

@@ -54,6 +54,13 @@ class EtablissementType extends InterventionDemandeType
         $builder
             ->remove('ambassadeur')
             ->remove('referent')
+            ->remove('objets')
+            ->remove('connaissances')
+            ->remove('connaissancesSI')
+            ->remove('objetsAutres')
+            ->remove('description')
+            ->remove('difficulteDescription')
+            ->remove('champLibre')
             ->remove('cmsiCommentaire');
     }
 }
