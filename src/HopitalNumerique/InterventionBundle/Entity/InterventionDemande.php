@@ -132,53 +132,6 @@ class InterventionDemande
     /**
      * @var string
      *
-     * @ORM\Column(name="desired_location_address", type="string", length=255)
-     */
-    private $desiredLocationAddress;
-
-    /**
-     * @var string
-     *
-     * @Assert\Length(
-     *      min = "5",
-     *      max = "5",
-     *      exactMessage="Il doit y avoir {{ limit }} caractères dans le code postal.",
-     * )
-     * @ORM\Column(name="desired_location_zip_code", type="string", length=5)
-     */
-    private $desiredLocationZipCode;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="desired_location_city", type="string", length=255)
-     */
-    private $desiredLocationCity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="motivation_context", nullable=true, type="text")
-     */
-    private $motivationContext;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="request_topics", nullable=true, type="string", length=255)
-     */
-    private $requestTopics;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="request_needs", type="text")
-     */
-    private $requestNeeds;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="interv_cmsi_commentaire", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $cmsiCommentaire;
@@ -420,7 +373,7 @@ class InterventionDemande
      *      minMessage="Le numéro de téléphone direct doit être composé de {{ limit }} caractères.",
      *      maxMessage="Le numéro de téléphone direct doit être composé de {{ limit }} caractères."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
+     * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
      * @ORM\Column(name="interv_direct", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
      */
     protected $telephone;
@@ -685,150 +638,6 @@ class InterventionDemande
     public function getRdvInformations()
     {
         return $this->rdvInformations;
-    }
-
-    /**
-     * Set desiredLocationAddress.
-     *
-     * @param string $desiredLocationAddress
-     *
-     * @return InterventionDemande
-     */
-    public function setDesiredLocationAddress($desiredLocationAddress)
-    {
-        $this->desiredLocationAddress = $desiredLocationAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get desiredLocationAddress.
-     *
-     * @return string
-     */
-    public function getDesiredLocationAddress()
-    {
-        return $this->desiredLocationAddress;
-    }
-
-    /**
-     * Set desiredLocationZipCode.
-     *
-     * @param string $desiredLocationZipCode
-     *
-     * @return InterventionDemande
-     */
-    public function setDesiredLocationZipCode($desiredLocationZipCode)
-    {
-        $this->desiredLocationZipCode = $desiredLocationZipCode;
-
-        return $this;
-    }
-
-    /**
-     * Get desiredLocationZipCode.
-     *
-     * @return string
-     */
-    public function getDesiredLocationZipCode()
-    {
-        return $this->desiredLocationZipCode;
-    }
-
-    /**
-     * Set desiredLocationCity.
-     *
-     * @param string $desiredLocationCity
-     *
-     * @return InterventionDemande
-     */
-    public function setDesiredLocationCity($desiredLocationCity)
-    {
-        $this->desiredLocationCity = $desiredLocationCity;
-
-        return $this;
-    }
-
-    /**
-     * Get desiredLocationCity.
-     *
-     * @return string
-     */
-    public function getDesiredLocationCity()
-    {
-        return $this->desiredLocationCity;
-    }
-
-    /**
-     * Set motivationContext.
-     *
-     * @param string $motivationContext
-     *
-     * @return InterventionDemande
-     */
-    public function setMotivationContext($motivationContext)
-    {
-        $this->motivationContext = $motivationContext;
-
-        return $this;
-    }
-
-    /**
-     * Get motivationContext.
-     *
-     * @return string
-     */
-    public function getMotivationContext()
-    {
-        return $this->motivationContext;
-    }
-
-    /**
-     * Set requestTopics.
-     *
-     * @param string $requestTopics
-     *
-     * @return InterventionDemande
-     */
-    public function setRequestTopics($requestTopics)
-    {
-        $this->requestTopics = $requestTopics;
-
-        return $this;
-    }
-
-    /**
-     * Get requestTopics.
-     *
-     * @return string
-     */
-    public function getRequestTopics()
-    {
-        return $this->requestTopics;
-    }
-
-    /**
-     * Set requestNeeds.
-     *
-     * @param string $requestNeeds
-     *
-     * @return InterventionDemande
-     */
-    public function setRequestNeeds($requestNeeds)
-    {
-        $this->requestNeeds = $requestNeeds;
-
-        return $this;
-    }
-
-    /**
-     * Get requestNeeds.
-     *
-     * @return string
-     */
-    public function getRequestNeeds()
-    {
-        return $this->requestNeeds;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\InterventionBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -87,7 +88,7 @@ abstract class InterventionDemandeType extends AbstractType
             'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
             'choice_label' => 'appellation',
             'required'     => false,
-            'label'        => 'Souhaitez-vous associer d’autres structures à la demande :',
+            'label'        => 'Associer les structures suivantes à la demande :',
             'multiple'     => true,
             'empty_value'  => '-',
             'attr'         => ['class' => 'ajax-list-select2 hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
@@ -107,26 +108,20 @@ abstract class InterventionDemandeType extends AbstractType
                 'choices' => $this->formInterventionDemandeManager->getInterventionTypesChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'property' => 'libelle',
-                'label' => 'Nature de la sollicitation',
+                'label' => 'Type d\'intervention souhaitée',
                 'empty_value' => '-',
                 'required' => true,
                 'attr' => ['class' => $this->_constraints['interventionType']['class']],
             ])
-            ->add('desiredLocationAddress', TextType::class, [
-                'label' => 'Adresse',
-                'required' => true,
-                'attr' => ['data-validation-engine' => 'validate[required]',],
-            ])
-            ->add('desiredLocationZipCode', TextType::class, [
-                'label' => 'Code postal',
-                'required' => true,
-                'attr' => ['data-validation-engine' => 'validate[required,custom[onlyNumberSp],minSize[5],maxSize[5]]',],
-
-            ])
-            ->add('desiredLocationCity', TextType::class, [
-                'label' => 'Ville',
-                'required' => true,
-                'attr' => ['data-validation-engine' => 'validate[required]',],
+            ->add('region', EntityType::class, [
+                'label' => 'Région des établissements',
+                'choices' => $this->formUserManager->getRegionsChoices(),
+                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'property' => 'libelle',
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'],
+                'data' => $this->utilisateurConnecte->getRegion(),
             ])
             ->add('email', TextType::class, [
                 'label' => 'Adresse mail',
@@ -141,14 +136,6 @@ abstract class InterventionDemandeType extends AbstractType
                     'data-mask' => $this->_constraints['telephone']['mask'],
                 ],
             ])
-            ->add('motivationContext', TextareaType::class, [
-                'label' => 'Pouvez-vous préciser le contexte de votre sollicitation (raison et contexte de la sollicitation, etc.)',
-                'required' => false,
-            ])
-            ->add('requestTopics', TextType::class, [
-                'label' => 'Sur quel sujet porte votre demande ?',
-                'required' => false,
-            ])
             ->add('etablissements', EntityType::class, $etablissementFieldOptions)
             ->add('referent', EntityType::class, [
                 'choices' => $this->formUserManager->getReferentsChoices(),
@@ -159,11 +146,6 @@ abstract class InterventionDemandeType extends AbstractType
                     'class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent '
                                . $this->_constraints['referent']['class'],
                 ],
-            ])
-            ->add('requestNeeds', TextareaType::class, [
-                'label' => 'Qu’attendez-vous de cette sollicitation ?',
-                'required' => true,
-                'attr' => ['data-validation-engine' => 'validate[required]',],
             ])
             ->add('objets', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getObjetsChoices(),
