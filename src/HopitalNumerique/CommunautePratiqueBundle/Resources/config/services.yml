@@ -95,6 +95,7 @@ services:
             - '@hopitalnumerique_user.repository.user'
             - '@HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository'
             - '@HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         calls:
             - [setMailManager, ['@nodevo_mail.manager.mail']]
 

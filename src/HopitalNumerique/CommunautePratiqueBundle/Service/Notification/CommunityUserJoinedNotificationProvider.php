@@ -53,13 +53,14 @@ class CommunityUserJoinedNotificationProvider extends PracticeCommunityHelpGroup
             $user->getId(),
             $title,
             null,
-            [
-                'prenomUtilisateurDist' => $user->getFirstname(),
-                'nomUtilisateurDist' => $user->getLastname(),
-                'domainIds' => $user->getDomaines()->map(function (Domaine $domain) {
-                    return $domain->getId();
-                })->toArray(),
-            ]
+            array_merge(
+                parent::generateOptions(null, $user),
+                [
+                    'domainIds' => $user->getDomaines()->map(function (Domaine $domain) {
+                        return $domain->getId();
+                    })->toArray(),
+                ]
+            )
         );
     }
 
