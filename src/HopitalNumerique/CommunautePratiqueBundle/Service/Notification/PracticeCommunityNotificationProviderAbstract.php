@@ -5,6 +5,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Service\Notification;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Discussion\Discussion;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository;
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use Html2Text\Html2Text;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -50,6 +51,11 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
     protected $messageRepository;
 
     /**
+     * @var CurrentDomaine
+     */
+    protected $currentDomaine;
+
+    /**
      * PracticeCommunityNotificationProviderAbstract constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
@@ -60,6 +66,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
      * @param UserRepository $userRepository
      * @param SubscriptionRepository $subscriptionRepository
      * @param MessageRepository $messageRepository
+     * @param CurrentDomaine $currentDomaine
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
@@ -69,7 +76,8 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         GroupeInscriptionRepository $groupeInscriptionRepository,
         UserRepository $userRepository,
         SubscriptionRepository $subscriptionRepository,
-        MessageRepository $messageRepository
+        MessageRepository $messageRepository,
+        CurrentDomaine $currentDomaine
     ) {
         parent::__construct($eventDispatcher, $tokenStorage, $translator);
         $this->publicationExtension = $publicationExtension;
@@ -78,6 +86,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
         $this->subscriptionRepository = $subscriptionRepository;
         $this->messageRepository = $messageRepository;
         $this->templatePath = '@HopitalNumeriqueCommunautePratique/notifications/' . $this::getNotificationCode() . '.html.twig';
+        $this->currentDomaine = $currentDomaine;
     }
 
     /**
@@ -115,6 +124,9 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
                 'nomDiscussion' => $discussion->getTitle(),
             ]);
         }
+
+        $options['currentDomaine'] = $this->currentDomaine->get();
+        $options['currentDomaineUrl'] = $this->currentDomaine->getUrl();
 
         return $options;
     }

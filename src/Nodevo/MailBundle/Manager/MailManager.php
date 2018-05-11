@@ -1872,8 +1872,17 @@ class MailManager extends BaseManager
         $domain = array_shift($domains);
         $this->_session->set('domaineId', $domain);
         $this->setOptions();
-        $this->currentDomain = $this->_domaineManager->findOneById($domain);
-        $this->basePath = $this->currentDomain->getUrl();
+
+        $this->currentDomain = array_key_exists('currentDomaine', $options) ?
+            $options['currentDomaine'] :
+            $this->_domaineManager->findOneById($domain)
+        ;
+
+        $this->basePath = array_key_exists('currentDomaineUrl', $options) ?
+            $options['currentDomaineUrl'] :
+            $this->currentDomain->getUrl()
+        ;
+
         /** @var Mail $mail */
         $mail = $this->findOneById($mailId);
 
