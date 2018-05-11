@@ -316,13 +316,9 @@ class ReferenceRepository extends EntityRepository
      */
     public function findByCodeParent($code, $parent = null, $actif = null, $labelOrdered = false)
     {
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb
-            ->select('ref')
-            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.codes', 'codes')
-            ->andWhere('codes.label = :code')
+        $qb = $this->createQueryBuilder('ref')
+            ->join('ref.codes', 'codes')
+            ->where('codes.label = :code')
             ->setParameter('code', $code)
             ->orderBy('ref.order', 'ASC')
         ;

@@ -1063,7 +1063,7 @@ class UserController extends Controller
         $form = $this->createForm($formName, $user);
 
         // Remove password field in BO
-        if ($this->getUser() && $options['isNew']) {
+        if ($this->getUser() && array_key_exists('isNew', $options) && $options['isNew']) {
             $options['removePassword'] = true;
             $form->remove('plainPassword');
         } else {

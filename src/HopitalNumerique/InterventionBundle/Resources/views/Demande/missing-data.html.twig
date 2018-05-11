@@ -1,0 +1,26 @@
+{% set displayTitle = false %}
+
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+
+{% block headerTitle %}Nouvelle intervention{% endblock %}
+
+{% block headerDesc %}
+        <strong>Certaines données sont nécessaires pour la création d'une demande d'intervention, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
+{% endblock %}
+
+{% block barreActions %}{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_row(form.profileType) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.phoneNumber) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.cellPhoneNumber) }}
+            </div>
+        </div>
+        <input class="btn btn-success pull-right" value="Enregistrer" type="submit">
+    {{ form_end(form) }}
+{% endblock %}
