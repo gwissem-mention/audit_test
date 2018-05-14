@@ -280,8 +280,7 @@ class MailManager extends BaseManager
                 'discussion' => $message->getDiscussion()->getId(),
                 'type' => UserSubscription::UNSUBSCRIBE,
                 'group' => $group ? $group->getId() : null,
-            ],
-            RouterInterface::ABSOLUTE_URL
+            ]
         );
 
         $this->sendNotification(
@@ -337,8 +336,7 @@ class MailManager extends BaseManager
                 'discussion' => $message->getDiscussion()->getId(),
                 'type' => UserSubscription::UNSUBSCRIBE,
                 'group' => $group ? $group->getId() : null,
-            ],
-            RouterInterface::ABSOLUTE_URL
+            ]
         );
 
         $this->mailer->send($this->generationMail(
@@ -445,6 +443,7 @@ class MailManager extends BaseManager
                 $body = str_replace($matches[0][$key], '(' . $matches[2][$key] . ')' . $matches[3][$key], $body);
             }
         }
+
         $template = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig');
         $bodyTxt = $template->render([
             'content' => strip_tags($body),
@@ -1772,8 +1771,7 @@ class MailManager extends BaseManager
                         'discussion' => $options['discussionId'],
                         'type' => UserSubscription::UNSUBSCRIBE,
                         'group' => $isGroupIdExist ? $options['groupId'] : null,
-                    ],
-                    RouterInterface::ABSOLUTE_URL
+                    ]
                 );
 
                 $options['urlUnfollow']  = $uriUnfollow;
@@ -1873,8 +1871,8 @@ class MailManager extends BaseManager
         $this->_session->set('domaineId', $domain);
         $this->setOptions();
 
-        $this->currentDomain = array_key_exists('currentDomaine', $options) ?
-            $options['currentDomaine'] :
+        $this->currentDomain = array_key_exists('currentDomaineId', $options) ?
+            $this->_domaineManager->findOneById($options['currentDomaineId']) :
             $this->_domaineManager->findOneById($domain)
         ;
 

@@ -7,7 +7,6 @@ use HopitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepos
 use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\SubscriptionRepository;
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
-use Html2Text\Html2Text;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\MailBundle\Service\Traits\MailManagerAwareTrait;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -125,7 +124,7 @@ abstract class PracticeCommunityNotificationProviderAbstract extends Notificatio
             ]);
         }
 
-        $options['currentDomaine'] = $this->currentDomaine->get();
+        $options['currentDomaineId'] = $this->currentDomaine->get()->getId();
         $options['currentDomaineUrl'] = $this->currentDomaine->getUrl();
 
         return $options;
