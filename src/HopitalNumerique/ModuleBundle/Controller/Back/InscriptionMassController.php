@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +24,7 @@ class InscriptionMassController extends Controller
      */
     public function accepterInscriptionMassAction($primaryKeys, $allPrimaryKeys)
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 407, 'inscription');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, SessionStatus::STATUT_FORMATION_ACCEPTED_ID, 'inscription');
     }
 
     /**
@@ -40,7 +41,7 @@ class InscriptionMassController extends Controller
         $cookies = $request->cookies;
         $textMail = $cookies->has('textMailInscription') ? $cookies->get('textMailInscription') : 'pasDeCookie';
 
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 408, 'inscription', ['textMailInscription' => $textMail]);
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, SessionStatus::STATUT_FORMATION_REFUSED_ID, 'inscription', ['textMailInscription' => $textMail]);
     }
 
     /**
@@ -53,7 +54,7 @@ class InscriptionMassController extends Controller
      */
     public function annulerInscriptionMassAction($primaryKeys, $allPrimaryKeys)
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 409, 'inscription');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, SessionStatus::STATUT_FORMATION_CANCELED_ID, 'inscription');
     }
 
     /**
@@ -66,7 +67,7 @@ class InscriptionMassController extends Controller
      */
     public function aParticiperParticipationMassAction($primaryKeys, $allPrimaryKeys)
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 411, 'participation');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, SessionStatus::STATUT_PARTICIPATION_OK_ID, 'participation');
     }
 
     /**
@@ -79,7 +80,7 @@ class InscriptionMassController extends Controller
      */
     public function aPasParticiperParticipationMassAction($primaryKeys, $allPrimaryKeys)
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 412, 'participation');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, SessionStatus::STATUT_PARTICIPATION_KO_ID, 'participation');
     }
 
     /**
@@ -254,13 +255,13 @@ class InscriptionMassController extends Controller
         switch ($etat) {
             case 'inscription':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription($inscriptions, $ref);
-                if (407 === $ref->getId()) {
+                if (SessionStatus::STATUT_FORMATION_ACCEPTED_ID === $ref->getId()) {
                     //Envoyer mail d'acceptation de l'inscription
                     $mails = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMassMail($inscriptions, []);
                     foreach ($mails as $mail) {
                         $this->get('mailer')->send($mail);
                     }
-                } elseif (408 === $ref->getId()) {
+                } elseif (SessionStatus::STATUT_FORMATION_REFUSED_ID === $ref->getId()) {
                     $textRefus = $options['textMailInscription'];
                     //Envoyer mail de refus de l'inscription
                     $mails = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMassMail($inscriptions, ['textRefus' => $textRefus]);
@@ -268,8 +269,8 @@ class InscriptionMassController extends Controller
                         $this->get('mailer')->send($mail);
                     }
                 }
-                if (408 === $ref->getId() || 409 === $ref->getId()) {
-                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation($inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 412]));
+                if (SessionStatus::STATUT_FORMATION_REFUSED_ID === $ref->getId() || SessionStatus::STATUT_FORMATION_CANCELED_ID === $ref->getId()) {
+                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation($inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_PARTICIPATION_KO_ID]));
                     $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation($inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 430]));
                 }
                 //inform user connected
@@ -278,7 +279,7 @@ class InscriptionMassController extends Controller
             case 'participation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation($inscriptions, $ref);
                 //A participé
-                if (411 === $ref->getId()) {
+                if (SessionStatus::STATUT_PARTICIPATION_OK_ID === $ref->getId()) {
                     //Envoyer mail du formulaire d'évluation de la session
                     $mails = $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail($inscriptions, []);
                     foreach ($mails as $mail) {
@@ -287,7 +288,7 @@ class InscriptionMassController extends Controller
                     $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation($inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 28]));
                 }
                 //N'a pas participé
-                elseif (412 === $ref->getId()) {
+                elseif (SessionStatus::STATUT_PARTICIPATION_KO_ID === $ref->getId()) {
                     $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation($inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 27]));
                 }
                 //inform user connected
@@ -295,7 +296,7 @@ class InscriptionMassController extends Controller
                 break;
             case 'evaluation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation($inscriptions, $ref);
-                if ($ref->getId() == '29') {
+                if ($ref->getId() === 29) {
                     foreach ($inscriptions as $inscription) {
                         $roleUser = $this->get('nodevo_role.manager.role')->getUserRole($inscription->getUser());
                         //Mise à jour de la production du module dans la liste des productions maitrisées : uniquement pour les ambassadeurs

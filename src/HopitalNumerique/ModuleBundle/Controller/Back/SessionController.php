@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -53,7 +54,7 @@ class SessionController extends Controller
         $session = $this->get('hopitalnumerique_module.manager.session')->createEmpty();
         //Valeurs par défaut lors de la création
         $session->setModule($module);
-        $session->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 403]));
+        $session->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID]));
         $session->getDefaultValueFromModule();
 
         $defaultRoles = $this->get('nodevo_role.manager.role')->getRoleByArrayName(['ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_ARS_-_HORS_CMSI_100', 'ROLE_ARS_-_CMSI_101', 'ROLE_GCS_12', 'ROLE_ANAP_MEMBRES_2', 'ROLE_ADMINISTRATEUR_1', 'ROLE_EXPERT_6']);

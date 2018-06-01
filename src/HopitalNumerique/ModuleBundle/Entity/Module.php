@@ -640,7 +640,7 @@ class Module
         $sessions = [];
 
         foreach ($this->sessions as $session) {
-            if (403 === $session->getEtat()->getId()) {
+            if (SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID === $session->getEtat()->getId()) {
                 $sessions[] = $session;
             }
         }
@@ -660,7 +660,7 @@ class Module
         foreach ($this->sessions as $session) {
             if ($session->getDateOuvertureInscription() <= new \DateTime()
                 && $session->getDateFermetureInscription() >= new \DateTime()
-                && $session->getEtat()->getId() === 403
+                && $session->getEtat()->getId() === SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID
                 && !$session->getArchiver()) {
                 $sessions[] = $session;
             }

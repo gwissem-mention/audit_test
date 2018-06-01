@@ -81,8 +81,8 @@ class WidgetsAggregator
                 $widgetCreator->setDomains($domains);
             }
 
-            if (null !== $widgetCreator->getWidget()) {
-                $widgets[] = $widgetCreator->getWidget();
+            if (null !== ($widgetToAdd = $widgetCreator->getWidget())) {
+                $widgets[] = $widgetToAdd;
             }
         }
 

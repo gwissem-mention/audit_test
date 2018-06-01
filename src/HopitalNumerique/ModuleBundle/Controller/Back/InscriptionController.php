@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use HopitalNumerique\ModuleBundle\Entity\Module;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +103,7 @@ class InscriptionController extends Controller
      */
     public function accepterInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 407]);
+        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_FORMATION_ACCEPTED_ID]);
 
         $inscription->setEtatInscription($refRefuse);
 
@@ -131,7 +132,7 @@ class InscriptionController extends Controller
      */
     public function refuserInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 408]);
+        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_FORMATION_REFUSED_ID]);
 
         $inscription->setEtatInscription($refRefuse);
 
@@ -160,7 +161,7 @@ class InscriptionController extends Controller
      */
     public function annulerInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refAnnule = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 409]);
+        $refAnnule = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_FORMATION_CANCELED_ID]);
 
         $inscription->setEtatInscription($refAnnule);
 

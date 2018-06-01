@@ -52,7 +52,7 @@
                         <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             <div class="btn-group"> 
-                                {% if inscription.etatParticipation.id == 411 and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) and inscription.etatEvaluation.id == 28 %}
+                                {% if inscription.etatParticipation.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_OK_ID') and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) and inscription.etatEvaluation.id == 28 %}
                                     <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}">{{inscription.etatEvaluation.libelle}}</i></a>
                                 {% elseif inscription.etatEvaluation.id == 29 %}
                                     <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_view_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
@@ -60,7 +60,7 @@
                                 {% else %}
                                     {#{inscription.etatEvaluation.libelle}#}
                                 {% endif %}
-                                {% if inscription.etatParticipation.id == 411 %}
+                                {% if inscription.etatParticipation.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_OK_ID') %}
                                     <a class="btn btn-success btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_module_inscription_export_liste_front',{'id':inscription.id})}}"><i class="fa fa-users"></i></a>
                                 {% endif %}
                             </div>
@@ -84,7 +84,7 @@
                             </td>
                         {% endif %}
                         <td>
-                            {% if inscription.etatParticipation.id == 410 %}
+                            {% if inscription.etatParticipation.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_WAITING_ID') %}
                                 <a class="btn btn-danger btn-sm" title="Annuler mon inscription" onclick="annulationInscription('{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}')"><i class="fa fa-times-circle"></i></a>
                             {% endif %}
                         </td>

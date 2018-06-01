@@ -8,6 +8,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use HopitalNumerique\CoreBundle\Service\Log;
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ModuleBundle\Entity\Module;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 class InscriptionLoggerSubscriber implements EventSubscriber
@@ -54,7 +55,7 @@ class InscriptionLoggerSubscriber implements EventSubscriber
         if ($entity instanceof Inscription) {
             // Handle désinscription
             if ($args->hasChangedField('etatInscription')) {
-                $validReferenceIds = [409];
+                $validReferenceIds = [SessionStatus::STATUT_FORMATION_CANCELED_ID];
                 $oldValue = $args->getOldValue('etatInscription');
                 $newValue = $args->getNewValue('etatInscription');
 

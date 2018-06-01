@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 
@@ -37,7 +39,7 @@ class EvaluationFrontController extends Controller
         $inscriptionsAcceptes = $session->getInscriptionsAccepte();
         foreach ($inscriptionsAcceptes as $inscriptionAccepte) {
             if ($user->getId() === $inscriptionAccepte->getUser()->getId()
-                && $inscriptionAccepte->getEtatParticipation()->getId() === 411) {
+                && $inscriptionAccepte->getEtatParticipation()->getId() === SessionStatus::STATUT_PARTICIPATION_OK_ID) {
                 $aParticipe = true;
                 break;
             }
@@ -187,9 +189,11 @@ class EvaluationFrontController extends Controller
             $sessionAArchiver = false;
             if ($session->getDateSession() < new \DateTime()) {
                 $sessionAArchiver = true;
+
+                /** @var Inscription $inscription */
                 foreach ($session->getInscriptions() as $inscription) {
-                    if (407 === $inscription->getEtatInscription()->getId()
-                        && 411 === $inscription->getEtatParticipation()->getId()) {
+                    if (SessionStatus::STATUT_FORMATION_ACCEPTED_ID === $inscription->getEtatInscription()->getId()
+                        && SessionStatus::STATUT_PARTICIPATION_OK_ID === $inscription->getEtatParticipation()->getId()) {
                         if (29 !== $inscription->getEtatEvaluation()->getId()) {
                             $sessionAArchiver = false;
                             break;

@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\RoleBundle\Entity\Role;
@@ -84,8 +86,8 @@ class InscriptionRepository extends EntityRepository
                             $qb->expr()->isNull('domaine.id')
                         ))
                     ->setParameter('domainesId', $domainesIds)
-            ->leftJoin('ses.etat', 'refEtat')
-                ->andWhere('refEtat.id = 403')
+            ->join('ses.etat', 'refEtat', Join::WITH, 'refEtat.id = :activeStatusId')
+            ->setParameter('activeStatusId', SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID)
             ->leftJoin('ins.user', 'user')
             ->groupBy('ins.id', 'domaine.id')
             ->orderBy('user.lastname');
@@ -108,12 +110,12 @@ class InscriptionRepository extends EntityRepository
         $qb
             ->select('insc')
             ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
-            ->leftJoin('insc.etatEvaluation', 'refEvaluation')
-            ->leftJoin('insc.etatParticipation', 'refParticipation')
+            ->join('insc.etatEvaluation', 'refEvaluation', Join::WITH, 'refEvaluation.id = 29')
+            ->join('insc.etatParticipation', 'refParticipation', Join::WITH, 'refParticipation.id = :okStatusId')
             ->leftJoin('insc.session', 'session')
             ->andWhere($qb->expr()->orX('insc.etatRemboursement != 6', $qb->expr()->isNull('insc.etatRemboursement')))
-            ->andWhere('refParticipation.id = 411', 'insc.facture IS NULL')
-            ->andWhere('refEvaluation.id = 29')
+            ->andWhere('insc.facture IS NULL')
+            ->setParameter('okStatusId', SessionStatus::STATUT_PARTICIPATION_OK_ID)
             ->orderBy('session.dateSession')
         ;
 
@@ -151,27 +153,34 @@ class InscriptionRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur.
-     *
-     * @param $user
+     * @param User $user
+     * @param Domaine $domain
      *
      * @return array
      */
-    public function getInscriptionsForUser($user)
+    public function getInscriptionsForUser(User $user, Domaine $domain = null)
     {
-        return $this->_em->createQueryBuilder()
-            ->select('insc')
+        $queryBuilder = $this->createQueryBuilder('inscription')
             ->addSelect('session', 'refEtatInscription', 'user')
-            ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
-            ->leftJoin('insc.session', 'session')
-            ->leftJoin('insc.etatInscription', 'refEtatInscription')
-            ->leftJoin('insc.user', 'user')
-            ->andWhere('user = :user', 'refEtatInscription.id != 409')
-            ->setParameter('user', $user)
+            ->join('inscription.session', 'session')
+            ->join('inscription.etatInscription', 'refEtatInscription', Join::WITH, 'refEtatInscription.id != :canceledStatusId')
+            ->join('inscription.user', 'user', Join::WITH, 'user.id = :userId')
+            ->setParameters([
+                'userId' => $user->getId(),
+                'canceledStatusId' => SessionStatus::STATUT_FORMATION_CANCELED_ID,
+            ])
             ->orderBy('session.dateSession', 'DESC')
-            ->getQuery()
-            ->getResult()
         ;
+
+        if (null !== $domain) {
+            $queryBuilder
+                ->join('session.module', 'module')
+                ->join('module.domaines', 'domain', Join::WITH, 'domain.id = :domainId')
+                ->setParameter('domainId', $domain->getId())
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -195,10 +204,10 @@ class InscriptionRepository extends EntityRepository
             ->leftJoin('insc.user', 'user')
             ->leftJoin('insc.session', 'session')
             ->leftJoin('session.module', 'module')
-            ->leftJoin('insc.etatParticipation', 'etat')
+            ->join('insc.etatParticipation', 'etat', Join::WITH, 'etat.id = :okStatusId')
             ->where('user.id IN (:users)')
-            ->andWhere('etat.id = 411')
             ->setParameter('users', $usersId)
+            ->setParameter('okStatusId', SessionStatus::STATUT_PARTICIPATION_OK_ID)
             ->orderBy('insc.dateInscription')
             ->groupBy('user.id, module.id');
 
@@ -244,7 +253,7 @@ class InscriptionRepository extends EntityRepository
             ))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->setParameters([
-                'etatInscriptionAccepte' => 407, // Accepté
+                'etatInscriptionAccepte' => SessionStatus::STATUT_FORMATION_ACCEPTED_ID,
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour,
             ])
@@ -293,7 +302,7 @@ class InscriptionRepository extends EntityRepository
             )
             ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->setParameters([
-                'etatInscriptionAccepte' => 407, // Accepté
+                'etatInscriptionAccepte' => SessionStatus::STATUT_FORMATION_ACCEPTED_ID,
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour,
             ])
@@ -337,7 +346,7 @@ class InscriptionRepository extends EntityRepository
                 'inscription.etatParticipation',
                 'participation',
                 Join::WITH,
-                $qb->expr()->eq('participation.id', Reference::PARTICIPATED_ID)
+                $qb->expr()->eq('participation.id', SessionStatus::STATUT_PARTICIPATION_OK_ID)
             )
             // Only AMBASSADEUR user role
             ->join(
@@ -355,7 +364,7 @@ class InscriptionRepository extends EntityRepository
             // Only active module
             ->join('module.statut', 'status', Join::WITH, $qb->expr()->eq('status.id', Reference::STATUT_ACTIF_ID))
             // Only active sessions
-            ->join('session.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', Reference::STATUT_SESSION_ACTIVE_ID))
+            ->join('session.etat', 'etat', Join::WITH, $qb->expr()->eq('etat.id', SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID))
             ->join(
                 'module.domaines',
                 'domaine',

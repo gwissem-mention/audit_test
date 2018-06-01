@@ -667,7 +667,7 @@ class Session
         foreach ($this->inscriptions as $key => $inscription) {
             //Récupération de l'état de l'inscription courante
             $etatInscription = $inscription->getEtatInscription();
-            if (407 === $etatInscription->getId()) {
+            if (SessionStatus::STATUT_FORMATION_ACCEPTED_ID === $etatInscription->getId()) {
                 $inscriptionsAcceptees[$inscription->getUser()->getLastname() . ' ' . $inscription->getUser()->getFirstname()]
                     = $inscription
                 ;
@@ -722,7 +722,7 @@ class Session
         foreach ($this->inscriptions as $inscription) {
             //Si l'utilisateur existe
             if ($inscription->getUser()->getId() === $user->getId()
-                && $inscription->getEtatInscription()->getId() === 409) {
+                && $inscription->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_CANCELED_ID) {
                 //&& $inscription->isInscrit())
                 return true;
             }

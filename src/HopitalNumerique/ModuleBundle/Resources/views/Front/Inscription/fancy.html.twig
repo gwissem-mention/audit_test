@@ -19,10 +19,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% set toCkeckStatus = [constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_WAITING_ID'), constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_OK_ID')] %}
                     {% for inscription in session.getInscriptionsAccepte() %}
                         <tr class="inscription inscription-{{inscription.id}}" data-id="{{inscription.id}}" >
                             <td align="center">
-                                <input type="checkbox" class="checkbox" id="checkbox-{{inscription.id}}"{% if inscription.etatParticipation.id in [411, 410] %} checked="checked"{% endif %} />
+                                <input type="checkbox" class="checkbox" id="checkbox-{{inscription.id}}"{% if inscription.etatParticipation.id in toCkeckStatus %} checked="checked"{% endif %} />
                             </td>
 
                             <td>

@@ -110,6 +110,7 @@ services:
             - '@translator'
             - '@hopitalnumerique_module.service.registration_transformer'
             - '@hopitalnumerique_module.service.session_transformer'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         public: false
 
     hopitalnumerique_module.widget.module_session:
@@ -122,6 +123,7 @@ services:
             - '@translator'
             - '@hopitalnumerique_module.service.registration_transformer'
             - '@hopitalnumerique_module.service.session_transformer'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         public: false
 
     hopitalnumerique_module.service.registration_transformer:

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ModuleBundle\Service\Widget\DataProvider;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\AclBundle\Manager\AclManager;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ModuleBundle\Entity\Session;
@@ -65,12 +66,15 @@ class SessionProvider
     /**
      * Returns the formatted sessions for the session widget
      *
+     * @param Domaine $domain
+     *
      * @return array
      */
-    public function getSessionData()
+    public function getSessionData(Domaine $domain)
     {
         $sessions = $this->sessionRepository->getSessionsForFormateur(
-            $this->tokenStorage->getToken()->getUser()
+            $this->tokenStorage->getToken()->getUser(),
+            $domain
         );
 
         $data = [];

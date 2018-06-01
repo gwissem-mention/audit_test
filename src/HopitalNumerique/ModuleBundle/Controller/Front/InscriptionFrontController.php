@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,14 +33,14 @@ class InscriptionFrontController extends Controller
         $inscription->setUser($user);
         $inscription->setSession($session);
         $referenceManager = $this->get('hopitalnumerique_reference.manager.reference');
-        $inscription->setEtatInscription($referenceManager->findOneBy(['id' => 406]));
-        $inscription->setEtatParticipation($referenceManager->findOneBy(['id' => 410]));
+        $inscription->setEtatInscription($referenceManager->findOneBy(['id' => SessionStatus::STATUT_FORMATION_WAITING_ID]));
+        $inscription->setEtatParticipation($referenceManager->findOneBy(['id' => SessionStatus::STATUT_PARTICIPATION_WAITING_ID]));
         $inscription->setEtatEvaluation($referenceManager->findOneBy(['id' => 27]));
 
         $form = $this->createForm('hopitalnumerique_module_inscription', $inscription);
 
         if ($form->handleRequest($request)->isValid()) {
-            $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 407]);
+            $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_FORMATION_ACCEPTED_ID]);
 
             $inscription->setEtatInscription($refAccepte);
 
@@ -85,11 +86,12 @@ class InscriptionFrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->getUser();
 
-        //get all inscriptions
-        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForUser($user);
+        //get all inscriptions for current domain
+        $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $inscriptions = $this->get('hn.module.repository.inscription')->getInscriptionsForUser($user, $currentDomain);
 
         //get sessions terminées where user connected == formateur
-        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur($user);
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur($user, $currentDomain);
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:index.html.twig', [
             'inscriptions' => $inscriptions,
@@ -160,7 +162,7 @@ class InscriptionFrontController extends Controller
         /** @var Inscription $inscription */
         foreach ($session->getInscriptions() as $inscription) {
             //On prend uniquement les "a participé"
-            if ($inscription->getEtatParticipation()->getId() === 411) {
+            if ($inscription->getEtatParticipation()->getId() === SessionStatus::STATUT_PARTICIPATION_OK_ID) {
                 $row = [];
 
                 /** @var User $user */
@@ -207,11 +209,11 @@ class InscriptionFrontController extends Controller
             $inscriptionManager = $this->get('hopitalnumerique_module.manager.inscription');
             $inscriptionManager->toogleEtatInscription(
                 [$inscription],
-                $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 409])
+                $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_FORMATION_CANCELED_ID])
             );
             $inscriptionManager->toogleEtatParticipation(
                 [$inscription],
-                $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 412])
+                $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => SessionStatus::STATUT_PARTICIPATION_KO_ID])
             );
             $inscriptionManager->toogleEtatEvaluation(
                 [$inscription],

@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\ModuleBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -84,9 +86,9 @@ class SessionManager extends BaseManager
             /** @var Inscription $inscription */
             foreach ($session->getInscriptions() as $inscription) {
                 if (!is_null($inscription->getEtatInscription())) {
-                    if ($inscription->getEtatInscription()->getId() === 406) {
+                    if ($inscription->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_WAITING_ID) {
                         $nbInscritsEnAttente++;
-                    } elseif ($inscription->getEtatInscription()->getId() === 407) {
+                    } elseif ($inscription->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_ACCEPTED_ID) {
                         ++$nbInscritsAccepte;
                         --$nbPlacesRestantes;
                     }
@@ -137,9 +139,9 @@ class SessionManager extends BaseManager
 
             /** @var Inscription $inscription */
             foreach ($session->getInscriptions() as $inscription) {
-                if ($inscription->getEtatInscription()->getId() === 406) {
+                if ($inscription->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_WAITING_ID) {
                     $nbInscritsEnAttente++;
-                } elseif ($inscription->getEtatInscription()->getId() === 407) {
+                } elseif ($inscription->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_ACCEPTED_ID) {
                     ++$nbInscritsAccepte;
                     --$nbPlacesRestantes;
                 }
@@ -190,37 +192,40 @@ class SessionManager extends BaseManager
      * Retourne la liste des sessions du formateur.
      *
      * @param User $user L'utilisateur concerné
+     * @param Domaine $domain
      *
      * @return array
      */
-    public function getSessionsForFormateur($user)
+    public function getSessionsForFormateur(User $user, Domaine $domain)
     {
-        return $this->getRepository()->getSessionsForFormateur($user);
+        return $this->getRepository()->getSessionsForFormateur($user, $domain);
     }
 
     /**
      * Retourne la liste des sessions à évaluer pour le dashboard user.
      *
      * @param User $user L'utilisateur concerné
+     * @param Domaine $domain
      *
      * @return array
      */
-    public function getSessionsForDashboard($user)
+    public function getSessionsForDashboard(User $user, Domaine $domain)
     {
-        return $this->getRepository()->getSessionsForDashboard($user)->getQuery()->getResult();
+        return $this->getRepository()->getSessionsForDashboard($user, $domain)->getQuery()->getResult();
     }
 
     /**
      * Retourne la liste des sessions ou l'user connecté est formateur.
      *
      * @param User $user L'utilisateur connecté
+     * @param Domaine $domain
      *
      * @return array
      */
-    public function getSessionsForFormateurForDashboard($user)
+    public function getSessionsForFormateurForDashboard(User $user, Domaine $domain)
     {
-        $before = $this->getRepository()->getSessionsForFormateur($user, 'beforeToday', 2);
-        $after = $this->getRepository()->getSessionsForFormateur($user, 'afterToday', 2);
+        $before = $this->getRepository()->getSessionsForFormateur($user, $domain, 'beforeToday', 2);
+        $after = $this->getRepository()->getSessionsForFormateur($user, $domain, 'afterToday', 2);
 
         return ['before' => $before, 'after' => $after];
     }

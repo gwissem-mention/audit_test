@@ -20,8 +20,9 @@ class DefaultController extends Controller
         $messages = $this->get('hopitalnumerique_flash.manager.flash')->getMessagesForUser($user);
 
         //get Sessions
-        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard($user);
-        $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateurForDashboard($user);
+        $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard($user, $currentDomain);
+        $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateurForDashboard($user, $currentDomain);
 
         //factures
         $factures = count($this->get('hopitalnumerique_paiement.manager.facture')->findBy(['user' => $user, 'payee' => false]));
