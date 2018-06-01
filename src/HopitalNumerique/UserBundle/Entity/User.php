@@ -1502,9 +1502,7 @@ class User extends BaseUser implements SettingsOwnerInterface
      */
     public function setOrganizationLabel($organizationLabel)
     {
-        if (null === $this->organization) {
-            $this->organizationLabel = $organizationLabel;
-        }
+        $this->organizationLabel = $organizationLabel;
     }
 
     /**
