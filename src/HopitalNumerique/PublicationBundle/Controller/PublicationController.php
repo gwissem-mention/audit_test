@@ -35,6 +35,13 @@ use HopitalNumerique\CoreBundle\Repository\ObjectIdentity\ObjectIdentityReposito
 class PublicationController extends Controller
 {
     /**
+     * Limit size content used to define where to display linked resources : on left column if size of content over specified limit or in body either.
+     *
+     * @var int
+     */
+    const CONTENT_SIZE_LIMIT = 300;
+
+    /**
      * Objet Action. Ajout ?pdf=1 pour la vue PDF.
      *
      * @param Request $request
@@ -216,6 +223,7 @@ class PublicationController extends Controller
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
             'subscribed' => $subscribed,
+            'displayLinkedResourcesInColumn' => (strlen(htmlspecialchars(strip_tags($objet->getResume()))) > self::CONTENT_SIZE_LIMIT),
         ]);
     }
 
@@ -503,6 +511,7 @@ class PublicationController extends Controller
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
             'subscribed' => $subscribed,
+            'displayLinkedResourcesInColumn' => (strlen(htmlspecialchars(strip_tags($contenu->getContenu()))) > self::CONTENT_SIZE_LIMIT),
         ]);
     }
 

@@ -34,14 +34,48 @@
 {% endblock %}
 
 {% block body %}
+
     {% import _self as mySelf %}
 
+    {% set displayRightColumn =
+        (
+            contenu is defined
+            and contenu is not sameas(false)
+            and contenu.contenu|parsePublication|glossaire_list(contenu) is not empty
+        )
+        or
+        (
+            contenu.contenu is not defined
+            and objet.resume is defined
+            and objet.resume|parsePublication|glossaire_list(objet) is not empty
+        )
+        or objectRelations|length > 0
+        or parcoursGuides|length > 0
+        or topicRelated|length > 0
+        or userRelated|length > 0
+        or objet.domaines|length > 1
+    %}
+
+    {% set hasLinkedResources =
+        objet.associatedProductions == true
+        and
+        (
+            objectRelations|length > 0
+            or parcoursGuides|length > 0
+            or topicRelated|length > 0
+            or userRelated|length > 0
+        )
+    %}
+
     <div id="publication">
+
         <div class="hidden-pdf">
+
             <div class="col-md-8">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
             </div>
+
             <div class="col-md-4">
                 <div class="text-right">
                     {% if objet.isArticle == false %}
@@ -78,7 +112,9 @@
                     {%- endif %}
                     <a class="btn btn-sm btn-default fancybox fancybox.ajax" href="{{ path('nodevo_mail_recommandation_popin') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
                 </div>
+
             </div>
+
         </div>
 
         {% if is_pdf %}
@@ -180,7 +216,13 @@
                     {% endif %}
 
                     <div id="publication-resume">
+
                         {{contenu.contenu|parsePublication|glossaire_add(contenu)|raw}}
+
+                        {% if displayRightColumn and hasLinkedResources and not displayLinkedResourcesInColumn %}
+                            {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
+                        {% endif %}
+
                     </div>
 
                     {%- if contenu.children|length > 0 -%}
@@ -259,7 +301,13 @@
                 {% endif %}
 
                 <div id="publication-resume">
+
                     {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
+
+                    {% if displayRightColumn and hasLinkedResources and not displayLinkedResourcesInColumn %}
+                        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
+                    {% endif %}
+
                 </div>
 
                 {% if is_pdf %}
@@ -370,6 +418,8 @@
 
         <div class="clearfix"></div>
     </div>
+
+
 {% endblock %}
 
 {% macro sousChapitres(contenu, class) %}
