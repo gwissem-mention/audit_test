@@ -34,7 +34,7 @@ class OrganizationMigratoryCommand extends ContainerAwareCommand
 
         /** @var User $user */
         foreach ($users as $user) {
-            if (null === $user->getOrganizationLabel() || "" === $user->getOrganizationLabel()) {
+            if (empty($user->getOrganizationLabel()) && null === $user->getOrganization()) {
                 $user->setOrganizationLabel($user->getNomStructure());
             }
             $user->setNomStructure(null);

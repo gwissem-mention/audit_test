@@ -28,6 +28,11 @@ class ProfileController extends Controller
            ->getMissingInformationByTab($user)
         ;
 
+        // NOTE : If user define both organization and unknown structure => remove last one
+        if (null !== $user->getOrganization() && $user->getOrganizationLabel()) {
+            $user->setOrganizationLabel('');
+        }
+
         $form = $this->createForm(UserAccountType::class, $user);
 
         $form->handleRequest($request);
