@@ -11,6 +11,7 @@ use HopitalNumerique\PublicationBundle\Model\Converter\Document\SquashableNode;
 use HopitalNumerique\PublicationBundle\Service\Converter\Content\TargetBlank;
 use HopitalNumerique\PublicationBundle\Service\Converter\Node\NodeParser;
 use HopitalNumerique\PublicationBundle\Service\Converter\Node\TreeSquasher;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ContentGenerator
@@ -123,6 +124,7 @@ class ContentGenerator
         $infradoc
             ->setObjet($object)
             ->setTitre(null !== $node->getTitle() ? $node->getTitle() : self::DEFAULT_TITLE)
+            ->setAlias((new Chaine($infradoc->getTitre()))->minifie())
             ->setContenu($node->getContent())
         ;
 
