@@ -199,27 +199,22 @@ Hn_RechercheBundle_Referencement.toggleReferenceDisplaying = function(referenceI
     var referenceLink = $('[data-reference="' + referenceId + '"] .reference').first();
     var referenceLevel = Hn_RechercheBundle_Referencement.getLevelByReferenceId(referenceId);
 
-    if ($(referenceChildrenList).size() > 0) {
-        var chevron = $(referenceLink).find('.toggle .fa');
+    var chevron = $(referenceLink).find('.toggle .fa');
 
-        if (!Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(referenceId)) {
-            Hn_RechercheBundle_Referencement.showReferenceChildren(referenceId);
+    if (!Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(referenceId)) {
+        Hn_RechercheBundle_Referencement.showReferenceChildren(referenceId);
 
-            if (1 === referenceLevel) { // On cache les autres si ouvre premier niveau
-                var referencesNiveau1 = $('.references-bloc [data-level="' + referenceLevel + '"]');
-                $(referencesNiveau1).each(function (i, element) {
-                    var otherReferenceId = Hn_RechercheBundle_Referencement.getReferenceIdByElement(element);
-                    if (referenceId !== otherReferenceId && Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(otherReferenceId)) {
-                        Hn_RechercheBundle_Referencement.hideReferenceChildren(otherReferenceId);
-                    }
-                });
-            }
-        } else {
-            Hn_RechercheBundle_Referencement.hideReferenceChildren(referenceId);
+        if (1 === referenceLevel) { // On cache les autres si ouvre premier niveau
+            var referencesNiveau1 = $('.references-bloc [data-level="' + referenceLevel + '"]');
+            $(referencesNiveau1).each(function (i, element) {
+                var otherReferenceId = Hn_RechercheBundle_Referencement.getReferenceIdByElement(element);
+                if (referenceId !== otherReferenceId && Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(otherReferenceId)) {
+                    Hn_RechercheBundle_Referencement.hideReferenceChildren(otherReferenceId);
+                }
+            });
         }
     } else {
-        // S'il n'y a pas d'enfant, on sélectionne la référence directement
-        Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceId);
+        Hn_RechercheBundle_Referencement.hideReferenceChildren(referenceId);
     }
 };
 
