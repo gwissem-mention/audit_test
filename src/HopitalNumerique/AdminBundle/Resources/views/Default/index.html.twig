@@ -81,52 +81,48 @@
                     </div>
                 </li>
 
-                {% if blocAmbassadeur is not null %}
-                    <li data-visible="{{ userConf['ambassadeurs']['visible'] }}" data-row="{{userConf['ambassadeurs']['row']}}" data-col="{{userConf['ambassadeurs']['col']}}" data-sizex="1" data-sizey="1" data-id="ambassadeurs" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Ambassadeurs</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
-
-                            <div class="panel-body">
-                                <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
-                                    <li><strong>{{blocAmbassadeur['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
-                                    <li><strong>{{blocAmbassadeur['ambCandidatsRecues']}}</strong> candidatures reçues</li>
-                                    <li><strong>{{blocAmbassadeur['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
-                                </ol>
+                <li data-visible="{{ userConf['ambassadeurs']['visible'] }}" data-row="{{userConf['ambassadeurs']['row']}}" data-col="{{userConf['ambassadeurs']['col']}}" data-sizex="1" data-sizey="1" data-id="ambassadeurs" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Ambassadeurs</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
                             </div>
                         </div>
-                    </li>
-                {% endif %}
 
-                {% if blocExpert is not null %}
-                    <li data-visible="{{ userConf['experts']['visible']}}" data-row="{{userConf['experts']['row']}}" data-col="{{userConf['experts']['col']}}" data-sizex="1" data-sizey="1" data-id="experts" >
-                        <div class="panel panel-midnightblue">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Experts</span></h3>
-                                <div class="options">
-                                    <i class="hide-block fa fa-minus"></i>
-                                    <i class="drag-handler fa fa-arrows"></i>
-                                </div>
-                            </div>
+                        <div class="panel-body">
+                            <ol>
+                                <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambCandidats']}}</strong> candidats</a></li>
+                                <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur', 'domain': domainForFilters})}}"><strong>{{blocAmbassadeur['ambassadeurs']}}</strong> ambassadeurs</a></li>
+                                <li><strong>{{blocAmbassadeur['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
+                                <li><strong>{{blocAmbassadeur['ambCandidatsRecues']}}</strong> candidatures reçues</li>
+                                <li><strong>{{blocAmbassadeur['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
 
-                            <div class="panel-body">
-                                <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
-                                    <li><strong>{{blocExpert['expCandidatsRecues']}}</strong> candidatures reçues</li>
-                                    <li><strong>{{blocExpert['contribution']}}</strong> contributions au forum depuis 7 jours</li>
-                                </ol>
+                <li data-visible="{{ userConf['experts']['visible']}}" data-row="{{userConf['experts']['row']}}" data-col="{{userConf['experts']['col']}}" data-sizex="1" data-sizey="1" data-id="experts" >
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-users"></i><span class="title">Experts</span></h3>
+                            <div class="options">
+                                <i class="hide-block fa fa-minus"></i>
+                                <i class="drag-handler fa fa-arrows"></i>
                             </div>
                         </div>
-                    </li>
-                {% endif %}
+
+                        <div class="panel-body">
+                            <ol>
+                                <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['expCandidats']}}</strong> candidats</a></li>
+                                <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert', 'domain': domainForFilters})}}"><strong>{{blocExpert['experts']}}</strong> experts</a></li>
+                                <li><strong>{{blocExpert['expCandidatsRecues']}}</strong> candidatures reçues</li>
+                                <li><strong>{{blocExpert['contribution']}}</strong> contributions au forum depuis 7 jours</li>
+                            </ol>
+                        </div>
+                    </div>
+                </li>
 
                 <li data-visible="{{ userConf['publications']['visible'] }}" data-row="{{userConf['publications']['row']}}" data-col="{{userConf['publications']['col']}}" data-sizex="1" data-sizey="1" data-id="publications" >
                     <div class="panel panel-midnightblue">
@@ -309,7 +305,7 @@
                             <ol>
                                 {% for session in blocSessions['next'] %}
                                     {% set sessionTitre =  session.dateSession|date('d/m/y') ~ ' - ' ~  session.inscriptions ~ ' inscrit(s)' ~ ' - ' ~ session.titre %}
-                                    <li><a href="{{path('hopitalnumerique_module_module_session_show', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(40) }}</a></li>
+                                    <li><a href="{{path('hopitalnumerique_module_module_session_inscription', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(40) }}</a></li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>
                                 {% endfor %}
@@ -342,27 +338,6 @@
                     </li>
                 {% endif %}
 
-                <li data-visible="{{ userConf['cdp']['visible'] }}" data-row="{{userConf['cdp']['row']}}" data-col="{{userConf['cdp']['col']}}" data-sizex="1" data-sizey="1" data-id="cdp" >
-                    <div class="panel panel-midnightblue">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-credit-card"></i><span class="title">CDP</span></h3>
-                            <div class="options">
-                                <i class="hide-block fa fa-minus"></i>
-                                <i class="drag-handler fa fa-arrows"></i>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <ol>
-                                <li><b>{{ blockCDP['members']|number_format(0, ',', ' ') }}</b> membres dans la communauté</li>
-                                <li><b>{{ blockCDP['GTMembers']|number_format(0, ',', ' ') }}</b> membres dans les GT</li>
-                                <li><b>{{ blockCDP['pendingRecords']|number_format(0, ',', ' ') }}</b> fiches de problématiques en cours</li>
-                                <li><b>{{ blockCDP['comments']|number_format(0, ',', ' ') }}</b> commentaires ces 30 derniers jours</li>
-                            </ol>
-                        </div>
-                    </div>
-                </li>
-
                 <li data-visible="{{ userConf['cdp_discussion']['visible'] }}" data-row="{{userConf['cdp_discussion']['row']}}" data-col="{{userConf['cdp_discussion']['col']}}" data-sizex="1" data-sizey="1" data-id="cdp_discussion" >
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading">
@@ -378,6 +353,8 @@
                                 <li><strong>{{ blockCDPDiscussion['active'] }}</strong> discussions commentées depuis 1 mois</li>
                                 <li><strong>{{ blockCDPDiscussion['messages'] }}</strong> contributions depuis 1 mois</li>
                                 <li><strong>{{ blockCDPDiscussion['withoutReply'] }}</strong> discussions sans réponse</li>
+                                <li><strong>{{ blockCDPDiscussion['members']|number_format(0, ',', ' ') }}</strong> membres dans la communauté</li>
+                                <li><strong>{{ blockCDPDiscussion['GTMembers']|number_format(0, ',', ' ') }}</strong> membres dans les GT</li>
                             </ol>
                         </div>
                     </div>

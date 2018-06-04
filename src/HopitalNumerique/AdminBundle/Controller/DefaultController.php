@@ -6,13 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\NewAccountBundle\Domain\Command\ReorderDashboardCommand;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\UserBundle\Entity\Contractualisation;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * DefaultController.
@@ -46,7 +44,7 @@ class DefaultController extends Controller
             $selectedDomainId = $userDomains[0]->getId();
         }
 
-        if ($selectedDomainId  === 'all') {
+        if ($selectedDomainId === 'all') {
             $selectedDomainId = null;
         }
 
@@ -74,7 +72,6 @@ class DefaultController extends Controller
         $blocInterventions = $this->getBlockIntervention();
         $blocSessions = $this->getBlockSession();
         $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas($this->domains);
-        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($this->domains);
         $blocCDPDiscussion = $this->get('hn.admin.cdp_grid_block')->getBlockDiscussionDatas($this->domains);
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
@@ -88,7 +85,6 @@ class DefaultController extends Controller
             'blocInterventions' => $blocInterventions,
             'blocSessions' => $blocSessions,
             'blocPaiements' => $blocPaiements,
-            'blockCDP' => $blocCDP,
             'blockCDPDiscussion' => $blocCDPDiscussion,
             'userDomains' => $userDomains,
             'selectedDomain' => $selectedDomainId,
@@ -247,10 +243,6 @@ class DefaultController extends Controller
         $postRepository = $this->get('hopitalnumerique_forum.repository.post');
         $contractRepository = $this->get('hopitalnumerique_user.repository.contractualisation');
 
-        $domainNumeric = !empty(array_filter($this->domains, function (Domaine $domain) {
-            return $domain->getId() === Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID;
-        }));
-
         $expertContributionDate = new \DateTime();
         $expertContributionDate->modify('-7 day');
 
@@ -263,110 +255,102 @@ class DefaultController extends Controller
             'es' => $userRepository->countEsUsersByDomains($this->domains),
         ];
 
-        $blocExpert = $domainNumeric
-            ? [
-                'expCandidats' => 0,
-                'experts' => 0,
-                'expCandidatsRecues' => 0,
-                'contribution' => $postRepository->countExpertContributionByDomains($this->domains, $expertContributionDate),
-            ]
-            : null
-        ;
+        $blocExpert = [
+            'expCandidats' => 0,
+            'experts' => 0,
+            'expCandidatsRecues' => 0,
+            'contribution' => $postRepository->countExpertContributionByDomains($this->domains, $expertContributionDate),
+        ];
 
-        $blocAmbassadeur = $domainNumeric
-            ? [
-                'ambCandidats' => 0,
-                'ambassadeurs' => 0,
-                'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
-                'ambCandidatsRecues' => 0,
-                'conventions' => $contractRepository->countExpiredContractForAmbassadorByDomains($this->domains),
-            ]
-            : null
-        ;
+        $blocAmbassadeur = [
+            'ambCandidats' => 0,
+            'ambassadeurs' => 0,
+            'ambassadeursMAPF' => $inscriptionRepository->countAmbassadorsTrainedInMAPFByDomains($this->domains),
+            'ambCandidatsRecues' => 0,
+            'conventions' => $contractRepository->countExpiredContractForAmbassadorByDomains($this->domains),
+        ];
 
-        if ($domainNumeric) {
-            /** @var User[] $users */
-            $users = $this->get('hopitalnumerique_user.manager.user')->findByDomaines(new ArrayCollection($this->domains));
+        /** @var User[] $users */
+        $users = $this->get('hopitalnumerique_user.manager.user')->findByDomaines(new ArrayCollection($this->domains));
 
-            //Get Questionnaire Infos
-            $idExpert = $questionnaireManager->getQuestionnaireId('expert');
-            $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
+        //Get Questionnaire Infos
+        $idExpert = $questionnaireManager->getQuestionnaireId('expert');
+        $idAmbassadeur = $questionnaireManager->getQuestionnaireId('ambassadeur');
 
-            //Récupération des questionnaires et users
-            $surveysAnswerByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
+        //Récupération des questionnaires et users
+        $surveysAnswerByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste();
 
-            //On récupère les candidatures refusées
-            $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
+        //On récupère les candidatures refusées
+        $refusCandidature = $refusCandidatureManager->getRefusCandidatureByQuestionnaire();
 
-            foreach ($users as $user) {
-                // Ne pas prendre en compte les utilisateurs inactifs
-                if ($user->getEtat()->getId() !== 3) {
-                    continue;
-                }
+        foreach ($users as $user) {
+            // Ne pas prendre en compte les utilisateurs inactifs
+            if ($user->getEtat()->getId() !== 3) {
+                continue;
+            }
 
-                if ($domainNumeric && $user->hasRoleAmbassadeur()) {
-                    $blocAmbassadeur['ambassadeurs']++;
-                } elseif ($domainNumeric && $user->hasRoleExpert()) {
-                    $blocExpert['experts']++;
-                }
+            if ($user->hasRoleAmbassadeur()) {
+                $blocAmbassadeur['ambassadeurs']++;
+            } elseif ($user->hasRoleExpert()) {
+                $blocExpert['experts']++;
+            }
 
-                //Récupération des questionnaires rempli par l'utilisateur courant
-                $questionnairesByUser = [];
-                if (array_key_exists($user->getId(), $surveysAnswerByUser)) {
-                    $questionnairesByUser = $surveysAnswerByUser[$user->getId()];
-                }
+            //Récupération des questionnaires rempli par l'utilisateur courant
+            $questionnairesByUser = [];
+            if (array_key_exists($user->getId(), $surveysAnswerByUser)) {
+                $questionnairesByUser = $surveysAnswerByUser[$user->getId()];
+            }
 
-                // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
-                // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-                if ($domainNumeric
-                    && in_array($idExpert, $surveysAnswerByUser)
-                    && !$user->hasRoleExpert()
-                    && !$user->getAlreadyBeExpert()
-                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                        $user->getId(),
-                        $idExpert,
-                        $refusCandidature
-                    )
-                ) {
-                    $blocExpert['expCandidats']++;
-                }
+            // Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
+            // que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            if (
+                in_array($idExpert, $surveysAnswerByUser)
+                && !$user->hasRoleExpert()
+                && !$user->getAlreadyBeExpert()
+                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                    $user->getId(),
+                    $idExpert,
+                    $refusCandidature
+                )
+            ) {
+                $blocExpert['expCandidats']++;
+            }
 
-                // Récupération d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est
-                // pas expert et que sa candidature n'a pas encore été refusé
-                if ($domainNumeric
-                    && in_array($idAmbassadeur, $questionnairesByUser)
-                    && !$user->hasRoleAmbassadeur()
-                    && !$user->getAlreadyBeAmbassadeur()
-                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                        $user->getId(),
-                        $idAmbassadeur,
-                        $refusCandidature
-                    )
-                ) {
-                    $blocAmbassadeur['ambCandidats']++;
-                }
+            // Récupération d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est
+            // pas expert et que sa candidature n'a pas encore été refusé
+            if (
+                in_array($idAmbassadeur, $questionnairesByUser)
+                && !$user->hasRoleAmbassadeur()
+                && !$user->getAlreadyBeAmbassadeur()
+                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                    $user->getId(),
+                    $idAmbassadeur,
+                    $refusCandidature
+                )
+            ) {
+                $blocAmbassadeur['ambCandidats']++;
+            }
 
-                if ($domainNumeric
-                    && in_array($idExpert, $questionnairesByUser)
-                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                        $user->getId(),
-                        $idExpert,
-                        $refusCandidature
-                    )
-                ) {
-                    $blocExpert['expCandidatsRecues']++;
-                }
+            if (
+                in_array($idExpert, $questionnairesByUser)
+                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                    $user->getId(),
+                    $idExpert,
+                    $refusCandidature
+                )
+            ) {
+                $blocExpert['expCandidatsRecues']++;
+            }
 
-                if ($domainNumeric
-                    && in_array($idAmbassadeur, $questionnairesByUser)
-                    && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
-                        $user->getId(),
-                        $idAmbassadeur,
-                        $refusCandidature
-                    )
-                ) {
-                    $blocAmbassadeur['ambCandidatsRecues']++;
-                }
+            if (
+                in_array($idAmbassadeur, $questionnairesByUser)
+                && !$refusCandidatureManager->refusExisteByUserByQuestionnaire(
+                    $user->getId(),
+                    $idAmbassadeur,
+                    $refusCandidature
+                )
+            ) {
+                $blocAmbassadeur['ambCandidatsRecues']++;
             }
         }
 
@@ -436,12 +420,11 @@ class DefaultController extends Controller
         $datas['inscriptions'] = ['row' => 4, 'col' => 1];
         $datas['sessions'] = ['row' => 4, 'col' => 2];
         $datas['paiements'] = ['row' => 4, 'col' => 3];
-        $datas['cdp'] = ['row' => 5, 'col' => 3];
-        $datas['forum'] = ['row' => 6, 'col' => 1];
-        $datas['top5-productions-3mois'] = ['row' => 6, 'col' => 2];
-        $datas['bottom5-productions-3mois'] = ['row' => 6, 'col' => 3];
-        $datas['top5-points-dur-3mois'] = ['row' => 7, 'col' => 1];
-        $datas['bottom5-points-dur-3mois'] = ['row' => 7, 'col' => 2];
+        $datas['forum'] = ['row' => 5, 'col' => 1];
+        $datas['top5-productions-3mois'] = ['row' => 5, 'col' => 2];
+        $datas['bottom5-productions-3mois'] = ['row' => 5, 'col' => 3];
+        $datas['top5-points-dur-3mois'] = ['row' => 6, 'col' => 1];
+        $datas['bottom5-points-dur-3mois'] = ['row' => 6, 'col' => 2];
         $datas['cdp_discussion'] = ['row' => 6, 'col' => 2];
 
         if (!is_null($settings)) {
