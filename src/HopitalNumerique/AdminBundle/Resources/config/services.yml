@@ -10,7 +10,5 @@ services:
         class: HopitalNumerique\AdminBundle\Service\CDPGridBlock
         arguments:
             - '@hopitalnumerique_user.repository.user'
-            - '@hopitalnumerique_communautepratique.repository.commentaire'
-            - '@hopitalnumerique_communautepratique.repository.fiche'
             - '@HOpitalNumerique\CommunautePratiqueBundle\Repository\Discussion\DiscussionRepository'
             - '@HOpitalNumerique\CommunautePratiqueBundle\Repository\Discussion\MessageRepository'
