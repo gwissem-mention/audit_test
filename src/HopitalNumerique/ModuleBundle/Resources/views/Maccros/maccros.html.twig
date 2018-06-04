@@ -92,23 +92,23 @@
                                         {# Si l'utilisateur connecté est inscrit alors on set la variable userEnAttente à true #}
                                         {% if app.user is not null and app.user.id == inscription.user.id %}
                                             {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
-                                            {% if inscription.etatInscription.id == 407 %}
+                                            {% if inscription.etatInscription.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_FORMATION_ACCEPTED_ID') %}
                                                 {% set userInscrit = true %}
                                             {% endif %}
                                             {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
-                                            {% if inscription.etatInscription.id == 408 %}
+                                            {% if inscription.etatInscription.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_FORMATION_REFUSED_ID') %}
                                                 {% set userRefuser = true %}
                                             {% endif %}
                                             {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
-                                            {% if inscription.etatInscription.id == 406 %}
+                                            {% if inscription.etatInscription.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_FORMATION_WAITING_ID') %}
                                                 {% set userEnAttente = true %}
                                             {% endif %}
                                             {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
-                                            {% if inscription.etatInscription.id == 409 %}
+                                            {% if inscription.etatInscription.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_FORMATION_CANCELED_ID') %}
                                                 {% set userAnnule = true %}
                                             {% endif %}
                                             {# Si l'utilisateur connecté a participé alors on set la variable userAParticipe à true #}
-                                            {% if inscription.etatParticipation.id == 411 %}
+                                            {% if inscription.etatParticipation.id == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_OK_ID') %}
                                                 {% set userAParticipe = true %}
                                             {% endif %}
                                         {% endif %}

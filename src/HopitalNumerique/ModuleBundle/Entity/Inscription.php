@@ -126,8 +126,8 @@ class Inscription
      */
     public function __construct()
     {
-        $this->etatInscription = 406;
-        $this->etatParticipation = 410;
+        $this->etatInscription = SessionStatus::STATUT_FORMATION_WAITING_ID;
+        $this->etatParticipation = SessionStatus::STATUT_PARTICIPATION_WAITING_ID;
         $this->etatEvaluation = 27;
         $this->etatRemboursement = null;
         $this->total = null;
@@ -331,7 +331,7 @@ class Inscription
      */
     public function isInscrit()
     {
-        if (407 === $this->etatInscription->getId()) {
+        if (SessionStatus::STATUT_FORMATION_ACCEPTED_ID === $this->etatInscription->getId()) {
             return true;
         }
 

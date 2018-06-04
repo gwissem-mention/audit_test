@@ -76,7 +76,7 @@
                             </ol>
                             <h4>Sessions à venir</h4>
                             <ol>
-                                {% for session in sessions if session['refEtatParticipationId'] == 410 %}
+                                {% for session in sessions if session['refEtatParticipationId'] == constant('HopitalNumerique\\ModuleBundle\\Entity\\SessionStatus::STATUT_PARTICIPATION_WAITING_ID') %}
                                     <li>- <a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}" title="Session du {{session['dateSession']|date('d/m/Y')}}">{{ session['titre'] }}</a></li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>

@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Manager;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\PaiementBundle\Entity\Facture;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -111,9 +112,9 @@ class InscriptionManager extends BaseManager
 
             /** @var Inscription $inscriptionDeLaSession */
             foreach ($inscription->getSession()->getInscriptions() as $inscriptionDeLaSession) {
-                if ($inscriptionDeLaSession->getEtatInscription()->getId() === 406) {
+                if ($inscriptionDeLaSession->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_WAITING_ID) {
                     ++$nbInscritsEnAttente;
-                } elseif ($inscriptionDeLaSession->getEtatInscription()->getId() === 407) {
+                } elseif ($inscriptionDeLaSession->getEtatInscription()->getId() === SessionStatus::STATUT_FORMATION_ACCEPTED_ID) {
                     ++$nbInscritsAccepte;
                     --$nbPlacesRestantes;
                 }
@@ -235,13 +236,13 @@ class InscriptionManager extends BaseManager
     public function allInscriptionsIsOk($user)
     {
         //Requete
-        $inscriptions = $this->findBy(['user' => $user, 'etatParticipation' => 411]);
+        $inscriptions = $this->findBy(['user' => $user, 'etatParticipation' => SessionStatus::STATUT_PARTICIPATION_OK_ID]);
 
         //Parcours des résultats
         /** @var Inscription $inscription */
         foreach ($inscriptions as $inscription) {
             //Il faut que TOUTES les inscriptions de l'utilisateur soient "A participé" et "Évaluée"
-            if ($inscription->getEtatParticipation()->getId() !== 411
+            if ($inscription->getEtatParticipation()->getId() !== SessionStatus::STATUT_PARTICIPATION_OK_ID
                 || $inscription->getEtatEvaluation()->getId() !== 29
             ) {
                 //Inscriptions non conforme
@@ -250,18 +251,6 @@ class InscriptionManager extends BaseManager
         }
 
         return true;
-    }
-
-    /**
-     * Retourne la liste des inscriptions de l'utilisateur.
-     *
-     * @param User $user L'utilisateur concerné
-     *
-     * @return array
-     */
-    public function getInscriptionsForUser($user)
-    {
-        return $this->getRepository()->getInscriptionsForUser($user);
     }
 
     /**

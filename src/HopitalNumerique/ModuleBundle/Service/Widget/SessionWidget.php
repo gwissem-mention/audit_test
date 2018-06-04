@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\ModuleBundle\Service\Widget;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
@@ -30,25 +30,33 @@ class SessionWidget extends WidgetAbstract implements DomainAwareInterface
     protected $sessionProvider;
 
     /**
+     * @var CurrentDomaine $currentDomain
+     */
+    protected $currentDomain;
+
+    /**
      * SessionWidget constructor.
      *
-     * @param \Twig_Environment     $twig
+     * @param \Twig_Environment $twig
      * @param TokenStorageInterface $tokenStorage
-     * @param TranslatorInterface   $translator
-     * @param RegistrationProvider  $registrationProvider
-     * @param SessionProvider       $sessionProvider
+     * @param TranslatorInterface $translator
+     * @param RegistrationProvider $registrationProvider
+     * @param SessionProvider $sessionProvider
+     * @param CurrentDomaine $currentDomain
      */
     public function __construct(
         \Twig_Environment $twig,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
         RegistrationProvider $registrationProvider,
-        SessionProvider $sessionProvider
+        SessionProvider $sessionProvider,
+        CurrentDomaine $currentDomain
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->registrationProvider = $registrationProvider;
         $this->sessionProvider = $sessionProvider;
+        $this->currentDomain = $currentDomain;
     }
 
     /**
@@ -56,22 +64,9 @@ class SessionWidget extends WidgetAbstract implements DomainAwareInterface
      */
     public function getWidget()
     {
-        $domainAllowed = false;
-
-        foreach ($this->domains as $domain) {
-            if (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID === $domain->getId()) {
-                $domainAllowed = true;
-                continue;
-            }
-        }
-
-        if (!$domainAllowed) {
-            return null;
-        }
-
         $data = [
-            'registrations' => $this->registrationProvider->getRegistrationData(),
-            'sessions' => $this->sessionProvider->getSessionData(),
+            'registrations' => $this->registrationProvider->getRegistrationData($this->currentDomain->get()),
+            'sessions' => $this->sessionProvider->getSessionData($this->currentDomain->get()),
         ];
 
         if (empty($data['registrations']) && empty($data['sessions'])) {

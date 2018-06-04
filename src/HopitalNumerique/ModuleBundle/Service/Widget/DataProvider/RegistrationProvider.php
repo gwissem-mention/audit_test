@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ModuleBundle\Service\Widget\DataProvider;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use Nodevo\AclBundle\Manager\AclManager;
 use Symfony\Component\Routing\RouterInterface;
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
@@ -68,12 +70,15 @@ class RegistrationProvider
     /**
      * Returns the formatted registrations for the session widget
      *
+     * @param Domaine $domain
+     *
      * @return array
      */
-    public function getRegistrationData()
+    public function getRegistrationData(Domaine $domain)
     {
         $registrations = $this->registrationRepository->getInscriptionsForUser(
-            $this->tokenStorage->getToken()->getUser()
+            $this->tokenStorage->getToken()->getUser(),
+            $domain
         );
 
         $data = [];
@@ -153,7 +158,7 @@ class RegistrationProvider
             ['id' => $registration->getSession()->getModule()->getId()]
         );
 
-        if (Reference::PARTICIPATED_ID === $registration->getEtatParticipation()->getId()
+        if (SessionStatus::STATUT_PARTICIPATION_OK_ID === $registration->getEtatParticipation()->getId()
             && $this->hadResponsesForSurvey($this->tokenStorage->getToken()->getUser()->getReponses())
             && Reference::TO_EVALUATE_ID === $registration->getEtatEvaluation()->getId()
         ) {
@@ -172,12 +177,12 @@ class RegistrationProvider
             );
         }
 
-        if (Reference::PARTICIPATED_ID === $registration->getEtatParticipation()->getId()) {
+        if (SessionStatus::STATUT_PARTICIPATION_OK_ID === $registration->getEtatParticipation()->getId()) {
             $actions['export']   = $this->router->generate(
                 'hopitalnumerique_module_inscription_export_liste_front',
                 ['id' => $registration->getId()]
             );
-        } elseif (Reference::WAITING_ID === $registration->getEtatParticipation()->getId()) {
+        } elseif (SessionStatus::STATUT_PARTICIPATION_WAITING_ID === $registration->getEtatParticipation()->getId()) {
             $actions['cancel']   = $this->router->generate(
                 'hopitalnumerique_module_inscription_annulation_inscription_front',
                 ['id' => $registration->getId(), 'json' => 'false']

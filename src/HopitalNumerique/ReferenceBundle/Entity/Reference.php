@@ -65,11 +65,6 @@ class Reference
     const GUYANE_REGION_ID = 1008;
     const OCEAN_INDIEN_REGION_ID = 1010;
 
-    const STATUT_SESSION_ACTIVE_ID = 403;
-    const STATUT_SESSION_ACCEPTED_ID = 407;
-
-    const WAITING_ID = 410;
-    const PARTICIPATED_ID = 411;
     const TO_EVALUATE_ID = 28;
     const EVALUATED_ID = 29;
 

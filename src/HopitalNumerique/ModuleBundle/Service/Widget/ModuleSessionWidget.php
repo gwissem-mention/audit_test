@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ModuleBundle\Service\Widget;
 
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use Symfony\Component\Translation\TranslatorInterface;
 use HopitalNumerique\NewAccountBundle\Model\Widget\Widget;
 use HopitalNumerique\NewAccountBundle\Service\Dashboard\WidgetAbstract;
@@ -25,25 +26,33 @@ class ModuleSessionWidget extends WidgetAbstract
     protected $sessionProvider;
 
     /**
+     * @var CurrentDomaine $currentDomain
+     */
+    protected $currentDomain;
+
+    /**
      * SessionWidget constructor.
      *
-     * @param \Twig_Environment     $twig
+     * @param \Twig_Environment $twig
      * @param TokenStorageInterface $tokenStorage
-     * @param TranslatorInterface   $translator
-     * @param RegistrationProvider  $registrationProvider
-     * @param SessionProvider       $sessionProvider
+     * @param TranslatorInterface $translator
+     * @param RegistrationProvider $registrationProvider
+     * @param SessionProvider $sessionProvider
+     * @param CurrentDomaine $currentDomain
      */
     public function __construct(
         \Twig_Environment $twig,
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
         RegistrationProvider $registrationProvider,
-        SessionProvider $sessionProvider
+        SessionProvider $sessionProvider,
+        CurrentDomaine $currentDomain
     ) {
         parent::__construct($twig, $tokenStorage, $translator);
 
         $this->registrationProvider = $registrationProvider;
         $this->sessionProvider = $sessionProvider;
+        $this->currentDomain = $currentDomain;
     }
 
     /**
@@ -52,8 +61,8 @@ class ModuleSessionWidget extends WidgetAbstract
     public function getWidget()
     {
         $html = $this->twig->render('HopitalNumeriqueModuleBundle:widget:module_session.html.twig', [
-            'registrations' => $this->registrationProvider->getRegistrationData(),
-            'sessions' => $this->sessionProvider->getSessionData(),
+            'registrations' => $this->registrationProvider->getRegistrationData($this->currentDomain->get()),
+            'sessions' => $this->sessionProvider->getSessionData($this->currentDomain->get()),
         ]);
 
         $title = $this->translator->trans('module_session.title', [], 'widget');

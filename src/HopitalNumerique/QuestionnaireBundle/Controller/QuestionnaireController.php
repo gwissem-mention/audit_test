@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
@@ -700,8 +701,8 @@ class QuestionnaireController extends Controller
                             $sessionAArchiver = true;
                             /** @var Inscription $inscription */
                             foreach ($session->getInscriptions() as $inscription) {
-                                if (407 === $inscription->getEtatInscription()->getId()
-                                    && 411 === $inscription->getEtatParticipation()->getId()
+                                if (SessionStatus::STATUT_FORMATION_ACCEPTED_ID === $inscription->getEtatInscription()->getId()
+                                    && SessionStatus::STATUT_PARTICIPATION_OK_ID === $inscription->getEtatParticipation()->getId()
                                 ) {
                                     if (29 !== $inscription->getEtatEvaluation()->getId()) {
                                         $sessionAArchiver = false;

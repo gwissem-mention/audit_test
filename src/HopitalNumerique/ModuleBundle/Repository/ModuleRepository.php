@@ -5,6 +5,7 @@ namespace HopitalNumerique\ModuleBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\ModuleBundle\Entity\Module;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -46,22 +47,23 @@ class ModuleRepository extends EntityRepository
     /**
      * Récupère les modules et leurs sessions actives et leurs inscriptions pas encore passées.
      *
-     * @return array(Module)
-     *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAllInscriptionsBySessionsActivesNonPasseesByModules()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('mod')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
-            ->leftJoin('mod.statut', 'refEtat')
-            ->where('refEtat.id = 3')
-            ->leftJoin('mod.sessions', 'session', Join::WITH, 'session.etat = 403')
-            ->andWhere('session.dateSession >= :today')
-            ->setParameter('today', new \DateTime())
-            ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
+            ->join('mod.statut', 'refEtat', Join::WITH, 'refEtat.id = :activeReferenceId')
+            ->join('mod.sessions', 'session', Join::WITH, 'session.etat = :activeSessionId')
+            ->join('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = :acceptedStatusId')
+            ->where('session.dateSession >= :today')
+            ->setParameters([
+                'activeSessionId' => SessionStatus::STATUT_SESSION_FORMATION_ACTIVE_ID,
+                'acceptedStatusId' => SessionStatus::STATUT_FORMATION_ACCEPTED_ID,
+                'activeReferenceId' => Reference::STATUT_ACTIF_ID,
+                'today' => new \DateTime(),
+            ])
             ->orderBy('mod.titre');
 
         return $qb;

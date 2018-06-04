@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
 use HopitalNumerique\ModuleBundle\Entity\Session;
+use HopitalNumerique\ModuleBundle\Entity\SessionStatus;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -212,8 +213,8 @@ class SessionFrontController extends Controller
         $inscriptionsId = json_decode($this->get('request')->request->get('inscriptions'));
 
         $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy(['session' => $session]);
-        $refParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
-        $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
+        $refParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(SessionStatus::STATUT_PARTICIPATION_OK_ID);
+        $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(SessionStatus::STATUT_PARTICIPATION_KO_ID);
         $refEval = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(28);
         $refEvalCanceled = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(430);
 
@@ -225,7 +226,7 @@ class SessionFrontController extends Controller
                 $inscription->setEtatParticipation($refParticipation);
                 $inscription->setEtatEvaluation($refEval);
                 //Envoyer mail du formulaire d'évluation de la session
-                if (411 != $etatparticip) {
+                if (SessionStatus::STATUT_PARTICIPATION_OK_ID != $etatparticip) {
                     $mails = array_merge(
                         $mails,
                         $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail([$inscription], [])
@@ -258,7 +259,8 @@ class SessionFrontController extends Controller
         $datas = [];
 
         //get sessions terminées where user connected == formateur
-        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur($user);
+        $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur($user, $currentDomain);
 
         $colonnes = [
             'Module',
