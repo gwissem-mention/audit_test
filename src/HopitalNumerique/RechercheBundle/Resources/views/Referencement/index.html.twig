@@ -1,3 +1,5 @@
+{% trans_default_domain 'widget' %}
+
 {% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {% block title %}{{ parent() }} - Recherche avancée{% endblock %}
@@ -156,8 +158,8 @@
                         {% endfor %}
 
                         <li data-libelle="{{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
-                            <a class="reference">
-                                <span class="add"><i class="fa fa-plus-circle"></i></span>
+                            <a class="reference {{ not hasChildren ? 'orphan' : '' }}">
+                                <span class="add" title="{{ 'advanced_search_engine.add'|trans }}"><i class="fa fa-plus-circle"></i></span>
                                 {%- if hasChildren -%}
                                     <span class="toggle"><i class="fa fa-chevron-right"></i></span>
                                 {%- endif -%}
