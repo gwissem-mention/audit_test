@@ -46,6 +46,10 @@
             {% if openRequeteSavingPopin is defined and openRequeteSavingPopin == true %}
             Hn_RechercheBundle_Referencement.saveFilters();
             {% endif %}
+
+            $('span.tooltip-wrapper').tooltip({
+                placement : 'top'
+            });
         });
     </script>
 {%- endblock %}
@@ -159,7 +163,11 @@
 
                         <li data-libelle="{{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
                             <a class="reference {{ not hasChildren ? 'orphan' : '' }}">
-                                <span class="add" title="{{ 'advanced_search_engine.add'|trans }}"><i class="fa fa-plus-circle"></i></span>
+                                <span class="add">
+                                    <span class="tooltip-wrapper" title="{{ 'advanced_search_engine.add'|trans }}">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </span>
+                                </span>
                                 {%- if hasChildren -%}
                                     <span class="toggle"><i class="fa fa-chevron-right"></i></span>
                                 {%- endif -%}
@@ -192,7 +200,7 @@
                     <h1>Ma recherche <span id="results-count"></span></h1>
                     <div id="filtres-actions"></div>
                     <div id="filtres-info">
-                        <p>Ici seront placés les critères de recherche que vous aurez sélectionnés dans le menu à gauche. Pour voir le détail d'un critère, cliquer le critère ou le chevron. Pour sélectionner un critère, cliquer le signe + ou double-cliquer le critère.</p>
+                        <p>Ici seront placés les critères de recherche que vous aurez sélectionnés dans le menu à gauche. Pour voir le détail d'un critère, cliquer sur le critère ou le chevron. Pour sélectionner un critère, cliquer sur le signe +.</p>
                         <p>La recherche textuelle fonctionne sur les titres, les résumés et les synthèses des productions.</p>
                         <p>Les résultats peuvent être filtrés par types de production (méthode, autodiagnostic, retour d'expériences, etc.)</p>
                     </div>

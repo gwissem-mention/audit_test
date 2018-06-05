@@ -31,7 +31,7 @@
     .recherche-referencement .references-bloc ul ul li .toggle { color: #d60030;font-size: 11px;margin: 1px 5px 0 2px; width: 11px; }
     .recherche-referencement .references-bloc ul ul li .reference { background-color: transparent;color: #000;font-size: 13px;padding: 8px 2px 8px 7px;text-transform: none; }
     .recherche-referencement .references-bloc ul ul li .reference.orphan { padding-left: 25px; }
-    .recherche-referencement .references-bloc ul ul li .add { display: block; }
+    .recherche-referencement .references-bloc ul ul li .add { display: block; font-weight: normal; }
 
     /* Search engine - Third level and more */
     .recherche-referencement .references-bloc ul ul ul li .reference { font-weight: normal; padding-left: 15px; }
