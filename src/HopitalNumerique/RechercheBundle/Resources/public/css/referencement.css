@@ -11,28 +11,40 @@
             .recherche-referencement #contexte-container .modal label { font-weight: normal;margin: 0; }
             .recherche-referencement #contexte-container .modal ul { list-style-type: none;padding: 0; }
                 .recherche-referencement #contexte-container .modal ul ul { list-style-type: none;padding: 0 0 10px 20px; }
+
+    /* Search engine - Common */
     .recherche-referencement .references-bloc {}
-        .recherche-referencement .references-bloc a { cursor: default; }
-        .recherche-referencement .references-bloc ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }
-            .recherche-referencement .references-bloc ul li {}
-                .recherche-referencement .references-bloc ul li .reference { background-color: #d60030; border-color: #E1E1E1;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 16px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
-                .recherche-referencement .references-bloc ul li .reference:hover { text-decoration: none; }
-                    .recherche-referencement .references-bloc ul li .add { cursor: pointer;display: none;float: right;margin: -2px 0 0;padding: 2px 7px; }
-                    .recherche-referencement .references-bloc ul li .add:hover { color: #d60030; }
-                    .recherche-referencement .references-bloc ul li .toggle { color: #fff;float: left;font-size: 20px;margin: -4px 10px 0 0px; }
-            .recherche-referencement .references-bloc ul li[data-chosen="true"] > .reference { background-color: #fff;font-style: italic;text-decoration: underline; }
-                .recherche-referencement .references-bloc ul li[data-chosen="true"] > .reference .add { color: #d60030; }
-            .recherche-referencement .references-bloc ul ul { display: none; }
-                .recherche-referencement .references-bloc ul ul li {}
-                    .recherche-referencement .references-bloc ul ul li .reference { background-color: transparent;color: #000;font-size: 13px;padding-left: 0px;text-transform: none; }
-                        .recherche-referencement .references-bloc ul ul li .add { display: block; }
-                        .recherche-referencement .references-bloc ul ul li .toggle { color: #d60030;font-size: 14px;margin: 0px 10px; }
-                        .recherche-referencement .references-bloc ul ul ul {}
-                        .recherche-referencement .references-bloc ul ul ul li .reference { font-weight: normal;padding-left: 12px; }
-                            .recherche-referencement .references-bloc ul ul ul ul li .reference { padding-left: 24px; }
-                            .recherche-referencement .references-bloc ul ul ul ul ul li .reference { padding-left: 36px; }
-                            .recherche-referencement .references-bloc ul ul ul ul ul ul li .reference { padding-left: 48px; }
-                            .recherche-referencement .references-bloc ul ul ul ul ul ul ul li .reference { padding-left: 60px; }
+    .recherche-referencement .references-bloc a { cursor: default; }
+    .recherche-referencement .references-bloc a:hover { text-decoration: none; }
+    .recherche-referencement .references-bloc .add { cursor: pointer;display: none;float: right;margin: -2px 0 0;padding: 2px 7px; }
+    .recherche-referencement .references-bloc .add:hover { color: #d60030; }
+    .recherche-referencement .references-bloc li[data-chosen="true"] > .reference { background-color: #fff;font-style: italic;text-decoration: underline; }
+    .recherche-referencement .references-bloc li[data-chosen="true"] > .reference .add { color: #d60030; }
+    .recherche-referencement .references-bloc ul ul { display: none; }
+
+    /* Search engine - First level */
+    .recherche-referencement .references-bloc ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }
+    .recherche-referencement .references-bloc ul li .toggle { color: #fff;float: left;font-size: 20px;margin: -4px 7px 0 -3px; width: 20px; }
+    .recherche-referencement .references-bloc ul li .reference { background-color: #d60030; border-color: #E1E1E1;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 16px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
+
+    /* Search engine - Second level */
+    .recherche-referencement .references-bloc ul ul li .toggle { color: #d60030;font-size: 11px;margin: 1px 5px 0 2px; width: 11px; }
+    .recherche-referencement .references-bloc ul ul li .reference { background-color: transparent;color: #000;font-size: 13px;padding: 8px 2px 8px 7px;text-transform: none; }
+    .recherche-referencement .references-bloc ul ul li .reference.orphan { padding-left: 25px; }
+    .recherche-referencement .references-bloc ul ul li .add { display: block; }
+
+    /* Search engine - Third level and more */
+    .recherche-referencement .references-bloc ul ul ul li .reference { font-weight: normal; padding-left: 15px; }
+    .recherche-referencement .references-bloc ul ul ul li .reference.orphan { padding-left: 33px; }
+    .recherche-referencement .references-bloc ul ul ul ul li .reference { padding-left: 25px; }
+    .recherche-referencement .references-bloc ul ul ul ul li .reference.orphan { padding-left: 43px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul li .reference { padding-left: 35px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul li .reference.orphan { padding-left: 53px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul ul li .reference { padding-left: 45px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul ul li .reference.orphan { padding-left: 63px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul ul ul li .reference { padding-left: 55px; }
+    .recherche-referencement .references-bloc ul ul ul ul ul ul ul li .reference.orphan { padding-left: 73px; }
+
     .recherche-referencement .filtres-bloc { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;padding: 15px; }
         .recherche-referencement .filtres-bloc h1 { color: #d60030;font-size: 22px;font-weight: bold;margin: 0;text-transform: uppercase; }
         .recherche-referencement .filtres-bloc #filtres-actions { border-color: #d5d5d5;border-style: solid;border-width: 0 0 1px 0;display: none;margin: 10px 0 10px 0;padding: 0 0 15px 0; }

@@ -20,3 +20,6 @@ saved_searches:
         error: Une erreur est survenue lors de la suppression de votre recherche.
     send:
         success: Votre recherche a bien été envoyée.
+
+advanced_search_engine:
+    add: Cliquer ici pour ajouter cette référence à la recherche
