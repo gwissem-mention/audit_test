@@ -8,30 +8,31 @@
             <h3 class="violet">Sommaire</h3>
             <ul>
                 {% for one in contenus %}
-                    {{ mySelf.buildTree(one, objet) }}
+                    {{ mySelf.buildTree(one, objet, contenu) }}
                 {% endfor %}
             </ul>
         </div>
     </div>
 {% endif %}
 
-{% macro buildTree(contenu, objet, chapter) %}
+{% macro buildTree(contenu, objet, activeContenu, chapter) %}
     {% import _self as mySelf %}
-    <li data-has-children="{{ contenu.childs ? '1' : '0' }}" data-content="{{ contenu.id }}">
+    {% set isActive = (activeContenu is defined and activeContenu.id == contenu.id) %}
+    <li data-has-children="{{ contenu.childs ? '1' : '0' }}" data-content="{{ contenu.id }}"">
         {% if contenu.childs %}
             <a class="toggle-children" data-contenu="{{ contenu.id }}"><em class="fa fa-plus-circle"></em></a>
         {% endif %}
         {% set name = chapter ~ contenu.order ~ '. ' ~ contenu.titre %}
         {% set name = '<span title="' ~ name ~ '">' ~ name|truncate(30) ~ '</span>' %}
 
-        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >
+        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" {{ isActive ? ' class="active"' : '' }}>
             {{ name|raw }}
         </a>
 
         {% if contenu.childs %}
             <ul data-contenu="{{ contenu.id }}">
                 {% for child in contenu.childs %}
-                    {{ mySelf.buildTree(child, objet, chapter ~ contenu.order ~ '.') }}
+                    {{ mySelf.buildTree(child, objet, activeContenu, chapter ~ contenu.order ~ '.') }}
                 {% endfor %}
             </ul>
         {% endif %}
