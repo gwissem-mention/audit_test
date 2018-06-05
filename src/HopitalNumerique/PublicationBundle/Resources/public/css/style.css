@@ -290,7 +290,7 @@
         #productions_liees .results-bloc p, #parcours_guides .results-bloc p { font-size: 12px;margin: 0; }
     #productions_liees .mysep.background-rose, #parcours_guides .mysep.background-rose {width: 85px; height: 4px; }
 
-    #publication-resume #productions_liees { margin-top: 30px; }
+    #publication-resume #productions_liees { margin: 30px 0; }
 
 /* Autres résultats */
     #autresResultats h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}

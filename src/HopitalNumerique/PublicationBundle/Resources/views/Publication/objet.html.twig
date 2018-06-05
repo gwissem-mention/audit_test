@@ -56,18 +56,7 @@
         or objet.domaines|length > 1
     %}
 
-    {% set hasLinkedResources =
-        objet.associatedProductions == true
-        and
-        (
-            objectRelations|length > 0
-            or parcoursGuides|length > 0
-            or topicRelated|length > 0
-            or userRelated|length > 0
-        )
-    %}
-
-    <div id="publication">
+<div id="publication">
 
         <div class="hidden-pdf">
 

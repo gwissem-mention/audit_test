@@ -199,6 +199,12 @@ class PublicationController extends Controller
             'contenu' => null
         ]);
 
+        $parcoursGuides = $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
+            ->getFormattedParcoursGuidesLies($objet)
+        ;
+        $topicRelated = array_slice($topicRelated, 0, 3);
+        $userRelated = array_slice($userRelated, 0, 3);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -214,15 +220,15 @@ class PublicationController extends Controller
                 $objet->getResume()
             ),
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
-            'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
-                ->getFormattedParcoursGuidesLies($objet),
-            'topicRelated' => array_slice($topicRelated, 0, 3),
-            'userRelated' => array_slice($userRelated, 0, 3),
+            'parcoursGuides' => $parcoursGuides,
+            'topicRelated' => $topicRelated,
+            'userRelated' => $userRelated,
             'is_pdf' => $isPdf,
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
             'subscribed' => $subscribed,
+            'hasLinkedResources' => $this->hasLinkedResources($objet, $objectRelations, $parcoursGuides, $topicRelated, $userRelated),
             'displayLinkedResourcesInColumn' => (strlen(htmlspecialchars(strip_tags($objet->getResume()))) > self::CONTENT_SIZE_LIMIT),
         ]);
     }
@@ -483,6 +489,12 @@ class PublicationController extends Controller
             'contenu' => $contenu,
         ]);
 
+        $parcoursGuides = $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
+            ->getFormattedParcoursGuidesLies($objet)
+        ;
+        $topicRelated = array_slice($topicRelated, 0, 3);
+        $userRelated = array_slice($userRelated, 0, 3);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', [
             'objet' => $objet,
@@ -502,15 +514,15 @@ class PublicationController extends Controller
             'suivant' => $suivant,
             'suivantOrder' => $suivantOrder,
             'productionsLiees' => $productionsLiees,
-            'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')
-                ->getFormattedParcoursGuidesLies($objet),
-            'topicRelated' => array_slice($topicRelated, 0, 3),
-            'userRelated' => array_slice($userRelated, 0, 3),
+            'parcoursGuides' => $parcoursGuides,
+            'topicRelated' => $topicRelated,
+            'userRelated' => $userRelated,
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine,
             'showCog' => $showCog,
             'objectRelations' => $objectRelations,
             'subscribed' => $subscribed,
+            'hasLinkedResources' => $this->hasLinkedResources($objet, $objectRelations, $parcoursGuides, $topicRelated, $userRelated),
             'displayLinkedResourcesInColumn' => (strlen(htmlspecialchars(strip_tags($contenu->getContenu()))) > self::CONTENT_SIZE_LIMIT),
         ]);
     }
@@ -782,5 +794,38 @@ class PublicationController extends Controller
         return $this->render('@HopitalNumeriquePublication/Publication/object_updates.html.twig', [
             'updates' => $updates,
         ]);
+    }
+
+    /**
+     * @param Objet $objet
+     * @param array $objectRelations
+     * @param array $parcoursGuides
+     * @param array $topicRelated
+     * @param array $userRelated
+     *
+     * @return bool
+     */
+    protected function hasLinkedResources(Objet $objet, $objectRelations, $parcoursGuides, $topicRelated, $userRelated)
+    {
+        if (!$objet->isAssociatedProductions()) {
+            return false;
+        }
+
+        $hasAllowedRelations = false;
+        if (count($objectRelations) > 0) {
+            foreach ($objectRelations as $objectRelation) {
+                if ($this->isGranted('read', $objectRelation)) {
+                    $hasAllowedRelations = true;
+                    break;
+                }
+            }
+        }
+
+        return (
+            $hasAllowedRelations
+            || count($parcoursGuides) > 0
+            || count($topicRelated) > 0
+            || count($userRelated) > 0
+        );
     }
 }

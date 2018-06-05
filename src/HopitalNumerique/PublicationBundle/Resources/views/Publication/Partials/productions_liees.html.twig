@@ -1,4 +1,4 @@
-{% if objectRelations|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 -%}
+{% if hasLinkedResources -%}
     <div class="recherche-referencement" id="productions_liees">
         <h2>Ressources associées</h2>
         <div class="mysep background-rose"></div>
