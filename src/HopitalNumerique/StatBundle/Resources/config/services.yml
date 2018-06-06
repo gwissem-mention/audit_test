@@ -55,3 +55,19 @@ services:
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
         tags:
             - { name: kernel.event_subscriber }
+
+    HopitalNumerique\StatBundle\EventListener\GuidedSearchStatSubscriber:
+        class: HopitalNumerique\StatBundle\EventListener\GuidedSearchStatSubscriber
+        arguments:
+            - '@session'
+            - '@security.token_storage'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_rechercheparcours.repository.recherche_parcours'
+            - '@HopitalNumerique\StatBundle\Service\GuidedSearchStatLogger'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    HopitalNumerique\StatBundle\Service\GuidedSearchStatLogger:
+        class: HopitalNumerique\StatBundle\Service\GuidedSearchStatLogger
+        arguments:
+            - '@doctrine.orm.entity_manager'
